@@ -200,9 +200,12 @@ public class ModelContext {
    * @return true or false
    */
   public boolean hasSeenBefore(ResolvedType resolvedType) {
-    return seenTypes.contains(resolvedType)
-        || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()))
-        || parentHasSeenBefore(resolvedType);
+    if (parentContext == null) {
+      return seenTypes.contains(resolvedType)
+          || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()));
+    } else {
+        return parentHasSeenBefore(resolvedType);
+      }
   }
 
   public DocumentationType getDocumentationType() {

@@ -108,7 +108,7 @@ public class OperationContext {
   }
   
   public OperationModelContextsBuilder getOperationModelContextsBuilder() {
-	return requestContext.operationModelsBuilder();	  	  
+    return requestContext.operationModelsBuilder();       
   }
 
   public DocumentationType getDocumentationType() {

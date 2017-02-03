@@ -44,17 +44,18 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           ImmutableSet.builder().build())
 
     when:
-      def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
+      def modelContexts = sut.modelsFor(reqContext) + sut.modelsFor(resContext)
 
     then:
-      models.each {
-        it.properties.size() == 2
-        it.properties.containsKey(fieldName)
-        it.properties."$fieldName".description == description
-        it.properties."$fieldName".required == isRequired
-        it.properties."$fieldName".type.erasedType == type
-        it.properties."$fieldName".qualifiedType == qualifiedTypeName
-        it.properties."$fieldName".allowableValues == allowableValues
+      modelContexts.each {
+        def model = it.builder.build()
+        model.properties.size() == 2
+        model.properties.containsKey(fieldName)
+        model.properties."$fieldName".description == description
+        model.properties."$fieldName".required == isRequired
+        model.properties."$fieldName".type.erasedType == type
+        model.properties."$fieldName".qualifiedType == qualifiedTypeName
+        model.properties."$fieldName".allowableValues == allowableValues
         true
       }
 
@@ -82,17 +83,18 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           ImmutableSet.builder().build())
 
     when:
-      def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
+      def models = sut.modelsFor(reqContext) + sut.modelsFor(resContext)
 
     then:
       models.each {
-        it.properties.size() == 2
-        it.properties.containsKey(fieldName)
-        it.properties."$fieldName".description == description
-        it.properties."$fieldName".required == isRequired
-        it.properties."$fieldName".type.erasedType == type
-        it.properties."$fieldName".qualifiedType == qualifiedTypeName
-        it.properties."$fieldName".allowableValues == allowableValues
+        def model = it.builder.build()
+        model.properties.size() == 2
+        model.properties.containsKey(fieldName)
+        model.properties."$fieldName".description == description
+        model.properties."$fieldName".required == isRequired
+        model.properties."$fieldName".type.erasedType == type
+        model.properties."$fieldName".qualifiedType == qualifiedTypeName
+        model.properties."$fieldName".allowableValues == allowableValues
         true
       }
 
@@ -120,17 +122,18 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           ImmutableSet.builder().build())
 
     when:
-      def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
+      def models = sut.modelsFor(reqContext) + sut.modelsFor(resContext)
 
     then:
       models.each {
-        it.properties.size() == 2
-        it.properties.containsKey(fieldName)
-        it.properties."$fieldName".description == description
-        it.properties."$fieldName".required == isRequired
-        it.properties."$fieldName".type.erasedType == type
-        it.properties."$fieldName".qualifiedType == qualifiedTypeName
-        it.properties."$fieldName".allowableValues == allowableValues
+        def model = it.builder.build()
+        model.properties.size() == 2
+        model.properties.containsKey(fieldName)
+        model.properties."$fieldName".description == description
+        model.properties."$fieldName".required == isRequired
+        model.properties."$fieldName".type.erasedType == type
+        model.properties."$fieldName".qualifiedType == qualifiedTypeName
+        model.properties."$fieldName".allowableValues == allowableValues
         true
       }
 

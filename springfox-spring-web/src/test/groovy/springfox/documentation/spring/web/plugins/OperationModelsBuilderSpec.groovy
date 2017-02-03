@@ -37,15 +37,17 @@ class OperationModelsBuilderSpec extends Specification {
 
   def "Manages a unique set of model contexts" () {
     given:
-      sut.addInputParam(Example)
+      sut.inputType(Example)
     when:
       def models = sut.build()
     then:
       models.size() == 1
 
     and:
-      sut.addInputParam(Example).build().size() == 1
-      sut.addReturn(Example).build().size() == 2
+      sut.inputType(Example)
+      sut.build().size() == 1
+      sut.returnType(Example)
+      sut.build().size() == 2
   }
 
 }

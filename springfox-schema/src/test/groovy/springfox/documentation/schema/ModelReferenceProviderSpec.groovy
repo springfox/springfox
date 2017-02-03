@@ -51,6 +51,24 @@ class ModelReferenceProviderSpec extends Specification {
       //TODO: Elaborate this test
       sut.itemModel().isPresent()
   }
+  
+  def "Model index is rendered correctly" () {
+      given:
+        def modelContext = inputParam(
+            Foo,
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            new DefaultGenericTypeNamingStrategy(),
+            ImmutableSet.builder().build())
+        modelContext.builder.index(2)
+        def resolver = new TypeResolver()
+        def typeNameExtractor = aTypeNameExtractor(resolver)
+      when:
+        def sut = modelRefFactory(modelContext, typeNameExtractor)
+            .apply(resolver.resolve(Foo))
+      then:
+        sut.getType() == "Foo_2"
+    }
 
   def aTypeNameExtractor(TypeResolver resolver) {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

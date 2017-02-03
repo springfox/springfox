@@ -37,25 +37,30 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(objectMapperThatUsesFields())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(
+      List asInputContexts = provider.modelsFor(
           inputParam(
               UnwrappedTypeForField,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
-          .get()
-      Model asReturn = provider.modelFor(
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = provider.modelsFor(
           returnValue(
               UnwrappedTypeForField,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
-          .get()
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     then:
-      asInput.getName() == UnwrappedTypeForField.simpleName
+      asInputModels.size() == 1
+      asInputModels.containsKey(UnwrappedTypeForField.simpleName)
+      def asInput = asInputModels.get(UnwrappedTypeForField.simpleName)
       asInput.getProperties().size() == 1
       asInput.getProperties().containsKey("name")
       def modelProperty = asInput.getProperties().get("name")
@@ -66,7 +71,9 @@ class UnwrappedTypeSpec extends Specification {
       !item.collection
       item.itemType == null
     and:
-      asReturn.getName() == UnwrappedTypeForField.simpleName
+      asReturnContexts.size() == 1
+      asReturnModels.containsKey(UnwrappedTypeForField.simpleName)
+      def asReturn = asReturnModels.get(UnwrappedTypeForField.simpleName)
       asReturn.getProperties().size() == 1
       asReturn.getProperties().containsKey("name")
       def returnProperty = asReturn.getProperties().get("name")
@@ -86,23 +93,29 @@ class UnwrappedTypeSpec extends Specification {
         objectMapperThatUsesGetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(
+      List asInputContexts = provider.modelsFor(
           inputParam(
               UnwrappedTypeForGetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(
+              ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = provider.modelsFor(
           returnValue(
               UnwrappedTypeForGetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     then:
-      asInput.getName() == UnwrappedTypeForGetter.simpleName
+      asInputModels.containsKey(UnwrappedTypeForGetter.simpleName)
+      def asInput = asInputModels.get(UnwrappedTypeForGetter.simpleName)
       asInput.getProperties().size() == 1
       asInput.getProperties().containsKey("category")
       def modelProperty = asInput.getProperties().get("category")
@@ -113,7 +126,8 @@ class UnwrappedTypeSpec extends Specification {
       !item.collection
       item.itemType == null
 
-      asReturn.getName() == UnwrappedTypeForGetter.simpleName
+      asReturnModels.containsKey(UnwrappedTypeForGetter.simpleName)
+      def asReturn = asReturnModels.get(UnwrappedTypeForGetter.simpleName)
       asReturn.getProperties().size() == 1
       asReturn.getProperties().containsKey("name")
       def retModelProperty = asReturn.getProperties().get("name")
@@ -133,23 +147,29 @@ class UnwrappedTypeSpec extends Specification {
         objectMapperThatUsesSetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(
+      List asInputContexts = provider.modelsFor(
           inputParam(
               UnwrappedTypeForSetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(
+              ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = provider.modelsFor(
           returnValue(
               UnwrappedTypeForSetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     then:
-      asInput.getName() == UnwrappedTypeForSetter.simpleName
+      asInputModels.containsKey(UnwrappedTypeForSetter.simpleName)
+      def asInput = asInputModels.get(UnwrappedTypeForSetter.simpleName)
       asInput.getProperties().size() == 1
       asInput.getProperties().containsKey("name")
       def modelProperty = asInput.getProperties().get("name")
@@ -160,7 +180,8 @@ class UnwrappedTypeSpec extends Specification {
       !item.collection
       item.itemType == null
 
-      asReturn.getName() == UnwrappedTypeForSetter.simpleName
+      asReturnModels.containsKey(UnwrappedTypeForSetter.simpleName)
+      def asReturn = asReturnModels.get(UnwrappedTypeForSetter.simpleName)
       asReturn.getProperties().size() == 1
       asReturn.getProperties().containsKey("category")
       def retModelProperty = asReturn.getProperties().get("category")

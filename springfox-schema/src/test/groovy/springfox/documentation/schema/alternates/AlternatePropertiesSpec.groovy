@@ -36,14 +36,18 @@ class AlternatePropertiesSpec extends Specification {
     given:
       def provider = alternateTypeProvider()
       ModelProvider modelProvider = defaultModelProvider()
-      Model model = modelProvider.modelFor(inputParam(
+      List modelContexts = modelProvider.modelsFor(inputParam(
           typeWithAlternateProperty(),
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map models = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     expect:
-      model.getName() == "TypeWithAlternateProperty"
+      models.size() == 1
+      models.containsKey("TypeWithAlternateProperty")
+      def model = models.get("TypeWithAlternateProperty")
       model.getProperties().containsKey("localDate")
       def modelProperty = model.getProperties().get("localDate")
       modelProperty.type.erasedType == java.sql.Date
@@ -59,14 +63,17 @@ class AlternatePropertiesSpec extends Specification {
       def provider = alternateTypeProvider()
       provider.addRule(new AlternateTypeRule(resolver.resolve(ResponseEntity, Void), resolver.resolve(Void)))
       ModelProvider modelProvider = defaultModelProvider()
-      Model model = modelProvider.modelFor(inputParam(
+      List modelContexts = modelProvider.modelsFor(inputParam(
           typeWithResponseEntityOfVoid(),
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map models = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     expect:
-      model.getName() == "GenericType«ResponseEntity«Void»»"
+      models.containsKey("GenericType«ResponseEntity«Void»»")
+      def model = models.get("GenericType«ResponseEntity«Void»»")
       model.getProperties().containsKey("genericField")
       def modelProperty = model.getProperties().get("genericField")
       modelProperty.type.erasedType == Void

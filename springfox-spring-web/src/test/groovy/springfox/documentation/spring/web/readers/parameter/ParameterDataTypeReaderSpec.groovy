@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -34,8 +35,12 @@ import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder;
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Business
@@ -62,11 +67,14 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   def "Parameter types #paramType"() {
     given:
       ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
+          new ResolvedMethodParameter(0, false, "", annotations, new TypeResolver().resolve(paramType))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
-                  Mock(OperationContext))
+                  Mock(OperationContext), operationModelContextsBuilder.inputParam(new TypeResolver().resolve(paramType), resolvedMethodParameter))
 
     when:
       sut.apply(parameterContext)
@@ -119,12 +127,15 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   def "RequestParam Map types"() {
     given:
       ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
+          new ResolvedMethodParameter(0, false, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext =
           new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
-              Mock(OperationContext))
-
+              Mock(OperationContext), operationModelContextsBuilder.inputParam(new TypeResolver().resolve(Map, String, String), resolvedMethodParameter))
+          
     when:
       sut.apply(parameterContext)
 
@@ -138,11 +149,14 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   def "Container Parameter types"() {
     given:
       ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
+          new ResolvedMethodParameter(0, false, "", [], new TypeResolver().resolve(List, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
-                  Mock(OperationContext))
+                  Mock(OperationContext), operationModelContextsBuilder.inputParam(new TypeResolver().resolve(List, String), resolvedMethodParameter))
 
     when:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

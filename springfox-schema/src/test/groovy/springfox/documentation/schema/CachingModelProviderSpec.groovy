@@ -44,7 +44,7 @@ class CachingModelProviderSpec extends Specification {
     when:
       def sut = new CachingModelProvider(mock)
     then:
-      sut.modelFor(context) == sut.modelFor(context)
+      sut.modelsFor(context) == sut.modelsFor(context)
   }
 
   def "Cache misses do not not result in errors" () {
@@ -61,7 +61,7 @@ class CachingModelProviderSpec extends Specification {
     when:
       def sut = new CachingModelProvider(mock)
     then:
-      !sut.modelFor(context).isPresent()
+      sut.modelsFor(context).isEmpty()
   }
 
   def aModel() {

@@ -180,7 +180,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   }
 
-  def "model should include property that is only visible during serialization"() {
+  def "ApiModelReader should considermodels with properties that is only visible during serialization"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
@@ -191,16 +191,21 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       def models = sut.read(context)
 
     then:
-      models.size() == 1
+      models.size() == 2
 
       String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
       models.containsKey(modelName)
+      models.containsKey(modelName + "_1")
 
-      Model model = models[modelName]
-      Map modelProperties = model.getProperties()
-      modelProperties.size() == 2
-      modelProperties.containsKey('visibleForSerialize')
-      modelProperties.containsKey('alwaysVisible')
+      Model model1 = models[modelName]
+      Model model2 = models[modelName + "_1"]
+      Map modelProperties1 = model1.getProperties()
+      modelProperties1.size() == 1
+      modelProperties1.containsKey('alwaysVisible')
+      Map modelProperties2 = model2.getProperties()
+      modelProperties2.size() == 2
+      modelProperties2.containsKey('visibleForSerialize')
+      modelProperties2.containsKey('alwaysVisible')
 
   }
 
@@ -218,16 +223,21 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       def models = snakeCaseReader.read(context)
 
     then:
-      models.size() == 1
+      models.size() == 2
 
       String modelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
       models.containsKey(modelName)
+      models.containsKey(modelName + "_1")
 
-      Model model = models[modelName]
-      Map modelProperties = model.getProperties()
-      modelProperties.size() == 2
-      modelProperties.containsKey('visible_for_serialize')
-      modelProperties.containsKey('always_visible')
+      Model model1 = models[modelName]
+      Model model2 = models[modelName + "_1"]
+      Map modelProperties1 = model1.getProperties()
+      modelProperties1.size() == 1
+      modelProperties1.containsKey('always_visible')
+      Map modelProperties2 = model2.getProperties()
+      modelProperties2.size() == 2
+      modelProperties2.containsKey('visible_for_serialize')
+      modelProperties2.containsKey('always_visible')
 
   }
 
@@ -240,14 +250,18 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       def models = sut.read(context)
 
     then:
-      models.size() == 1
+      models.size() == 2
 
       String modelName = FoobarDto.simpleName
       models.containsKey(modelName)
+      models.containsKey(modelName + "_1")
 
-      Model model = models[modelName]
-      Map modelProperties = model.getProperties()
-      modelProperties.containsKey('visibleForSerialize')
+      Model model1 = models[modelName]
+      Model model2 = models[modelName + "_1"]
+      Map modelProperties1 = model1.getProperties()
+      modelProperties1.containsKey('visibleForSerialize')
+      Map modelProperties2 = model2.getProperties()
+      !modelProperties2.containsKey('visibleForSerialize')
 
   }
   def "Test to verify issue #1196"() {

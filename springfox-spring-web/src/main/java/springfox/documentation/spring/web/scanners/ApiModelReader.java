@@ -62,9 +62,9 @@ public class ApiModelReader  {
     Map<String, Model> modelMap = newHashMap(context.getModelMap());
     for (ModelContext each : modelContexts) {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
-      List<ModelContext> pModel = modelProvider.modelsFor(each);
-      if (!pModel.isEmpty()) {
-        compareModelMap(modelMap, pModel);
+      List<ModelContext> pModelContexts = modelProvider.modelsFor(each);
+      if (!pModelContexts.isEmpty()) {
+        compareModelMap(modelMap, pModelContexts);
       } else {
         LOG.debug("Did not find any parameter models for {}", each.getType());
       }
@@ -73,43 +73,43 @@ public class ApiModelReader  {
   }
 
   private void compareModelMap(Map<String, Model> target, List<ModelContext> source) {     
-	boolean changes;
-	while (true) {	    
-	  changes = false;
-	  Iterator<ModelContext> iterator = source.iterator();  
+    boolean changes;
+    while (true) {      
+      changes = false;
+      Iterator<ModelContext> iterator = source.iterator();  
       outer:while (iterator.hasNext()) {
-    	ModelContext contextSource = iterator.next();
-    	Model modelSource = contextSource.getBuilder().build();
+        ModelContext contextSource = iterator.next();
+        Model modelSource = contextSource.getBuilder().build();
         LOG.debug("Checking duplicate models for model: {}", modelSource.getId());
-    	for (Map.Entry<String, Model> entryTarget : target.entrySet()) {
-    	  Model modelTarger = entryTarget.getValue();
-     	  if (!modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) { 
-     	    LOG.debug("Found duplicate for model: {}. Increasing index.", modelSource.getId());  
-     	    contextSource.getBuilder().index(modelSource.getIndex() + 1);
-    	    if (!contextSource.isRootContext()) {
-    	      changes = true;
-    	      break outer;
-    	    }
-    	  }	
-    	  if (modelSource.equals(modelTarger) && !modelSource.getName().equals(modelTarger.getName())) {
-    	    LOG.debug("Found same model for model: {}. But with different index. Adjusting the index.", modelSource.getId());  
-    	    contextSource.getBuilder().index(modelTarger.getIndex());
-      	    if (!contextSource.isRootContext()) {
-    	      changes = true;
-    	      break outer;
-    	    }
-      	  }	
+        for (Map.Entry<String, Model> entryTarget : target.entrySet()) {
+          Model modelTarger = entryTarget.getValue();
+          if (!modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) { 
+            LOG.debug("Found duplicate for model: {}. Increasing index.", modelSource.getId());  
+            contextSource.getBuilder().index(modelSource.getIndex() + 1);
+            if (!contextSource.isRootContext()) {
+              changes = true;
+              break outer;
+            }
+          } 
+          if (modelSource.equals(modelTarger) && !modelSource.getName().equals(modelTarger.getName())) {
+            LOG.debug("Found same model for model: {}. But with different index. Adjusting the index.", modelSource.getId());  
+            contextSource.getBuilder().index(modelTarger.getIndex());
+            if (!contextSource.isRootContext()) {
+              changes = true;
+              break outer;
+            }
+          } 
         }        
-	  }  
-	  if (!changes) {
-	    break;  
-	  }
-    }	
-	for (ModelContext sourceModelContext : source) {
-	  Model model = sourceModelContext.getBuilder().build();
-	  if (!target.containsKey(model.getId())) {
-	    target.put(model.getId(), model);
-	  }
+      }  
+      if (!changes) {
+        break;  
+      }
+    }   
+    for (ModelContext sourceModelContext : source) {
+      Model model = sourceModelContext.getBuilder().build();
+      if (!target.containsKey(model.getId())) {
+        target.put(model.getId(), model);
+      }
     }
   }
 

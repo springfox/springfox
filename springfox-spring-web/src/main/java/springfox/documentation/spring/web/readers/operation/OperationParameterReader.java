@@ -81,7 +81,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
       if (!shouldIgnore(methodParameter, alternate, context.getIgnorableParameterTypes())) {
 
-    	ModelContext modelContext = context.getOperationModelContextsBuilder().inputParam(alternate, methodParameter);
+        ModelContext modelContext = context.getOperationModelContextsBuilder().inputParam(alternate, methodParameter);
         ParameterContext parameterContext = new ParameterContext(methodParameter,
             new ParameterBuilder(),
             context.getDocumentationContext(),

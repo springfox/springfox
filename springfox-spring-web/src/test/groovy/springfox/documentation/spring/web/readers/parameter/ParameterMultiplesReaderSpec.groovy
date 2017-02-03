@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
@@ -26,8 +27,10 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -51,13 +54,17 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
     given:
       ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
       ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
+          new ResolvedMethodParameter(0, false, "", [apiParamAnnotation], resolvedType)
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(
           resolvedMethodParameter,
           new ParameterBuilder(),
           context(),
           Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+          Mock(OperationContext),
+          operationModelContextsBuilder.inputParam(resolvedType, resolvedMethodParameter))
 
     when:
       sut.apply(parameterContext)

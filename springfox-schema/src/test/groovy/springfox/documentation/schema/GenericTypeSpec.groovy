@@ -47,14 +47,20 @@ class GenericTypeSpec extends SchemaSpecification {
           ImmutableSet.builder().build())
         def propertyLookup = ["GenericType": "genericField", "Resource": "content"]
     when:
-      Model asInput = modelProvider.modelFor(inputContext).get()
+      List asInputContexts = modelProvider.modelsFor(inputContext)
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     and:
-      Model asReturn = modelProvider.modelFor(returnContext).get()
+      List asReturnContexts = modelProvider.modelsFor(returnContext)
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     then:
-      asInput.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
+      asInputModels.containsKey(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
+      def asInput = asInputModels.get(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
       verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
     and:
-      asReturn.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
+      asReturnModels.containsKey(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
+      def asReturn = asReturnModels.get(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
       verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
 
     
@@ -87,15 +93,22 @@ class GenericTypeSpec extends SchemaSpecification {
           namingStrategy,
           ImmutableSet.builder().build())
     when:
-      Model asInput = modelProvider.modelFor(inputContext).get()
-      Model asReturn = modelProvider.modelFor(returnContext).get()
+      List asInputContexts = modelProvider.modelsFor(inputContext)
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+    and:
+      List asReturnContexts = modelProvider.modelsFor(returnContext)
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     then:
-      asInput.getName() == "GenericTypeBoundToMultiple«Void,Void»"
+      asInputModels.containsKey("GenericTypeBoundToMultiple«Void,Void»")
+      def asInput = asInputModels.get("GenericTypeBoundToMultiple«Void,Void»")
       verifyModelProperty(asInput, propertyType, qualifiedType, propertyName)
 
     and:
-      asReturn.getName() == "GenericTypeBoundToMultiple«Void,Void»"
+      asReturnModels.containsKey("GenericTypeBoundToMultiple«Void,Void»")
+      def asReturn = asReturnModels.get("GenericTypeBoundToMultiple«Void,Void»")
       verifyModelProperty(asReturn, propertyType, qualifiedType, propertyName)
 
     where:
@@ -113,7 +126,9 @@ class GenericTypeSpec extends SchemaSpecification {
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-        Model asInput = modelProvider.modelFor(inputContext).get()
+      List asInputContexts = modelProvider.modelsFor(inputContext)
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
       def returnContext = returnValue(
           modelType,
@@ -121,30 +136,36 @@ class GenericTypeSpec extends SchemaSpecification {
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      Model asReturn = modelProvider.modelFor(returnContext).get()
+      List asReturnContexts = modelProvider.modelsFor(returnContext)
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
+      asInputModels.containsKey(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
+      def asInput = asInputModels.get(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
       asInput.getProperties().containsKey("strings")
       def modelProperty = asInput.getProperties().get("strings")
       typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType())) == propertyType
 //      modelProperty.qualifiedType == qualifiedType
 
+      asReturnModels.containsKey(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
+      def asReturn = asReturnModels.get(expectedModelName(modelNamePart, modelType.erasedType.simpleName))
       asReturn.getProperties().containsKey("strings")
       def retModelProperty = asReturn.getProperties().get("strings")
       typeNameExtractor.typeName(fromParent(inputContext, retModelProperty.getType())) == propertyType
 //      retModelProperty.qualifiedType == qualifiedType // Not working as expected because of bug with classmate
 
     where:
-      modelType                      | propertyType     | qualifiedType
-      genericClass()                 | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithTypeErased()   | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithListField()    | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithGenericField() | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithDeepGenerics() | "List"           | "java.util.List<java.lang.String>"
-      genericCollectionWithEnum()    | "List"           | "java.util.List<java.lang.String>"
+      modelType                      | propertyType     | qualifiedType                      | modelNamePart
+      genericClass()                 | "List"           | "java.util.List<java.lang.String>" | "SimpleType"
+      genericClassWithTypeErased()   | "List"           | "java.util.List<java.lang.String>" | ""
+      genericClassWithListField()    | "List"           | "java.util.List<java.lang.String>" | "List«SimpleType»"
+      genericClassWithGenericField() | "List"           | "java.util.List<java.lang.String>" | "ResponseEntityAlternative«SimpleType»"
+      genericClassWithDeepGenerics() | "List"           | "java.util.List<java.lang.String>" | "ResponseEntityAlternative«List«SimpleType»»"
+      genericCollectionWithEnum()    | "List"           | "java.util.List<java.lang.String>" | "Collection«string»"
   }
 
-  def expectedModelName(String modelName, String hostType = "GenericType") {
+  String expectedModelName(String modelName, String hostType = "GenericType") {
     if (!isNullOrEmpty(modelName)) {
       "$hostType«$modelName»"
     } else {

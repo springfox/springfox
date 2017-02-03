@@ -21,7 +21,6 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
@@ -39,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static com.google.common.base.Predicates.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -71,15 +71,14 @@ public class DefaultModelProvider implements ModelProvider {
     List<ModelContext> modelContexts = newArrayList();
     if (shouldIgnore(modelContext)) {
       return modelContexts;    
-    }
-    for (ModelContext parentContext : FluentIterable.from(dependencyProvider.dependentModels(modelContext)).filter(shouldIgnore()).toList()) {
-      Optional<Model> model = Optional.of(modelBuilder(parentContext)).or(mapModel(parentContext, parentContext.resolvedType(resolver)));
-      if (model.isPresent()) {
-          modelContexts.add(parentContext);
-        LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
-          model.get().getId(),
-          model.get().getName());
-      }    
+    }   
+    for (ModelContext childContext : FluentIterable.from(dependencyProvider.dependentModels(modelContext)).
+            filter(not(shouldIgnore())).toList()) {
+      Model model = isMapType(childContext.resolvedType(resolver))?mapModel(childContext):modelBuilder(childContext);
+      modelContexts.add(childContext);
+      LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
+        model.getId(),
+        model.getName()); 
     }
     modelBuilder(modelContext);
     modelContexts.add(modelContext);
@@ -102,23 +101,20 @@ public class DefaultModelProvider implements ModelProvider {
     return schemaPluginsManager.model(modelContext);
   }
   
-  private Optional<Model> mapModel(ModelContext parentContext, ResolvedType resolvedType) {
-    if (isMapType(resolvedType) && !parentContext.hasSeenBefore(resolvedType)) {
-      String typeName = typeNameExtractor.typeName(parentContext);
-      return Optional.of(parentContext.getBuilder()
-          .id(typeName)
-          .type(resolvedType)
-          .name(typeName)
-          .index(0)
-          .qualifiedType(simpleQualifiedTypeName(resolvedType))
-          .properties(new HashMap<String, ModelProperty>())
-          .description("")
-          .baseModel("")
-          .discriminator("")
-          .subTypes(new ArrayList<String>())
-          .build());
-    }
-    return Optional.absent();
+  private Model mapModel(ModelContext modelContext) {
+    String typeName = typeNameExtractor.typeName(modelContext);
+    return modelContext.getBuilder()
+        .id(typeName)
+        .type(modelContext.resolvedType(resolver))
+        .name(typeName)
+        .index(0)
+        .qualifiedType(simpleQualifiedTypeName(modelContext.resolvedType(resolver)))
+        .properties(new HashMap<String, ModelProperty>())
+        .description("")
+        .baseModel("")
+        .discriminator("")
+        .subTypes(new ArrayList<String>())
+        .build();
   }
   
   private Predicate<ModelContext> shouldIgnore() {
@@ -133,7 +129,6 @@ public class DefaultModelProvider implements ModelProvider {
   private boolean shouldIgnore(ModelContext context) {
     ResolvedType propertiesHost = context.alternateFor(context.resolvedType(resolver));
     if (isContainerType(propertiesHost)
-        || isMapType(propertiesHost)
         || propertiesHost.getErasedType().isEnum()
         || isBaseType(propertiesHost)
         || context.hasSeenBefore(propertiesHost)) {

@@ -130,7 +130,9 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     for (ResolvedType parameter : resolvedType.getTypeParameters()) {
       LOG.debug("Adding type for parameter {}", parameter.getSignature());
       parameter = modelContext.alternateFor(parameter);
-      ModelContext childContext = ModelContext.copy(modelContext, parameter);
+      ModelContext childContext = 
+              (isContainerType(resolvedType) || isMapType(resolvedType))?
+                      ModelContext.copy(modelContext, parameter):ModelContext.fromParent(modelContext, parameter);
       parameters.add(childContext);
       LOG.debug("Recursively resolving dependencies for parameter {}", parameter.getSignature());
       parameters.addAll(resolvedDependencies(childContext));

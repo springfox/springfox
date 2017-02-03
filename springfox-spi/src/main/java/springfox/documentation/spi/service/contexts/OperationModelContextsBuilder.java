@@ -76,10 +76,10 @@ public class OperationModelContextsBuilder {
   }
   
   public ModelContext inputParam(Type type, ResolvedMethodParameter parameter) {
-	if (!contextsLinks.containsKey(parameter)) {
-	  contextsLinks.put(parameter, parameter.isReturnType()?this.returnType(type):this.inputType(type));
-	}
-	return contextsLinks.get(parameter);
+    if (!contextsLinks.containsKey(parameter)) {
+      contextsLinks.put(parameter, parameter.isReturnType()?this.returnType(type):this.inputType(type));
+    }
+    return contextsLinks.get(parameter);
   }
   
   public Set<ModelContext> build() {

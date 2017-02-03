@@ -33,22 +33,29 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = typeWithLists()
-      Model asInput = modelProvider.modelFor(inputParam(
+      List asInputContexts = modelProvider.modelsFor(inputParam(
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(
+          ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = modelProvider.modelsFor(returnValue(
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "ListsContainer"
+      asInputModels.containsKey("ListsContainer")
+      def asInput = asInputModels.get("ListsContainer")
       asInput.getProperties().containsKey(property)
+      asInput.getProperties().size() == 6
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == name
       modelProperty.getModelRef()
@@ -57,8 +64,10 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemType
       item.collection
 
-      asReturn.getName() == "ListsContainer"
+      asReturnModels.containsKey("ListsContainer")
+      def asReturn = asReturnModels.get("ListsContainer")
       asReturn.getProperties().containsKey(property)
+      asReturn.getProperties().size() == 6
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == name
       retModelProperty.getModelRef()
@@ -80,22 +89,29 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties are inferred correctly"() {
     given:
       def sut = typeWithSets()
-      Model asInput = modelProvider.modelFor(inputParam(
+      List asInputContexts = modelProvider.modelsFor(inputParam(
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(
+          ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = modelProvider.modelsFor(returnValue(
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "SetsContainer"
+      asInputModels.containsKey("SetsContainer")
+      def asInput = asInputModels.get("SetsContainer")
       asInput.getProperties().containsKey(property)
+      asInput.getProperties().size() == 5
       def modelProperty = asInput.getProperties().get(property)
       containerType(modelProperty.getType()) == type
       modelProperty.getModelRef()
@@ -104,8 +120,10 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemType
       item.collection
 
-      asReturn.getName() == "SetsContainer"
+      asReturnModels.containsKey("SetsContainer")
+      def asReturn = asReturnModels.get("SetsContainer")
       asReturn.getProperties().containsKey(property)
+      asReturn.getProperties().size() == 5
       def retModelProperty = asReturn.getProperties().get(property)
       containerType(retModelProperty.type) == type
       retModelProperty.getModelRef()
@@ -127,22 +145,29 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type Arrays are inferred correctly for #property"() {
     given:
       def sut = typeWithArrays()
-      Model asInput = modelProvider.modelFor(inputParam(
+      List asInputContexts = modelProvider.modelsFor(inputParam(
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(
+          ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = modelProvider.modelsFor(returnValue(
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "ArraysContainer"
+      asInputModels.containsKey("ArraysContainer")
+      def asInput = asInputModels.get("ArraysContainer")
       asInput.getProperties().containsKey(property)
+      asInput.getProperties().size() == 10
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getModelRef()
@@ -151,8 +176,10 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemType
       item.collection
 
-      asReturn.getName() == "ArraysContainer"
+      asReturnModels.containsKey("ArraysContainer")
+      def asReturn = asReturnModels.get("ArraysContainer")
       asReturn.getProperties().containsKey(property)
+      asReturn.getProperties().size() == 10
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getModelRef()
@@ -162,37 +189,45 @@ class ContainerTypesSpec extends SchemaSpecification {
       retItem.collection
 
     where:
-      property          | type          | itemType      | itemQualifiedType
-      "complexTypes"    | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"
-      "enums"           | ExampleEnum[] | "string"      | "springfox.documentation.schema.ExampleEnum"
-      "aliasOfIntegers" | Integer[]     | "int"         | "java.lang.Integer"
-      "strings"         | String[]      | "string"      | "java.lang.String"
-      "objects"         | Object[]      | "object"      | "java.lang.Object"
-      "bytes"           | byte[]        | "byte"        | "byte"
-      "substituted"     | Substituted[] | "Substituted" | "springfox.documentation.schema.Substituted"
-      "arrayOfArrayOfInts"| int[][]     | "Array"       | "Array"
-      "arrayOfListOfStrings"| List[]    | "List"        | "Array"
+      property               | type          | itemType      | itemQualifiedType
+      "complexTypes"         | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"
+      "enums"                | ExampleEnum[] | "string"      | "springfox.documentation.schema.ExampleEnum"
+      "aliasOfIntegers"      | Integer[]     | "int"         | "java.lang.Integer"
+      "strings"              | String[]      | "string"      | "java.lang.String"
+      "objects"              | Object[]      | "object"      | "java.lang.Object"
+      "bytes"                | byte[]        | "byte"        | "byte"
+      "substituted"          | Substituted[] | "Substituted" | "springfox.documentation.schema.Substituted"
+      "arrayOfArrayOfInts"   | int[][]       | "Array"       | "Array"
+      "arrayOfListOfStrings" | List[]        | "List"        | "Array"
+      "aliasOfIntegers"      | Integer[]     | "int"         | "java.lang.Integer"
   }
 
   def "Model properties of type Map are inferred correctly"() {
     given:
       def sut = mapsContainer()
-      Model asInput = modelProvider.modelFor(inputParam(
+      List asInputContexts = modelProvider.modelsFor(inputParam(
           sut,
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue(
+          ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = modelProvider.modelsFor(returnValue(
           sut,
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "MapsContainer"
+      asInputModels.containsKey("MapsContainer")
+      def asInput = asInputModels.get("MapsContainer")
       asInput.getProperties().containsKey(property)
+      asInput.getProperties().size() == 4
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getModelRef()
@@ -201,8 +236,10 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemRef
       item.collection
 
-      asReturn.getName() == "MapsContainer"
+      asReturnModels.containsKey("MapsContainer")
+      def asReturn = asReturnModels.get("MapsContainer")
       asReturn.getProperties().containsKey(property)
+      asReturn.getProperties().size() == 4
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getModelRef()
@@ -212,10 +249,11 @@ class ContainerTypesSpec extends SchemaSpecification {
       retItem.collection
 
     where:
-      property              | type  | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
+      property                       | type  | itemRef                      | itemQualifiedType
+      "enumToSimpleType"             | List  | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
+      "stringToSimpleType"           | List  | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
+      "complexToSimpleType"          | List  | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
+      "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
   }
 
   def "Model properties of type Map are inferred correctly on generic host"() {
@@ -228,7 +266,9 @@ class ContainerTypesSpec extends SchemaSpecification {
         alternateRulesWithWildcardMap(),
         namingStrategy,
         ImmutableSet.builder().build())
-      Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
+      List asInputContexts = modelProvider.modelsFor(modelContext)
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     def returnContext = returnValue(
         sut,
@@ -236,11 +276,15 @@ class ContainerTypesSpec extends SchemaSpecification {
         alternateRulesWithWildcardMap(),
         namingStrategy,
         ImmutableSet.builder().build())
-      Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
+      List asReturnContexts = modelProvider.modelsFor(returnContext)
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "MapsContainer"
+      asInputModels.containsKey("MapsContainer")
+      def asInput = asInputModels.get("MapsContainer")
       asInput.getProperties().containsKey(property)
+      asInput.getProperties().size() == 4
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getModelRef()
@@ -249,8 +293,10 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemRef
       item.collection
 
-      asReturn.getName() == "MapsContainer"
+      asReturnModels.containsKey("MapsContainer")
+      def asReturn = asReturnModels.get("MapsContainer")
       asReturn.getProperties().containsKey(property)
+      asReturn.getProperties().size() == 4
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getModelRef()
@@ -260,11 +306,11 @@ class ContainerTypesSpec extends SchemaSpecification {
       retItem.collection
 
     where:
-      property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
-      "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
+      property                       | type   | itemRef                      | itemQualifiedType
+      "enumToSimpleType"             | List   | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
+      "stringToSimpleType"           | List   | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
+      "complexToSimpleType"          | List   | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
+      "mapOfmapOfStringToSimpleType" | List   | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
   }
 
   def "Model properties of type Map are inferred correctly on generic host with default rules"() {
@@ -277,7 +323,9 @@ class ContainerTypesSpec extends SchemaSpecification {
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
+      List asInputContexts = modelProvider.modelsFor(modelContext)
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
       def returnContext = returnValue(
           sut,
@@ -285,11 +333,15 @@ class ContainerTypesSpec extends SchemaSpecification {
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
+      List asReturnContexts = modelProvider.modelsFor(returnContext)
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "MapsContainer"
+      asInputModels.containsKey("MapsContainer")
+      def asInput = asInputModels.get("MapsContainer")
       asInput.getProperties().containsKey(property)
+      asInput.getProperties().size() == 4
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getModelRef()
@@ -298,8 +350,10 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemRef
       !item.collection
 
-      asReturn.getName() == "MapsContainer"
+      asReturnModels.containsKey("MapsContainer")
+      def asReturn = asReturnModels.get("MapsContainer")
       asReturn.getProperties().containsKey(property)
+      asReturn.getProperties().size() == 4
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getModelRef()

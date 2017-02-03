@@ -48,12 +48,10 @@ class AllowableRangeValuesSpec extends Specification {
       sut.hashCode() == sut.hashCode()
     where:
       min | exclusiveMin | max | exclusiveMax | expectedEquality
-      "0" | null         | "2" | null         | false
       "0" | true         | "2" | false        | true
-      "1" | true         | "2" | false        | false
-      "1" | true         | "3" | false        | false
-      "1" | false        | "3" | false        | false
-      "1" | false        | "3" | true         | false
-      "1" | true         | "3" | true         | false
+      "1" | null         | "2" | null         | false
+      "0" | true         | "3" | false        | false
+      "0" | false        | "2" | false        | false
+      "0" | true         | "2" | true         | false
     }
 }

@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpMethod
@@ -28,8 +29,10 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -44,13 +47,17 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
   def "param type #annotation"() {
     given:
       def annotations = annotation == null ? [] : [annotation]
-      def resolvedMethodParameter = new ResolvedMethodParameter(0, "",  annotations, resolve(type))
+      def resolvedMethodParameter = new ResolvedMethodParameter(0, false, "",  annotations, resolve(type))
       def operationContext = Mock(OperationContext)
     and:
       operationContext.consumes() >> consumes
       operationContext.httpMethod() >> httpMethod
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), Mock(GenericTypeNamingStrategy), operationContext)
+          context(), Mock(GenericTypeNamingStrategy), operationContext,
+          operationModelContextsBuilder.inputParam(resolve(type), resolvedMethodParameter))
     when:
       def operationCommand = new ParameterTypeReader()
       operationCommand.apply(parameterContext)

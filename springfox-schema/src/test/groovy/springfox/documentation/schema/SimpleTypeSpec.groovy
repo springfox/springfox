@@ -33,23 +33,30 @@ class SimpleTypeSpec extends SchemaSpecification {
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
-      Model asInput = modelProvider.modelFor(
+      List asInputContexts = modelProvider.modelsFor(
           inputParam(
               simpleType(),
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(
+              ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = modelProvider.modelsFor(
           returnValue(
               simpleType(),
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "SimpleType"
+      asInputModels.size() == 1
+      asInputModels.containsKey("SimpleType")
+      def asInput = asInputModels.get("SimpleType")
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
@@ -59,7 +66,9 @@ class SimpleTypeSpec extends SchemaSpecification {
       !item.collection
       item.itemType == null
 
-      asReturn.getName() == "SimpleType"
+      asReturnContexts.size() == 1
+      asReturnModels.containsKey("SimpleType")
+      def asReturn = asReturnModels.get("SimpleType")
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
@@ -95,23 +104,30 @@ class SimpleTypeSpec extends SchemaSpecification {
   @Ignore
   def "type with constructor all properties are inferred"() {
     given:
-      Model asInput = modelProvider.modelFor(
+      List asInputContexts = modelProvider.modelsFor(
           inputParam(
               typeWithConstructor(),
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(
+              ImmutableSet.builder().build()))
+     Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+    
+     List asReturnContexts = modelProvider.modelsFor(
           returnValue(
               typeWithConstructor(),
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              ImmutableSet.builder().build()))
+     Map asReturnModels = asReturnContexts.collectEntries{
+         [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "TypeWithConstructor"
+      asInputModels.size() == 1
+      asInputModels.containsKey("TypeWithConstructor")
+      def asInput = asInputModels.get("TypeWithConstructor")
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.getType().erasedType == type
@@ -121,7 +137,9 @@ class SimpleTypeSpec extends SchemaSpecification {
       !item.collection
       item.itemType == null
 
-      asReturn.getName() == "TypeWithConstructor"
+      asReturnContexts.size() == 1
+      asReturnModels.containsKey("TypeWithConstructor")
+      def asReturn = asReturnModels.get("TypeWithConstructor")
       !asReturn.getProperties().containsKey(property)
 
     where:
@@ -131,23 +149,30 @@ class SimpleTypeSpec extends SchemaSpecification {
 
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
-      Model asInput = modelProvider.modelFor(
+      List asInputContexts = modelProvider.modelsFor(
           inputParam(
               typeWithJsonPropertyAnnotation(),
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(
+              ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = modelProvider.modelsFor(
           returnValue(
               typeWithJsonPropertyAnnotation(),
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};  
 
     expect:
-      asInput.getName() == "TypeWithJsonProperty"
+      asInputModels.size() == 1
+      asInputModels.containsKey("TypeWithJsonProperty")
+      def asInput = asInputModels.get("TypeWithJsonProperty")
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
@@ -157,7 +182,9 @@ class SimpleTypeSpec extends SchemaSpecification {
       !item.collection
       item.itemType == null
 
-      asReturn.getName() == "TypeWithJsonProperty"
+      asReturnContexts.size() == 1
+      asReturnModels.containsKey("TypeWithJsonProperty")
+      def asReturn = asReturnModels.get("TypeWithJsonProperty")
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
