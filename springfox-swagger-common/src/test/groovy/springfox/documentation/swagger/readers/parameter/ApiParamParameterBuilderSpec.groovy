@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
@@ -29,8 +30,11 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -46,12 +50,17 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
       def resolvedMethodParameter = new ResolvedMethodParameter("default", methodParameter,
           new TypeResolver().resolve(handlerMethod.methodParameters[0].getParameterType()))
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(
           resolvedMethodParameter,
           new ParameterBuilder(),
           context(),
           genericNamingStrategy,
-          Mock(OperationContext))
+          Mock(OperationContext),
+          operationModelContextsBuilder.inputParam(
+              new TypeResolver().resolve(handlerMethod.methodParameters[0].getParameterType()), resolvedMethodParameter))
 
     when:
       ApiParamParameterBuilder operationCommand = new ApiParamParameterBuilder();
@@ -70,15 +79,19 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   @Unroll
   def "Api annotation with list type"() {
     given:
-      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], Mock(ResolvedType))
+      def resolvedMethodParameter = new ResolvedMethodParameter(0, false, "", [apiParamAnnotation], Mock(ResolvedType))
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext =
           new ParameterContext(
               resolvedMethodParameter,
               new ParameterBuilder(),
               context(),
               genericNamingStrategy,
-              Mock(OperationContext))
+              Mock(OperationContext),
+              operationModelContextsBuilder.inputParam(Mock(ResolvedType), resolvedMethodParameter))
 
     when:
       ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation);
@@ -98,14 +111,18 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   @Unroll("Range: #min | #max")
   def "Api annotation with ranges"() {
     given:
-      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], Mock(ResolvedType))
+      def resolvedMethodParameter = new ResolvedMethodParameter(0, false, "", [apiParamAnnotation], Mock(ResolvedType))
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(
           resolvedMethodParameter,
           new ParameterBuilder(),
           context(),
           genericNamingStrategy,
-          Mock(OperationContext))
+          Mock(OperationContext),
+          operationModelContextsBuilder.inputParam(Mock(ResolvedType), resolvedMethodParameter))
 
     when:
       ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation);

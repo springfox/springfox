@@ -131,7 +131,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Resource\u00abPet\u00bb"
+              "responseModel": "Resource\u00abPet\u00bb_1"
             },
             {
               "code": 401,
@@ -151,7 +151,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Resource\u00abPet\u00bb"
+          "type": "Resource\u00abPet\u00bb_1"
         }
       ],
       "path": "/foo/get-t/{id}"
@@ -162,6 +162,74 @@
 
   ],
   "models": {
+    "Link_1": {
+      "description": "",
+      "id": "Link_1",
+      "properties": {
+        "href": {
+          "required": false,
+          "type": "string"
+        },
+        "rel": {
+          "required": false,
+          "type": "string"
+        },
+        "templated": {
+          "required": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "Resource\u00abPet\u00bb": {
+      "description": "",
+      "id": "Resource\u00abPet\u00bb",
+      "properties": {
+        "_links": {
+          "required": false,
+          "items": {
+            "type": "Link"
+          },
+          "type": "array"
+        },
+        "content": {
+          "required": false,
+          "type": "Pet"
+        }
+      }
+    },
+    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
+      "description": "",
+      "id": "HttpEntity\u00abResource\u00abPet\u00bb\u00bb",
+      "properties": {
+        "body": {
+          "required": false,
+          "type": "Resource\u00abPet\u00bb_1"
+        }
+      }
+    },
+    "Resource\u00abPet\u00bb_1": {
+      "description": "",
+      "id": "Resource\u00abPet\u00bb_1",
+      "properties": {
+        "_links": {
+          "required": false,
+          "type": "List[Link_1]"
+        },
+        "age": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
     "Pet": {
       "description": "",
       "id": "Pet",
@@ -192,50 +260,6 @@
         "rel": {
           "required": false,
           "type": "string"
-        },
-        "templated": {
-          "required": false,
-          "type": "boolean"
-        }
-      }
-    },
-    "Resource\u00abPet\u00bb": {
-      "description": "",
-      "id": "Resource\u00abPet\u00bb",
-      "properties": {
-        "_links": {
-          "required": false,
-          "items": {
-            "type": "Link"
-          },
-          "type": "array"
-        },
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "content": {
-          "required": false,
-          "type": "Pet"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
-      "description": "",
-      "id": "HttpEntity\u00abResource\u00abPet\u00bb\u00bb",
-      "properties": {
-        "body": {
-          "required": false,
-          "type": "Resource\u00abPet\u00bb"
         }
       }
     }

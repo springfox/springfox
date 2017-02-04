@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
-import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
@@ -56,8 +55,7 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Autowired
   public DefaultModelProvider(TypeResolver resolver,
-      @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
-      @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
+      @Qualifier("default") ModelDependencyProvider dependencyProvider,
       SchemaPluginsManager schemaPluginsManager,
       TypeNameExtractor typeNameExtractor) {
     this.resolver = resolver;
@@ -69,19 +67,19 @@ public class DefaultModelProvider implements ModelProvider {
   @Override
   public List<ModelContext> modelsFor(ModelContext modelContext) {
     List<ModelContext> modelContexts = newArrayList();
-    if (shouldIgnore(modelContext)) {
-      return modelContexts;    
+    if (!shouldIgnore(modelContext) && 
+        !isMapType(modelContext.alternateFor(modelContext.resolvedType(resolver)))) {
+      modelContexts.add(modelContext);
     }   
-    for (ModelContext childContext : FluentIterable.from(dependencyProvider.dependentModels(modelContext)).
-            filter(not(shouldIgnore())).toList()) {
-      Model model = isMapType(childContext.resolvedType(resolver))?mapModel(childContext):modelBuilder(childContext);
-      modelContexts.add(childContext);
+    modelContexts.addAll(FluentIterable.from(dependencyProvider.dependentModels(modelContext)).
+            filter(not(shouldIgnore())).toList());
+    for (ModelContext childContext : modelContexts) {
+      Model model = isMapType(childContext.resolvedType(resolver))?
+              mapModel(childContext):modelBuilder(childContext);
       LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
         model.getId(),
         model.getName()); 
     }
-    modelBuilder(modelContext);
-    modelContexts.add(modelContext);
     return modelContexts;
   }
 

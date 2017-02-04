@@ -37,6 +37,7 @@ import static com.google.common.collect.Sets.*;
 public class ModelContext {
   private final Type type;
   private final boolean returnType;
+  private final boolean parentContainer;
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
@@ -61,28 +62,20 @@ public class ModelContext {
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
+    this.parentContainer = false;
     this.modelBuilder = new ModelBuilder();
   }
 
-  ModelContext(ModelContext parentContext, ResolvedType input) {
+  ModelContext(ModelContext parentContext, ResolvedType input, boolean parentContainer) {
     this.parentContext = parentContext;
     this.type = input;
     this.returnType = parentContext.isReturnType();
+    this.parentContainer = parentContainer;
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
   }
-  
-  ModelContext(ModelContext parentContext, ResolvedType input, ModelBuilder modelBuilder) {
-      this.parentContext = parentContext;
-      this.type = input;
-      this.returnType = parentContext.isReturnType();
-      this.documentationType = parentContext.getDocumentationType();
-      this.modelBuilder = modelBuilder;
-      this.alternateTypeProvider = parentContext.alternateTypeProvider;
-      this.ignorableTypes = parentContext.ignorableTypes;
-    }
 
   /**
    * @return type behind this context
@@ -180,7 +173,7 @@ public class ModelContext {
    * @return new context based on parent context for a given input
    */
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
-    return new ModelContext(context, input);
+    return new ModelContext(context, input, false);
   }
   
   /**
@@ -189,8 +182,8 @@ public class ModelContext {
    * @param input - context for given input
    * @return new context based on parent context for a given input
    */
-  public static ModelContext copy(ModelContext context, ResolvedType input) {
-    return new ModelContext(context, input, context.getBuilder());
+  public static ModelContext fromContainerParent(ModelContext context, ResolvedType input) {
+    return new ModelContext(context, input, true);
   }
 
   /**
@@ -242,6 +235,13 @@ public class ModelContext {
   
   public boolean isRootContext() {
     return (parentContext == null);  
+  }
+  
+  public void updateIndex(Integer index) {
+    modelBuilder.index(index);  
+    if (parentContainer) {
+      parentContext.updateIndex(index); 
+    }
   }
 
   @Override

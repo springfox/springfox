@@ -160,7 +160,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
       sut.apply(context)
     and:
       def enriched = context.getBuilder().build()
-      enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+      enriched.updateModelRefFactory(modelRefFactory(modelContext, typeNameExtractor))
     then:
       enriched.allowableValues?.values == null
       !enriched.isRequired()
@@ -198,7 +198,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
       sut.apply(context)
     and:
       def enriched = context.getBuilder().build()
-      enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+      enriched.updateModelRefFactory(modelRefFactory(modelContext, typeNameExtractor))
     then:
       enriched.allowableValues?.values == null
       !enriched.isRequired()

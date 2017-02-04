@@ -47,7 +47,7 @@ public class ApiModelReader  {
   private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiModelReader(@Qualifier("cachedModels") ModelProvider modelProvider,
+  public ApiModelReader(@Qualifier("default") ModelProvider modelProvider,
           TypeResolver typeResolver,
           DocumentationPluginsManager pluginsManager) {
     this.modelProvider = modelProvider;
@@ -85,7 +85,7 @@ public class ApiModelReader  {
           Model modelTarger = entryTarget.getValue();
           if (!modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) { 
             LOG.debug("Found duplicate for model: {}. Increasing index.", modelSource.getId());  
-            contextSource.getBuilder().index(modelSource.getIndex() + 1);
+            contextSource.updateIndex(modelSource.getIndex() + 1);
             if (!contextSource.isRootContext()) {
               changes = true;
               break outer;
@@ -93,7 +93,7 @@ public class ApiModelReader  {
           } 
           if (modelSource.equals(modelTarger) && !modelSource.getName().equals(modelTarger.getName())) {
             LOG.debug("Found same model for model: {}. But with different index. Adjusting the index.", modelSource.getId());  
-            contextSource.getBuilder().index(modelTarger.getIndex());
+            contextSource.updateIndex(modelTarger.getIndex());
             if (!contextSource.isRootContext()) {
               changes = true;
               break outer;

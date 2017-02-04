@@ -22,10 +22,8 @@ package springfox.documentation.schema;
 
 import java.util.List;
 
-import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 public interface ModelProvider {
-  @Cacheable(value = "models")
   List<ModelContext> modelsFor(ModelContext modelContext);
 }

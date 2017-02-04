@@ -197,15 +197,25 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       models.containsKey(modelName)
       models.containsKey(modelName + "_1")
 
-      Model model1 = models[modelName]
-      Model model2 = models[modelName + "_1"]
+      Model model1 = models[modelName + "_1"]
+      Model model2 = models[modelName]
+      
       Map modelProperties1 = model1.getProperties()
-      modelProperties1.size() == 1
-      modelProperties1.containsKey('alwaysVisible')
       Map modelProperties2 = model2.getProperties()
-      modelProperties2.size() == 2
-      modelProperties2.containsKey('visibleForSerialize')
-      modelProperties2.containsKey('alwaysVisible')
+      
+      if (modelProperties1.size() == 1) {
+        modelProperties1.containsKey('always_visible')
+            
+        modelProperties2.size() == 2
+        modelProperties2.containsKey('visible_for_serialize')
+        modelProperties2.containsKey('always_visible')
+      } else {
+          modelProperties1.containsKey('always_visible')
+          modelProperties1.containsKey('visible_for_serialize')
+            
+          modelProperties2.size() == 1
+          modelProperties2.containsKey('always_visible')
+      }
 
   }
 
@@ -229,15 +239,25 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       models.containsKey(modelName)
       models.containsKey(modelName + "_1")
 
-      Model model1 = models[modelName]
-      Model model2 = models[modelName + "_1"]
+      Model model1 = models[modelName + "_1"]
+      Model model2 = models[modelName]
+     
       Map modelProperties1 = model1.getProperties()
-      modelProperties1.size() == 1
-      modelProperties1.containsKey('always_visible')
       Map modelProperties2 = model2.getProperties()
-      modelProperties2.size() == 2
-      modelProperties2.containsKey('visible_for_serialize')
-      modelProperties2.containsKey('always_visible')
+      
+      if (modelProperties1.size() == 1) {
+        modelProperties1.containsKey('always_visible')
+          
+        modelProperties2.size() == 2
+        modelProperties2.containsKey('visible_for_serialize')
+        modelProperties2.containsKey('always_visible')
+      } else {
+          modelProperties1.containsKey('always_visible')
+          modelProperties1.containsKey('visible_for_serialize')
+          
+          modelProperties2.size() == 1
+          modelProperties2.containsKey('always_visible')
+      }
 
   }
 
@@ -253,8 +273,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       models.size() == 2
 
       String modelName = FoobarDto.simpleName
-      models.containsKey(modelName)
       models.containsKey(modelName + "_1")
+      models.containsKey(modelName)
 
       Model model1 = models[modelName]
       Model model2 = models[modelName + "_1"]

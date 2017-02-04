@@ -46,7 +46,7 @@ public class ApiDescriptionReader {
 
   @Autowired
   public ApiDescriptionReader(
-      @Qualifier("cachedOperations") OperationReader operationReader,
+      @Qualifier("default") OperationReader operationReader,
       DocumentationPluginsManager pluginsManager,
       ApiDescriptionLookup lookup) {
     this.operationReader = operationReader;

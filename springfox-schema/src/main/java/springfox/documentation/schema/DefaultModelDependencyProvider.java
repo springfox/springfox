@@ -58,7 +58,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   @Autowired
   public DefaultModelDependencyProvider(
       TypeResolver typeResolver,
-      @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
+      @Qualifier("optimized") ModelPropertiesProvider propertiesProvider,
       TypeNameExtractor nameExtractor) {
 
     this.typeResolver = typeResolver;
@@ -117,7 +117,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
       ResolvedType elementType = resolvedType.getArrayElementType();
       LOG.debug("Adding type for element {}", elementType.getSignature());
       elementType = modelContext.alternateFor(elementType);
-      ModelContext childContext = ModelContext.copy(modelContext, elementType);
+      ModelContext childContext = ModelContext.fromContainerParent(modelContext, elementType);
       parameters.add(childContext);
       LOG.debug("Recursively resolving dependencies for element {}", elementType.getSignature());
       parameters.addAll(resolvedDependencies(childContext));
@@ -130,9 +130,8 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     for (ResolvedType parameter : resolvedType.getTypeParameters()) {
       LOG.debug("Adding type for parameter {}", parameter.getSignature());
       parameter = modelContext.alternateFor(parameter);
-      ModelContext childContext = 
-              (isContainerType(resolvedType) || isMapType(resolvedType))?
-                      ModelContext.copy(modelContext, parameter):ModelContext.fromParent(modelContext, parameter);
+      ModelContext childContext = (isContainerType(resolvedType))?
+              ModelContext.fromContainerParent(modelContext, parameter):ModelContext.fromParent(modelContext, parameter);
       parameters.add(childContext);
       LOG.debug("Recursively resolving dependencies for parameter {}", parameter.getSignature());
       parameters.addAll(resolvedDependencies(childContext));
