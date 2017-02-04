@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger1.mappers
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
@@ -32,8 +33,10 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.ResourceListingBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
+import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
+import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.spi.service.contexts.Defaults
@@ -90,6 +93,20 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
         .path("/api-path")
         .operations([operation1])
         .build()
+      ModelProperty property = Spy(ModelProperty, 
+          constructorArgs: [
+                  null, 
+                  null, 
+                  "qualified.Test", 
+                  1, 
+                  true, 
+                  false, 
+                  null, 
+                  "property 1", 
+                  null, 
+                  null,
+                  null]);
+      property.getModelRef() >> null
       def built = new ApiListingBuilder(new Defaults().apiDescriptionOrdering())
                   .apis([description])
                   .apiVersion("1.0")
@@ -103,17 +120,11 @@ class ServiceModelToSwaggerMapperSpec extends Specification {
                             .description("test")
                             .id("test")
                             .name("test")
+                            .index(0)
                             .qualifiedType("qualified.name")
                             .subTypes(null)
                             .properties([
-                              "p1" : new ModelPropertyBuilder()
-                                      .allowableValues(null)
-                                      .description("property 1")
-                                      .position(1)
-                                      .qualifiedType("qualified.Test")
-                                      .required(true)
-                                      .type(new TypeResolver().resolve(String))
-                                      .build()
+                              "p1" : property
                             ])
                             .build()])
                   .position(1)

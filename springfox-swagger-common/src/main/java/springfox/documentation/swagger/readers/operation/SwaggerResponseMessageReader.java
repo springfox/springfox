@@ -105,10 +105,10 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
             type = type.or(operationResponse);
           }
           if (type.isPresent()) {
-        	ResolvedType modelType = context.alternateFor(type.get());  
-        	ModelContext modelContext = 
+            ResolvedType modelType = context.alternateFor(type.get());  
+            ModelContext modelContext = 
                 context.getOperationModelContextsBuilder().inputParam(modelType, 
-                    		                                          context.getReturnParameter().replaceResolvedParameterType(type.get()));  
+                                                                      context.getReturnParameter().replaceResolvedParameterType(type.get()));  
             responseModel = Optional.of(
                     modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
@@ -126,7 +126,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       }
     }
     if (operationResponse.isPresent()) {
-      ResolvedType resolvedType = context.alternateFor(operationResponse.get());	
+      ResolvedType resolvedType = context.alternateFor(operationResponse.get());    
       ModelContext modelContext = 
           context.getOperationModelContextsBuilder().inputParam(resolvedType, 
                                                                 context.getReturnParameter().replaceResolvedParameterType(operationResponse.get()));  

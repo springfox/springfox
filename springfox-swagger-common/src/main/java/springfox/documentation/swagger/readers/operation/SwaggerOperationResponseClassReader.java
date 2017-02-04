@@ -62,7 +62,8 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     if (canSkip(context, returnType)) {
       return;
     }
-    ModelContext modelContext = context.getOperationModelContextsBuilder().inputParam(context.alternateFor(returnType), context.getReturnParameter().replaceResolvedParameterType(returnType));
+    ModelContext modelContext = context.getOperationModelContextsBuilder().inputParam(
+        context.alternateFor(returnType), context.getReturnParameter().replaceResolvedParameterType(returnType));
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);
 

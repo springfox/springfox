@@ -2,6 +2,7 @@ package springfox.documentation.swagger2.mappers
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Function
 import com.google.common.base.Functions
 import com.google.common.base.Suppliers
 import com.google.common.collect.LinkedListMultimap
@@ -9,6 +10,7 @@ import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.*
 import springfox.documentation.schema.ModelRef
+import springfox.documentation.schema.ModelReference
 import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -150,6 +152,15 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
     then:
       mapped == null
   }
+  
+  Function<ResolvedType, ModelReference> modelRefFactory() {
+      return new Function<ResolvedType, ModelReference>() {
+        @Override
+        public ModelReference apply(ResolvedType type) {
+          return new ModelRef("string");
+        }
+      };
+  }
 
   def apiListing() {
     def defaults = new Defaults()
@@ -216,7 +227,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .required(true)
         .type(resolved)
         .build()
-    modelProperty.updateModelRef(Functions.forSupplier(Suppliers.ofInstance(new ModelRef("string"))))
+    modelProperty.updateModelRefFactory(modelRefFactory())
     new ApiListingBuilder(defaults.apiDescriptionOrdering())
         .apis([description])
         .apiVersion("1.0")

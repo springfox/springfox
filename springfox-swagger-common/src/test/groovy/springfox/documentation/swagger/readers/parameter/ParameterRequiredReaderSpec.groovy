@@ -19,12 +19,17 @@
 
 package springfox.documentation.swagger.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -50,16 +55,22 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
   def setupParameterContext(paramAnnotation) {
     def resolvedMethodParameter = new ResolvedMethodParameter(
         0,
+        false,
         "",
         [paramAnnotation],
         new TypeResolver().resolve(Object.class))
+    OperationModelContextsBuilder operationModelContextsBuilder =
+        new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+            ImmutableSet.builder().build())
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     new ParameterContext(
         resolvedMethodParameter,
         new ParameterBuilder(),
         context(),
         genericNamingStrategy,
-        Mock(OperationContext))
+        Mock(OperationContext),
+        operationModelContextsBuilder.inputParam(
+            new TypeResolver().resolve(Object.class), resolvedMethodParameter))
   }
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {

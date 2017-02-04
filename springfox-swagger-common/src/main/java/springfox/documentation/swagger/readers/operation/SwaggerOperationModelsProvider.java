@@ -75,7 +75,8 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
         .transform(resolvedTypeFromOperation(typeResolver, returnType));
     if (returnParameter.isPresent() && returnParameter.get() != returnType) {
       LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(returnParameter.get()).or("<null>"));
-      context.operationModelsBuilder().inputParam(context.alternateFor(returnParameter.get()), context.getReturnParameter().replaceResolvedParameterType(returnParameter.get()));
+      context.operationModelsBuilder().inputParam(
+          context.alternateFor(returnParameter.get()), context.getReturnParameter().replaceResolvedParameterType(returnParameter.get()));
     }
   }
 
@@ -86,7 +87,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     for (ApiResponses apiResponses : allApiResponses) {
       List<ResolvedType> parameterTypes = toResolvedTypes(context).apply(apiResponses);
       for (ResolvedType parameterType : parameterTypes) {
-    	ResolvedType modelType = context.alternateFor(parameterType);
+        ResolvedType modelType = context.alternateFor(parameterType);
         if (!seenTypes.contains(modelType)) {
           seenTypes.add(modelType);
           context.operationModelsBuilder().inputParam(modelType, context.getReturnParameter().replaceResolvedParameterType(parameterType));
