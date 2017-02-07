@@ -1,9 +1,10 @@
-[![Stories in Ready](https://badge.waffle.io/springfox/springfox.png?label=ready&title=Ready)](https://waffle.io/springfox/springfox)
+
 # Springfox
 
 [![Join the chat at https://gitter.im/springfox/springfox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/springfox/springfox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [ ![Download](https://api.bintray.com/packages/springfox/maven-repo/springfox/images/download.svg) ](https://bintray.com/springfox/maven-repo/springfox/_latestVersion) 
 [![Project Stats](https://www.openhub.net/p/springfox/widgets/project_thin_badge.gif)](https://www.openhub.net/p/springfox)
+[![Stories in Ready](https://badge.waffle.io/springfox/springfox.png?label=ready&title=Ready)](https://waffle.io/springfox/springfox)
 
 | Build Status  | Coverage   |
 |---|---|
