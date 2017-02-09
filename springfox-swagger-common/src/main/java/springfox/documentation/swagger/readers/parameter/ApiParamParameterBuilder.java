@@ -46,7 +46,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     Optional<ApiParam> apiParam = context.resolvedMethodParameter().findAnnotation(ApiParam.class);
     context.parameterBuilder()
         .allowableValues(allowableValues(
-            context.resolvedMethodParameter().getParameterType(),
+            context.alternateFor(context.resolvedMethodParameter().getParameterType()),
             apiParam.transform(toAllowableValue()).or("")));
     if (apiParam.isPresent()) {
       context.parameterBuilder().name(emptyToNull(apiParam.get().name()));
