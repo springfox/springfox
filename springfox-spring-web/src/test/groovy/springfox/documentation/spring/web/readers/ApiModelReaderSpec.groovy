@@ -34,6 +34,7 @@ import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.Pirate
+import springfox.documentation.spring.web.dummy.models.FancyPet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -41,6 +42,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.scanners.ApiModelReader
 
+import javax.print.attribute.Size2DSyntax
 import javax.servlet.http.HttpServletResponse
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
@@ -220,7 +222,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   }
 
 
-  def "model should include snake_case property that is only visible during serialization when objectMapper has CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"() {
+  def "ApiModelReader should consider models that include snake_case property and is only visible during serialization when objectMapper has CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
@@ -304,4 +306,74 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       monkey.getProperties().containsKey('pirate')
 
   }
+  def "Test to verify issue #182, #807, #895, #1356"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSameClassesWithDifferentProperties', FancyPet)
+      RequestMappingContext context = requestMappingContext(handlerMethod)
+  
+    when:
+      def models = sut.read(context)
+      Model Category = models["Category"]
+      Model FancyPet = models["FancyPet"]
+        
+      Model Category_1 = models["Category_1"]
+      Model FancyPet_1 = models["FancyPet_1"]
+  
+    then:
+      models.size() == 5
+    and:
+      Category != null
+      FancyPet != null
+        
+      Category_1 != null
+      FancyPet_1 != null
+    and:
+      (Category.getProperties().size() == 2 && Category_1.getProperties().size() == 1) ||
+      (Category.getProperties().size() == 1 && Category_1.getProperties().size() == 2)
+      
+      (FancyPet.getProperties().size() == 5 && FancyPet_1.getProperties().size() == 4) ||
+      (FancyPet.getProperties().size() == 4 && FancyPet_1.getProperties().size() == 5)
+    and:
+      if (Category.getProperties().size() == 2) {
+        Category.getProperties().containsKey('id')
+        Category.getProperties().containsKey('name')
+      } else {
+          Category.getProperties().containsKey('name')
+        }
+
+      if (Category_1.getProperties().size() == 2) {
+        Category_1.getProperties().containsKey('id')
+        Category_1.getProperties().containsKey('name')
+      } else {
+          Category_1.getProperties().containsKey('name')
+        }
+        
+      if (FancyPet.getProperties().size() == 5) {
+        FancyPet.getProperties().containsKey('id')
+        FancyPet.getProperties().containsKey('age')
+        FancyPet.getProperties().containsKey('name')
+        FancyPet.getProperties().containsKey('categories')
+      } else {
+          FancyPet.getProperties().containsKey('id')
+          FancyPet.getProperties().containsKey('age')
+          FancyPet.getProperties().containsKey('name')
+          FancyPet.getProperties().containsKey('color')
+          FancyPet.getProperties().containsKey('extendedCategories')
+        }
+    
+      if (FancyPet_1.getProperties().size() == 5) {
+        FancyPet.getProperties().containsKey('id')
+        FancyPet.getProperties().containsKey('age')
+        FancyPet.getProperties().containsKey('name')
+        FancyPet.getProperties().containsKey('categories')
+      } else {
+          FancyPet.getProperties().containsKey('id')
+          FancyPet.getProperties().containsKey('age')
+          FancyPet.getProperties().containsKey('name')
+          FancyPet.getProperties().containsKey('color')
+          FancyPet.getProperties().containsKey('extendedCategories')
+        }
+
+  }
+  
 }

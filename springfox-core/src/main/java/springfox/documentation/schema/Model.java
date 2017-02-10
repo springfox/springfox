@@ -31,6 +31,7 @@ public class Model {
   private final String name;
   private final Integer index;
   private final ResolvedType type;
+  private final Boolean isMapType;
   private final String qualifiedType;
   private final Map<String, ModelProperty> properties;
   private final String description;
@@ -44,6 +45,7 @@ public class Model {
       String name,
       Integer index,
       ResolvedType type,
+      Boolean isMap,
       String qualifiedType,
       Map<String, ModelProperty> properties,
       String description,
@@ -56,6 +58,7 @@ public class Model {
     this.name = name;
     this.index = index;
     this.type = type;
+    this.isMapType = isMap;
     this.qualifiedType = qualifiedType;
     this.properties = properties;
     this.description = description;
@@ -104,6 +107,10 @@ public class Model {
   public ResolvedType getType() {
     return type;
   }
+  
+  public Boolean isMap() {
+      return isMapType;
+    }
 
   public String getExample() {
     return example;
@@ -111,7 +118,7 @@ public class Model {
   
   @Override
   public int hashCode() {
-    return Objects.hashCode(id, name, type, qualifiedType, properties, description, baseModel, discriminator, subTypes, example);
+    return Objects.hashCode(id, name, type, qualifiedType, isMapType, properties, description, baseModel, discriminator, subTypes, example);
   }
   
   @Override
@@ -129,6 +136,7 @@ public class Model {
     return Objects.equal(id, that.id) &&
         Objects.equal(name, that.name) &&
         Objects.equal(type, that.type) &&
+        Objects.equal(isMapType, that.isMapType) &&
         Objects.equal(qualifiedType, that.qualifiedType) &&
         Objects.equal(properties, that.properties) &&
         Objects.equal(description, that.description) &&

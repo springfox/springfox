@@ -173,10 +173,6 @@
         "rel": {
           "required": false,
           "type": "string"
-        },
-        "templated": {
-          "required": false,
-          "type": "boolean"
         }
       }
     },
@@ -186,10 +182,7 @@
       "properties": {
         "_links": {
           "required": false,
-          "items": {
-            "type": "Link"
-          },
-          "type": "array"
+          "type": "List[Link_1]"
         },
         "content": {
           "required": false,
@@ -213,7 +206,10 @@
       "properties": {
         "_links": {
           "required": false,
-          "type": "List[Link_1]"
+          "items": {
+            "type": "Link"
+          },
+          "type": "array"
         },
         "age": {
           "required": false,
@@ -260,6 +256,10 @@
         "rel": {
           "required": false,
           "type": "string"
+        },
+        "templated": {
+          "required": false,
+          "type": "boolean"
         }
       }
     }

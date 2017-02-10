@@ -121,7 +121,7 @@ class ResolvedMethodParameterSpec extends Specification {
       methodParameter1.parameterIndex >> 1
       methodParameter1.parameterAnnotations >> []
       methodParameter2.parameterIndex >> index
-      methodParameter2.parameterAnnotations >> annotations
+      methodParameter2.parameterAnnotations >> []
     and:
       def sut = new ResolvedMethodParameter("defaultName", methodParameter1, resolver.resolve(String))
       def sutTest = (returnType)?new ResolvedMethodParameter(resolver.resolve(type)):new ResolvedMethodParameter(defaultName, methodParameter2, resolver.resolve(type))
@@ -134,12 +134,11 @@ class ResolvedMethodParameterSpec extends Specification {
       (sut.hashCode() == sutTest.hashCode()) == expectedEquality
       sut.hashCode() == sut.hashCode()
     where:
-      index | returnType | annotations                               | defaultName    | type    | expectedEquality
-      1     | false      | []                                        | "defaultName"  | String  | true
-      2     | false      | []                                        | "defaultName"  | Integer | false
-      0     | true       | []                                        | "defaultName"  | Double  | false
-      1     | false      | [[required: { -> true }] as RequestParam] | "defaultName"  | String  | false
-      1     | false      | []                                        | "defaultName1" | String  | false
-      1     | false      | []                                        | "defaultName"  | Double  | false
+      index | returnType | defaultName    | type    | expectedEquality
+      1     | false      | "defaultName"  | String  | true
+      2     | false      | "defaultName"  | Integer | false
+      1     | true       | "defaultName"  | Double  | false
+      1     | false      | "defaultName1" | String  | false
+      1     | false      | "defaultName"  | Double  | false
   }
 }

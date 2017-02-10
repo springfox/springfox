@@ -170,7 +170,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Pet"
+                "$ref": "#/definitions/Pet_1"
               }
             }
           },
@@ -218,7 +218,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Pet"
+                "$ref": "#/definitions/Pet_1"
               }
             }
           },
@@ -267,7 +267,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "$ref": "#/definitions/Pet_1"
             }
           },
           "400": {
@@ -433,7 +433,7 @@
             "description": "Created user object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/User_1"
             }
           }
         ],
@@ -441,7 +441,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User_1"
+              "$ref": "#/definitions/User"
             }
           }
         }
@@ -479,7 +479,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User_1"
+              "$ref": "#/definitions/User"
             }
           }
         }
@@ -798,6 +798,9 @@
           "type": "integer",
           "format": "int64"
         },
+        "identifier": {
+          "type": "string"
+        },
         "lastName": {
           "type": "string"
         },
@@ -893,9 +896,6 @@
         "id": {
           "type": "integer",
           "format": "int64"
-        },
-        "identifier": {
-          "type": "string"
         },
         "lastName": {
           "type": "string"
