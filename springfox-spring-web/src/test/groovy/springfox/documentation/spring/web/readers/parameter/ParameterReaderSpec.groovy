@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
@@ -31,8 +32,10 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -43,9 +46,13 @@ class ParameterReaderSpec extends DocumentationContextSpec {
    def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
       def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParamAnnotation, reqParamAnnot], Mock(ResolvedType))
+          new ResolvedMethodParameter(0, false, "", [apiParamAnnotation, reqParamAnnot], Mock(ResolvedType))
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext),
+          operationModelContextsBuilder.inputParam(Mock(ResolvedType), resolvedMethodParameter))
     when:
       parameterPlugin.apply(parameterContext)
 
@@ -64,10 +71,14 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       def bean = new ParamNameClazzSpecimen()
       def resolvedBeanType = new TypeResolver().resolve(ParamNameClazzSpecimen)
       HandlerMethod method = new HandlerMethod(bean, ParamNameClazzSpecimen.methods.find {it.name.equals(methodName)})
-      def resolvedMethodParameter  = new ResolvedMethodParameter("someName", method.getMethodParameters().first(),
+      def resolvedMethodParameter = new ResolvedMethodParameter("someName", method.getMethodParameters().first(),
           resolvedBeanType)
+      OperationModelContextsBuilder operationModelContextsBuilder =
+      new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+          ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+        context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext),
+        operationModelContextsBuilder.inputParam(resolvedBeanType, resolvedMethodParameter))
     when:
       parameterPlugin.apply(parameterContext)
 

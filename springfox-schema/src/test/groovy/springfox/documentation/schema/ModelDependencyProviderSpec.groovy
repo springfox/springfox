@@ -42,7 +42,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       def dependentTypeNames = dependentTypes.collect() {
         typeNameExtractor.typeName(
             inputParam(
-                it,
+                it.getType(),
                 documentationType,
                 alternateTypeProvider(),
                 namingStrategy,
@@ -87,7 +87,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
       def dependentTypeNames = dependentTypes.collect() {
         typeNameExtractor.typeName(
             returnValue(
-                it,
+                it.getType(),
                 documentationType,
                 alternateTypeProvider(),
                 namingStrategy,

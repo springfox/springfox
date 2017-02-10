@@ -20,26 +20,24 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Lists.*;
 
 @Component
 public class ApiModelReader  {
@@ -49,7 +47,7 @@ public class ApiModelReader  {
   private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiModelReader(@Qualifier("cachedModels") ModelProvider modelProvider,
+  public ApiModelReader(@Qualifier("default") ModelProvider modelProvider,
           TypeResolver typeResolver,
           DocumentationPluginsManager pluginsManager) {
     this.modelProvider = modelProvider;
@@ -60,64 +58,118 @@ public class ApiModelReader  {
   public Map<String, Model> read(RequestMappingContext context) {
 
     Set<Class> ignorableTypes = newHashSet(context.getIgnorableParameterTypes());
-    Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
-    Map<String, Model> modelMap = newHashMap(context.getModelMap());
+    List<ModelContext> modelContexts = pluginsManager.modelContexts(context);
+    Map<String, Model> globalModelMap = newHashMap(context.getModelMap());
+    Map<String, Model> localModelMap = newHashMap();
     for (ModelContext each : modelContexts) {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
-      Optional<Model> pModel = modelProvider.modelFor(each);
-      if (pModel.isPresent()) {
-        LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
-            pModel.get().getId(),
-            pModel.get().getName());
-        mergeModelMap(modelMap, pModel.get());
+      List<ModelContext> pModelContexts = modelProvider.modelsFor(each);
+      if (!pModelContexts.isEmpty()) {
+        localModelMap.putAll(compareModelMap(globalModelMap, pModelContexts));
       } else {
         LOG.debug("Did not find any parameter models for {}", each.getType());
       }
-      populateDependencies(each, modelMap);
     }
-    return modelMap;
+    return localModelMap;
   }
 
-  @SuppressWarnings("unchecked")
-  private void mergeModelMap(Map<String, Model> target, Model source) {
-      String sourceModelKey = source.getId();
-
-      if (!target.containsKey(sourceModelKey)) {
-        //if we encounter completely unknown model, just add it
-        LOG.debug("Adding a new model with key {}", sourceModelKey);
-        target.put(sourceModelKey, source);
-      } else {
-        //we can encounter a known model with an unknown property
-        //if (de)serialization is not symmetrical (@JsonIgnore on setter, @JsonProperty on getter).
-        //In these cases, don't overwrite the entire model entry for that type, just add the unknown property.
-        Model targetModelValue = target.get(sourceModelKey);
-
-        Map<String, ModelProperty> targetProperties = targetModelValue.getProperties();
-        Map<String, ModelProperty> sourceProperties = source.getProperties();
-
-        Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
-        newSourcePropKeys.removeAll(targetProperties.keySet());
-        Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
-        for (String newProperty : newSourcePropKeys) {
-          LOG.debug("Adding a missing property {} to model {}", newProperty, sourceModelKey);
-          mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
-        }
-
-        Model mergedModel = new ModelBuilder()
-                .id(targetModelValue.getId())
-                .name(targetModelValue.getName())
-                .type(targetModelValue.getType())
-                .qualifiedType(targetModelValue.getQualifiedType())
-                .properties(mergedTargetProperties)
-                .description(targetModelValue.getDescription())
-                .baseModel(targetModelValue.getBaseModel())
-                .discriminator(targetModelValue.getDiscriminator())
-                .subTypes(targetModelValue.getSubTypes())
-                .example(targetModelValue.getExample())
-                .build();
-
-        target.put(sourceModelKey, mergedModel);
+  private Map<String, Model> compareModelMap(Map<String, Model> target, List<ModelContext> source) {  
+    LOG.debug("Starting comparing algorithm. Defining enter points for the context's tree branches...");
+    List<ModelContext> enterPoints = newArrayList();
+    main:for (ModelContext sourceC: source) {
+      Model modelSource = sourceC.getBuilder().build();  
+      LOG.debug("Received context with model: {}. Amount of properties: {}", 
+              modelSource.getId(), 
+              modelSource.getProperties().size());
+      if (modelSource.isMap()) {
+        continue;
       }
+      for (ModelContext sourceT: source) {
+        ModelContext parent = toParent(sourceT.getParent(), source);
+        if (sourceC == parent) {
+          continue main;
+        }
+      }
+      LOG.debug("Model: {} is in the lowest level at the tree, added to the entry points.", modelSource.getId());
+      enterPoints.add(sourceC);    
+    }
+    LOG.debug("Searching for duplicates at the current tree level.");
+    while (enterPoints.size() != 0) {
+      Model previousModel = null;
+      for (ModelContext contextSource: enterPoints ) {
+        List<Model> heap = newArrayList(target.values()); 
+        for (ModelContext contextS: enterPoints) {
+          Model modelSource = contextS.getBuilder().build();
+          if (previousModel != null && previousModel.equals(modelSource)) {
+            LOG.debug("Model: {} has already been checked. Increasing index.", modelSource.getId());  
+            contextS.updateIndex(previousModel.getIndex()); 
+            modelSource = contextS.getBuilder().build();
+          }
+          heap.add(modelSource); 
+        }
+        Model modelSource = contextSource.getBuilder().build();
+        LOG.debug("Checking duplicate models for model: {}({})", modelSource.getId(), modelSource.getProperties().size());
+        for (int i = 0; i < heap.size(); i++) {
+          Model modelTarger = heap.get(i);
+          LOG.debug("Comparing with model: {}({})", modelTarger.getId(), modelTarger.getProperties().size());
+          if (!modelSource.equals(modelTarger) && modelSource.getName().equals(modelTarger.getName())) { 
+            LOG.debug("Found duplicate for model: {}. Increasing index.", modelSource.getId());  
+            contextSource.updateIndex(modelSource.getIndex() + 1);
+            modelSource = contextSource.getBuilder().build();
+            i = 0;
+          }
+        }   
+        previousModel = modelSource;
+      }   
+      LOG.debug("Going to the next tree's level.");
+      enterPoints = nextLevel(enterPoints, source);
+    }
+    Map<String, Model> localModels = newHashMap();
+    for (ModelContext sourceModelContext : source) {
+      Model model = sourceModelContext.getBuilder().build();
+      if (!target.containsKey(model.getId())) {
+        target.put(model.getId(), model);
+      }
+      localModels.put(model.getId(), model);
+    }
+    return localModels;
+  }
+
+  private boolean containsInTree(ModelContext context, List<ModelContext> contexts) {
+    for (ModelContext contextT: contexts) {
+      if (context == contextT) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private ModelContext toParent(ModelContext context, List<ModelContext> contexts) {
+    while (context != null) {
+      if (!containsInTree(context, contexts)) {
+        context = context.getParent();
+      } else {
+          break;
+        }
+    }
+    return context;
+  }
+  
+  private List<ModelContext> nextLevel(List<ModelContext> currentLevel, List<ModelContext> allModels) {
+    List<ModelContext> enterPointsNext = newArrayList();
+    for (ModelContext context: currentLevel) {
+      ModelContext parent = toParent(context.getParent(), allModels);
+      if (parent != null) {
+        Model modelParent = parent.getBuilder().build();
+          if (!modelParent.isMap()) {
+          LOG.debug("Model: {}() is in the next level at the tree, added to the entry points.", 
+                  modelParent.getId(), 
+                  modelParent.getProperties().size());
+          enterPointsNext.add(parent);
+        }
+      }
+    }
+    return enterPointsNext;
   }
 
   private void markIgnorablesAsHasSeen(TypeResolver typeResolver,
@@ -128,12 +180,4 @@ public class ApiModelReader  {
       modelContext.seen(typeResolver.resolve(ignorableParameterType));
     }
   }
-
-  private void populateDependencies(ModelContext modelContext, Map<String, Model> modelMap) {
-    Map<String, Model> dependencies = modelProvider.dependencies(modelContext);
-    for (Model each : dependencies.values()) {
-      mergeModelMap(modelMap, each);
-    }
-  }
-
 }

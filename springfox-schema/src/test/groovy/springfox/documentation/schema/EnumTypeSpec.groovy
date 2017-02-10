@@ -35,23 +35,30 @@ class EnumTypeSpec extends Specification {
       def list = newArrayList("ONE", "TWO")
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      Model asInput = provider.modelFor(
+      List asInputContexts = provider.modelsFor(
           inputParam(
               enumType(),
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(
+              ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = provider.modelsFor(
           returnValue(
               enumType(),
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "ExampleWithEnums"
+      asInputModels.size() == 1
+      asInputModels.containsKey("ExampleWithEnums")
+      def asInput = asInputModels.get("ExampleWithEnums")
       asInput.getProperties().containsKey("exampleEnum")
       def modelPropertyOption = asInput.getProperties().get("exampleEnum")
       def modelProperty = modelPropertyOption
@@ -64,7 +71,9 @@ class EnumTypeSpec extends Specification {
       modelProperty.getModelRef().itemType == null
       modelProperty.getAllowableValues().getValues() == list
 
-      asReturn.getName() == "ExampleWithEnums"
+      asReturnModels.size() == 1
+      asReturnModels.containsKey("ExampleWithEnums")
+      def asReturn = asReturnModels.get("ExampleWithEnums")
       asReturn.getProperties().containsKey("exampleEnum")
       def retModelPropertyOption = asReturn.getProperties().get("exampleEnum")
       def retModelProperty = retModelPropertyOption

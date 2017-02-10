@@ -21,6 +21,8 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
+
 import springfox.documentation.service.AllowableValues;
 
 public class ModelProperty {
@@ -33,7 +35,7 @@ public class ModelProperty {
   private final Boolean readOnly;
   private final String description;
   private final AllowableValues allowableValues;
-  private ModelReference modelRef;
+  private Function<ResolvedType, ? extends ModelReference> modelRefFactory;
   private final String example;
   private final String pattern;
 
@@ -96,15 +98,15 @@ public class ModelProperty {
   }
 
   public ModelReference getModelRef() {
-    return modelRef;
+    return modelRefFactory.apply(type);
   }
 
   public boolean isHidden() {
     return isHidden;
   }
 
-  public ModelProperty updateModelRef(Function<ResolvedType, ? extends ModelReference> modelRefFactory) {
-    modelRef = modelRefFactory.apply(type);
+  public ModelProperty updateModelRefFactory(Function<ResolvedType, ? extends ModelReference> modelRefFactory) {
+    this.modelRefFactory = modelRefFactory;
     return this;
   }
 
@@ -114,5 +116,37 @@ public class ModelProperty {
 
   public String getPattern() {
     return pattern;
+  }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden, 
+                            readOnly, description, allowableValues, getModelRef(), example, pattern);
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ModelProperty that = (ModelProperty) o;
+    
+    return Objects.equal(name, that.name) &&
+        Objects.equal(type, that.type) &&
+        Objects.equal(qualifiedType, that.qualifiedType) &&
+        Objects.equal(position, that.position) &&
+        Objects.equal(required, that.required) &&
+        Objects.equal(isHidden, that.isHidden) &&
+        Objects.equal(readOnly, that.readOnly) &&
+        Objects.equal(description, that.description) &&
+        Objects.equal(allowableValues, that.allowableValues) &&
+        Objects.equal(getModelRef(), that.getModelRef()) &&
+        Objects.equal(example, that.example) &&
+        Objects.equal(pattern, that.pattern);
   }
 }

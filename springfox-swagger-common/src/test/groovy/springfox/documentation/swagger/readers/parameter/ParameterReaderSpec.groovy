@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import spock.lang.Unroll
@@ -26,7 +27,10 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -39,10 +43,14 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
     given:
       def nonNullAnnotations = [apiParamAnnotation, reqParamAnnot].findAll { it != null }
       def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
+          new ResolvedMethodParameter(0, false, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy, Mock(OperationContext))
+          context(), genericNamingStrategy, Mock(OperationContext), operationModelContextsBuilder.inputParam(
+              new TypeResolver().resolve(Object.class), resolvedMethodParameter))
       def sut = stubbedParamBuilder(apiParamAnnotation)
     when:
       sut.apply(parameterContext)

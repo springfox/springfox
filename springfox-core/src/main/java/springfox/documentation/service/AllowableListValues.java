@@ -21,6 +21,8 @@ package springfox.documentation.service;
 
 import java.util.List;
 
+import com.google.common.base.Objects;
+
 public class AllowableListValues implements AllowableValues {
   private final List<String> values;
   private final String valueType;
@@ -36,5 +38,26 @@ public class AllowableListValues implements AllowableValues {
 
   public String getValueType() {
     return valueType;
+  }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(values, valueType);
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    AllowableListValues that = (AllowableListValues) o;
+
+    return Objects.equal(values, that.values) &&
+        Objects.equal(valueType, that.valueType);
   }
 }

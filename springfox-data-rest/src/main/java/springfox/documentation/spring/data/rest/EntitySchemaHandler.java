@@ -139,7 +139,7 @@ class EntitySchemaHandler implements RequestHandler {
   }
 
   @Override
-  public ResolvedType getReturnType() {
+  public ResolvedMethodParameter getReturnParameter() {
     MemberResolver memberResolver = new MemberResolver(resolver);
     ResolvedTypeWithMembers members = memberResolver.resolve(
         resolver.resolve(handlerMethod.getMethod().getDeclaringClass()), null, null);
@@ -147,12 +147,12 @@ class EntitySchemaHandler implements RequestHandler {
       if (resolvedMethod.getRawMember().equals(handlerMethod.getMethod())) {
         ResolvedType resourceInfo = resolver.resolve(HttpEntity.class, RootResourceInformation.class);
         if (resourceInfo.equals(resolvedMethod.getReturnType())) {
-          return resolver.resolve(Alps.class);
+          return new ResolvedMethodParameter(resolver.resolve(Alps.class));
         }
-        return resolvedMethod.getReturnType();
+        return new ResolvedMethodParameter(resolvedMethod.getReturnType());
       }
     }
-    return resolver.resolve(Void.TYPE);
+    return new ResolvedMethodParameter(resolver.resolve(Void.TYPE));
   }
 
   @Override

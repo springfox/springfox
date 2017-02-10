@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -193,26 +192,26 @@ class EntityRequestHandler implements RequestHandler {
   }
 
   @Override
-  public ResolvedType getReturnType() {
+  public ResolvedMethodParameter getReturnParameter() {
     if (resourceType == ResourceType.COLLECTION) {
       if (COLLECTION_COMPACT_MEDIA_TYPES.containsAll(
           requestMapping.getProducesCondition().getProducibleMediaTypes())) {
-        return resolver.resolve(Resources.class, Link.class);
+        return new ResolvedMethodParameter(resolver.resolve(Resources.class, Link.class));
       } else if (requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.HEAD)
           || requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.OPTIONS)) {
-        return resolver.resolve(Void.TYPE);
+        return new ResolvedMethodParameter(resolver.resolve(Void.TYPE));
       } else if (requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.POST)) {
-        return resolver.resolve(Resource.class, domainType);
+        return new ResolvedMethodParameter(resolver.resolve(Resource.class, domainType));
       }
-      return resolver.resolve(Resources.class, domainType);
+      return new ResolvedMethodParameter(resolver.resolve(Resources.class, domainType));
     } else {
       if (requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.GET)
           || requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.PUT)
           || requestMapping.getMethodsCondition().getMethods().contains(RequestMethod.PATCH)) {
-        return resolver.resolve(Resource.class, domainType);
+        return new ResolvedMethodParameter(resolver.resolve(Resource.class, domainType));
       }
     }
-    return resolver.resolve(Void.TYPE);
+    return new ResolvedMethodParameter(resolver.resolve(Void.TYPE));
   }
 
   private ResourceType resourceType() {

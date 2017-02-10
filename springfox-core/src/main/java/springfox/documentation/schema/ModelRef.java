@@ -20,7 +20,9 @@
 package springfox.documentation.schema;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
+
 import springfox.documentation.service.AllowableValues;
 
 public class ModelRef implements ModelReference {
@@ -93,5 +95,28 @@ public class ModelRef implements ModelReference {
         return input.getType();
       }
     };
+  }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(type, isMap, itemModel, allowableValues);
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ModelRef that = (ModelRef) o;
+
+    return Objects.equal(type, that.type) &&
+        Objects.equal(isMap, that.isMap) &&
+        Objects.equal(itemModel, that.itemModel) &&
+        Objects.equal(allowableValues, that.allowableValues);
   }
 }

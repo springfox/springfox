@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
@@ -28,8 +29,10 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -47,9 +50,13 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
       methodParameter.getParameterType() >> Object.class
       methodParameter.getMethodAnnotation(PathVariable.class) >> paramAnnotations.find { it instanceof PathVariable }
       def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", paramAnnotations, new TypeResolver().resolve(Object.class))
+          new ResolvedMethodParameter(0, false, "", paramAnnotations, new TypeResolver().resolve(Object.class))
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext),
+          operationModelContextsBuilder.inputParam(new TypeResolver().resolve(Object.class), resolvedMethodParameter))
     when:
       def operationCommand = new ParameterRequiredReader();
       operationCommand.apply(parameterContext)
@@ -83,15 +90,20 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
     given:
       def resolvedMethodParameter = new ResolvedMethodParameter(
         0,
+        false,
         "",
         paramAnnotations,
         new TypeResolver().resolve(Object.class))
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(
           resolvedMethodParameter,
           new ParameterBuilder(),
           context(),
           Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+          Mock(OperationContext),
+          operationModelContextsBuilder.inputParam(new TypeResolver().resolve(Object.class), resolvedMethodParameter))
 
     when:
       def operationCommand = new ParameterRequiredReader() {

@@ -106,6 +106,10 @@ public class OperationContext {
   public DocumentationContext getDocumentationContext() {
     return requestContext.getDocumentationContext();
   }
+  
+  public OperationModelContextsBuilder getOperationModelContextsBuilder() {
+    return requestContext.operationModelsBuilder();       
+  }
 
   public DocumentationType getDocumentationType() {
     return getDocumentationContext().getDocumentationType();
@@ -162,8 +166,8 @@ public class OperationContext {
     return requestContext.findAnnotation(annotation);
   }
 
-  public ResolvedType getReturnType() {
-    return requestContext.getReturnType();
+  public ResolvedMethodParameter getReturnParameter() {
+    return requestContext.getReturnParameter();
   }
 
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {

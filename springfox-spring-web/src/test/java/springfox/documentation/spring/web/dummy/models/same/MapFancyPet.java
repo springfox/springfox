@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,13 +16,29 @@
  *
  *
  */
-package springfox.documentation.spring.web.readers.operation;
 
-import springfox.documentation.service.Operation;
-import springfox.documentation.spi.service.contexts.RequestMappingContext;
+package springfox.documentation.spring.web.dummy.models.same;
 
-import java.util.List;
+import java.util.Map;
 
-public interface OperationReader {
-  List<Operation> read(RequestMappingContext outerContext);
+public class MapFancyPet {
+  private Map<String, FancyPet> fancyPets;
+  
+  private FancyPet fancyPet;
+
+  public Map<String, FancyPet> getFancyPets() {
+    return fancyPets;
+  }
+
+  public void setFancyPets(Map<String, FancyPet> fancyPets) {
+    this.fancyPets = fancyPets;
+  }
+
+  public FancyPet getFancyPet() {
+    return fancyPet;
+  }
+
+  public void setFancyPet(FancyPet fancyPet) {
+    this.fancyPet = fancyPet;
+  }
 }

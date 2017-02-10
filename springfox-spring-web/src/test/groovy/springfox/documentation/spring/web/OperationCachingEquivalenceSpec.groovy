@@ -203,7 +203,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       }
 
       @Override
-      ResolvedType getReturnType() {
+      ResolvedMethodParameter getReturnParameter() {
         return null
       }
 

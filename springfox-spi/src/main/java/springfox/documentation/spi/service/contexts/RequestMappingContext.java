@@ -201,8 +201,8 @@ public class RequestMappingContext {
     return annotations;
   }
 
-  public ResolvedType getReturnType() {
-    return handler.getReturnType();
+  public ResolvedMethodParameter getReturnParameter() {
+    return handler.getReturnParameter();
   }
 
 

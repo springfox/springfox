@@ -36,21 +36,28 @@ class ComplexTypeSpec extends Specification {
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(
+      List asInputContexts = provider.modelsFor(inputParam(
           complexType(),
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(returnValue(
+          ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = provider.modelsFor(returnValue(
           complexType(),
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "ComplexType"
+      asInputModels.size() == 2
+      asInputModels.containsKey(modelName)
+      def asInput = asInputModels.get(modelName)
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
@@ -58,8 +65,10 @@ class ComplexTypeSpec extends Specification {
       modelProperty.getModelRef().type == typeName
       !modelProperty.getModelRef().collection
       modelProperty.getModelRef().itemType == null
-
-      asReturn.getName() == "ComplexType"
+      
+      asReturnContexts.size() == 2
+      asReturnModels.containsKey(modelName)
+      def asReturn = asReturnModels.get(modelName)
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
@@ -67,50 +76,64 @@ class ComplexTypeSpec extends Specification {
       retModelProperty.getModelRef().type == typeName
       !retModelProperty.getModelRef().collection
       retModelProperty.getModelRef().itemType == null
-
+      
     where:
-      property     | type         | typeName   | qualifiedType
-      "name"       | String       | "string"   | "java.lang.String"
-      "age"        | Integer.TYPE | "int"      | "int"
-      "category"   | Category     | "Category" | "springfox.documentation.schema.Category"
-      "customType" | BigDecimal   | "bigdecimal"   | "java.math.BigDecimal"
+      modelName     | property     | type         | typeName     | qualifiedType
+      "ComplexType" | "name"       | String       | "string"     | "java.lang.String"
+      "ComplexType" | "age"        | Integer.TYPE | "int"        | "int"
+      "ComplexType" | "category"   | Category     | "Category"   | "springfox.documentation.schema.Category"
+      "ComplexType" | "customType" | BigDecimal   | "bigdecimal" | "java.math.BigDecimal"
+      "Category"    | "name"       | String       | "string"     | "java.lang.String"
   }
 
   def "recursive type properties are inferred correctly"() {
     given:
       def complexType = recursiveType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(
+      List asInputContexts = provider.modelsFor(inputParam(
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(returnValue(
+          ImmutableSet.builder().build()))
+      
+      List asReturnContexts = provider.modelsFor(returnValue(
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
 
     expect:
-      asInput.getName() == "RecursiveType"
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      modelProperty.type.erasedType == type
-      modelProperty.getQualifiedType() == qualifiedType
-      modelProperty.getModelRef().type == "RecursiveType"
-      !modelProperty.getModelRef().collection
-      modelProperty.getModelRef().itemType == null
+      asInputContexts.size() == 2
+      asInputContexts.each {
+        def asInput = it.builder.build()
+        if (asInput.getName() == "RecursiveType") {
+          asInput.getProperties().size() == 1
+          asInput.getProperties().containsKey(property)
+          def modelProperty = asInput.getProperties().get(property)
+          modelProperty.type.erasedType == type
+          modelProperty.getQualifiedType() == qualifiedType
+          modelProperty.getModelRef().type == "RecursiveType"
+          !modelProperty.getModelRef().collection
+          modelProperty.getModelRef().itemType == null
+        }
+      }
 
-      asReturn.getName() == "RecursiveType"
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.type.erasedType == type
-      retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getModelRef().type == "RecursiveType"
-      !retModelProperty.getModelRef().collection
-      retModelProperty.getModelRef().itemType == null
+      asReturnContexts.size() == 2
+      asReturnContexts.each {
+        def asReturn = it.builder.build()
+        if (asReturn.getName() == "RecursiveType") {
+          asReturn.getProperties().size() == 1
+          asReturn.getProperties().containsKey(property)
+          def retModelProperty = asReturn.getProperties().get(property)
+          retModelProperty.type.erasedType == type
+          retModelProperty.getQualifiedType() == qualifiedType
+          retModelProperty.getModelRef().type == "RecursiveType"
+          !retModelProperty.getModelRef().collection
+          retModelProperty.getModelRef().itemType == null
+        }
+      }
 
     where:
       property | type          | qualifiedType
@@ -121,21 +144,28 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = inheritedComplexType()
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam(
+      List asInputContexts = provider.modelsFor(inputParam(
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(returnValue(
+          ImmutableSet.builder().build()))
+      Map asInputModels = asInputContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
+      
+      List asReturnContexts = provider.modelsFor(returnValue(
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          ImmutableSet.builder().build()))
+      Map asReturnModels = asReturnContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
 
     expect:
-      asInput.getName() == "InheritedComplexType"
+      asInputContexts.size() == 2
+      asInputModels.containsKey(modelName)
+      def asInput = asInputModels.get(modelName)   
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
@@ -144,7 +174,9 @@ class ComplexTypeSpec extends Specification {
       !modelProperty.getModelRef().collection
       modelProperty.getModelRef().itemType == null
 
-      asReturn.getName() == "InheritedComplexType"
+      asReturnContexts.size() == 2
+      asReturnModels.containsKey(modelName)
+      def asReturn = asReturnModels.get(modelName)
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
@@ -152,13 +184,14 @@ class ComplexTypeSpec extends Specification {
       retModelProperty.getModelRef().type == typeName
       !retModelProperty.getModelRef().collection
       retModelProperty.getModelRef().itemType == null
-
+      
     where:
-      property            | type         | typeName   | typeProperty | qualifiedType
-      "name"              | String       | "string"   | 'type'       | "java.lang.String"
-      "age"               | Integer.TYPE | "int"      | 'type'       | "int"
-      "category"          | Category     | "Category" | 'reference'  | "springfox.documentation.schema.Category"
-      "customType"        | BigDecimal   | "bigdecimal"   | 'type'       | "java.math.BigDecimal"
-      "inheritedProperty" | String       | "string"   | 'type'       | "java.lang.String"
+      modelName              |property             | type         | typeName     | typeProperty | qualifiedType
+      "InheritedComplexType" | "name"              | String       | "string"     | 'type'       | "java.lang.String"
+      "InheritedComplexType" | "age"               | Integer.TYPE | "int"        | 'type'       | "int"
+      "InheritedComplexType" | "category"          | Category     | "Category"   | 'reference'  | "springfox.documentation.schema.Category"
+      "InheritedComplexType" | "customType"        | BigDecimal   | "bigdecimal" | 'type'       | "java.math.BigDecimal"
+      "InheritedComplexType" | "inheritedProperty" | String       | "string"     | 'type'       | "java.lang.String"
+      "Category"             | "name"              | String       | "string"     | 'type'       | "java.lang.String"
   }
 }

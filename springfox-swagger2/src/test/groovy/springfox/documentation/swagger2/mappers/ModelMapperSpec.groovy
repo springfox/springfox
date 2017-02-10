@@ -45,57 +45,62 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "models are serialized correctly" (){
     given:
-      Model model = modelProvider.modelFor(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             typeToTest,
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
+            ImmutableSet.builder().build()))
     def modelMap = newHashMap()
     and:
-      modelMap.put("test", model)
+      modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      mapped.containsKey("test")
+      mapped.containsKey(nameToTest)
     and:
-      def mappedModel = mapped.get("test")
-      mappedModel.properties.size() == model.properties.size()
+      def mappedModel = mapped.get(nameToTest)
+      mappedModel.properties.size() == modelMap.get(nameToTest).properties.size()
     where:
       typeToTest  << [simpleType(), mapsContainer(), enumType(), typeWithLists()]
+      nameToTest << ["SimpleType", "MapsContainer", "ExampleWithEnums", "ListsContainer"]
   }
 
   def "void properties or collection of voids are filtered in the model" (){
     given:
-      Model model = modelProvider.modelFor(
+      List modelContexts = modelProvider.modelsFor(
           inputParam(
               typeWithVoidLists(),
               DocumentationType.SWAGGER_2,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
-          .get()
       def modelMap = newHashMap()
     and:
-      modelMap.put("test", model)
+      modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      def mappedModel = mapped.get("test")
-      model.properties.size() == 3
+      mapped.containsKey("GenericTypeBoundToMultipleOfVoidAndVoid")
+      def mappedModel = mapped.get("GenericTypeBoundToMultipleOfVoidAndVoid")
+      modelMap.get("GenericTypeBoundToMultipleOfVoidAndVoid").properties.size() == 3
       mappedModel.properties == null
   }
 
   def "model dependences are inferred correctly for list of map of string to string" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             listOfMapOfStringToString(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+      Map<String, Model> modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -107,13 +112,15 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of ModelMap" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             listOfModelMap(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+      Map<String, Model> modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -125,13 +132,15 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of map of string to Simpletype" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             listOfMapOfStringToSimpleType(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+      Map<String, Model> modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -144,13 +153,15 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of erased map" (){
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             listOfErasedMap(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+      Map<String, Model> modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
@@ -159,24 +170,25 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "when the source models contain a property that has a generic type with one of the type bindings as Void" (){
     given:
-      Model model = modelProvider.modelFor(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             genericClassOfType(
                 Void),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
+            ImmutableSet.builder().build()))
       def modelMap = newHashMap()
     and:
-      modelMap.put("test", model)
+      modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      mapped.containsKey("test")
+      mapped.containsKey("GenericTypeOfVoid")
     and:
-      def mappedModel = mapped.get("test")
-      mappedModel.properties.size() == (model.properties.size() - 1)
+      def mappedModel = mapped.get("GenericTypeOfVoid")
+      mappedModel.properties.size() == (modelMap.get("GenericTypeOfVoid").properties.size() - 1)
       !mappedModel.properties.containsKey("genericField")
   }
 
@@ -191,25 +203,27 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "models with allowable ranges are serialized correctly" (){
     given:
-      Model model = modelProvider.modelFor(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             simpleType(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
+            ImmutableSet.builder().build()))
       def modelMap = newHashMap()
     and:
-      modelMap.put("test", model)
+      modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     and: "we add a fake allowable range"
+      def model = modelMap.get("SimpleType")
       def intObject = model.properties.get("anObjectInt")
       model.properties.put("anObjectInt", updatedIntObject(intObject))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      mapped.containsKey("test")
+      mapped.containsKey("SimpleType")
     and: "Required values contains the modified property"
-      def mappedModel = mapped.get("test")
+      def mappedModel = mapped.get("SimpleType")
       mappedModel.properties.size() == model.properties.size()
       mappedModel.getRequired().size() == 1
       mappedModel.getRequired().contains("anObjectInt")
@@ -283,31 +297,33 @@ class ModelMapperSpec extends SchemaSpecification {
         .type(modelProperty.type)
         .example(modelProperty.example)
       .build()
-    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+    newModel.updateModelRefFactory(forSupplier(ofInstance((modelProperty.modelRef))))
   }
 
 
   def "models with allowable ranges are serialized correctly for string property" (){
     given:
-      Model model = modelProvider.modelFor(
+      List modelContexts = modelProvider.modelsFor(
         inputParam(
             simpleType(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
+            ImmutableSet.builder().build()))
       def modelMap = newHashMap()
     and:
-      modelMap.put("test", model)
+      modelMap = modelContexts.collectEntries{
+          [it.builder.build().getName(), it.builder.build()]};
     and: "we add a fake allowable range"
+      def model = modelMap.get("SimpleType")
       def stringObject = model.properties.get("aString")
       model.properties.put("aString", updatedStringObject(stringObject))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      mapped.containsKey("test")
+      mapped.containsKey("SimpleType")
     and: "Required values contains the modified property"
-      def mappedModel = mapped.get("test")
+      def mappedModel = mapped.get("SimpleType")
       mappedModel.properties.size() == model.properties.size()
       mappedModel.getRequired().size() == 1
       mappedModel.getRequired().contains("aString")
@@ -328,7 +344,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .position(modelProperty.position)
         .type(modelProperty.type)
       .build()
-    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+    newModel.updateModelRefFactory(forSupplier(ofInstance((modelProperty.modelRef))))
   }
 
   def "model property positions affect the serialization order" () {
@@ -379,7 +395,7 @@ class ModelMapperSpec extends SchemaSpecification {
         null,
         '',
         '').with {
-      it.updateModelRef({ rt -> new ModelRef(simpleQualifiedTypeName(stringProperty)) })
+      it.updateModelRefFactory({ rt -> new ModelRef(simpleQualifiedTypeName(stringProperty)) })
       it
     }
   }
@@ -389,7 +405,9 @@ class ModelMapperSpec extends SchemaSpecification {
     def model = new Model(
         'test',
         'test',
+        0,
         modelType,
+        false,
         simpleQualifiedTypeName(modelType),
         properties,
         '',

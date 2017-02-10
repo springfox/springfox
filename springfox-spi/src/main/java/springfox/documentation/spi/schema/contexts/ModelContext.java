@@ -37,6 +37,7 @@ import static com.google.common.collect.Sets.*;
 public class ModelContext {
   private final Type type;
   private final boolean returnType;
+  private final boolean parentContainer;
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
@@ -61,13 +62,15 @@ public class ModelContext {
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
+    this.parentContainer = false;
     this.modelBuilder = new ModelBuilder();
   }
 
-  ModelContext(ModelContext parentContext, ResolvedType input) {
+  ModelContext(ModelContext parentContext, ResolvedType input, boolean parentContainer) {
     this.parentContext = parentContext;
     this.type = input;
     this.returnType = parentContext.isReturnType();
+    this.parentContainer = parentContainer;
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
@@ -170,9 +173,27 @@ public class ModelContext {
    * @return new context based on parent context for a given input
    */
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
-    return new ModelContext(context, input);
+    return new ModelContext(context, input, false);
   }
-
+  
+  /**
+   * Convenience method to provide an new context for an input parameter
+   *
+   * @param input - context for given input
+   * @return new context based on parent context for a given input
+   */
+  public static ModelContext fromContainerParent(ModelContext context, ResolvedType input) {
+    return new ModelContext(context, input, true);
+  }
+  
+  /**
+   * Answers the question, has the given type been processed?
+   *
+   * @return context of the parent type
+   */
+  public ModelContext getParent() {
+    return parentContext;
+  }
   /**
    * Answers the question, has the given type been processed?
    *
@@ -215,6 +236,13 @@ public class ModelContext {
 
   public void seen(ResolvedType resolvedType) {
     seenTypes.add(resolvedType);
+  }
+
+  public void updateIndex(Integer index) {
+    modelBuilder.index(index);  
+    if (parentContainer) {
+      parentContext.updateIndex(index); 
+    }
   }
 
   @Override

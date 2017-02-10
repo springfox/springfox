@@ -54,8 +54,7 @@ class ModelProviderSupport {
         pluginsManager, typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
-    new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
-            pluginsManager, typeNameExtractor)
+    new DefaultModelProvider(typeResolver, modelDependenciesProvider, pluginsManager, typeNameExtractor)
   }
 
   DefaultModelDependencyProvider modelDependencyProvider(TypeResolver resolver,

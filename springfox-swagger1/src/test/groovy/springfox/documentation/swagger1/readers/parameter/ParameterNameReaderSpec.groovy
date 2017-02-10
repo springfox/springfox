@@ -19,13 +19,17 @@
 
 package springfox.documentation.swagger1.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -47,13 +51,17 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
     given:
       def operationContext = Mock(OperationContext)
       def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParam], new TypeResolver().resolve(Object.class))
+          new ResolvedMethodParameter(0, false, "", [apiParam], new TypeResolver().resolve(Object.class))
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     and: "mocks are setup"
       operationContext.consumes() >> []
     and: "context is setup"
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy, operationContext)
+          context(), genericNamingStrategy, operationContext, operationModelContextsBuilder.inputParam(
+            new TypeResolver().resolve(Object.class), resolvedMethodParameter))
     when:
       def sut = nameReader(apiParam)
       sut.apply(parameterContext)

@@ -19,7 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.MemberResolver;
-import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
@@ -206,19 +205,19 @@ class EntitySearchRequestHandler implements RequestHandler {
   }
 
   @Override
-  public ResolvedType getReturnType() {
+  public ResolvedMethodParameter getReturnParameter() {
     if (resourceType() == ResourceType.ITEM) {
       MemberResolver memberResolver = new MemberResolver(resolver);
       ResolvedTypeWithMembers members = memberResolver.resolve(
           resolver.resolve(searchResource.getMethod().getDeclaringClass()), null, null);
       for (ResolvedMethod resolvedMethod : members.getMemberMethods()) {
         if (resolvedMethod.getRawMember().equals(searchResource.getMethod())) {
-          return resolvedMethod.getReturnType();
+          return new ResolvedMethodParameter(resolvedMethod.getReturnType());
         }
       }
-      return resolver.resolve(Void.TYPE);
+      return new ResolvedMethodParameter(resolver.resolve(Void.TYPE));
     } else {
-      return resolver.resolve(handlerMethod.getReturnType().getParameterType());
+      return new ResolvedMethodParameter(resolver.resolve(handlerMethod.getReturnType().getParameterType()));
     }
   }
 

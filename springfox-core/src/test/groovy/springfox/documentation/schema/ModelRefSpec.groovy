@@ -21,6 +21,7 @@ package springfox.documentation.schema
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.service.AllowableRangeValues
 
 class ModelRefSpec extends Specification {
   @Unroll
@@ -29,13 +30,35 @@ class ModelRefSpec extends Specification {
       model.isCollection() == isCollection
       model.isMap() == isMap
     where:
-      model                                               | isCollection | isMap
-      new ModelRef("string")                              | false        | false
-      new ModelRef("string", null as ModelReference)      | false        | false
-      new ModelRef("string", null, true)                  | false        | false
-      new ModelRef("string", new ModelRef("List"), true)  | false        | true
-      new ModelRef("string", new ModelRef("List"), false) | true         | false
-      new ModelRef("string", new ModelRef("Map"), true)   | false        | true
-      new ModelRef("string", new ModelRef("Map"), false)  | true         | false
+      model                                                      | isCollection | isMap
+      new ModelRef("string")                                     | false        | false
+      new ModelRef("string", null as ModelReference)             | false        | false
+      new ModelRef("string", null, true)                         | false        | false
+      new ModelRef("string", new AllowableRangeValues("1", "5")) | false        | false
+      new ModelRef("string", new ModelRef("List"), true)         | false        | true
+      new ModelRef("string", new ModelRef("List"), false)        | true         | false
+      new ModelRef("string", new ModelRef("Map"), true)          | false        | true
+      new ModelRef("string", new ModelRef("Map"), false)         | true         | false
+  }
+  
+  def ".equals and .hashCode works as expected" () {
+    given:
+      ModelReference model = new ModelRef("string")
+    expect:
+      model.equals(testModel) == expectedEquality
+      model.equals(model)
+      !model.equals(null)
+      !model.equals(new Object())
+    and:
+      (model.hashCode() == testModel.hashCode()) == expectedEquality
+      model.hashCode() == model.hashCode()  
+    where:
+      testModel                                            | expectedEquality
+      new ModelRef("string")                               | true
+      new ModelRef("string", null as ModelReference)       | true
+      new ModelRef("integer", null, true)                  | false
+      new ModelRef("string", null, true)                   | false
+      new ModelRef("string", new ModelRef("List"), false)  | false
+      new ModelRef("string", new ModelRef("Map"), new AllowableRangeValues("3", "5"))    | false
   }
 }

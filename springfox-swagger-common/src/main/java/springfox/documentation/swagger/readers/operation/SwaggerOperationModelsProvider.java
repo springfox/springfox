@@ -69,13 +69,14 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   }
 
   private void collectFromApiOperation(RequestMappingContext context) {
-    ResolvedType returnType = context.getReturnType();
+    ResolvedType returnType = context.getReturnParameter().getParameterType();
     returnType = context.alternateFor(returnType);
     Optional<ResolvedType> returnParameter = context.findAnnotation(ApiOperation.class)
         .transform(resolvedTypeFromOperation(typeResolver, returnType));
     if (returnParameter.isPresent() && returnParameter.get() != returnType) {
       LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(returnParameter.get()).or("<null>"));
-      context.operationModelsBuilder().addReturn(returnParameter.get());
+      context.operationModelsBuilder().inputParam(
+          context.alternateFor(returnParameter.get()), context.getReturnParameter().replaceResolvedParameterType(returnParameter.get()));
     }
   }
 
@@ -84,11 +85,12 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
     Set<ResolvedType> seenTypes = newHashSet();
     for (ApiResponses apiResponses : allApiResponses) {
-      List<ResolvedType> modelTypes = toResolvedTypes(context).apply(apiResponses);
-      for (ResolvedType modelType : modelTypes) {
+      List<ResolvedType> parameterTypes = toResolvedTypes(context).apply(apiResponses);
+      for (ResolvedType parameterType : parameterTypes) {
+        ResolvedType modelType = context.alternateFor(parameterType);
         if (!seenTypes.contains(modelType)) {
           seenTypes.add(modelType);
-          context.operationModelsBuilder().addReturn(modelType);
+          context.operationModelsBuilder().inputParam(modelType, context.getReturnParameter().replaceResolvedParameterType(parameterType));
         }
       }
     }
@@ -100,9 +102,9 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
       public List<ResolvedType> apply(ApiResponses input) {
         List<ResolvedType> resolvedTypes = newArrayList();
         for (ApiResponse response : input.value()) {
-          ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
-          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-          resolvedTypes.add(modelType);
+          ResolvedType parameterType = typeResolver.resolve(response.response());
+          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(parameterType).or("<null>"));
+          resolvedTypes.add(parameterType);
         }
         return resolvedTypes;
       }

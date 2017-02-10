@@ -20,12 +20,10 @@
 package springfox.documentation.schema;
 
 
-import springfox.documentation.annotations.Cacheable;
+import java.util.List;
+
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 public interface ModelProvider {
-  @Cacheable(value = "models")
-  com.google.common.base.Optional<Model> modelFor(ModelContext modelContext);
-
-  java.util.Map<String, Model> dependencies(ModelContext modelContext);
+  List<ModelContext> modelsFor(ModelContext modelContext);
 }

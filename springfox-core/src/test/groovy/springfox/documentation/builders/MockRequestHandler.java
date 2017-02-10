@@ -18,7 +18,6 @@
  */
 package springfox.documentation.builders;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
@@ -121,7 +120,7 @@ public class MockRequestHandler implements RequestHandler {
   }
 
   @Override
-  public ResolvedType getReturnType() {
+  public ResolvedMethodParameter getReturnParameter() {
     return null;
   }
 

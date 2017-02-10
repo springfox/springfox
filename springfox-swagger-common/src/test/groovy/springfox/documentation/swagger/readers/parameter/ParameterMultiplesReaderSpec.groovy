@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.parameter
 
+import com.google.common.collect.ImmutableSet
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
@@ -27,7 +28,11 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -35,7 +40,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {   
   @Unroll
   def "param multiples for swagger reader"() {
     given:
@@ -45,8 +50,12 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
       ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
       ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+      OperationModelContextsBuilder operationModelContextsBuilder =
+          new OperationModelContextsBuilder(DocumentationType.SWAGGER_12, Mock(AlternateTypeProvider), Mock(GenericTypeNamingStrategy),
+              ImmutableSet.builder().build())
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy, Mock(OperationContext))
+          context(), genericNamingStrategy, Mock(OperationContext), operationModelContextsBuilder.inputParam(
+              resolvedType, resolvedMethodParameter))
 
     when:
       def operationCommand = stubbedParamBuilder(apiParamAnnotation);

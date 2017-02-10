@@ -19,23 +19,29 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.*;
 
 public class OperationModelContextsBuilder {
   private final DocumentationType documentationType;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
-  private final Set<ModelContext> contexts = newHashSet();
+  private final List<ModelContext> contexts = newArrayList();
+  private final Map<ResolvedMethodParameter, ModelContext> contextsLinks = newHashMap();
 
   public OperationModelContextsBuilder(
       DocumentationType documentationType,
@@ -48,7 +54,7 @@ public class OperationModelContextsBuilder {
     ignorableTypes = ignorableParameterTypes;
   }
 
-  public OperationModelContextsBuilder addReturn(Type type) {
+  public ModelContext returnType(Type type) {
     ModelContext returnValue = ModelContext.returnValue(
         type,
         documentationType,
@@ -56,10 +62,10 @@ public class OperationModelContextsBuilder {
         genericsNamingStrategy,
         ignorableTypes);
     this.contexts.add(returnValue);
-    return this;
+    return returnValue;
   }
 
-  public OperationModelContextsBuilder addInputParam(Type type) {
+  public ModelContext inputType(Type type) {
     ModelContext inputParam = ModelContext.inputParam(
         type,
         documentationType,
@@ -67,10 +73,17 @@ public class OperationModelContextsBuilder {
         genericsNamingStrategy,
         ignorableTypes);
     this.contexts.add(inputParam);
-    return this;
+    return inputParam;
   }
-
-  public Set<ModelContext> build() {
-    return ImmutableSet.copyOf(contexts);
+  
+  public ModelContext inputParam(Type type, ResolvedMethodParameter parameter) {
+    if (!contextsLinks.containsKey(parameter)) {
+      contextsLinks.put(parameter, parameter.isReturnType()?this.returnType(type):this.inputType(type));
+    }
+    return contextsLinks.get(parameter);
+  }
+  
+  public List<ModelContext> build() {
+    return ImmutableList.copyOf(contexts);
   }
 }

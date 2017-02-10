@@ -44,44 +44,52 @@ class ModelProviderSpec extends Specification {
         namingStrategy,
         ImmutableSet.builder().build())
       context.seen(new TypeResolver().resolve(HttpHeaders))
-      def dependentTypeNames = sut.dependencies(context).keySet().sort()
-
+      def modelContexts = sut.modelsFor(context)
+      def dependentTypeNames = modelContexts.collect() {
+        it.builder.build().getName()
+      }.unique()
+          .sort()
+      
     expect:
-      dependencies == dependentTypeNames
+      dependencies == dependentTypeNames - rootModelName
 
     where:
-      modelType                      | dependencies
-      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+      modelType                      | dependencies                                                   | rootModelName
+      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort() | "GenericType«ResponseEntityAlternative«SimpleType»»"
   }
 
   @Unroll
   def "dependencies are inferred correctly by the model provider"() {
     given:
       ModelProvider provider = defaultModelProvider()
-      def dependentTypeNames = provider.dependencies(
+      def modelContexts = provider.modelsFor(
         inputParam(
             modelType,
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).keySet().sort()
+            ImmutableSet.builder().build()))
+      def dependentTypeNames = modelContexts.collect() {
+          it.builder.build().getName()
+      }.unique()
+          .sort()
 
     expect:
-      dependencies == dependentTypeNames
+      dependencies == dependentTypeNames - rootModelName
 
     where:
-      modelType                      | dependencies
-      simpleType()                   | []
-      complexType()                  | ["Category"]
-      inheritedComplexType()         | ["Category"]
-      typeWithLists()                | ["Category", "ComplexType", "Substituted"].sort()
-      typeWithSets()                 | ["Category", "ComplexType"].sort()
-      typeWithArrays()               | ["Category", "ComplexType", "Substituted"]
-      genericClass()                 | ["SimpleType"]
-      genericClassWithListField()    | ["SimpleType"]
-      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
-      genericClassWithDeepGenerics() | ["ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort()
-      genericCollectionWithEnum()    | ["Collection«string»"]
-      recursiveType()                | ["SimpleType"]
+      modelType                      | dependencies                                                         | rootModelName
+      simpleType()                   | []                                                                   | "SimpleType"
+      complexType()                  | ["Category"]                                                         | "ComplexType"
+      inheritedComplexType()         | ["Category"]                                                         | "InheritedComplexType"
+      typeWithLists()                | ["Category", "ComplexType", "Substituted"].sort()                    | "ListsContainer"
+      typeWithSets()                 | ["Category", "ComplexType"].sort()                                   | "SetsContainer"
+      typeWithArrays()               | ["Category", "ComplexType", "Substituted"]                           | "ArraysContainer"
+      genericClass()                 | ["SimpleType"]                                                       | "GenericType«SimpleType»"
+      genericClassWithListField()    | ["SimpleType"]                                                       | "GenericType«List«SimpleType»»"
+      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()       | "GenericType«ResponseEntityAlternative«SimpleType»»"
+      genericClassWithDeepGenerics() | ["ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort() | "GenericType«ResponseEntityAlternative«List«SimpleType»»»"
+      genericCollectionWithEnum()    | ["Collection«string»"]                                               | "GenericType«Collection«string»»"
+      recursiveType()                | ["SimpleType"]                                                       | "RecursiveType"
   }
 }

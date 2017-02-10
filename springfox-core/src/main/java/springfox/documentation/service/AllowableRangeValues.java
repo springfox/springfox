@@ -19,6 +19,8 @@
 
 package springfox.documentation.service;
 
+import com.google.common.base.Objects;
+
 public class AllowableRangeValues implements AllowableValues {
   private final String min;
   private final String max;
@@ -43,12 +45,35 @@ public class AllowableRangeValues implements AllowableValues {
   public String getMax() {
     return max;
   }
-
+  
   public Boolean getExclusiveMin() {
     return exclusiveMin;
   }
 
   public Boolean getExclusiveMax() {
     return exclusiveMax;
+  }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(min, max, exclusiveMin, exclusiveMax);
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    AllowableRangeValues that = (AllowableRangeValues) o;
+
+    return Objects.equal(min, that.min) &&
+        Objects.equal(max, that.max)&&
+        Objects.equal(exclusiveMin, that.exclusiveMin) &&
+        Objects.equal(exclusiveMax, that.exclusiveMax);
   }
 }
