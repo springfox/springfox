@@ -55,7 +55,6 @@ import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
@@ -133,7 +132,7 @@ public class DocumentationPluginsManager {
     return context.apiListingBuilder().build();
   }
 
-  public Set<ModelContext> modelContexts(RequestMappingContext context) {
+  public List<ModelContext> modelContexts(RequestMappingContext context) {
     DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
     for (OperationModelsProviderPlugin each : operationModelsProviders.getPluginsFor(documentationType)) {
       each.apply(context);

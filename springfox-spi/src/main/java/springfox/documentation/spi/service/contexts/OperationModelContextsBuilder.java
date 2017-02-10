@@ -19,6 +19,7 @@
 
 package springfox.documentation.spi.service.contexts;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -28,10 +29,10 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 
 public class OperationModelContextsBuilder {
@@ -39,7 +40,7 @@ public class OperationModelContextsBuilder {
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
-  private final Set<ModelContext> contexts = newHashSet();
+  private final List<ModelContext> contexts = newArrayList();
   private final Map<ResolvedMethodParameter, ModelContext> contextsLinks = newHashMap();
 
   public OperationModelContextsBuilder(
@@ -82,7 +83,7 @@ public class OperationModelContextsBuilder {
     return contextsLinks.get(parameter);
   }
   
-  public Set<ModelContext> build() {
-    return ImmutableSet.copyOf(contexts);
+  public List<ModelContext> build() {
+    return ImmutableList.copyOf(contexts);
   }
 }

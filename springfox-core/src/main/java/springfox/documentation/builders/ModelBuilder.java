@@ -39,6 +39,7 @@ public class ModelBuilder {
   private String baseModel;
   private String discriminator;
   private ResolvedType modelType;
+  private Boolean isMapType;
   private String example;
 
   private Map<String, ModelProperty> properties = newHashMap();
@@ -166,9 +167,20 @@ public class ModelBuilder {
     this.modelType = defaultIfAbsent(modelType, this.modelType);
     return this;
   }
+  
+  /**
+   * Shows if model is Map model
+   *
+   * @param isModelType - true if type is Map 
+   * @return this
+   */
+  public ModelBuilder isMapType(Boolean isMapType) {
+    this.isMapType = defaultIfAbsent(isMapType, this.isMapType);
+    return this;
+  }
 
   public Model build() {
-    return new Model(id, name, index, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
+    return new Model(id, name, index, modelType, isMapType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
         example);
   }
 }

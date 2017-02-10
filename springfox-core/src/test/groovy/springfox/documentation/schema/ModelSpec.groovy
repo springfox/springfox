@@ -35,6 +35,7 @@ class ModelSpec extends Specification {
                         "Test", 
                         0, 
                         resolver.resolve(String), 
+                        false,
                         "qType", 
                         ["Test": property],
                         "desc", 
@@ -43,7 +44,7 @@ class ModelSpec extends Specification {
                         ["subType1", "subType2"], 
                         "exmpl")
       
-      Model testModel = new Model(id, name, index, resolver.resolve(type), qualifiedType, props, description, baseModel, discriminator, subTypes, example)
+      Model testModel = new Model(id, name, index, resolver.resolve(type), isMapType, qualifiedType, props, description, baseModel, discriminator, subTypes, example)
     and:
       property.getModelRef() >> new ModelRef("string", null, true)
     expect:
@@ -55,21 +56,22 @@ class ModelSpec extends Specification {
       (model.hashCode() == testModel.hashCode()) == expectedEquality
       model.hashCode() == model.hashCode()
     where:
-      id << ["Test", "Test1", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test"]
-      name << ["Test", "Test", "Test1", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test"]
-      index << [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-      type << [String, String, String, Integer, String, String, String, String, String, String, String]
-      qualifiedType << ["qType", "qType", "qType", "qType", "qType1", "qType", "qType", "qType", "qType", "qType", "qType"]
+      id << ["Test", "Test1", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test"]
+      name << ["Test", "Test", "Test1", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test"]
+      index << [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      type << [String, String, String, Integer, String, String, String, String, String, String, String, String]
+      isMapType << [false, false, false, false, true, false, false, false, false, false, false, false]
+      qualifiedType << ["qType", "qType", "qType", "qType", "qType", "qType1", "qType", "qType", "qType", "qType", "qType", "qType"]
       props << {
           ModelProperty pr = Spy(ModelProperty, constructorArgs: args)
           pr.getModelRef() >> new ModelRef("string", null, true)
-          [["Test": pr], ["T": pr], ["T": pr], ["T": pr], ["T": pr], ["T": pr], ["Test": pr], ["Test": pr], ["Test": pr], ["Test": pr], ["Test": pr]]
+          [["Test": pr], ["T": pr], ["T": pr], ["T": pr], ["T": pr], ["T": pr], ["T": pr], ["Test": pr], ["Test": pr], ["Test": pr], ["Test": pr], ["Test": pr]]
       }()
-      description << ["desc", "desc", "desc", "desc", "desc", "desc", "desc1", "desc", "desc", "desc", "desc"]
-      baseModel << ["bModel", "bModel", "bModel", "bModel", "bModel", "bModel", "bModel", "bModel1", "bModel", "bModel", "bModel"]
-      discriminator << ["discr", "discr", "discr", "discr", "discr", "discr", "discr", "discr", "discr1", "discr", "discr"]
-      subTypes << [["subType1", "subType2"], [], [], [], [], [], [], [], [], ["subType1"], ["subType1", "subType2"]]
-      example << ["exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl1"]
-      expectedEquality << [true, false, false, false, false, false, false, false, false, false, false]
+      description << ["desc", "desc", "desc", "desc", "desc", "desc", "desc", "desc1", "desc", "desc", "desc", "desc"]
+      baseModel << ["bModel", "bModel", "bModel", "bModel", "bModel", "bModel", "bModel", "bModel", "bModel1", "bModel", "bModel", "bModel"]
+      discriminator << ["discr", "discr", "discr", "discr", "discr", "discr", "discr", "discr", "discr", "discr1", "discr", "discr"]
+      subTypes << [["subType1", "subType2"], [], [], [], [], [], [], [], [], [], [], ["subType1", "subType2"]]
+      example << ["exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmlp1"]
+      expectedEquality << [true, false, false, false, false, false, false, false, false, false, false, false]
   }
 }

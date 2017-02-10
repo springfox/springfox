@@ -32,7 +32,7 @@
           "concrete-controller"
         ],
         "summary": "create",
-        "operationId": "createUsingPUT_1",
+        "operationId": "createUsingPUT_2",
         "consumes": [
           "application/json"
         ],
@@ -100,7 +100,7 @@
           "concrete-controller"
         ],
         "summary": "get",
-        "operationId": "getUsingGET_1",
+        "operationId": "getUsingGET_2",
         "consumes": [
           "application/json"
         ],

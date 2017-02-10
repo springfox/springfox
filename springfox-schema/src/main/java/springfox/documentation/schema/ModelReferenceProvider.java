@@ -26,6 +26,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.schema.ResolvedTypes.allowableValues;
 import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
 
@@ -52,14 +53,14 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (MultipartFile.class.isAssignableFrom(type.getErasedType())) {
       return new ModelRef("File");
     }
-    String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-    return new ModelRef(addModelIndex(typeName), allowableValues(type));
+    String typeName = withModelIndex(typeNameExtractor.typeName(fromParent(parentContext, type)), type);
+    return new ModelRef(typeName, allowableValues(type));
   }
 
   private Optional<ModelReference> mapReference(ResolvedType type) {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
-      String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
+      String typeName = withModelIndex(typeNameExtractor.typeName(fromParent(parentContext, type)), type);
       return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), true));
     }
     return Optional.absent();
@@ -78,8 +79,24 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     return Optional.absent();
   }
   
-  private String addModelIndex(String name) {
-    Integer index = parentContext.getBuilder().build().getIndex();
+  private String withModelIndex(String name, ResolvedType type) {
+    if (isBaseType(type)) {
+      return name;  
+    }
+    Model model = parentContext.getBuilder().build();
+    Integer index = model.getIndex();
+    if (index == null) {
+      ModelContext parent = parentContext.getParent();
+      while (parent != null) {
+        model = parent.getBuilder().build();
+        if (type.equals(model.getType())) {
+          index = model.getIndex();
+          break;
+        } else {
+            parent = parent.getParent();  
+          }
+      }
+    }
     if (index != null && index > 0) {
       name += "_" + index;
     }

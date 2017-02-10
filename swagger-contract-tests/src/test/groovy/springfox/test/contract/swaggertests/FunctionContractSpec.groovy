@@ -74,6 +74,7 @@ public class FunctionContractSpec extends Specification implements FileAccess {
     'declaration-pet-service.json'                                | 'petService'
     'declaration-groovy-service.json'                             | 'groovyService'
     'declaration-enum-service.json'                               | 'enumService'
+    'declaration-same-controller.json'                            | 'same'
   }
 
   def "should list swagger resources for swagger 2.0"() {

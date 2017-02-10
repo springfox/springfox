@@ -103,7 +103,7 @@ public class ResolvedMethodParameter {
  
   @Override
   public int hashCode() {
-    return Objects.hashCode(parameterIndex, returnType, annotations, defaultName, parameterType);
+    return Objects.hashCode(parameterIndex, returnType, defaultName, parameterType);
   }
   
   @Override
@@ -120,7 +120,6 @@ public class ResolvedMethodParameter {
     
     return Objects.equal(parameterIndex, that.parameterIndex) &&
         Objects.equal(returnType, that.returnType) &&   
-        Objects.equal(annotations, that.annotations) &&
         Objects.equal(defaultName, that.defaultName) &&
         Objects.equal(parameterType, that.parameterType);
   }

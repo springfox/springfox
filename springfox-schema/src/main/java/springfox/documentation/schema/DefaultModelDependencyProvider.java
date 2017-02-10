@@ -69,7 +69,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   @Override
   public List<ModelContext> dependentModels(ModelContext modelContext) {
     return from(resolvedDependencies(modelContext))
-        .filter(ignorableTypes(modelContext))
+        .filter(ignorableTypes())
         .filter(not(baseTypes(modelContext)))
         .toList();
   }
@@ -88,15 +88,14 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return Types.isBaseType(typeName);
   }
 
-  private Predicate<ModelContext> ignorableTypes(final ModelContext modelContext) {
+  private Predicate<ModelContext> ignorableTypes() {
     return new Predicate<ModelContext>() {
       @Override
       public boolean apply(ModelContext input) {
-        return !modelContext.hasSeenBefore(input.resolvedType(typeResolver));
+        return !input.getParent().hasSeenBefore(input.resolvedType(typeResolver));
       }
     };
   }
-
 
   private List<ModelContext> resolvedDependencies(ModelContext modelContext) {
     ResolvedType resolvedType = modelContext.alternateFor(modelContext.resolvedType(typeResolver));
@@ -130,7 +129,8 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     for (ResolvedType parameter : resolvedType.getTypeParameters()) {
       LOG.debug("Adding type for parameter {}", parameter.getSignature());
       parameter = modelContext.alternateFor(parameter);
-      ModelContext childContext = (isContainerType(resolvedType))?
+      ModelContext childContext = (isContainerType(resolvedType) || 
+                                   isMapType(resolvedType))?
               ModelContext.fromContainerParent(modelContext, parameter):ModelContext.fromParent(modelContext, parameter);
       parameters.add(childContext);
       LOG.debug("Recursively resolving dependencies for parameter {}", parameter.getSignature());

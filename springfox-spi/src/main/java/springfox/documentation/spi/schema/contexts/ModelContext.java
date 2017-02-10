@@ -177,7 +177,7 @@ public class ModelContext {
   }
   
   /**
-   * Convenience method to provide an new context for an input parameter with the same ModelBuilder
+   * Convenience method to provide an new context for an input parameter
    *
    * @param input - context for given input
    * @return new context based on parent context for a given input
@@ -185,7 +185,15 @@ public class ModelContext {
   public static ModelContext fromContainerParent(ModelContext context, ResolvedType input) {
     return new ModelContext(context, input, true);
   }
-
+  
+  /**
+   * Answers the question, has the given type been processed?
+   *
+   * @return context of the parent type
+   */
+  public ModelContext getParent() {
+    return parentContext;
+  }
   /**
    * Answers the question, has the given type been processed?
    *
@@ -193,12 +201,9 @@ public class ModelContext {
    * @return true or false
    */
   public boolean hasSeenBefore(ResolvedType resolvedType) {
-    if (parentContext == null) {
-      return seenTypes.contains(resolvedType)
-          || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()));
-    } else {
-        return parentHasSeenBefore(resolvedType);
-      }
+    return seenTypes.contains(resolvedType)
+        || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()))
+        || parentHasSeenBefore(resolvedType);
   }
 
   public DocumentationType getDocumentationType() {
@@ -232,11 +237,7 @@ public class ModelContext {
   public void seen(ResolvedType resolvedType) {
     seenTypes.add(resolvedType);
   }
-  
-  public boolean isRootContext() {
-    return (parentContext == null);  
-  }
-  
+
   public void updateIndex(Integer index) {
     modelBuilder.index(index);  
     if (parentContainer) {

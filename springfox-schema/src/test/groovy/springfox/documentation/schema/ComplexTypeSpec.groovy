@@ -108,8 +108,9 @@ class ComplexTypeSpec extends Specification {
       asInputContexts.size() == 2
       asInputContexts.each {
         def asInput = it.builder.build()
-        asInput.getName() == "RecursiveType"
-        if (asInput.getProperties().containsKey(property)) { 
+        if (asInput.getName() == "RecursiveType") {
+          asInput.getProperties().size() == 1
+          asInput.getProperties().containsKey(property)
           def modelProperty = asInput.getProperties().get(property)
           modelProperty.type.erasedType == type
           modelProperty.getQualifiedType() == qualifiedType
@@ -117,25 +118,20 @@ class ComplexTypeSpec extends Specification {
           !modelProperty.getModelRef().collection
           modelProperty.getModelRef().itemType == null
         }
-        else  {
-          asInput.getProperties().size() == 0
-        }
       }
 
       asReturnContexts.size() == 2
       asReturnContexts.each {
         def asReturn = it.builder.build()
-        asReturn.getName() == "RecursiveType"
-        if (asReturn.getProperties().containsKey(property)) {
+        if (asReturn.getName() == "RecursiveType") {
+          asReturn.getProperties().size() == 1
+          asReturn.getProperties().containsKey(property)
           def retModelProperty = asReturn.getProperties().get(property)
           retModelProperty.type.erasedType == type
           retModelProperty.getQualifiedType() == qualifiedType
           retModelProperty.getModelRef().type == "RecursiveType"
           !retModelProperty.getModelRef().collection
           retModelProperty.getModelRef().itemType == null
-        }
-        else {
-          asReturn.getProperties().size() == 0
         }
       }
 

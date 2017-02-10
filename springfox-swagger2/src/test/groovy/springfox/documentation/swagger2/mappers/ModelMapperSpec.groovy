@@ -407,6 +407,7 @@ class ModelMapperSpec extends SchemaSpecification {
         'test',
         0,
         modelType,
+        false,
         simpleQualifiedTypeName(modelType),
         properties,
         '',

@@ -74,6 +74,7 @@ public class ApiListingScanner {
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
             = context.getRequestMappingsByResourceGroup();
     List<SecurityReference> securityReferences = newArrayList();
+    Map<String, Model> globalModels = new LinkedHashMap<String, Model>();
     for (ResourceGroup resourceGroup : sortedByName(requestMappingsByResourceGroup.keySet())) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
@@ -83,9 +84,10 @@ public class ApiListingScanner {
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = newHashSet();
 
-      Map<String, Model> models = new LinkedHashMap<String, Model>();
+      Map<String, Model> localModels = new LinkedHashMap<String, Model>();
       for (RequestMappingContext each : sortedByMethods(requestMappingsByResourceGroup.get(resourceGroup))) {
-        models.putAll(apiModelReader.read(each.withKnownModels(models)));
+        localModels.putAll(apiModelReader.read(each.withKnownModels(globalModels)));
+        globalModels.putAll(localModels);
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
       apiDescriptions.addAll(pluginsManager.additionalListings(context));
@@ -108,7 +110,7 @@ public class ApiListingScanner {
               .protocols(protocols)
               .securityReferences(securityReferences)
               .apis(sortedApis)
-              .models(models)
+              .models(localModels)
               .position(position++)
               .availableTags(documentationContext.getTags());
 

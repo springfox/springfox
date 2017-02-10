@@ -67,12 +67,12 @@ public class DefaultModelProvider implements ModelProvider {
   @Override
   public List<ModelContext> modelsFor(ModelContext modelContext) {
     List<ModelContext> modelContexts = newArrayList();
-    if (!shouldIgnore(modelContext) && 
+    if (!shouldIgnore(modelContext.alternateFor(modelContext.resolvedType(resolver)), modelContext) && 
         !isMapType(modelContext.alternateFor(modelContext.resolvedType(resolver)))) {
       modelContexts.add(modelContext);
     }   
     modelContexts.addAll(FluentIterable.from(dependencyProvider.dependentModels(modelContext)).
-            filter(not(shouldIgnore())).toList());
+            filter(not(shouldIgnore(modelContext))).toList());
     for (ModelContext childContext : modelContexts) {
       Model model = isMapType(childContext.resolvedType(resolver))?
               mapModel(childContext):modelBuilder(childContext);
@@ -89,6 +89,7 @@ public class DefaultModelProvider implements ModelProvider {
     modelContext.getBuilder()
         .id(typeName)
         .type(propertiesHost)
+        .isMapType(false)
         .name(typeName)
         .index(0)
         .qualifiedType(simpleQualifiedTypeName(propertiesHost))
@@ -104,6 +105,7 @@ public class DefaultModelProvider implements ModelProvider {
     return modelContext.getBuilder()
         .id(typeName)
         .type(modelContext.resolvedType(resolver))
+        .isMapType(true)
         .name(typeName)
         .index(0)
         .qualifiedType(simpleQualifiedTypeName(modelContext.resolvedType(resolver)))
@@ -115,21 +117,20 @@ public class DefaultModelProvider implements ModelProvider {
         .build();
   }
   
-  private Predicate<ModelContext> shouldIgnore() {
+  private Predicate<ModelContext> shouldIgnore(final ModelContext rootContext) {
       return new Predicate<ModelContext>() {
         @Override
         public boolean apply(ModelContext input) {
-          return shouldIgnore(input);       
+          return shouldIgnore(input.alternateFor(input.resolvedType(resolver)), rootContext);       
         }      
       };
     }
   
-  private boolean shouldIgnore(ModelContext context) {
-    ResolvedType propertiesHost = context.alternateFor(context.resolvedType(resolver));
+  private boolean shouldIgnore(ResolvedType propertiesHost, ModelContext rootContext) {
     if (isContainerType(propertiesHost)
         || propertiesHost.getErasedType().isEnum()
         || isBaseType(propertiesHost)
-        || context.hasSeenBefore(propertiesHost)) {
+        || rootContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));  
       return true;

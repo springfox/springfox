@@ -55,6 +55,29 @@ public class DummyModels {
       this.name = name;
     }
   }
+  
+  public class NewBusinessModel {
+    public class BusinessModel {
+      private String name;
+      private Integer numEmployees;
+      
+      public String getName() {
+        return name;
+      }
+      
+      public void setName(String name) {
+        this.name = name;
+      }
+      
+      public Integer getNumEmployees() {
+        return numEmployees;
+      }
+      
+      public void setNumEmployees(Integer numEmployees) {
+        this.numEmployees = numEmployees;
+      }
+    }  
+  }
 
   public class AnnotatedBusinessModel {
 //    @ApiModelProperty(value = "The name of this business", required = true)
