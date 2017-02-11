@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
 import org.springframework.web.servlet.View
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -49,25 +50,15 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
     listingScanner = Mock(ApiListingScanner)
     listingScanner.scan(_) >> LinkedListMultimap.create()
     controller.mapper = swagger2Mapper()
-    def jackson2 = new MappingJackson2HttpMessageConverter()
 
-    jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
-
-    def mapper = new ObjectMapper()
-    jackson2.setObjectMapper(mapper)
-
-    mockMvc = standaloneSetup(controller)
-        .setSingleView(mockView)
-        .setMessageConverters(jackson2)
+    mockMvc = basicSetup()
         .build();
   }
 
   @Unroll("path: #path")
   def "should return the default or first swagger resource listing"() {
     given:
-      ApiDocumentationScanner swaggerApiResourceListing =
-          new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+      configureDocumentationCache()
     when:
       MvcResult result = mockMvc
         .perform(get(path))
@@ -84,12 +75,35 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
       "/v2/api-docs?group=unknown" | 404
   }
 
+  @Unroll("path: #path")
+  def "should override the default path location"() {
+    given:
+
+    mockMvc = basicSetup()
+            .addPlaceHolderValue("springfox.documentation.swagger.v2.path", "/api-docs")
+            .build();
+
+    configureDocumentationCache()
+
+    when:
+      MvcResult result = mockMvc
+        .perform(get(path))
+        .andDo(print())
+        .andReturn()
+
+      jsonBodyResponse(result)
+    then:
+      result.getResponse().getStatus() == expectedStatus
+    where:
+      path                      | expectedStatus
+      "/api-docs"               | 200
+      "/v2/api-docs"            | 404
+  }
+
   @Unroll("x-forwarded-prefix: #prefix")
   def "should respect proxy headers ('X-Forwarded-*') when setting host, port and basePath"() {
     given:
-      ApiDocumentationScanner swaggerApiResourceListing =
-          new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+      configureDocumentationCache()
     when:
       ResultActions result = mockMvc
           .perform(get("/v2/api-docs")
@@ -108,9 +122,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
 
   def "Should omit port number if it is -1"() {
     given:
-      ApiDocumentationScanner swaggerApiResourceListing =
-        new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+      configureDocumentationCache()
     and:
       controller.hostNameOverride = "DEFAULT"
     when:
@@ -125,6 +137,25 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
     then:
       host == "localhost"
       result.getResponse().getStatus() == 200
+  }
+
+  def StandaloneMockMvcBuilder basicSetup() {
+    def jackson2 = new MappingJackson2HttpMessageConverter()
+
+    jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
+
+    def mapper = new ObjectMapper()
+    jackson2.setObjectMapper(mapper)
+
+    return standaloneSetup(controller)
+            .setSingleView(mockView)
+            .setMessageConverters(jackson2);
+  }
+
+  def configureDocumentationCache() {
+    ApiDocumentationScanner swaggerApiResourceListing =
+            new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+    controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
   }
 
 }
