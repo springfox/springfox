@@ -70,7 +70,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   @Unroll
   def "Api annotation with list type"() {
     given:
-      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], Mock(ResolvedType))
+      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
           new ParameterContext(
@@ -98,7 +98,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   @Unroll("Range: #min | #max")
   def "Api annotation with ranges"() {
     given:
-      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], Mock(ResolvedType))
+      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext = new ParameterContext(
           resolvedMethodParameter,
@@ -133,5 +133,11 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
     new ApiParamParameterBuilder() {
     }
+  }
+
+  def stubbedResolvedType() {
+    def resolvedType = Mock(ResolvedType)
+    resolvedType.getErasedType() >> Object.class
+    return resolvedType
   }
 }
