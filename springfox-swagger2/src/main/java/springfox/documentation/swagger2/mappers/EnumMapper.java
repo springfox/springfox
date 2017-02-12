@@ -33,6 +33,7 @@ import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.google.common.base.Optional.*;
@@ -56,18 +57,18 @@ public class EnumMapper {
     }
     if (allowableValues instanceof AllowableRangeValues) {
       AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-      toReturn.setMinimum(safeDouble(range.getMin()));
-      toReturn.setMaximum(safeDouble(range.getMax()));
+      toReturn.setMinimum(safeBigDecimal(range.getMin()));
+      toReturn.setMaximum(safeBigDecimal(range.getMax()));
     }
     return toReturn;
   }
 
-  static Double safeDouble(String doubleString) {
+  static BigDecimal safeBigDecimal(String doubleString) {
     if (doubleString == null){
       return null;
     }
     try {
-      return Double.valueOf(doubleString);
+      return new BigDecimal(doubleString);
     } catch (NumberFormatException e) {
       return null;
     }
@@ -101,8 +102,8 @@ public class EnumMapper {
       if (property instanceof AbstractNumericProperty) {
         AbstractNumericProperty numeric = (AbstractNumericProperty) property;
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        numeric.setMaximum(safeDouble(range.getMax()));
-        numeric.setMinimum(safeDouble(range.getMin()));
+        numeric.setMaximum(safeBigDecimal(range.getMax()));
+        numeric.setMinimum(safeBigDecimal(range.getMin()));
       }
     }
     return property;

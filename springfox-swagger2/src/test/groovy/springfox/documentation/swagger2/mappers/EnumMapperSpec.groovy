@@ -72,8 +72,8 @@ class EnumMapperSpec extends Specification {
     if (allowableValues instanceof AllowableListValues) {
       assert parameter.enum.size() == expectedSize
     } else if (allowableValues instanceof AllowableRangeValues) {
-      assert parameter.minimum == safeDouble(allowableValues.min)
-      assert parameter.maximum == safeDouble(allowableValues.max)
+      assert parameter.minimum == safeBigDecimal(allowableValues.min)
+      assert parameter.maximum == safeBigDecimal(allowableValues.max)
     } else {
       assert parameter.enum == null
     }

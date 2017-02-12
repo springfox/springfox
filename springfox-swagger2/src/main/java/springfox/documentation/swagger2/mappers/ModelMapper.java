@@ -153,9 +153,9 @@ public abstract class ModelMapper {
       AllowableValues allowableValues = source.getAllowableValues();
       if (allowableValues instanceof AllowableRangeValues) {
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-        numericProperty.maximum(safeDouble(range.getMax()));
+        numericProperty.maximum(safeBigDecimal(range.getMax()));
         numericProperty.exclusiveMaximum(range.getExclusiveMax());
-        numericProperty.minimum(safeDouble(range.getMin()));
+        numericProperty.minimum(safeBigDecimal(range.getMin()));
         numericProperty.exclusiveMinimum(range.getExclusiveMin());
       }
     }
