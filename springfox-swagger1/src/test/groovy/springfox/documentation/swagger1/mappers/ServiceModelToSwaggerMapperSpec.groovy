@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -42,8 +42,7 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 
 import static com.google.common.collect.Sets.*
 
-@Mixin(MapperSupport)
-class ServiceModelToSwaggerMapperSpec extends Specification {
+class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSupport {
   def "Maps the api description correctly"() {
     given:
       def defaults = new Defaults()
