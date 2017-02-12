@@ -28,6 +28,7 @@ dependencies:
 test:
   override:
   - ./gradlew clean check
+      timeout: 900
 
 deployment:
  staging:
