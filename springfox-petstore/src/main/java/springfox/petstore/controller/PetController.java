@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
+import io.swagger.annotations.ResponseHeader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,6 +55,10 @@ public class PetController {
           value = "Find pet by ID", notes = "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API " +
           "error conditions",
           response = Pet.class,
+          responseHeaders = {
+            @ResponseHeader(name = "header4", response = String.class),
+            @ResponseHeader(name = "header3", response = String.class)
+          },
           authorizations = {
                   @Authorization(value = "api_key"),
                   @Authorization(value = "petstore_auth", scopes = {
@@ -61,7 +66,10 @@ public class PetController {
                           @AuthorizationScope(scope = "read:pets", description = "")
                   })})
   @ApiResponses(value = {
-          @ApiResponse(code = 400, message = "Invalid ID supplied"),
+          @ApiResponse(code = 400, message = "Invalid ID supplied", responseHeaders = {
+                  @ResponseHeader(name = "header2", response = String.class),
+                  @ResponseHeader(name = "header1", response = String.class)
+          }),
           @ApiResponse(code = 404, message = "Pet not found")}
   )
   public ResponseEntity<Pet> getPetById(
