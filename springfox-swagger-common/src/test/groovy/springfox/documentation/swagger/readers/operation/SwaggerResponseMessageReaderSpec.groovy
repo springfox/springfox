@@ -130,7 +130,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
       "operationHeadersOnly"    | [["name": "header1", "type": new ModelRef("List", new ModelRef("string"))]]
       "responseHeadersOnly"     | [["name": "header1", "type": new ModelRef("string")]]
       "bothWithOverride"        | [["name": "header1", "type": new ModelRef("int")]]
-      "bothWithoutOverride"     | [["name": "header2", "type": new ModelRef("int")],["name": "header1", "type": new ModelRef("string")]]
+      "bothWithoutOverride"     | [["name": "header1", "type": new ModelRef("string")],["name": "header2", "type": new ModelRef("int")]]
   }
 
   boolean headersMatch(Map<String, ModelReference> headers, List<Header> expectedHeaders) {
