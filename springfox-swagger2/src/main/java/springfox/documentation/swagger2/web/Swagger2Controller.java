@@ -56,21 +56,26 @@ public class Swagger2Controller {
   @Value("${springfox.documentation.swagger.v2.host:DEFAULT}")
   private String hostNameOverride;
 
-  @Autowired
-  private DocumentationCache documentationCache;
+  private final DocumentationCache documentationCache;
+  private final ServiceModelToSwagger2Mapper mapper;
+  private final JsonSerializer jsonSerializer;
 
   @Autowired
-  private ServiceModelToSwagger2Mapper mapper;
-
-  @Autowired
-  private JsonSerializer jsonSerializer;
+  public Swagger2Controller(
+      DocumentationCache documentationCache,
+      ServiceModelToSwagger2Mapper mapper,
+      JsonSerializer jsonSerializer) {
+    
+    this.documentationCache = documentationCache;
+    this.mapper = mapper;
+    this.jsonSerializer = jsonSerializer;
+  }
 
   @ApiIgnore
   @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
       method = RequestMethod.GET, produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
-  public
   @ResponseBody
-  ResponseEntity<Json> getDocumentation(
+  public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 

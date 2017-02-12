@@ -1,18 +1,21 @@
 package springfox.documentation.swagger2.web
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.LinkedListMultimap
 import com.jayway.jsonpath.JsonPath
-import org.springframework.http.MediaType
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.*
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.web.servlet.View
-import spock.lang.Shared
+import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import spock.lang.Unroll
 import springfox.documentation.spring.web.DocumentationCache
+import springfox.documentation.spring.web.configuration.WebContextLoader
 import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -25,41 +28,32 @@ import springfox.documentation.spring.web.scanners.ApiListingScanner
 import springfox.documentation.swagger2.configuration.Swagger2JacksonModule
 import springfox.documentation.swagger2.mappers.MapperSupport
 
-import static com.google.common.collect.Maps.newHashMap
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
+import static com.google.common.collect.Maps.*
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
 
+@ContextConfiguration(classes=[Swagger1ControllerConfiguration], loader = WebContextLoader)
 @Mixin([JsonSupport, ApiListingSupport, AuthSupport])
+@ActiveProfiles("Swagger2Controller")
 class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperSupport {
-  @Shared
   MockMvc mockMvc
-  @Shared
-  View mockView
-  @Shared
-  Swagger2Controller controller = new Swagger2Controller()
+
+  @Autowired
+  Swagger2Controller controller
+  @Autowired
+  WebApplicationContext context
+
   ApiListingReferenceScanner listingReferenceScanner
   ApiListingScanner listingScanner
 
   def setup() {
-    controller.documentationCache = new DocumentationCache()
-    controller.jsonSerializer = new JsonSerializer([new Swagger2JacksonModule()])
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
     listingScanner = Mock(ApiListingScanner)
     listingScanner.scan(_) >> LinkedListMultimap.create()
-    controller.mapper = swagger2Mapper()
-    def jackson2 = new MappingJackson2HttpMessageConverter()
 
-    jackson2.setSupportedMediaTypes([MediaType.ALL, MediaType.APPLICATION_JSON])
-
-    def mapper = new ObjectMapper()
-    jackson2.setObjectMapper(mapper)
-
-    mockMvc = standaloneSetup(controller)
-        .setSingleView(mockView)
-        .setMessageConverters(jackson2)
-        .build();
+    mockMvc = webAppContextSetup(context).build();
   }
 
   @Unroll("path: #path")
@@ -125,6 +119,29 @@ class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperS
     then:
       host == "localhost"
       result.getResponse().getStatus() == 200
+  }
+
+  @Configuration
+  @EnableWebMvc
+  @Profile("Swagger2Controller")
+  private static class Swagger1ControllerConfiguration implements MapperSupport {
+
+    @Bean
+    static PropertySourcesPlaceholderConfigurer properties() throws Exception {
+      final PropertySourcesPlaceholderConfigurer configurer =
+          new PropertySourcesPlaceholderConfigurer()
+      configurer.setPlaceholderPrefix("\$SPRINGFOX{")
+      configurer.setIgnoreUnresolvablePlaceholders(false)
+      return configurer
+    }
+
+    @Bean
+    protected Swagger2Controller controller() {
+      new Swagger2Controller(
+          new DocumentationCache(),
+          swagger2Mapper(),
+          new JsonSerializer([new Swagger2JacksonModule()]))
+    }
   }
 
 }

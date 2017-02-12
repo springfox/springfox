@@ -3,7 +3,7 @@
  *
  *
  *
- * Copyright 2015 the original author or authors.
+ * Copyright 2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,14 @@
  */
 
 package springfox.test.contract.swaggertests
+
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.IntegrationTest
-import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.boot.test.TestRestTemplate
+import org.springframework.boot.test.context.SpringBootContextLoader
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -35,10 +36,6 @@ import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestExecutionListeners
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener
-import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
@@ -46,11 +43,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 import springfox.test.contract.swagger.SwaggerApplication
 import springfox.test.contract.swagger.listeners.ObjectMapperEventListener
 
-@WebAppConfiguration
-@IntegrationTest("server.port:0")
-@TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
+import static org.springframework.boot.test.context.SpringBootTest.*
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(
-        loader = SpringApplicationContextLoader,
+        loader = SpringBootContextLoader,
         classes = Config)
 class ObjectMapperSanityCheck extends Specification {
 

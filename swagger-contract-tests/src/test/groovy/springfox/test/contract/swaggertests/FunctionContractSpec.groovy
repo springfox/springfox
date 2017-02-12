@@ -1,42 +1,55 @@
+/*
+ *
+ *  Copyright 2017 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
+
 package springfox.test.contract.swaggertests
 
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.IntegrationTest
-import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.boot.test.TestRestTemplate
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestExecutionListeners
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener
-import org.springframework.test.context.web.WebAppConfiguration
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
+import static org.springframework.boot.test.context.SpringBootTest.*
 
-@WebAppConfiguration
-@IntegrationTest("server.port:0")
-@TestExecutionListeners([DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener])
-@ContextConfiguration(
-    loader = SpringApplicationContextLoader,
-    classes = Config)
-public class FunctionContractSpec extends Specification implements FileAccess {
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Config)
+class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared
   def http = new TestRestTemplate()
 
   @Value('${local.server.port}')
-  int port;
+  int port
 
   @Unroll
   def 'should honor swagger v2 resource listing #groupName'() {
@@ -184,5 +197,13 @@ public class FunctionContractSpec extends Specification implements FileAccess {
   ])
   @Import([SecuritySupport, Swagger12TestConfig, Swagger2TestConfig])
   static class Config {
+
+    @Bean
+    static PropertySourcesPlaceholderConfigurer properties() throws Exception {
+      final PropertySourcesPlaceholderConfigurer configurer =
+          new PropertySourcesPlaceholderConfigurer()
+      configurer.setIgnoreUnresolvablePlaceholders(false)
+      return configurer
+    }
   }
 }
