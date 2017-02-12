@@ -51,6 +51,16 @@ class SynthesizedAnnotations {
     public String value() {
       return "id";
     }
+
+    @Override
+    public String name() {
+      return "id";
+    }
+
+    @Override
+    public boolean required() {
+      return true;
+    }
   };
 
   static final ApiIgnore API_IGNORE_ANNOTATION = new ApiIgnore() {

@@ -26,8 +26,8 @@ dependencies {
   provided libs.springProvided
   provided libs.clientProvided
 
-  compile 'org.mapstruct:mapstruct:1.0.0.Final'
-  apt 'org.mapstruct:mapstruct-processor:1.0.0.Final'
+  compile "org.mapstruct:mapstruct:$mapstruct"
+  apt "org.mapstruct:mapstruct-processor:$mapstruct"
 
   testCompile project(':springfox-core')
   testCompile project(':springfox-core').sourceSets.test.output

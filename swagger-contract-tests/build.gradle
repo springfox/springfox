@@ -1,21 +1,15 @@
-apply plugin: 'groovy'
-apply plugin: 'idea'
-
-buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
-    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
-  }
+plugins {
+  id 'org.springframework.boot' version '1.4.4.RELEASE'
 }
+
 repositories {
   jcenter()
 }
 
+apply plugin: 'groovy'
+apply plugin: 'idea'
 apply plugin: 'war'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 configurations {
   //Logback causing spring boot errors
@@ -38,6 +32,7 @@ dependencies {
 
   testCompile libs.test
   testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
+  testCompile("org.springframework.boot:spring-boot-starter-test")
 
   compile project(':springfox-swagger1')
   compile project(':springfox-swagger2')
