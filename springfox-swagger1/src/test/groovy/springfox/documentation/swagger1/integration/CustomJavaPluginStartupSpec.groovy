@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.swagger1.integration
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
@@ -37,7 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class CustomJavaPluginStartupSpec extends Specification {
 
   @Autowired
-  WebApplicationContext context;
+  WebApplicationContext context
 
   def "Should start app with custom java config"() {
     when:
