@@ -271,10 +271,32 @@
             }
           },
           "400": {
-            "description": "Invalid ID supplied"
+            "description": "Invalid ID supplied",
+            "headers": {
+              "header1": {
+                "type": "string"
+              },
+              "header2": {
+                "type": "string"
+              },
+              "header3": {
+                "type": "string"
+              },
+              "header4": {
+                "type": "string"
+              }
+            }
           },
           "404": {
-            "description": "Pet not found"
+            "description": "Pet not found",
+            "headers": {
+              "header3": {
+                "type": "string"
+              },
+              "header4": {
+                "type": "string"
+              }
+            }
           }
         },
         "security": [
