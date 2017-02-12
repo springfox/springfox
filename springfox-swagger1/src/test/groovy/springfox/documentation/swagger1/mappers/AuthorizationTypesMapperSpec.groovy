@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -44,8 +44,7 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 
 import static com.google.common.collect.Lists.*
 
-@Mixin(MapperSupport)
-class AuthorizationTypesMapperSpec extends Specification {
+class AuthorizationTypesMapperSpec extends Specification implements MapperSupport {
   AuthorizationTypesMapper sut = authMapper()
 
   def "OAuth gets mapped correctly"() {

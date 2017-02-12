@@ -2,7 +2,7 @@ package springfox.documentation.spring.web.plugins
 
 import spock.lang.Specification
 
-class WebMvcRequestHandlerProvitderSpec extends Specification {
+class WebMvcRequestHandlerProviderSpec extends Specification {
   def "when handler mappings is empty or null" () {
     given:
       WebMvcRequestHandlerProvider sut = new WebMvcRequestHandlerProvider(handlers)

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -53,24 +53,28 @@ public class Swagger2Controller {
   public static final String DEFAULT_URL = "/v2/api-docs";
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
-  @Value("${springfox.documentation.swagger.v2.host:DEFAULT}")
+  @Value("$SPRINGFOX{springfox.documentation.swagger.v2.host:DEFAULT}")
   private String hostNameOverride;
 
-  @Autowired
-  private DocumentationCache documentationCache;
+  private final DocumentationCache documentationCache;
+  private final ServiceModelToSwagger2Mapper mapper;
+  private final JsonSerializer jsonSerializer;
 
   @Autowired
-  private ServiceModelToSwagger2Mapper mapper;
+  public Swagger2Controller(
+      DocumentationCache documentationCache,
+      ServiceModelToSwagger2Mapper mapper,
+      JsonSerializer jsonSerializer) {
+    
+    this.documentationCache = documentationCache;
+    this.mapper = mapper;
+    this.jsonSerializer = jsonSerializer;
+  }
 
-  @Autowired
-  private JsonSerializer jsonSerializer;
-
-  @ApiIgnore
-  @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
+  @RequestMapping(value = "$SPRINGFOX{springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
       method = RequestMethod.GET, produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
-  public
   @ResponseBody
-  ResponseEntity<Json> getDocumentation(
+  public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 

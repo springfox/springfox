@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -44,8 +44,7 @@ import springfox.documentation.swagger1.dto.Parameter
 import springfox.documentation.swagger1.dto.ResponseMessage
 import springfox.documentation.swagger1.mixins.MapperSupport
 
-@Mixin(MapperSupport)
-public class AllMappersSpec extends Specification {
+class AllMappersSpec extends Specification implements MapperSupport {
   def "All AuthorizationTypesMapper null sources are mapped to null targets"() {
     given:
       AuthorizationTypesMapper mapper = authMapper()
