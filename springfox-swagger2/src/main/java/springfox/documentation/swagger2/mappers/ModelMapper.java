@@ -126,7 +126,7 @@ public abstract class ModelMapper {
   Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {
-      if (mapInterface.get().getTypeParameters().size() > 0) {
+      if (mapInterface.get().getTypeParameters().size() == 2) {
         return Optional.of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
       }
       return Optional.of((Class) Object.class);
