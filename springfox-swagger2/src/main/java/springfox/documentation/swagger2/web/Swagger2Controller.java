@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public class Swagger2Controller {
   public static final String DEFAULT_URL = "/v2/api-docs";
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
-  @Value("${springfox.documentation.swagger.v2.host:DEFAULT}")
+  @Value("$SPRINGFOX{springfox.documentation.swagger.v2.host:DEFAULT}")
   private String hostNameOverride;
 
   private final DocumentationCache documentationCache;
@@ -71,8 +71,7 @@ public class Swagger2Controller {
     this.jsonSerializer = jsonSerializer;
   }
 
-  @ApiIgnore
-  @RequestMapping(value = "${springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
+  @RequestMapping(value = "$SPRINGFOX{springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
       method = RequestMethod.GET, produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
   @ResponseBody
   public ResponseEntity<Json> getDocumentation(

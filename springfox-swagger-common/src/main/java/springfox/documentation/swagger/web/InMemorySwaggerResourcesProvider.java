@@ -35,10 +35,10 @@ import static springfox.documentation.schema.ClassSupport.*;
 
 @Component
 public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvider {
-  @Value("${springfox.documentation.swagger.v1.path:/api-docs}")
+  @Value("$SPRINGFOX{springfox.documentation.swagger.v1.path:/api-docs}")
   private String swagger1Url;
 
-  @Value("${springfox.documentation.swagger.v2.path:/v2/api-docs}")
+  @Value("$SPRINGFOX{springfox.documentation.swagger.v2.path:/v2/api-docs}")
   private String swagger2Url;
 
   private boolean swagger1Available;

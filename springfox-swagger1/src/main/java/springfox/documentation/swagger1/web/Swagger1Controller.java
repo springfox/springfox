@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ import static springfox.documentation.swagger1.web.ApiListingMerger.*;
 
 @Controller
 @ApiIgnore
-@RequestMapping("${springfox.documentation.swagger.v1.path:/api-docs}")
+@RequestMapping("$SPRINGFOX{springfox.documentation.swagger.v1.path:/api-docs}")
 public class Swagger1Controller {
 
   private final DocumentationCache documentationCache;
