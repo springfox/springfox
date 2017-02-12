@@ -75,7 +75,7 @@ class ReturnTypesSpec extends Specification {
     where:
       clazz       | expectedResponseClassName
       SimpleType  | "GenericType«SimpleType»"
-      Integer     | "GenericType«int»"
+      Integer     | "GenericType«integer»"
   }
 
 }

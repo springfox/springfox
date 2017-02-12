@@ -69,11 +69,11 @@ class ComplexTypeSpec extends Specification {
       retModelProperty.getModelRef().itemType == null
 
     where:
-      property     | type         | typeName   | qualifiedType
-      "name"       | String       | "string"   | "java.lang.String"
-      "age"        | Integer.TYPE | "int"      | "int"
-      "category"   | Category     | "Category" | "springfox.documentation.schema.Category"
-      "customType" | BigDecimal   | "bigdecimal"   | "java.math.BigDecimal"
+      property     | type         | typeName     | qualifiedType
+      "name"       | String       | "string"     | "java.lang.String"
+      "age"        | Integer.TYPE | "integer"    | "integer"
+      "category"   | Category     | "Category"   | "springfox.documentation.schema.Category"
+      "customType" | BigDecimal   | "bigdecimal" | "java.math.BigDecimal"
   }
 
   def "recursive type properties are inferred correctly"() {
@@ -156,7 +156,7 @@ class ComplexTypeSpec extends Specification {
     where:
       property            | type         | typeName   | typeProperty | qualifiedType
       "name"              | String       | "string"   | 'type'       | "java.lang.String"
-      "age"               | Integer.TYPE | "int"      | 'type'       | "int"
+      "age"               | Integer.TYPE | "integer"  | 'type'       | "integer"
       "category"          | Category     | "Category" | 'reference'  | "springfox.documentation.schema.Category"
       "customType"        | BigDecimal   | "bigdecimal"   | 'type'       | "java.math.BigDecimal"
       "inheritedProperty" | String       | "string"   | 'type'       | "java.lang.String"

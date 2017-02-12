@@ -71,7 +71,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       property          | name      | itemType      | itemQualifiedType
       "complexTypes"    | List      | 'ComplexType' | "springfox.documentation.schema.ComplexType"
       "enums"           | List      | "string"      | "springfox.documentation.schema.ExampleEnum"
-      "aliasOfIntegers" | List      | "int"         | "java.lang.Integer"
+      "aliasOfIntegers" | List      | "integer"     | "java.lang.Integer"
       "strings"         | ArrayList | "string"      | "java.lang.String"
       "objects"         | List      | "object"      | "java.lang.Object"
       "substituted"     | List      | "Substituted" | "springfox.documentation.schema.Substituted"
@@ -118,7 +118,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       property          | type  | itemType      | itemQualifiedType
       "complexTypes"    | "Set" | 'ComplexType' | "springfox.documentation.schema.ComplexType"
       "enums"           | "Set" | "string"      | "springfox.documentation.schema.ExampleEnum"
-      "aliasOfIntegers" | "Set" | "int"         | "java.lang.Integer"
+      "aliasOfIntegers" | "Set" | "integer"     | "java.lang.Integer"
       "strings"         | "Set" | "string"      | "java.lang.String"
       "objects"         | "Set" | "object"      | "java.lang.Object"
   }
@@ -165,7 +165,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       property          | type          | itemType      | itemQualifiedType
       "complexTypes"    | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"
       "enums"           | ExampleEnum[] | "string"      | "springfox.documentation.schema.ExampleEnum"
-      "aliasOfIntegers" | Integer[]     | "int"         | "java.lang.Integer"
+      "aliasOfIntegers" | Integer[]     | "integer"     | "java.lang.Integer"
       "strings"         | String[]      | "string"      | "java.lang.String"
       "objects"         | Object[]      | "object"      | "java.lang.Object"
       "bytes"           | byte[]        | "byte"        | "byte"

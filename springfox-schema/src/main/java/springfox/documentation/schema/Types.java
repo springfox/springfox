@@ -40,7 +40,7 @@ public class Types {
   }
 
   private static final Set<String> baseTypes = newHashSet(
-      "int",
+      "integer",
       "date",
       "string",
       "double",
@@ -55,8 +55,8 @@ public class Types {
       "bigdecimal");
   private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
       .put(Long.TYPE, "long")
-      .put(Short.TYPE, "int")
-      .put(Integer.TYPE, "int")
+      .put(Short.TYPE, "integer")
+      .put(Integer.TYPE, "integer")
       .put(Double.TYPE, "double")
       .put(Float.TYPE, "float")
       .put(Byte.TYPE, "byte")
@@ -68,8 +68,8 @@ public class Types {
       .put(String.class, "string")
       .put(Object.class, "object")
       .put(Long.class, "long")
-      .put(Integer.class, "int")
-      .put(Short.class, "int")
+      .put(Integer.class, "integer")
+      .put(Short.class, "integer")
       .put(Double.class, "double")
       .put(Float.class, "float")
       .put(Boolean.class, "boolean")
