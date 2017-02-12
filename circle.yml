@@ -27,7 +27,7 @@ dependencies:
     - ~/.gradle
 test:
   override:
-  - ./gradlew clean check
+  - ./gradlew clean check:
       timeout: 900
 
 deployment:
