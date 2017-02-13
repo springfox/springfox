@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -47,14 +46,10 @@ import static springfox.documentation.schema.Types.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ResponseMessagesReader implements OperationBuilderPlugin {
 
-  private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ResponseMessagesReader(
-      TypeResolver typeResolver,
-      TypeNameExtractor typeNameExtractor) {
-    this.typeResolver = typeResolver;
+  public ResponseMessagesReader(TypeNameExtractor typeNameExtractor) {
     this.typeNameExtractor = typeNameExtractor;
   }
 
