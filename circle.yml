@@ -12,7 +12,7 @@ machine:
     CI_BRANCH: $CIRCLE_BRANCH
     CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
     CI_BUILD_URL: $CIRCLE_COMPARE_URL
-    GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3584m -XX:+HeapDumpOnOutOfMemoryError"'
+    GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3840m -XX:+HeapDumpOnOutOfMemoryError"'
 
 
 checkout:

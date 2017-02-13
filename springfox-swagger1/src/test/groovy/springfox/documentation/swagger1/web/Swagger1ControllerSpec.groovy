@@ -21,24 +21,13 @@ package springfox.documentation.swagger1.web
 
 import com.google.common.collect.LinkedListMultimap
 import com.google.common.collect.Multimap
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MvcResult
-import org.springframework.web.context.WebApplicationContext
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
+import org.springframework.http.HttpStatus
 import spock.lang.Unroll
 import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
-import springfox.documentation.spring.web.configuration.WebContextLoader
 import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -52,22 +41,15 @@ import springfox.documentation.swagger1.configuration.SwaggerJacksonModule
 import springfox.documentation.swagger1.mixins.MapperSupport
 
 import static com.google.common.collect.Maps.*
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*
 
-@ContextConfiguration(classes=[Swagger1ControllerConfiguration], loader = WebContextLoader)
 @Mixin([JsonSupport, ApiListingSupport, AuthSupport])
-@ActiveProfiles("Swagger1Controller")
-class Swagger1ControllerSpec extends DocumentationContextSpec {
+class Swagger1ControllerSpec extends DocumentationContextSpec implements MapperSupport {
 
-  MockMvc mockMvc
+  Swagger1Controller sut =  new Swagger1Controller(
+          new DocumentationCache(),
+          serviceMapper(),
+          new JsonSerializer([new SwaggerJacksonModule()]))
 
-  @Autowired
-  Swagger1Controller controller
-
-  @Autowired
-  WebApplicationContext context
 
   ApiListingReferenceScanner listingReferenceScanner
   ApiListingScanner listingScanner
@@ -77,29 +59,22 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
     listingScanner = Mock(ApiListingScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
     listingScanner.scan(_) >> LinkedListMultimap.create()
-
-    mockMvc = webAppContextSetup(context).build()
   }
 
-  @Unroll("path: #path")
-  def "should return the default or first swagger resource listing"() {
+  @Unroll
+  def "should return #expectedStatus.value() for #group"() {
     given:
-      ApiDocumentationScanner sut = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(sut.scan(context()))
+      ApiDocumentationScanner scanner = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+      sut.documentationCache.addDocumentation(scanner.scan(context()))
     when:
-      MvcResult result = mockMvc
-              .perform(get(path))
-              .andDo(print())
-              .andReturn()
-
-      jsonBodyResponse(result)
+      def result = sut.getResourceListing(group)
     then:
-      result.getResponse().getStatus() == expectedStatus
+      result.getStatusCode() == expectedStatus
     where:
-      path                      | expectedStatus
-      "/api-docs"               | 200
-      "/api-docs?group=default" | 200
-      "/api-docs?group=unknown" | 404
+      group     | expectedStatus
+      null      | HttpStatus.OK
+      "default" | HttpStatus.OK
+      "unknown" | HttpStatus.NOT_FOUND
   }
 
   def "should respond with api listing for a given resource group"() {
@@ -111,13 +86,11 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
               .name("groupName")
               .apiListingsByResourceGroupName(listings)
               .build()
-      controller.documentationCache.addDocumentation(group)
+      sut.documentationCache.addDocumentation(group)
     when:
-      MvcResult result = mockMvc.perform(get("/api-docs/groupName/businesses")).andDo(print()).andReturn()
-      jsonBodyResponse(result)
-
+      def result = sut.getApiListing("groupName", "businesses")
     then:
-      result.getResponse().getStatus() == 200
+      result.getStatusCode() == HttpStatus.OK 
   }
 
   def "should respond with auth included"() {
@@ -129,37 +102,11 @@ class Swagger1ControllerSpec extends DocumentationContextSpec {
               .resourceListing(resourceListing(authTypes))
               .build()
 
-      controller.documentationCache.addDocumentation(group)
+      sut.documentationCache.addDocumentation(group)
     when:
-      MvcResult result = mockMvc.perform(get("/api-docs?group=groupName")).andDo(print()).andReturn()
-      def json = jsonBodyResponse(result)
-
+      def result = sut.getResourceListing("groupName")
     then:
-      result.getResponse().getStatus() == 200
-      assertDefaultAuth(json)
+      result.getStatusCode() == HttpStatus.OK
+      assertDefaultAuth(jsonBodyResponse(result.getBody().value()))
   }
-
-  @Configuration
-  @EnableWebMvc
-  @Profile("Swagger1Controller")
-  private static class Swagger1ControllerConfiguration implements MapperSupport {
-
-    @Bean
-    static PropertySourcesPlaceholderConfigurer properties() throws Exception {
-      final PropertySourcesPlaceholderConfigurer configurer =
-          new PropertySourcesPlaceholderConfigurer()
-      configurer.setPlaceholderPrefix("\$SPRINGFOX{")
-      configurer.setIgnoreUnresolvablePlaceholders(false)
-      return configurer
-    }
-
-    @Bean
-    protected Swagger1Controller controller() {
-      new Swagger1Controller(
-          new DocumentationCache(),
-          serviceMapper(),
-          new JsonSerializer([new SwaggerJacksonModule()]))
-    }
-  }
-
 }
