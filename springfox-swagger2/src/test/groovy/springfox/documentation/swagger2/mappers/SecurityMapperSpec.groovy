@@ -20,7 +20,7 @@ class SecurityMapperSpec extends Specification {
     then:
       mapped as ApiKeyAuthDefinition
       ((ApiKeyAuthDefinition) mapped).in.toValue() == "header"
-      ((ApiKeyAuthDefinition) mapped).name == "name"
+      ((ApiKeyAuthDefinition) mapped).name == "keyName"
       ((ApiKeyAuthDefinition) mapped).type == "apiKey"
   }
 

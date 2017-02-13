@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ class ApiKeyAuthFactory implements SecuritySchemeFactory {
   public SecuritySchemeDefinition create(SecurityScheme input) {
     ApiKey apiKey = (ApiKey) input;
     ApiKeyAuthDefinition definition = new ApiKeyAuthDefinition();
-    definition.name(apiKey.getName()).in(In.forValue(apiKey.getPassAs()));
+    definition.name(apiKey.getKeyname()).in(In.forValue(apiKey.getPassAs()));
     return definition;
   }
 }
