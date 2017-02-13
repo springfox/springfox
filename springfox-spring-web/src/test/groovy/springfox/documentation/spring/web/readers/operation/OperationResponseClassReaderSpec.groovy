@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
 
-    sut = new OperationResponseClassReader(new TypeResolver(), typeNameExtractor)
+    sut = new OperationResponseClassReader(typeNameExtractor)
   }
   
   def "Should support all documentation types"() {
@@ -83,6 +83,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
       dummyHandlerMethod('methodWithListOfBusinesses')                     | 'List[BusinessModel]'      | null
       dummyHandlerMethod('methodWithMapReturn')                            | 'Map«string,BusinessModel»'| null
       dummyHandlerMethod('methodWithEnumResponse')                         | 'string'                   | ['ONE', 'TWO']
+      dummyHandlerMethod('methodWithByteArray')                            | 'Array[byte]'              | ['ONE', 'TWO']
   }
 
 }

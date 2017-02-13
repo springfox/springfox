@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -197,8 +197,7 @@ public abstract class ModelMapper {
     }
     Property responseProperty;
     if (modelRef.isCollection()) {
-      responseProperty = new ArrayProperty(
-          maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
+      responseProperty = property(modelRef);
     } else if (modelRef.isMap()) {
       responseProperty = new MapProperty(property(modelRef.itemModel().get()));
     } else {

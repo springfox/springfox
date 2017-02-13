@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +38,10 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
-  private final TypeResolver typeResolver;
   private final TypeNameExtractor nameExtractor;
 
   @Autowired
-  public OperationResponseClassReader(
-      TypeResolver typeResolver,
-      TypeNameExtractor nameExtractor) {
-    this.typeResolver = typeResolver;
+  public OperationResponseClassReader(TypeNameExtractor nameExtractor) {
     this.nameExtractor = nameExtractor;
   }
 
@@ -61,7 +56,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
         context.getGenericsNamingStrategy(),
         context.getIgnorableParameterTypes());
     String responseTypeName = nameExtractor.typeName(modelContext);
-    log.debug("Setting spring response class to:" + responseTypeName);
+    log.debug("Setting spring response class to: {}", responseTypeName);
 
     context.operationBuilder().responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
   }

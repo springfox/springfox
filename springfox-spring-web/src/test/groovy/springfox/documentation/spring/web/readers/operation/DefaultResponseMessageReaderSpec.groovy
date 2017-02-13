@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
-    sut = new ResponseMessagesReader(new TypeResolver(), typeNameExtractor)
+    sut = new ResponseMessagesReader(typeNameExtractor)
   }
 
   def "Should add default response messages"() {

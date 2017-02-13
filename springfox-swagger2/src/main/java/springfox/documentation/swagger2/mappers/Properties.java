@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import com.google.common.primitives.Ints;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BaseIntegerProperty;
 import io.swagger.models.properties.BooleanProperty;
+import io.swagger.models.properties.ByteArrayProperty;
 import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.DateTimeProperty;
 import io.swagger.models.properties.DecimalProperty;
@@ -88,10 +89,22 @@ class Properties {
     if (modelRef.isMap()) {
       return new MapProperty(property(modelRef.itemModel().get()));
     } else if (modelRef.isCollection()) {
+      if ("byte".equals(modelRef.itemModel().transform(toTypeName()).or(""))) {
+        return new ByteArrayProperty();
+      }
       return new ArrayProperty(
           maybeAddAllowableValues(itemTypeProperty(modelRef.itemModel().get()), modelRef.getAllowableValues()));
     }
     return property(modelRef.getType());
+  }
+
+  private static Function<? super ModelReference, String> toTypeName() {
+    return new Function<ModelReference, String>() {
+      @Override
+      public String apply(ModelReference input) {
+        return input.getType();
+      }
+    };
   }
 
   public static Property itemTypeProperty(ModelReference paramModel) {
