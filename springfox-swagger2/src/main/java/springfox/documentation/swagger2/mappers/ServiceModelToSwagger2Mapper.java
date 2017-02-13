@@ -150,7 +150,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, Path> paths = newHashMap();
+    Map<String, Path> paths = newTreeMap();
     for (ApiListing each : apiListings.values()) {
       for (ApiDescription api : each.getApis()) {
         paths.put(api.getPath(), mapOperations(api, Optional.fromNullable(paths.get(api.getPath()))));
