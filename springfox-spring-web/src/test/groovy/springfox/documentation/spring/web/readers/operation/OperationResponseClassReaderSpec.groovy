@@ -83,6 +83,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
       dummyHandlerMethod('methodWithListOfBusinesses')                     | 'List[BusinessModel]'      | null
       dummyHandlerMethod('methodWithMapReturn')                            | 'Map«string,BusinessModel»'| null
       dummyHandlerMethod('methodWithEnumResponse')                         | 'string'                   | ['ONE', 'TWO']
+      dummyHandlerMethod('methodWithByteArray')                            | 'Array[byte]'              | ['ONE', 'TWO']
   }
 
 }
