@@ -19,7 +19,10 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
+import io.swagger.annotations.ApiParam;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import springfox.documentation.spring.web.dummy.models.Pet;
 
 
 @Component
@@ -30,5 +33,10 @@ public class InheritedServiceImpl implements InheritedService {
     return parameter;
   }
 
-
+  @Override
+  public Pet demonstrateInheritanceWithAnnotations(
+          @ApiParam(value = "", required = true)
+          @PathVariable("param1") String param1) {
+    return null;
+  }
 }

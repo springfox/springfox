@@ -18,7 +18,7 @@
   "tags": [
     {
       "name": "inherited-service-impl",
-      "description": "Inherited Service Impl"
+      "description": "Interface API"
     }
   ],
   "produces": [
@@ -26,6 +26,39 @@
     "application/json"
   ],
   "paths": {
+    "/child/1575": {
+      "get": {
+        "tags": [
+          "inherited-service-impl"
+        ],
+        "summary": "demonstrateInheritanceWithAnnotations",
+        "operationId": "demonstrateInheritanceWithAnnotationsUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "param1",
+            "in": "path",
+            "description": "param1",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "kkj",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      }
+    },
     "/child/child-method": {
       "get": {
         "tags": [
@@ -74,6 +107,23 @@
       "type": "apiKey",
       "name": "api_key",
       "in": "header"
+    }
+  },
+  "definitions": {
+    "Pet": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
     }
   }
 }

@@ -19,16 +19,32 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.spring.web.dummy.models.Pet;
 
 
 @Controller
 @RequestMapping("child")
+@Api(value = "inheritedService", description = "Interface API")
 public interface InheritedService {
 
-  @RequestMapping(value = "child-method", method = RequestMethod.GET)
-  public String getSomething(String parameter);
+    @RequestMapping(value = "child-method", method = RequestMethod.GET)
+    String getSomething(String parameter);
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "kkj", response = Pet.class) })
+    @RequestMapping(value = "/1575",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    Pet demonstrateInheritanceWithAnnotations(
+            @ApiParam(value = "Parameter 1", required = true) @PathVariable("param1") String param1
+    );
 
 }

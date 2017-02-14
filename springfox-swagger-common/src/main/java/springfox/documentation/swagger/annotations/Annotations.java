@@ -28,7 +28,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ResponseHeader;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -49,10 +48,6 @@ public class Annotations {
     return fromNullable(getAnnotation(annotated, ApiParam.class));
   }
 
-  public static Optional<ApiOperation> findApiOperationAnnotation(Method annotated) {
-    return fromNullable(findAnnotation(annotated, ApiOperation.class));
-  }
-
   public static List<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
     List<ApiResponses> results = newArrayList();
     ApiResponses currentLevel = getAnnotation(annotated, ApiResponses.class);
@@ -67,11 +62,6 @@ public class Annotations {
     }
     return results;
   }
-
-  public static Optional<ResponseHeader> findResponseHeader(Method annotated) {
-    return fromNullable(findAnnotation(annotated, ResponseHeader.class));
-  }
-
 
   public static Function<ApiOperation, ResolvedType> resolvedTypeFromOperation(final TypeResolver typeResolver,
       final ResolvedType defaultType) {
