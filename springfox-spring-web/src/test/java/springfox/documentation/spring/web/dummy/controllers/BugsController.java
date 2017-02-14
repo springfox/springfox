@@ -20,9 +20,11 @@ package springfox.documentation.spring.web.dummy.controllers;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,6 +102,34 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
+  @RequestMapping(value = "1676", method = RequestMethod.GET)
+  public void apiModelProperty(@RequestBody Bug1676 value) {
+    throw new UnsupportedOperationException();
+  }
+
+  class Bug1676 {
+    @ApiModelProperty(value = "Horizontal position", required=false, example="200")
+    private float xAxis;
+    @ApiModelProperty(value = "Vertical position", required=false, example="500")
+    private float yAxis;
+
+    public float getxAxis() {
+      return xAxis;
+    }
+
+    public void setxAxis(float xAxis) {
+      this.xAxis = xAxis;
+    }
+
+    public float getyAxis() {
+      return yAxis;
+    }
+
+    public void setyAxis(float yAxis) {
+      this.yAxis = yAxis;
+    }
+  }
+  
   class Bug1376 {
 
     URL url;

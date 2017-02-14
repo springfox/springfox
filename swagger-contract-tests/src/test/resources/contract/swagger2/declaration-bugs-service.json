@@ -370,9 +370,46 @@
           }
         }
       }
+    },
+    "/bugs/1676": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "apiModelProperty",
+        "operationId": "apiModelPropertyUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "value",
+            "description": "value",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bug1676"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
     "petstore_auth": {
       "type": "oauth2",
       "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
@@ -381,28 +418,6 @@
         "write:pets": "modify pets in your account",
         "read:pets": "read your pets"
       }
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-
     }
   },
   "definitions": {
@@ -484,6 +499,23 @@
           "type": "string",
           "description": "A read only string",
           "readOnly": true
+        }
+      }
+    },
+    "Bug1676": {
+      "type": "object",
+      "properties": {
+        "xAxis": {
+          "type": "number",
+          "format": "float",
+          "example": 200.0,
+          "description": "Horizontal position"
+        },
+        "yAxis": {
+          "type": "number",
+          "format": "float",
+          "example": 500.0,
+          "description": "Vertical position"
         }
       }
     },
