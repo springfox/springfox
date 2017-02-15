@@ -277,7 +277,7 @@ public class ModelAttributeParameterExpander {
 
       for (PropertyDescriptor propDescriptor : propDescriptors) {
 
-        if (propDescriptor.getReadMethod() != null && propDescriptor.getWriteMethod() != null) {
+        if (propDescriptor.getReadMethod() != null) {
           beanProps.add(propDescriptor.getName());
         }
       }

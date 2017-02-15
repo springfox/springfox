@@ -14,9 +14,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -49,9 +47,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -84,9 +80,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -123,9 +117,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -162,9 +154,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -197,9 +187,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -232,9 +220,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -267,9 +253,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -464,9 +448,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -498,9 +480,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -532,9 +512,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -570,9 +548,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -608,9 +584,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -642,9 +616,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -676,9 +648,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -710,9 +680,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -833,6 +801,13 @@
               "description": "description of annotatedEnumType",
               "name": "annotatedEnumType",
               "paramAccess": "",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "propertyWithNoSetterMethod",
               "paramType": "query",
               "type": "string",
               "required": false
@@ -1044,9 +1019,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -1085,9 +1058,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -1238,9 +1209,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -1279,9 +1248,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -1320,9 +1287,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -1647,9 +1612,7 @@
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
+  "consumes": [],
   "models": {
     "Entry\u00abstring,Map\u00abstring,Example\u00bb\u00bb": {
       "description": "",
@@ -1795,9 +1758,7 @@
       }
     }
   },
-  "produces": [
-
-  ],
+  "produces": [],
   "resourcePath": "/features",
   "swaggerVersion": "1.2"
 }

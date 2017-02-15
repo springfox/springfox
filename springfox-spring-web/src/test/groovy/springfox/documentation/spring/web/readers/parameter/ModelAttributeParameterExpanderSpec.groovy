@@ -50,13 +50,14 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     when:
       def parameters = sut.expand(new ExpansionContext("", typeResolver.resolve(Example), context()))
     then:
-      parameters.size() == 9
+      parameters.size() == 10
       parameters.find { it.name == 'parentBeanProperty' }
       parameters.find { it.name == 'foo' }
       parameters.find { it.name == 'bar' }
       parameters.find { it.name == 'readOnlyString' }
       parameters.find { it.name == 'enumType' }
       parameters.find { it.name == 'annotatedEnumType' }
+      parameters.find { it.name == 'propertyWithNoSetterMethod' }
       parameters.find { it.name == 'allCapsSet' }
       parameters.find { it.name == 'nestedType.name' }
       parameters.find { it.name == 'localDateTime' }
@@ -96,12 +97,13 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     when:
       def parameters = sut.expand(new ExpansionContext("parent", typeResolver.resolve(Example), context()))
     then:
-      parameters.size() == 9
+      parameters.size() == 10
       parameters.find { it.name == 'parent.parentBeanProperty' }
       parameters.find { it.name == 'parent.foo' }
       parameters.find { it.name == 'parent.bar' }
       parameters.find { it.name == 'parent.enumType' }
       parameters.find { it.name == 'parent.annotatedEnumType' }
+      parameters.find { it.name == 'parent.propertyWithNoSetterMethod' }
       parameters.find { it.name == 'parent.allCapsSet' }
       parameters.find { it.name == 'parent.nestedType.name' }
       parameters.find { it.name == 'parent.localDateTime' }
