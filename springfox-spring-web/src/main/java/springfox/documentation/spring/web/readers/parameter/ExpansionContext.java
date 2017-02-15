@@ -20,17 +20,36 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.collect.Sets;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
+
+import java.util.Set;
+
+import static com.google.common.base.Objects.equal;
+import static com.google.common.collect.Sets.newHashSet;
 
 public class ExpansionContext {
     private final String parentName;
     private final ResolvedType paramType;
     private final DocumentationContext documentationContext;
+    private final Set<ResolvedType> seenTypes;
 
-    public ExpansionContext(String parentName, ResolvedType paramType, DocumentationContext documentationContext) {
+    public ExpansionContext(
+            String parentName,
+            ResolvedType paramType,
+            DocumentationContext documentationContext) {
+        this(parentName, paramType, documentationContext, Sets.<ResolvedType>newHashSet());
+    }
+
+    private ExpansionContext(
+            String parentName,
+            ResolvedType paramType,
+            DocumentationContext documentationContext,
+            Set<ResolvedType> seenTypes) {
         this.parentName = parentName;
         this.paramType = paramType;
         this.documentationContext = documentationContext;
+        this.seenTypes = newHashSet(seenTypes);
     }
 
     public String getParentName() {
@@ -43,5 +62,18 @@ public class ExpansionContext {
 
     public DocumentationContext getDocumentationContext() {
         return documentationContext;
+    }
+
+    public boolean hasSeenType(ResolvedType type) {
+        return seenTypes.contains(type)
+                || equal(type, paramType);
+    }
+
+    public ExpansionContext childContext(
+            String parentName,
+            ResolvedType paramType,
+            DocumentationContext documentationContext) {
+        seenTypes.add(paramType);
+        return new ExpansionContext(parentName, paramType, documentationContext, seenTypes);
     }
 }

@@ -18,8 +18,28 @@
  */
 package springfox.documentation.spring.web.dummy.models;
 
+import java.util.List;
+
 public class SomeType {
+    private String string1;
     private OtherType otherType;
+    private List<SomeType> someOtherTypes;
+
+    public List<SomeType> getSomeOtherTypes() {
+        return someOtherTypes;
+    }
+
+    public void setSomeOtherTypes(List<SomeType> someOtherTypes) {
+        this.someOtherTypes = someOtherTypes;
+    }
+
+    public String getString1() {
+        return string1;
+    }
+
+    public void setString1(String string1) {
+        this.string1 = string1;
+    }
 
     public OtherType getOtherType() {
         return otherType;

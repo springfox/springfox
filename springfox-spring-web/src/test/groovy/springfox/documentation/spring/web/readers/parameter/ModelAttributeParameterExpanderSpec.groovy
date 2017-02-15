@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
-import spock.lang.Ignore
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.ModelAttributeComplexTypeExample
@@ -108,20 +107,14 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
       parameters.find { it.name == 'parent.localDateTime' }
   }
 
-  @Ignore
   def "should not expand causing stack overflow"() {
     when:
       def parameters = sut.expand(new ExpansionContext("parent", typeResolver.resolve(SomeType), context()))
     then:
-      parameters.size() == 9
-      parameters.find { it.name == 'parent.parentBeanProperty' }
-      parameters.find { it.name == 'parent.foo' }
-      parameters.find { it.name == 'parent.bar' }
-      parameters.find { it.name == 'parent.enumType' }
-      parameters.find { it.name == 'parent.annotatedEnumType' }
-      parameters.find { it.name == 'parent.allCapsSet' }
-      parameters.find { it.name == 'parent.nestedType.name' }
-      parameters.find { it.name == 'parent.localDateTime' }
+      parameters.size() == 3
+      parameters.find { it.name == 'parent.string1' }
+      parameters.find { it.name == 'parent.otherType.string2' }
+      parameters.find { it.name == 'parent.otherType.parent.string1' }
   }
 
   def "Should return empty set when there is an exception"() {

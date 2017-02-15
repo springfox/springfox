@@ -19,7 +19,16 @@
 package springfox.documentation.spring.web.dummy.models;
 
 public class OtherType {
+    private String string2;
     private SomeType parent;
+
+    public String getString2() {
+        return string2;
+    }
+
+    public void setString2(String string2) {
+        this.string2 = string2;
+    }
 
     public SomeType getParent() {
         return parent;
