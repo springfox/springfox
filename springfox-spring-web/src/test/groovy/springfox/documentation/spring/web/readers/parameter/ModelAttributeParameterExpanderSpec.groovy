@@ -1,8 +1,8 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  Licensed under the Apache License, Version 2.0 (the "License")
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
@@ -25,6 +25,7 @@ import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.ModelAttributeComplexTypeExample
 import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
+import springfox.documentation.spring.web.dummy.models.SomeType
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
@@ -47,15 +48,16 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "should expand parameters"() {
     when:
-      def parameters = sut.expand("", typeResolver.resolve(Example), context());
+      def parameters = sut.expand(new ExpansionContext("", typeResolver.resolve(Example), context()))
     then:
-      parameters.size() == 9
+      parameters.size() == 10
       parameters.find { it.name == 'parentBeanProperty' }
       parameters.find { it.name == 'foo' }
       parameters.find { it.name == 'bar' }
       parameters.find { it.name == 'readOnlyString' }
       parameters.find { it.name == 'enumType' }
       parameters.find { it.name == 'annotatedEnumType' }
+      parameters.find { it.name == 'propertyWithNoSetterMethod' }
       parameters.find { it.name == 'allCapsSet' }
       parameters.find { it.name == 'nestedType.name' }
       parameters.find { it.name == 'localDateTime' }
@@ -63,7 +65,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "should expand lists and nested types"() {
     when:
-      def parameters = sut.expand("", typeResolver.resolve(ModelAttributeExample), context());
+      def parameters = sut.expand(new ExpansionContext("", typeResolver.resolve(ModelAttributeExample), context()))
     then:
       parameters.size() == 5
       parameters.find { it.name == 'stringProp' }
@@ -75,7 +77,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   
   def "should expand complex types"() {
     when:
-      def parameters = sut.expand("", typeResolver.resolve(ModelAttributeComplexTypeExample), context());
+      def parameters = sut.expand(new ExpansionContext("", typeResolver.resolve(ModelAttributeComplexTypeExample), context()))
     then:
       parameters.size() == 11
       parameters.find { it.name == 'stringProp' }
@@ -93,17 +95,28 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "should expand parameters when parent name is not empty"() {
     when:
-      def parameters = sut.expand("parent", typeResolver.resolve(Example), context());
+      def parameters = sut.expand(new ExpansionContext("parent", typeResolver.resolve(Example), context()))
     then:
-      parameters.size() == 9
+      parameters.size() == 10
       parameters.find { it.name == 'parent.parentBeanProperty' }
       parameters.find { it.name == 'parent.foo' }
       parameters.find { it.name == 'parent.bar' }
       parameters.find { it.name == 'parent.enumType' }
       parameters.find { it.name == 'parent.annotatedEnumType' }
+      parameters.find { it.name == 'parent.propertyWithNoSetterMethod' }
       parameters.find { it.name == 'parent.allCapsSet' }
       parameters.find { it.name == 'parent.nestedType.name' }
       parameters.find { it.name == 'parent.localDateTime' }
+  }
+
+  def "should not expand causing stack overflow"() {
+    when:
+      def parameters = sut.expand(new ExpansionContext("parent", typeResolver.resolve(SomeType), context()))
+    then:
+      parameters.size() == 3
+      parameters.find { it.name == 'parent.string1' }
+      parameters.find { it.name == 'parent.otherType.string2' }
+      parameters.find { it.name == 'parent.otherType.parent.string1' }
   }
 
   def "Should return empty set when there is an exception"() {
@@ -112,13 +125,13 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
               new ModelAttributeParameterExpander(new FieldProvider(typeResolver)) {
         @Override
         def BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
-          throw new IntrospectionException("Fail");
+          throw new IntrospectionException("Fail")
         }
       }
       expander.pluginsManager = defaultWebPlugins()
     when:
-      def parameters = expander.expand("", typeResolver.resolve(Example), context())
+      def parameters = expander.expand(new ExpansionContext("", typeResolver.resolve(Example), context()))
     then:
-      parameters.size() == 0;
+      parameters.size() == 0
   }
 }

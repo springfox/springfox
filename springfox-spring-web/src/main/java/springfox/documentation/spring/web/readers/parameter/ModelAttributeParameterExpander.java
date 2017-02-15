@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -70,53 +70,52 @@ public class ModelAttributeParameterExpander {
     this.fieldProvider = fields;
   }
 
-  public List<Parameter> expand(
-      final String parentName,
-      final ResolvedType paramType,
-      DocumentationContext documentationContext) {
+  public List<Parameter> expand(ExpansionContext context) {
 
     List<Parameter> parameters = newArrayList();
-    Set<String> beanPropNames = getBeanPropertyNames(paramType.getErasedType());
-    Iterable<ResolvedField> fields = FluentIterable.from(fieldProvider.in(paramType))
+    Set<String> beanPropNames = getBeanPropertyNames(context.getParamType().getErasedType());
+    Iterable<ResolvedField> fields = FluentIterable.from(fieldProvider.in(context.getParamType()))
         .filter(onlyBeanProperties(beanPropNames));
-    LOG.debug("Expanding parameter type: {}", paramType);
-    AlternateTypeProvider alternateTypeProvider = documentationContext.getAlternateTypeProvider();
+    LOG.debug("Expanding parameter type: {}", context.getParamType());
+    AlternateTypeProvider alternateTypeProvider = context.getDocumentationContext().getAlternateTypeProvider();
 
     FluentIterable<ModelAttributeField> modelAttributes = from(fields)
         .transform(toModelAttributeField(alternateTypeProvider));
 
     FluentIterable<ModelAttributeField> expendables = modelAttributes
         .filter(not(simpleType()))
-        .filter(not(recursiveType(paramType)));
+        .filter(not(recursiveType(context)));
     for (ModelAttributeField each : expendables) {
       LOG.debug("Attempting to expand expandable field: {}", each.getField());
       parameters.addAll(
           expand(
-              nestedParentName(parentName, each.getField()),
-              each.getFieldType(),
-              documentationContext));
+                  context.childContext(
+                          nestedParentName(context.getParentName(), each.getField()),
+                          each.getFieldType(),
+                          context.getDocumentationContext())));
     }
 
     FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
-        .filter(and(isCollection(), not(recursiveCollectionItemType(paramType))));
+        .filter(and(isCollection(), not(recursiveCollectionItemType(context.getParamType()))));
     for (ModelAttributeField each : collectionTypes) {
       LOG.debug("Attempting to expand collection/array field: {}", each.getField());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
       if (Types.isBaseType(itemType)) {
-        parameters.add(simpleFields(parentName, documentationContext, each));
+        parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
       } else {
         parameters.addAll(
             expand(
-                nestedParentName(parentName, each.getField()),
-                itemType,
-                documentationContext));
+                    context.childContext(
+                            nestedParentName(context.getParentName(), each.getField()),
+                            itemType,
+                            context.getDocumentationContext())));
       }
     }
 
     FluentIterable<ModelAttributeField> simpleFields = modelAttributes.filter(simpleType());
     for (ModelAttributeField each : simpleFields) {
-      parameters.add(simpleFields(parentName, documentationContext, each));
+      parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
     }
     return FluentIterable.from(parameters).filter(not(hiddenParameters())).toList();
   }
@@ -157,11 +156,11 @@ public class ModelAttributeParameterExpander {
   }
 
 
-  private Predicate<ModelAttributeField> recursiveType(final ResolvedType paramType) {
+  private Predicate<ModelAttributeField> recursiveType(final ExpansionContext context) {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return equal(input.getFieldType(), paramType);
+        return context.hasSeenType(input.getFieldType());
       }
     };
   }
@@ -278,7 +277,7 @@ public class ModelAttributeParameterExpander {
 
       for (PropertyDescriptor propDescriptor : propDescriptors) {
 
-        if (propDescriptor.getReadMethod() != null && propDescriptor.getWriteMethod() != null) {
+        if (propDescriptor.getReadMethod() != null) {
           beanProps.add(propDescriptor.getName());
         }
       }

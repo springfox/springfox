@@ -5,9 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -395,6 +393,12 @@
               "ONE",
               "TWO"
             ]
+          },
+          {
+            "name": "propertyWithNoSetterMethod",
+            "in": "query",
+            "required": false,
+            "type": "string"
           },
           {
             "name": "localDateTime",
@@ -929,8 +933,8 @@
             "description": "ID of pet that needs to be fetched",
             "required": true,
             "type": "string",
-            "maximum": 5.0,
-            "minimum": 1.0
+            "maximum": 5,
+            "minimum": 1
           }
         ],
         "responses": {

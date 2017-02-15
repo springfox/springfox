@@ -111,7 +111,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
       def operation = operationContext.operationBuilder().build()
 
     then:
-      operation.parameters.size() == 9
+      operation.parameters.size() == 10
 
       Parameter annotatedFooParam = operation.parameters.find { it.name == "foo" }
       annotatedFooParam != null
@@ -182,7 +182,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
     where:
       handlerMethod                                                    | expectedSize
-      dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 9
+      dummyHandlerMethod('methodWithoutModelAttribute', Example.class) | 10
   }
 
   def "OperationParameterReader supports all documentationTypes"() {
