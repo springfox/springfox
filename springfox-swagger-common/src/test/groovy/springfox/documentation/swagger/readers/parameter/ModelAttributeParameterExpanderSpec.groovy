@@ -1,8 +1,8 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  Licensed under the Apache License, Version 2.0 (the "License")
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
  *
@@ -32,6 +32,7 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.dummy.models.ModelAttributeWithHiddenParametersExample
 import springfox.documentation.spring.web.plugins.DefaultConfiguration
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.parameter.ExpansionContext
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
@@ -55,7 +56,8 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def "shouldn't expand hidden parameters"() {
       when:
-        def parameters = sut.expand("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context());
+        def parameters = sut.expand(
+            new ExpansionContext("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context()))
       then:
         parameters.size() == 6
         parameters.find { it.name == 'modelAttributeProperty' }
@@ -67,24 +69,24 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   }
 
   class SwaggerDefaults implements DefaultsProviderPlugin {
-    private final DefaultConfiguration defaultConfiguration;
-    private TypeResolver typeResolver;
+    private final DefaultConfiguration defaultConfiguration
+    private TypeResolver typeResolver
 
     @Autowired
-    public SwaggerDefaults(Defaults defaults, TypeResolver typeResolver, ServletContext servletContext) {
-      this.typeResolver = typeResolver;
-      defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
+    SwaggerDefaults(Defaults defaults, TypeResolver typeResolver, ServletContext servletContext) {
+      this.typeResolver = typeResolver
+      defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext)
     }
 
     @Override
-    public DocumentationContextBuilder create(DocumentationType documentationType) {
-      List<AlternateTypeRule> rules = newArrayList();
+    DocumentationContextBuilder create(DocumentationType documentationType) {
+      List<AlternateTypeRule> rules = newArrayList()
       rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
-          typeResolver.resolve(Object.class)));
-      rules.add(newMapRule(WildcardType.class, WildcardType.class));
+          typeResolver.resolve(Object.class)))
+      rules.add(newMapRule(WildcardType.class, WildcardType.class))
       return defaultConfiguration
           .create(documentationType)
-          .rules(rules);
+          .rules(rules)
     }
 
     @Override

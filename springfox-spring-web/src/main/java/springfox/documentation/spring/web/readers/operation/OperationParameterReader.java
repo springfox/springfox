@@ -35,6 +35,7 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
+import springfox.documentation.spring.web.readers.parameter.ExpansionContext;
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander;
 
 import java.lang.annotation.Annotation;
@@ -89,9 +90,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         if (shouldExpand(methodParameter, alternate)) {
           parameters.addAll(
               expander.expand(
-                  "",
-                  methodParameter.getParameterType(),
-                  context.getDocumentationContext()));
+                      new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }

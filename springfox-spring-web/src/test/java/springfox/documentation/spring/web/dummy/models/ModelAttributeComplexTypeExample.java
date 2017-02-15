@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
  *
  *
  */
- 
+
 package springfox.documentation.spring.web.dummy.models;
 
 import java.util.List;
 
 public class ModelAttributeComplexTypeExample extends ModelAttributeExample {
-    
+
     private List<FancyPet> fancyPets;
-    
+
     private Category[] categories;
-    
+
     private String[] modelAttributeProperty;
 
     private List<ModelAttributeComplexTypeExample> recursiveList;
@@ -55,11 +55,11 @@ public class ModelAttributeComplexTypeExample extends ModelAttributeExample {
         this.modelAttributeProperty = modelAttributeProperty;
     }
 
-  public List<ModelAttributeComplexTypeExample> getRecursiveList() {
-    return recursiveList;
-  }
+    public List<ModelAttributeComplexTypeExample> getRecursiveList() {
+        return recursiveList;
+    }
 
-  public void setRecursiveList(List<ModelAttributeComplexTypeExample> recursiveList) {
-    this.recursiveList = recursiveList;
-  }
+    public void setRecursiveList(List<ModelAttributeComplexTypeExample> recursiveList) {
+        this.recursiveList = recursiveList;
+    }
 }
