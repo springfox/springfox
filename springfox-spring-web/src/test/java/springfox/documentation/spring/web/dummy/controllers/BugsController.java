@@ -107,6 +107,28 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
+  @RequestMapping(value = "1632", method = RequestMethod.GET)
+  public void fileCustomType(@RequestBody File value) {
+    throw new UnsupportedOperationException();
+  }
+
+  @RequestMapping(value = "1632s", method = RequestMethod.GET)
+  public void filesCustomType(@RequestBody List<File> values) {
+    throw new UnsupportedOperationException();
+  }
+
+  class File {
+    private String name;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+  }
+
   class Bug1676 {
     @ApiModelProperty(value = "Horizontal position", required=false, example="200")
     private float xAxis;
