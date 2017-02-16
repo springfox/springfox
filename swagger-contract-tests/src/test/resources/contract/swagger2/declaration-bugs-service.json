@@ -5,9 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -371,6 +369,73 @@
         }
       }
     },
+    "/bugs/1632": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "fileCustomType",
+        "operationId": "fileCustomTypeUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "value",
+            "description": "value",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1632s": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "filesCustomType",
+        "operationId": "filesCustomTypeUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "values",
+            "description": "values",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/File"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/bugs/1676": {
       "get": {
         "tags": [
@@ -516,6 +581,14 @@
           "format": "float",
           "example": 500.0,
           "description": "Vertical position"
+        }
+      }
+    },
+    "File": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
         }
       }
     },
