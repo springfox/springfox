@@ -834,7 +834,7 @@
               "description": "pic",
               "name": "pic",
               "paramType": "form",
-              "type": "file",
+              "type": "File",
               "required": false
             }
           ],

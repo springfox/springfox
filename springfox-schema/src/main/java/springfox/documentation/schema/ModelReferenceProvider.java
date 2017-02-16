@@ -50,7 +50,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       return new ModelRef("void");
     }
     if (MultipartFile.class.isAssignableFrom(type.getErasedType())) {
-      return new ModelRef("File");
+      return new ModelRef("__file");
     }
     String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
     return new ModelRef(typeName, allowableValues(type));

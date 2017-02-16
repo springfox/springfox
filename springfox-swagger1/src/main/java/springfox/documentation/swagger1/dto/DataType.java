@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 //CHECKSTYLE:OFF CyclomaticComplexityCheck
 public class DataType implements SwaggerDataType {
-  private static final Pattern containerPattern = Pattern.compile("([a-zA-Z]+)\\[([a-zA-Z\\.\\-]+)\\]");
+  private static final Pattern containerPattern = Pattern.compile("([a-zA-Z]+)\\[([_a-zA-Z\\.\\-]+)\\]");
   @JsonUnwrapped
   @JsonProperty
   private SwaggerDataType dataType;
@@ -80,9 +80,15 @@ public class DataType implements SwaggerDataType {
     if (isOfType(initialType, "date-time")) {
       return new PrimitiveFormatDataType("string", "date-time");
     }
+    if (isOfType(initialType, "__file")) {
+      return new PrimitiveDataType("File");
+    }
     Matcher matcher = containerPattern.matcher(initialType);
     if (matcher.matches()) {
       String containerInnerType = matcher.group(2);
+      if ("__file".equals(containerInnerType)) {
+        containerInnerType = "File";
+      }
       if (isUniqueContainerType(matcher.group(1))) {
         return new ContainerDataType(containerInnerType, true);
       } else {

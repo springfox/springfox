@@ -84,6 +84,6 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
   }
 
   ResolvedType resolve(Class clazz) {
-    new TypeResolver().resolve(clazz);
+    new TypeResolver().resolve(clazz)
   }
 }

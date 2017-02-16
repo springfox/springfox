@@ -33,6 +33,8 @@ class DataTypeSpec extends InternalJsonSerializationSpec {
     where:
       dataType     | assertion
       "void"       | { it.type == 'void' }
+      "File"       | { it.type == 'File' }
+      "__file"       | { it.type == 'File' }
       "int"        | { it.type == 'integer' && it.format == 'int32' }
       "long"       | { it.type == 'integer' && it.format == 'int64' }
       "float"      | { it.type == 'number' && it.format == 'float' }
@@ -48,6 +50,7 @@ class DataTypeSpec extends InternalJsonSerializationSpec {
       "date"       | { it.type == 'string' && it.format == 'date' }
       "date-time"  | { it.type == 'string' && it.format == 'date-time' }
       "pet"        | { it.'type' == 'pet' }
+      "List[__file]"| { it.type == 'array' && it.items.'type' == 'File' && it.uniqueItems == null }
       "Set[Pet]"   | { it.type == 'array' && it.items.'type' == 'Pet' && it.uniqueItems == true }
       "List[Pet]"  | { it.type == 'array' && it.items.'type' == 'Pet' && it.uniqueItems == null }
       "List[int]"  | { it.type == 'array' && it.items.format == 'int32' && it.items.type == 'integer' }

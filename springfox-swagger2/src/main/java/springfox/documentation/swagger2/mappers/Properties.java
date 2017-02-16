@@ -71,7 +71,7 @@ class Properties {
       .put("uuid", newInstanceOf(UUIDProperty.class))
       .put("object", newInstanceOf(ObjectProperty.class))
       .put("byte", bytePropertyFactory())
-      .put("file", filePropertyFactory())
+      .put("__file", filePropertyFactory())
       .build();
 
   private Properties() {
