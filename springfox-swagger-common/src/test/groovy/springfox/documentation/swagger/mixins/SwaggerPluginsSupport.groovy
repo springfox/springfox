@@ -56,7 +56,7 @@ class SwaggerPluginsSupport {
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
     def resolver = new TypeResolver()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(resolver), new SwaggerApiListingReader()))
+    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new SwaggerApiListingReader()))
     plugins.documentationPlugins = create([])
     plugins.parameterExpanderPlugins =
         create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
