@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@ import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
-class NotNullAnnotationPluginSpec extends Specification {
+class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
-      new NotNullAnnotationPlugin().supports(types)
+      new ModelPropertyNotNullAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
@@ -39,7 +39,7 @@ class NotNullAnnotationPluginSpec extends Specification {
   @Unroll
   def "@NotNull annotations are reflected in the model properties that are AnnotatedElements"()  {
     given:
-      def sut = new NotNullAnnotationPlugin()
+      def sut = new ModelPropertyNotNullAnnotationPlugin()
       def element = NullablityTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
@@ -62,7 +62,7 @@ class NotNullAnnotationPluginSpec extends Specification {
   @Unroll
   def "@NotNull annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
     given:
-      def sut = new NotNullAnnotationPlugin()
+      def sut = new ModelPropertyNotNullAnnotationPlugin()
       def beanProperty = beanProperty(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),

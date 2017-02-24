@@ -40,8 +40,12 @@ public class ModelPropertyDescriptionKeysAnnotationPlugin implements ModelProper
 
   private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyDescriptionKeysAnnotationPlugin.class);
 
+  private final ApiDescriptionPropertiesReader propertiesReader;
+
   @Autowired
-  private ApiDescriptionPropertiesReader propertiesReader;
+  public ModelPropertyDescriptionKeysAnnotationPlugin(ApiDescriptionPropertiesReader propertiesReader) {
+    this.propertiesReader = propertiesReader;
+  }
 
   @Override
   public boolean supports(DocumentationType delimiter) {

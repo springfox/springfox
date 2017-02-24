@@ -20,7 +20,7 @@ package springfox.bean.validators.configuration
 
 import spock.lang.Specification
 import springfox.bean.validators.plugins.MinMaxAnnotationPlugin
-import springfox.bean.validators.plugins.NotNullAnnotationPlugin
+import springfox.bean.validators.plugins.ModelPropertyNotNullAnnotationPlugin
 import springfox.bean.validators.plugins.SizeAnnotationPlugin
 
 class BeanValidatorPluginsConfigurationSpec extends Specification {
@@ -34,7 +34,7 @@ class BeanValidatorPluginsConfigurationSpec extends Specification {
         def clazz3 = config.sizePlugin()
         then:
         clazz1 instanceof  MinMaxAnnotationPlugin
-        clazz2 instanceof  NotNullAnnotationPlugin
+        clazz2 instanceof  ModelPropertyNotNullAnnotationPlugin
         clazz3 instanceof  SizeAnnotationPlugin
     }
 }
