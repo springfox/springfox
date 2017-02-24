@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.readers
 
-import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Shared
@@ -36,7 +35,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
   MediaTypeReader sut
   @Shared Set<String> emptySet = newHashSet()
   def setup() {
-    sut = new MediaTypeReader(new TypeResolver())
+    sut = new MediaTypeReader()
   }
 
   @Unroll
