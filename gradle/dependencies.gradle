@@ -3,7 +3,7 @@ ext {
   classmate = "1.3.3"
   groovy = "2.4.8"
   guava = "18.0"
-  jackson = '2.8.6'
+  jackson = '2.8.7'
   joda = "2.9.7"
   jsonPath = "2.2.0"
   jsonAssert = "1.4.0"
@@ -11,8 +11,8 @@ ext {
   mockito = "1.10.19"
   objenesis = "2.5.1"
   servlet = "3.1.0"
-  slf4j = "1.7.22"
-  snakeyaml = '1.17'
+  slf4j = "1.7.24"
+  snakeyaml = '1.18'
   spock = "1.1-groovy-2.4-rc-3"
   spring = "4.3.6.RELEASE"
   springHateoas = "0.23.0.RELEASE"
