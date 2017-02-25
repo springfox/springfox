@@ -9,6 +9,7 @@ import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
+import springfox.documentation.spring.web.DescriptionResolver
 
 import static springfox.bean.apidescriptionreaders.plugins.AnnotatedFieldsHelperClass.*
 

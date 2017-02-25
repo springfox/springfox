@@ -28,11 +28,10 @@ dependencies {
   compile libs.swagger2Core
   compile libs.spring
   compile project(':springfox-spi')
+  compile project(':springfox-spring-web')
 
   provided libs.springProvided
   provided 'javax.validation:validation-api:1.1.0.Final'
 
-  testCompile project(':springfox-core')
-  testCompile project(':springfox-schema')
   testCompile libs.test
 }

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 
 import static springfox.bean.validators.plugins.Validators.*;
 

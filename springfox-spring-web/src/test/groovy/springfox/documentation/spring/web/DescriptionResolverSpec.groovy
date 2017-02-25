@@ -1,4 +1,4 @@
-package springfox.bean.apidescriptionreaders.plugins
+package springfox.documentation.spring.web
 
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Specification

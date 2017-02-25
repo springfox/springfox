@@ -9,6 +9,7 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
+import springfox.documentation.spring.web.DescriptionResolver
 
 import static springfox.bean.apidescriptionreaders.plugins.AnnotatedFieldsHelperClass.*
 

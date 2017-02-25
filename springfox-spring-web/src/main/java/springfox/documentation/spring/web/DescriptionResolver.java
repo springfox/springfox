@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.bean.apidescriptionreaders.plugins;
+package springfox.documentation.spring.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
