@@ -172,6 +172,62 @@ public class CustomJavaPluginConfig {
 }
 ```
 
+=== Support for documentation from property file lookup
+
+Starting with `2.7.0` we support looking up description from the following annotations given a property just like
+property place holders resolve a value annotation `@Value(${key})`. The following annotations attributes support
+description resolution.
+
+- `@ApiParam#value()`
+- `@ApiImplicitParam#value()`
+- `@ApiModelProperty#value()`
+- `@ApiOperation#value()`
+- `@ApiOperation#notes()`
+
+[[Description Resolution]]
+[source,java]
+.app.java
+----
+
+  @ApiOperation(value = "Find pet by Status",
+      notes = "${SomeController.findPetsByStatus.notes}"...) //<1>
+  @RequestMapping(value = "/findByStatus", method = RequestMethod.GET, params = {"status"})
+  public Pet findPetsByStatus(
+      @ApiParam(value = "${SomeController.findPetsByStatus.status}", //<2>
+      required = true,...)
+      @RequestParam("status") String status) {
+      //...
+  }
+
+  @ApiOperation(notes = "Operation 2", value = "${SomeController.operation2.value}"...) //<3>
+  @ApiImplicitParams(
+      @ApiImplicitParam(name="header1", value="${SomeController.operation2.header1}", ...) //<4>
+  )
+  @RequestMapping(value = "operation2", method = RequestMethod.POST)
+  public ResponseEntity<String> operation2() {
+    return ResponseEntity.ok("");
+  }
+
+  public class SomeModel {
+    @ApiModelProperty(value = "${SomeModel.someProperty}", ...) //<5>
+    private long someProperty;
+  }
+----
+
+To provide these properties via external properties just add it to your application property file or any property
+source configured by the application as shown below. When a property place holder cannot be found the default
+behavior is to echo the expression as-is.
+
+[source,properties]
+.application.properties
+----
+SomeController.findPetsByStatus.notes=Finds pets by status
+SomeController.findPetsByStatus.status=Status could be one of ...
+SomeController.operation2.header1=Header for bla bla...
+SomeController.operation2.value=Operation 2 do something...
+SomeModel.someProperty=Some property description
+----
+
 ==== Swagger group
 
 A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
@@ -382,3 +438,5 @@ If you want to combine the generated documentation with your hand-written docume
 
 ==== Generated HTML using Swagger2Markup and AsciidoctorJ
 image::asciidoc_html.PNG[asciidoc_html]
+
+
