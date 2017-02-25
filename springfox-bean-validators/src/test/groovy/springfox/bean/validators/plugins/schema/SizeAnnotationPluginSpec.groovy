@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2015 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,31 +16,31 @@
  *
  *
  */
-package springfox.bean.validators.plugins
+package springfox.bean.validators.plugins.schema
 
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.bean.validators.plugins.models.DecimalMinMaxTestModel
-import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin
+import springfox.bean.validators.plugins.models.SizeTestModel
+import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
-class DecimalMinMaxAnnotationPluginSpec extends Specification {
+class SizeAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
-      new DecimalMinMaxAnnotationPlugin().supports(types)
+      new SizeAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@DecimalMin/@DecimalMax annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
+  def "@Size annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
     given:
-      def sut = new DecimalMinMaxAnnotationPlugin()
-      def element = DecimalMinMaxTestModel.getDeclaredField(propertyName)
+      def sut = new SizeAnnotationPlugin()
+      def element = SizeTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
           element,
@@ -52,17 +52,17 @@ class DecimalMinMaxAnnotationPluginSpec extends Specification {
     then:
       def range = property.allowableValues as AllowableRangeValues
       range?.max == expectedMax
-      range?.exclusiveMax == exclusiveMax
       range?.min == expectedMin
-      range?.exclusiveMin == exclusiveMin
     where:
-      propertyName      | expectedMin | exclusiveMin | expectedMax                 | exclusiveMax
-      "noAnnotation"    | null        | null         | null                        | null
-      "onlyMin"         | "10.5"      | false        | null                        | null
-      "onlyMax"         | null        | null         | "20.5"                      | false
-      "both"            | "10.5"      | false        | "20.5"                      | false
-      "minExclusive"    | "10.5"      | true         | null                        | null
-      "maxExclusive"    | null        | null         | "20.5"                      | true
-      "bothExclusive"   | "10.5"      | true         | "20.5"                      | true
+      propertyName      | expectedMin                   | expectedMax
+      "noAnnotation"    | null                          | null
+      "defaultSize"     | "0"                           | Integer.MAX_VALUE.toString()
+      "belowZero"       | "0"                           | "10"
+      "aboveMax"        | "10"                          | "0"
+      "inverted"        | Integer.MAX_VALUE.toString()  | "0"
+      "bothNegative"    | "0"                           | "0"
+      "bothZero"        | "0"                           | "0"
+      "bothMax"         | Integer.MAX_VALUE.toString()  | Integer.MAX_VALUE.toString()
   }
+
 }

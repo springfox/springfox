@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.bean.validators.plugins
+package springfox.bean.validators.plugins.schema
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper

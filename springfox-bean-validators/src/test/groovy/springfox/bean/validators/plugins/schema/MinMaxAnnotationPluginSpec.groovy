@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.bean.validators.plugins
+package springfox.bean.validators.plugins.schema
 
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
