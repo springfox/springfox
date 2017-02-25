@@ -46,11 +46,11 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_12)
       sut.supports(DocumentationType.SWAGGER_2)
     where:
-      sut                             | property     | handlerMethod                              | expected
-      new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod('methodWithSummary')    | 'summary'
-      new OperationHiddenReader()     | 'hidden'     | dummyHandlerMethod('methodThatIsHidden')   | true
-      new OperationHiddenReader()     | 'hidden'     | dummyHandlerMethod('dummyMethod')          | false
-      new OperationNotesReader()      | 'notes'      | dummyHandlerMethod('methodWithNotes')      | 'some notes'
-      new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
+      sut                                      | property   | handlerMethod                            | expected
+      new OperationSummaryReader(descriptions) | 'summary'  | dummyHandlerMethod('methodWithSummary')  | 'summary'
+      new OperationHiddenReader()              | 'hidden'   | dummyHandlerMethod('methodThatIsHidden') | true
+      new OperationHiddenReader()              | 'hidden'   | dummyHandlerMethod('dummyMethod')        | false
+      new OperationNotesReader()               | 'notes'    | dummyHandlerMethod('methodWithNotes')    | 'some notes'
+      new OperationPositionReader()            | 'position' | dummyHandlerMethod('methodWithPosition') | 5
   }
 }
