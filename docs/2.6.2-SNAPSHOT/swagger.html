@@ -528,6 +528,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#overriding-property-datatypes">Overriding property datatypes</a></li>
 <li><a href="#docket-xml-configuration">Docket XML Configuration</a></li>
 <li><a href="#docket-spring-java-configuration">Docket Spring Java Configuration</a></li>
+<li><a href="#support-for-documentation-from-property-file-lookup">Support for documentation from property file lookup</a></li>
 <li><a href="#caching">Caching</a></li>
 <li><a href="#configuring-security-schemes-and-contexts-an-overview">Configuring Security Schemes and Contexts an Overview</a></li>
 <li><a href="#extensibility">Extensibility</a></li>
@@ -832,6 +833,79 @@ This config class must then be defined in your xml application context.</p>
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="support-for-documentation-from-property-file-lookup">Support for documentation from property file lookup</h3>
+<div class="paragraph">
+<p>Starting with <code>2.7.0</code> we support looking up description from the following annotations given a property just like
+property place holders resolve a value annotation <code>@Value(${key})</code>. The following annotations attributes support
+description resolution.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@ApiParam#value()</code></p>
+</li>
+<li>
+<p><code>@ApiImplicitParam#value()</code></p>
+</li>
+<li>
+<p><code>@ApiModelProperty#value()</code></p>
+</li>
+<li>
+<p><code>@ApiOperation#value()</code></p>
+</li>
+<li>
+<p><code>@ApiOperation#notes()</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>[[Description Resolution]]</p>
+</div>
+<div class="listingblock">
+<div class="title">app.java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">  <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">Find pet by Status</span><span class="delimiter">&quot;</span></span>,
+      notes = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.findPetsByStatus.notes}</span><span class="delimiter">&quot;</span></span>...) <i class="conum" data-value="1"></i><b>(1)</b>
+  <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/findByStatus</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET, params = {<span class="string"><span class="delimiter">&quot;</span><span class="content">status</span><span class="delimiter">&quot;</span></span>})
+  <span class="directive">public</span> Pet findPetsByStatus(
+      <span class="annotation">@ApiParam</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.findPetsByStatus.status}</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="2"></i><b>(2)</b>
+      required = <span class="predefined-constant">true</span>,...)
+      <span class="annotation">@RequestParam</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">status</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> status) {
+      <span class="comment">//...</span>
+  }
+
+  <span class="annotation">@ApiOperation</span>(notes = <span class="string"><span class="delimiter">&quot;</span><span class="content">Operation 2</span><span class="delimiter">&quot;</span></span>, value = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.operation2.value}</span><span class="delimiter">&quot;</span></span>...) <i class="conum" data-value="3"></i><b>(3)</b>
+  <span class="annotation">@ApiImplicitParams</span>(
+      <span class="annotation">@ApiImplicitParam</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">header1</span><span class="delimiter">&quot;</span></span>, value=<span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeController.operation2.header1}</span><span class="delimiter">&quot;</span></span>, ...) <i class="conum" data-value="4"></i><b>(4)</b>
+  )
+  <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">operation2</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.POST)
+  <span class="directive">public</span> ResponseEntity&lt;<span class="predefined-type">String</span>&gt; operation2() {
+    <span class="keyword">return</span> ResponseEntity.ok(<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+  }
+
+  <span class="directive">public</span> <span class="type">class</span> <span class="class">SomeModel</span> {
+    <span class="annotation">@ApiModelProperty</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">${SomeModel.someProperty}</span><span class="delimiter">&quot;</span></span>, ...) <i class="conum" data-value="5"></i><b>(5)</b>
+    <span class="directive">private</span> <span class="type">long</span> someProperty;
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To provide these properties via external properties just add it to your application property file or any property
+source configured by the application as shown below. When a property place holder cannot be found the default
+behavior is to echo the expression as-is.</p>
+</div>
+<div class="listingblock">
+<div class="title">application.properties</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="properties">SomeController.findPetsByStatus.notes=Finds pets by status
+SomeController.findPetsByStatus.status=Status could be one of ...
+SomeController.operation2.header1=Header for bla bla...
+SomeController.operation2.value=Operation 2 do something...
+SomeModel.someProperty=Some property description</code></pre>
+</div>
+</div>
 <div class="sect3">
 <h4 id="swagger-group">Swagger group</h4>
 <div class="paragraph">
@@ -1105,7 +1179,7 @@ Swagger2Markup can be used as an alternative to swagger-ui and can be served as 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-14 13:26:37 UTC
+Last updated 2017-02-25 22:16:58 UTC
 </div>
 </div>
 </body>
