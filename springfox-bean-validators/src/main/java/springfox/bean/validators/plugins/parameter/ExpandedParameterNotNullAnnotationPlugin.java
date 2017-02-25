@@ -29,7 +29,6 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.NotNull;
-import java.lang.reflect.Field;
 
 import static springfox.bean.validators.plugins.Validators.*;
 
@@ -47,15 +46,11 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Field myfield = context.getField().getRawMember();
-    LOG.debug("myfield: " + myfield.getName());
+    Optional<NotNull> notNull = validatorFromExpandedParameter(context, NotNull.class);
 
-    Optional<NotNull> size = validatorFromExpandedParameter(context, NotNull.class);
-
-    if (size.isPresent()) {
-      LOG.info("myfield: " + myfield.getName() + " set to required!!");
+    if (notNull.isPresent()) {
+      LOG.debug("Setting parameter to required because of @NotNull attribute");
       context.getParameterBuilder().required(true);
-
     }
   }
 }

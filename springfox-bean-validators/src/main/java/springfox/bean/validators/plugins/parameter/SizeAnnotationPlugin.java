@@ -49,10 +49,10 @@ public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     Optional<Size> size = annotationFromParameter(context, Size.class);
-    LOG.info("searching for @size: " + size.isPresent());
+    LOG.info("searching for @size: {}", size.isPresent());
     if (size.isPresent()) {
       AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
-      LOG.info(String.format("adding allowable Values @Size: %s - %s", values.getMin(), values.getMax()));
+      LOG.info("Adding allowable Values @Size: {} - {}", values.getMin(), values.getMax());
       context.parameterBuilder().allowableValues(values);
 
       // TODO Additionally show @Size in the description until https://github.com/springfox/springfox/issues/1244

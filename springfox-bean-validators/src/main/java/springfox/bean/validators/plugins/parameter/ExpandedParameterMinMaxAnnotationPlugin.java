@@ -32,7 +32,6 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.lang.reflect.Field;
 
 import static springfox.bean.validators.plugins.Validators.*;
 
@@ -49,16 +48,12 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 
   @Override
   public void apply(ParameterExpansionContext context) {
-
-    Field myfield = context.getField().getRawMember();
-    LOG.debug("expandedparam.myfield: " + myfield.getName());
-
     Optional<Min> min = validatorFromExpandedParameter(context, Min.class);
     Optional<Max> max = validatorFromExpandedParameter(context, Max.class);
 
     if (min.isPresent() || max.isPresent()) {
       AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
-      LOG.debug("adding allowable Values MinMax: " + values.getMin() + " - " + values.getMax());
+      LOG.debug("Adding allowable range: min({}) - max({}}", values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);
     }
   }

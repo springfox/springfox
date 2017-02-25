@@ -31,7 +31,6 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Size;
-import java.lang.reflect.Field;
 
 import static springfox.bean.validators.plugins.Validators.*;
 
@@ -49,16 +48,12 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
   @Override
   public void apply(ParameterExpansionContext context) {
-
-    Field myfield = context.getField().getRawMember();
-    LOG.debug("expandedparam.myfield: " + myfield.getName());
-
     Optional<Size> size = validatorFromExpandedParameter(context, Size.class)
         .or(validatorFromExpandedParameter(context, Size.class));
 
     if (size.isPresent()) {
       AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
-      LOG.debug("adding allowable Values: " + values.getMin() + "-" + values.getMax());
+      LOG.debug("Adding allowable Values: {} - {}", values.getMin(), values.getMax());
 
       values = new AllowableRangeValues(values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);

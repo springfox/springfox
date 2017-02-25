@@ -23,8 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -48,29 +46,11 @@ public class NotNullAnnotationPlugin implements ParameterBuilderPlugin {
 
   @Override
   public void apply(ParameterContext context) {
-    Optional<RequestParam> requestParam = annotationFromParameter(context, RequestParam.class);
-    
-    if (requestParam.isPresent()) {
-      RequestParam requestParamValue = requestParam.get();
+    Optional<NotNull> notNull = annotationFromParameter(context, NotNull.class);
 
-      if (requestParamValue.required()) {
-        LOG.debug("@RequestParam.required=true: setting parameter as required");
-        context.parameterBuilder().required(true);
-      }
-    } else {
-      Optional<PathVariable> pathVariableParam = annotationFromParameter(context, PathVariable.class);
-
-      if (pathVariableParam.isPresent()) {
-        LOG.debug("@PathVariable present: setting parameter as required");
-        context.parameterBuilder().required(true);
-      } else {
-        Optional<NotNull> notNull = annotationFromParameter(context, NotNull.class);
-        
-        if (notNull.isPresent()) {
-          LOG.debug("@NotNull present: setting parameter as required");
-          context.parameterBuilder().required(true);
-        }
-      }
+    if (notNull.isPresent()) {
+      LOG.debug("@NotNull present: setting parameter as required");
+      context.parameterBuilder().required(true);
     }
   }
 }
