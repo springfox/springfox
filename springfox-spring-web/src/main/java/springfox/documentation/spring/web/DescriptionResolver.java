@@ -18,22 +18,18 @@
  */
 package springfox.documentation.spring.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component
 public class DescriptionResolver {
+  private static final Pattern pattern = Pattern.compile("\\Q${\\E(.+?)\\Q}\\E");
   private final Environment environment;
   private Map<String, String> cache;
-  private static final Pattern pattern = Pattern.compile("\\Q${\\E(.+?)\\Q}\\E");
 
-  @Autowired
   public DescriptionResolver(Environment environment) {
     this.environment = environment;
     this.cache = new HashMap<String, String>();
