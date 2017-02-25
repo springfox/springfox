@@ -20,6 +20,9 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,29 +77,30 @@ public class ApiModelReader  {
   }
 
   private Map<String, Model> compareModelMap(Map<String, Model> target, List<ModelContext> source) {  
-    LOG.debug("Starting comparing algorithm. Defining enter points for the context's tree branches...");
-    List<ModelContext> enterPoints = newArrayList();
+    LOG.debug("Starting comparing algorithm. Defining levels for the context's tree branches...");
+    Multimap<Integer, ModelContext> modelTree = ArrayListMultimap.create();
     main:for (ModelContext sourceC: source) {
-      Model modelSource = sourceC.getBuilder().build();  
+      Model sourceM = sourceC.getBuilder().build();
       LOG.debug("Received context with model: {}. Amount of properties: {}", 
-              modelSource.getId(), 
-              modelSource.getProperties().size());
-      if (modelSource.isMap()) {
-        continue;
-      }
-      for (ModelContext sourceT: source) {
-        ModelContext parent = toParent(sourceT.getParent(), source);
-        if (sourceC == parent) {
-          continue main;
+              sourceM.getId(), 
+              sourceM.getProperties().size());
+      if (!sourceM.isMap()) {
+        for (String key: target.keySet()) {
+          if (target.get(key).equals(sourceM)) {
+            sourceC.getBuilder().index(target.get(key).getIndex());
+            continue main;
+          }
         }
+        modelTree.put(getModelLevel(sourceC), sourceC);
       }
-      LOG.debug("Model: {} is in the lowest level at the tree, added to the entry points.", modelSource.getId());
-      enterPoints.add(sourceC);    
     }
-    LOG.debug("Searching for duplicates at the current tree level.");
-    while (enterPoints.size() != 0) {
+    int level = modelTree.size();
+    LOG.debug("Searching for duplicates at the each tree level.");
+    while (level > 0) {
+      LOG.debug("Entering tree level {}...", level);
       Model previousModel = null;
-      for (ModelContext contextSource: enterPoints ) {
+      List<ModelContext> enterPoints = newArrayList(modelTree.get(level));
+      for (ModelContext contextSource: enterPoints) {
         List<Model> heap = newArrayList(target.values()); 
         for (ModelContext contextS: source) {
           Model modelSource = contextS.getBuilder().build();
@@ -122,7 +126,7 @@ public class ApiModelReader  {
         previousModel = modelSource;
       }   
       LOG.debug("Going to the next tree's level.");
-      enterPoints = nextLevel(enterPoints, source);
+      --level;
     }
     Map<String, Model> localModels = newHashMap();
     for (ModelContext sourceModelContext : source) {
@@ -135,41 +139,17 @@ public class ApiModelReader  {
     return localModels;
   }
 
-  private boolean containsInTree(ModelContext context, List<ModelContext> contexts) {
-    for (ModelContext contextT: contexts) {
-      if (context == contextT) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private ModelContext toParent(ModelContext context, List<ModelContext> contexts) {
+  private int getModelLevel(ModelContext modelContext) {
+    int level = 0;
+    ModelContext context = modelContext;
     while (context != null) {
-      if (!containsInTree(context, contexts)) {
-        context = context.getParent();
-      } else {
-          break;
-        }
+      if (!context.isParentContainer() && 
+          !Boolean.TRUE.equals(context.getBuilder().build().isMap())) {//!context.getBuilder().build().isMap()) {
+        ++level;    
+      }  
+      context = context.getParent();
     }
-    return context;
-  }
-  
-  private List<ModelContext> nextLevel(List<ModelContext> currentLevel, List<ModelContext> allModels) {
-    List<ModelContext> enterPointsNext = newArrayList();
-    for (ModelContext context: currentLevel) {
-      ModelContext parent = toParent(context.getParent(), allModels);
-      if (parent != null) {
-        Model modelParent = parent.getBuilder().build();
-          if (!modelParent.isMap()) {
-          LOG.debug("Model: {}() is in the next level at the tree, added to the entry points.", 
-                  modelParent.getId(), 
-                  modelParent.getProperties().size());
-          enterPointsNext.add(parent);
-        }
-      }
-    }
-    return enterPointsNext;
+    return level;
   }
 
   private void markIgnorablesAsHasSeen(TypeResolver typeResolver,

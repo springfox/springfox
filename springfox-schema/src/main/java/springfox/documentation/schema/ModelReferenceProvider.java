@@ -98,7 +98,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       }
     }
     if (index != null && index > 0) {
-      name += "_" + index;
+      return name + "_" + index;
     }
     return name;
   }

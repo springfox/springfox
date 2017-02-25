@@ -1,6 +1,6 @@
 ext {
   limits = [
-      'instruction': 96.9,
+      'instruction': 96.5,
       'branch'     : 91,
       'line'       : 96.5,
       'complexity' : 92,

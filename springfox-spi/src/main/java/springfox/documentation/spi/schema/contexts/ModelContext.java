@@ -187,7 +187,7 @@ public class ModelContext {
   }
   
   /**
-   * Answers the question, has the given type been processed?
+   * Method to achieve parent
    *
    * @return context of the parent type
    */
@@ -243,6 +243,10 @@ public class ModelContext {
     if (parentContainer) {
       parentContext.updateIndex(index); 
     }
+  }
+  
+  public boolean isParentContainer() {
+    return parentContainer;
   }
 
   @Override

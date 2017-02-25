@@ -70,11 +70,11 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   public List<ModelContext> dependentModels(ModelContext modelContext) {
     return from(resolvedDependencies(modelContext))
         .filter(ignorableTypes())
-        .filter(not(baseTypes(modelContext)))
+        .filter(not(baseTypes()))
         .toList();
   }
 
-  private Predicate<ModelContext> baseTypes(final ModelContext modelContext) {
+  private Predicate<ModelContext> baseTypes() {
     return new Predicate<ModelContext>() {
       @Override
       public boolean apply(ModelContext modelContext) {
