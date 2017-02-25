@@ -71,7 +71,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
     this.mappings = mappings;
     this.repositories = repositories;
     this.typeResolver = typeResolver;
-    this.restMappings = new RepositoryRestHandlerMapping(mappings, repositoryConfiguration);
+    this.restMappings = new RepositoryRestHandlerMapping(mappings, repositoryConfiguration, repositories);
     restMappings.setJpaHelper(jpaHelper);
     restMappings.setApplicationContext(applicationContext);
     restMappings.afterPropertiesSet();
