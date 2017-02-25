@@ -31,6 +31,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.Collections;
@@ -99,7 +100,9 @@ public final class ApiModelProperties {
     };
   }
 
-  public static Function<ApiModelProperty, String> toDescription() {
+  static Function<ApiModelProperty, String> toDescription(
+      final DescriptionResolver descriptions) {
+    
     return new Function<ApiModelProperty, String>() {
       @Override
       public String apply(ApiModelProperty annotation) {
@@ -109,7 +112,7 @@ public final class ApiModelProperties {
         } else if (!Strings.isNullOrEmpty(annotation.notes())) {
           description = annotation.notes();
         }
-        return description;
+        return descriptions.resolve(description);
       }
     };
   }

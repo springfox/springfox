@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,12 +23,14 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
@@ -38,6 +40,12 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationImplicitParametersReader implements OperationBuilderPlugin {
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public OperationImplicitParametersReader(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
 
   @Override
   public void apply(OperationContext context) {
@@ -55,7 +63,7 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
     List<Parameter> parameters = Lists.newArrayList();
     if (annotation.isPresent()) {
       for (ApiImplicitParam param : annotation.get().value()) {
-        parameters.add(OperationImplicitParameterReader.implicitParameter(param));
+        parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, param));
       }
     }
 

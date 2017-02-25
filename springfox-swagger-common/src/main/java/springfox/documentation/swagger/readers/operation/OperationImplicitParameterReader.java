@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ParameterBuilder;
@@ -32,6 +33,7 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
@@ -44,6 +46,12 @@ import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationImplicitParameterReader implements OperationBuilderPlugin {
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public OperationImplicitParameterReader(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
 
   @Override
   public void apply(OperationContext context) {
@@ -55,11 +63,11 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
     return SwaggerPluginSupport.pluginDoesApply(delimiter);
   }
 
-  static Parameter implicitParameter(ApiImplicitParam param) {
+  static Parameter implicitParameter(DescriptionResolver descriptions, ApiImplicitParam param) {
     ModelRef modelRef = maybeGetModelRef(param);
     return new ParameterBuilder()
         .name(param.name())
-        .description(param.value())
+        .description(descriptions.resolve(param.value()))
         .defaultValue(param.defaultValue())
         .required(param.required())
         .allowMultiple(param.allowMultiple())
@@ -86,7 +94,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
     Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
     List<Parameter> parameters = Lists.newArrayList();
     if (annotation.isPresent()) {
-      parameters.add(OperationImplicitParameterReader.implicitParameter(annotation.get()));
+      parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, annotation.get()));
     }
     return parameters;
   }
