@@ -21,23 +21,32 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationNotesReader implements OperationBuilderPlugin {
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public OperationNotesReader(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
+
   @Override
   public void apply(OperationContext context) {
 
     Optional<ApiOperation> methodAnnotation = context.findAnnotation(ApiOperation.class);
     if (methodAnnotation.isPresent() && StringUtils.hasText(methodAnnotation.get().notes())) {
-      context.operationBuilder().notes(methodAnnotation.get().notes());
+      context.operationBuilder().notes(descriptions.resolve(methodAnnotation.get().notes()));
     }
   }
 

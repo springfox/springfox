@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.AllowableListValues;
@@ -30,6 +31,7 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
@@ -46,6 +48,12 @@ import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public SwaggerExpandedParameterBuilder(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
 
   @Override
   public void apply(ParameterExpansionContext context) {
@@ -69,7 +77,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
-            .description(apiParam.value())
+            .description(descriptions.resolve(apiParam.value()))
             .defaultValue(apiParam.defaultValue())
             .required(apiParam.required())
             .allowMultiple(apiParam.allowMultiple())
@@ -83,7 +91,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
-            .description(apiModelProperty.value())
+            .description(descriptions.resolve(apiModelProperty.value()))
             .required(apiModelProperty.required())
             .allowableValues(allowable)
             .parameterAccess(apiModelProperty.access())

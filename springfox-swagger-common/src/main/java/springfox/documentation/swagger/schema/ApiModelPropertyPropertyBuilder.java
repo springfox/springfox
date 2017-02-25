@@ -21,11 +21,13 @@ package springfox.documentation.swagger.schema;
 
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import static springfox.documentation.schema.Annotations.*;
@@ -34,6 +36,13 @@ import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlugin {
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public ApiModelPropertyPropertyBuilder(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
+  
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<ApiModelProperty> annotation = Optional.absent();
@@ -50,7 +59,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
           .allowableValues(annotation.transform(toAllowableValues()).orNull())
           .required(annotation.transform(toIsRequired()).or(false))
           .readOnly(annotation.transform(toIsReadOnly()).or(false))
-          .description(annotation.transform(toDescription()).orNull())
+          .description(annotation.transform(toDescription(descriptions)).orNull())
           .isHidden(annotation.transform(toHidden()).or(false))
           .type(annotation.transform(toType(context.getResolver())).orNull())
           .position(annotation.transform(toPosition()).or(0))

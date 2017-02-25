@@ -31,6 +31,6 @@ dependencies {
   provided libs.springProvided
   provided 'javax.validation:validation-api:1.1.0.Final'
 
-  testCompile project(':springfox-core')
   testCompile libs.test
+  testCompile project(':springfox-schema')
 }

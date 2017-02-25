@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.bean.validators.plugins
+package springfox.bean.validators.plugins.schema
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.PatternTestModel
+import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext

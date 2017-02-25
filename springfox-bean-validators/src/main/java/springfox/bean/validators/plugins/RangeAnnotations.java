@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,72 +16,65 @@
  *
  *
  */
+
 package springfox.bean.validators.plugins;
 
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import springfox.documentation.service.AllowableRangeValues;
-import springfox.documentation.service.AllowableValues;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
-import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+public class RangeAnnotations {
+  private static final Logger LOG = LoggerFactory.getLogger(RangeAnnotations.class);
 
-@Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
-
-  private static final Logger LOG = LoggerFactory.getLogger(MinMaxAnnotationPlugin.class);
-
-  @Override
-  public boolean supports(DocumentationType delimiter) {
-    // we simply support all documentationTypes!
-    return true;
+  private RangeAnnotations() {
+    throw new UnsupportedOperationException();
   }
 
-  @Override
-  public void apply(ModelPropertyContext context) {
-    Optional<Min> min = extractAnnotation(context, Min.class);
-    Optional<Max> max = extractAnnotation(context, Max.class);
-
-    // add support for @Min/@Max
-    context.getBuilder().allowableValues(createAllowableValuesFromMinMaxForNumbers(min, max));
+  public static AllowableRangeValues stringLengthRange(Size size) {
+    LOG.debug("@Size detected: adding MinLength/MaxLength to field");
+    return new AllowableRangeValues(minValue(size), maxValue(size));
   }
 
-  private AllowableValues createAllowableValuesFromMinMaxForNumbers(Optional<Min> min, Optional<Max> max) {
-    AllowableRangeValues allowableValues = null;
+  private static String minValue(Size size) {
+    return String.valueOf(Math.max(size.min(), 0));
+  }
+
+  private static String maxValue(Size size) {
+    return String.valueOf(Math.max(0, Math.min(size.max(), Integer.MAX_VALUE)));
+  }
+
+  public static AllowableRangeValues allowableRange(Optional<Min> min, Optional<Max> max) {
+    AllowableRangeValues myvalues = null;
 
     if (min.isPresent() && max.isPresent()) {
       LOG.debug("@Min+@Max detected: adding AllowableRangeValues to field ");
-      allowableValues = new AllowableRangeValues(
+      myvalues = new AllowableRangeValues(
           Double.toString(min.get().value()),
           false,
           Double.toString(max.get().value()),
           false);
+
     } else if (min.isPresent()) {
       LOG.debug("@Min detected: adding AllowableRangeValues to field ");
-      allowableValues = new AllowableRangeValues(
+      myvalues = new AllowableRangeValues(
           Double.toString(min.get().value()),
           false,
           null,
           null);
+
     } else if (max.isPresent()) {
       LOG.debug("@Max detected: adding AllowableRangeValues to field ");
-      allowableValues = new AllowableRangeValues(
+      myvalues = new AllowableRangeValues(
           null,
           null,
           Double.toString(max.get().value()),
           false);
     }
-    return allowableValues;
+    return myvalues;
   }
-
-
 }

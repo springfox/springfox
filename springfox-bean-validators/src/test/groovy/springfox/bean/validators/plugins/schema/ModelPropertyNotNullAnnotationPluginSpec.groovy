@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.bean.validators.plugins
+package springfox.bean.validators.plugins.schema
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -24,11 +24,12 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.NullablityTestModel
+import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
-class NotNullAnnotationPluginSpec extends Specification {
+class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
       new NotNullAnnotationPlugin().supports(types)

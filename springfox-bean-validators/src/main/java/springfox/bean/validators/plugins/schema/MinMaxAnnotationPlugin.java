@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2016-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,22 +16,26 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.validators.plugins.schema;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import static springfox.bean.validators.plugins.RangeAnnotations.*;
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
+@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
+public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
@@ -41,8 +45,20 @@ public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<NotNull> notNull = extractAnnotation(context, NotNull.class);
-    context.getBuilder().required(notNull.isPresent());
+    Optional<Min> min = extractMin(context);
+    Optional<Max> max = extractMax(context);
+
+    // add support for @Min/@Max
+    context.getBuilder().allowableValues(allowableRange(min, max));
   }
 
+  @VisibleForTesting
+  Optional<Min> extractMin(ModelPropertyContext context) {
+    return annotationFromBean(context, Min.class).or(annotationFromField(context, Min.class));
+  }
+
+  @VisibleForTesting
+  Optional<Max> extractMax(ModelPropertyContext context) {
+    return annotationFromBean(context, Max.class).or(annotationFromField(context, Max.class));
+  }
 }

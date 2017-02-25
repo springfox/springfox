@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
 import com.google.common.collect.ImmutableSet
 import org.joda.time.LocalDate
+import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -36,6 +37,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
+import springfox.documentation.spring.web.DescriptionResolver
 
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.DocumentationType.*
@@ -44,6 +46,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([ConfiguredObjectMapperSupport, AlternateTypesSupport, SchemaPluginsSupport])
 class ApiModelPropertyPropertyBuilderSpec extends Specification {
   BeanDescription beanDescription
+  def descriptions = new DescriptionResolver(new MockEnvironment())
 
   def setup() {
     beanDescription = beanDescription(TypeWithAnnotatedGettersAndSetters)
@@ -60,7 +63,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
   def "ApiModelProperty annotated models get enriched with additional info given a bean property" (){
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
       def properties = beanDescription.findProperties()
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
@@ -88,7 +91,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
   def "ApiModelProperty annotated models get enriched with additional info given an annotated element" (){
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
       def properties = beanDescription.findProperties()
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
@@ -117,7 +120,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
   def "ApiModelProperties marked as hidden properties are respected" (){
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
       def properties = beanDescription.findProperties()
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
@@ -140,7 +143,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
   def "Supports ApiModelProperty annotated models with dataType overrides" (){
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
       def properties = beanDescription.findProperties()
 
       def resolver = new TypeResolver()
@@ -176,7 +179,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
   def "Supports ApiModelProperty annotated models with dataType overrides but protects specific types" (){
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder()
+      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
       def properties = beanDescription.findProperties()
 
       def resolver = new TypeResolver()

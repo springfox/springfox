@@ -19,15 +19,20 @@
 
 package springfox.documentation.swagger.readers.operation
 
+import org.springframework.mock.env.MockEnvironment
+import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport])
 class OperationCommandReaderSpec extends DocumentationContextSpec {
   private static final int CURRENT_COUNT = 3
+  @Shared
+  def descriptions = new DescriptionResolver(new MockEnvironment())
 
   @Unroll("property #property expected: #expected")
   def "should set various properties based on method name or swagger annotation"() {
@@ -46,11 +51,11 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_12)
       sut.supports(DocumentationType.SWAGGER_2)
     where:
-      sut                             | property     | handlerMethod                              | expected
-      new OperationSummaryReader()    | 'summary'    | dummyHandlerMethod('methodWithSummary')    | 'summary'
-      new OperationHiddenReader()     | 'hidden'     | dummyHandlerMethod('methodThatIsHidden')   | true
-      new OperationHiddenReader()     | 'hidden'     | dummyHandlerMethod('dummyMethod')          | false
-      new OperationNotesReader()      | 'notes'      | dummyHandlerMethod('methodWithNotes')      | 'some notes'
-      new OperationPositionReader()   | 'position'   | dummyHandlerMethod('methodWithPosition')   | 5
+      sut                                      | property   | handlerMethod                            | expected
+      new OperationSummaryReader(descriptions) | 'summary'  | dummyHandlerMethod('methodWithSummary')  | 'summary'
+      new OperationHiddenReader()              | 'hidden'   | dummyHandlerMethod('methodThatIsHidden') | true
+      new OperationHiddenReader()              | 'hidden'   | dummyHandlerMethod('dummyMethod')        | false
+      new OperationNotesReader(descriptions)   | 'notes'    | dummyHandlerMethod('methodWithNotes')    | 'some notes'
+      new OperationPositionReader()            | 'position' | dummyHandlerMethod('methodWithPosition') | 5
   }
 }

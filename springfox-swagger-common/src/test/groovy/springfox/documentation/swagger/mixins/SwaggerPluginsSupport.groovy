@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,12 +20,14 @@
 package springfox.documentation.swagger.mixins
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.PluginRegistry
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.service.DefaultsProviderPlugin
+import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
 import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
@@ -35,8 +37,8 @@ import springfox.documentation.swagger.readers.operation.SwaggerOperationModelsP
 import springfox.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder
 import springfox.documentation.swagger.schema.ApiModelBuilder
 import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
-import springfox.documentation.swagger.web.SwaggerApiListingReader
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
+import springfox.documentation.swagger.web.SwaggerApiListingReader
 
 import static com.google.common.collect.Lists.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
@@ -44,8 +46,9 @@ import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 @SuppressWarnings("GrMethodMayBeStatic")
 class SwaggerPluginsSupport {
   SchemaPluginsManager swaggerSchemaPlugins() {
+    def descriptions = new DescriptionResolver(new MockEnvironment())
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        create(newArrayList(new ApiModelPropertyPropertyBuilder()))
+        create(newArrayList(new ApiModelPropertyPropertyBuilder(descriptions)))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
         create(newArrayList(new ApiModelBuilder(new TypeResolver())))
@@ -58,8 +61,9 @@ class SwaggerPluginsSupport {
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new SwaggerApiListingReader()))
     plugins.documentationPlugins = create([])
+    def descriptions = new DescriptionResolver(new MockEnvironment())
     plugins.parameterExpanderPlugins =
-        create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder()])
+        create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder(descriptions)])
     plugins.parameterPlugins = create([new ParameterNameReader(),
                                        new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])

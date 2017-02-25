@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2015 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,30 +16,31 @@
  *
  *
  */
-package springfox.bean.validators.plugins
+package springfox.bean.validators.plugins.schema
 
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.bean.validators.plugins.models.DecimalMinMaxTestModel
+import springfox.bean.validators.plugins.models.MinMaxTestModel
+import springfox.bean.validators.plugins.schema.MinMaxAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
-class DecimalMinMaxAnnotationPluginSpec extends Specification {
+class MinMaxAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
-      new DecimalMinMaxAnnotationPlugin().supports(types)
+      new MinMaxAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@DecimalMin/@DecimalMax annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
+  def "@Min/@Max annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
     given:
-      def sut = new DecimalMinMaxAnnotationPlugin()
-      def element = DecimalMinMaxTestModel.getDeclaredField(propertyName)
+      def sut = new MinMaxAnnotationPlugin()
+      def element = MinMaxTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
           element,
@@ -57,11 +58,8 @@ class DecimalMinMaxAnnotationPluginSpec extends Specification {
     where:
       propertyName      | expectedMin | exclusiveMin | expectedMax                 | exclusiveMax
       "noAnnotation"    | null        | null         | null                        | null
-      "onlyMin"         | "10.5"      | false        | null                        | null
-      "onlyMax"         | null        | null         | "20.5"                      | false
-      "both"            | "10.5"      | false        | "20.5"                      | false
-      "minExclusive"    | "10.5"      | true         | null                        | null
-      "maxExclusive"    | null        | null         | "20.5"                      | true
-      "bothExclusive"   | "10.5"      | true         | "20.5"                      | true
+      "onlyMin"         | "10.0"      | false        | null                        | null
+      "onlyMax"         | null        | null         | "20.0"                      | false
+      "both"            | "10.0"      | false        | "20.0"                      | false
   }
 }

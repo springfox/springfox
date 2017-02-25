@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
+import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -32,6 +33,7 @@ import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
+import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -81,7 +83,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
               Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation);
+      ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation)
       operationCommand.apply(parameterContext)
       AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     then:
@@ -131,7 +133,8 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   }
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder() {
+    def descriptions = new DescriptionResolver(new MockEnvironment())
+    new ApiParamParameterBuilder(descriptions) {
     }
   }
 

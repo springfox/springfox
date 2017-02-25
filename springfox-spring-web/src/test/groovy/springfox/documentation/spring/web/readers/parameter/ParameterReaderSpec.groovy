@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -75,13 +75,13 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       parameterContext.parameterBuilder().build()."$resultProperty" == expected
       parameterContext.parameterBuilder().build().description == expected
     where:
-      parameterPlugin                     | resultProperty | methodName   | expected
-      new ParameterNameReader()           | 'name'         | "method1"    | 'someName'
-      new ParameterNameReader()           | 'name'         | "method2"    | 'someName'
-      new ParameterNameReader()           | 'name'         | "method3"    | 'ArName'
-      new ParameterNameReader()           | 'name'         | "method4"    | 'header'
-      new ParameterNameReader()           | 'name'         | "method5"    | 'modelAttr'
-      new ParameterNameReader()           | 'name'         | "method6"    | 'pathVar'
+      parameterPlugin           | resultProperty | methodName | expected
+      new ParameterNameReader() | 'name'         | "method1"  | 'someName'
+      new ParameterNameReader() | 'name'         | "method2"  | 'someName'
+      new ParameterNameReader() | 'name'         | "method3"  | 'ArName'
+      new ParameterNameReader() | 'name'         | "method4"  | 'header'
+      new ParameterNameReader() | 'name'         | "method5"  | 'modelAttr'
+      new ParameterNameReader() | 'name'         | "method6"  | 'pathVar'
   }
 
   class ParamNameClazzSpecimen {

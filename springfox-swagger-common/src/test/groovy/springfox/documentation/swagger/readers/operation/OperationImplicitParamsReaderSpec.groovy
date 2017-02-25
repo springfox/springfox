@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@
 package springfox.documentation.swagger.readers.operation
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.mock.env.MockEnvironment
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -44,8 +46,9 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
       expander.pluginsManager = plugins
       OperationParameterReader sut = new OperationParameterReader(expander)
       sut.pluginsManager = plugins
-      OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader()
-      OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader()
+      def env = new DescriptionResolver(new MockEnvironment())
+      OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader(env)
+      OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader(env)
     when:
       sut.apply(operationContext)
       operationImplicitParametersReader.apply(operationContext)

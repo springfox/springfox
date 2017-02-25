@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,30 +22,36 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.spi.service.contexts.ParameterContext;
+import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class BeanValidators {
-  public final static int BEAN_VALIDATOR_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
+/**
+ * Utility methods for Validators
+ */
+public class Validators {
+  public static final int BEAN_VALIDATOR_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
 
-  private BeanValidators() {
+  private Validators() {
     throw new UnsupportedOperationException();
   }
 
   public static <T extends Annotation> Optional<T> extractAnnotation(
-          ModelPropertyContext context,
-          Class<T> annotationType) {
-    return validatorFromBean(context, annotationType)
-            .or(validatorFromField(context, annotationType));
+      ModelPropertyContext context,
+      Class<T> annotationType) {
+    return annotationFromBean(context, annotationType)
+        .or(annotationFromField(context, annotationType));
   }
 
-  public static <T extends Annotation> Optional<T> validatorFromBean(
-          ModelPropertyContext context,
-          Class<T> annotationType) {
+  public static <T extends Annotation> Optional<T> annotationFromBean(
+      ModelPropertyContext context,
+      Class<T> annotationType) {
 
     Optional<BeanPropertyDefinition> propertyDefinition = context.getBeanPropertyDefinition();
     Optional<T> notNull = Optional.absent();
@@ -58,10 +64,26 @@ public class BeanValidators {
     return notNull;
   }
 
-  public static <T extends Annotation> Optional<T> validatorFromField(
-          ModelPropertyContext context,
-          Class<T> annotationType) {
+  public static <T extends Annotation> Optional<T> annotationFromField(
+      ModelPropertyContext context,
+      Class<T> annotationType) {
     return findAnnotation(context.getAnnotatedElement(), annotationType);
+  }
+
+  public static <T extends Annotation> Optional<T> annotationFromParameter(
+      ParameterContext context,
+      Class<T> annotationType) {
+
+    ResolvedMethodParameter methodParam = context.resolvedMethodParameter();
+    return methodParam.findAnnotation(annotationType);
+  }
+
+  public static <T extends Annotation> Optional<T> validatorFromExpandedParameter(
+      ParameterExpansionContext context,
+      Class<T> annotationType) {
+
+    Field field = context.getField().getRawMember();
+    return Optional.fromNullable(field.getAnnotation(annotationType));
   }
 
   private static Optional<Field> extractFieldFromPropertyDefinition(BeanPropertyDefinition propertyDefinition) {
@@ -79,8 +101,8 @@ public class BeanValidators {
   }
 
   private static <T extends Annotation> Optional<T> findAnnotation(
-          Optional<? extends AnnotatedElement> annotatedElement,
-          Class<T> annotationType) {
+      Optional<? extends AnnotatedElement> annotatedElement,
+      Class<T> annotationType) {
     if (annotatedElement.isPresent()) {
       return Optional.fromNullable(AnnotationUtils.findAnnotation(annotatedElement.get(), annotationType));
     } else {

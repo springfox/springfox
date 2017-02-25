@@ -18,7 +18,7 @@ import java.lang.reflect.AnnotatedElement
 class BeanValidatorsSpec extends Specification {
   def "Cannot instantiate" () {
     when:
-      new BeanValidators()
+      new Validators()
     then:
       thrown(UnsupportedOperationException)
   }
@@ -30,7 +30,7 @@ class BeanValidatorsSpec extends Specification {
             (AnnotatedElement) null,
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
-      def annotation = BeanValidators.extractAnnotation(context, NotNull)
+      def annotation = Validators.extractAnnotation(context, NotNull)
     then:
       !annotation.isPresent()
   }
@@ -42,7 +42,7 @@ class BeanValidatorsSpec extends Specification {
             Mock(BeanPropertyDefinition),
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
-      def annotation = BeanValidators.extractAnnotation(context, NotNull)
+      def annotation = Validators.extractAnnotation(context, NotNull)
     then:
       !annotation.isPresent()
   }
@@ -57,7 +57,7 @@ class BeanValidatorsSpec extends Specification {
               new TypeResolver(),
               DocumentationType.SWAGGER_12)
     when:
-      def annotation = BeanValidators.extractAnnotation(context, NotNull)
+      def annotation = Validators.extractAnnotation(context, NotNull)
     then:
       annotation.isPresent() == present
     where:
@@ -81,7 +81,7 @@ class BeanValidatorsSpec extends Specification {
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
     when:
-      def annotation = BeanValidators.extractAnnotation(context, NotNull)
+      def annotation = Validators.extractAnnotation(context, NotNull)
     then:
       annotation.isPresent() == present
     where:
@@ -105,7 +105,7 @@ class BeanValidatorsSpec extends Specification {
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
     when:
-      def annotation = BeanValidators.extractAnnotation(context, Pattern)
+      def annotation = Validators.extractAnnotation(context, Pattern)
     then:
       def value = annotation.isPresent() ? annotation.get().regexp() : null
       value == overriddenValue
@@ -125,7 +125,7 @@ class BeanValidatorsSpec extends Specification {
             new TypeResolver(),
             DocumentationType.SWAGGER_12)
     when:
-      def annotation = BeanValidators.extractAnnotation(context, Pattern)
+      def annotation = Validators.extractAnnotation(context, Pattern)
     then:
       def value = annotation.isPresent() ? annotation.get().regexp() : null
       value == overriddenValue

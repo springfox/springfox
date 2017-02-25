@@ -76,6 +76,7 @@ class ExpandedParameterBuilderSpec extends Specification {
       }
     }
   }
+
   class A {
     public List<ExampleEnum> enums;
     public List<String> strings;
