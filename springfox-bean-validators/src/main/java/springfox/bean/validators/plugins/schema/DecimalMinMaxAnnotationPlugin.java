@@ -16,13 +16,14 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.validators.plugins.schema;
 
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -32,10 +33,10 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
+@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class DecimalMinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(DecimalMinMaxAnnotationPlugin.class);

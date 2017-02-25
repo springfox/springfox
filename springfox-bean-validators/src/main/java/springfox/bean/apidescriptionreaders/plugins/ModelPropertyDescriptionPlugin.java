@@ -18,7 +18,6 @@
  */
 package springfox.bean.apidescriptionreaders.plugins;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
@@ -31,19 +30,17 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
-//@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
 @Order(Ordered.LOWEST_PRECEDENCE)
-public class ModelPropertyDescriptionKeysAnnotationPlugin implements ModelPropertyBuilderPlugin {
+public class ModelPropertyDescriptionPlugin implements ModelPropertyBuilderPlugin {
+  private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyDescriptionPlugin.class);
 
-  private static final Logger LOG = LoggerFactory.getLogger(ModelPropertyDescriptionKeysAnnotationPlugin.class);
-
-  private final ApiDescriptionPropertiesReader propertiesReader;
+  private final DescriptionResolver propertiesReader;
 
   @Autowired
-  public ModelPropertyDescriptionKeysAnnotationPlugin(ApiDescriptionPropertiesReader propertiesReader) {
+  public ModelPropertyDescriptionPlugin(DescriptionResolver propertiesReader) {
     this.propertiesReader = propertiesReader;
   }
 
@@ -55,25 +52,14 @@ public class ModelPropertyDescriptionKeysAnnotationPlugin implements ModelProper
 
   @Override
   public void apply(ModelPropertyContext context) {
-    LOG.info("apply model property");
-    Optional<ApiModelProperty> apiDescription = extractAnnotation(context);
+    Optional<ApiModelProperty> apiModelProperty = annotationFromBean(context, ApiModelProperty.class)
+        .or(annotationFromField(context, ApiModelProperty.class));
 
-    if (apiDescription.isPresent()) {
-      ApiModelProperty apiModelProperty = apiDescription.get();
-
-      String descriptionValue = apiModelProperty.value();
-      LOG.info("*** searching for key: " + descriptionValue);
-      String description = propertiesReader.getProperty(descriptionValue);
-
-      if (description != null) {
-        context.getBuilder().description(description);
-      }
+    if (apiModelProperty.isPresent()) {
+      ApiModelProperty annotation = apiModelProperty.get();
+      String key = annotation.value();
+      LOG.debug("Searching for description with key: {}", key);
+      context.getBuilder().description(propertiesReader.resolve(key));
     }
-
-  }
-
-  @VisibleForTesting
-  Optional<ApiModelProperty> extractAnnotation(ModelPropertyContext context) {
-    return validatorFromBean(context, ApiModelProperty.class).or(validatorFromField(context, ApiModelProperty.class));
   }
 }

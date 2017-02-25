@@ -22,7 +22,10 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Optional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.spi.service.contexts.ParameterContext;
+import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -30,23 +33,23 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * Utility methods for BeanValidators
+ * Utility methods for Validators
  */
-public class BeanValidators {
-  public final static int BEAN_VALIDATOR_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
+public class Validators {
+  public static final int BEAN_VALIDATOR_PLUGIN_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
 
-  private BeanValidators() {
+  private Validators() {
     throw new UnsupportedOperationException();
   }
 
   public static <T extends Annotation> Optional<T> extractAnnotation(
       ModelPropertyContext context,
       Class<T> annotationType) {
-    return validatorFromBean(context, annotationType)
-        .or(validatorFromField(context, annotationType));
+    return annotationFromBean(context, annotationType)
+        .or(annotationFromField(context, annotationType));
   }
 
-  public static <T extends Annotation> Optional<T> validatorFromBean(
+  public static <T extends Annotation> Optional<T> annotationFromBean(
       ModelPropertyContext context,
       Class<T> annotationType) {
 
@@ -61,10 +64,26 @@ public class BeanValidators {
     return notNull;
   }
 
-  public static <T extends Annotation> Optional<T> validatorFromField(
+  public static <T extends Annotation> Optional<T> annotationFromField(
       ModelPropertyContext context,
       Class<T> annotationType) {
     return findAnnotation(context.getAnnotatedElement(), annotationType);
+  }
+
+  public static <T extends Annotation> Optional<T> annotationFromParameter(
+      ParameterContext context,
+      Class<T> annotationType) {
+
+    ResolvedMethodParameter methodParam = context.resolvedMethodParameter();
+    return methodParam.findAnnotation(annotationType);
+  }
+
+  public static <T extends Annotation> Optional<T> validatorFromExpandedParameter(
+      ParameterExpansionContext context,
+      Class<T> annotationType) {
+
+    Field field = context.getField().getRawMember();
+    return Optional.fromNullable(field.getAnnotation(annotationType));
   }
 
   private static Optional<Field> extractFieldFromPropertyDefinition(BeanPropertyDefinition propertyDefinition) {

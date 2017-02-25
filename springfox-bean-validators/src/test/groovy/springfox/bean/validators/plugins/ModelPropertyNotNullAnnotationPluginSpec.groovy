@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.NullablityTestModel
+import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
@@ -31,7 +32,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
   def "Always supported" () {
     expect:
-      new ModelPropertyNotNullAnnotationPlugin().supports(types)
+      new NotNullAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
@@ -39,7 +40,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
   @Unroll
   def "@NotNull annotations are reflected in the model properties that are AnnotatedElements"()  {
     given:
-      def sut = new ModelPropertyNotNullAnnotationPlugin()
+      def sut = new NotNullAnnotationPlugin()
       def element = NullablityTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
@@ -62,7 +63,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
   @Unroll
   def "@NotNull annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
     given:
-      def sut = new ModelPropertyNotNullAnnotationPlugin()
+      def sut = new NotNullAnnotationPlugin()
       def beanProperty = beanProperty(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),

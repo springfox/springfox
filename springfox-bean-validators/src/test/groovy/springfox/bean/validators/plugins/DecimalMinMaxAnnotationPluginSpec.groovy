@@ -22,6 +22,7 @@ import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.DecimalMinMaxTestModel
+import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType

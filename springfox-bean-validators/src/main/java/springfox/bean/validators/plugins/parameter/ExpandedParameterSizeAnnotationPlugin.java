@@ -16,14 +16,14 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.plugins.Validators;
 import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
@@ -31,41 +31,15 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Size;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import static springfox.bean.validators.plugins.Validators.*;
+
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
+@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterSizeAnnotationPlugin.class);
-
-  public static <T extends Annotation> Optional<T> validatorFromBean(
-      ParameterExpansionContext context, Class<T>
-      annotationType) {
-
-    Optional<T> notNull = Optional.absent();
-    // if (propertyDefinition.isPresent()) {
-    // notNull = annotationFrom(propertyDefinition.get().getGetter(),
-    // annotationType)
-    // .or(annotationFrom(propertyDefinition.get().getField(),
-    // annotationType));
-    // }
-    return notNull;
-  }
-
-  public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T>
-      annotationType) {
-
-    Field field = context.getField().getRawMember();
-    Optional<T> notNull = Optional.absent();
-    if (field != null) {
-      LOG.debug("Annotation size present for " + field.getName() + "!!");
-      notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-    }
-
-    return notNull;
-  }
 
   @Override
   public boolean supports(DocumentationType delimiter) {
@@ -79,7 +53,8 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
     Field myfield = context.getField().getRawMember();
     LOG.debug("expandedparam.myfield: " + myfield.getName());
 
-    Optional<Size> size = extractAnnotation(context);
+    Optional<Size> size = validatorFromExpandedParameter(context, Size.class)
+        .or(validatorFromExpandedParameter(context, Size.class));
 
     if (size.isPresent()) {
       AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
@@ -87,14 +62,6 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
       values = new AllowableRangeValues(values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);
-
     }
   }
-
-  @VisibleForTesting
-  Optional<Size> extractAnnotation(ParameterExpansionContext context) {
-
-    return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
-  }
-
 }

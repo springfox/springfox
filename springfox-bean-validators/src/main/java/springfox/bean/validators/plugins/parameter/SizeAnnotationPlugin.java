@@ -16,15 +16,14 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.plugins.Validators;
 import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
@@ -32,30 +31,14 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import javax.validation.constraints.Size;
-import java.lang.annotation.Annotation;
+
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class ParameterSizeAnnotationPlugin implements ParameterBuilderPlugin {
+@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
+public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ParameterSizeAnnotationPlugin.class);
-
-  public static <T extends Annotation> Optional<T> validatorFromField(
-      ParameterContext context,
-      Class<T> annotationType) {
-
-    MethodParameter methodParam = context.methodParameter();
-    LOG.debug("methodParam.index: " + methodParam.getParameterIndex());
-    LOG.debug("methodParam.name: " + methodParam.getParameterName());
-
-
-    T annotatedElement = methodParam.getParameterAnnotation(annotationType);
-    Optional<T> notNull = Optional.absent();
-    if (annotatedElement != null) {
-      notNull = Optional.fromNullable(annotatedElement);
-    }
-    return notNull;
-  }
+  private static final Logger LOG = LoggerFactory.getLogger(SizeAnnotationPlugin.class);
 
   @Override
   public boolean supports(DocumentationType delimiter) {
@@ -65,22 +48,20 @@ public class ParameterSizeAnnotationPlugin implements ParameterBuilderPlugin {
 
   @Override
   public void apply(ParameterContext context) {
-    Optional<Size> size = extractAnnotation(context);
+    Optional<Size> size = annotationFromParameter(context, Size.class);
     LOG.info("searching for @size: " + size.isPresent());
     if (size.isPresent()) {
       AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
-      LOG.info("adding allowable Values @Size: " + values.getMin() + " - " + values.getMax());
+      LOG.info(String.format("adding allowable Values @Size: %s - %s", values.getMin(), values.getMax()));
       context.parameterBuilder().allowableValues(values);
 
       // TODO Additionally show @Size in the description until https://github.com/springfox/springfox/issues/1244
       // gets fixed
-      context.parameterBuilder().description("@Size: " + values.getMin() + " - " + values.getMax() + " (until #1244 "
-          + "gets fixed)");
+      context.parameterBuilder()
+          .description(
+              String.format("@Size: %s - %s (until #1244 gets fixed)",
+                  values.getMin(),
+                  values.getMax()));
     }
-  }
-
-  @VisibleForTesting
-  Optional<Size> extractAnnotation(ParameterContext context) {
-    return validatorFromField(context, Size.class);
   }
 }

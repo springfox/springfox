@@ -16,52 +16,28 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.NotNull;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import static springfox.bean.validators.plugins.Validators.*;
+
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
+@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParameterBuilderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(ExpandedParameterNotNullAnnotationPlugin.class);
-
-  public static <T extends Annotation> Optional<T> validatorFromBean(ParameterExpansionContext context, Class<T>
-      annotationType) {
-
-    Field field = context.getField().getRawMember();
-
-    Optional<T> notNull = Optional.absent();
-    if (field != null) {
-      notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-    }
-    return notNull;
-  }
-
-  public static <T extends Annotation> Optional<T> validatorFromField(ParameterExpansionContext context, Class<T>
-      annotationType) {
-
-    Field field = context.getField().getRawMember();
-    Optional<T> notNull = Optional.absent();
-    if (field != null) {
-      LOG.debug("Annotation size present for field " + field.getName() + "!!");
-      notNull = Optional.fromNullable(field.getAnnotation(annotationType));
-    }
-
-    return notNull;
-  }
 
   @Override
   public boolean supports(DocumentationType delimiter) {
@@ -74,18 +50,12 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
     Field myfield = context.getField().getRawMember();
     LOG.debug("myfield: " + myfield.getName());
 
-    Optional<NotNull> size = extractAnnotation(context);
+    Optional<NotNull> size = validatorFromExpandedParameter(context, NotNull.class);
 
     if (size.isPresent()) {
       LOG.info("myfield: " + myfield.getName() + " set to required!!");
       context.getParameterBuilder().required(true);
 
     }
-  }
-
-  @VisibleForTesting
-  Optional<NotNull> extractAnnotation(ParameterExpansionContext context) {
-
-    return validatorFromBean(context, NotNull.class).or(validatorFromField(context, NotNull.class));
   }
 }

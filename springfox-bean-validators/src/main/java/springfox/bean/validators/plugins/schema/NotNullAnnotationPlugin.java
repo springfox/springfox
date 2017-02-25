@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2016-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,24 +16,25 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.validators.plugins.schema;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.bean.validators.util.SizeUtil;
+import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
+@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
+public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
+
   /**
    * support all documentationTypes
    */
@@ -44,26 +45,16 @@ public class ModelPropertySizeAnnotationPlugin implements ModelPropertyBuilderPl
   }
 
   /**
-   * read Size annotation
+   * read NotNull annotation
    */
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Size> size = extractAnnotation(context);
-
-
-    if (size.isPresent()) {
-      context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
-    }
+    Optional<NotNull> notNull = extractAnnotation(context);
+    context.getBuilder().required(notNull.isPresent());
   }
 
-  /**
-   * extract Size from bean or field
-   *
-   * @param context
-   * @return
-   */
   @VisibleForTesting
-  Optional<Size> extractAnnotation(ModelPropertyContext context) {
-    return validatorFromBean(context, Size.class).or(validatorFromField(context, Size.class));
+  Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
+    return annotationFromBean(context, NotNull.class).or(annotationFromField(context, NotNull.class));
   }
 }

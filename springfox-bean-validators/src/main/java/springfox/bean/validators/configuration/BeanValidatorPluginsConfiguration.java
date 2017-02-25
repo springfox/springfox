@@ -20,11 +20,11 @@ package springfox.bean.validators.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.bean.validators.plugins.DecimalMinMaxAnnotationPlugin;
-import springfox.bean.validators.plugins.MinMaxAnnotationPlugin;
-import springfox.bean.validators.plugins.ModelPropertyNotNullAnnotationPlugin;
-import springfox.bean.validators.plugins.PatternAnnotationPlugin;
-import springfox.bean.validators.plugins.SizeAnnotationPlugin;
+import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.schema.MinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin;
+import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin;
+import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin;
 
 @Configuration
 public class BeanValidatorPluginsConfiguration {
@@ -53,8 +53,8 @@ public class BeanValidatorPluginsConfiguration {
      * @return
      */
   @Bean
-  public ModelPropertyNotNullAnnotationPlugin notNullPlugin() {
-    return new ModelPropertyNotNullAnnotationPlugin();
+  public NotNullAnnotationPlugin notNullPlugin() {
+    return new NotNullAnnotationPlugin();
   }
 
   @Bean

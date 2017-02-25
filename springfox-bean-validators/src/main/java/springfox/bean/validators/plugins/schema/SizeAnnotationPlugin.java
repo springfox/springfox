@@ -16,25 +16,25 @@
  *
  *
  */
-package springfox.bean.validators.plugins;
+package springfox.bean.validators.plugins.schema;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.bean.validators.util.MinMaxUtil;
+import springfox.bean.validators.plugins.Validators;
+import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
-import static springfox.bean.validators.plugins.BeanValidators.*;
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
-@Order(BeanValidators.BEAN_VALIDATOR_PLUGIN_ORDER)
-public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
+@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
+public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public boolean supports(DocumentationType delimiter) {
@@ -44,20 +44,15 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<Min> min = extractMin(context);
-    Optional<Max> max = extractMax(context);
+    Optional<Size> size = extractAnnotation(context);
 
-    // add support for @Min/@Max
-    context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
+    if (size.isPresent()) {
+      context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
+    }
   }
 
   @VisibleForTesting
-  Optional<Min> extractMin(ModelPropertyContext context) {
-    return validatorFromBean(context, Min.class).or(validatorFromField(context, Min.class));
-  }
-
-  @VisibleForTesting
-  Optional<Max> extractMax(ModelPropertyContext context) {
-    return validatorFromBean(context, Max.class).or(validatorFromField(context, Max.class));
+  Optional<Size> extractAnnotation(ModelPropertyContext context) {
+    return annotationFromBean(context, Size.class).or(annotationFromField(context, Size.class));
   }
 }

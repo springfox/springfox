@@ -41,15 +41,15 @@ public class AnnotatedFieldsHelperClass {
     public static final String FIELD_SIZE = "size";
 
     @AssertFalse
-    @ApiParam
+    @ApiParam(value = "${assertFalse}")
     private Boolean assertFalse;
 
     @AssertTrue
-    @ApiParam(value = FIELD_ASSERT_FALSE)
+    @ApiParam(value = FIELD_ASSERT_TRUE)
     private Boolean assertTrue;
 
     @DecimalMax(value = "1")
-    @ApiParam(value = FIELD_ASSERT_TRUE)
+    @ApiParam(value = FIELD_DECIMAL_MAX)
     private Double decimalMax;
 
     @DecimalMin(value = "1")
@@ -57,11 +57,11 @@ public class AnnotatedFieldsHelperClass {
     private Double decimalMin;
 
     @Digits(integer = 1, fraction = 0)
-    @ApiModelProperty(value = FIELD_DIGITS)
+    @ApiModelProperty(value = "${digits}")
     private Double digits;
 
     @Future
-    @ApiModelProperty(value = FIELD_PAST)
+    @ApiModelProperty(value = "${future}")
     private Date future;
 
     @Max(value = 1)
@@ -84,6 +84,4 @@ public class AnnotatedFieldsHelperClass {
 
     @Size
     private String size;
-
-
 }

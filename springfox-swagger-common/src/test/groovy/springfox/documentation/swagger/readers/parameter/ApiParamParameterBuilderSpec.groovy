@@ -81,7 +81,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
               Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation);
+      ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation)
       operationCommand.apply(parameterContext)
       AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     then:

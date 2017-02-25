@@ -24,11 +24,12 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.PatternAndSizeTestModel
+import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin
+import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
-
 /**
  * @author : ashutosh 
  * 18/05/2016
@@ -39,7 +40,7 @@ class PatternAndSizePluginSpec extends Specification{
   def "@Pattern annotations are reflected in the model properties that are AnnotatedElements"()  {
     given:
     def pat = new PatternAnnotationPlugin()
-    def sat = new ModelPropertySizeAnnotationPlugin()
+    def sat = new SizeAnnotationPlugin()
     def element = PatternAndSizeTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
@@ -65,7 +66,7 @@ class PatternAndSizePluginSpec extends Specification{
   def "@Pattern annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
     given:
     def pat = new PatternAnnotationPlugin()
-    def sat = new ModelPropertySizeAnnotationPlugin()
+    def sat = new SizeAnnotationPlugin()
     def beanProperty = beanProperty(propertyName)
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
