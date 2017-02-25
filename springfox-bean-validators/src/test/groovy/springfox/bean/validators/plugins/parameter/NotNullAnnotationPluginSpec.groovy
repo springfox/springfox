@@ -33,7 +33,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext
 class NotNullAnnotationPluginSpec extends Specification implements AnnotationsSupport {
   def "Always supported" () {
     expect:
-      new SizeAnnotationPlugin().supports(types)
+      new NotNullAnnotationPlugin().supports(types)
     where:
       types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }

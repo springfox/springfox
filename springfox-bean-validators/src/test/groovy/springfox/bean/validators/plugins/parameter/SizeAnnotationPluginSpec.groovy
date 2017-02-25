@@ -64,7 +64,7 @@ class SizeAnnotationPluginSpec extends Specification implements AnnotationsSuppo
         range == null
       }
     where:
-      description                                  | annotation
+      description                                   | annotation
       "null"                                        | null
       "size(0,Integer.MAX_VALUE)"                   | size(0,Integer.MAX_VALUE)
       "size(0, 10)"                                 | size(0, 10)
@@ -72,6 +72,7 @@ class SizeAnnotationPluginSpec extends Specification implements AnnotationsSuppo
       "size(Integer.MAX_VALUE, 0)"                  | size(Integer.MAX_VALUE, 0)
       "size(0, 0)"                                  | size(0, 0)
       "size(0, 0)"                                  | size(0, 0)
+      "size(-10, -5)"                               | size(-10, -5)
       "size(Integer.MAX_VALUE, Integer.MAX_VALUE)"  | size(Integer.MAX_VALUE, Integer.MAX_VALUE)
   }
 }
