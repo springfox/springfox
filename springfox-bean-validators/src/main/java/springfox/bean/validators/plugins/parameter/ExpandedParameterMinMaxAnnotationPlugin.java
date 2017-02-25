@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.bean.validators.util.MinMaxUtil;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -33,6 +32,7 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import static springfox.bean.validators.plugins.RangeAnnotations.*;
 import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
@@ -52,7 +52,7 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
     Optional<Max> max = validatorFromExpandedParameter(context, Max.class);
 
     if (min.isPresent() || max.isPresent()) {
-      AllowableRangeValues values = MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max);
+      AllowableRangeValues values = allowableRange(min, max);
       LOG.debug("Adding allowable range: min({}) - max({}}", values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);
     }

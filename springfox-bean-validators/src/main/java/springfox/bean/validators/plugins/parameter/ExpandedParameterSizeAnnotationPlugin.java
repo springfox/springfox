@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -32,6 +31,7 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Size;
 
+import static springfox.bean.validators.plugins.RangeAnnotations.*;
 import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
@@ -52,7 +52,7 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
         .or(validatorFromExpandedParameter(context, Size.class));
 
     if (size.isPresent()) {
-      AllowableRangeValues values = SizeUtil.createAllowableValuesFromSizeForStrings(size.get());
+      AllowableRangeValues values = stringLengthRange(size.get());
       LOG.debug("Adding allowable Values: {} - {}", values.getMin(), values.getMax());
 
       values = new AllowableRangeValues(values.getMin(), values.getMax());

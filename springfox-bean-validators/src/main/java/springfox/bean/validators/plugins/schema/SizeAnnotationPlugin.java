@@ -23,13 +23,13 @@ import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.bean.validators.util.SizeUtil;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Size;
 
+import static springfox.bean.validators.plugins.RangeAnnotations.*;
 import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
@@ -47,7 +47,7 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
     Optional<Size> size = extractAnnotation(context);
 
     if (size.isPresent()) {
-      context.getBuilder().allowableValues(SizeUtil.createAllowableValuesFromSizeForStrings(size.get()));
+      context.getBuilder().allowableValues(stringLengthRange(size.get()));
     }
   }
 

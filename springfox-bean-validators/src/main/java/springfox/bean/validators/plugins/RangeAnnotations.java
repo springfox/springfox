@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016-2017 the original author or authors.
+ *  Copyright 2017-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
  *
  *
  */
-package springfox.bean.validators.util;
 
+package springfox.bean.validators.plugins;
 
 import com.google.common.base.Optional;
 import org.slf4j.Logger;
@@ -26,11 +26,29 @@ import springfox.documentation.service.AllowableRangeValues;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
-public class MinMaxUtil {
-  private static final Logger LOG = LoggerFactory.getLogger(MinMaxUtil.class);
+public class RangeAnnotations {
+  private static final Logger LOG = LoggerFactory.getLogger(RangeAnnotations.class);
 
-  public static AllowableRangeValues createAllowableValuesFromMinMaxForNumbers(Optional<Min> min, Optional<Max> max) {
+  private RangeAnnotations() {
+    throw new UnsupportedOperationException();
+  }
+
+  public static AllowableRangeValues stringLengthRange(Size size) {
+    LOG.debug("@Size detected: adding MinLength/MaxLength to field");
+    return new AllowableRangeValues(minValue(size), maxValue(size));
+  }
+
+  private static String minValue(Size size) {
+    return String.valueOf(Math.max(size.min(), 0));
+  }
+
+  private static String maxValue(Size size) {
+    return String.valueOf(Math.max(0, Math.min(size.max(), Integer.MAX_VALUE)));
+  }
+
+  public static AllowableRangeValues allowableRange(Optional<Min> min, Optional<Max> max) {
     AllowableRangeValues myvalues = null;
 
     if (min.isPresent() && max.isPresent()) {

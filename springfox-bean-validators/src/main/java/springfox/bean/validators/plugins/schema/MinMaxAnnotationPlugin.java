@@ -23,7 +23,6 @@ import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.bean.validators.util.MinMaxUtil;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
@@ -31,6 +30,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import static springfox.bean.validators.plugins.RangeAnnotations.*;
 import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
@@ -49,7 +49,7 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
     Optional<Max> max = extractMax(context);
 
     // add support for @Min/@Max
-    context.getBuilder().allowableValues(MinMaxUtil.createAllowableValuesFromMinMaxForNumbers(min, max));
+    context.getBuilder().allowableValues(allowableRange(min, max));
   }
 
   @VisibleForTesting
