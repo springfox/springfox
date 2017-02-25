@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public final class ApiModelProperties {
     throw new UnsupportedOperationException();
   }
 
-  public static Function<ApiModelProperty, AllowableValues> toAllowableValues() {
+  static Function<ApiModelProperty, AllowableValues> toAllowableValues() {
     return new Function<ApiModelProperty, AllowableValues>() {
       @Override
       public AllowableValues apply(ApiModelProperty annotation) {
@@ -72,7 +72,7 @@ public final class ApiModelProperties {
     return allowableValues;
   }
 
-  public static Function<ApiModelProperty, Boolean> toIsRequired() {
+  static Function<ApiModelProperty, Boolean> toIsRequired() {
     return new Function<ApiModelProperty, Boolean>() {
       @Override
       public Boolean apply(ApiModelProperty annotation) {
@@ -81,7 +81,7 @@ public final class ApiModelProperties {
     };
   }
 
-  public static Function<ApiModelProperty, Integer> toPosition() {
+  static Function<ApiModelProperty, Integer> toPosition() {
     return new Function<ApiModelProperty, Integer>() {
       @Override
       public Integer apply(ApiModelProperty annotation) {
@@ -90,7 +90,7 @@ public final class ApiModelProperties {
     };
   }
 
-  public static Function<ApiModelProperty, Boolean> toIsReadOnly() {
+  static Function<ApiModelProperty, Boolean> toIsReadOnly() {
     return new Function<ApiModelProperty, Boolean>() {
       @Override
       public Boolean apply(ApiModelProperty annotation) {
@@ -114,7 +114,7 @@ public final class ApiModelProperties {
     };
   }
 
-  public static Function<ApiModelProperty, ResolvedType> toType(final TypeResolver resolver) {
+  static Function<ApiModelProperty, ResolvedType> toType(final TypeResolver resolver) {
     return new Function<ApiModelProperty, ResolvedType>() {
       @Override
       public ResolvedType apply(ApiModelProperty annotation) {
@@ -131,7 +131,7 @@ public final class ApiModelProperties {
     return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
   }
 
-  public static Function<ApiModelProperty, Boolean> toHidden() {
+  static Function<ApiModelProperty, Boolean> toHidden() {
     return new Function<ApiModelProperty, Boolean>() {
       @Override
       public Boolean apply(ApiModelProperty annotation) {
@@ -140,7 +140,7 @@ public final class ApiModelProperties {
     };
   }
 
-  public static Function<ApiModelProperty, String> toExample() {
+  static Function<ApiModelProperty, String> toExample() {
     return new Function<ApiModelProperty, String>() {
       @Override
       public String apply(ApiModelProperty annotation) {
