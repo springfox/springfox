@@ -90,7 +90,6 @@ subprojects {
   }
   task allDeps(type: DependencyReportTask) {}
 
-
   jacocoTestReport {
     reports {
       xml.enabled true
@@ -116,8 +115,8 @@ task codeCoverageReport(type: JacocoReport) {
 
   reports {
     xml.enabled true
-    html.enabled true
-    html.destination "${buildDir}/reports/jacoco"
+    xml.destination "${buildDir}/reports/jacoco/report.xml"
+    html.enabled false
     csv.enabled false
   }
 }
