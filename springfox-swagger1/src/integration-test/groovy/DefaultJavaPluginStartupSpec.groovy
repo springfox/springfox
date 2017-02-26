@@ -33,11 +33,10 @@ import springfox.documentation.swagger1.configuration.DefaultJavaPluginConfig
 
 @WebAppConfiguration
 @ContextConfiguration(classes = DefaultJavaPluginConfig.class)
-@Mixin(JsonSupport)
-class DefaultJavaPluginStartupSpec extends Specification{
+class DefaultJavaPluginStartupSpec extends Specification implements JsonSupport {
 
   @Autowired
-  WebApplicationContext context;
+  WebApplicationContext context
 
   def "Should start app with default java config"() {
     when:
