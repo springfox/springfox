@@ -42,8 +42,9 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 
 import static com.google.common.collect.Maps.*
 
-@Mixin([JsonSupport, ApiListingSupport, AuthSupport])
-class Swagger1ControllerSpec extends DocumentationContextSpec implements MapperSupport {
+@Mixin([ApiListingSupport, AuthSupport])
+class Swagger1ControllerSpec extends DocumentationContextSpec
+    implements MapperSupport, JsonSupport {
 
   Swagger1Controller sut =  new Swagger1Controller(
           new DocumentationCache(),

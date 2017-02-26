@@ -25,15 +25,15 @@ import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.context.WebApplicationContext
 import spock.lang.Specification
 
-@ContextConfiguration("classpath:handler-adapter-context.xml")
 @WebAppConfiguration
-class MultipleRequestMappingHandlerAdaptersSpec extends Specification{
+@ContextConfiguration("classpath:handler-adapter-context.xml")
+class MultipleRequestMappingHandlerAdaptersSpec extends Specification {
 
   @Autowired
   WebApplicationContext context;
 
-  def "should survive multiple MultipleRequestMappingHandlerAdapters"(){
+  def "should survive multiple MultipleRequestMappingHandlerAdapters"() {
     expect:
-      true
+    true
   }
 }

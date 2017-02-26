@@ -30,13 +30,12 @@ import org.springframework.web.context.WebApplicationContext
 import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.JsonSupport
 
-@ContextConfiguration("classpath:custom-plugin-context.xml")
 @WebAppConfiguration
-@Mixin(JsonSupport)
-class CustomXmlPluginStartupSpec extends Specification {
+@ContextConfiguration("classpath:custom-plugin-context.xml")
+class CustomXmlPluginStartupSpec extends Specification implements JsonSupport {
 
   @Autowired
-  WebApplicationContext context;
+  WebApplicationContext context
 
   def "Should start app with custom xml config"() {
     when:

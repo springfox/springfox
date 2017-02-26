@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.swagger1.integration
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -31,13 +32,12 @@ import spock.lang.Specification
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.spring.web.mixins.JsonSupport
 
-@ContextConfiguration("classpath:default-plugin-context.xml")
 @WebAppConfiguration
-@Mixin(JsonSupport)
-class DefaultXmlPluginStartupSpec extends Specification {
+@ContextConfiguration("classpath:default-plugin-context.xml")
+class DefaultXmlPluginStartupSpec extends Specification implements JsonSupport {
 
   @Autowired
-  WebApplicationContext context;
+  WebApplicationContext context
 
   def "Should start app with default xml config"() {
     when:

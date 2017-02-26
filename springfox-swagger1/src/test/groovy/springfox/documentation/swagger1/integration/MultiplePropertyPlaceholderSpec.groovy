@@ -29,12 +29,12 @@ import org.springframework.web.context.WebApplicationContext
 import spock.lang.Specification
 import springfox.documentation.swagger1.configuration.SimpleBean
 
-@ContextConfiguration("classpath:placeholders-adapter-context.xml")
 @WebAppConfiguration
+@ContextConfiguration("classpath:placeholders-adapter-context.xml")
 class MultiplePropertyPlaceholderSpec extends Specification {
 
   @Autowired
-  WebApplicationContext context;
+  WebApplicationContext context
 
   @Autowired
   SimpleBean simpleBean

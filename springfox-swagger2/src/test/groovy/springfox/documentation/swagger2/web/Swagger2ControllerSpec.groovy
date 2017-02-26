@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletRequest
 
 import static com.google.common.collect.Maps.*
 
-@Mixin([JsonSupport, ApiListingSupport, AuthSupport])
-class Swagger2ControllerSpec extends DocumentationContextSpec implements MapperSupport {
+@Mixin([ApiListingSupport, AuthSupport])
+class Swagger2ControllerSpec extends DocumentationContextSpec
+    implements MapperSupport, JsonSupport{
 
   Swagger2Controller controller = new Swagger2Controller(
           new DocumentationCache(),
