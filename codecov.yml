@@ -37,5 +37,6 @@ comment:
 
 ignore:
   - "springfox-petstore"  # ignore petstore project as its a sample
+  - "springfox-spring-config" # ignore project used for documentation
   - "swagger-contract-tests" # ignore contract tests as its purely for testing
 
