@@ -25,6 +25,9 @@ ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
   jdkVersion = 1.6
 }
+allprojects {
+  apply plugin: 'jacoco'
+}
 
 subprojects {
   //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
@@ -39,7 +42,6 @@ subprojects {
   //Perhaps run every 20 CI builds (mod of ci build number)
 //  apply from: "$rootDir/gradle/code-quality.gradle"
   if (springfox.gradlebuild.utils.ProjectDefinitions.publishable(it)) {
-    apply from: "$rootDir/gradle/coverage.gradle"
     apply from: "$rootDir/gradle/publishing.gradle"
   }
   repositories {
@@ -118,3 +120,5 @@ task codeCoverageReport(type: JacocoReport) {
 codeCoverageReport.dependsOn {
   subprojects*.test
 }
+
+check 
