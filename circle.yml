@@ -29,6 +29,7 @@ test:
   override:
   - ./gradlew clean check codeCoverageReport:
       timeout: 900
+  - bash <(curl -s https://codecov.io/bash)
 
 deployment:
  staging:
