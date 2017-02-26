@@ -90,7 +90,7 @@ dependencies {
 ----
 
 == Quick start guides
-==== Springfox Spring MVC and Spring Boot
+=== Springfox Spring MVC and Spring Boot
 [[getting-started-spring-boot]]
 
 [source,java,linenums]
@@ -98,7 +98,7 @@ dependencies {
 include::../../springfox-spring-config/src/main/java/springfox/springconfig/Swagger2SpringBoot.java[indent=0]
 ----
 
-===== Configuration explained
+=== Configuration explained
 IMPORTANT: This library extensively uses https://github.com/google/guava[googles guava library]. For e.g. when you
 see `newArrayList(...)` its actually the guava equivalent of creating an normal array list and adding item(s) to it.
 
@@ -162,7 +162,7 @@ override the default behavior.
  to do exactly that.
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
-==== Springfox Spring Data Rest
+=== Springfox Spring Data Rest
 In version greater than 2.6.0, support for spring data rest was added.
 
 NOTE: This is still in ***incubation***.
@@ -171,7 +171,7 @@ In order to use it
 
 <1> add the `springfox-data-rest` dependency.
 
-====== Gradle
+==== Gradle
 [source,groovy]
 [subs="verbatim,attributes"]
 ----
@@ -180,7 +180,7 @@ dependencies {
 }
 ----
 
-====== Maven
+==== Maven
 [source,xml]
 [subs="verbatim,attributes"]
 ----
@@ -193,7 +193,7 @@ dependencies {
 
 <2> Import the configuration from the `springfox-data-rest` module as shown below
 
-====== java config
+==== java config
 [source,java]
 [subs="verbatim,attributes"]
 ----
@@ -201,7 +201,7 @@ dependencies {
 @Import({ ... springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class, ...})
 ----
 
-====== xml config
+==== xml config
 Import the bean in your xml configuration by defining a bean of the following type
 
 [source,xml]
@@ -210,7 +210,7 @@ Import the bean in your xml configuration by defining a bean of the following ty
 <bean class="springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class" />
 ----
 
-==== Springfox Support for JSR-303
+=== Springfox Support for JSR-303
 In version greater than 2.3.2, support for bean validation annotations was added, specifically for @NotNull, @Min,
 @Max, and @Size.
 
@@ -218,7 +218,7 @@ In order to use it
 
 <1> add the `springfox-bean-validators` dependency.
 
-====== Gradle
+==== Gradle
 [source,groovy]
 [subs="verbatim,attributes"]
 ----
@@ -227,7 +227,7 @@ dependencies {
 }
 ----
 
-====== Maven
+==== Maven
 [source,xml]
 [subs="verbatim,attributes"]
 ----
@@ -240,7 +240,7 @@ dependencies {
 
 <2> Import the configuration from the `springfox-bean-validators` module as shown below
 
-====== java config
+==== java config
 [source,java]
 [subs="verbatim,attributes"]
 ----
@@ -248,7 +248,7 @@ dependencies {
 @Import({ ... springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class, ...})
 ----
 
-====== xml config
+==== xml config
 Import the bean in your xml configuration by defining a bean of the following type
 
 [source,xml]
@@ -257,7 +257,7 @@ Import the bean in your xml configuration by defining a bean of the following ty
 <bean class="springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration" />
 ----
 
-==== Springfox Swagger UI
+=== Springfox Swagger UI
 The `springfox-swagger-ui` http://www.webjars.org/[web jar] ships with https://github.com/swagger-api/swagger-ui[Swagger UI]. To include it in a standard
 Spring Boot application you can add the dependency as follows:
 
@@ -302,7 +302,7 @@ Regarding [where swagger-ui itself is served](http://springfox.github.io/springf
 api docs are served](http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints) those are
  totally configurable.
 
-==== Springfox RFC6570 support *incubating*
+=== Springfox RFC6570 support *incubating*
 NOTE: _Keep in mind this is experimental_!
 In order to use this feature
 1. Add `springfox-swagger-ui-rfc6570` instead of `springfox-swagger-ui` as a dependency

@@ -186,9 +186,11 @@ description resolution.
 - `@RequestParam#defaultValue()`
 - `@RequestHeader#defaultValue()`
 
-[[Description Resolution]]
+Below are examples of how it would work
+
+[[controller-description]]Controller Example
 [source,java]
-.app.java
+.SomeController.java
 ----
 
   @ApiOperation(value = "Find pet by Status",
@@ -196,25 +198,40 @@ description resolution.
   @RequestMapping(value = "/findByStatus", method = RequestMethod.GET, params = {"status"})
   public Pet findPetsByStatus(
       @ApiParam(value = "${SomeController.findPetsByStatus.status}", //<2>
-      required = true,...)
-      @RequestParam("status") String status) {
+           required = true,...)
+      @RequestParam("status",
+          defaultValue="${SomeController.findPetsByStatus.status.default}") String status) { //<3>
       //...
   }
 
-  @ApiOperation(notes = "Operation 2", value = "${SomeController.operation2.value}"...) //<3>
+  @ApiOperation(notes = "Operation 2", value = "${SomeController.operation2.value}"...) //<4>
   @ApiImplicitParams(
-      @ApiImplicitParam(name="header1", value="${SomeController.operation2.header1}", ...) //<4>
+      @ApiImplicitParam(name="header1", value="${SomeController.operation2.header1}", ...) //<5>
   )
   @RequestMapping(value = "operation2", method = RequestMethod.POST)
   public ResponseEntity<String> operation2() {
     return ResponseEntity.ok("");
   }
+----
 
+<1> Example of `@ApiOperation#notes()`
+<2> Example of `@ApiParam#value()
+<3> Example of `@RequestParam#defaultValue()`
+<4> Example of `@ApiOperation#value()`
+<5> Example of `@ApiImplicitParams#value()`
+
+[[model-description]]Model Example
+
+[source,java]
+.SomeModel.java
+----
   public class SomeModel {
-    @ApiModelProperty(value = "${SomeModel.someProperty}", ...) //<5>
+    @ApiModelProperty(value = "${SomeModel.someProperty}", ...) //<1>
     private long someProperty;
   }
 ----
+
+<1> Example of `@ApiModelProperty#value()`
 
 To provide these properties via external properties just add it to your application property file or any property
 source configured by the application as shown below. When a property place holder cannot be found the default
@@ -342,13 +359,6 @@ schemes swagger specification supports (ApiKey, BasicAuth and OAuth2 (certain pr
 - Finally the security contexts which actually provides information on which api's are protected by which schemes. I
 think in your example, you're missing the last piece of the puzzle, the security context see  xref:getting-started-spring-boot[15].
 
-=== Extensibility
-
-The library provides a variety of extensibility hooks to enrich/ augment the schema and service models
-
-- For enriching models and properties (TODO)
-- For enriching services models (TODO)
-
 === Example application
 
 For an examples for spring-boot, vanilla spring applications take a look https://github.com/springfox/springfox-demos[examples]
@@ -356,7 +366,7 @@ in the demo application.
 
 == Configuring springfox-staticdocs
 
-NOTE: Support for this module has been deprecated in 2.7.0. Since swagger2markup doesnt support jdk6 anymore it is
+IMPORTANT: Support for this module has been deprecated in 2.7.0. Since swagger2markup doesnt support jdk6 anymore it is
 difficult for build to co-exist with the newer version of swagger2markup. Please use the
 _latest_ instructions provided in the awesome https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup Library].
 
