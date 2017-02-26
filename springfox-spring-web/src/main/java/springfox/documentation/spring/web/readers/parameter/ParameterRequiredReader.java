@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +45,13 @@ import static com.google.common.base.Strings.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public ParameterRequiredReader(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
+
   @Override
   public void apply(ParameterContext context) {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
@@ -89,12 +98,13 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
   }
 
   @VisibleForTesting
+  @SuppressWarnings("squid:S1872")
   boolean isOptional(ResolvedMethodParameter methodParameter) {
     return "java.util.Optional".equals(methodParameter.getParameterType().getErasedType().getName());
   }
 
   private boolean isRequired(RequestParam annotation) {
-    String defaultValue = annotation.defaultValue();
+    String defaultValue = descriptions.resolve(annotation.defaultValue());
     boolean missingDefaultValue = ValueConstants.DEFAULT_NONE.equals(defaultValue) ||
         isNullOrEmpty(defaultValue);
     return annotation.required() && missingDefaultValue;

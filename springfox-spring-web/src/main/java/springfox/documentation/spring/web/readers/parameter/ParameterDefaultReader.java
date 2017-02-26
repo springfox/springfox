@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.base.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -30,10 +31,18 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterDefaultReader implements ParameterBuilderPlugin {
+  private final DescriptionResolver descriptions;
+
+  @Autowired
+  public ParameterDefaultReader(DescriptionResolver descriptions) {
+    this.descriptions = descriptions;
+  }
+  
   @Override
   public void apply(ParameterContext context) {
     String defaultValue = findAnnotatedDefaultValue(context.resolvedMethodParameter());
@@ -51,11 +60,11 @@ public class ParameterDefaultReader implements ParameterBuilderPlugin {
   private String findAnnotatedDefaultValue(ResolvedMethodParameter methodParameter) {
     Optional<RequestParam> requestParam = methodParameter.findAnnotation(RequestParam.class);
     if (requestParam.isPresent()) {
-      return requestParam.get().defaultValue();
+      return descriptions.resolve(requestParam.get().defaultValue());
     }
     Optional<RequestHeader> requestHeader = methodParameter.findAnnotation(RequestHeader.class);
     if (requestHeader.isPresent()) {
-      return requestHeader.get().defaultValue();
+      return descriptions.resolve(requestHeader.get().defaultValue());
     }
     return null;
   }

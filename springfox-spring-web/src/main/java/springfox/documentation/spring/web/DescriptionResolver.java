@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.web;
 
+import com.google.common.base.Strings;
 import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
@@ -37,6 +38,10 @@ public class DescriptionResolver {
 
   //Thanks to http://stackoverflow.com/a/37962230/19219
   public String resolve(String expression) {
+    if (Strings.isNullOrEmpty(expression)) {
+      return expression;
+    }
+    
     // Check if the expression is already been parsed
     if (cache.containsKey(expression)) {
       return cache.get(expression);

@@ -183,6 +183,8 @@ description resolution.
 - `@ApiModelProperty#value()`
 - `@ApiOperation#value()`
 - `@ApiOperation#notes()`
+- `@RequestParam#defaultValue()`
+- `@RequestHeader#defaultValue()`
 
 [[Description Resolution]]
 [source,java]

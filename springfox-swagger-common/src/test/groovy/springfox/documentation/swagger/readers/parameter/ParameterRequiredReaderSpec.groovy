@@ -20,7 +20,6 @@
 package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
-import io.swagger.annotations.ApiParam
 import org.springframework.mock.env.MockEnvironment
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -39,7 +38,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
     given:
       def parameterContext = setupParameterContext(paramAnnotation)
     when:
-      def operationCommand = stubbedParamBuilder(paramAnnotation)
+      def operationCommand = stubbedParamBuilder()
       operationCommand.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().isRequired() == expected
@@ -54,7 +53,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
     given:
       def parameterContext = setupParameterContext(paramAnnotation)
     when:
-      def operationCommand = stubbedParamBuilder(paramAnnotation);
+      def operationCommand = stubbedParamBuilder()
       operationCommand.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().isHidden() == expected
@@ -80,8 +79,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
         Mock(OperationContext))
   }
 
-  def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder(descriptions) {
-    }
+  def stubbedParamBuilder() {
+    new ApiParamParameterBuilder(descriptions)
   }
 }
