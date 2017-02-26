@@ -597,18 +597,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#example-application">6.10. Example application</a></li>
 </ul>
 </li>
-<li><a href="#configuring-springfox-staticdocs">7. Configuring springfox-staticdocs</a>
-<ul class="sectlevel2">
-<li><a href="#usage-guide">7.1. Usage guide</a>
-<ul class="sectlevel3">
-<li><a href="#maven-4">7.1.1. Maven</a></li>
-<li><a href="#gradle-4">7.1.2. Gradle</a></li>
-<li><a href="#generate-markup-during-an-unit-test">7.1.3. Generate Markup during an unit test</a></li>
-<li><a href="#generated-html-using-swagger2markup-and-asciidoctorj">7.1.4. Generated HTML using Swagger2Markup and AsciidoctorJ</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a href="#configuring-springfox-staticdocs">7. Configuring springfox-staticdocs</a></li>
 <li><a href="#plugins">8. Plugins</a>
 <ul class="sectlevel2">
 <li><a href="#introduction-2">8.1. Introduction</a></li>
@@ -2124,6 +2113,12 @@ description resolution.</p>
 <li>
 <p><code>@ApiOperation#notes()</code></p>
 </li>
+<li>
+<p><code>@RequestParam#defaultValue()</code></p>
+</li>
+<li>
+<p><code>@RequestHeader#defaultValue()</code></p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -2342,103 +2337,19 @@ in the demo application.</p>
 <div class="sect1">
 <h2 id="configuring-springfox-staticdocs">7. Configuring springfox-staticdocs</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Springfox-staticdocs is a module which brings together springfox and <a href="https://github.com/RobWin/swagger2markup">swagger2markup</a>.
-Swagger2Markup is a library which simplifies the generation of an up-to-date RESTful API documentation by combining
-documentation that’s been hand-written with auto-generated API documentation produced by Springfox. The result is intended
-to be an up-to-date, easy-to-read, on- and offline user guide. Swagger2Markup converts a Swagger JSON or YAML file into
-several AsciiDoc or GitHub Flavored Markdown documents which can be converted to HTML, PDF and EPUB. The output of
-Swagger2Markup can be used as an alternative to swagger-ui and can be served as static content.</p>
-</div>
-<div class="sect2">
-<h3 id="usage-guide">7.1. Usage guide</h3>
-<div class="paragraph">
-<p>Adding springfox-staticdocs to your project</p>
-</div>
-<div class="sect3">
-<h4 id="maven-4">7.1.1. Maven</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-swagger2<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>{releaseVersion}<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span>
-<span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.springfox<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>springfox-staticdocs<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>{releaseVersion}<span class="tag">&lt;/version&gt;</span>
-    <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="gradle-4">7.1.2. Gradle</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-    ...
-    compile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-swagger2:{releaseVersion}</span><span class="delimiter">'</span></span>
-    testCompile <span class="string"><span class="delimiter">'</span><span class="content">io.springfox:springfox-staticdocs:{releaseVersion}</span><span class="delimiter">'</span></span>
-    ...
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="generate-markup-during-an-unit-test">7.1.3. Generate Markup during an unit test</h4>
-<div class="paragraph">
-<p>Spring&#8217;s MVC Test framework can be used to make a request to a <a href="https://github.com/springfox/springfox">springfox</a> Swagger endpoint during an unit test. The ResultHandler <code>Swagger2MarkupResultHandler</code> can be used to convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of <code>springfox-staticdocs</code>. That way you also verify that your Swagger endpoint is working. The following is an example with Spring Boot:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@WebAppConfiguration</span>
-<span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
-<span class="annotation">@ContextConfiguration</span>(classes = Application.class, loader = SpringApplicationContextLoader.class)
-<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
-
-    <span class="annotation">@Autowired</span>
-    <span class="directive">private</span> WebApplicationContext context;
-
-    <span class="directive">private</span> MockMvc mockMvc;
-
-    <span class="annotation">@Before</span>
-    <span class="directive">public</span> <span class="type">void</span> setUp() {
-        <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context).build();
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> convertSwaggerToAsciiDoc() <span class="directive">throws</span> <span class="exception">Exception</span> {
-        <span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler.outputDirectory(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>).build())
-                .andExpect(status().isOk());
-    }
-
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> convertSwaggerToMarkdown() <span class="directive">throws</span> <span class="exception">Exception</span> {
-        <span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler.outputDirectory(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/markdown/generated</span><span class="delimiter">&quot;</span></span>)
-                    .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
-                .andExpect(status().isOk());
-    }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you want to combine the generated documentation with your hand-written documentation, then have a look at the user guide of <a href="https://github.com/RobWin/swagger2markup#combine-generated-documentation-with-your-hand-written-documentation">swagger2Markup</a>. You can also include generated CURL request, HTTP request and HTTP response example snippets from <a href="https://github.com/spring-projects/spring-restdocs">spring-restdocs</a> into the generated documentation.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="generated-html-using-swagger2markup-and-asciidoctorj">7.1.4. Generated HTML using Swagger2Markup and AsciidoctorJ</h4>
-<div class="imageblock">
-<div class="content">
-<img src="./images/asciidoc_html.PNG" alt="asciidoc_html">
-</div>
-</div>
-</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Support for this module has been deprecated in 2.7.0. Since swagger2markup doesnt support jdk6 anymore it is
+difficult for build to co-exist with the newer version of swagger2markup. Please use the
+<em>latest</em> instructions provided in the awesome <a href="https://github.com/Swagger2Markup/swagger2markup">Swagger2Markup Library</a>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -3236,7 +3147,7 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 <div id="footer">
 <div id="footer-text">
 Version 2.6.2-SNAPSHOT<br>
-Last updated 2017-02-25 22:16:58 UTC
+Last updated 2017-02-26 01:01:15 UTC
 </div>
 </div>
 </body>
