@@ -25,6 +25,7 @@ ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
   jdkVersion = 1.6
 }
+
 allprojects {
   apply plugin: 'jacoco'
 }
@@ -89,6 +90,13 @@ subprojects {
   }
   task allDeps(type: DependencyReportTask) {}
 
+
+  jacocoTestReport {
+    reports {
+      xml.enabled true
+      html.enabled true
+    }
+  }
 }
 
 apply from: "$rootDir/gradle/documentation.gradle"
@@ -104,9 +112,7 @@ task codeCoverageReport(type: JacocoReport) {
   executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
   // Add all relevant sourcesets from the subprojects
-  subprojects
-      .dropWhile { springfox.gradlebuild.utils.ProjectDefinitions.publishable(it) }
-      .each { sourceSets it.sourceSets.main }
+  subprojects.each { sourceSets it.sourceSets.main }
 
   reports {
     xml.enabled true
@@ -120,5 +126,3 @@ task codeCoverageReport(type: JacocoReport) {
 codeCoverageReport.dependsOn {
   subprojects*.test
 }
-
-check 
