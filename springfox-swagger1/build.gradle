@@ -5,12 +5,28 @@ plugins {
 ext {
   limits = [
       'instruction': 97,
-      'branch'     : 96,
+      'branch'     : 95,
       'line'       : 97,
-      'complexity' : 95,
-      'method'     : 95,
-      'class'      : 97.5
+      'complexity' : 94,
+      'method'     : 94,
+      'class'      : 95.5
   ]
+}
+
+sourceSets {
+  integrationTest { sourceSet ->
+    ["java", "groovy", "scala", "resources"].each {
+      if (!sourceSet.hasProperty(it)) return
+      sourceSet."$it".srcDir file("src/integration-test/${it}")
+    }
+  }
+}
+
+
+// Define integration test task
+task integrationTest(type: Test) {
+  testClassesDir = sourceSets.integrationTest.output.classesDir
+  classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 dependencies {
@@ -36,6 +52,10 @@ dependencies {
   testCompile project(':springfox-spring-web').sourceSets.test.output
   testCompile libs.test
 
+  integrationTestCompile sourceSets.main.output
+  integrationTestCompile sourceSets.test.output
+  integrationTestCompile configurations.testCompile
+  integrationTestRuntime configurations.testRuntime
 }
 
 compileJava {
