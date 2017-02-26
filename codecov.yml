@@ -34,3 +34,8 @@ comment:
   layout: "header, diff"
   behavior: default
   require_changes: no
+
+ignore:
+  - "springfox-petstore"  # ignore petstore project as its a sample
+  - "swagger-contract-tests" # ignore contract tests as its purely for testing
+
