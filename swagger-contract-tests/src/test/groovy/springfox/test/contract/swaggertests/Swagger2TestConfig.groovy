@@ -13,6 +13,8 @@ import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
+import java.nio.ByteBuffer
+
 import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -154,6 +156,7 @@ public class Swagger2TestConfig {
           newRule(
               resolver.resolve(List.class, Link.class),
               resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
+        .directModelSubstitute(ByteBuffer.class, String.class)
         .select()
         .paths(regex("/bugs/.*"))
         .build()

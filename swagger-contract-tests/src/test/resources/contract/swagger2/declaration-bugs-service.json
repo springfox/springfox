@@ -467,6 +467,38 @@
           }
         }
       }
+    },
+    "/bugs/1697": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "payloadWithByteBuffer",
+        "operationId": "payloadWithByteBufferUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bug1697"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -588,6 +620,14 @@
       "type": "object",
       "properties": {
         "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Bug1697": {
+      "type": "object",
+      "properties": {
+        "bar": {
           "type": "string"
         }
       }

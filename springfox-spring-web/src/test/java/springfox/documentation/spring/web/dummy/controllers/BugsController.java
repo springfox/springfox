@@ -33,6 +33,7 @@ import springfox.documentation.spring.web.dummy.models.Example;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +117,24 @@ public class BugsController {
   public void filesCustomType(@RequestBody List<File> values) {
     throw new UnsupportedOperationException();
   }
+
+  @RequestMapping(value = "1697", method = RequestMethod.GET)
+  public void payloadWithByteBuffer(@RequestBody Bug1697 body) {
+    throw new UnsupportedOperationException();
+  }
+
+  class Bug1697 {
+    public ByteBuffer getBar() {
+      return bar;
+    }
+
+    public void setBar(ByteBuffer bar) {
+      this.bar = bar;
+    }
+
+    private ByteBuffer bar;
+  }
+
 
   class File {
     private String name;
