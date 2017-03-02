@@ -49,21 +49,21 @@ public class ApiResourceController {
 
   @RequestMapping(value = "/configuration/security")
   @ResponseBody
-  ResponseEntity<SecurityConfiguration> securityConfiguration() {
+  public ResponseEntity<SecurityConfiguration> securityConfiguration() {
     return new ResponseEntity<SecurityConfiguration>(
         Optional.fromNullable(securityConfiguration).or(SecurityConfiguration.DEFAULT), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/configuration/ui")
   @ResponseBody
-  ResponseEntity<UiConfiguration> uiConfiguration() {
+  public ResponseEntity<UiConfiguration> uiConfiguration() {
     return new ResponseEntity<UiConfiguration>(
         Optional.fromNullable(uiConfiguration).or(UiConfiguration.DEFAULT), HttpStatus.OK);
   }
 
   @RequestMapping
   @ResponseBody
-  ResponseEntity<List<SwaggerResource>> swaggerResources() {
+  public ResponseEntity<List<SwaggerResource>> swaggerResources() {
     return new ResponseEntity<List<SwaggerResource>>(swaggerResources.get(), HttpStatus.OK);
   }
 
