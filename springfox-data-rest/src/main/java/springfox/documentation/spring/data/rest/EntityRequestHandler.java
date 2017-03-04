@@ -110,7 +110,8 @@ class EntityRequestHandler implements RequestHandler {
 
   @Override
   public String getName() {
-    return handlerMethod.getMethod().getName();
+    return handlerMethod.getMethod().getName()
+        .replace("Resource", String.format("%sResource", resource.getDomainType().getSimpleName()));
   }
 
   @Override
