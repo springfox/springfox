@@ -59,7 +59,7 @@ class EntitySearchRequestTemplate {
         EntitySearchRequestHandler handler = new EntitySearchRequestHandler(
             resolver,
             requestMapping,
-            handlerMethod,
+            new HandlerMethod(searchResource.getMethod().getClass(), searchResource.getMethod()),
             searchResource,
             resource);
         if (handler.resourceType() == ResourceType.ITEM || !collectionHandlerAdded) {
