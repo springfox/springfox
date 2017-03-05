@@ -18,7 +18,6 @@
  */
 package springfox.documentation.swagger2.web;
 
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UrlPathHelper;
@@ -81,7 +80,7 @@ public class HostNameProvider {
     final ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromContextPath(request);
 
     builder.replacePath(prependForwardedPrefix(request, basePath));
-    if (StringUtils.hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
+    if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
       builder.path(request.getServletPath());
     }
 
