@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,10 +20,12 @@ package springfox.documentation.swagger2.web;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.util.StringUtils.*;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromContextPath;
 
 public class HostNameProvider {
 
@@ -31,11 +33,18 @@ public class HostNameProvider {
     throw new UnsupportedOperationException();
   }
 
-  static UriComponents componentsFrom(HttpServletRequest request) {
-    ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromServletMapping(request);
+  static UriComponents componentsFrom(
+      HttpServletRequest request,
+      String basePath) {
+
+    ServletUriComponentsBuilder builder = fromServletMapping(request, basePath);
 
     ForwardedHeader forwarded = ForwardedHeader.of(request.getHeader(ForwardedHeader.NAME));
-    String proto = hasText(forwarded.getProto()) ? forwarded.getProto() : request.getHeader("X-Forwarded-Proto");
+
+    String proto = hasText(forwarded.getProto())
+                   ? forwarded.getProto()
+                   : request.getHeader("X-Forwarded-Proto");
+
     String forwardedSsl = request.getHeader("X-Forwarded-Ssl");
 
     if (hasText(proto)) {
@@ -55,12 +64,10 @@ public class HostNameProvider {
     String hostToUse = hosts[0];
 
     if (hostToUse.contains(":")) {
-
       String[] hostAndPort = split(hostToUse, ":");
 
       builder.host(hostAndPort[0]);
       builder.port(Integer.parseInt(hostAndPort[1]));
-
     } else {
       builder.host(hostToUse);
       builder.port(-1); // reset port if it was forwarded from default port
@@ -73,5 +80,31 @@ public class HostNameProvider {
     }
 
     return builder.build();
+  }
+
+  private static ServletUriComponentsBuilder fromServletMapping(
+      HttpServletRequest request,
+      String basePath) {
+
+    ServletUriComponentsBuilder builder = fromContextPath(request);
+
+    builder.replacePath(prependForwardedPrefix(request, basePath));
+    if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
+      builder.path(request.getServletPath());
+    }
+
+    return builder;
+  }
+
+  private static String prependForwardedPrefix(
+      HttpServletRequest request,
+      String path) {
+
+    String prefix = request.getHeader("X-Forwarded-Prefix");
+    if (prefix != null) {
+      return prefix + path;
+    } else {
+      return path;
+    }
   }
 }
