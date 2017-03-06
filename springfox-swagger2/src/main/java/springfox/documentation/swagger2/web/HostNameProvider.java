@@ -20,6 +20,7 @@ package springfox.documentation.swagger2.web;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,8 +32,8 @@ public class HostNameProvider {
     throw new UnsupportedOperationException();
   }
 
-  static UriComponents componentsFrom(HttpServletRequest request) {
-    ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromServletMapping(request);
+  static UriComponents componentsFrom(final HttpServletRequest request, final String basePath) {
+    ServletUriComponentsBuilder builder = fromServletMapping(request, basePath);
 
     ForwardedHeader forwarded = ForwardedHeader.of(request.getHeader(ForwardedHeader.NAME));
     String proto = hasText(forwarded.getProto()) ? forwarded.getProto() : request.getHeader("X-Forwarded-Proto");
@@ -73,5 +74,25 @@ public class HostNameProvider {
     }
 
     return builder.build();
+  }
+
+  private static ServletUriComponentsBuilder fromServletMapping(final HttpServletRequest request, final String basePath) {
+    final ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromContextPath(request);
+
+    builder.replacePath(prependForwardedPrefix(request, basePath));
+    if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
+      builder.path(request.getServletPath());
+    }
+
+    return builder;
+  }
+
+  private static String prependForwardedPrefix(final HttpServletRequest request, final String path) {
+    final String prefix = request.getHeader("X-Forwarded-Prefix");
+    if (prefix != null) {
+      return prefix + path;
+    } else {
+      return path;
+    }
   }
 }

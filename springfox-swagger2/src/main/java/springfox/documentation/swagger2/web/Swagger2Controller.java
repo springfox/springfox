@@ -85,7 +85,7 @@ public class Swagger2Controller {
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     if (isNullOrEmpty(swagger.getHost())) {
-      final UriComponents uriComponents = componentsFrom(servletRequest);
+      final UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
       swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
       swagger.host(hostName(uriComponents));
     }
