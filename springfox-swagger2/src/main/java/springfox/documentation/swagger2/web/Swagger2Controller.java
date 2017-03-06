@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2017-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ public class Swagger2Controller {
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     if (isNullOrEmpty(swagger.getHost())) {
-      final UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
+      UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
       swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
       swagger.host(hostName(uriComponents));
     }
