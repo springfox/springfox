@@ -43,7 +43,7 @@ public class ModelContext {
   private final Set<ResolvedType> seenTypes = newHashSet();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
-  private GenericTypeNamingStrategy genericNamingStrategy;
+  private final GenericTypeNamingStrategy genericNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
 
   ModelContext(
@@ -72,6 +72,7 @@ public class ModelContext {
     this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
+    this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
   }
 
   /**
