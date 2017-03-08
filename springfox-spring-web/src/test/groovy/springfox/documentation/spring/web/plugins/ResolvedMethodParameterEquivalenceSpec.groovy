@@ -13,6 +13,7 @@ class ResolvedMethodParameterEquivalenceSpec extends Specification {
       def sut = new ResolvedMethodParameterEquivalence()
     expect:
       sut.equivalent(first, second) == areSame
+      (sut.doHash(first) == sut.doHash(second)) == areSame
     where:
       first                   | second                | areSame
       param("a", String)      | param("b", String)    | false

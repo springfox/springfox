@@ -20,6 +20,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Equivalence;
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 import springfox.documentation.RequestHandler;
@@ -57,6 +58,10 @@ class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
 
   @Override
   protected int doHash(RequestHandler requestHandler) {
-    return requestHandler.key().hashCode();
+    return Objects.hashCode(
+        requestHandler.getPatternsCondition().getPatterns(),
+        requestHandler.supportedMethods(),
+        requestHandler.params(),
+        wrapped(requestHandler.getParameters()));
   }
 }

@@ -20,15 +20,16 @@ class PathAndParametersEquivalenceSpec extends Specification {
       def sut = new PathAndParametersEquivalence()
     expect:
       sut.equivalent(first, second) == areSame
+      (sut.doHash(first) == sut.doHash(second)) == sameHash
     where:
-      first                                                | second                                                           | areSame
-      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/a"], param("b", String))             | false
-      handler("/b", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/a"], param("a", String))             | false
-      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/b"], param("a", String))             | true
-      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", POST, ["vendor/a"], param("a", String))            | false
-      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", [GET,POST], ["vendor/a"], param("a", String))      | true
-      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/a"], param("a", String))             | true
-      handlerWithDifferentParams("state=TX")               | handlerWithDifferentParams("state=CA")                           | false
+      first                                                | second                                                       | sameHash | areSame
+      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/a"], param("b", String))         | false    | false
+      handler("/b", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/a"], param("a", String))         | false    | false
+      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/b"], param("a", String))         | true     | true
+      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", POST, ["vendor/a"], param("a", String))        | false    | false
+      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", [GET,POST], ["vendor/a"], param("a", String))  | false    | true
+      handler("/a", GET, ["vendor/a"], param("a", String)) | handler("/a", GET, ["vendor/a"], param("a", String))         | true     | true
+      handlerWithDifferentParams("state=TX")               | handlerWithDifferentParams("state=CA")                       | false    | false
   }
 
   def handlerWithDifferentParams(String expression) {
