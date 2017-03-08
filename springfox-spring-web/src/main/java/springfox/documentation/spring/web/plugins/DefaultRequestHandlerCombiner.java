@@ -29,14 +29,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
-  
+
   public List<RequestHandler> combine(List<RequestHandler> source) {
     List<RequestHandler> combined = new ArrayList<RequestHandler>();
     Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
-    for (RequestHandler each : source) {
+    for (RequestHandler each : nullToEmptyList(source)) {
       byPath.put(patternsCondition(each).toString(), each);
     }
     for (String key : byPath.keySet()) {
@@ -47,8 +48,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
 
   private Collection<? extends RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
     List<RequestHandler> source = newArrayList(requestHandlers);
-    SamePathDifferentMediaTypesEquivalence equality =
-        new SamePathDifferentMediaTypesEquivalence();
+    PathAndParametersEquivalence equality = new PathAndParametersEquivalence();
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;
     }

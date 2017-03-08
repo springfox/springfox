@@ -28,18 +28,16 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import java.util.List;
 import java.util.Set;
 
-class SamePathDifferentMediaTypesEquivalence extends Equivalence<RequestHandler> {
+class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
   private static final ResolvedMethodParameterEquivalence parameterEquivalence
       = new ResolvedMethodParameterEquivalence();
 
   @Override
   protected boolean doEquivalent(RequestHandler a, RequestHandler b) {
-    if (a.getPatternsCondition().equals(b.getPatternsCondition())) {
-      if (!a.produces().equals(b.produces())) {
-        return Sets.difference(wrapped(a.getParameters()), wrapped(b.getParameters())).isEmpty();
-      }
-    }
-    return false;
+    return a.getPatternsCondition().equals(b.getPatternsCondition())
+        && !Sets.intersection(a.supportedMethods(), b.supportedMethods()).isEmpty()
+        && a.params().equals(b.params())
+        && Sets.difference(wrapped(a.getParameters()), wrapped(b.getParameters())).isEmpty();
   }
 
   private Set<Wrapper<ResolvedMethodParameter>> wrapped(List<ResolvedMethodParameter> parameters) {
