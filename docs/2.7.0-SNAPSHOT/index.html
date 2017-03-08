@@ -619,7 +619,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#steps-to-create-a-plugin">8.3. Steps To Create A Plugin</a></li>
 </ul>
 </li>
-<li><a href="#answers-to-common-questions-and-problems">9. Answers to common questions and problems</a></li>
+<li><a href="#additional-extensibility-options">9. Additional extensibility options</a></li>
 </ul>
 </div>
 </div>
@@ -2542,8 +2542,45 @@ order specified in the bean. In general spring plugins get the highest priority,
 </div>
 </div>
 <div class="sect1">
-<h2 id="answers-to-common-questions-and-problems">9. Answers to common questions and problems</h2>
+<h2 id="additional-extensibility-options">9. Additional extensibility options</h2>
 <div class="sectionbody">
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. Other Extensibility</caption>
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Since</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RequestHandlerCombiner</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">for combining apis that react to the same API endpoint given the same input criteria but produces different output.
+ We provide a <code>DefaultRequestHandlerCombiner</code> but this is an extensibility point added to customize it.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This has a shortcoming currently in that, currently the response still hides one of the response
+representations. This is a limitation of the OAI Spec 2.0
+== Answers to common questions and problems
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p><a id="q1"></a><strong>Q. Why does springfox ignore the http status code in the return value of a controller method?</strong></p>
 </div>
@@ -3188,7 +3225,7 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 <div id="footer">
 <div id="footer-text">
 Version 2.7.0-SNAPSHOT<br>
-Last updated 2017-03-06 22:56:34 UTC
+Last updated 2017-03-08 17:26:59 UTC
 </div>
 </div>
 </body>
