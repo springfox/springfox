@@ -71,3 +71,16 @@ TIP: The ___same___ patterns apply to all of the extensibility mechanisms
 
 That is it!
 
+== Additional extensibility options
+.Other Extensibility
+|====
+|Name| Description | Since
+
+| `RequestHandlerCombiner`
+| for combining apis that react to the same API endpoint given the same input criteria but produces different output.
+ We provide a `DefaultRequestHandlerCombiner` but this is an extensibility point added to customize it.
+| 2.7.0
+|====
+
+NOTE: This has a shortcoming currently in that, currently the response still hides one of the response
+representations. This is a limitation of the OAI Spec 2.0
