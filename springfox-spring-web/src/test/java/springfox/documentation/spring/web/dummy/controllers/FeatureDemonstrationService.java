@@ -41,6 +41,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.spring.web.dummy.models.Business;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.FancyPet;
 import springfox.documentation.spring.web.dummy.models.ModelAttributeExample;
 import springfox.documentation.spring.web.dummy.models.ModelWithArrayOfArrays;
 import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
@@ -200,5 +201,15 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "/1430-query", method = RequestMethod.POST)
   public void proper(@RequestParam byte[] base64Encoded) {
     //No-op
+  }
+
+  @RequestMapping(value = "/1367/{itemId}", method = RequestMethod.GET, produces = "application/vnd.com.pet+json")
+  public ResponseEntity<Pet> findIdentityById(@PathVariable String itemId) {
+    return new ResponseEntity<Pet>(new Pet(), HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/1367/{itemId}", method = RequestMethod.GET, produces = "application/vnd.com.fancy-pet+json")
+  public ResponseEntity<FancyPet> findById(@PathVariable String itemId) {
+    return new ResponseEntity<FancyPet>(new FancyPet(), HttpStatus.OK);
   }
 }

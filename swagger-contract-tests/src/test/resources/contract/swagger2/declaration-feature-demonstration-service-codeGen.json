@@ -24,6 +24,41 @@
     "application/json"
   ],
   "paths": {
+    "/features/1367/{itemId}": {
+      "get": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "findIdentityById",
+        "operationId": "findIdentityByIdUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/vnd.com.fancy-pet+json",
+          "application/json",
+          "application/vnd.com.pet+json"
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "itemId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      }
+    },
     "/features/1430-body": {
       "post": {
         "tags": [

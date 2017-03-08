@@ -16,10 +16,11 @@
  *
  *
  */
-package springfox.documentation.spring.data.rest;
+package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.Sets;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -36,11 +37,11 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
 
-class CombinedRequestHandler implements RequestHandler {
+public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
   private final RequestHandler second;
 
-  CombinedRequestHandler(RequestHandler first, RequestHandler second) {
+  public CombinedRequestHandler(RequestHandler first, RequestHandler second) {
     this.first = first;
     this.second = second;
   }
@@ -57,8 +58,9 @@ class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    Set<String> patterns = newHashSet(first.getPatternsCondition().getPatterns());
-    patterns.addAll(second.getPatternsCondition().getPatterns());
+    SetView<String> patterns = Sets.union(
+        first.getPatternsCondition().getPatterns(),
+        second.getPatternsCondition().getPatterns());
     return new PatternsRequestCondition(patterns.toArray(new String[patterns.size()]));
   }
 
@@ -74,28 +76,22 @@ class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    Set<RequestMethod> requestMethods = newHashSet(first.supportedMethods());
-    requestMethods.addAll(second.supportedMethods());
-    return requestMethods;
+    return Sets.union(first.supportedMethods(), second.supportedMethods());
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    Set<MediaType> mediaTypes = newHashSet(first.produces());
-    mediaTypes.addAll(second.produces());
-    return mediaTypes;
+    return Sets.union(first.produces(), second.produces());
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    Set<MediaType> mediaTypes = newHashSet(first.consumes());
-    mediaTypes.addAll(second.consumes());
-    return mediaTypes;
+    return Sets.union(first.consumes(), second.consumes());
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return first.headers();
+    return Sets.union(first.headers(), second.headers());
   }
 
   @Override

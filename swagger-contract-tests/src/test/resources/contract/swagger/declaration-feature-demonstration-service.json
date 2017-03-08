@@ -280,6 +280,55 @@
       "path": "/features"
     },
     {
+      "description": "findIdentityById",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "findIdentityById",
+          "nickname": "findIdentityByIdUsingGET",
+          "produces": [
+            "application/vnd.com.pet+json",
+            "application/vnd.com.fancy-pet+json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "itemId",
+              "name": "itemId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ],
+      "path": "/features/1367/{itemId}"
+    },
+    {
       "description": "base64EncodedBody",
       "operations": [
         {

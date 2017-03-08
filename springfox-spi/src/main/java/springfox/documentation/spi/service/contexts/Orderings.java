@@ -116,7 +116,7 @@ public class Orderings {
     });
   }
 
-  static PatternsRequestCondition patternsCondition(RequestHandler handler) {
+  public static PatternsRequestCondition patternsCondition(RequestHandler handler) {
     return handler.getPatternsCondition();
   }
 

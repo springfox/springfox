@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DocumentationPlugin;
+import springfox.documentation.spi.service.RequestHandlerCombiner;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
@@ -60,6 +62,9 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
+  @Autowired(required = false)
+  private RequestHandlerCombiner combiner;
+
   @Autowired
   public DocumentationPluginsBootstrapper(
       DocumentationPluginsManager documentationPluginsManager,
@@ -85,14 +90,18 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
     scanned.addDocumentation(resourceListing.scan(context));
   }
 
-  private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin each) {
-    DocumentationType documentationType = each.getDocumentationType();
+  private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin plugin) {
+    DocumentationType documentationType = plugin.getDocumentationType();
     List<RequestHandler> requestHandlers = from(handlerProviders)
         .transformAndConcat(handlers())
         .toList();
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
-        .requestHandlers(requestHandlers);
+        .requestHandlers(combiner().combine(requestHandlers));
+  }
+
+  private RequestHandlerCombiner combiner() {
+    return Optional.fromNullable(combiner).or(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
