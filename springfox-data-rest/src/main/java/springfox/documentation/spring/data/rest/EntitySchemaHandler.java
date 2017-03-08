@@ -38,6 +38,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.documentation.spring.data.rest;
+package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
@@ -36,11 +36,11 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
 
-class CombinedRequestHandler implements RequestHandler {
+public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
   private final RequestHandler second;
 
-  CombinedRequestHandler(RequestHandler first, RequestHandler second) {
+  public CombinedRequestHandler(RequestHandler first, RequestHandler second) {
     this.first = first;
     this.second = second;
   }
