@@ -18,14 +18,16 @@
  */
 package springfox.documentation.swagger2.web;
 
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.util.StringUtils.*;
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromContextPath;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.*;
 
 public class HostNameProvider {
 
@@ -39,45 +41,17 @@ public class HostNameProvider {
 
     ServletUriComponentsBuilder builder = fromServletMapping(request, basePath);
 
-    ForwardedHeader forwarded = ForwardedHeader.of(request.getHeader(ForwardedHeader.NAME));
+    UriComponents components = UriComponentsBuilder.fromHttpRequest(
+        new ServletServerHttpRequest(request))
+        .build();
 
-    String proto = hasText(forwarded.getProto())
-                   ? forwarded.getProto()
-                   : request.getHeader("X-Forwarded-Proto");
-
-    String forwardedSsl = request.getHeader("X-Forwarded-Ssl");
-
-    if (hasText(proto)) {
-      builder.scheme(proto);
-    } else if (hasText(forwardedSsl) && forwardedSsl.equalsIgnoreCase("on")) {
-      builder.scheme("https");
-    }
-
-    String host = forwarded.getHost();
-    host = hasText(host) ? host : request.getHeader("X-Forwarded-Host");
-
+    String host = components.getHost();
     if (!hasText(host)) {
       return builder.build();
     }
 
-    String[] hosts = commaDelimitedListToStringArray(host);
-    String hostToUse = hosts[0];
-
-    if (hostToUse.contains(":")) {
-      String[] hostAndPort = split(hostToUse, ":");
-
-      builder.host(hostAndPort[0]);
-      builder.port(Integer.parseInt(hostAndPort[1]));
-    } else {
-      builder.host(hostToUse);
-      builder.port(-1); // reset port if it was forwarded from default port
-    }
-
-    String port = request.getHeader("X-Forwarded-Port");
-
-    if (hasText(port)) {
-      builder.port(Integer.parseInt(port));
-    }
+    builder.host(host);
+    builder.port(components.getPort());
 
     return builder.build();
   }
