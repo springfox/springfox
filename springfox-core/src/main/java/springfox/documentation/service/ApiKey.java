@@ -19,14 +19,31 @@
 
 package springfox.documentation.service;
 
+import org.springframework.util.CollectionUtils;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class ApiKey extends SecurityScheme {
   private final String keyname;
   private final String passAs;
+  private Map<String, Object> vendorExtensions = new LinkedHashMap<String, Object>();
 
   public ApiKey(String name, String keyname, String passAs) {
     super(name, "apiKey");
     this.keyname = keyname;
     this.passAs = passAs;
+  }
+
+  public ApiKey(String name, String keyname, String passAs, Map<String, Object> vendorExtensions) {
+    this(name, keyname, passAs);
+    if(!CollectionUtils.isEmpty(vendorExtensions)) {
+      for(String key : vendorExtensions.keySet()) {
+        if (key.startsWith("x-")) {
+          this.vendorExtensions.put(key, vendorExtensions.get(key));
+        }
+      }
+    }
   }
 
   public String getKeyname() {
@@ -35,5 +52,9 @@ public class ApiKey extends SecurityScheme {
 
   public String getPassAs() {
     return passAs;
+  }
+
+  public Map<String, Object> getVendorExtensions() {
+    return vendorExtensions;
   }
 }

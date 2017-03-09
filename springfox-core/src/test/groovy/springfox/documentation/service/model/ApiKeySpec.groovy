@@ -33,4 +33,51 @@ class ApiKeySpec extends Specification {
       apiKey.name == "mykey"
       apiKey.passAs == "header"
   }
+
+  def "Bean properties are set as expected via constructor with vendor extensions" () {
+    when:
+    def apiKeyObject = new ApiKey("mykey", "key1", "header")
+    def vendorExtension = [:]
+    vendorExtension.put('x-amazon-apigateway-authtype', 'cognito_user_pools')
+    vendorExtension.put('x-amazon-apigateway-authorizer', apiKeyObject)
+    def apiKey = new ApiKey("mykey", "key1", "header", vendorExtension)
+    then:
+    apiKey.type == "apiKey"
+    and:
+    apiKey.keyname == "key1"
+    apiKey.name == "mykey"
+    apiKey.passAs == "header"
+    apiKey.vendorExtensions['x-amazon-apigateway-authtype'] == 'cognito_user_pools'
+    apiKey.vendorExtensions['x-amazon-apigateway-authorizer'] == apiKeyObject
+  }
+
+  def "Bean properties are set as expected via constructor without vendor extensions" () {
+    when:
+    def apiKey = new ApiKey("mykey", "key1", "header", null)
+    then:
+    apiKey.type == "apiKey"
+    and:
+    apiKey.keyname == "key1"
+    apiKey.name == "mykey"
+    apiKey.passAs == "header"
+    apiKey.vendorExtensions['x-amazon-apigateway-authtype'] == null
+    apiKey.vendorExtensions['x-amazon-apigateway-authorizer'] == null
+  }
+
+  def "Bean properties are set as expected via constructor with invalid vendor extensions" () {
+    when:
+    def apiKeyObject = new ApiKey("mykey", "key1", "header")
+    def vendorExtension = [:]
+    vendorExtension.put('amazon-apigateway-authtype', 'cognito_user_pools')
+    vendorExtension.put('amazon-apigateway-authorizer', apiKeyObject)
+    def apiKey = new ApiKey("mykey", "key1", "header", vendorExtension)
+    then:
+    apiKey.type == "apiKey"
+    and:
+    apiKey.keyname == "key1"
+    apiKey.name == "mykey"
+    apiKey.passAs == "header"
+    apiKey.vendorExtensions['amazon-apigateway-authtype'] == null
+    apiKey.vendorExtensions['amazon-apigateway-authorizer'] == null
+  }
 }

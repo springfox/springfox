@@ -31,6 +31,7 @@ class ApiKeyAuthFactory implements SecuritySchemeFactory {
     ApiKey apiKey = (ApiKey) input;
     ApiKeyAuthDefinition definition = new ApiKeyAuthDefinition();
     definition.name(apiKey.getKeyname()).in(In.forValue(apiKey.getPassAs()));
+    definition.setVendorExtensions(apiKey.getVendorExtensions());
     return definition;
   }
 }
