@@ -26,13 +26,13 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.context.SpringBootContextLoader
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
@@ -46,13 +46,11 @@ import springfox.test.contract.swagger.listeners.ObjectMapperEventListener
 import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(
-        loader = SpringBootContextLoader,
-        classes = Config)
+@ContextConfiguration(classes = Config)
 class ObjectMapperSanityCheck extends Specification {
 
   @Value('${local.server.port}')
-  int port;
+  int port
 
   def "should produce valid swagger json regardless of object mapper configuration"() {
 
@@ -96,6 +94,12 @@ class ObjectMapperSanityCheck extends Specification {
     public ObjectMapperEventListener objectMapperEventListener(){
       //Register an ObjectMapperConfigured event listener
       return new ObjectMapperEventListener()
+    }
+
+
+    @Bean
+    static PropertySourcesPlaceholderConfigurer properties() throws Exception {
+      return new PropertySourcesPlaceholderConfigurer()
     }
   }
 }

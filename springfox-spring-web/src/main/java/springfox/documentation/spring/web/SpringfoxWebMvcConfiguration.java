@@ -19,11 +19,11 @@
 
 package springfox.documentation.spring.web;
 
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
@@ -89,8 +89,8 @@ public class SpringfoxWebMvcConfiguration {
   }
 
   @Bean
-  public static PropertyPlaceholderConfigurer swaggerProperties() {
-    PropertyPlaceholderConfigurer properties = new PropertyPlaceholderConfigurer();
+  public static PropertySourcesPlaceholderConfigurer swaggerProperties() {
+    PropertySourcesPlaceholderConfigurer properties = new PropertySourcesPlaceholderConfigurer();
     properties.setPlaceholderPrefix("$SPRINGFOX{");
     properties.setIgnoreUnresolvablePlaceholders(true);
     return properties;
