@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,21 +18,16 @@
  */
 package springfox.documentation.swagger2.mappers
 
-import spock.lang.Specification
-import springfox.documentation.service.ApiKey
-import springfox.documentation.service.SecurityScheme
-import io.swagger.models.auth.In
 import io.swagger.models.auth.ApiKeyAuthDefinition
+import io.swagger.models.auth.In
+import spock.lang.Specification
+import springfox.documentation.service.*
 
 class ApiKeyAuthFactorySpec extends Specification {
 
-  def "Create ApiKey scheme definition" () {
+  def "Create ApiKey scheme definition"() {
     given:
-      def apiKeyObject = new ApiKey("mykey", "key1", "header")
-      def vendorExtension = [:]
-      vendorExtension.put('x-amazon-apigateway-authtype', 'cognito_user_pools')
-      vendorExtension.put('x-amazon-apigateway-authorizer', apiKeyObject)
-      SecurityScheme security = new ApiKey("mykey", "key1", "header", vendorExtension)
+      SecurityScheme security = new ApiKey("mykey", "key1", "header", amazonVendorExtensions())
     and:
       ApiKeyAuthFactory factory = new ApiKeyAuthFactory()
     when:
@@ -41,6 +36,36 @@ class ApiKeyAuthFactorySpec extends Specification {
       securityDefintion.type == "apiKey"
       ((ApiKeyAuthDefinition)securityDefintion).getName() == "key1"
       ((ApiKeyAuthDefinition)securityDefintion).getIn() == In.HEADER
-      ((ApiKeyAuthDefinition)securityDefintion).vendorExtensions == vendorExtension
+      ((ApiKeyAuthDefinition)securityDefintion).vendorExtensions == expectedExtensions()
+  }
+
+  def amazonVendorExtensions(
+      String authorizerKey = 'x-amazon-apigateway-authorizer',
+      String authTypeKey = 'x-amazon-apigateway-authtype') {
+
+    def authorizer = new ObjectVendorExtension(authorizerKey)
+    def arns = new ListVendorExtension<String>(
+        "providerARNS",
+        ["arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}"])
+    authorizer.with {
+      addProperty(new StringVendorExtension("type", "cognito_user_pools"))
+      addProperty(arns)
+    }
+
+    def authType = new StringVendorExtension(authTypeKey, 'cognito_user_pools')
+    def vendorExtensions = [authType, authorizer]
+    vendorExtensions
+  }
+
+  def expectedExtensions() {
+    [
+        "x-amazon-apigateway-authtype"  : "cognito_user_pools",
+        "x-amazon-apigateway-authorizer": [
+            "type"        : "cognito_user_pools",
+            "providerARNS": [
+                "arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}"
+            ]
+        ]
+    ]
   }
 }
