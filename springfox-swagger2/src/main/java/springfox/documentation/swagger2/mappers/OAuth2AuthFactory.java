@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.swagger2.mappers;
 
 import io.swagger.models.auth.OAuth2Definition;
@@ -55,6 +54,8 @@ class OAuth2AuthFactory implements SecuritySchemeFactory {
     for (AuthorizationScope each : oAuth.getScopes()) {
       definition.addScope(each.getScope(), each.getDescription());
     }
+    VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
+    definition.setVendorExtensions(vendorMapper.mapExtensions(input.getVendorExtensions()));
     return definition;
   }
 }

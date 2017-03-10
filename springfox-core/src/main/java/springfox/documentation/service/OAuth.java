@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.service;
 
 import java.util.ArrayList;
@@ -28,11 +27,22 @@ public class OAuth extends SecurityScheme {
   private final List<AuthorizationScope> scopes;
   private final LinkedHashMap<String, GrantType> grantTypes;
 
-  public OAuth(String name, List<AuthorizationScope> scopes, List<GrantType> gTypes) {
+  public OAuth(
+      String name,
+      List<AuthorizationScope> scopes,
+      List<GrantType> grantTypes,
+      List<VendorExtension> vendorExtensions) {
     super(name, "oauth2");
     this.scopes = scopes;
-    this.grantTypes = initializeGrantTypes(gTypes);
+    this.grantTypes = initializeGrantTypes(grantTypes);
+    addValidVendorExtensions(vendorExtensions);
+  }
 
+  public OAuth(
+      String name,
+      List<AuthorizationScope> scopes,
+      List<GrantType> grantTypes) {
+    this(name, scopes, grantTypes, new ArrayList<VendorExtension>());
   }
 
   private LinkedHashMap<String, GrantType> initializeGrantTypes(List<GrantType> gTypes) {

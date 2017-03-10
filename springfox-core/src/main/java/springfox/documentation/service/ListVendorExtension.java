@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2017-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,29 +18,29 @@
  */
 package springfox.documentation.service;
 
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
-public class ApiKey extends SecurityScheme {
-  private final String keyname;
-  private final String passAs;
+import static com.google.common.collect.Lists.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
-  public ApiKey(String name, String keyname, String passAs) {
-    this(name, keyname, passAs, new ArrayList<VendorExtension>());
+public class ListVendorExtension<T> implements VendorExtension<List<T>> {
+  private final List<T> values = newArrayList();
+  private final String name;
+
+  public ListVendorExtension(String name, List<T> values) {
+    this.name = name;
+    this.values.addAll(nullToEmptyList(values));
   }
 
-  public ApiKey(String name, String keyname, String passAs, List<VendorExtension> vendorExtensions) {
-    super(name, "apiKey");
-    this.keyname = keyname;
-    this.passAs = passAs;
-    addValidVendorExtensions(vendorExtensions);
+  @Override
+  public String getName() {
+    return name;
   }
 
-  public String getKeyname() {
-    return keyname;
-  }
-
-  public String getPassAs() {
-    return passAs;
+  @Override
+  public List<T> getValue() {
+    return ImmutableList.copyOf(values);
   }
 }
