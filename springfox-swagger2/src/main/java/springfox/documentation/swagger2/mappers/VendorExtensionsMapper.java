@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import org.mapstruct.Mapper;
+import springfox.documentation.service.ListVendorExtension;
 import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
@@ -36,6 +37,11 @@ public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {
     Map<String, Object> extensions = newHashMap();
+    Iterable<ListVendorExtension> listExtensions = from(from)
+        .filter(ListVendorExtension.class);
+    for (ListVendorExtension each : listExtensions) {
+      extensions.put(each.getName(), each.getValue());
+    }
     Iterable<Map<String, Object>> objectExtensions = from(from)
         .filter(ObjectVendorExtension.class)
         .transform(toExtensionMap());
