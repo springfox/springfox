@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,11 +16,18 @@
  *
  *
  */
-
 package springfox.documentation.service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasicAuth extends SecurityScheme {
   public BasicAuth(String name) {
+    this(name, new ArrayList<VendorExtension>());
+  }
+
+  public BasicAuth(String name, List<VendorExtension> vendorExtensions) {
     super(name, "basicAuth");
+    addValidVendorExtensions(vendorExtensions);
   }
 }
