@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class CachingModelProviderSpec extends Specification {
   def "Implementation caches the invocations" () {
     given:
-      def context = inputParam(
+      def context = inputParam("group",
           complexType(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
@@ -49,7 +49,7 @@ class CachingModelProviderSpec extends Specification {
 
   def "Cache misses do not not result in errors" () {
     given:
-      def context = inputParam(
+      def context = inputParam("group",
           complexType(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),

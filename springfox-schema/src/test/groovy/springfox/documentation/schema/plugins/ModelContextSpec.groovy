@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema.plugins
 
 import com.google.common.collect.ImmutableSet
@@ -39,7 +38,13 @@ class ModelContextSpec extends Specification {
 
   def "ModelContext equals works as expected"() {
     given:
-      ModelContext context = inputParam(ExampleEnum, SWAGGER_12, provider, namingStrategy, ImmutableSet.builder().build())
+      ModelContext context = inputParam(
+          "group",
+          ExampleEnum,
+          SWAGGER_12,
+          provider,
+          namingStrategy,
+          ImmutableSet.builder().build())
     expect:
       context.equals(test) == expectedEquality
       context.equals(context)
@@ -52,7 +57,7 @@ class ModelContextSpec extends Specification {
   }
 
   def inputParam(Class ofType) {
-    inputParam(
+    inputParam("group",
         ofType,
         SWAGGER_12,
         provider,
@@ -61,7 +66,7 @@ class ModelContextSpec extends Specification {
   }
 
   def returnValue(Class ofType) {
-    returnValue(
+    returnValue("group",
         ofType,
         SWAGGER_12,
         provider,
@@ -71,19 +76,19 @@ class ModelContextSpec extends Specification {
 
   def "ModelContext hashcode generated takes into account immutable values"() {
     given:
-      ModelContext context = inputParam(
+      ModelContext context = inputParam("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
-      ModelContext other = inputParam(
+      ModelContext other = inputParam("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
-      ModelContext otherReturn = returnValue(
+      ModelContext otherReturn = returnValue("group",
           ExampleEnum,
           SWAGGER_12,
           provider,

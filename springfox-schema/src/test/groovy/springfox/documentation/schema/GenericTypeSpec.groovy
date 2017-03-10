@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema
 
 import com.google.common.collect.ImmutableSet
@@ -34,12 +33,13 @@ class GenericTypeSpec extends SchemaSpecification {
   def "Generic property on a generic types is inferred correctly for types"() {
     given:
       def inputContext = inputParam(
+          "group",
           modelType,
           documentationType,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      def returnContext = returnValue(
+      def returnContext = returnValue("group",
           modelType,
           documentationType,
           alternateTypeProvider(),
@@ -75,12 +75,13 @@ class GenericTypeSpec extends SchemaSpecification {
   def "Void generic type bindings are rendered correctly"() {
     given:
       def inputContext = inputParam(
+          "group",
           modelType,
           documentationType,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      def returnContext = returnValue(
+      def returnContext = returnValue("group",
           modelType,
           documentationType,
           alternateTypeProvider(),
@@ -107,7 +108,7 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-      def inputContext = inputParam(
+      def inputContext = inputParam("group",
           modelType,
           documentationType,
           alternateTypeProvider(),
@@ -115,7 +116,7 @@ class GenericTypeSpec extends SchemaSpecification {
           ImmutableSet.builder().build())
         Model asInput = modelProvider.modelFor(inputContext).get()
 
-      def returnContext = returnValue(
+      def returnContext = returnValue("group",
           modelType,
           documentationType,
           alternateTypeProvider(),

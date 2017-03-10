@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema.property
 
 import com.fasterxml.classmate.ResolvedType
@@ -65,7 +64,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
       def inputValue = sut.propertiesFor(
         type,
-        inputParam(
+        inputParam("group",
             type,
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
@@ -73,7 +72,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             ImmutableSet.builder().build()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue(
+        returnValue("group",
             type,
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
@@ -112,7 +111,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
       def inputValue = sut.propertiesFor(
           type,
-          inputParam(
+          inputParam("group",
               type,
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),
@@ -120,7 +119,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
               ImmutableSet.builder().build()))
       def returnValue = sut.propertiesFor(
           type,
-          returnValue(
+          returnValue("group",
               type,
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),
@@ -159,13 +158,13 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
       sut.onApplicationEvent(objectMapperConfigured)
 
     and:
-      def inputContext = inputParam(
+      def inputContext = inputParam("group",
           type,
           SPRING_WEB,
           new AlternateTypeProvider(newArrayList()),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
-      def returnContext = returnValue(
+      def returnContext = returnValue("group",
           type,
           SPRING_WEB,
           new AlternateTypeProvider(newArrayList()),
@@ -210,7 +209,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
       def inputValue = sut.propertiesFor(
           type,
-          inputParam(
+          inputParam("group",
               type,
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),
@@ -218,7 +217,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
               ImmutableSet.builder().build()))
       def returnValue = sut.propertiesFor(
           type,
-          returnValue(
+          returnValue("group",
               type,
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),

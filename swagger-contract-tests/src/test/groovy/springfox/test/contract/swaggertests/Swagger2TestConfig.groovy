@@ -163,6 +163,27 @@ public class Swagger2TestConfig {
   }
 
   @Bean
+  public Docket bugsDifferent(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("bugsDifferent")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .tags(new Tag("foo", "Foo Description"))
+        .produces(['application/xml', 'application/json'] as Set)
+        .enableUrlTemplating(true)
+        .alternateTypeRules(
+        newRule(URL.class, String.class),
+        newRule(
+            resolver.resolve(List.class, Link.class),
+            resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
+        .directModelSubstitute(ByteBuffer.class, String.class)
+        .ignoredParameterTypes(BugsController.Bug1627)
+        .select()
+        .paths(regex("/bugs/.*"))
+        .build()
+  }
+
+  @Bean
   public Docket petGrooming(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("petGroomingService")

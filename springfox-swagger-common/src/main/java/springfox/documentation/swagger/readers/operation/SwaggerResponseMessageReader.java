@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
@@ -41,13 +40,13 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
-import java.util.List;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
@@ -101,11 +100,11 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
         if (!seenResponsesByCode.containsKey(apiResponse.code())) {
           seenResponsesByCode.put(apiResponse.code(), apiResponse);
           ModelContext modelContext = returnValue(
-                  apiResponse.response(),
-                  context.getDocumentationType(),
-                  context.getAlternateTypeProvider(),
-                  context.getGenericsNamingStrategy(),
-                  context.getIgnorableParameterTypes());
+              context.getGroupName(), apiResponse.response(),
+              context.getDocumentationType(),
+              context.getAlternateTypeProvider(),
+              context.getGenericsNamingStrategy(),
+              context.getIgnorableParameterTypes());
           Optional<ModelReference> responseModel = Optional.absent();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
           if (isSuccessful(apiResponse.code())) {
@@ -113,23 +112,25 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           }
           if (type.isPresent()) {
             responseModel = Optional.of(
-                    modelRefFactory(modelContext, typeNameExtractor)
+                modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
           Map<String, Header> headers = newHashMap(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
           responseMessages.add(new ResponseMessageBuilder()
-                  .code(apiResponse.code())
-                  .message(apiResponse.message())
-                  .responseModel(responseModel.orNull())
-                  .headersWithDescription(headers)
-                  .build());
+              .code(apiResponse.code())
+              .message(apiResponse.message())
+              .responseModel(responseModel.orNull())
+              .headersWithDescription(headers)
+              .build());
         }
       }
     }
     if (operationResponse.isPresent()) {
-      ModelContext modelContext = returnValue(operationResponse.get(),
+      ModelContext modelContext = returnValue(
+          context.getGroupName(),
+          operationResponse.get(),
           context.getDocumentationType(),
           context.getAlternateTypeProvider(),
           context.getGenericsNamingStrategy(),

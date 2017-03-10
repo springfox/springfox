@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema.property.constructor
 
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -43,7 +42,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
       def typeToTest = typeWithConstructorProperty()
       def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
-      def modelContext = inputParam(
+      def modelContext = inputParam("group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),

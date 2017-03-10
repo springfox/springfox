@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.spi.service.contexts;
 
 import com.google.common.collect.ImmutableSet;
@@ -31,6 +30,7 @@ import java.util.Set;
 import static com.google.common.collect.Sets.*;
 
 public class OperationModelContextsBuilder {
+  private final String group;
   private final DocumentationType documentationType;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
@@ -38,10 +38,12 @@ public class OperationModelContextsBuilder {
   private final Set<ModelContext> contexts = newHashSet();
 
   public OperationModelContextsBuilder(
+      String group,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericsNamingStrategy,
       ImmutableSet<Class> ignorableParameterTypes) {
+    this.group = group;
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericsNamingStrategy = genericsNamingStrategy;
@@ -50,6 +52,7 @@ public class OperationModelContextsBuilder {
 
   public OperationModelContextsBuilder addReturn(Type type) {
     ModelContext returnValue = ModelContext.returnValue(
+        group,
         type,
         documentationType,
         alternateTypeProvider,
@@ -61,6 +64,7 @@ public class OperationModelContextsBuilder {
 
   public OperationModelContextsBuilder addInputParam(Type type) {
     ModelContext inputParam = ModelContext.inputParam(
+        group,
         type,
         documentationType,
         alternateTypeProvider,

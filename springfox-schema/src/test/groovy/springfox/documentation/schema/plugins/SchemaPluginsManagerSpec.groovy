@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
@@ -78,11 +77,12 @@ class SchemaPluginsManagerSpec extends Specification {
     given:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       def context = inputParam(
-        TypeForTestingPropertyNames,
-        SPRING_WEB,
-        new AlternateTypeProvider([]),
-        namingStrategy,
-        ImmutableSet.builder().build())
+          "group",
+          TypeForTestingPropertyNames,
+          SPRING_WEB,
+          new AlternateTypeProvider([]),
+          namingStrategy,
+          ImmutableSet.builder().build())
     and:
       context.documentationType >> SPRING_WEB
     when:
@@ -94,11 +94,12 @@ class SchemaPluginsManagerSpec extends Specification {
   def "enriches model name when plugins are found"() {
     given:
       def context = inputParam(
-        ExampleWithEnums,
-        SPRING_WEB,
-        alternateTypeProvider(),
-        new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+          "group",
+          ExampleWithEnums,
+          SPRING_WEB,
+          alternateTypeProvider(),
+          new DefaultGenericTypeNamingStrategy(),
+          ImmutableSet.builder().build())
     and:
       context.documentationType >> SPRING_WEB
     when:

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema.property.property
 
 import com.fasterxml.classmate.TypeResolver
@@ -49,7 +48,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
   def "Extracting information from resolved properties #methodName"() {
     given:
       Class typeToTest = TypeWithGettersAndSetters
-      def modelContext = inputParam(
+      def modelContext = inputParam("group",
           typeToTest,
           SWAGGER_12,
           alternateTypeProvider(),
@@ -91,7 +90,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
   def "Extracting information from ApiModelProperty annotation"() {
     given:
       Class typeToTest = TypeWithAnnotatedGettersAndSetters
-      def modelContext = inputParam(
+      def modelContext = inputParam("group",
           typeToTest,
           SWAGGER_12,
           alternateTypeProvider(),
@@ -137,7 +136,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
 
     given:
       Class typeToTest = typeForTestingJsonGetterAnnotation()
-      def modelContext = inputParam(
+      def modelContext = inputParam("group",
           typeToTest,
           SWAGGER_12,
           alternateTypeProvider(),

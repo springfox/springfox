@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.GenericType
@@ -62,7 +61,7 @@ class ReturnTypesSpec extends Specification {
     expect:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       def modelResponseClass = sut.typeName(
-          returnValue(
+          returnValue("group",
               new TypeResolver().resolve(
                   GenericType.class,
                   clazz),

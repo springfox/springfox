@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.schema
 
 import com.google.common.collect.ImmutableSet
@@ -35,13 +34,14 @@ class SimpleTypeSpec extends SchemaSpecification {
     given:
       Model asInput = modelProvider.modelFor(
           inputParam(
+              "group",
               simpleType(),
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
-          returnValue(
+          returnValue("group",
               simpleType(),
               SWAGGER_12,
               alternateTypeProvider(),
@@ -97,6 +97,7 @@ class SimpleTypeSpec extends SchemaSpecification {
     given:
       Model asInput = modelProvider.modelFor(
           inputParam(
+              "group",
               typeWithConstructor(),
               documentationType,
               alternateTypeProvider(),
@@ -104,6 +105,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
+              "group",
               typeWithConstructor(),
               documentationType,
               alternateTypeProvider(),
@@ -133,6 +135,7 @@ class SimpleTypeSpec extends SchemaSpecification {
     given:
       Model asInput = modelProvider.modelFor(
           inputParam(
+              "group",
               typeWithJsonPropertyAnnotation(),
               documentationType,
               alternateTypeProvider(),
@@ -140,6 +143,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
+              "group",
               typeWithJsonPropertyAnnotation(),
               documentationType,
               alternateTypeProvider(),

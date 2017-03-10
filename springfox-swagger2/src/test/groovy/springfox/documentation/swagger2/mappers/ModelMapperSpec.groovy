@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Model model = modelProvider.modelFor(
         inputParam(
+            "group",
             typeToTest,
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
@@ -70,6 +71,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Model model = modelProvider.modelFor(
           inputParam(
+              "group",
               typeWithVoidLists(),
               DocumentationType.SWAGGER_2,
               alternateTypeProvider(),
@@ -91,6 +93,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "group",
             listOfMapOfStringToString(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
@@ -109,6 +112,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "group",
             listOfModelMap(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
@@ -127,6 +131,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "group",
             listOfMapOfStringToSimpleType(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
@@ -146,6 +151,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "group",
             listOfErasedMap(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
@@ -161,8 +167,8 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Model model = modelProvider.modelFor(
         inputParam(
-            genericClassOfType(
-                Void),
+            "group",
+            genericClassOfType(Void),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
@@ -193,6 +199,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Model model = modelProvider.modelFor(
         inputParam(
+            "group",
             simpleType(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
@@ -291,6 +298,7 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Model model = modelProvider.modelFor(
         inputParam(
+            "group",
             simpleType(),
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),

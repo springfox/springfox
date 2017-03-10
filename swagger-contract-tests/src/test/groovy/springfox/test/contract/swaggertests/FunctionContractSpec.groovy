@@ -76,6 +76,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     'swagger.json'                                                | 'petstore'
     'swaggerTemplated.json'                                       | 'petstoreTemplated'
     'declaration-bugs-service.json'                               | 'bugs'
+    'declaration-bugs-different-service.json'                     | 'bugsDifferent'
     'declaration-business-service.json'                           | 'businessService'
     'declaration-concrete-controller.json'                        | 'concrete'
     'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'

@@ -123,6 +123,23 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
+  @RequestMapping(value = "1627", method = RequestMethod.GET)
+  public void bug1627(@RequestBody Bug1627 body) {
+    throw new UnsupportedOperationException();
+  }
+
+  public class Bug1627 {
+    private String name;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+  }
+
   class Bug1697 {
     public ByteBuffer getBar() {
       return bar;

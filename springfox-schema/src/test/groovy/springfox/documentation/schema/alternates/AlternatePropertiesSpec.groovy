@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class AlternatePropertiesSpec extends Specification {
     given:
       def provider = alternateTypeProvider()
       ModelProvider modelProvider = defaultModelProvider()
-      Model model = modelProvider.modelFor(inputParam(
+      Model model = modelProvider.modelFor(inputParam("group",
           typeWithAlternateProperty(),
           SWAGGER_12,
           provider,
@@ -59,7 +59,7 @@ class AlternatePropertiesSpec extends Specification {
       def provider = alternateTypeProvider()
       provider.addRule(new AlternateTypeRule(resolver.resolve(ResponseEntity, Void), resolver.resolve(Void)))
       ModelProvider modelProvider = defaultModelProvider()
-      Model model = modelProvider.modelFor(inputParam(
+      Model model = modelProvider.modelFor(inputParam("group",
           typeWithResponseEntityOfVoid(),
           SWAGGER_12,
           alternateTypeProvider(),

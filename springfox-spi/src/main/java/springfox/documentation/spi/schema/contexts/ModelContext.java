@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
@@ -37,6 +36,7 @@ import static com.google.common.collect.Sets.*;
 public class ModelContext {
   private final Type type;
   private final boolean returnType;
+  private final String groupName;
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
@@ -47,13 +47,14 @@ public class ModelContext {
   private final ImmutableSet<Class> ignorableTypes;
 
   ModelContext(
+      String groupName,
       Type type,
       boolean returnType,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
       ImmutableSet<Class> ignorableTypes) {
-
+    this.groupName = groupName;
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericNamingStrategy = genericNamingStrategy;
@@ -67,6 +68,7 @@ public class ModelContext {
   ModelContext(ModelContext parentContext, ResolvedType input) {
     this.parentContext = parentContext;
     this.type = input;
+    this.groupName = parentContext.groupName;
     this.returnType = parentContext.isReturnType();
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
@@ -113,8 +115,16 @@ public class ModelContext {
   }
 
   /**
+   * @return group name of the docket
+   */
+  public String getGroupName() {
+    return groupName;
+  }
+
+  /**
    * Convenience method to provide an new context for an input parameter
    *
+   * @param group                 - group name of the docket
    * @param type                  - type
    * @param documentationType     - for documenation type
    * @param alternateTypeProvider - alternate type provider
@@ -123,6 +133,7 @@ public class ModelContext {
    * @return new context
    */
   public static ModelContext inputParam(
+      String group,
       Type type,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
@@ -130,6 +141,7 @@ public class ModelContext {
       ImmutableSet<Class> ignorableTypes) {
 
     return new ModelContext(
+        group,
         type,
         false,
         documentationType,
@@ -141,6 +153,8 @@ public class ModelContext {
   /**
    * Convenience method to provide an new context for an return parameter
    *
+   *
+   * @param groupName             - group name of the docket
    * @param type                  - type
    * @param documentationType     - for documenation type
    * @param alternateTypeProvider - alternate type provider
@@ -149,6 +163,7 @@ public class ModelContext {
    * @return new context
    */
   public static ModelContext returnValue(
+      String groupName,
       Type type,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
@@ -156,6 +171,7 @@ public class ModelContext {
       ImmutableSet<Class> ignorableTypes) {
 
     return new ModelContext(
+        groupName,
         type,
         true,
         documentationType,
@@ -230,7 +246,9 @@ public class ModelContext {
 
     ModelContext that = (ModelContext) o;
 
-    return Objects.equal(type, that.type) &&
+    return
+        Objects.equal(groupName, that.groupName) &&
+        Objects.equal(type, that.type) &&
         Objects.equal(documentationType, that.documentationType) &&
         Objects.equal(returnType, that.returnType) &&
         Objects.equal(namingStrategy(), that.namingStrategy());
@@ -246,11 +264,17 @@ public class ModelContext {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(type, documentationType, returnType, namingStrategy());
+    return Objects.hashCode(
+        groupName,
+        type,
+        documentationType,
+        returnType,
+        namingStrategy());
   }
 
   public String description() {
     return MoreObjects.toStringHelper(ModelContext.class)
+        .add("groupName", this.getGroupName())
         .add("type", this.getType())
         .add("isReturnType", this.isReturnType())
         .toString();
