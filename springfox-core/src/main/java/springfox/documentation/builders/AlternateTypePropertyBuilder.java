@@ -53,14 +53,14 @@ public class AlternateTypePropertyBuilder {
   }
 
   public DynamicType.Builder<Object> apply(DynamicType.Builder<Object> builder) {
-    builder = builder.defineField(name, clazz, Visibility.PRIVATE);
+    DynamicType.Builder<Object> augmented = builder.defineField(name, clazz, Visibility.PRIVATE);
     if (canRead) {
-      builder = getter(builder);
+      augmented = getter(augmented);
     }
     if (canWrite) {
-      builder = setter(builder);
+      augmented = setter(augmented);
     }
-    return builder;
+    return augmented;
   }
 
   private DynamicType.Builder<Object> setter(DynamicType.Builder<Object> builder) {
