@@ -431,6 +431,161 @@
       "path": "/features/1430-query"
     },
     {
+      "description": "serializablePetEntity",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "serializablePetEntity",
+          "nickname": "serializablePetEntityUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "itemId",
+              "name": "itemId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ],
+      "path": "/features/1490/entity/{itemId}"
+    },
+    {
+      "description": "serializablePet",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "serializablePet",
+          "nickname": "serializablePetUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "itemId",
+              "name": "itemId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ],
+      "path": "/features/1490/{itemId}"
+    },
+    {
+      "description": "updateSerializablePet",
+      "operations": [
+        {
+          "method": "PUT",
+          "summary": "updateSerializablePet",
+          "nickname": "updateSerializablePetUsingPUT",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "itemId",
+              "name": "itemId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            },
+            {
+              "allowMultiple": false,
+              "description": "pet",
+              "name": "body",
+              "paramType": "body",
+              "type": "Pet",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK"
+            },
+            {
+              "code": 201,
+              "message": "Created"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "void"
+        }
+      ],
+      "path": "/features/1490/{itemId}"
+    },
+    {
       "description": "addFiles",
       "operations": [
         {

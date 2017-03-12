@@ -19,6 +19,7 @@
 
 package springfox.test.contract.swaggertests
 
+import com.fasterxml.classmate.TypeResolver
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -37,6 +38,8 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.schema.AlternateTypeRuleConvention
+import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
@@ -54,6 +57,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @Unroll
   def 'should honor swagger v2 resource listing #groupName'() {
     given:
+
     RequestEntity<Void> request = RequestEntity.get(
         new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
         .accept(MediaType.APPLICATION_JSON)
@@ -61,17 +65,17 @@ class FunctionContractSpec extends Specification implements FileAccess {
     String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
+
     def response = http.exchange(request, String)
     then:
     String raw = response.body
     response.statusCode == HttpStatus.OK
-    //Uncomment this to see a better json diff when tests fail
-//    println(JsonOutput.prettyPrint(raw))
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     JSONAssert.assertEquals(withPortReplaced, raw, JSONCompareMode.NON_EXTENSIBLE)
 
     where:
+
     contractFile                                                  | groupName
     'swagger.json'                                                | 'petstore'
     'swaggerTemplated.json'                                       | 'petstoreTemplated'
@@ -149,8 +153,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     String raw = response.body
     response.statusCode == HttpStatus.OK
-    //Uncomment this to see a better json diff when tests fail
-//    println(JsonOutput.prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
@@ -198,6 +200,11 @@ class FunctionContractSpec extends Specification implements FileAccess {
   ])
   @Import([SecuritySupport, Swagger12TestConfig, Swagger2TestConfig])
   static class Config {
+
+    @Bean
+    AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
+      new JacksonSerializerConvention(resolver, "springfox.documentation.spring.web.dummy.models")
+    }
 
     @Bean
     static PropertySourcesPlaceholderConfigurer properties() throws Exception {

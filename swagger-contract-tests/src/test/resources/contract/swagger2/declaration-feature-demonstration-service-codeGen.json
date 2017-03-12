@@ -123,6 +123,109 @@
         }
       }
     },
+    "/features/1490/entity/{itemId}": {
+      "get": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "serializablePetEntity",
+        "operationId": "serializablePetEntityUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "itemId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      }
+    },
+    "/features/1490/{itemId}": {
+      "get": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "serializablePet",
+        "operationId": "serializablePetUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "itemId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "updateSerializablePet",
+        "operationId": "updateSerializablePetUsingPUT_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "itemId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "pet",
+            "description": "pet",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/features/addFiles": {
       "post": {
         "tags": [
