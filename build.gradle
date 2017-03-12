@@ -96,6 +96,10 @@ subprojects {
       html.enabled true
     }
   }
+
+  test {
+    jvmArgs "-Dorg.spockframework.mock.ignoreByteBuddy=true"
+  }
 }
 
 apply from: "$rootDir/gradle/documentation.gradle"

@@ -10,10 +10,12 @@ ext {
 }
 
 dependencies {
+  compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
   compile libs.core
   compile libs.spring
+  
   provided libs.springProvided
   provided libs.clientProvided
-  testCompile libs.test
 
+  testCompile libs.test
 }
