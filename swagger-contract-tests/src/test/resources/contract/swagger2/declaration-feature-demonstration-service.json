@@ -5,7 +5,8 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {},
+    "contact": {
+    },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -36,9 +37,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/vnd.com.fancy-pet+json",
           "application/json",
-          "application/vnd.com.pet+json"
+          "application/vnd.com.pet+json",
+          "application/vnd.com.fancy-pet+json"
         ],
         "parameters": [
           {
@@ -785,7 +786,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Map\u00abstring,string\u00bb"
+                "$ref": "#/definitions/Map«string,string»"
               }
             }
           }
@@ -1091,6 +1092,11 @@
     }
   },
   "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
     "petstore_auth": {
       "type": "oauth2",
       "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
@@ -1099,73 +1105,9 @@
         "write:pets": "modify pets in your account",
         "read:pets": "read your pets"
       }
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     }
   },
   "definitions": {
-    "ModelWithMapProperty": {
-      "type": "object",
-      "properties": {
-        "params": {
-          "type": "object",
-          "description": "Map of params to be sent",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "Describes model with map property"
-    },
-    "ModelWithArrayOfArrays": {
-      "type": "object",
-      "properties": {
-        "arrayOfArrayOfInts": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      }
-    },
-    "ObjectNode": {
-      "type": "object"
-    },
-    "Map\u00abstring,Example\u00bb": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/definitions/Example"
-      }
-    },
-    "NestedType": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "ModelWithObjectNode": {
-      "type": "object",
-      "properties": {
-        "anyObject": {
-          "$ref": "#/definitions/ObjectNode"
-        }
-      }
-    },
-    "Map\u00abstring,string\u00bb": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
     "Example": {
       "type": "object",
       "properties": {
@@ -1219,6 +1161,65 @@
           "readOnly": true
         }
       }
+    },
+    "Map«string,Example»": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Example"
+      }
+    },
+    "Map«string,string»": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "ModelWithArrayOfArrays": {
+      "type": "object",
+      "properties": {
+        "arrayOfArrayOfInts": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "ModelWithMapProperty": {
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "description": "Map of params to be sent",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Describes model with map property"
+    },
+    "ModelWithObjectNode": {
+      "type": "object",
+      "properties": {
+        "anyObject": {
+          "$ref": "#/definitions/ObjectNode"
+        }
+      }
+    },
+    "NestedType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ObjectNode": {
+      "type": "object"
     },
     "Pet": {
       "type": "object",

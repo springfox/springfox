@@ -287,8 +287,8 @@
           "summary": "findIdentityById",
           "nickname": "findIdentityByIdUsingGET",
           "produces": [
-            "application/vnd.com.pet+json",
-            "application/vnd.com.fancy-pet+json"
+            "application/vnd.com.fancy-pet+json",
+            "application/vnd.com.pet+json"
           ],
           "consumes": [
             "application/json"
@@ -1434,7 +1434,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Map\u00abstring,string\u00bb]"
+          "type": "List[Map«string,string»]"
         }
       ],
       "path": "/features/listOfMaps"
@@ -1473,7 +1473,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry\u00abstring,Map\u00abstring,Example\u00bb\u00bb]"
+          "type": "List[Entry«string,Map«string,Example»»]"
         }
       ],
       "path": "/features/mapOfMapOfExample"
@@ -1818,61 +1818,22 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Entry\u00abstring,Map\u00abstring,Example\u00bb\u00bb": {
+    "Pet": {
       "description": "",
-      "id": "Entry\u00abstring,Map\u00abstring,Example\u00bb\u00bb",
+      "id": "Pet",
       "properties": {
-        "key": {
+        "age": {
           "required": false,
-          "type": "List[Entry\u00abstring,Example\u00bb]"
-        }
-      }
-    },
-    "ModelWithMapProperty": {
-      "description": "Describes model with map property",
-      "id": "ModelWithMapProperty",
-      "properties": {
-        "params": {
-          "description": "Map of params to be sent",
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
           "required": false,
-          "type": "object"
-        }
-      }
-    },
-    "ObjectNode": {
-      "description": "",
-      "id": "ObjectNode",
-      "properties": {
-
-      }
-    },
-    "Entry\u00abstring,Example\u00bb": {
-      "description": "",
-      "id": "Entry\u00abstring,Example\u00bb",
-      "properties": {
-        "key": {
-          "required": false,
-          "type": "Example"
-        }
-      }
-    },
-    "NestedType": {
-      "description": "",
-      "id": "NestedType",
-      "properties": {
+          "type": "string"
+        },
         "name": {
           "required": false,
           "type": "string"
-        }
-      }
-    },
-    "ModelWithObjectNode": {
-      "description": "",
-      "id": "ModelWithObjectNode",
-      "properties": {
-        "anyObject": {
-          "required": false,
-          "type": "ObjectNode"
         }
       }
     },
@@ -1942,22 +1903,59 @@
         }
       }
     },
-    "Pet": {
+    "ObjectNode": {
       "description": "",
-      "id": "Pet",
+      "id": "ObjectNode",
+      "properties": {}
+    },
+    "Entry«string,Map«string,Example»»": {
+      "description": "",
+      "id": "Entry«string,Map«string,Example»»",
       "properties": {
-        "age": {
+        "key": {
           "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
+          "type": "List[Entry«string,Example»]"
+        }
+      }
+    },
+    "Entry«string,Example»": {
+      "description": "",
+      "id": "Entry«string,Example»",
+      "properties": {
+        "key": {
           "required": false,
-          "type": "string"
-        },
+          "type": "Example"
+        }
+      }
+    },
+    "NestedType": {
+      "description": "",
+      "id": "NestedType",
+      "properties": {
         "name": {
           "required": false,
           "type": "string"
+        }
+      }
+    },
+    "ModelWithMapProperty": {
+      "description": "Describes model with map property",
+      "id": "ModelWithMapProperty",
+      "properties": {
+        "params": {
+          "description": "Map of params to be sent",
+          "required": false,
+          "type": "object"
+        }
+      }
+    },
+    "ModelWithObjectNode": {
+      "description": "",
+      "id": "ModelWithObjectNode",
+      "properties": {
+        "anyObject": {
+          "required": false,
+          "type": "ObjectNode"
         }
       }
     }

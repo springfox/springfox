@@ -41,7 +41,6 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -60,7 +59,7 @@ public abstract class ModelMapper {
       return null;
     }
 
-    Map<String, Model> map = new HashMap<String, Model>();
+    Map<String, Model> map = newTreeMap();
 
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
@@ -210,7 +209,7 @@ public abstract class ModelMapper {
   }
 
   Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, springfox.documentation.schema.Model> definitions = newHashMap();
+    Map<String, springfox.documentation.schema.Model> definitions = newTreeMap();
     for (ApiListing each : apiListings.values()) {
       definitions.putAll(each.getModels());
     }

@@ -6,7 +6,6 @@
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
     "contact": {
-
     },
     "license": {
       "name": "Apache 2.0",
@@ -47,7 +46,7 @@
             "description": "toCreate",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Resource\u00abPet\u00bb"
+              "$ref": "#/definitions/Resource«Pet»"
             }
           }
         ],
@@ -82,14 +81,14 @@
           }
         ],
         "responses": {
-          "405": {
-            "description": "Invalid input"
-          },
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/HttpEntity\u00abResource\u00abPet\u00bb\u00bb"
+              "$ref": "#/definitions/HttpEntity«Resource«Pet»»"
             }
+          },
+          "405": {
+            "description": "Invalid input"
           }
         }
       }
@@ -118,20 +117,25 @@
           }
         ],
         "responses": {
-          "405": {
-            "description": "Invalid input"
-          },
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Resource\u00abPet\u00bb"
+              "$ref": "#/definitions/Resource«Pet»"
             }
+          },
+          "405": {
+            "description": "Invalid input"
           }
         }
       }
     }
   },
   "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
     "petstore_auth": {
       "type": "oauth2",
       "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
@@ -140,35 +144,14 @@
         "write:pets": "modify pets in your account",
         "read:pets": "read your pets"
       }
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     }
   },
   "definitions": {
-    "Resource\u00abPet\u00bb": {
+    "HttpEntity«Resource«Pet»»": {
       "type": "object",
       "properties": {
-        "_links": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Link"
-          }
-        },
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "content": {
-          "$ref": "#/definitions/Pet"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
+        "body": {
+          "$ref": "#/definitions/Resource«Pet»"
         }
       }
     },
@@ -201,11 +184,27 @@
         }
       }
     },
-    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
+    "Resource«Pet»": {
       "type": "object",
       "properties": {
-        "body": {
-          "$ref": "#/definitions/Resource\u00abPet\u00bb"
+        "_links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "content": {
+          "$ref": "#/definitions/Pet"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
         }
       }
     }

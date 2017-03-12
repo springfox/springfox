@@ -57,69 +57,67 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @Unroll
   def 'should honor swagger v2 resource listing #groupName'() {
     given:
-
-    RequestEntity<Void> request = RequestEntity.get(
-        new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
-        .accept(MediaType.APPLICATION_JSON)
-        .build()
-    String contract = fileContents("/contract/swagger2/$contractFile")
+      RequestEntity<Void> request = RequestEntity.get(
+          new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
+          .accept(MediaType.APPLICATION_JSON)
+          .build()
+      String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
+      def response = http.exchange(request, String)
+      then:
+      String raw = response.body
+      response.statusCode == HttpStatus.OK
 
-    def response = http.exchange(request, String)
-    then:
-    String raw = response.body
-    response.statusCode == HttpStatus.OK
-
-    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-    JSONAssert.assertEquals(withPortReplaced, raw, JSONCompareMode.NON_EXTENSIBLE)
+      def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+      JSONAssert.assertEquals(withPortReplaced, raw, JSONCompareMode.NON_EXTENSIBLE)
+//      println(JsonFormatter.prettyPrint(raw))
 
     where:
-
-    contractFile                                                  | groupName
-    'swagger.json'                                                | 'petstore'
-    'swaggerTemplated.json'                                       | 'petstoreTemplated'
-    'declaration-bugs-service.json'                               | 'bugs'
-    'declaration-bugs-different-service.json'                     | 'bugsDifferent'
-    'declaration-business-service.json'                           | 'businessService'
-    'declaration-concrete-controller.json'                        | 'concrete'
-    'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
-    'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
-    'declaration-feature-demonstration-service.json'              | 'featureService'
-    'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
-    'declaration-inherited-service-impl.json'                     | 'inheritedService'
-    'declaration-pet-grooming-service.json'                       | 'petGroomingService'
-    'declaration-pet-service.json'                                | 'petService'
-    'declaration-groovy-service.json'                             | 'groovyService'
-    'declaration-enum-service.json'                               | 'enumService'
+      contractFile                                                  | groupName
+      'swagger.json'                                                | 'petstore'
+      'swaggerTemplated.json'                                       | 'petstoreTemplated'
+      'declaration-bugs-service.json'                               | 'bugs'
+      'declaration-bugs-different-service.json'                     | 'bugsDifferent'
+      'declaration-business-service.json'                           | 'businessService'
+      'declaration-concrete-controller.json'                        | 'concrete'
+      'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
+      'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
+      'declaration-feature-demonstration-service.json'              | 'featureService'
+      'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
+      'declaration-inherited-service-impl.json'                     | 'inheritedService'
+      'declaration-pet-grooming-service.json'                       | 'petGroomingService'
+      'declaration-pet-service.json'                                | 'petService'
+      'declaration-groovy-service.json'                             | 'groovyService'
+      'declaration-enum-service.json'                               | 'enumService'
   }
 
   def "should list swagger resources for swagger 2.0"() {
     given:
-    def http = new TestRestTemplate()
-    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
-        .accept(MediaType.APPLICATION_JSON)
-        .build()
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
+          .accept(MediaType.APPLICATION_JSON)
+          .build()
     when:
-    def response = http.exchange(request, String)
-    def slurper = new JsonSlurper()
-    def result = slurper.parseText(response.body)
+      def response = http.exchange(request, String)
+      def slurper = new JsonSlurper()
+      def result = slurper.parseText(response.body)
     then:
-    result.find {
-      it.name == 'petstore' &&
-          it.location == '/v2/api-docs?group=petstore' &&
-          it.swaggerVersion == '2.0'
-    }
-    result.find {
-      it.name == 'businessService' &&
-          it.location == '/v2/api-docs?group=businessService' &&
-          it.swaggerVersion == '2.0'
-    }
-    result.find {
-      it.name == 'concrete' &&
-          it.location == '/v2/api-docs?group=concrete' &&
-          it.swaggerVersion == '2.0'
-    }
+      result.find {
+        it.name == 'petstore' &&
+            it.location == '/v2/api-docs?group=petstore' &&
+            it.swaggerVersion == '2.0'
+      }
+      result.find {
+        it.name == 'businessService' &&
+            it.location == '/v2/api-docs?group=businessService' &&
+            it.swaggerVersion == '2.0'
+      }
+      result.find {
+        it.name == 'concrete' &&
+            it.location == '/v2/api-docs?group=concrete' &&
+            it.swaggerVersion == '2.0'
+      }
   }
 
   def 'should honor swagger resource listing'() {
@@ -134,8 +132,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
     def response = http.exchange(request, String)
     then:
     response.statusCode == HttpStatus.OK
-    //Uncomment this to see a better json diff when tests fail
-//    println(JsonOutput.prettyPrint(response.body))
 
     JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
   }
@@ -143,49 +139,46 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @Unroll
   def 'should honor api v1.2 contract [#contractFile] at endpoint [#declarationPath]'() {
     given:
-    def http = new TestRestTemplate()
-    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs${declarationPath}"))
-        .accept(MediaType.APPLICATION_JSON)
-        .build()
-    String contract = fileContents("/contract/swagger/$contractFile")
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs${declarationPath}"))
+          .accept(MediaType.APPLICATION_JSON)
+          .build()
+      String contract = fileContents("/contract/swagger/$contractFile")
     when:
-    def response = http.exchange(request, String)
+      def response = http.exchange(request, String)
     then:
-    String raw = response.body
-    response.statusCode == HttpStatus.OK
+      String raw = response.body
+      response.statusCode == HttpStatus.OK
 
-    JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
-
-//    and: "both json docs are the same length"
-//      contract.length() == actual.length()
+      JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
     where:
-    contractFile                                                  | declarationPath
-    'declaration-business-service.json'                           | '/default/business-service'
-    'declaration-concrete-controller.json'                        | '/default/concrete-controller'
-    'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
-    'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
-    'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
-    'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
-    'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
-    'declaration-pet-service.json'                                | '/default/pet-service'
-    'declaration-root-controller.json'                            | '/default/root-controller'
-    'declaration-groovy-service.json'                             | '/default/groovy-service'
+      contractFile                                                  | declarationPath
+      'declaration-business-service.json'                           | '/default/business-service'
+      'declaration-concrete-controller.json'                        | '/default/concrete-controller'
+      'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
+      'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
+      'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
+      'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
+      'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
+      'declaration-pet-service.json'                                | '/default/pet-service'
+      'declaration-root-controller.json'                            | '/default/root-controller'
+      'declaration-groovy-service.json'                             | '/default/groovy-service'
   }
 
 
   def "should list swagger resources for swagger 1.2"() {
     given:
-    def http = new TestRestTemplate()
-    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
+      def http = new TestRestTemplate()
+      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
     when:
-    def response = http.exchange(request, String)
-    def slurper = new JsonSlurper()
-    def result = slurper.parseText(response.body)
+      def response = http.exchange(request, String)
+      def slurper = new JsonSlurper()
+      def result = slurper.parseText(response.body)
     then:
-    result.find {
+      result.find {
       it.name == 'default' &&
           it.location == '/api-docs' &&
           it.swaggerVersion == '1.2'
