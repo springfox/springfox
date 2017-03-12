@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.collect.FluentIterable.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 /**
@@ -60,13 +61,14 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   private final List<RequestHandlerProvider> handlerProviders;
   private final DocumentationCache scanned;
   private final ApiDocumentationScanner resourceListing;
-  private final List<AlternateTypeRuleConvention> typeConventions;
   private final DefaultConfiguration defaultConfiguration;
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
   @Autowired(required = false)
   private RequestHandlerCombiner combiner;
+  @Autowired(required = false)
+  private List<AlternateTypeRuleConvention> typeConventions;
 
   @Autowired
   public DocumentationPluginsBootstrapper(
@@ -76,14 +78,12 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
       ApiDocumentationScanner resourceListing,
       TypeResolver typeResolver,
       Defaults defaults,
-      ServletContext servletContext,
-      List<AlternateTypeRuleConvention> typeConventions) {
+      ServletContext servletContext) {
 
     this.documentationPluginsManager = documentationPluginsManager;
     this.handlerProviders = handlerProviders;
     this.scanned = scanned;
     this.resourceListing = resourceListing;
-    this.typeConventions = typeConventions;
     this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
   }
 
@@ -100,7 +100,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
     List<RequestHandler> requestHandlers = from(handlerProviders)
         .transformAndConcat(handlers())
         .toList();
-    List<AlternateTypeRule> rules = from(typeConventions)
+    List<AlternateTypeRule> rules = from(nullToEmptyList(typeConventions))
           .transformAndConcat(toRules())
           .toList();
     return documentationPluginsManager
