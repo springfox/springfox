@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -518,6 +517,40 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1722": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "Remove an apple from a user",
+        "description": "Remove an apple from a user. You must specify the user name and the apple name.",
+        "operationId": "bug1722UsingPOST_2",
+        "consumes": [
+          "application/xml",
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "test",
+            "description": "test",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The apple is removed"
           }
         }
       }

@@ -22,6 +22,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,7 +80,7 @@ public class BugsController {
   }
 
   @RequestMapping(value = "1420", method = RequestMethod.GET)
-  @ApiOperation(tags = {"foo"}, value = "issue1420")
+  @ApiOperation(tags = { "foo" }, value = "issue1420")
   public String issue1420() {
     return "1420";
   }
@@ -128,6 +130,14 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
+  @ApiOperation(value = "Remove an apple from a user", notes = "Remove an apple from a user. You must specify the "
+      + "user name and the apple name.", response = Void.class, consumes = "application/json, application/xml",
+      produces = "application/json, application/xml")
+  @ApiResponses({ @ApiResponse(code = 200, message = "The apple is removed") })
+  @RequestMapping(value = "1722", method = RequestMethod.POST)
+  public void bug1722(@RequestBody String test) {
+  }
+
   public class Bug1627 {
     private String name;
 
@@ -166,9 +176,9 @@ public class BugsController {
   }
 
   class Bug1676 {
-    @ApiModelProperty(value = "Horizontal position", required=false, example="200")
+    @ApiModelProperty(value = "Horizontal position", required = false, example = "200")
     private float xAxis;
-    @ApiModelProperty(value = "Vertical position", required=false, example="500")
+    @ApiModelProperty(value = "Vertical position", required = false, example = "500")
     private float yAxis;
 
     public float getxAxis() {
@@ -187,10 +197,11 @@ public class BugsController {
       this.yAxis = yAxis;
     }
   }
-  
+
   class Bug1376 {
 
     URL url;
+
     public Bug1376(URL url) {
       this.url = url;
     }
