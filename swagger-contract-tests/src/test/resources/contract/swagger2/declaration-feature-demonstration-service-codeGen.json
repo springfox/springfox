@@ -5,7 +5,8 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {},
+    "contact": {
+    },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -36,9 +37,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/vnd.com.fancy-pet+json",
           "application/json",
-          "application/vnd.com.pet+json"
+          "application/vnd.com.pet+json",
+          "application/vnd.com.fancy-pet+json"
         ],
         "parameters": [
           {
@@ -114,6 +115,109 @@
             "required": true,
             "type": "string",
             "format": "byte"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/features/1490/entity/{itemId}": {
+      "get": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "serializablePetEntity",
+        "operationId": "serializablePetEntityUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "itemId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      }
+    },
+    "/features/1490/{itemId}": {
+      "get": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "serializablePet",
+        "operationId": "serializablePetUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "itemId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "updateSerializablePet",
+        "operationId": "updateSerializablePetUsingPUT_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "description": "itemId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "pet",
+            "description": "pet",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
           }
         ],
         "responses": {
@@ -988,6 +1092,11 @@
     }
   },
   "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
     "petstore_auth": {
       "type": "oauth2",
       "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
@@ -996,73 +1105,9 @@
         "write:pets": "modify pets in your account",
         "read:pets": "read your pets"
       }
-    },
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     }
   },
   "definitions": {
-    "ModelWithMapProperty": {
-      "type": "object",
-      "properties": {
-        "params": {
-          "type": "object",
-          "description": "Map of params to be sent",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "Describes model with map property"
-    },
-    "ModelWithArrayOfArrays": {
-      "type": "object",
-      "properties": {
-        "arrayOfArrayOfInts": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      }
-    },
-    "ObjectNode": {
-      "type": "object"
-    },
-    "MapOfstringAndExample": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/definitions/Example"
-      }
-    },
-    "NestedType": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "MapOfstringAndstring": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "ModelWithObjectNode": {
-      "type": "object",
-      "properties": {
-        "anyObject": {
-          "$ref": "#/definitions/ObjectNode"
-        }
-      }
-    },
     "Example": {
       "type": "object",
       "properties": {
@@ -1116,6 +1161,65 @@
           "readOnly": true
         }
       }
+    },
+    "MapOfstringAndExample": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Example"
+      }
+    },
+    "MapOfstringAndstring": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "ModelWithArrayOfArrays": {
+      "type": "object",
+      "properties": {
+        "arrayOfArrayOfInts": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      }
+    },
+    "ModelWithMapProperty": {
+      "type": "object",
+      "properties": {
+        "params": {
+          "type": "object",
+          "description": "Map of params to be sent",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Describes model with map property"
+    },
+    "ModelWithObjectNode": {
+      "type": "object",
+      "properties": {
+        "anyObject": {
+          "$ref": "#/definitions/ObjectNode"
+        }
+      }
+    },
+    "NestedType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "ObjectNode": {
+      "type": "object"
     },
     "Pet": {
       "type": "object",

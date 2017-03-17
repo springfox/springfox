@@ -26,6 +26,7 @@ import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.SecurityScheme;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import static com.google.common.collect.Maps.*;
 
@@ -41,7 +42,10 @@ public class SecurityMapper {
     if (from == null) {
       return newHashMap();
     }
-    return transformValues(uniqueIndex(from.getSecuritySchemes(), schemeName()), toSecuritySchemeDefinition());
+    TreeMap<String, SecuritySchemeDefinition> result = newTreeMap();
+    result.putAll(transformValues(uniqueIndex(from.getSecuritySchemes(), schemeName()),
+        toSecuritySchemeDefinition()));
+    return result;
   }
 
   private Function<SecurityScheme, String> schemeName() {

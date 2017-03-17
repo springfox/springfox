@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.spring.web.dummy.models.Business;
@@ -48,6 +49,7 @@ import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
 import springfox.documentation.spring.web.dummy.models.ModelWithObjectNode;
 import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
+import springfox.documentation.spring.web.dummy.models.PetWithSerializer;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -211,5 +213,22 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "/1367/{itemId}", method = RequestMethod.GET, produces = "application/vnd.com.fancy-pet+json")
   public ResponseEntity<FancyPet> findById(@PathVariable String itemId) {
     return new ResponseEntity<FancyPet>(new FancyPet(), HttpStatus.OK);
+  }
+
+  //TODO: entity in params doesnt work bug?
+  @RequestMapping(value = "/1490/entity/{itemId}", method = RequestMethod.GET)
+  @ResponseBody
+  public ResponseEntity<PetWithSerializer> serializablePetEntity(@PathVariable String itemId) {
+    return new ResponseEntity<PetWithSerializer>(new PetWithSerializer(), HttpStatus.OK);
+  }
+
+  @RequestMapping(value = "/1490/{itemId}", method = RequestMethod.GET)
+  @ResponseBody
+  public PetWithSerializer serializablePet(@PathVariable String itemId) {
+    return new PetWithSerializer();
+  }
+
+  @RequestMapping(value = "/1490/{itemId}", method = RequestMethod.PUT)
+  public void updateSerializablePet(@PathVariable String itemId, @RequestBody PetWithSerializer pet) {
   }
 }

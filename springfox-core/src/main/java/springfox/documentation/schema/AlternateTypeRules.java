@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AlternateTypeRules {
-  public static final int DIRECT_SUBSTITUTION_RULE_ORDER = Ordered.HIGHEST_PRECEDENCE + 1000;
-  public static final int GENERIC_SUBSTITUTION_RULE_ORDER = Ordered.HIGHEST_PRECEDENCE + 500;
+  public static final int DIRECT_SUBSTITUTION_RULE_ORDER = Ordered.HIGHEST_PRECEDENCE + 3000;
+  public static final int GENERIC_SUBSTITUTION_RULE_ORDER = Ordered.HIGHEST_PRECEDENCE + 2000;
 
   private AlternateTypeRules() {
     throw new UnsupportedOperationException();

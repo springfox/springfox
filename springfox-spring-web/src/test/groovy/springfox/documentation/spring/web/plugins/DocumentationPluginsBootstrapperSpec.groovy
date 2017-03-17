@@ -41,11 +41,12 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
 
   DocumentationPluginsBootstrapper bootstrapper =
           new DocumentationPluginsBootstrapper(pluginManager,
-          [handlerProvider],
-          new DocumentationCache(),
-          apiGroup,
-          new TypeResolver(),
-          new Defaults(), Mock(ServletContext))
+              [handlerProvider],
+              new DocumentationCache(),
+              apiGroup,
+              new TypeResolver(),
+              new Defaults(),
+              Mock(ServletContext))
 
   def setup() {
     pluginManager.createContextBuilder(_, _) >> new DocumentationContextBuilder(DocumentationType.SWAGGER_12)

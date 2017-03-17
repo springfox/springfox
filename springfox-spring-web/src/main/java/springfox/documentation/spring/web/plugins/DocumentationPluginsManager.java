@@ -149,8 +149,9 @@ public class DocumentationPluginsManager {
     return new Docket(DocumentationType.SWAGGER_2);
   }
 
-  public DocumentationContextBuilder createContextBuilder(DocumentationType documentationType,
-                                                          DefaultConfiguration defaultConfiguration) {
+  public DocumentationContextBuilder createContextBuilder(
+      DocumentationType documentationType,
+      DefaultConfiguration defaultConfiguration) {
     return defaultsProviders.getPluginFor(documentationType, defaultConfiguration)
         .create(documentationType)
         .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));

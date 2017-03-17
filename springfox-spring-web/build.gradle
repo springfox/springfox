@@ -10,13 +10,14 @@ ext {
 }
 
 dependencies {
+  compile "org.reflections:reflections:$reflections"
   compile libs.core
   compile libs.spring
-  provided libs.springProvided
-  provided libs.clientProvided
-
   compile project(':springfox-spi')
   compile project(':springfox-schema').sourceSets.main.output
+
+  provided libs.springProvided
+  provided libs.clientProvided
 
   testCompile project(':springfox-core')
   testCompile libs.test

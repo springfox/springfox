@@ -5,7 +5,8 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {},
+    "contact": {
+    },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -278,7 +279,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Resource\u00abstring\u00bb"
+              "$ref": "#/definitions/Resource«string»"
             }
           }
         }
@@ -558,21 +559,35 @@
         }
       }
     },
-    "Resource«string»": {
+    "Bug1627": {
       "type": "object",
       "properties": {
-        "_links": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/LinkAlternate"
-          }
+        "name": {
+          "type": "string"
         }
       }
     },
-    "LinkAlternate": {
+    "Bug1676": {
       "type": "object",
       "properties": {
-        "href": {
+        "xAxis": {
+          "type": "number",
+          "format": "float",
+          "example": 200.0,
+          "description": "Horizontal position"
+        },
+        "yAxis": {
+          "type": "number",
+          "format": "float",
+          "example": 500.0,
+          "description": "Vertical position"
+        }
+      }
+    },
+    "Bug1697": {
+      "type": "object",
+      "properties": {
+        "bar": {
           "type": "string"
         }
       }
@@ -631,31 +646,6 @@
         }
       }
     },
-    "Bug1627": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "Bug1676": {
-      "type": "object",
-      "properties": {
-        "xAxis": {
-          "type": "number",
-          "format": "float",
-          "example": 200.0,
-          "description": "Horizontal position"
-        },
-        "yAxis": {
-          "type": "number",
-          "format": "float",
-          "example": 500.0,
-          "description": "Vertical position"
-        }
-      }
-    },
     "File": {
       "type": "object",
       "properties": {
@@ -664,10 +654,10 @@
         }
       }
     },
-    "Bug1697": {
+    "LinkAlternate": {
       "type": "object",
       "properties": {
-        "bar": {
+        "href": {
           "type": "string"
         }
       }
@@ -677,6 +667,17 @@
       "properties": {
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "Resource«string»": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/LinkAlternate"
+          }
         }
       }
     }

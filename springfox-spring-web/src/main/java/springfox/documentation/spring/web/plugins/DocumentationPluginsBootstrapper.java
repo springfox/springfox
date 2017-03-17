@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.schema.AlternateTypeRule;
+import springfox.documentation.schema.AlternateTypeRuleConvention;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.RequestHandlerCombiner;
@@ -43,6 +45,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.collect.FluentIterable.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 /**
@@ -64,6 +67,8 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
 
   @Autowired(required = false)
   private RequestHandlerCombiner combiner;
+  @Autowired(required = false)
+  private List<AlternateTypeRuleConvention> typeConventions;
 
   @Autowired
   public DocumentationPluginsBootstrapper(
@@ -95,9 +100,22 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
     List<RequestHandler> requestHandlers = from(handlerProviders)
         .transformAndConcat(handlers())
         .toList();
+    List<AlternateTypeRule> rules = from(nullToEmptyList(typeConventions))
+          .transformAndConcat(toRules())
+          .toList();
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
+        .rules(rules)
         .requestHandlers(combiner().combine(requestHandlers));
+  }
+
+  private Function<AlternateTypeRuleConvention, List<AlternateTypeRule>> toRules() {
+    return new Function<AlternateTypeRuleConvention, List<AlternateTypeRule>>() {
+      @Override
+      public List<AlternateTypeRule> apply(AlternateTypeRuleConvention input) {
+        return input.rules();
+      }
+    };
   }
 
   private RequestHandlerCombiner combiner() {

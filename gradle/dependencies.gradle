@@ -11,6 +11,7 @@ ext {
   mapstruct = "1.1.0.Final"
   mockito = "1.10.19"
   objenesis = "2.5.1"
+  reflections = "0.9.11"
   servlet = "3.1.0"
   slf4j = "1.7.24"
   snakeyaml = '1.18'
