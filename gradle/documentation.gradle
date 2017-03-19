@@ -5,8 +5,6 @@ apply plugin: "org.asciidoctor.convert"
 apply plugin: 'org.ajoberstar.github-pages'
 
 githubPages {
-  repoUri = 'git@github.com:springfox/springfox-documentation.git' // defaults to this project's origin URI
-  targetBranch = 'master'
   deleteExistingFiles = false
   pages {
     from "${buildDir}/all-docs"
