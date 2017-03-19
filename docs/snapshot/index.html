@@ -537,7 +537,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel3">
 <li><a href="#snapshot">1.5.1. Snapshot</a></li>
 <li><a href="#override-deploy">1.5.2. Override deploy</a></li>
-<li><a href="#updating-documentation">1.5.3. Updating documentation</a></li>
+<li><a href="#releasing-documentation">1.5.3. Releasing documentation</a></li>
 <li><a href="#contributing">1.5.4. Contributing</a></li>
 </ul>
 </li>
@@ -743,19 +743,19 @@ and building will NOT work!
 <div class="sect3">
 <h4 id="building-reference-documentation">1.4.2. Building reference documentation</h4>
 <div class="paragraph">
-<p>To view the docs in a browser run:</p>
+<p>To build all the current documentation (builds hand written docs and javadocs):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">./gradlew docs</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew allDocs</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>When frequently generating the docs use the Gradle daemon as follows</p>
+<p>The docs are generated in the <code>build/all-docs</code> folder. To publish the current documentation (snapshot)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"> ./gradlew asciidoc --daemon</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew publishDocs</code></pre>
 </div>
 </div>
 </div>
@@ -793,7 +793,7 @@ The below properties are required to run a release:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">    ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
+<pre class="CodeRay highlight"><code>    ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
     -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt; -i</code></pre>
 </div>
 </div>
@@ -816,7 +816,7 @@ The below properties are required to run a release:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">./gradlew snapshot -PbintrayUsername=&lt;bintrayUsername&gt; -PbintrayPassword=&lt;bintrayPassword&gt;</code></pre>
+<pre class="CodeRay highlight"><code>./gradlew snapshot -PbintrayUsername=&lt;bintrayUsername&gt; -PbintrayPassword=&lt;bintrayPassword&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -828,19 +828,19 @@ The below properties are required to run a release:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">./gradlew clean build bintrayUpload -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt;
+<pre class="CodeRay highlight"><code>./gradlew clean build bintrayUpload -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt;
  --stacktrace</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="updating-documentation">1.5.3. Updating documentation</h4>
+<h4 id="releasing-documentation">1.5.3. Releasing documentation</h4>
 <div class="paragraph">
 <p>To update the docs for an existing release pass the <code>updateMode</code> switch</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>./gradlew publishDocs -PupdateMode</code></pre>
+<pre class="CodeRay highlight"><code>./gradlew releaseDocs</code></pre>
 </div>
 </div>
 </div>
@@ -3225,7 +3225,7 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 <div id="footer">
 <div id="footer-text">
 Version 2.7.0-SNAPSHOT<br>
-Last updated 2017-03-17 01:14:29 UTC
+Last updated 2017-03-19 19:47:31 UTC
 </div>
 </div>
 </body>
