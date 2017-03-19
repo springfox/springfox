@@ -33,21 +33,27 @@ Endorsed or approved by the Spring Framework Contributors
 - Make sure to check the 'use the default gradle wrapper' option.
 - First time build
 
-```bash
+[source,bash]
+[subs="verbatim,attributes"]
+----
 ./gradlew cleanIdea idea
-
-```
+----
 
 - To get more output from any gradle commands/tasks append a `-i` (info) or `-d` (debug) e.g.
-```bash
+
+[source,bash]
+[subs="verbatim,attributes"]
+----
 ./gradlew build -i
+----
 
-```
 - To publish to local maven repository
-```bash
-./gradlew clean build publishToMavenLocal -i
 
-```
+[source,bash]
+[subs="verbatim,attributes"]
+----
+./gradlew clean build publishToMavenLocal -i
+----
 
 NOTE: This build is optimized for releasing software to bintray/sonatype. In order for gradle to figure out
 the version the gradle plugin relies on local folder being a cloned git repository. Downloading the source archive
@@ -57,20 +63,28 @@ and building will NOT work!
 
 - Code quality (code coverage, checkstyle)
 
-```bash
+[source,bash]
+[subs="verbatim,attributes"]
+----
 ./gradlew check
-```
+----
 
 ==== Building reference documentation
-To view the docs in a browser run:
-```bash
-./gradlew docs
-```
+To build all the current documentation (builds hand written docs and javadocs):
+[source,bash]
+[subs="verbatim,attributes"]
+----
+./gradlew allDocs
+----
 
-When frequently generating the docs use the Gradle daemon as follows
-```bash
- ./gradlew asciidoc --daemon
-```
+The docs are generated in the `build/all-docs` folder. To publish the current documentation (snapshot)
+
+[source,bash]
+[subs="verbatim,attributes"]
+----
+./gradlew publishDocs
+----
+
 ==== CI Environment
 
 https://circleci.com/gh/springfox/springfox[Circle CI]
@@ -88,10 +102,12 @@ The below properties are required to run a release:
 
 Recommend using [autoenv](https://github.com/kennethreitz/autoenv) with a `.env` file at the root of the repo.
 
-```bash
+[source,]
+[subs="verbatim,attributes"]
+----
     ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
     -PreleaseType=<MAJOR|MINOR|PATCH> -i
-```
+----
 
 The release steps are as follows:
 - check that the git workspace is clean
@@ -107,25 +123,31 @@ The release steps are as follows:
 ==== Snapshot
 
 This is normally done by the CI server
-```bash
+[source,]
+[subs="verbatim,attributes"]
+----
 ./gradlew snapshot -PbintrayUsername=<bintrayUsername> -PbintrayPassword=<bintrayPassword>
-```
+----
 
 ==== Override deploy
 
 To bypass the standard release flow and upload directly to bintray use the following task
 - manually set the version in version.properties
-```bash
+[source,]
+[subs="verbatim,attributes"]
+----
 ./gradlew clean build bintrayUpload -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD -PreleaseType=<MAJOR|MINOR|PATCH>
  --stacktrace
-```
+----
 
-==== Updating documentation
+==== Releasing documentation
 
 To update the docs for an existing release pass the `updateMode` switch
-```
-./gradlew publishDocs -PupdateMode
-```
+[source,]
+[subs="verbatim,attributes"]
+----
+./gradlew releaseDocs
+----
 
 ==== Contributing
 
