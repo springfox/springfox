@@ -2,15 +2,26 @@ import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply plugin: "org.asciidoctor.convert"
+apply plugin: 'org.ajoberstar.github-pages'
+
+githubPages {
+  repoUri = 'git@github.com:springfox/springfox-documentation.git' // defaults to this project's origin URI
+  targetBranch = 'master'
+  deleteExistingFiles = false
+  pages {
+    from "${buildDir}/all-docs"
+  }
+}
+
 asciidoctor {
   sourceDir = file('docs/asciidoc')
   logDocuments = true
   separateOutputDirs = false
   backends = ['html5']
-
+  outputDir = file("${buildDir}/all-docs/docs/snapshot")
   attributes 'source-highlighter': 'coderay',
-          'springfox-current-version': latestSnapshotVersion(project),
-          'springfox-released-version': latestReleasedVersion(project),
+          'springfox-current-version': project.version.toString(),
+          'springfox-released-version': project.rootProject.buildInfo.currentVersion.asText(),
           'springfox-swagger-ui-rfc6570-version': "${rootProject.ext.springfoxRfc6570Version}",
           toc: 'left',
           idprefix: '',
@@ -19,73 +30,50 @@ asciidoctor {
           encoding: 'utf-8'
 }
 
-def latestSnapshotVersion(project) {
-  if (project.rootProject.buildInfo.isReleaseBuild) {
-    return project.rootProject.buildInfo.nextVersion.asText()
-  }
-  return project.version.toString()
+task allJavadoc(type: Javadoc) {
+  final def publishables = ProjectDefinitions.publishables(project)
+  source publishables.collect { it.sourceSets.main.allJava }
+  classpath = files(publishables.collect { it.sourceSets.main.compileClasspath })
+  destinationDir = file("${buildDir}/all-docs/javadoc/snapshot")
 }
 
-def latestReleasedVersion(project) {
-  if (project.rootProject.buildInfo.isReleaseBuild) {
-    return project.version.toString()
+
+task allDocs {
+  dependsOn asciidoctor, allJavadoc
+  doLast {
+    println asciidoctor.attributes
+    println asciidoctor.properties
   }
-  return project.rootProject.buildInfo.currentVersion.asText()
 }
 
-task publishDocs(type: Exec) {
-  description = "Publishes reference documentation"
+task publishDocs {
+  dependsOn publishGhPages
+}
+
+task createReleaseDocs(type: Exec, dependsOn: allDocs) {
+  description = "Creates released version of documentation"
   group = "release"
 
-  String symlink = 'snapshot'
-  String docVersion = project.version
   BuildInfo buildInfo = project.rootProject.buildInfo
+  String symlink = 'current'
+  String docVersion = buildInfo.currentVersion.asText()
 
-  if (project.hasProperty('updateMode')) {
-    symlink = 'current'
-    docVersion = buildInfo.currentVersion.asText()
-  } else {
-    symlink = project.rootProject.buildInfo.isReleaseBuild ? 'current' : 'snapshot'
-  }
-
-  def docPublishInfo = """Publishing docs with ...
-        latest snapshot version: ${latestSnapshotVersion(project)}
-        latest release version: ${latestReleasedVersion(project)}
-        symlink: ${symlink}
-        docVersion: ${docVersion}
-        project version: ${project.version}
-"""
-  project.logger.info(docPublishInfo)
-
-
-  String gitChanges = ""
-  ['build/asciidoc/*'    : "docs",
-   'build/docs/javadoc/*': "javadoc"].each { source, destination ->
-    String dir = "${destination}/${docVersion}/"
-    gitChanges += """rm -rf $dir
-      mkdir -p $dir
-      cp -r $source $dir
-      rm -rf ${destination}/${symlink}
-      ln -sf ${docVersion}/ ${destination}/${symlink}
-      git add $dir ${destination}/${symlink}
+  String releaseCommands = ""
+  ["${buildDir}/all-docs/docs/snapshot"    : "${buildDir}/all-docs/docs",
+   "${buildDir}/all-docs/javadoc/snapshot": "${buildDir}/all-docs/javadoc"].each { source, destination ->
+    String releaseVersionDir = "${destination}/${docVersion}/"
+    releaseCommands += """
+      cp -r $source $releaseVersionDir
+      ln -sf $releaseVersionDir ${destination}/${symlink}
 """
   }
 
   def commands = """
-  git config --local user.email "bot@springfox.io"
-  git config --local user.name "Springfox Robot"
-  git fetch origin +gh-pages:gh-pages
-  git checkout gh-pages
-  $gitChanges
-  git commit -qm "Publish docs/${project.version}"
-  git push -q "https://${System.getenv("GITHUB_TOKEN")}@github.com/springfox/springfox.git" gh-pages > /dev/null 2>&1
-  git checkout master
-  git config --local --unset user.email
-  git config --local --unset user.name
-"""
-
+  $releaseCommands
+  """
+  
   if (buildInfo.dryRun) {
-    logger.info("Will run the following command:")
+    logger.info("Will run the following commands:")
     logger.info(commands)
     commandLine "sh", "-c", "echo This is a dry run"
     return
@@ -94,26 +82,8 @@ task publishDocs(type: Exec) {
   commandLine "sh", "-c", commands
 }
 
-def isSnapshot(project) {
-  String.valueOf(project.version).endsWith("-SNAPSHOT")
+task releaseDocs {
+  dependsOn createReleaseDocs, publishDocs
 }
 
-task allJavadoc(type: Javadoc) {
-  final def publishables = ProjectDefinitions.publishables(project)
-  source publishables.collect { it.sourceSets.main.allJava }
-  classpath = files(publishables.collect { it.sourceSets.main.compileClasspath })
-  destinationDir = file("${buildDir}/docs/javadoc")
-}
-
-
-task docs {
-  dependsOn asciidoctor
-  doLast {
-    println asciidoctor.attributes
-    println asciidoctor.properties
-    Class.forName("java.awt.Desktop").newInstance().browse(file("${asciidoctor.outputDir}/index.html").toURI())
-  }
-}
-
-publishDocs.dependsOn asciidoctor
-publishDocs.dependsOn allJavadoc
+publishGhPages.dependsOn allDocs
