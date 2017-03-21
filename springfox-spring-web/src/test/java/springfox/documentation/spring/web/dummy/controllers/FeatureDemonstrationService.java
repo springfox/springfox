@@ -215,7 +215,6 @@ public class FeatureDemonstrationService {
     return new ResponseEntity<FancyPet>(new FancyPet(), HttpStatus.OK);
   }
 
-  //TODO: entity in params doesnt work bug?
   @RequestMapping(value = "/1490/entity/{itemId}", method = RequestMethod.GET)
   @ResponseBody
   public ResponseEntity<PetWithSerializer> serializablePetEntity(@PathVariable String itemId) {

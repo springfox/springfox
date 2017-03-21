@@ -49,16 +49,6 @@ public class ParameterModelProperty extends BaseModelProperty {
   }
 
   @Override
-  public boolean isRequired() {
-    return true;
-  }
-
-  @Override
-  public boolean isReadOnly() {
-    return false;
-  }
-
-  @Override
   public int position() {
     return parameter.getIndex();
   }
