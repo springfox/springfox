@@ -163,7 +163,7 @@ discusses issues with doing this.
 A. This is because of how plugins work and how their priority layers information
 
 - `@PathVariables` are always marked as required.
-- `@ApiParam is` an optional annotation to describe additional meta-information like description etc.
+- `@ApiParam` is an optional annotation to describe additional meta-information like description etc.
 - `@ApiParam#required()` is defaulted to false, unless you set it to true.
 
 Springfox uses plugins to layer information. There are a set of plugins that are spring specific that apply the
