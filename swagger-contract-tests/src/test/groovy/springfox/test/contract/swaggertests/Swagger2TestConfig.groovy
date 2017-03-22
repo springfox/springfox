@@ -25,7 +25,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 public class Swagger2TestConfig {
 
   @Autowired
-  private TypeResolver resolver;
+  private TypeResolver resolver
 
   @Bean
   public Docket petstore(List<SecurityScheme> authorizationTypes) {
@@ -35,7 +35,11 @@ public class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-          .paths(and(regex("/api/.*"), not(regex("/api/store/search.*"))))
+          .paths(or(
+                  and(
+                      regex("/api/.*"),
+                      not(regex("/api/store/search.*"))),
+                  regex("/generic/.*")))
           .build()
         .host("petstore.swagger.io")
         .protocols(['http', 'https'] as Set)

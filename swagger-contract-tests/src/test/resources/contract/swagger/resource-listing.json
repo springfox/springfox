@@ -42,6 +42,11 @@
       "position": 0
     },
     {
+      "description": "Generic Pet Controller",
+      "path": "/default/generic-pet-controller",
+      "position": 0
+    },
+    {
       "description": "Groovy Service",
       "path": "/default/groovy-service",
       "position": 0

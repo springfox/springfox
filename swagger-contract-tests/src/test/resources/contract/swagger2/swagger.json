@@ -20,6 +20,10 @@
       "description": "Operations about store"
     },
     {
+      "name": "generic-pet-controller",
+      "description": "Generic Pet Controller"
+    },
+    {
       "name": "pet-controller",
       "description": "Operations about pets"
     },
@@ -730,6 +734,30 @@
           },
           "404": {
             "description": "User not found"
+          }
+        }
+      }
+    },
+    "/generic/pets/test": {
+      "post": {
+        "tags": [
+          "generic-pet-controller"
+        ],
+        "summary": "test",
+        "operationId": "testUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
           }
         }
       }
