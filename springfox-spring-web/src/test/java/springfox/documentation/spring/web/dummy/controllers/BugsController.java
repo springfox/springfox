@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.Resource;
@@ -136,6 +137,14 @@ public class BugsController {
   @ApiResponses({ @ApiResponse(code = 200, message = "The apple is removed") })
   @RequestMapping(value = "1722", method = RequestMethod.POST)
   public void bug1722(@RequestBody String test) {
+  }
+
+  @RequestMapping(value = "1734", method = RequestMethod.GET)
+  public void bug1734(
+      @ApiParam(name = "offset", value = "The value of offset", defaultValue = "0")
+      @RequestParam(value = "offset", defaultValue = "0", required = false)
+          int offset) {
+    throw new UnsupportedOperationException();
   }
 
   public class Bug1627 {

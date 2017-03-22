@@ -554,6 +554,38 @@
           }
         }
       }
+    },
+    "/bugs/1734{?offset}": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1734",
+        "operationId": "bug1734UsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The value of offset",
+            "required": false,
+            "type": "integer",
+            "default": 0,
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
