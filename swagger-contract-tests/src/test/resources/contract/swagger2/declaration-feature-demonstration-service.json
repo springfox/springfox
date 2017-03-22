@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -888,6 +887,24 @@
               "format": "int32"
             },
             "collectionFormat": "multi"
+          },
+          {
+            "name": "accountTypes",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "CASH",
+                "BANK"
+              ]
+            },
+            "collectionFormat": "multi",
+            "enum": [
+              "CASH",
+              "BANK"
+            ]
           },
           {
             "name": "stringProp",

@@ -1560,6 +1560,16 @@
               "required": false
             },
             {
+              "allowMultiple": true,
+              "name": "accountTypes",
+              "paramType": "query",
+              "items": {
+                "type": "string"
+              },
+              "type": "array",
+              "required": false
+            },
+            {
               "allowMultiple": false,
               "name": "stringProp",
               "paramType": "query",

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License")
  *  you may not use this file except in compliance with the License.
@@ -55,17 +55,19 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   }
 
   def "shouldn't expand hidden parameters"() {
-      when:
-        def parameters = sut.expand(
-            new ExpansionContext("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context()))
-      then:
-        parameters.size() == 6
-        parameters.find { it.name == 'modelAttributeProperty' }
-        parameters.find { it.name == 'stringProp' }
-        parameters.find { it.name == 'intProp' }
-        parameters.find { it.name == 'listProp' }
-        parameters.find { it.name == 'arrayProp' }
-        parameters.find { it.name == 'complexProp.name' }
+    when:
+    def parameters = sut.expand(
+        new ExpansionContext("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context()))
+
+    then:
+    parameters.size() == 7
+    parameters.find { it.name == 'modelAttributeProperty' }
+    parameters.find { it.name == 'stringProp' }
+    parameters.find { it.name == 'intProp' }
+    parameters.find { it.name == 'listProp' }
+    parameters.find { it.name == 'arrayProp' }
+    parameters.find { it.name == 'complexProp.name' }
+    parameters.find { it.name == 'accountTypes' }
   }
 
   class SwaggerDefaults implements DefaultsProviderPlugin {

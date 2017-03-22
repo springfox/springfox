@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ public class ModelAttributeParameterExpander {
       LOG.debug("Attempting to expand collection/array field: {}", each.getField());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
-      if (Types.isBaseType(itemType)) {
+      if (Types.isBaseType(itemType) || itemType.getErasedType().isEnum()) {
         parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
       } else {
         parameters.addAll(
