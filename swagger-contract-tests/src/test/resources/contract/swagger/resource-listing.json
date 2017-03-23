@@ -2,6 +2,21 @@
   "apiVersion": "1.0",
   "apis": [
     {
+      "description": "Alps Controller\nRepository Schema Controller",
+      "path": "/default/Entity Metadata Services",
+      "position": 0
+    },
+    {
+      "description": "Repository Entity Controller",
+      "path": "/default/Person Entity",
+      "position": 0
+    },
+    {
+      "description": "Person Repository",
+      "path": "/default/Person Entity Search",
+      "position": 0
+    },
+    {
       "description": "Basic Error Controller",
       "path": "/default/basic-error-controller",
       "position": 0
@@ -64,6 +79,16 @@
     {
       "description": "Operations about pets",
       "path": "/default/pet-service",
+      "position": 0
+    },
+    {
+      "description": "Profile Controller",
+      "path": "/default/profile-controller",
+      "position": 0
+    },
+    {
+      "description": "Repository Controller",
+      "path": "/default/repository-controller",
       "position": 0
     },
     {

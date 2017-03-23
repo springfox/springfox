@@ -287,8 +287,8 @@
           "summary": "findIdentityById",
           "nickname": "findIdentityByIdUsingGET",
           "produces": [
-            "application/vnd.com.fancy-pet+json",
-            "application/vnd.com.pet+json"
+            "application/vnd.com.pet+json",
+            "application/vnd.com.fancy-pet+json"
           ],
           "consumes": [
             "application/json"
@@ -1828,24 +1828,41 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Pet": {
+    "Entry«string,Map«string,Example»»": {
       "description": "",
-      "id": "Pet",
+      "id": "Entry«string,Map«string,Example»»",
       "properties": {
-        "age": {
+        "key": {
           "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
+          "type": "List[Entry«string,Example»]"
         }
       }
+    },
+    "ModelWithMapProperty": {
+      "description": "Describes model with map property",
+      "id": "ModelWithMapProperty",
+      "properties": {
+        "params": {
+          "description": "Map of params to be sent",
+          "required": false,
+          "type": "object"
+        }
+      }
+    },
+    "ModelWithObjectNode": {
+      "description": "",
+      "id": "ModelWithObjectNode",
+      "properties": {
+        "anyObject": {
+          "required": false,
+          "type": "ObjectNode"
+        }
+      }
+    },
+    "ObjectNode": {
+      "description": "",
+      "id": "ObjectNode",
+      "properties": {}
     },
     "Example": {
       "description": "",
@@ -1913,21 +1930,6 @@
         }
       }
     },
-    "ObjectNode": {
-      "description": "",
-      "id": "ObjectNode",
-      "properties": {}
-    },
-    "Entry«string,Map«string,Example»»": {
-      "description": "",
-      "id": "Entry«string,Map«string,Example»»",
-      "properties": {
-        "key": {
-          "required": false,
-          "type": "List[Entry«string,Example»]"
-        }
-      }
-    },
     "Entry«string,Example»": {
       "description": "",
       "id": "Entry«string,Example»",
@@ -1948,24 +1950,22 @@
         }
       }
     },
-    "ModelWithMapProperty": {
-      "description": "Describes model with map property",
-      "id": "ModelWithMapProperty",
-      "properties": {
-        "params": {
-          "description": "Map of params to be sent",
-          "required": false,
-          "type": "object"
-        }
-      }
-    },
-    "ModelWithObjectNode": {
+    "Pet": {
       "description": "",
-      "id": "ModelWithObjectNode",
+      "id": "Pet",
       "properties": {
-        "anyObject": {
+        "age": {
           "required": false,
-          "type": "ObjectNode"
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
         }
       }
     }

@@ -22,12 +22,14 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
+import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
@@ -42,6 +44,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 @Configuration
 @EnableSwagger2
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
+@Import(SpringDataRestConfiguration)
 public class Swagger2TestConfig {
 
   @Autowired
@@ -270,9 +273,22 @@ public class Swagger2TestConfig {
         .paths(regex("/features/.*"))
         .build()
   }
-  
+
   @Bean 
   public ApiListingScannerPlugin listingScanner() {
     new Bug1767ListingScanner()
+  }
+
+  @Bean
+  public Docket springDataRest() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("spring-data-rest")
+        .useDefaultResponseMessages(false)
+        .securitySchemes([])
+        .forCodeGeneration(true)
+        .produces(['application/xml', 'application/json'] as Set)
+        .select()
+          .paths(regex("/people/.*"))
+        .build()
   }
 }

@@ -38,6 +38,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.schema.ClassSupport;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 
@@ -71,7 +72,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
     this.mappings = mappings;
     this.repositories = repositories;
     this.typeResolver = typeResolver;
-    this.restMappings = new RepositoryRestHandlerMapping(mappings, repositoryConfiguration, repositories);
+    this.restMappings = constructRepositoryHandlerMapping(mappings, repositoryConfiguration, repositories);
     restMappings.setJpaHelper(jpaHelper);
     restMappings.setApplicationContext(applicationContext);
     restMappings.afterPropertiesSet();
@@ -79,6 +80,19 @@ class EntityServicesProvider implements RequestHandlerProvider {
     basePathAwareMappings = new BasePathAwareHandlerMapping(repositoryConfiguration);
     basePathAwareMappings.setApplicationContext(applicationContext);
     basePathAwareMappings.afterPropertiesSet();
+  }
+
+  private RepositoryRestHandlerMapping constructRepositoryHandlerMapping(
+      ResourceMappings mappings,
+      RepositoryRestConfiguration repositoryConfiguration,
+      Repositories repositories) {
+
+    String className = "org.springframework.data.rest.webmvc.RepositoryRestHandlerMapping$RepositoryCorsConfigurationAccessor";
+    Optional<? extends Class> corsClass = ClassSupport.classByName(className);
+    if (corsClass.isPresent()) {
+      return new RepositoryRestHandlerMapping(mappings, repositoryConfiguration, repositories);
+    }
+    return new RepositoryRestHandlerMapping(mappings, repositoryConfiguration);
   }
 
 
@@ -135,7 +149,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
 
   private Collection<RequestHandler> maybeCombine(
       List<RequestHandler> metadataHandlers,
-      Predicate <RequestHandler> selector) {
+      Predicate<RequestHandler> selector) {
     List<RequestHandler> combined = newArrayList();
     Iterable<RequestHandler> selected = FluentIterable.from(metadataHandlers)
         .filter(and(selector, getHandler()));

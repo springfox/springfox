@@ -20,7 +20,7 @@
               "description": "toCreate",
               "name": "body",
               "paramType": "body",
-              "type": "Resource\u00abPet\u00bb",
+              "type": "Resource«Pet»",
               "required": true
             }
           ],
@@ -79,7 +79,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "HttpEntity\u00abResource\u00abPet\u00bb\u00bb"
+              "responseModel": "HttpEntity«Resource«Pet»»"
             },
             {
               "code": 204,
@@ -99,7 +99,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "HttpEntity\u00abResource\u00abPet\u00bb\u00bb"
+          "type": "HttpEntity«Resource«Pet»»"
         }
       ],
       "path": "/foo/delete-t/{id}"
@@ -131,7 +131,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Resource\u00abPet\u00bb"
+              "responseModel": "Resource«Pet»"
             },
             {
               "code": 401,
@@ -151,16 +151,14 @@
             }
           ],
           "deprecated": "false",
-          "type": "Resource\u00abPet\u00bb"
+          "type": "Resource«Pet»"
         }
       ],
       "path": "/foo/get-t/{id}"
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
+  "consumes": [],
   "models": {
     "Pet": {
       "description": "",
@@ -199,11 +197,11 @@
         }
       }
     },
-    "Resource\u00abPet\u00bb": {
+    "Resource«Pet»": {
       "description": "",
-      "id": "Resource\u00abPet\u00bb",
+      "id": "Resource«Pet»",
       "properties": {
-        "_links": {
+        "links": {
           "required": false,
           "items": {
             "type": "Link"
@@ -225,20 +223,18 @@
         }
       }
     },
-    "HttpEntity\u00abResource\u00abPet\u00bb\u00bb": {
+    "HttpEntity«Resource«Pet»»": {
       "description": "",
-      "id": "HttpEntity\u00abResource\u00abPet\u00bb\u00bb",
+      "id": "HttpEntity«Resource«Pet»»",
       "properties": {
         "body": {
           "required": false,
-          "type": "Resource\u00abPet\u00bb"
+          "type": "Resource«Pet»"
         }
       }
     }
   },
-  "produces": [
-
-  ],
+  "produces": [],
   "resourcePath": "/foo",
   "swaggerVersion": "1.2"
 }
