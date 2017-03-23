@@ -36,7 +36,7 @@ import static com.google.common.collect.Maps.*;
 public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {
-    Map<String, Object> extensions = newHashMap();
+    Map<String, Object> extensions = newTreeMap();
     Iterable<ListVendorExtension> listExtensions = from(from)
         .filter(ListVendorExtension.class);
     for (ListVendorExtension each : listExtensions) {

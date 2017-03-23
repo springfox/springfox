@@ -98,12 +98,6 @@
     }
   ],
   "authorizations": {
-    "apiKey": {
-      "keyname": "api_key",
-      "name": "api_key",
-      "passAs": "header",
-      "type": "apiKey"
-    },
     "oauth2": {
       "grantTypes": {
         "implicit": {
@@ -125,6 +119,12 @@
         }
       ],
       "type": "oauth2"
+    },
+    "apiKey": {
+      "keyname": "api_key",
+      "name": "api_key",
+      "passAs": "header",
+      "type": "apiKey"
     }
   },
   "info": {

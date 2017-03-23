@@ -44,7 +44,6 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -120,7 +119,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
-    HashMap<String, Response> responses = newHashMap();
+    Map<String, Response> responses = newTreeMap();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
       ModelReference modelRef = responseMessage.getResponseModel();
