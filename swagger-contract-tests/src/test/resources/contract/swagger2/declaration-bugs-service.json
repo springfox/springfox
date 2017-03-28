@@ -129,38 +129,6 @@
         }
       }
     },
-    "/bugs/1740": {
-      "get": {
-        "tags": [
-          "bugs-controller"
-        ],
-        "summary": "bug1740",
-        "operationId": "bug1740UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Bug1740"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/bugs/1376-bare": {
       "post": {
         "tags": [
@@ -626,6 +594,30 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1740": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1740",
+        "operationId": "bug1740UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Bug1740"
+            }
           }
         }
       }
