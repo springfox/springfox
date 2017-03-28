@@ -149,7 +149,7 @@ public class BugsController {
   }
 
   @RequestMapping(value = "1740", method = RequestMethod.GET)
-  public Bug1740 bugNNN() {
+  public Bug1740 bug1740() {
     return new Bug1740();
   }
 
