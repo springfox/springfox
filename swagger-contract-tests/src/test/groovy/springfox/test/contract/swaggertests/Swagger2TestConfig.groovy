@@ -284,11 +284,12 @@ public class Swagger2TestConfig {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("spring-data-rest")
         .useDefaultResponseMessages(false)
+        .enableUrlTemplating(true)
         .securitySchemes([])
         .forCodeGeneration(true)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-          .paths(regex("/people/.*"))
+          .paths(regex("/people.*"))
         .build()
   }
 }

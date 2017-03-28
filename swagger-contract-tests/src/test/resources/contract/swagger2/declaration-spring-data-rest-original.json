@@ -1,0 +1,165 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Api Documentation",
+    "version": "1.0",
+    "title": "Api Documentation",
+    "termsOfService": "urn:tos",
+    "contact": {},
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "localhost:__PORT__",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Person Entity Search",
+      "description": "Person Repository"
+    }
+  ],
+  "produces": [
+    "application/xml",
+    "application/json"
+  ],
+  "paths": {
+    "/people/search": {
+      "get": {
+        "tags": [
+          "Person Entity Search"
+        ],
+        "summary": "findByLastName",
+        "operationId": "findByLastNameUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/*+json;charset=UTF-8",
+          "application/json",
+          "application/hal+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "head": {
+        "tags": [
+          "Person Entity Search"
+        ],
+        "summary": "findByLastName",
+        "operationId": "findByLastNameUsingHEAD_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/*+json;charset=UTF-8",
+          "application/json",
+          "application/hal+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "tags": [
+          "Person Entity Search"
+        ],
+        "summary": "findByLastName",
+        "operationId": "findByLastNameUsingOPTIONS_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/*+json;charset=UTF-8",
+          "application/json",
+          "application/hal+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/people/search/findByLastName": {
+      "get": {
+        "tags": [
+          "Person Entity Search"
+        ],
+        "summary": "/findByLastName",
+        "operationId": "/findByLastNameUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/*+json;charset=UTF-8",
+          "application/json",
+          "application/hal+json",
+          "application/x-spring-data-compact+json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "param0",
+            "description": "param0",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Person": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

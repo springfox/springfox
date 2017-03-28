@@ -63,3 +63,12 @@ class UnwrappedTypeForSetter {
     this.category = category;
   }
 }
+
+class UnwrappedTypeForFieldWithGetter {
+  @JsonUnwrapped
+  private Category category;
+
+  public Category getCategory() {
+    return category;
+  }
+}

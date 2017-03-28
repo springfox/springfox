@@ -15,8 +15,8 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Person Entity Search",
-      "description": "Person Repository"
+      "name": "Person Entity",
+      "description": "Class"
     }
   ],
   "produces": [
@@ -24,115 +24,27 @@
     "application/json"
   ],
   "paths": {
-    "/people/search": {
+    "/people{?name}": {
       "get": {
         "tags": [
-          "Person Entity Search"
+          "Person Entity"
         ],
-        "summary": "findByLastName",
-        "operationId": "findByLastNameUsingGET_2",
+        "summary": "Person",
+        "operationId": "PersonUsingGET_8",
         "consumes": [
           "application/json"
         ],
         "produces": [
           "application/xml",
-          "application/*+json;charset=UTF-8",
-          "application/json",
-          "application/hal+json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        }
-      },
-      "head": {
-        "tags": [
-          "Person Entity Search"
-        ],
-        "summary": "findByLastName",
-        "operationId": "findByLastNameUsingHEAD_2",
-        "consumes": [
           "application/json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/*+json;charset=UTF-8",
-          "application/json",
-          "application/hal+json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        }
-      },
-      "options": {
-        "tags": [
-          "Person Entity Search"
-        ],
-        "summary": "findByLastName",
-        "operationId": "findByLastNameUsingOPTIONS_2",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/*+json;charset=UTF-8",
-          "application/json",
-          "application/hal+json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/people/search/findByLastName": {
-      "get": {
-        "tags": [
-          "Person Entity Search"
-        ],
-        "summary": "/findByLastName",
-        "operationId": "/findByLastNameUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/*+json;charset=UTF-8",
-          "application/json",
-          "application/hal+json",
-          "application/x-spring-data-compact+json"
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "param0",
-            "description": "param0",
+            "in": "query",
+            "name": "name",
+            "description": "name",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -143,6 +55,157 @@
               "items": {
                 "$ref": "#/definitions/Person"
               }
+            }
+          }
+        }
+      }
+    },
+    "/people/{id}": {
+      "put": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingPUT_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref":"#/definitions/Person"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingGET_6",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingDELETE_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/people{?page,size,sort}": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingGET_7",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "size",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "sort",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
             }
           }
         }

@@ -49,13 +49,24 @@ class ModelProviderSupport {
     def event = new ObjectMapperConfigured(this, objectMapper)
     namingStrategy.onApplicationEvent(event)
 
-    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
-        new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, typeNameExtractor)
+    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(
+        new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver),
+        new FactoryMethodProvider(typeResolver),
+        typeResolver,
+        namingStrategy,
+        pluginsManager,
+        typeNameExtractor)
+
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
-    new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
-            pluginsManager, typeNameExtractor)
+
+    new DefaultModelProvider(
+        typeResolver,
+        modelPropertiesProvider,
+        modelDependenciesProvider,
+        pluginsManager,
+        typeNameExtractor)
   }
 
   DefaultModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
@@ -77,9 +88,14 @@ class ModelProviderSupport {
     def event = new ObjectMapperConfigured(this, objectMapper)
     namingStrategy.onApplicationEvent(event)
 
-    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
-        new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, typeNameExtractor)
+    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(
+        new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver),
+        new FactoryMethodProvider(typeResolver),
+        typeResolver,
+        namingStrategy,
+        pluginsManager,
+        typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
     modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
   }
