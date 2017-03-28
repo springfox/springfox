@@ -243,29 +243,26 @@ public class BugsController {
     }
   }
 
-public class Bug1740 {
-  private String value;
+  public class Bug1740 {
+    private String value;
 
-  @JsonUnwrapped
-  private Bug1740Inner inner;
+    @JsonUnwrapped
+    private Bug1740Inner inner;
 
-  public String getValue() {
-    return value;
-  }
+    public String getValue() {
+      return value;
+    }
 
-  public Bug1740Inner getInner() {
-    return inner;
-  }
+    public Bug1740Inner getInner() {
+      return inner;
+    }
 
-  private final class Bug1740Inner {
-    private String innerValue;
+    private final class Bug1740Inner {
+      private String innerValue;
 
-    public String getInnerValue() {
-      return innerValue;
+      public String getInnerValue() {
+        return innerValue;
+      }
     }
   }
-}
-
-
-
 }
