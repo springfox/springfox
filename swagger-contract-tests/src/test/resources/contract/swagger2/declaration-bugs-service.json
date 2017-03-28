@@ -129,6 +129,38 @@
         }
       }
     },
+    "/bugs/1740": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1740",
+        "operationId": "bug1740UsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bug1740"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/bugs/1376-bare": {
       "post": {
         "tags": [
@@ -653,6 +685,17 @@
       "type": "object",
       "properties": {
         "bar": {
+          "type": "string"
+        }
+      }
+    },
+    "Bug1740": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "innerValue": {
           "type": "string"
         }
       }
