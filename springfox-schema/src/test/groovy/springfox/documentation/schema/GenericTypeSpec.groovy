@@ -29,120 +29,125 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class GenericTypeSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+
   @Unroll
   def "Generic property on a generic types is inferred correctly for types"() {
     given:
-      def inputContext = inputParam(
-          "group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-      def returnContext = returnValue("group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-        def propertyLookup = ["GenericType": "genericField", "Resource": "content"]
-    when:
-      Model asInput = modelProvider.modelFor(inputContext).get()
-    and:
-      Model asReturn = modelProvider.modelFor(returnContext).get()
-    then:
-      asInput.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
-      verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
-    and:
-      asReturn.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
-      verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
+    def inputContext = inputParam(
+        "group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+    def returnContext = returnValue("group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+    def propertyLookup = ["GenericType": "genericField", "Resource": "links"]
 
-    
+    when:
+    Model asInput = modelProvider.modelFor(inputContext).get()
+
+    and:
+    Model asReturn = modelProvider.modelFor(returnContext).get()
+
+    then:
+    asInput.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
+    verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
+
+    and:
+    asReturn.getName() == expectedModelName(modelNamePart, modelType.erasedType.simpleName)
+    verifyModelProperty(asInput, propertyType, qualifiedType, propertyLookup[modelType.erasedType.simpleName])
+
     where:
-      modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
-      genericClass()                  | "SimpleType"                                  | "SimpleType"                                  | "springfox.documentation.schema.SimpleType"
-      genericClassWithTypeErased()    | "object"                                      | ""                                            | "java.lang.Object"
-      genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<springfox.documentation.schema.SimpleType>"
-      genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "springfox.documentation.schema.ResponseEntityAlternative<springfox.documentation.schema.SimpleType>"
-      genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "springfox.documentation.schema.ResponseEntityAlternative<java.util.List<springfox.documentation.schema.SimpleType>>"
-      genericCollectionWithEnum()     | "Collection«string»"                          | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
-      genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
-      genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
-      genericResource()               | "SubclassOfResourceSupport"                   | "SubclassOfResourceSupport"                   | null
+    modelType                       | propertyType                                  | modelNamePart                                 | qualifiedType
+    genericClass()                  | "SimpleType"                                  | "SimpleType"                                  | "springfox.documentation.schema.SimpleType"
+    genericClassWithTypeErased()    | "object"                                      | ""                                            | "java.lang.Object"
+    genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<springfox.documentation.schema.SimpleType>"
+    genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "springfox.documentation.schema.ResponseEntityAlternative<springfox.documentation.schema.SimpleType>"
+    genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "springfox.documentation.schema.ResponseEntityAlternative<java.util.List<springfox.documentation.schema.SimpleType>>"
+    genericCollectionWithEnum()     | "Collection«string»"                          | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
+    genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
+    genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
+    genericResource()               | "List"                                        | "SubclassOfResourceSupport"                   | null
   }
 
   @Unroll
   def "Void generic type bindings are rendered correctly"() {
     given:
-      def inputContext = inputParam(
-          "group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-      def returnContext = returnValue("group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
+    def inputContext = inputParam(
+        "group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+    def returnContext = returnValue("group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+
     when:
-      Model asInput = modelProvider.modelFor(inputContext).get()
-      Model asReturn = modelProvider.modelFor(returnContext).get()
+    Model asInput = modelProvider.modelFor(inputContext).get()
+    Model asReturn = modelProvider.modelFor(returnContext).get()
 
     then:
-      asInput.getName() == "GenericTypeBoundToMultiple«Void,Void»"
-      verifyModelProperty(asInput, propertyType, qualifiedType, propertyName)
+    asInput.getName() == "GenericTypeBoundToMultiple«Void,Void»"
+    verifyModelProperty(asInput, propertyType, qualifiedType, propertyName)
 
     and:
-      asReturn.getName() == "GenericTypeBoundToMultiple«Void,Void»"
-      verifyModelProperty(asReturn, propertyType, qualifiedType, propertyName)
+    asReturn.getName() == "GenericTypeBoundToMultiple«Void,Void»"
+    verifyModelProperty(asReturn, propertyType, qualifiedType, propertyName)
 
     where:
-      modelType            | propertyName | propertyType  | qualifiedType
-      typeWithVoidLists()  | "a"          | "Void"        | "java.lang.Void"
-      typeWithVoidLists()  | "listOfB"    | "List"        | "java.util.List<java.lang.Void>"
+    modelType           | propertyName | propertyType | qualifiedType
+    typeWithVoidLists() | "a"          | "Void"       | "java.lang.Void"
+    typeWithVoidLists() | "listOfB"    | "List"       | "java.util.List<java.lang.Void>"
   }
 
   @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-      def inputContext = inputParam("group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-        Model asInput = modelProvider.modelFor(inputContext).get()
+    def inputContext = inputParam("group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+    Model asInput = modelProvider.modelFor(inputContext).get()
 
-      def returnContext = returnValue("group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-      Model asReturn = modelProvider.modelFor(returnContext).get()
+    def returnContext = returnValue("group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+    Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:
-      asInput.getProperties().containsKey("strings")
-      def modelProperty = asInput.getProperties().get("strings")
-      typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType())) == propertyType
+    asInput.getProperties().containsKey("strings")
+    def modelProperty = asInput.getProperties().get("strings")
+    typeNameExtractor.typeName(fromParent(inputContext, modelProperty.getType())) == propertyType
 //      modelProperty.qualifiedType == qualifiedType
 
-      asReturn.getProperties().containsKey("strings")
-      def retModelProperty = asReturn.getProperties().get("strings")
-      typeNameExtractor.typeName(fromParent(inputContext, retModelProperty.getType())) == propertyType
+    asReturn.getProperties().containsKey("strings")
+    def retModelProperty = asReturn.getProperties().get("strings")
+    typeNameExtractor.typeName(fromParent(inputContext, retModelProperty.getType())) == propertyType
 //      retModelProperty.qualifiedType == qualifiedType // Not working as expected because of bug with classmate
 
     where:
-      modelType                      | propertyType     | qualifiedType
-      genericClass()                 | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithTypeErased()   | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithListField()    | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithGenericField() | "List"           | "java.util.List<java.lang.String>"
-      genericClassWithDeepGenerics() | "List"           | "java.util.List<java.lang.String>"
-      genericCollectionWithEnum()    | "List"           | "java.util.List<java.lang.String>"
+    modelType                      | propertyType | qualifiedType
+    genericClass()                 | "List"       | "java.util.List<java.lang.String>"
+    genericClassWithTypeErased()   | "List"       | "java.util.List<java.lang.String>"
+    genericClassWithListField()    | "List"       | "java.util.List<java.lang.String>"
+    genericClassWithGenericField() | "List"       | "java.util.List<java.lang.String>"
+    genericClassWithDeepGenerics() | "List"       | "java.util.List<java.lang.String>"
+    genericCollectionWithEnum()    | "List"       | "java.util.List<java.lang.String>"
   }
 
   def expectedModelName(String modelName, String hostType = "GenericType") {

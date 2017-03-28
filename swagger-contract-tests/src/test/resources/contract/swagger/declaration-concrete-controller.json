@@ -215,10 +215,6 @@
           "format": "int32",
           "type": "integer"
         },
-        "content": {
-          "required": false,
-          "type": "Pet"
-        },
         "id": {
           "required": false,
           "type": "string"

@@ -103,12 +103,12 @@ class UnwrappedTypeSpec extends Specification {
     then:
       asInput.getName() == UnwrappedTypeForGetter.simpleName
       asInput.getProperties().size() == 1
-      asInput.getProperties().containsKey("category")
-      def modelProperty = asInput.getProperties().get("category")
-      modelProperty.type.erasedType == Category
-      modelProperty.getQualifiedType() == "springfox.documentation.schema.Category"
+      asInput.getProperties().containsKey("name")
+      def modelProperty = asInput.getProperties().get("name")
+      modelProperty.type.erasedType == String
+      modelProperty.getQualifiedType() == "java.lang.String"
       def item = modelProperty.getModelRef()
-      item.type == "Category"
+      item.type == "string"
       !item.collection
       item.itemType == null
 
@@ -161,12 +161,12 @@ class UnwrappedTypeSpec extends Specification {
 
       asReturn.getName() == UnwrappedTypeForSetter.simpleName
       asReturn.getProperties().size() == 1
-      asReturn.getProperties().containsKey("category")
-      def retModelProperty = asReturn.getProperties().get("category")
-      retModelProperty.type.erasedType == Category
-      retModelProperty.getQualifiedType() == "springfox.documentation.schema.Category"
+      asReturn.getProperties().containsKey("name")
+      def retModelProperty = asReturn.getProperties().get("name")
+      retModelProperty.type.erasedType == String
+      retModelProperty.getQualifiedType() == "java.lang.String"
       def retItem = retModelProperty.getModelRef()
-      retItem.type == "Category"
+      retItem.type == "string"
       !retItem.collection
       retItem.itemType == null
 
