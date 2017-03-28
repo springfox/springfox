@@ -41,12 +41,13 @@ public class Annotations {
    * @param <A>                    type that extends Annotation
    * @return first annotation found for property
    */
-  public static <A extends Annotation> Optional<A> findPropertyAnnotation(BeanPropertyDefinition beanPropertyDefinition,
-                                                                          Class<A> annotationClass) {
+  public static <A extends Annotation> Optional<A> findPropertyAnnotation(
+      BeanPropertyDefinition beanPropertyDefinition,
+      Class<A> annotationClass) {
 
-    return tryGetGetterAnnotation(beanPropertyDefinition, annotationClass)
-            .or(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass))
-            .or(tryGetFieldAnnotation(beanPropertyDefinition, annotationClass));
+    return tryGetFieldAnnotation(beanPropertyDefinition, annotationClass)
+            .or(tryGetGetterAnnotation(beanPropertyDefinition, annotationClass))
+            .or(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass));
   }
 
   public static boolean memberIsUnwrapped(AnnotatedMember member) {

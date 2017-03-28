@@ -597,6 +597,30 @@
           }
         }
       }
+    },
+    "/bugs/1740": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1740",
+        "operationId": "bug1740UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Bug1740"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -653,6 +677,17 @@
       "type": "object",
       "properties": {
         "bar": {
+          "type": "string"
+        }
+      }
+    },
+    "Bug1740": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "innerValue": {
           "type": "string"
         }
       }

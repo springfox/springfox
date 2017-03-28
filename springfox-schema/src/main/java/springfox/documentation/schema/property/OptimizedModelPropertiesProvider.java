@@ -23,7 +23,6 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,6 +67,7 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.schema.property.FactoryMethodProvider.*;
@@ -157,7 +157,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       public List<ModelProperty> apply(ResolvedMethod input) {
         ResolvedType type = paramOrReturnType(typeResolver, input);
         if (!givenContext.canIgnore(type)) {
-          if (shouldUnwrap(input)) {
+          if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
               return propertiesFor(type, fromParent(givenContext, type));
           }
           return newArrayList(beanModelProperty(input, jacksonProperty, givenContext));
@@ -168,10 +168,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
 
-  private boolean shouldUnwrap(ResolvedMethod input) {
-    return any(newArrayList(input.getRawMember().getDeclaredAnnotations()), ofType(JsonUnwrapped.class));
-  }
-
   private Function<ResolvedField, List<ModelProperty>> propertyFromField(
       final ModelContext givenContext,
       final BeanPropertyDefinition jacksonProperty) {
@@ -179,9 +175,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return new Function<ResolvedField, List<ModelProperty>>() {
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
-        List<Annotation> annotations = newArrayList(input.getRawMember().getAnnotations());
         if (!givenContext.canIgnore(input.getType())) {
-          if (any(annotations, ofType(JsonUnwrapped.class))) {
+          if (memberIsUnwrapped(jacksonProperty.getField())) {
               return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
           }
           return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));

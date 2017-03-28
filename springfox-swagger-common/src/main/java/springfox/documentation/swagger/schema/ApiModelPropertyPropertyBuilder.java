@@ -52,7 +52,8 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     }
     if (context.getBeanPropertyDefinition().isPresent()) {
       annotation = annotation.or(findPropertyAnnotation(
-          context.getBeanPropertyDefinition().get(), ApiModelProperty.class));
+          context.getBeanPropertyDefinition().get(),
+          ApiModelProperty.class));
     }
     if (annotation.isPresent()) {
       context.getBuilder()

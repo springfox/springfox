@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -196,9 +195,6 @@
         "age": {
           "type": "integer",
           "format": "int32"
-        },
-        "content": {
-          "$ref": "#/definitions/Pet"
         },
         "id": {
           "type": "string"

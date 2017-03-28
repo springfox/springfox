@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.web.dummy.controllers;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModelProperty;
@@ -147,6 +148,11 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
+  @RequestMapping(value = "1740", method = RequestMethod.GET)
+  public Bug1740 bug1740() {
+    return new Bug1740();
+  }
+
   public class Bug1627 {
     private String name;
 
@@ -237,4 +243,26 @@ public class BugsController {
     }
   }
 
+  public class Bug1740 {
+    private String value;
+
+    @JsonUnwrapped
+    private Bug1740Inner inner;
+
+    public String getValue() {
+      return value;
+    }
+
+    public Bug1740Inner getInner() {
+      return inner;
+    }
+
+    private final class Bug1740Inner {
+      private String innerValue;
+
+      public String getInnerValue() {
+        return innerValue;
+      }
+    }
+  }
 }
