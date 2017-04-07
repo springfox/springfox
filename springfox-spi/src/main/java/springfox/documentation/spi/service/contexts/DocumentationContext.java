@@ -36,11 +36,13 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
+import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,6 +73,7 @@ public class DocumentationContext {
   private String host;
   private Set<String> protocols;
   private boolean isUriTemplatesEnabled;
+  private List<VendorExtension> vendorExtensions;
 
   public DocumentationContext(
       DocumentationType documentationType,
@@ -96,7 +99,8 @@ public class DocumentationContext {
       Optional<String> pathMapping,
       boolean isUriTemplatesEnabled,
       Set<ResolvedType> additionalModels,
-      Set<Tag> tags) {
+      Set<Tag> tags,
+      List<VendorExtension> vendorExtensions) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -123,6 +127,7 @@ public class DocumentationContext {
     this.additionalModels = additionalModels;
     this.tags = tags;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
+    this.vendorExtensions = vendorExtensions;
   }
 
   public DocumentationType getDocumentationType() {
@@ -228,5 +233,9 @@ public class DocumentationContext {
 
   public Set<Tag> getTags() {
     return tags;
+  }
+
+  public List<VendorExtension> getVendorExtentions() {
+    return vendorExtensions;
   }
 }

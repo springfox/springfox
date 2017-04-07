@@ -38,10 +38,12 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.Tags;
+import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,6 +67,7 @@ public class DocumentationContextBuilder {
   private final Set<String> consumes = newHashSet();
   private final Set<ResolvedType> additionalModels = newHashSet();
   private final Set<Tag> tags = newTreeSet(Tags.tagNameComparator());
+  private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
   private TypeResolver typeResolver;
   private List<RequestHandler> handlerMappings;
@@ -247,6 +250,11 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  public DocumentationContextBuilder vendorExtentions(List<VendorExtension> vendorExtensions) {
+    this.vendorExtensions.addAll(vendorExtensions);
+    return this;
+  }
+
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     OrderComparator.sort(rules);
@@ -274,7 +282,8 @@ public class DocumentationContextBuilder {
         pathMapping,
         isUrlTemplatesEnabled,
         additionalModels,
-        tags);
+        tags,
+        vendorExtensions);
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>

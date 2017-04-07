@@ -34,11 +34,13 @@ import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
+import springfox.documentation.service.ListVendorExtension;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
+import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
@@ -94,9 +96,23 @@ public class Docket implements DocumentationPlugin {
   private Optional<String> pathMapping = Optional.absent();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
+  private List<VendorExtension> vendorExtensions;
+
 
   public Docket(DocumentationType documentationType) {
     this.documentationType = documentationType;
+  }
+
+
+  /**
+   * Sets the api's meta information as included in the json ResourceListing response.
+   *
+   * @param vendorExtensions Indicates the vendor extension information
+   * @return this Docket
+   */
+  public Docket vendorExtensions(List<VendorExtension> vendorExtensions) {
+    this.vendorExtensions = vendorExtensions;
+    return this;
   }
 
   /**
@@ -452,6 +468,7 @@ public class Docket implements DocumentationPlugin {
         .enableUrlTemplating(enableUrlTemplating)
         .additionalModels(additionalModels)
         .tags(tags)
+        .vendorExtentions(vendorExtensions)
         .build();
   }
 
