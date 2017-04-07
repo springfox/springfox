@@ -105,7 +105,7 @@ public class Docket implements DocumentationPlugin {
 
 
   /**
-   * Sets the api's meta information as included in the json ResourceListing response.
+   * Sets the api's vendor extensions
    *
    * @param vendorExtensions Indicates the vendor extension information
    * @return this Docket

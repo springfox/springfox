@@ -22,6 +22,7 @@ import com.google.common.collect.LinkedListMultimap
 import com.google.common.collect.Multimap
 import spock.lang.Specification
 import springfox.documentation.service.ApiListing
+import springfox.documentation.service.ListVendorExtension
 import springfox.documentation.service.ResourceListing
 import springfox.documentation.service.VendorExtension
 
@@ -63,19 +64,7 @@ class DocumentationBuilderSpec extends Specification {
   }
 
   List<VendorExtension> extensions() {
-    List<VendorExtension> extensions = new ArrayList<VendorExtension>();
-    extensions.add(new VendorExtension() {
-      @Override
-      String getName() {
-        return "test";
-      }
-
-      @Override
-      Object getValue() {
-        return "woot";
-      }
-    })
-    return extensions;
+    return Arrays.asList(new ListVendorExtension<String>("test", Arrays.asList("Test")))
   }
 
   def "Setting builder properties to null values preserves existing values"() {

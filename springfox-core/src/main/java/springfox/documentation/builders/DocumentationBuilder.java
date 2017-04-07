@@ -149,9 +149,9 @@ public class DocumentationBuilder {
   }
 
   /**
-   * Updates the operation extensions
+   * Adds extensions for this API
    *
-   * @param extensions - operation extensions
+   * @param extensions - extensions
    * @return this
    */
   public DocumentationBuilder extensions(List<VendorExtension> extensions) {
