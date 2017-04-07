@@ -50,7 +50,7 @@ class ApiInfoBuilderSpec extends Specification {
       'contact'           | new Contact("a", "b", "c") | 'contact'
       'license'           | 'license'                  | 'license'
       'licenseUrl'        | 'urn:license'              | 'licenseUrl'
-      'vendorExtensions'  | extensions()                  | 'vendorExtensions'
+      'extensions'        | extensions()                  | 'vendorExtensions'
   }
 
   List<VendorExtension> extensions() {

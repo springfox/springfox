@@ -34,7 +34,6 @@ import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.ListVendorExtension;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
@@ -96,7 +95,7 @@ public class Docket implements DocumentationPlugin {
   private Optional<String> pathMapping = Optional.absent();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
-  private List<VendorExtension> vendorExtensions;
+  private List<VendorExtension> vendorExtensions = newArrayList();
 
 
   public Docket(DocumentationType documentationType) {
@@ -105,13 +104,13 @@ public class Docket implements DocumentationPlugin {
 
 
   /**
-   * Sets the api's vendor extensions
+   * Add to the api's vendor extensions
    *
    * @param vendorExtensions Indicates the vendor extension information
    * @return this Docket
    */
-  public Docket vendorExtensions(List<VendorExtension> vendorExtensions) {
-    this.vendorExtensions = vendorExtensions;
+  public Docket extensions(List<VendorExtension> vendorExtensions) {
+    this.vendorExtensions.addAll(vendorExtensions);
     return this;
   }
 
