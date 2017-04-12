@@ -26,8 +26,11 @@ import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
+import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
@@ -43,6 +46,8 @@ public class DocumentationBuilder {
   private Set<String> consumes = newHashSet();
   private String host;
   private Set<String> schemes = newHashSet();
+  private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
+
 
   /**
    * Name of the documentation group
@@ -143,6 +148,17 @@ public class DocumentationBuilder {
     return this;
   }
 
+  /**
+   * Adds extensions for this API
+   *
+   * @param extensions - extensions
+   * @return this
+   */
+  public DocumentationBuilder extensions(List<VendorExtension> extensions) {
+    this.vendorExtensions.addAll(nullToEmptyList(extensions));
+    return this;
+  }
+
 
   public static Comparator<ApiListing> byListingPosition() {
     return new Comparator<ApiListing>() {
@@ -163,6 +179,7 @@ public class DocumentationBuilder {
         produces,
         consumes,
         host,
-        schemes);
+        schemes,
+        vendorExtensions);
   }
 }

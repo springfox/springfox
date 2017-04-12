@@ -21,6 +21,8 @@ package springfox.documentation.builders
 
 import spock.lang.Specification
 import springfox.documentation.service.Contact
+import springfox.documentation.service.ListVendorExtension
+import springfox.documentation.service.VendorExtension
 
 class ApiInfoBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -48,5 +50,11 @@ class ApiInfoBuilderSpec extends Specification {
       'contact'           | new Contact("a", "b", "c") | 'contact'
       'license'           | 'license'                  | 'license'
       'licenseUrl'        | 'urn:license'              | 'licenseUrl'
+      'extensions'        | extensions()                  | 'vendorExtensions'
   }
+
+  List<VendorExtension> extensions() {
+    return Arrays.asList(new ListVendorExtension<String>("test", Arrays.asList("Test")))
+  }
+
 }

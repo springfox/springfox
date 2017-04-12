@@ -78,6 +78,7 @@ public class ApiDocumentationScanner {
         .host(context.getHost())
         .schemes(context.getProtocols())
         .basePath(context.getPathProvider().getApplicationBasePath())
+        .extensions(context.getVendorExtentions())
         .tags(tags);
 
     Set<ApiListingReference> apiReferenceSet = newTreeSet(listingReferencePathComparator());

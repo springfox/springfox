@@ -22,7 +22,9 @@ import com.google.common.collect.LinkedListMultimap
 import com.google.common.collect.Multimap
 import spock.lang.Specification
 import springfox.documentation.service.ApiListing
+import springfox.documentation.service.ListVendorExtension
 import springfox.documentation.service.ResourceListing
+import springfox.documentation.service.VendorExtension
 
 class DocumentationBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -52,12 +54,17 @@ class DocumentationBuilderSpec extends Specification {
       'host'                            | 'host1'                        | 'host'
       'schemes'                         | ['http']  as Set               | 'schemes'
       'tags'                            | ['pet'] as Set                 | 'tags'
+      'extensions'                      | extensions()                  | 'vendorExtensions'
   }
 
   Multimap<String, ApiListing> multiMap() {
     Multimap<String, ApiListing> multiMap = LinkedListMultimap.create()
     multiMap.put("group1", Mock(ApiListing))
     return multiMap
+  }
+
+  List<VendorExtension> extensions() {
+    return Arrays.asList(new ListVendorExtension<String>("test", Arrays.asList("Test")))
   }
 
   def "Setting builder properties to null values preserves existing values"() {

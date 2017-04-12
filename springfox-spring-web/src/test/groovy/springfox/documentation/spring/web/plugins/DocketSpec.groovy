@@ -31,10 +31,12 @@ import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.ListVendorExtension
 import springfox.documentation.service.Parameter
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Tag
+import springfox.documentation.service.VendorExtension
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
@@ -189,6 +191,11 @@ class DocketSpec extends DocumentationContextSpec {
       'enableUrlTemplating'   | true                                            | 'isUriTemplatesEnabled'
       'tags'                  | new Tag("test", "test")                         | 'tags'
       'globalOperationParameters' | [Mock(Parameter)]                           | 'globalOperationParameters'
+      'extensions'            | extensions()                                          | 'vendorExtensions'
+  }
+
+  List<VendorExtension> extensions() {
+    return Arrays.asList(new ListVendorExtension<String>("test", Arrays.asList("Test")))
   }
 
   def "Code generation strategy property is set"() {
