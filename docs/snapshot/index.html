@@ -616,7 +616,11 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#introduction-2">8.1. Introduction</a></li>
 <li><a href="#plugins-available-for-extensibility">8.2. Plugins Available For Extensibility</a></li>
-<li><a href="#steps-to-create-a-plugin">8.3. Steps To Create A Plugin</a></li>
+<li><a href="#steps-to-create-a-plugin">8.3. Steps To Create A Plugin</a>
+<ul class="sectlevel3">
+<li><a href="#example-apilistingscannerplugin">8.3.1. Example ApiListingScannerPlugin</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#additional-extensibility-options">9. Additional extensibility options</a></li>
@@ -1474,13 +1478,12 @@ This is still in <strong><strong>incubation</strong></strong>.
 <div class="paragraph">
 <p>In order to use it</p>
 </div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>add the <code>springfox-data-rest</code> dependency.</td>
-</tr>
-</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>add the <code>springfox-data-rest</code> dependency.</p>
+</li>
+</ol>
 </div>
 <div class="sect3">
 <h4 id="gradle-2">3.3.1. Gradle</h4>
@@ -1503,13 +1506,12 @@ This is still in <strong><strong>incubation</strong></strong>.
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Import the configuration from the <code>springfox-data-rest</code> module as shown below</td>
-</tr>
-</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Import the configuration from the <code>springfox-data-rest</code> module as shown below</p>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect3">
@@ -1542,13 +1544,12 @@ This is still in <strong><strong>incubation</strong></strong>.
 <div class="paragraph">
 <p>In order to use it</p>
 </div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>add the <code>springfox-bean-validators</code> dependency.</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>add the <code>springfox-bean-validators</code> dependency.</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="gradle-3">3.4.1. Gradle</h4>
@@ -1571,13 +1572,12 @@ This is still in <strong><strong>incubation</strong></strong>.
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Import the configuration from the <code>springfox-bean-validators</code> module as shown below</td>
-</tr>
-</table>
+<div class="ulist">
+<ul>
+<li>
+<p>Import the configuration from the <code>springfox-bean-validators</code> module as shown below</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -1690,11 +1690,17 @@ api docs are served](<a href="http://springfox.github.io/springfox/docs/current/
 <td class="content">
 <em>Keep in mind this is experimental</em>!
 In order to use this feature
-1. Add <code>springfox-swagger-ui-rfc6570</code> instead of <code>springfox-swagger-ui</code> as a dependency
-<a href="http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/1.0.0">experimental swagger-ui</a>.
 </td>
 </tr>
 </table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add <code>springfox-swagger-ui-rfc6570</code> instead of <code>springfox-swagger-ui</code> as a dependency
+<a href="http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/1.0.0">experimental swagger-ui</a>.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>For gradle:</p>
@@ -1730,12 +1736,12 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </tr>
 </table>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="ulist">
+<ul>
 <li>
 <p>Enable url templating; (<a href="http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot">see #21</a>)</p>
 </li>
-</ol>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -2458,7 +2464,7 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ApiListingScannerPlugin</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">for adding custom api descriptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">for adding custom api descriptions (see <a href="#example-apilistingscannerplugin">example</a>).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ApiListingBuilderPlugin</code></p></td>
@@ -2537,6 +2543,113 @@ order specified in the bean. In general spring plugins get the highest priority,
 </div>
 <div class="paragraph">
 <p>That is it!</p>
+</div>
+<div class="sect3">
+<h4 id="example-apilistingscannerplugin">8.3.1. Example ApiListingScannerPlugin</h4>
+<div class="paragraph">
+<p>Here is an exampl of how to add Api Descriptions by Hand.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/springfox/springfox/blob/master/swagger-contract-tests/src/main/java/springfox/test/contract/swagger/Bug1767ListingScanner.java">Bug1767ListingScanner.java</a></p>
+</div>
+<div id="api-listing-plugin-example" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre></td>
+  <td class="code"><pre>  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="predefined-type">List</span>&lt;ApiDescription&gt; apply(DocumentationContext context) {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;ApiDescription&gt;(
+        <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="1"></i><b>(1)</b>
+            <span class="keyword">new</span> ApiDescription(
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">/bugs/1767</span><span class="delimiter">&quot;</span></span>,
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
+                <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="2"></i><b>(2)</b>
+                    <span class="keyword">new</span> OperationBuilder(
+                        <span class="keyword">new</span> CachingOperationNameGenerator())
+                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
+                        .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug1767GET</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
+                        .method(HttpMethod.GET)
+                        .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
+                        .parameters(
+                            <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="4"></i><b>(4)</b>
+                                <span class="keyword">new</span> ParameterBuilder()
+                                    .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">search by description</span><span class="delimiter">&quot;</span></span>)
+                                    .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
+                                    .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
+                                    .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
+                                    .parameterAccess(<span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>)
+                                    .required(<span class="predefined-constant">true</span>)
+                                    .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="5"></i><b>(5)</b>
+                                    .build()))
+                        .build()),
+                <span class="predefined-constant">false</span>)));
+  }
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">boolean</span> supports(DocumentationType delimiter) {
+    <span class="keyword">return</span> DocumentationType.SWAGGER_2.equals(delimiter);
+  }
+
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Add a list of custom <code>ApiDescription</code>s</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Add a list of <code>Operation</code>s for each description</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>NOTE: the code generated names are not guaranteed to be unique. For these custom endpoints it is the
+resposibility of the service author to ensure.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>NOTE: It is important to also ensure we pass in a model reference even for primitive types</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -3225,7 +3338,7 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 <div id="footer">
 <div id="footer-text">
 Version 2.7.0-SNAPSHOT<br>
-Last updated 2017-04-12 11:32:55 UTC
+Last updated 2017-04-13 03:38:42 UTC
 </div>
 </div>
 </body>
