@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
+import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -59,7 +60,8 @@ import java.util.List;
     ResourceGroupingStrategy.class,
     OperationModelsProviderPlugin.class,
     DefaultsProviderPlugin.class,
-    PathDecorator.class
+    PathDecorator.class,
+    ApiListingScannerPlugin.class
 })
 public class SpringfoxWebMvcConfiguration {
 

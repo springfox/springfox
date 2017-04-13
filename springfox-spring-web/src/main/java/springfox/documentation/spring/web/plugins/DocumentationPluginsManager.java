@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -90,8 +88,7 @@ public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("pathDecoratorRegistry")
   private PluginRegistry<PathDecorator, DocumentationContext> pathDecorators;
-
-  @Autowired(required = false)
+  @Autowired
   @Qualifier("apiListingScannerPluginRegistry")
   private PluginRegistry<ApiListingScannerPlugin, DocumentationType> apiListingScanners;
 
@@ -184,17 +181,10 @@ public class DocumentationPluginsManager {
 
   public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {
     final DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
-    return Optional.fromNullable(apiListingScanners)
-        .transform(new Function<PluginRegistry<ApiListingScannerPlugin,DocumentationType>, List<ApiDescription>>() {
-          @Override
-          public List<ApiDescription> apply(PluginRegistry<ApiListingScannerPlugin, DocumentationType> input) {
-            List<ApiDescription> additional = newArrayList();
-            for(ApiListingScannerPlugin each : input.getPluginsFor(documentationType)) {
-              additional.addAll(each.apply(context.getDocumentationContext()));
-            }
-            return additional;
-          }
-        })
-        .or(Lists.<ApiDescription>newArrayList());
+    List<ApiDescription> additional = newArrayList();
+    for (ApiListingScannerPlugin each : apiListingScanners.getPluginsFor(documentationType)) {
+      additional.addAll(each.apply(context.getDocumentationContext()));
+    }
+    return additional;
   }
 }

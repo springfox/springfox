@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.LinkedListMultimap;
@@ -88,7 +89,10 @@ public class ApiListingScanner {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
-      apiDescriptions.addAll(pluginsManager.additionalListings(context));
+
+      apiDescriptions.addAll(FluentIterable.from(pluginsManager.additionalListings(context))
+          .filter(onlySelectedApis(documentationContext))
+          .toList());
 
       List<ApiDescription> sortedApis = newArrayList(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
@@ -119,6 +123,15 @@ public class ApiListingScanner {
       apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;
+  }
+
+  private Predicate<ApiDescription> onlySelectedApis(final DocumentationContext context) {
+    return new Predicate<ApiDescription>() {
+      @Override
+      public boolean apply(ApiDescription input) {
+        return context.getApiSelector().getPathSelector().apply(input.getPath());
+      }
+    };
   }
 
   private Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {

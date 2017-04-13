@@ -621,6 +621,21 @@
           }
         }
       }
+    },
+    "/bugs/1767": {
+      "get": {
+        "description": "This is a test method",
+        "operationId": "bug1767GET",
+        "parameters": [
+          {
+            "name": "description",
+            "in": "query",
+            "description": "search by description",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
     }
   },
   "securityDefinitions": {
@@ -684,10 +699,10 @@
     "Bug1740": {
       "type": "object",
       "properties": {
-        "value": {
+        "innerValue": {
           "type": "string"
         },
-        "innerValue": {
+        "value": {
           "type": "string"
         }
       }
