@@ -22,7 +22,6 @@ package springfox.documentation.spring.web.scanners;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +89,7 @@ public class ApiListingScanner {
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      apiDescriptions.addAll(FluentIterable.from(pluginsManager.additionalListings(context))
+      apiDescriptions.addAll(from(pluginsManager.additionalListings(context))
           .filter(onlySelectedApis(documentationContext))
           .toList());
 
@@ -135,7 +134,7 @@ public class ApiListingScanner {
   }
 
   private Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
-    return FluentIterable.from(resourceGroups).toSortedList(resourceGroupComparator());
+    return from(resourceGroups).toSortedList(resourceGroupComparator());
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
