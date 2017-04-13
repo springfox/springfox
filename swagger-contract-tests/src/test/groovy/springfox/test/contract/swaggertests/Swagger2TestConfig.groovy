@@ -31,6 +31,7 @@ import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 

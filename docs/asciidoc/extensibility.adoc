@@ -31,7 +31,7 @@ To explicitly state the extensibility points that are available:
 |Name| Description
 
 | `ApiListingScannerPlugin`
-| for adding custom api descriptions
+| for adding custom api descriptions (see <<index.adoc#example-apilistingscannerplugin,example>>).
 
 | `ApiListingBuilderPlugin`
 | for enriching api listings
@@ -70,6 +70,22 @@ TIP: The ___same___ patterns apply to all of the extensibility mechanisms
 5. Register the plugin as a `@bean`, so that the plugin registry can pick it up.
 
 That is it!
+
+==== Example ApiListingScannerPlugin
+
+Here is an exampl of how to add Api Descriptions by Hand.
+
+https://github.com/springfox/springfox/blob/master/swagger-contract-tests/src/main/java/springfox/test/contract/swagger/Bug1767ListingScanner.java[Bug1767ListingScanner.java]
+[[api-listing-plugin-example]]
+[source,java,linenums]
+----
+include::../../swagger-contract-tests/src/main/java/springfox/test/contract/swagger/Bug1767ListingScanner.java[tags=api-listing-plugin,indent=0]
+----
+<1> Add a list of custom ``ApiDescription``s
+<2> Add a list of ``Operation``s for each description
+<3> NOTE: the code generated names are not guaranteed to be unique. For these custom endpoints it is the
+resposibility of the service author to ensure.
+<4> NOTE: It is important to also ensure we pass in a model reference even for primitive types
 
 == Additional extensibility options
 .Other Extensibility

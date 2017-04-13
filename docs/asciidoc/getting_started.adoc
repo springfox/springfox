@@ -169,7 +169,7 @@ NOTE: This is still in ***incubation***.
 
 In order to use it
 
-<1> add the `springfox-data-rest` dependency.
+1. add the `springfox-data-rest` dependency.
 
 ==== Gradle
 [source,groovy]
@@ -191,7 +191,7 @@ dependencies {
 </dependency>
 ----
 
-<2> Import the configuration from the `springfox-data-rest` module as shown below
+1. Import the configuration from the `springfox-data-rest` module as shown below
 
 ==== java config
 [source,java]
@@ -216,7 +216,7 @@ In version greater than 2.3.2, support for bean validation annotations was added
 
 In order to use it
 
-<1> add the `springfox-bean-validators` dependency.
+- add the `springfox-bean-validators` dependency.
 
 ==== Gradle
 [source,groovy]
@@ -238,7 +238,7 @@ dependencies {
 </dependency>
 ----
 
-<2> Import the configuration from the `springfox-bean-validators` module as shown below
+- Import the configuration from the `springfox-bean-validators` module as shown below
 
 ==== java config
 [source,java]
@@ -305,6 +305,7 @@ api docs are served](http://springfox.github.io/springfox/docs/current/#customiz
 === Springfox RFC6570 support *incubating*
 NOTE: _Keep in mind this is experimental_!
 In order to use this feature
+
 1. Add `springfox-swagger-ui-rfc6570` instead of `springfox-swagger-ui` as a dependency
 http://mvnrepository.com/artifact/io.springfox.ui/springfox-swagger-ui-rfc6570/{springfoxRfc6570Version}[experimental swagger-ui].
 
@@ -329,7 +330,7 @@ For maven:
 ----
 NOTE: The newer version has changed the group id from `_io.springfox_` to `_io.springfox.ui_`!
 
-2. Enable url templating; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
+- Enable url templating; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
 
 === Springfox samples
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.
