@@ -79,7 +79,7 @@ By default the swagger service descriptions are generated at the following urls
 |=======================
 |Swagger version  | Documentation Url           | Group
 |1.2              | /api-docs                   | implicit *default* group
-|2.0              | /api-docs?group=external    | *external* group via docket.groupName()
+|1.2              | /api-docs?group=external    | *external* group via docket.groupName()
 |2.0              | /v2/api-docs                | implicit *default* group
 |2.0              | /v2/api-docs?group=external | *external* group via docket.groupName()
 |=======================
