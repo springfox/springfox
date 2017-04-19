@@ -693,6 +693,30 @@
           }
         ]
       }
+    },
+    "/bugs/1777": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1777",
+        "operationId": "bug1777UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Bug1777"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -763,6 +787,20 @@
           "type": "string"
         }
       }
+    },
+    "Bug1777": {
+      "type": "object",
+      "required": [
+        "longitude"
+      ],
+      "properties": {
+        "longitude": {
+          "type": "number",
+          "format": "double",
+          "description": "经度"
+        }
+      },
+      "description": "Test 1777"
     },
     "Example": {
       "type": "object",

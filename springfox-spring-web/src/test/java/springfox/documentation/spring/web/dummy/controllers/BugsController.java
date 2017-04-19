@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.dummy.controllers;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -180,6 +181,25 @@ public class BugsController {
   @RequestMapping(value = "/1750b", method = GET)
   public ResponseEntity<String> bug1750b() {
     throw new UnsupportedOperationException();
+  }
+
+  @RequestMapping(value = "/1777", method = GET)
+  public ResponseEntity<Bug1777> bug1777() {
+    throw new UnsupportedOperationException();
+  }
+
+  @ApiModel(description = "Test 1777")
+  public class Bug1777 {
+    @ApiModelProperty(value = "经度", required = true)
+    private Double longitude;
+
+    public Double getLongitude() {
+      return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+      this.longitude = longitude;
+    }
   }
 
   public class Bug1627 {
