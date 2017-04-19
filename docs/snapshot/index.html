@@ -3318,7 +3318,7 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 </div>
 </div>
 <div class="paragraph">
-<p><a id="q21"></a>*21. How to add CORS support? (thanks <a href="https://github.com/gangakrishh">gangakrishh</a>)</p>
+<p><a id="q21"></a>*21. How to add CORS support? (thanks <a href="https://github.com/gangakrishh">@gangakrishh</a>)</p>
 </div>
 <div class="paragraph">
 <p>Based on the <a href="https://spring.io/guides/gs/rest-service-cors/">spring guide</a>, Creating a <code>WebMvcConfigurer</code> we can
@@ -3335,6 +3335,36 @@ configure a request mapping to allow specific origins.</p>
             }
         };</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><a id="q22"></a>*22. How to configure the docket when using <a href="https://immutables.github.io">Immutables</a>? (thanks <a href="https://github" class="bare">https://github</a>
+.com/kevinm416[@kevinm416])</p>
+</div>
+<div class="paragraph">
+<p>This is related to <a href="https://github.com/springfox/springfox/issues/1490">#1490</a>.The way to configure this
+is to create a custom  alternateTypeRules in the <code>Docket</code> config. For e.g. if you have an immutable <code>MyClass</code> that
+ generates <code>ImmutableMyClass</code>, then we would add a rule for it as shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Bean</span>
+<span class="directive">public</span> Docket docket() {
+  <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)
+    .alternateTypeRules(AlternateTypeRules.newRule(MyClass.class,
+                ImmutableMyClass.class));</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you&#8217;re using a library for you models, you may need to make the Immutable visible outside the package.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -3357,7 +3387,7 @@ configure a request mapping to allow specific origins.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.7.0-SNAPSHOT<br>
-Last updated 2017-04-19 11:27:08 UTC
+Last updated 2017-04-19 11:34:32 UTC
 </div>
 </div>
 </body>
