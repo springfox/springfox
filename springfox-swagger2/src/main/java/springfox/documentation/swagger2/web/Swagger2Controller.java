@@ -65,7 +65,7 @@ public class Swagger2Controller {
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
       JsonSerializer jsonSerializer) {
-    
+
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
@@ -84,9 +84,9 @@ public class Swagger2Controller {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
+    UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
+    swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
     if (isNullOrEmpty(swagger.getHost())) {
-      UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
-      swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
       swagger.host(hostName(uriComponents));
     }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
