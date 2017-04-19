@@ -622,6 +622,63 @@
         }
       }
     },
+    "/bugs/1750a": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1750a",
+        "operationId": "bug1750aUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "list of ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "204": {
+            "description": "no ids found"
+          }
+        }
+      }
+    },
+    "/bugs/1750b": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "1750b",
+        "operationId": "bug1750bUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "list of ids",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "204": {
+            "description": "no ids found",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/1767": {
       "get": {
         "description": "This is a test method",

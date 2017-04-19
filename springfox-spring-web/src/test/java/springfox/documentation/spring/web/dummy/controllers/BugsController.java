@@ -42,6 +42,8 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 @RestController
 @RequestMapping("/bugs")
 public class BugsController {
@@ -81,53 +83,53 @@ public class BugsController {
   public void issue1376Input(Bug1376 bug) throws MalformedURLException {
   }
 
-  @RequestMapping(value = "1420", method = RequestMethod.GET)
+  @RequestMapping(value = "1420", method = GET)
   @ApiOperation(tags = { "foo" }, value = "issue1420")
   public String issue1420() {
     return "1420";
   }
 
-  @RequestMapping(value = "1440", method = RequestMethod.GET)
+  @RequestMapping(value = "1440", method = GET)
   public Resource<String> issue1440() {
     return new Resource<String>("1420");
   }
 
-  @RequestMapping(value = "1475", method = RequestMethod.GET)
+  @RequestMapping(value = "1475", method = GET)
   public Map<String, List<String>> mapOfLists() {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1475-example", method = RequestMethod.GET)
+  @RequestMapping(value = "1475-example", method = GET)
   public Map<String, List<Example>> mapOfListOfExample() {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1605", method = RequestMethod.GET)
+  @RequestMapping(value = "1605", method = GET)
   public byte[] byteArrayResponse() {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1676", method = RequestMethod.GET)
+  @RequestMapping(value = "1676", method = GET)
   public void apiModelProperty(@RequestBody Bug1676 value) {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1632", method = RequestMethod.GET)
+  @RequestMapping(value = "1632", method = GET)
   public void fileCustomType(@RequestBody File value) {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1632s", method = RequestMethod.GET)
+  @RequestMapping(value = "1632s", method = GET)
   public void filesCustomType(@RequestBody List<File> values) {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1697", method = RequestMethod.GET)
+  @RequestMapping(value = "1697", method = GET)
   public void payloadWithByteBuffer(@RequestBody Bug1697 body) {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1627", method = RequestMethod.GET)
+  @RequestMapping(value = "1627", method = GET)
   public void bug1627(@RequestBody Bug1627 body) {
     throw new UnsupportedOperationException();
   }
@@ -140,7 +142,7 @@ public class BugsController {
   public void bug1722(@RequestBody String test) {
   }
 
-  @RequestMapping(value = "1734", method = RequestMethod.GET)
+  @RequestMapping(value = "1734", method = GET)
   public void bug1734(
       @ApiParam(name = "offset", value = "The value of offset", defaultValue = "0")
       @RequestParam(value = "offset", defaultValue = "0", required = false)
@@ -148,9 +150,36 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value = "1740", method = RequestMethod.GET)
+  @RequestMapping(value = "1740", method = GET)
   public Bug1740 bug1740() {
     return new Bug1740();
+  }
+  
+  @ApiResponses(value = {
+      @ApiResponse(code = 200,
+          message = "list of ids",
+          response = String.class),
+      @ApiResponse(code = 204,
+          message = "no ids found",
+          response = Void.class)
+  })
+  @RequestMapping(value = "/1750a", method = GET)
+  public ResponseEntity<String> bug1750a() {
+    throw new UnsupportedOperationException();
+  }
+
+  @ApiOperation(value = "1750b", response = String.class)
+  @ApiResponses(value = {
+      @ApiResponse(code = 200,
+          message = "list of ids",
+          response = String.class),
+      @ApiResponse(code = 204,
+          message = "no ids found",
+          response = Void.class)
+  })
+  @RequestMapping(value = "/1750b", method = GET)
+  public ResponseEntity<String> bug1750b() {
+    throw new UnsupportedOperationException();
   }
 
   public class Bug1627 {
