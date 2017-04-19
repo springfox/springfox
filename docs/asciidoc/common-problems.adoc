@@ -371,7 +371,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 ...
 ----
 
-[[q21]]*21. How to add CORS support? (thanks https://github.com/gangakrishh[gangakrishh])
+[[q21]]*21. How to add CORS support? (thanks https://github.com/gangakrishh[@gangakrishh])
 
 Based on the https://spring.io/guides/gs/rest-service-cors/[spring guide], Creating a `WebMvcConfigurer` we can
 configure a request mapping to allow specific origins.
@@ -387,3 +387,22 @@ configure a request mapping to allow specific origins.
             }
         };
 ----
+
+[[q22]]*22. How to configure the docket when using https://immutables.github.io[Immutables]? (thanks https://github
+.com/kevinm416[@kevinm416])
+
+This is related to https://github.com/springfox/springfox/issues/1490[#1490].The way to configure this
+is to create a custom  alternateTypeRules in the `Docket` config. For e.g. if you have an immutable `MyClass` that
+ generates `ImmutableMyClass`, then we would add a rule for it as shown below.
+
+
+[source,java]
+----
+@Bean
+public Docket docket() {
+  return new Docket(DocumentationType.SWAGGER_2)
+    .alternateTypeRules(AlternateTypeRules.newRule(MyClass.class,
+                ImmutableMyClass.class));
+----
+
+NOTE: If you're using a library for you models, you may need to make the Immutable visible outside the package.
