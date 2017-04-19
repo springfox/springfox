@@ -1145,6 +1145,25 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 ...</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><a id="q21"></a>*21. How to add CORS support? (thanks <a href="https://github.com/gangakrishh">gangakrishh</a>)</p>
+</div>
+<div class="paragraph">
+<p>Based on the <a href="https://spring.io/guides/gs/rest-service-cors/">spring guide</a>, Creating a <code>WebMvcConfigurer</code> we can
+configure a request mapping to allow specific origins.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">    <span class="annotation">@Bean</span>
+    <span class="directive">public</span> WebMvcConfigurer corsConfigurer() {
+        <span class="keyword">return</span> <span class="keyword">new</span> WebMvcConfigurerAdapter() {
+            <span class="annotation">@Override</span>
+            <span class="directive">public</span> <span class="type">void</span> addCorsMappings(CorsRegistry registry) {
+                registry.addMapping(<span class="string"><span class="delimiter">&quot;</span><span class="content">/some-request-mapping</span><span class="delimiter">&quot;</span></span>).allowedOrigins(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:9000</span><span class="delimiter">&quot;</span></span>);
+            }
+        };</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1165,7 +1184,7 @@ using the <code>@EnableSwagger2</code> like below, try removing the <code>@Confi
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-04-19 11:09:34 UTC
+Last updated 2017-04-19 11:27:08 UTC
 </div>
 </div>
 </body>
