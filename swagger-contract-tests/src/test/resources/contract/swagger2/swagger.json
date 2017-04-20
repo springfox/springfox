@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -20,12 +19,12 @@
       "description": "Operations about store"
     },
     {
-      "name": "generic-pet-controller",
-      "description": "Generic Pet Controller"
-    },
-    {
       "name": "pet-controller",
       "description": "Operations about pets"
+    },
+    {
+      "name": "generic-pet-controller",
+      "description": "Generic Pet Controller"
     },
     {
       "name": "user-controller",
@@ -304,8 +303,7 @@
         },
         "security": [
           {
-            "api_key": [
-            ]
+            "api_key": []
           },
           {
             "petstore_auth": [
@@ -332,13 +330,44 @@
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "order",
-            "description": "order placed for purchasing the pet",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Order"
-            }
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "petId",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "quantity",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "shipDate",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "complete",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -675,13 +704,54 @@
             "type": "string"
           },
           {
-            "in": "body",
-            "name": "user",
-            "description": "Updated user object",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "firstName",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastName",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "userStatus",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "responses": {

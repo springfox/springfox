@@ -611,6 +611,86 @@
         }
       }
     },
+    "/bugs/1749{?pageNumber,pageSize,sortDirection,sortField,email,companyName,like}": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "Retrieve all the companies",
+        "operationId": "getAllPagedUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ]
+          },
+          {
+            "name": "sortField",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "email",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "companyName",
+            "in": "query",
+            "description": "companyName",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "like",
+            "in": "query",
+            "description": "like",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/bugs/1750a": {
       "get": {
         "tags": [

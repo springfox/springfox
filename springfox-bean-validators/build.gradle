@@ -29,7 +29,7 @@ dependencies {
   compile project(':springfox-spi')
 
   provided libs.springProvided
-  provided 'javax.validation:validation-api:1.1.0.Final'
+  provided "javax.validation:validation-api:$validationApiVersion"
 
   testCompile libs.test
   testCompile project(':springfox-schema')

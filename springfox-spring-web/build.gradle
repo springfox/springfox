@@ -19,6 +19,7 @@ dependencies {
   provided libs.springProvided
   provided libs.clientProvided
 
+  testCompile "javax.validation:validation-api:$validationApiVersion"
   testCompile project(':springfox-core')
   testCompile libs.test
   testCompile libs.swagger2Core
