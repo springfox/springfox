@@ -3366,6 +3366,26 @@ If you&#8217;re using a library for you models, you may need to make the Immutab
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p><a id="q23"></a>*23. Why does setting <code>@ApiImplicitParam#paramType="form"</code> output undefined dataType?</p>
+</div>
+<div class="paragraph">
+<p>If you change the datatype to "__file" once 2.7.0 is released, it will fix your issue.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The reason we use "__file" is because if a consuming library defines a custom type <code>File</code> then that type ends
+up getting treated just as if it were a <code>file</code> data type, even if that wasn&#8217;t the intent. To distinguish the usage of
+ the custom type from the natively understood <code>file</code> primitive we introduced this convention.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -3387,7 +3407,7 @@ If you&#8217;re using a library for you models, you may need to make the Immutab
 <div id="footer">
 <div id="footer-text">
 Version 2.7.0-SNAPSHOT<br>
-Last updated 2017-04-20 02:36:34 UTC
+Last updated 2017-04-20 03:05:32 UTC
 </div>
 </div>
 </body>
