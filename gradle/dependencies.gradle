@@ -24,6 +24,7 @@ ext {
   springBoot = "1.4.4.RELEASE"
   springfoxRfc6570Version = "1.0.0"
   undercouch = "3.2.0"
+  validationApiVersion = '1.1.0.Final'
 
   libs = [
 
