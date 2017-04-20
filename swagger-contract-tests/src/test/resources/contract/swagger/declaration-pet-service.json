@@ -18,11 +18,25 @@
           "parameters": [
             {
               "allowMultiple": false,
-              "description": "Pet object that needs to be added to the store",
-              "name": "body",
-              "paramType": "body",
-              "type": "Pet",
-              "required": true
+              "name": "id",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "name",
+              "paramType": "query",
+              "type": "string",
+              "required": false
+            },
+            {
+              "allowMultiple": false,
+              "name": "age",
+              "paramType": "query",
+              "format": "int32",
+              "type": "integer",
+              "required": false
             }
           ],
           "responseMessages": [
