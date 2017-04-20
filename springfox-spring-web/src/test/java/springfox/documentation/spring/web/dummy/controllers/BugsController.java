@@ -34,8 +34,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.spring.web.dummy.models.Bug1749;
 import springfox.documentation.spring.web.dummy.models.Example;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -189,10 +192,22 @@ public class BugsController {
   }
 
 
-  @RequestMapping(value = "/1778", method = RequestMethod.GET)
+  @RequestMapping(value = "/1778", method = GET)
   public ResponseEntity<Void> bug1778(TestClass testClass, TestClass2 testClass2) {
     return ResponseEntity.ok().build();
   }
+
+  @ApiOperation(value = "Retrieve all the companies")
+  @RequestMapping(value = "/1749", method = GET)
+  public List<String> getAllPaged(
+      @Valid Bug1749 request,
+      HttpServletResponse response,
+      @RequestParam(required = false) String email,
+      @RequestParam(required = false) String companyName,
+      @RequestParam(required = false) Boolean like) throws Exception {
+    throw new UnsupportedOperationException();
+  }
+
 
   class TestClass {
 
