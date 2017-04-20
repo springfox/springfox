@@ -155,7 +155,7 @@ public class BugsController {
   public Bug1740 bug1740() {
     return new Bug1740();
   }
-  
+
   @ApiResponses(value = {
       @ApiResponse(code = 200,
           message = "list of ids",
@@ -186,6 +186,38 @@ public class BugsController {
   @RequestMapping(value = "/1777", method = GET)
   public ResponseEntity<Bug1777> bug1777() {
     throw new UnsupportedOperationException();
+  }
+
+
+  @RequestMapping(value = "/1778", method = RequestMethod.GET)
+  public ResponseEntity<Void> bug1778(TestClass testClass, TestClass2 testClass2) {
+    return ResponseEntity.ok().build();
+  }
+
+  class TestClass {
+
+    private String s;
+
+    public String getS() {
+      return s;
+    }
+
+    public void setS(String s) {
+      this.s = s;
+    }
+  }
+
+  class TestClass2 {
+
+    private String e;
+
+    public String getE() {
+      return e;
+    }
+
+    public void setE(String e) {
+      this.e = e;
+    }
   }
 
   @ApiModel(description = "Test 1777")

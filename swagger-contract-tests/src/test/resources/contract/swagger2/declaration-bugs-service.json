@@ -717,6 +717,41 @@
           }
         }
       }
+    },
+    "/bugs/1778{?s,e}": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "bug1778",
+        "operationId": "bug1778UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "s",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "e",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
