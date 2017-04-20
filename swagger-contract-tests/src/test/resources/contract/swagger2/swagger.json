@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -20,12 +19,12 @@
       "description": "Operations about store"
     },
     {
-      "name": "generic-pet-controller",
-      "description": "Generic Pet Controller"
-    },
-    {
       "name": "pet-controller",
       "description": "Operations about pets"
+    },
+    {
+      "name": "generic-pet-controller",
+      "description": "Generic Pet Controller"
     },
     {
       "name": "user-controller",
@@ -304,8 +303,7 @@
         },
         "security": [
           {
-            "api_key": [
-            ]
+            "api_key": []
           },
           {
             "petstore_auth": [

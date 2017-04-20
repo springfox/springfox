@@ -70,9 +70,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -234,7 +232,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "type": "List[Entry«string,Pet»]",
               "required": true
             }
           ],
@@ -262,7 +260,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry\u00abstring,Pet\u00bb]"
+          "type": "List[Entry«string,Pet»]"
         }
       ],
       "path": "/pets/echo"
@@ -392,9 +390,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -419,7 +415,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry\u00abstring,List\u00abstring\u00bb\u00bb]"
+          "type": "List[Entry«string,List«string»»]"
         }
       ],
       "path": "/pets/nameToNickNamesMap"
@@ -512,7 +508,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "type": "List[Entry«string,Pet»]",
               "required": true
             }
           ],
@@ -564,7 +560,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "type": "List[Entry«string,Pet»]",
               "required": true
             }
           ],
@@ -616,7 +612,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry\u00abstring,Pet\u00bb]",
+              "type": "List[Entry«string,Pet»]",
               "required": true
             }
           ],
@@ -923,13 +919,11 @@
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
+  "consumes": [],
   "models": {
-    "Entry\u00abstring,List\u00abstring\u00bb\u00bb": {
+    "Entry«string,List«string»»": {
       "description": "",
-      "id": "Entry\u00abstring,List\u00abstring\u00bb\u00bb",
+      "id": "Entry«string,List«string»»",
       "properties": {
         "key": {
           "required": false,
@@ -940,9 +934,9 @@
         }
       }
     },
-    "Entry\u00abstring,Pet\u00bb": {
+    "Entry«string,Pet»": {
       "description": "",
-      "id": "Entry\u00abstring,Pet\u00bb",
+      "id": "Entry«string,Pet»",
       "properties": {
         "key": {
           "required": false,
@@ -970,9 +964,7 @@
       }
     }
   },
-  "produces": [
-
-  ],
+  "produces": [],
   "resourcePath": "/pets",
   "swaggerVersion": "1.2"
 }
