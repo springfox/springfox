@@ -23,6 +23,8 @@ import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.service.AllowableListValues
+import springfox.documentation.service.ListVendorExtension
+import springfox.documentation.service.VendorExtension
 
 class ModelPropertyBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -47,6 +49,11 @@ class ModelPropertyBuilderSpec extends Specification {
       'isHidden'          | true                                  | 'hidden'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
       'example'           | 'example1'                            | 'example'
+      'extensions'        | extensions()                          | 'vendorExtensions'
+  }
+
+  List<VendorExtension> extensions() {
+    return Arrays.asList(new ListVendorExtension<String>("test", Arrays.asList("Test")))
   }
 
   @Unroll

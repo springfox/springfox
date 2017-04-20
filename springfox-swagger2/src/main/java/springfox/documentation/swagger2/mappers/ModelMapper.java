@@ -179,6 +179,12 @@ public abstract class ModelMapper {
       property.setReadOnly(source.isReadOnly());
       property.setExample(source.getExample());
     }
+
+    Map<String, Object> extensions = new VendorExtensionsMapper()
+            .mapExtensions(source.getVendorExtensions());
+    property.getVendorExtensions().putAll(extensions);
+    source.getVendorExtensions();
+
     return property;
   }
 
