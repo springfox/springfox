@@ -406,3 +406,11 @@ public Docket docket() {
 ----
 
 NOTE: If you're using a library for you models, you may need to make the Immutable visible outside the package.
+
+[[q23]]*23. Why does setting `@ApiImplicitParam#paramType="form"` output undefined dataType?
+
+If you change the datatype to "__file" once 2.7.0 is released, it will fix your issue.
+
+NOTE: The reason we use "__file" is because if a consuming library defines a custom type `File` then that type ends
+up getting treated just as if it were a `file` data type, even if that wasn't the intent. To distinguish the usage of
+ the custom type from the natively understood `file` primitive we introduced this convention.
