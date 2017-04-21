@@ -19,9 +19,15 @@
 
 package springfox.documentation.schema;
 
+import static com.google.common.collect.Lists.newArrayList;
+
+import java.util.List;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
+
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.service.VendorExtension;
 
 public class ModelProperty {
   private final String name;
@@ -36,6 +42,7 @@ public class ModelProperty {
   private ModelReference modelRef;
   private final String example;
   private final String pattern;
+  private final List<VendorExtension> vendorExtensions;
 
   public ModelProperty(
       String name,
@@ -48,7 +55,8 @@ public class ModelProperty {
       String description,
       AllowableValues allowableValues,
       String example,
-      String pattern) {
+      String pattern,
+      List<VendorExtension> vendorExtensions) {
 
     this.name = name;
     this.type = type;
@@ -61,6 +69,7 @@ public class ModelProperty {
     this.allowableValues = allowableValues;
     this.example = example;
     this.pattern = pattern;
+    this.vendorExtensions = newArrayList(vendorExtensions);
   }
 
   public String getName() {
@@ -114,5 +123,9 @@ public class ModelProperty {
 
   public String getPattern() {
     return pattern;
+  }
+
+  public List<VendorExtension> getVendorExtensions() {
+    return vendorExtensions;
   }
 }

@@ -22,7 +22,11 @@ package springfox.documentation.builders;
 import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.service.VendorExtension;
 
+import java.util.List;
+
+import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelPropertyBuilder {
@@ -37,6 +41,7 @@ public class ModelPropertyBuilder {
   private boolean isHidden;
   private String example;
   private String pattern;
+  private List<VendorExtension> vendorExtensions = newArrayList();
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -93,8 +98,24 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  public ModelPropertyBuilder extensions(List<VendorExtension> extensions) {
+    this.vendorExtensions.addAll(nullToEmptyList(extensions));
+    return this;
+  }
+
   public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description,
-        allowableValues, example, pattern);
+    return new ModelProperty(
+        name,
+        type,
+        qualifiedType,
+        position,
+        required,
+        isHidden,
+        readOnly,
+        description,
+        allowableValues,
+        example,
+        pattern,
+        vendorExtensions);
   }
 }

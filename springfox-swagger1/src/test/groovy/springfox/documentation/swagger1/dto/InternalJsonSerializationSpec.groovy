@@ -46,6 +46,6 @@ class InternalJsonSerializationSpec extends Specification {
   }
 
   def writePretty(object){
-    objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object)
+    objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object).normalize()
   }
 }

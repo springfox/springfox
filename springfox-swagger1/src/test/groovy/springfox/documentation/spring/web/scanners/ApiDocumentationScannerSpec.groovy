@@ -138,7 +138,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     then:
       scanned.resourceListing.apis.size() == 1
       scanned.resourceListing.apis.get(0).path == "/groupName/test"
-      scanned.resourceListing.apis.get(0).description == """Operation with path /b and position 1
+      scanned.resourceListing.apis.get(0).description.normalize() == """Operation with path /b and position 1
                                                              |Operation with path /c and position 2
                                                              |Operation with path /a and position 2""".stripMargin()
 
