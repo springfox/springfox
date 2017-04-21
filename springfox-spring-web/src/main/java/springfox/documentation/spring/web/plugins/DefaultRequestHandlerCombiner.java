@@ -63,8 +63,10 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
       List<RequestHandler> handlers = groupByEquality.get(path);
 
       RequestHandler toCombine = path.get();
-      for (RequestHandler each : handlers) {
-        toCombine = combine(toCombine, each);
+      if (handlers.size() > 1) {
+        for (RequestHandler each : handlers) {
+          toCombine = combine(toCombine, each);
+        }
       }
       combined.add(toCombine);
     }
