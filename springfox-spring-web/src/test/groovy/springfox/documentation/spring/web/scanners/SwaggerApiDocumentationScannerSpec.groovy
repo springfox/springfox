@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.spring.web.scanners
+
 import com.google.common.collect.LinkedListMultimap
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
@@ -30,8 +31,8 @@ import springfox.documentation.spring.web.paths.AbstractPathProvider
 import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.collect.Maps.*
-import static springfox.documentation.builders.PathSelectors.*
+import static com.google.common.collect.Maps.newHashMap
+import static springfox.documentation.builders.PathSelectors.regex
 
 @Mixin([RequestMappingSupport])
 class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
@@ -169,7 +170,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     then:
       scanned.resourceListing.apis.size() == 1
       scanned.resourceListing.apis.get(0).path == "/groupName/test"
-      scanned.resourceListing.apis.get(0).description == """Operation with path /b and position 1
+      scanned.resourceListing.apis.get(0).description.normalize() == """Operation with path /b and position 1
                                                            |Operation with path /c and position 2
                                                            |Operation with path /a and position 2""".stripMargin()
 
