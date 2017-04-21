@@ -18,14 +18,17 @@
  */
 package springfox.documentation.spring.web.plugins;
 
+import com.google.common.base.Equivalence;
+import com.google.common.base.Function;
 import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerCombiner;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -33,6 +36,8 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
+
+  private static final PathAndParametersEquivalence EQUIVALENCE = new PathAndParametersEquivalence();
 
   public List<RequestHandler> combine(List<RequestHandler> source) {
     List<RequestHandler> combined = new ArrayList<RequestHandler>();
@@ -48,24 +53,32 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
 
   private Collection<? extends RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
     List<RequestHandler> source = newArrayList(requestHandlers);
-    PathAndParametersEquivalence equality = new PathAndParametersEquivalence();
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;
     }
+    ListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> groupByEquality
+        = Multimaps.index(source, equivalenceAsKey());
     List<RequestHandler> combined = newArrayList();
-    for (Iterator<RequestHandler> outer = source.iterator(); outer.hasNext(); ) {
-      RequestHandler each = outer.next();
-      outer.remove();
-      for (Iterator<RequestHandler> inner = source.iterator(); inner.hasNext(); ) {
-        RequestHandler innerEach = inner.next();
-        if (equality.equivalent(each, innerEach)) {
-          each = combine(each, innerEach);
-          inner.remove();
-        }
+    for (Equivalence.Wrapper<RequestHandler> path : groupByEquality.keySet()) {
+      List<RequestHandler> handlers = groupByEquality.get(path);
+
+      RequestHandler toCombine = path.get();
+      for (RequestHandler each : handlers) {
+        toCombine = combine(toCombine, each);
       }
-      combined.add(each);
+      combined.add(toCombine);
     }
     return combined;
+  }
+
+  private Function<RequestHandler, Equivalence.Wrapper<RequestHandler>> equivalenceAsKey() {
+    return new
+        Function<RequestHandler, Equivalence.Wrapper<RequestHandler>>() {
+      @Override
+      public Equivalence.Wrapper<RequestHandler> apply(RequestHandler input) {
+        return EQUIVALENCE.wrap(input);
+      }
+    };
   }
 
   private RequestHandler combine(RequestHandler first, RequestHandler second) {
