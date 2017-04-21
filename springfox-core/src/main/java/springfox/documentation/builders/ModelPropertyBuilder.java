@@ -19,16 +19,14 @@
 
 package springfox.documentation.builders;
 
-import static com.google.common.collect.Lists.newArrayList;
-
-import java.util.List;
-
 import com.fasterxml.classmate.ResolvedType;
-
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.List;
+
+import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelPropertyBuilder {
@@ -106,7 +104,18 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    return new ModelProperty(name, type, qualifiedType, position, required, isHidden, readOnly, description,
-        allowableValues, example, pattern, vendorExtensions);
+    return new ModelProperty(
+        name,
+        type,
+        qualifiedType,
+        position,
+        required,
+        isHidden,
+        readOnly,
+        description,
+        allowableValues,
+        example,
+        pattern,
+        vendorExtensions);
   }
 }
