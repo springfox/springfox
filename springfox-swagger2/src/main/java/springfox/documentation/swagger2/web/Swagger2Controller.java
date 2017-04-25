@@ -23,7 +23,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -53,19 +53,19 @@ public class Swagger2Controller {
   public static final String DEFAULT_URL = "/v2/api-docs";
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
-  @Value("$SPRINGFOX{springfox.documentation.swagger.v2.host:DEFAULT}")
-  private String hostNameOverride;
-
+  private final String hostNameOverride;
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
   private final JsonSerializer jsonSerializer;
 
   @Autowired
   public Swagger2Controller(
+      Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
       JsonSerializer jsonSerializer) {
 
+    this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
