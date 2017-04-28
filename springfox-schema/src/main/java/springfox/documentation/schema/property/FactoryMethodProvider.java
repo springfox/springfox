@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Iterables.*;
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Lists.*;
 
 @Component
@@ -47,7 +47,8 @@ public class FactoryMethodProvider {
     memberResolver = new MemberResolver(resolver);
   }
 
-  public Optional<? extends ResolvedParameterizedMember> in(ResolvedType resolvedType,
+  public Optional<? extends ResolvedParameterizedMember> in(
+      ResolvedType resolvedType,
       Predicate<ResolvedParameterizedMember> predicate) {
     return from(concat(constructors(resolvedType), delegatedFactoryMethods(resolvedType))).firstMatch(predicate);
   }
@@ -60,6 +61,7 @@ public class FactoryMethodProvider {
       }
     };
   }
+
   public Collection<ResolvedConstructor> constructors(ResolvedType resolvedType) {
     ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(resolvedType, null, null);
     return newArrayList(typeWithMembers.getConstructors());
