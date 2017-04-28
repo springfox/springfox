@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.springframework.http.MediaType
+import org.springframework.mock.env.MockEnvironment
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
 import springfox.documentation.builders.DocumentationBuilder
@@ -35,43 +36,43 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class ApiResourceControllerSpec extends Specification {
   def mockMvc
-  def security = "{\n" +
-      "    \"apiKey\": \"key\",\n" +
-      "    \"apiKeyName\": \"api_key\",\n" +
-      "    \"apiKeyVehicle\": \"header\",\n" +
-      "    \"appName\": \"test\",\n" +
-      "    \"clientId\": \"client\",\n" +
-      "    \"clientSecret\": \"client-secret\",\n" +
-      "    \"realm\": \"real\",\n" +
-      "    \"scopeSeparator\": \",\"\n" +
-      "}"
-  def ui = "{\n" +
-      "    \"apisSorter\": \"alpha\",\n" +
-      "    \"defaultModelRendering\": \"schema\",\n" +
-      "    \"docExpansion\": \"none\",\n" +
-      "    \"jsonEditor\": false,\n" +
-      "    \"showRequestHeaders\": true,\n" +
-      "    \"supportedSubmitMethods\": [\n" +
-      "        \"get\",\n" +
-      "        \"post\",\n" +
-      "        \"put\",\n" +
-      "        \"delete\",\n" +
-      "        \"patch\"\n" +
-      "    ],\n" +
-      "    \"validatorUrl\": \"/validate\"\n" +
-      "}"
-  def resources = "[\n" +
-      "        {\n" +
-      "            \"name\": \"test\",\n" +
-      "            \"location\": \"/v1?group=test\",\n" +
-      "            \"swaggerVersion\": \"1.2\"\n" +
-      "        },\n" +
-      "        {\n" +
-      "            \"name\": \"test\",\n" +
-      "            \"location\": \"/v2?group=test\",\n" +
-      "            \"swaggerVersion\": \"2.0\"\n" +
-      "        }\n" +
-      "    ]"
+  def security = """{
+    "apiKey": "key",
+    "apiKeyName": "api_key",
+    "apiKeyVehicle": "header",
+    "appName": "test",
+    "clientId": "client",
+    "clientSecret": "client-secret",
+    "realm": "real",
+    "scopeSeparator": ","
+}"""
+  def ui = """{
+    "apisSorter": "alpha",
+    "defaultModelRendering": "schema",
+    "docExpansion": "none",
+    "jsonEditor": false,
+    "showRequestHeaders": true,
+    "supportedSubmitMethods": [
+        "get",
+        "post",
+        "put",
+        "delete",
+        "patch"
+    ],
+    "validatorUrl": "/validate"
+}"""
+  def resources = """[
+        {
+            "name": "test",
+            "location": "/v1?group=test",
+            "swaggerVersion": "1.2"
+        },
+        {
+            "name": "test",
+            "location": "/v2?group=test",
+            "swaggerVersion": "2.0"
+        }
+    ]"""
 
   def sut
 
@@ -93,15 +94,17 @@ class ApiResourceControllerSpec extends Specification {
   }
 
   def inMemorySwaggerResources() {
-    def swaggerResources = new InMemorySwaggerResourcesProvider(documentationCache())
-    swaggerResources.with {
-      swagger1Url = "/v1"
-      swagger1Available = true
+    def resources = new InMemorySwaggerResourcesProvider(mockEnvironment(), documentationCache())
+    resources.swagger1Available = true
+    resources.swagger2Available = true
+    resources
+  }
 
-      swagger2Url = "/v2"
-      swagger2Available = true
-    }
-    swaggerResources
+  def mockEnvironment() {
+    def environment = new MockEnvironment()
+    environment.withProperty("springfox.documentation.swagger.v1.path", "/v1")
+    environment.withProperty("springfox.documentation.swagger.v2.path", "/v2")
+    environment
   }
 
   def documentationCache() {
@@ -144,16 +147,16 @@ class ApiResourceControllerSpec extends Specification {
 
     then:
     JSONAssert.assertEquals(
-        mapper.writer().writeValueAsString(sut.securityConfiguration),
         security,
+        mapper.writer().writeValueAsString(sut.securityConfiguration),
         JSONCompareMode.NON_EXTENSIBLE)
     JSONAssert.assertEquals(
-        mapper.writer().writeValueAsString(sut.uiConfiguration),
         ui,
+        mapper.writer().writeValueAsString(sut.uiConfiguration),
         JSONCompareMode.NON_EXTENSIBLE)
     JSONAssert.assertEquals(
-        mapper.writer().writeValueAsString(sut.swaggerResources().body),
         resources,
+        mapper.writer().writeValueAsString(sut.swaggerResources().body),
         JSONCompareMode.NON_EXTENSIBLE)
   }
 }

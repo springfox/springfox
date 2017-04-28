@@ -3,22 +3,19 @@ package springfox.documentation.swagger2.web
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.LinkedListMultimap
 import com.google.common.collect.Ordering
+import org.springframework.mock.env.MockEnvironment
 import org.springframework.web.util.WebUtils
 import spock.lang.Unroll
 import springfox.documentation.PathProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
-import springfox.documentation.spi.service.contexts.DocumentationContext
-import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
 import springfox.documentation.spring.web.paths.AbstractPathProvider
-import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DefaultConfiguration
-import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner
 import springfox.documentation.spring.web.scanners.ApiListingReferenceScanResult
@@ -38,9 +35,10 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     implements MapperSupport, JsonSupport{
 
   Swagger2Controller controller = new Swagger2Controller(
-          new DocumentationCache(),
-          swagger2Mapper(),
-          new JsonSerializer([new Swagger2JacksonModule()]))
+      mockEnvironment(),
+      new DocumentationCache(),
+      swagger2Mapper(),
+      new JsonSerializer([new Swagger2JacksonModule()]))
 
   ApiListingReferenceScanner listingReferenceScanner
   ApiListingScanner listingScanner
@@ -53,6 +51,13 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     request = servletRequest()
+  }
+
+  def mockEnvironment() {
+    def environment = new MockEnvironment()
+    environment.withProperty("springfox.documentation.swagger.v1.path", "/v1")
+    environment.withProperty("springfox.documentation.swagger.v2.path", "/v2")
+    environment
   }
 
 
@@ -143,8 +148,6 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       ApiDocumentationScanner swaggerApiResourceListing =
         new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
       controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
-    and:
-      controller.hostNameOverride = "DEFAULT"
     when:
       def result = controller.getDocumentation(null, request)
     and:

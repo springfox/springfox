@@ -23,7 +23,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,6 +35,7 @@ import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.PropertySourcedMapping;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -43,7 +44,7 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.*;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.util.MimeTypeUtils.*;
 import static springfox.documentation.swagger2.web.HostNameProvider.*;
 
 @Controller
@@ -53,26 +54,31 @@ public class Swagger2Controller {
   public static final String DEFAULT_URL = "/v2/api-docs";
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
-  @Value("$SPRINGFOX{springfox.documentation.swagger.v2.host:DEFAULT}")
-  private String hostNameOverride;
-
+  private final String hostNameOverride;
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
   private final JsonSerializer jsonSerializer;
 
   @Autowired
   public Swagger2Controller(
+      Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
       JsonSerializer jsonSerializer) {
 
+    this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
   }
 
-  @RequestMapping(value = "$SPRINGFOX{springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
-      method = RequestMethod.GET, produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
+  @RequestMapping(
+      value = DEFAULT_URL,
+      method = RequestMethod.GET,
+      produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
+  @PropertySourcedMapping(
+      value = "${springfox.documentation.swagger.v2.path}",
+      propertyKey = "springfox.documentation.swagger.v2.path")
   @ResponseBody
   public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,

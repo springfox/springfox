@@ -30,7 +30,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
@@ -197,14 +196,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
     @Bean
     AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
       new JacksonSerializerConvention(resolver, "springfox.documentation.spring.web.dummy.models")
-    }
-
-    @Bean
-    static PropertySourcesPlaceholderConfigurer properties() throws Exception {
-      final PropertySourcesPlaceholderConfigurer configurer =
-          new PropertySourcesPlaceholderConfigurer()
-      configurer.setIgnoreUnresolvablePlaceholders(false)
-      return configurer
     }
   }
 }

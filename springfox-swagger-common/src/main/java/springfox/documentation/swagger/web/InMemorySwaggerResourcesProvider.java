@@ -18,9 +18,10 @@
  */
 package springfox.documentation.swagger.web;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -35,19 +36,22 @@ import static springfox.documentation.schema.ClassSupport.*;
 
 @Component
 public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvider {
-  @Value("$SPRINGFOX{springfox.documentation.swagger.v1.path:/api-docs}")
-  private String swagger1Url;
+  private final String swagger1Url;
+  private final String swagger2Url;
 
-  @Value("$SPRINGFOX{springfox.documentation.swagger.v2.path:/v2/api-docs}")
-  private String swagger2Url;
-
-  private boolean swagger1Available;
-  private boolean swagger2Available;
+  @VisibleForTesting
+  boolean swagger1Available;
+  @VisibleForTesting
+  boolean swagger2Available;
 
   private final DocumentationCache documentationCache;
 
   @Autowired
-  public InMemorySwaggerResourcesProvider(DocumentationCache documentationCache) {
+  public InMemorySwaggerResourcesProvider(
+      Environment environment,
+      DocumentationCache documentationCache) {
+    swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
+    swagger2Url = environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs");
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
     swagger2Available = classByName("springfox.documentation.swagger2.web.Swagger2Controller").isPresent();
     this.documentationCache = documentationCache;
