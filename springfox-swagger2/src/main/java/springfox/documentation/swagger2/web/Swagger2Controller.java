@@ -35,6 +35,7 @@ import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.PropertySourcedMapping;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -43,7 +44,7 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.*;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.util.MimeTypeUtils.*;
 import static springfox.documentation.swagger2.web.HostNameProvider.*;
 
 @Controller
@@ -71,8 +72,13 @@ public class Swagger2Controller {
     this.jsonSerializer = jsonSerializer;
   }
 
-  @RequestMapping(value = "$SPRINGFOX{springfox.documentation.swagger.v2.path:" + DEFAULT_URL + "}",
-      method = RequestMethod.GET, produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
+  @RequestMapping(
+      value = DEFAULT_URL,
+      method = RequestMethod.GET,
+      produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
+  @PropertySourcedMapping(
+      value = "${springfox.documentation.swagger.v2.path}",
+      propertyKey = "springfox.documentation.swagger.v2.path")
   @ResponseBody
   public ResponseEntity<Json> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
