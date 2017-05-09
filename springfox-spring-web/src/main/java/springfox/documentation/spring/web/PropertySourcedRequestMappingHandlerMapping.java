@@ -76,7 +76,7 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
   }
 
   private String mappingPath(final PropertySourcedMapping mapper) {
-    final String key = mapper.value();
+    final String key = mapper.propertyKey();
     return Optional.fromNullable(environment.getProperty(key))
         .transform(new Function<String, String>() {
           @Override
