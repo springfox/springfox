@@ -21,14 +21,20 @@ package springfox.documentation.spring.data.rest;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.collect.Lists;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.mapping.Association;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.SimpleAssociationHandler;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.MethodResourceMapping;
+import org.springframework.data.rest.core.mapping.ResourceMapping;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.core.mapping.SearchResourceMappings;
+import org.springframework.data.rest.webmvc.mapping.Associations;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -52,6 +58,7 @@ class EntityContext {
   private final TypeResolver typeResolver;
   private final ResourceMappings mappings;
   private final PersistentEntities entities;
+  private final Associations associations;
   private URI basePath;
 
   public EntityContext(
@@ -60,7 +67,8 @@ class EntityContext {
       ResourceMetadata resource,
       TypeResolver typeResolver,
       ResourceMappings mappings,
-      PersistentEntities entities) {
+      PersistentEntities entities,
+      Associations associations) {
 
     this.configuration = configuration;
     this.repository = repository;
@@ -69,6 +77,7 @@ class EntityContext {
     this.basePath = configuration.getBaseUri();
     this.mappings = mappings;
     this.entities = entities;
+    this.associations = associations;
   }
 
 
@@ -158,6 +167,25 @@ class EntityContext {
           methodResolver.methodReturnType(handler));
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
+
+
+    final PersistentEntity<?, ?> entity = entities.getPersistentEntity(resource.getDomainType());
+    entity.doWithAssociations(new SimpleAssociationHandler() {
+
+      @Override
+      public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
+        ResourceMetadata metadata = associations.getMetadataFor(entity.getType());
+        PersistentProperty<?> property = association.getInverse();
+
+        if (!associations.isLinkableAssociation(property)) {
+          return;
+        }
+
+        ResourceMapping mapping = metadata.getMappingFor(property);
+        ResourceMetadata targetTypeMetadata = associations.getMetadataFor(property.getActualType());
+
+      }
+    });
     return handlers;
   }
 

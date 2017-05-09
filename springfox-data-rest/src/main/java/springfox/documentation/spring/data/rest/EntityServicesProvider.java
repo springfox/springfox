@@ -27,6 +27,7 @@ import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
+import org.springframework.data.rest.webmvc.mapping.Associations;
 import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
@@ -42,18 +43,21 @@ public class EntityServicesProvider implements RequestHandlerProvider {
   private final Repositories repositories;
   private final TypeResolver typeResolver;
   private final PersistentEntities entities;
+  private final Associations associations;
 
   public EntityServicesProvider(
       RepositoryRestConfiguration configuration,
       ResourceMappings mappings,
       Repositories repositories,
       TypeResolver typeResolver,
-      PersistentEntities entities) {
+      PersistentEntities entities,
+      Associations associations) {
     this.mappings = mappings;
     this.configuration = configuration;
     this.repositories = repositories;
     this.typeResolver = typeResolver;
     this.entities = entities;
+    this.associations = associations;
   }
 
   @Override
@@ -66,7 +70,7 @@ public class EntityServicesProvider implements RequestHandlerProvider {
       ResourceMetadata resource = mappings.getMetadataFor(each);
 //      SearchResourceMappings searchResource = mappings.getSearchResourceMappings(each);
 //      crudMethods.hasDelete();
-      contexts.add(new EntityContext(configuration, repository, resource, typeResolver, mappings, entities));
+      contexts.add(new EntityContext(configuration, repository, resource, typeResolver, mappings, entities, associations));
 
     }
     return FluentIterable.from(contexts)
