@@ -24,13 +24,13 @@
     "application/json"
   ],
   "paths": {
-    "/people{?name}": {
+    "/people/search/findByLastName{?name}": {
       "get": {
         "tags": [
           "Person Entity"
         ],
         "summary": "Person",
-        "operationId": "PersonUsingGET_8",
+        "operationId": "PersonUsingGET_6",
         "consumes": [
           "application/json"
         ],
@@ -40,8 +40,8 @@
         ],
         "parameters": [
           {
-            "in": "query",
             "name": "name",
+            "in": "query",
             "description": "name",
             "required": false,
             "type": "string"
@@ -61,6 +61,38 @@
       }
     },
     "/people/{id}": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingGET_7",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Person Entity"
@@ -89,40 +121,8 @@
             "description": "body",
             "required": true,
             "schema": {
-              "$ref":"#/definitions/Person"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
               "$ref": "#/definitions/Person"
             }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Person Entity"
-        ],
-        "summary": "Person",
-        "operationId": "PersonUsingGET_6",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "integer",
-            "format": "int64"
           }
         ],
         "responses": {
@@ -170,7 +170,7 @@
           "Person Entity"
         ],
         "summary": "Person",
-        "operationId": "PersonUsingGET_7",
+        "operationId": "PersonUsingGET_8",
         "consumes": [
           "application/json"
         ],

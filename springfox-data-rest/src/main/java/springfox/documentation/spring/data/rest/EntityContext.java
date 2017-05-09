@@ -24,7 +24,10 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.mapping.MethodResourceMapping;
+import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
+import org.springframework.data.rest.core.mapping.SearchResourceMappings;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -33,7 +36,6 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,19 +49,22 @@ class EntityContext {
   private final RepositoryInformation repository;
   private final ResourceMetadata resource;
   private final TypeResolver typeResolver;
+  private final ResourceMappings mappings;
   private URI basePath;
 
   public EntityContext(
       RepositoryRestConfiguration configuration,
       RepositoryInformation repository,
       ResourceMetadata resource,
-      TypeResolver typeResolver) {
+      TypeResolver typeResolver,
+      ResourceMappings mappings) {
 
     this.configuration = configuration;
     this.repository = repository;
     this.resource = resource;
     this.typeResolver = typeResolver;
     this.basePath = configuration.getBaseUri();
+    this.mappings = mappings;
   }
 
 
@@ -145,12 +150,13 @@ class EntityContext {
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
     HandlerMethodResolver methodResolver = new HandlerMethodResolver(typeResolver);
-    for (Method method : repository.getQueryMethods()) {
+    SearchResourceMappings searchMappings = mappings.getSearchResourceMappings(repository.getDomainType());
+    for (MethodResourceMapping mapping : searchMappings.getExportedMappings()) {
       HandlerMethod handler = new HandlerMethod(
           repository.getRepositoryInterface(),
-          method);
+          mapping.getMethod());
       ActionSpecification spec = new ActionSpecification(
-          String.format("%s%s", configuration.getBasePath(), resource.getPath()),
+          String.format("%s%s/search%s", configuration.getBasePath(), resource.getPath(), mapping.getPath()),
           newHashSet(RequestMethod.GET),
           new HashSet<MediaType>(),
           new HashSet<MediaType>(),

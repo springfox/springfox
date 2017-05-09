@@ -62,7 +62,7 @@ public class EntityServicesProvider implements RequestHandlerProvider {
       ResourceMetadata resource = mappings.getMetadataFor(each);
 //      SearchResourceMappings searchResource = mappings.getSearchResourceMappings(each);
 //      crudMethods.hasDelete();
-      contexts.add(new EntityContext(configuration, repository, resource, typeResolver));
+      contexts.add(new EntityContext(configuration, repository, resource, typeResolver, mappings));
 
     }
     return FluentIterable.from(contexts)
