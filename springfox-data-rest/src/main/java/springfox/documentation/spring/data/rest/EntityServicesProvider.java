@@ -21,6 +21,7 @@ package springfox.documentation.spring.data.rest;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -40,16 +41,19 @@ public class EntityServicesProvider implements RequestHandlerProvider {
   private final ResourceMappings mappings;
   private final Repositories repositories;
   private final TypeResolver typeResolver;
+  private final PersistentEntities entities;
 
   public EntityServicesProvider(
       RepositoryRestConfiguration configuration,
       ResourceMappings mappings,
       Repositories repositories,
-      TypeResolver typeResolver) {
+      TypeResolver typeResolver,
+      PersistentEntities entities) {
     this.mappings = mappings;
     this.configuration = configuration;
     this.repositories = repositories;
     this.typeResolver = typeResolver;
+    this.entities = entities;
   }
 
   @Override
@@ -62,7 +66,7 @@ public class EntityServicesProvider implements RequestHandlerProvider {
       ResourceMetadata resource = mappings.getMetadataFor(each);
 //      SearchResourceMappings searchResource = mappings.getSearchResourceMappings(each);
 //      crudMethods.hasDelete();
-      contexts.add(new EntityContext(configuration, repository, resource, typeResolver, mappings));
+      contexts.add(new EntityContext(configuration, repository, resource, typeResolver, mappings, entities));
 
     }
     return FluentIterable.from(contexts)

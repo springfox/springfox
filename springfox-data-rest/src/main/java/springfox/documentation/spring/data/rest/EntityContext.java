@@ -21,6 +21,7 @@ package springfox.documentation.spring.data.rest;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.collect.Lists;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -50,6 +51,7 @@ class EntityContext {
   private final ResourceMetadata resource;
   private final TypeResolver typeResolver;
   private final ResourceMappings mappings;
+  private final PersistentEntities entities;
   private URI basePath;
 
   public EntityContext(
@@ -57,7 +59,8 @@ class EntityContext {
       RepositoryInformation repository,
       ResourceMetadata resource,
       TypeResolver typeResolver,
-      ResourceMappings mappings) {
+      ResourceMappings mappings,
+      PersistentEntities entities) {
 
     this.configuration = configuration;
     this.repository = repository;
@@ -65,15 +68,12 @@ class EntityContext {
     this.typeResolver = typeResolver;
     this.basePath = configuration.getBaseUri();
     this.mappings = mappings;
+    this.entities = entities;
   }
 
 
   public List<RequestHandler> requestHandlers() {
     List<RequestHandler> handlers = newArrayList();
-    //      CrudMethods crudMethods = repository.getCrudMethods();
-//      Iterable<Method> queryMethods = repository.getQueryMethods();
-//      SearchResourceMappings searchResource = mappings.getSearchResourceMappings(each);
-//      crudMethods.hasDelete();
     CrudMethods crudMethods = repository.getCrudMethods();
     if (crudMethods.hasSaveMethod()) {
       HandlerMethod handler = new HandlerMethod(
@@ -165,8 +165,6 @@ class EntityContext {
           methodResolver.methodReturnType(handler));
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
-
-    //Collection Resource
     return handlers;
   }
 
