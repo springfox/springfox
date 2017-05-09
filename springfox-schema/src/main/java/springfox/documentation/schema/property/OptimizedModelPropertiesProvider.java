@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -367,12 +366,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
     if (context.isReturnType()) {
       SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
-      return serializationConfig.introspect(TypeFactory.defaultInstance()
-          .constructType(type.getErasedType()));
+      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
     } else {
       DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
-      return serializationConfig.introspect(TypeFactory.defaultInstance()
-          .constructType(type.getErasedType()));
+      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
     }
   }
 }
