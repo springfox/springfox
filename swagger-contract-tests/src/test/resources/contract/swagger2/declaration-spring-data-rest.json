@@ -24,6 +24,49 @@
     "application/json"
   ],
   "paths": {
+    "/people": {
+      "post": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingPOST_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          }
+        }
+      }
+    },
     "/people/search/findByLastName{?name}": {
       "get": {
         "tags": [

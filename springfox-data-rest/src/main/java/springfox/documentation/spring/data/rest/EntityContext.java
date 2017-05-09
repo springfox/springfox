@@ -79,25 +79,18 @@ class EntityContext {
       HandlerMethod handler = new HandlerMethod(
           repository.getRepositoryInterface(),
           crudMethods.getSaveMethod());
-      ActionSpecification spec = new ActionSpecification(
+      ActionSpecification put = saveActionSpecification(
+          RequestMethod.PUT,
           String.format("%s%s/{id}", configuration.getBasePath(), resource.getPath()),
-          newHashSet(RequestMethod.PUT),
-          new HashSet<MediaType>(),
-          new HashSet<MediaType>(),
-          handler,
-          newArrayList(
-              new ResolvedMethodParameter(
-                  0,
-                  "id",
-                  pathAnnotations(handler),
-                  typeResolver.resolve(repository.getIdType())),
-              new ResolvedMethodParameter(
-                  0,
-                  "body",
-                  bodyAnnotations(handler),
-                  typeResolver.resolve(repository.getDomainType()))),
-          typeResolver.resolve(repository.getReturnedDomainClass(handler.getMethod())));
-      handlers.add(new SpringDataRestRequestHandler(this, spec));
+          handler
+      );
+      handlers.add(new SpringDataRestRequestHandler(this, put));
+      ActionSpecification post = saveActionSpecification(
+          RequestMethod.POST,
+          String.format("%s%s", configuration.getBasePath(), resource.getPath()),
+          handler
+      );
+      handlers.add(new SpringDataRestRequestHandler(this, post));
     }
     if (crudMethods.hasDelete()) {
       HandlerMethod handler = new HandlerMethod(
@@ -166,6 +159,27 @@ class EntityContext {
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
     return handlers;
+  }
+
+  private ActionSpecification saveActionSpecification(RequestMethod method, String path, HandlerMethod handler) {
+    return new ActionSpecification(
+        path,
+        newHashSet(method),
+        new HashSet<MediaType>(),
+        new HashSet<MediaType>(),
+        handler,
+        newArrayList(
+            new ResolvedMethodParameter(
+                0,
+                "id",
+                pathAnnotations(handler),
+                typeResolver.resolve(repository.getIdType())),
+            new ResolvedMethodParameter(
+                0,
+                "body",
+                bodyAnnotations(handler),
+                typeResolver.resolve(repository.getDomainType()))),
+        typeResolver.resolve(repository.getReturnedDomainClass(handler.getMethod())));
   }
 
   private List<Annotation> pathAnnotations(HandlerMethod handler) {
