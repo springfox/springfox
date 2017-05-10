@@ -20,6 +20,7 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 
 import static com.google.common.base.Objects.*;
 
@@ -46,8 +47,8 @@ public class ResourceGroup {
     return position;
   }
 
-  public Class<?> getControllerClass() {
-    return controllerClazz;
+  public Optional<? extends Class<?>> getControllerClass() {
+    return Optional.fromNullable(controllerClazz);
   }
 
   @Override

@@ -2,8 +2,23 @@
   "apiVersion": "1.0",
   "apis": [
     {
-      "description": "Class",
+      "description": "Address Entity\nClass",
+      "path": "/default/Address Entity",
+      "position": 0
+    },
+    {
+      "description": "Category Entity\nClass",
+      "path": "/default/Category Entity",
+      "position": 0
+    },
+    {
+      "description": "Class\nPerson Entity",
       "path": "/default/Person Entity",
+      "position": 0
+    },
+    {
+      "description": "Class\nTag Entity",
+      "path": "/default/Tag Entity",
       "position": 0
     },
     {

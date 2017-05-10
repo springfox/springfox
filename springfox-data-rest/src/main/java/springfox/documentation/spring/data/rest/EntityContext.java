@@ -34,6 +34,7 @@ import org.springframework.data.rest.core.mapping.ResourceMapping;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.core.mapping.SearchResourceMappings;
+import org.springframework.data.rest.webmvc.RestMediaTypes;
 import org.springframework.data.rest.webmvc.mapping.Associations;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +46,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -82,7 +84,7 @@ class EntityContext {
 
 
   public List<RequestHandler> requestHandlers() {
-    List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = newArrayList();
     CrudMethods crudMethods = repository.getCrudMethods();
     if (crudMethods.hasSaveMethod()) {
       HandlerMethod handler = new HandlerMethod(
@@ -170,6 +172,7 @@ class EntityContext {
 
 
     final PersistentEntity<?, ?> entity = entities.getPersistentEntity(resource.getDomainType());
+    final EntityContext entityContext = this;
     entity.doWithAssociations(new SimpleAssociationHandler() {
 
       @Override
@@ -182,7 +185,31 @@ class EntityContext {
         }
 
         ResourceMapping mapping = metadata.getMappingFor(property);
-        ResourceMetadata targetTypeMetadata = associations.getMetadataFor(property.getActualType());
+        if (property.isWritable() && property.getOwner().equals(entity)) {
+          ActionSpecification spec = new ActionSpecification(
+              String.format("%s%s/{id}/%s",
+                  configuration.getBasePath(),
+                  resource.getPath(),
+                  mapping.getPath()),
+              newHashSet(RequestMethod.GET),
+              new HashSet<MediaType>(),
+              newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
+              null,
+              newArrayList(new ResolvedMethodParameter(
+                      0,
+                      "id",
+                      pathAnnotations(),
+                      typeResolver.resolve(repository.getIdType())),
+                  new ResolvedMethodParameter(
+                      0,
+                      "body",
+                      bodyAnnotations(),
+                      property.isCollectionLike()
+                      ? typeResolver.resolve(List.class, String.class)
+                      : typeResolver.resolve(String.class))),
+              typeResolver.resolve(Void.class));
+          handlers.add(new SpringDataRestRequestHandler(entityContext, spec));
+        }
 
       }
     });
@@ -211,13 +238,31 @@ class EntityContext {
   }
 
   private List<Annotation> pathAnnotations(HandlerMethod handler) {
-    List<Annotation> annotations = newArrayList(AnnotationUtils.getAnnotations(handler.getMethod()));
+    List<Annotation> annotations = handlerAnnotations(handler);
     annotations.add(SynthesizedAnnotations.pathVariable("id"));
     return annotations;
   }
 
+  private List<Annotation> handlerAnnotations(HandlerMethod handler) {
+    List<Annotation> annotations = new ArrayList<Annotation>();
+    if (handler != null) {
+      annotations.addAll(Arrays.asList(AnnotationUtils.getAnnotations(handler.getMethod())));
+    }
+    return annotations;
+  }
+
+  private List<Annotation> pathAnnotations() {
+    return pathAnnotations(null);
+  }
+
   private List<Annotation> bodyAnnotations(HandlerMethod handler) {
-    List<Annotation> annotations = newArrayList(AnnotationUtils.getAnnotations(handler.getMethod()));
+    List<Annotation> annotations = handlerAnnotations(handler);
+    annotations.add(SynthesizedAnnotations.REQUEST_BODY_ANNOTATION);
+    return annotations;
+  }
+
+  private List<Annotation> bodyAnnotations() {
+    List<Annotation> annotations = handlerAnnotations(null);
     annotations.add(SynthesizedAnnotations.REQUEST_BODY_ANNOTATION);
     return annotations;
   }

@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.spring.web.scanners
+
+import com.google.common.base.Optional
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
@@ -92,7 +94,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     and:
       def resourceGroup = result.resourceGroupRequestMappings.keySet().first()
       resourceGroup.groupName == "dummy-class"
-      resourceGroup.controllerClass == DummyClass
+      resourceGroup.controllerClass == Optional.fromNullable(DummyClass)
       resourceGroup.position == 0
   }
 

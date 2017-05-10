@@ -85,7 +85,7 @@
           "Address Entity"
         ],
         "summary": "Address",
-        "operationId": "AddressUsingGET_4",
+        "operationId": "AddressUsingGET_7",
         "consumes": [
           "application/json"
         ],
@@ -183,13 +183,54 @@
         }
       }
     },
+    "/addresses/{id}/person": {
+      "get": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "Address",
+        "operationId": "AddressUsingGET_6",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/addresses{?page,size,sort}": {
       "get": {
         "tags": [
           "Address Entity"
         ],
         "summary": "Address",
-        "operationId": "AddressUsingGET_5",
+        "operationId": "AddressUsingGET_8",
         "consumes": [
           "application/json"
         ],
@@ -279,7 +320,7 @@
           "Category Entity"
         ],
         "summary": "Category",
-        "operationId": "CategoryUsingGET_4",
+        "operationId": "CategoryUsingGET_7",
         "consumes": [
           "application/json"
         ],
@@ -377,13 +418,57 @@
         }
       }
     },
+    "/categories/{id}/people": {
+      "get": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "Category",
+        "operationId": "CategoryUsingGET_6",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/categories{?page,size,sort}": {
       "get": {
         "tags": [
           "Category Entity"
         ],
         "summary": "Category",
-        "operationId": "CategoryUsingGET_5",
+        "operationId": "CategoryUsingGET_8",
         "consumes": [
           "application/json"
         ],
@@ -473,7 +558,7 @@
           "Person Entity"
         ],
         "summary": "Person",
-        "operationId": "PersonUsingGET_6",
+        "operationId": "PersonUsingGET_15",
         "consumes": [
           "application/json"
         ],
@@ -509,7 +594,7 @@
           "Person Entity"
         ],
         "summary": "Person",
-        "operationId": "PersonUsingGET_7",
+        "operationId": "PersonUsingGET_16",
         "consumes": [
           "application/json"
         ],
@@ -607,13 +692,139 @@
         }
       }
     },
+    "/people/{id}/category": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingGET_12",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/people/{id}/personAddress": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingGET_13",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/people/{id}/tags": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "Person",
+        "operationId": "PersonUsingGET_14",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/people{?page,size,sort}": {
       "get": {
         "tags": [
           "Person Entity"
         ],
         "summary": "Person",
-        "operationId": "PersonUsingGET_8",
+        "operationId": "PersonUsingGET_17",
         "consumes": [
           "application/json"
         ],
@@ -703,7 +914,7 @@
           "Tag Entity"
         ],
         "summary": "Tag",
-        "operationId": "TagUsingGET_4",
+        "operationId": "TagUsingGET_6",
         "consumes": [
           "application/json"
         ],
@@ -801,13 +1012,57 @@
         }
       }
     },
+    "/tags/{id}/people": {
+      "get": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "Tag",
+        "operationId": "TagUsingGET_8",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/tags{?page,size,sort}": {
       "get": {
         "tags": [
           "Tag Entity"
         ],
         "summary": "Tag",
-        "operationId": "TagUsingGET_5",
+        "operationId": "TagUsingGET_7",
         "consumes": [
           "application/json"
         ],

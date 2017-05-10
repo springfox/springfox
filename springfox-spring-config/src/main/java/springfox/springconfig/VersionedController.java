@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.petstore.model.User;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @RestController
 public class VersionedController {
@@ -32,7 +31,7 @@ public class VersionedController {
   public ResponseEntity<User> getUser(
       @VersionApi int version, //<1>
       @RequestParam("id") String id) {
-    throw new NotImplementedException();
+    throw new UnsupportedOperationException();
   }
   // tag::version-annotated-controller[]
 }

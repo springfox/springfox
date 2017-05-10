@@ -53,7 +53,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public Class<?> declaringClass() {
-    return actionSpecification.getDeclaringClass();
+    return actionSpecification.getDeclaringClass().orNull();
   }
 
   @Override
@@ -103,7 +103,10 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
+    if (getHandlerMethod() != null) {
+      return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
+    }
+    return Optional.absent();
   }
 
   @Override
@@ -124,12 +127,15 @@ class SpringDataRestRequestHandler implements RequestHandler {
   @SuppressWarnings("Guava")
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
+    if (getHandlerMethod() != null) {
+      return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
+    }
+    return Optional.absent();
   }
 
   @Override
   public HandlerMethod getHandlerMethod() {
-    return actionSpecification.getHandlerMethod();
+    return actionSpecification.getHandlerMethod().orNull();
   }
 
   @Override

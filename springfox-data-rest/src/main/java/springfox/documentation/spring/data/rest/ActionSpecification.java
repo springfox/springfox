@@ -19,7 +19,8 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Preconditions;
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -46,8 +47,6 @@ class ActionSpecification {
       HandlerMethod handlerMethod,
       List<ResolvedMethodParameter> parameters,
       ResolvedType returnType) {
-
-    Preconditions.checkNotNull(handlerMethod, "Handler method is null");
 
     this.path = path;
     this.supportedMethods = supportedMethods;
@@ -82,11 +81,16 @@ class ActionSpecification {
     return returnType;
   }
 
-  public HandlerMethod getHandlerMethod() {
-    return handlerMethod;
+  public Optional<HandlerMethod> getHandlerMethod() {
+    return Optional.fromNullable(handlerMethod);
   }
 
-  public Class<?> getDeclaringClass() {
-    return handlerMethod.getBeanType();
+  public Optional<Class<?>> getDeclaringClass() {
+    return getHandlerMethod().transform(new Function<HandlerMethod, Class<?>>() {
+      @Override
+      public Class<?> apply(HandlerMethod input) {
+        return handlerMethod.getBeanType();
+      }
+    });
   }
 }

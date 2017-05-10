@@ -39,6 +39,7 @@ public class Person {
 
   private String firstName;
   private String lastName;
+  
   @OneToOne
   @JoinColumn(name = "address_id")
   @RestResource(path = "personAddress", rel="address")
