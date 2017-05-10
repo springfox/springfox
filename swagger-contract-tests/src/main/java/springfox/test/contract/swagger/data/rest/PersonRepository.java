@@ -18,6 +18,7 @@
  */
 package springfox.test.contract.swagger.data.rest;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -29,6 +30,10 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "people", path = "people")
 public interface PersonRepository extends PagingAndSortingRepository<Person, Long> {
 
-  List<Person> findByLastName(@RequestParam @ApiParam(name = "name", value = "name") @Param("name") String name);
+  @ApiOperation(value = "findByLastName", notes = "Finds persons by last name")
+  List<Person> findByLastName(
+      @RequestParam
+      @ApiParam(name = "name", value = "name parameter")
+      @Param("name") String name);
 
 }

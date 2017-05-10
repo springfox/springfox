@@ -557,7 +557,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
+        "summary": "findByLastName",
+        "description": "Finds persons by last name",
         "operationId": "PersonUsingGET_15",
         "consumes": [
           "application/json"
@@ -570,7 +571,7 @@
           {
             "name": "name",
             "in": "query",
-            "description": "name",
+            "description": "name parameter",
             "required": false,
             "type": "string"
           }
