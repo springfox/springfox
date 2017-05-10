@@ -16,19 +16,19 @@
   "tags": [
     {
       "name": "Address Entity",
-      "description": "Class"
-    },
-    {
-      "name": "Category Entity",
-      "description": "Class"
+      "description": "Simple Jpa Repository"
     },
     {
       "name": "Tag Entity",
-      "description": "Class"
+      "description": "Simple Jpa Repository"
     },
     {
       "name": "Person Entity",
-      "description": "Class"
+      "description": "Simple Jpa Repository"
+    },
+    {
+      "name": "Category Entity",
+      "description": "Simple Jpa Repository"
     }
   ],
   "produces": [
@@ -914,7 +914,7 @@
           "Tag Entity"
         ],
         "summary": "Tag",
-        "operationId": "TagUsingGET_6",
+        "operationId": "TagUsingGET_7",
         "consumes": [
           "application/json"
         ],
@@ -1018,7 +1018,7 @@
           "Tag Entity"
         ],
         "summary": "Tag",
-        "operationId": "TagUsingGET_8",
+        "operationId": "TagUsingGET_6",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1062,7 +1062,7 @@
           "Tag Entity"
         ],
         "summary": "Tag",
-        "operationId": "TagUsingGET_7",
+        "operationId": "TagUsingGET_8",
         "consumes": [
           "application/json"
         ],

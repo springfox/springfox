@@ -56,6 +56,7 @@ import static com.google.common.collect.Sets.*;
 class EntityContext {
   private final RepositoryRestConfiguration configuration;
   private final RepositoryInformation repository;
+  private final Object repositoryInstance;
   private final ResourceMetadata resource;
   private final TypeResolver typeResolver;
   private final ResourceMappings mappings;
@@ -64,16 +65,18 @@ class EntityContext {
   private URI basePath;
 
   public EntityContext(
+      TypeResolver typeResolver,
       RepositoryRestConfiguration configuration,
       RepositoryInformation repository,
+      Object repositoryInstance,
       ResourceMetadata resource,
-      TypeResolver typeResolver,
       ResourceMappings mappings,
       PersistentEntities entities,
       Associations associations) {
 
     this.configuration = configuration;
     this.repository = repository;
+    this.repositoryInstance = repositoryInstance;
     this.resource = resource;
     this.typeResolver = typeResolver;
     this.basePath = configuration.getBaseUri();
@@ -88,7 +91,7 @@ class EntityContext {
     CrudMethods crudMethods = repository.getCrudMethods();
     if (crudMethods.hasSaveMethod()) {
       HandlerMethod handler = new HandlerMethod(
-          repository.getRepositoryInterface(),
+          repositoryInstance,
           crudMethods.getSaveMethod());
       ActionSpecification put = saveActionSpecification(
           RequestMethod.PUT,
@@ -105,7 +108,7 @@ class EntityContext {
     }
     if (crudMethods.hasDelete()) {
       HandlerMethod handler = new HandlerMethod(
-          repository.getRepositoryInterface(),
+          repositoryInstance,
           crudMethods.getDeleteMethod());
       ActionSpecification spec = new ActionSpecification(
           String.format("%s%s/{id}", basePath, resource.getPath()),
@@ -123,7 +126,7 @@ class EntityContext {
     }
     if (crudMethods.hasFindOneMethod()) {
       HandlerMethod handler = new HandlerMethod(
-          repository.getRepositoryInterface(),
+          repositoryInstance,
           crudMethods.getFindOneMethod());
       ActionSpecification spec = new ActionSpecification(
           String.format("%s%s/{id}", configuration.getBasePath(), resource.getPath()),
@@ -141,7 +144,7 @@ class EntityContext {
     }
     if (crudMethods.hasFindAllMethod()) {
       HandlerMethod handler = new HandlerMethod(
-          repository.getRepositoryInterface(),
+          repositoryInstance,
           crudMethods.getFindAllMethod());
       ActionSpecification spec = new ActionSpecification(
           String.format("%s%s", configuration.getBasePath(), resource.getPath()),
@@ -157,7 +160,7 @@ class EntityContext {
     SearchResourceMappings searchMappings = mappings.getSearchResourceMappings(repository.getDomainType());
     for (MethodResourceMapping mapping : searchMappings.getExportedMappings()) {
       HandlerMethod handler = new HandlerMethod(
-          repository.getRepositoryInterface(),
+          repositoryInstance,
           mapping.getMethod());
       ActionSpecification spec = new ActionSpecification(
           String.format("%s%s/search%s", configuration.getBasePath(), resource.getPath(), mapping.getPath()),

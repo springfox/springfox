@@ -2,22 +2,22 @@
   "apiVersion": "1.0",
   "apis": [
     {
-      "description": "Address Entity\nClass",
+      "description": "Address Entity\nSimple Jpa Repository",
       "path": "/default/Address Entity",
       "position": 0
     },
     {
-      "description": "Category Entity\nClass",
+      "description": "Category Entity\nSimple Jpa Repository",
       "path": "/default/Category Entity",
       "position": 0
     },
     {
-      "description": "Class\nPerson Entity",
+      "description": "Person Entity\nSimple Jpa Repository",
       "path": "/default/Person Entity",
       "position": 0
     },
     {
-      "description": "Class\nTag Entity",
+      "description": "Simple Jpa Repository\nTag Entity",
       "path": "/default/Tag Entity",
       "position": 0
     },

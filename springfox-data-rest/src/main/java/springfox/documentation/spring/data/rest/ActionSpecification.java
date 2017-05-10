@@ -21,6 +21,7 @@ package springfox.documentation.spring.data.rest;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -89,6 +90,9 @@ class ActionSpecification {
     return getHandlerMethod().transform(new Function<HandlerMethod, Class<?>>() {
       @Override
       public Class<?> apply(HandlerMethod input) {
+        if (AopUtils.isAopProxy(handlerMethod.getBean())) {
+          return AopUtils.getTargetClass(handlerMethod.getBean());
+        }
         return handlerMethod.getBeanType();
       }
     });
