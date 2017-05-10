@@ -58,12 +58,12 @@ public class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-          .paths(or(
-                  and(
-                      regex("/api/.*"),
-                      not(regex("/api/store/search.*"))),
-                  regex("/generic/.*")))
-          .build()
+        .paths(or(
+        and(
+            regex("/api/.*"),
+            not(regex("/api/store/search.*"))),
+        regex("/generic/.*")))
+        .build()
         .host("petstore.swagger.io")
         .protocols(['http', 'https'] as Set)
   }
@@ -76,8 +76,8 @@ public class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-          .paths(regex("/api/store/search.*"))
-          .build()
+        .paths(regex("/api/store/search.*"))
+        .build()
         .enableUrlTemplating(true)
         .host("petstore.swagger.io")
         .protocols(['http', 'https'] as Set)
@@ -179,10 +179,10 @@ public class Swagger2TestConfig {
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
         .alternateTypeRules(
-          newRule(URL.class, String.class),
-          newRule(
-              resolver.resolve(List.class, Link.class),
-              resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
+        newRule(URL.class, String.class),
+        newRule(
+            resolver.resolve(List.class, Link.class),
+            resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .directModelSubstitute(ByteBuffer.class, String.class)
         .select()
         .paths(regex("/bugs/.*"))
@@ -274,7 +274,7 @@ public class Swagger2TestConfig {
         .build()
   }
 
-  @Bean 
+  @Bean
   public ApiListingScannerPlugin listingScanner() {
     new Bug1767ListingScanner()
   }
@@ -289,7 +289,11 @@ public class Swagger2TestConfig {
         .forCodeGeneration(true)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-          .paths(regex("/people.*"))
+        .paths(or(
+        regex("/people.*"),
+        regex("/tags.*"),
+        regex("/categories.*"),
+        regex("/addresses.*")))
         .build()
   }
 }

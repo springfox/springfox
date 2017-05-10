@@ -15,6 +15,18 @@
   "basePath": "/",
   "tags": [
     {
+      "name": "Address Entity",
+      "description": "Class"
+    },
+    {
+      "name": "Category Entity",
+      "description": "Class"
+    },
+    {
+      "name": "Tag Entity",
+      "description": "Class"
+    },
+    {
       "name": "Person Entity",
       "description": "Class"
     }
@@ -24,6 +36,394 @@
     "application/json"
   ],
   "paths": {
+    "/addresses": {
+      "post": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "Address",
+        "operationId": "AddressUsingPOST_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        }
+      }
+    },
+    "/addresses/{id}": {
+      "get": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "Address",
+        "operationId": "AddressUsingGET_4",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "Address",
+        "operationId": "AddressUsingPUT_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "Address",
+        "operationId": "AddressUsingDELETE_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/addresses{?page,size,sort}": {
+      "get": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "Address",
+        "operationId": "AddressUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "size",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "sort",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "post": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "Category",
+        "operationId": "CategoryUsingPOST_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "Category",
+        "operationId": "CategoryUsingGET_4",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "Category",
+        "operationId": "CategoryUsingPUT_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "Category",
+        "operationId": "CategoryUsingDELETE_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/categories{?page,size,sort}": {
+      "get": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "Category",
+        "operationId": "CategoryUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "size",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "sort",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      }
+    },
     "/people": {
       "post": {
         "tags": [
@@ -249,6 +649,200 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/Person"
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "post": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "Tag",
+        "operationId": "TagUsingPOST_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        }
+      }
+    },
+    "/tags/{id}": {
+      "get": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "Tag",
+        "operationId": "TagUsingGET_4",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "Tag",
+        "operationId": "TagUsingPUT_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Tag"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "Tag",
+        "operationId": "TagUsingDELETE_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/tags{?page,size,sort}": {
+      "get": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "Tag",
+        "operationId": "TagUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "size",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "sort",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Tag"
             }
           }
         }
