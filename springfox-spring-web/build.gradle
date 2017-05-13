@@ -11,6 +11,7 @@ ext {
 
 dependencies {
   compile "org.reflections:reflections:$reflections"
+  compile files("${System.properties['java.home']}/../lib/tools.jar")
   compile libs.core
   compile libs.spring
   compile project(':springfox-spi')
