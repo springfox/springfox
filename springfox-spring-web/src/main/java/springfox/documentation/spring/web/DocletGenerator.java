@@ -20,6 +20,8 @@ package springfox.documentation.spring.web;
 
 import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.DocErrorReporter;
+import com.sun.javadoc.Doclet;
 import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.RootDoc;
@@ -29,19 +31,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.TypeElement;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URLConnection;
 import java.util.Properties;
-import java.util.Set;
 
 /**
- * Created by vijaya on 4/19/17.
+ * Generate properties file based on Javadoc.
  */
-public class DocletGenerator  extends AbstractProcessor {
+public class DocletGenerator  extends Doclet {
 
-    private static Logger log = LoggerFactory.getLogger(DocletGenerator.class);
+    public static final String SPRINGFOX_JAVADOC_PROPERTIES = "META-INF/springfox.javadoc.properties";
+    public static final String SPRINGFOX_JAVADOC_URI = "-targetUri";
 
     private static final String REQUEST_MAPPING = "org.springframework.web.bind.annotation.RequestMapping";
     private static final String DELETE_MAPPING = "org.springframework.web.bind.annotation.DeleteMapping";
@@ -56,15 +58,70 @@ public class DocletGenerator  extends AbstractProcessor {
     private static final String EMPTY = "";
     private static final String METHOD = "method";
 
+
     private static final String[] MAPPINGS = new String[] {
             DELETE_MAPPING, GET_MAPPING, PATCH_MAPPING, POST_MAPPING, PUT_MAPPING, REQUEST_MAPPING
     };
+
+
+    private static String readOptions(String[][] options) {
+        String targetUri = null;
+        for (String[] opt : options) {
+            if (opt[0].equalsIgnoreCase("-targeturi")) {
+                targetUri = opt[1];
+            }
+        }
+        return targetUri;
+    }
+
+    public static int optionLength(String option) {
+        int length = 0;
+        if (option.equalsIgnoreCase("-targeturi")) {
+            length = 1;
+        }
+        return length;
+    }
+
+    public static boolean validOptions(String options[][],
+                                       DocErrorReporter reporter) {
+        boolean foundTargetUri = false;
+        for (String[] opt : options) {
+            if (opt[0].equalsIgnoreCase("-targeturi")) {
+                if (foundTargetUri) {
+                    reporter.printError("Only one -targetUri option allowed.");
+                    return false;
+                } else {
+                    foundTargetUri = true;
+                }
+            }
+        }
+        if (!foundTargetUri) {
+            reporter.printError("Usage: javadoc -targetUri file:///target.file.name -doclet ListTags ...");
+        }
+        return foundTargetUri;
+    }
+
+
 
     public static boolean start(RootDoc root) {
 
         RootDocImpl rootDoc = (RootDocImpl) root;
         try {
-            FileOutputStream javadoc = new FileOutputStream("META-INF/springfox.javadoc.properties");
+            String outputUri = readOptions(root.options());
+            if (outputUri == null) {
+                root.printError("No output location was specified");
+                return false;
+            }
+            root.printNotice("Writing output to " +  outputUri);
+            URI uri = new URI(outputUri);
+            OutputStream javadoc = null;
+            if (uri.getScheme().equals("file")) {
+                javadoc = new FileOutputStream(uri.getPath());
+            } else {
+                URLConnection connection = uri.toURL().openConnection();
+                connection.setDoOutput(true);
+                javadoc = connection.getOutputStream();
+            }
             Properties properties = new Properties();
 
             for (ClassDoc classDoc : rootDoc.classes()) {
@@ -78,12 +135,8 @@ public class DocletGenerator  extends AbstractProcessor {
             }
             properties.store(javadoc, "Springfox javadoc properties");
         } catch (Exception ex) {
-            log.error("Unexpected error processing Javadoc", ex);
+            root.printError("Unexpected error processing Javadoc " + ex.getMessage());
         }
-        return true;
-    }
-
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment env) {
         return true;
     }
 
@@ -186,6 +239,5 @@ public class DocletGenerator  extends AbstractProcessor {
         }
         return defaultMethod;
     }
-
 }
 
