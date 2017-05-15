@@ -27,14 +27,12 @@ import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
 import com.sun.tools.javadoc.RootDocImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.util.StringUtils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URLConnection;
 import java.util.Properties;
 
 /**
@@ -43,9 +41,13 @@ import java.util.Properties;
 public class DocletGenerator  extends Doclet {
 
     public static final String SPRINGFOX_JAVADOC_PROPERTIES = "META-INF/springfox.javadoc.properties";
-    public static final String SPRINGFOX_JAVADOC_URI = "-targetUri";
 
     private static final String REQUEST_MAPPING = "org.springframework.web.bind.annotation.RequestMapping";
+    private static final String REQUEST_GET_MAPPING = "org.springframework.web.bind.annotation.RequestMethod.GET";
+    private static final String REQUEST_POST_MAPPING = "org.springframework.web.bind.annotation.RequestMethod.POST";
+    private static final String REQUEST_PUT_MAPPING = "org.springframework.web.bind.annotation.RequestMethod.PUT";
+    private static final String REQUEST_PATCH_MAPPING = "org.springframework.web.bind.annotation.RequestMethod.PATCH";
+    private static final String REQUEST_DELETE_MAPPING = "org.springframework.web.bind.annotation.RequestMethod.DELETE";
     private static final String DELETE_MAPPING = "org.springframework.web.bind.annotation.DeleteMapping";
     private static final String GET_MAPPING = "org.springframework.web.bind.annotation.GetMapping";
     private static final String PATCH_MAPPING = "org.springframework.web.bind.annotation.PatchMapping";
@@ -63,42 +65,43 @@ public class DocletGenerator  extends Doclet {
             DELETE_MAPPING, GET_MAPPING, PATCH_MAPPING, POST_MAPPING, PUT_MAPPING, REQUEST_MAPPING
     };
 
+    private static final String[][] REQUEST_MAPPINGS = new String[][] { {REQUEST_DELETE_MAPPING, "DELETE"},
+            {REQUEST_GET_MAPPING, "GET"}, {REQUEST_PATCH_MAPPING, "PATCH"}, {REQUEST_POST_MAPPING, "POST"},
+            {REQUEST_PUT_MAPPING, "PUT"}};
 
-    private static String readOptions(String[][] options) {
-        String targetUri = null;
+    private static String getClassDir(String[][] options) {
         for (String[] opt : options) {
-            if (opt[0].equalsIgnoreCase("-targeturi")) {
-                targetUri = opt[1];
+            if (opt[0].equalsIgnoreCase("-classdir")) {
+                return opt[1];
             }
         }
-        return targetUri;
+        return null;
     }
 
     public static int optionLength(String option) {
         int length = 0;
-        if (option.equalsIgnoreCase("-targeturi")) {
-            length = 1;
+        if (option.equalsIgnoreCase("-classdir")) {
+            length = 2;
         }
         return length;
     }
 
-    public static boolean validOptions(String options[][],
-                                       DocErrorReporter reporter) {
-        boolean foundTargetUri = false;
+    public static boolean validOptions(String options[][], DocErrorReporter reporter) {
+        boolean foundClassDir = false;
         for (String[] opt : options) {
-            if (opt[0].equalsIgnoreCase("-targeturi")) {
-                if (foundTargetUri) {
-                    reporter.printError("Only one -targetUri option allowed.");
+            if (opt[0].equalsIgnoreCase("-classdir")) {
+                if (foundClassDir) {
+                    reporter.printError("Only one -classdir option allowed.");
                     return false;
                 } else {
-                    foundTargetUri = true;
+                    foundClassDir = true;
                 }
             }
         }
-        if (!foundTargetUri) {
-            reporter.printError("Usage: javadoc -targetUri file:///target.file.name -doclet ListTags ...");
+        if (!foundClassDir) {
+            reporter.printError("Usage: javadoc -classDir classes directory  -doclet  ...");
         }
-        return foundTargetUri;
+        return foundClassDir;
     }
 
 
@@ -107,20 +110,22 @@ public class DocletGenerator  extends Doclet {
 
         RootDocImpl rootDoc = (RootDocImpl) root;
         try {
-            String outputUri = readOptions(root.options());
-            if (outputUri == null) {
+            String classDir = getClassDir(root.options());
+            OutputStream javadoc = null;
+            if (classDir == null || classDir.length() == 0) {
                 root.printError("No output location was specified");
                 return false;
-            }
-            root.printNotice("Writing output to " +  outputUri);
-            URI uri = new URI(outputUri);
-            OutputStream javadoc = null;
-            if (uri.getScheme().equals("file")) {
-                javadoc = new FileOutputStream(uri.getPath());
             } else {
-                URLConnection connection = uri.toURL().openConnection();
-                connection.setDoOutput(true);
-                javadoc = connection.getOutputStream();
+                StringBuilder sb = new StringBuilder(classDir);
+                if (!classDir.endsWith("/")) {
+                    sb.append("/");
+                }
+                sb.append(SPRINGFOX_JAVADOC_PROPERTIES);
+                String out = sb.toString();
+                root.printNotice("Writing output to " + out);
+                File file = new File(out);
+                file.getParentFile().mkdirs();
+                javadoc = new FileOutputStream(file);
             }
             Properties properties = new Properties();
 
@@ -146,11 +151,7 @@ public class DocletGenerator  extends Doclet {
             if (REQUEST_MAPPING.equals(annotationDesc.annotationType().qualifiedTypeName())) {
                 for (AnnotationDesc.ElementValuePair pair : annotationDesc.elementValues()) {
                     if (VALUE.equals(pair.element().name())) {
-                        String value = pair.value().toString();
-                        pathRoot.append(value);
-                        if (!value.endsWith("/")) {
-                            pathRoot.append("/");
-                        }
+                        setRoot(pathRoot, pair);
                     }
                     if (METHOD.equals(pair.element().name())) {
                         defaultMethod = pair.value().toString();
@@ -162,51 +163,61 @@ public class DocletGenerator  extends Doclet {
         return defaultMethod;
     }
 
+    private static void setRoot(StringBuilder pathRoot, AnnotationDesc.ElementValuePair pair) {
+        String value = pair.value().toString();
+        if (!value.startsWith("/")) {
+            pathRoot.append("/");
+        }
+        if (value.endsWith("/")) {
+            pathRoot.append(value.substring(0, value.length() - 1));
+        } else {
+            pathRoot.append(value);
+        }
+    }
+
     private static void processMethod(Properties properties, MethodDoc methodDoc, String defaultMethod,
                                       String pathRoot) {
         for (AnnotationDesc annotationDesc : methodDoc.annotations()) {
-            String name = annotationDesc.annotationType().name();
+            String name = annotationDesc.annotationType().toString();
             if (isMapping(name)) {
                 StringBuilder path = new StringBuilder(pathRoot);
                 for (AnnotationDesc.ElementValuePair pair : annotationDesc.elementValues()) {
                     if (VALUE.equals(pair.element().name())) {
-                        String value = pair.value().toString();
-                        if (path.length() > 0 && value.startsWith("/")) {
-                            path.append(value.substring(1)).append(".");
-                        } else {
-                            path.append(value).append(".");
-                        }
-                        path.append(pair.value().toString());
+                        appendPath(path, pair);
                         break;
                     }
                 }
                 String method = getMethod(annotationDesc, name, defaultMethod);
                 if (method != null) {
                     path.append(method);
-                    properties.setProperty(path.toString() + ".notes", methodDoc.commentText().
-                            replaceAll("\n", ""));
+                    saveProperty(properties, path.toString() + ".notes", methodDoc.commentText());
+
                     for (ParamTag paramTag : methodDoc.paramTags()) {
-                        properties.setProperty(path.toString() + ".param." + paramTag.parameterName(),
-                                paramTag.parameterComment().replaceAll(NEWLINE, EMPTY));
+                        saveProperty(properties, path.toString() + ".param." + paramTag.parameterName(),
+                                paramTag.parameterComment());
                     }
                     for (Tag tag : methodDoc.tags()) {
                         if (tag.name().equals(RETURN)) {
-                            properties.setProperty(path.toString() + ".return", tag.text().
-                                    replaceAll(NEWLINE, EMPTY));
+                            saveProperty(properties, path.toString() + ".return", tag.text());
                             break;
                         }
                     }
                     for (Tag tag : methodDoc.tags()) {
                         if (tag.name().equals(THROWS)) {
-                            String[] tokens = StringUtils.split(tag.text().trim(), " ");
-                            String key = path.toString() + ".throws." + tokens[0];
-                            String description = tokens[1].trim().replaceAll(NEWLINE, EMPTY);
-                            properties.setProperty(key, description);
+                            processThrows(properties, tag, path);
                         }
                     }
                 }
             }
+        }
+    }
 
+    private static void appendPath(StringBuilder path, AnnotationDesc.ElementValuePair pair) {
+        String value = pair.value().toString().replaceAll("\"$|^\"", "");
+        if (value.startsWith("/")) {
+            path.append(value).append(".");
+        } else {
+            path.append("/").append(value).append(".");
         }
     }
 
@@ -223,7 +234,7 @@ public class DocletGenerator  extends Doclet {
         if (REQUEST_MAPPING.equals(name)) {
             for (AnnotationDesc.ElementValuePair pair : annotationDesc.elementValues()) {
                 if (METHOD.equals(pair.element().name())) {
-                    return pair.value().toString();
+                    return resolveRequestMethod(pair, defaultMethod);
                 }
             }
         } else if (PUT_MAPPING.equals(name)) {
@@ -238,6 +249,31 @@ public class DocletGenerator  extends Doclet {
             return "DELETE";
         }
         return defaultMethod;
+    }
+
+    private static String resolveRequestMethod(AnnotationDesc.ElementValuePair pair, String defaultMethod) {
+        String value = pair.value().toString();
+        for (int i = 0; i < REQUEST_MAPPINGS.length; ++i) {
+            if (REQUEST_MAPPINGS[i][0].equals(value)) {
+                return REQUEST_MAPPINGS[i][1];
+            }
+        }
+        return defaultMethod;
+    }
+
+    private static void processThrows(Properties properties, Tag tag, StringBuilder path) {
+        String[] tokens = StringUtils.split(tag.text().trim(), " ");
+        if (tokens.length == 2) {
+            String key = path.toString() + ".throws." + tokens[0];
+            saveProperty(properties, key, tokens[1].trim());
+        }
+    }
+
+    private static void saveProperty(Properties properties, String key, String value) {
+        value = value.replaceAll(NEWLINE, EMPTY);
+        if (value.length() > 0) {
+            properties.setProperty(key, value);
+        }
     }
 }
 
