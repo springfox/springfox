@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
@@ -37,10 +38,14 @@ import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.core.mapping.SearchResourceMappings;
 import org.springframework.data.rest.webmvc.RestMediaTypes;
 import org.springframework.data.rest.webmvc.mapping.Associations;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.schema.Collections;
+import springfox.documentation.schema.Types;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
@@ -127,7 +132,7 @@ class EntityContext {
               "id",
               pathAnnotations(handler),
               typeResolver.resolve(repository.getIdType()))),
-          typeResolver.resolve(repository.getReturnedDomainClass(handler.getMethod())));
+          typeResolver.resolve(Void.TYPE));
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
     if (crudMethods.hasFindOneMethod()) {
@@ -146,7 +151,7 @@ class EntityContext {
               "id",
               pathAnnotations(handler),
               typeResolver.resolve(repository.getIdType()))),
-          typeResolver.resolve(repository.getReturnedDomainClass(handler.getMethod())));
+          typeResolver.resolve(Resource.class, repository.getReturnedDomainClass(handler.getMethod())));
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
     if (crudMethods.hasFindAllMethod()) {
@@ -157,11 +162,11 @@ class EntityContext {
           actionName(entity, crudMethods.getFindAllMethod()),
           String.format("%s%s", configuration.getBasePath(), resource.getPath()),
           newHashSet(RequestMethod.GET),
-          new HashSet<MediaType>(),
+          newHashSet(RestMediaTypes.SPRING_DATA_COMPACT_JSON, RestMediaTypes.TEXT_URI_LIST),
           new HashSet<MediaType>(),
           handler,
           findAllParameters(),
-          typeResolver.resolve(repository.getReturnedDomainClass(handler.getMethod())));
+          typeResolver.resolve(Resources.class, repository.getReturnedDomainClass(handler.getMethod())));
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
     HandlerMethodResolver methodResolver = new HandlerMethodResolver(typeResolver);
@@ -178,7 +183,7 @@ class EntityContext {
           new HashSet<MediaType>(),
           handler,
           methodResolver.methodParameters(handler),
-          methodResolver.methodReturnType(handler));
+          inferReturnType(methodResolver, handler));
       handlers.add(new SpringDataRestRequestHandler(this, spec));
     }
 
@@ -219,13 +224,23 @@ class EntityContext {
                       property.isCollectionLike()
                       ? typeResolver.resolve(List.class, String.class)
                       : typeResolver.resolve(String.class))),
-              typeResolver.resolve(Void.class));
+              typeResolver.resolve(property.getType()));
           handlers.add(new SpringDataRestRequestHandler(entityContext, spec));
         }
 
       }
     });
     return handlers;
+  }
+
+  private ResolvedType inferReturnType(HandlerMethodResolver methodResolver, HandlerMethod handler) {
+    ResolvedType returnType = methodResolver.methodReturnType(handler);
+    if (Collections.isContainerType(returnType)) {
+      return typeResolver.resolve(Resources.class, returnType);
+    } else if (Types.isBaseType(returnType)) {
+      return returnType;
+    }
+    return typeResolver.resolve(Resource.class, returnType);
   }
 
   private String lowerCamelCaseName(String stringValue) {
@@ -260,7 +275,7 @@ class EntityContext {
                 "body",
                 bodyAnnotations(handler),
                 typeResolver.resolve(repository.getDomainType()))),
-        typeResolver.resolve(repository.getReturnedDomainClass(handler.getMethod())));
+        typeResolver.resolve(Resource.class, repository.getReturnedDomainClass(handler.getMethod())));
   }
 
   private List<Annotation> pathAnnotations(HandlerMethod handler) {

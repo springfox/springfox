@@ -73,7 +73,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Address"
+              "$ref": "#/definitions/ResourceOfAddress"
             }
           }
         }
@@ -107,7 +107,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Address"
+              "$ref": "#/definitions/ResourceOfAddress"
             }
           }
         }
@@ -148,7 +148,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Address"
+              "$ref": "#/definitions/ResourceOfAddress"
             }
           }
         }
@@ -219,7 +219,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
           }
         }
       }
@@ -236,7 +239,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json"
+          "text/uri-list",
+          "application/json",
+          "application/x-spring-data-compact+json"
         ],
         "parameters": [
           {
@@ -265,7 +270,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Address"
+              "$ref": "#/definitions/ResourcesOfAddress"
             }
           }
         }
@@ -308,7 +313,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "$ref": "#/definitions/ResourceOfCategory"
             }
           }
         }
@@ -342,7 +347,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "$ref": "#/definitions/ResourceOfCategory"
             }
           }
         }
@@ -383,7 +388,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "$ref": "#/definitions/ResourceOfCategory"
             }
           }
         }
@@ -457,7 +462,13 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
           }
         }
       }
@@ -474,7 +485,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json"
+          "text/uri-list",
+          "application/json",
+          "application/x-spring-data-compact+json"
         ],
         "parameters": [
           {
@@ -503,7 +516,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "$ref": "#/definitions/ResourcesOfCategory"
             }
           }
         }
@@ -546,7 +559,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/ResourceOfPerson"
             }
           }
         }
@@ -580,10 +593,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Person"
-              }
+              "$ref": "#/definitions/ResourcesOfListOfPerson"
             }
           }
         }
@@ -617,7 +627,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/ResourceOfPerson"
             }
           }
         }
@@ -658,7 +668,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/ResourceOfPerson"
             }
           }
         }
@@ -729,7 +739,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
           }
         }
       }
@@ -770,7 +783,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
           }
         }
       }
@@ -814,7 +830,13 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
           }
         }
       }
@@ -831,7 +853,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json"
+          "text/uri-list",
+          "application/json",
+          "application/x-spring-data-compact+json"
         ],
         "parameters": [
           {
@@ -860,7 +884,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/ResourcesOfPerson"
             }
           }
         }
@@ -903,7 +927,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Tag"
+              "$ref": "#/definitions/ResourceOfTag"
             }
           }
         }
@@ -937,7 +961,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Tag"
+              "$ref": "#/definitions/ResourceOfTag"
             }
           }
         }
@@ -978,7 +1002,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Tag"
+              "$ref": "#/definitions/ResourceOfTag"
             }
           }
         }
@@ -1052,7 +1076,13 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
           }
         }
       }
@@ -1069,7 +1099,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json"
+          "text/uri-list",
+          "application/json",
+          "application/x-spring-data-compact+json"
         ],
         "parameters": [
           {
@@ -1098,7 +1130,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Tag"
+              "$ref": "#/definitions/ResourcesOfTag"
             }
           }
         }
@@ -1151,6 +1183,35 @@
         }
       }
     },
+    "CollectionOfAddress": {
+      "type": "object"
+    },
+    "CollectionOfCategory": {
+      "type": "object"
+    },
+    "CollectionOfListOfPerson": {
+      "type": "object"
+    },
+    "CollectionOfPerson": {
+      "type": "object"
+    },
+    "CollectionOfTag": {
+      "type": "object"
+    },
+    "Link": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "rel": {
+          "type": "string"
+        },
+        "templated": {
+          "type": "boolean"
+        }
+      }
+    },
     "Person": {
       "type": "object",
       "properties": {
@@ -1174,6 +1235,190 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/Tag"
+          }
+        }
+      }
+    },
+    "ResourceOfAddress": {
+      "type": "object",
+      "properties": {
+        "address1": {
+          "type": "string"
+        },
+        "address2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "person": {
+          "$ref": "#/definitions/Person"
+        },
+        "state": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        }
+      }
+    },
+    "ResourceOfCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "people": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Person"
+          }
+        }
+      }
+    },
+    "ResourceOfPerson": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/definitions/Address"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
+        }
+      }
+    },
+    "ResourceOfTag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "people": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Person"
+          }
+        }
+      }
+    },
+    "ResourcesOfAddress": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/CollectionOfAddress"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "ResourcesOfCategory": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/CollectionOfCategory"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "ResourcesOfListOfPerson": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/CollectionOfListOfPerson"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "ResourcesOfPerson": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/CollectionOfPerson"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "ResourcesOfTag": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/CollectionOfTag"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
           }
         }
       }
