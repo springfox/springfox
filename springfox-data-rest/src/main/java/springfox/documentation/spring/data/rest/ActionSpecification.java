@@ -38,9 +38,11 @@ class ActionSpecification {
   private final List<ResolvedMethodParameter> parameters;
   private final ResolvedType returnType;
   private final HandlerMethod handlerMethod;
+  private final String name;
   private final String path;
 
   public ActionSpecification(
+      String name,
       String path,
       Collection<RequestMethod> supportedMethods,
       Set<MediaType> produces,
@@ -48,7 +50,7 @@ class ActionSpecification {
       HandlerMethod handlerMethod,
       List<ResolvedMethodParameter> parameters,
       ResolvedType returnType) {
-
+    this.name = name;
     this.path = path;
     this.supportedMethods = supportedMethods;
     this.produces = produces;
@@ -56,6 +58,10 @@ class ActionSpecification {
     this.parameters = parameters;
     this.returnType = returnType;
     this.handlerMethod = handlerMethod;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public String getPath() {

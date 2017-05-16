@@ -19,6 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.mapping.Association;
@@ -44,6 +45,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,18 +90,21 @@ class EntityContext {
 
   public List<RequestHandler> requestHandlers() {
     final List<RequestHandler> handlers = newArrayList();
+    final PersistentEntity<?, ?> entity = entities.getPersistentEntity(resource.getDomainType());
     CrudMethods crudMethods = repository.getCrudMethods();
     if (crudMethods.hasSaveMethod()) {
       HandlerMethod handler = new HandlerMethod(
           repositoryInstance,
           crudMethods.getSaveMethod());
       ActionSpecification put = saveActionSpecification(
+          entity,
           RequestMethod.PUT,
           String.format("%s%s/{id}", configuration.getBasePath(), resource.getPath()),
           handler
       );
       handlers.add(new SpringDataRestRequestHandler(this, put));
       ActionSpecification post = saveActionSpecification(
+          entity,
           RequestMethod.POST,
           String.format("%s%s", configuration.getBasePath(), resource.getPath()),
           handler
@@ -111,6 +116,7 @@ class EntityContext {
           repositoryInstance,
           crudMethods.getDeleteMethod());
       ActionSpecification spec = new ActionSpecification(
+          actionName(entity, crudMethods.getDeleteMethod()),
           String.format("%s%s/{id}", basePath, resource.getPath()),
           newHashSet(RequestMethod.DELETE),
           new HashSet<MediaType>(),
@@ -129,6 +135,7 @@ class EntityContext {
           repositoryInstance,
           crudMethods.getFindOneMethod());
       ActionSpecification spec = new ActionSpecification(
+          actionName(entity, crudMethods.getFindOneMethod()),
           String.format("%s%s/{id}", configuration.getBasePath(), resource.getPath()),
           newHashSet(RequestMethod.GET),
           new HashSet<MediaType>(),
@@ -147,6 +154,7 @@ class EntityContext {
           repositoryInstance,
           crudMethods.getFindAllMethod());
       ActionSpecification spec = new ActionSpecification(
+          actionName(entity, crudMethods.getFindAllMethod()),
           String.format("%s%s", configuration.getBasePath(), resource.getPath()),
           newHashSet(RequestMethod.GET),
           new HashSet<MediaType>(),
@@ -163,6 +171,7 @@ class EntityContext {
           repositoryInstance,
           mapping.getMethod());
       ActionSpecification spec = new ActionSpecification(
+          actionName(entity, mapping.getMethod()),
           String.format("%s%s/search%s", configuration.getBasePath(), resource.getPath(), mapping.getPath()),
           newHashSet(RequestMethod.GET),
           new HashSet<MediaType>(),
@@ -174,7 +183,6 @@ class EntityContext {
     }
 
 
-    final PersistentEntity<?, ?> entity = entities.getPersistentEntity(resource.getDomainType());
     final EntityContext entityContext = this;
     entity.doWithAssociations(new SimpleAssociationHandler() {
 
@@ -190,6 +198,7 @@ class EntityContext {
         ResourceMapping mapping = metadata.getMappingFor(property);
         if (property.isWritable() && property.getOwner().equals(entity)) {
           ActionSpecification spec = new ActionSpecification(
+              String.format("%s%s", lowerCamelCaseName(entity.getType().getSimpleName()), upperCamelCaseName(property.getName())),
               String.format("%s%s/{id}/%s",
                   configuration.getBasePath(),
                   resource.getPath(),
@@ -219,8 +228,22 @@ class EntityContext {
     return handlers;
   }
 
-  private ActionSpecification saveActionSpecification(RequestMethod method, String path, HandlerMethod handler) {
+  private String lowerCamelCaseName(String stringValue) {
+    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, stringValue);
+  }
+
+  private String upperCamelCaseName(String stringValue) {
+    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, stringValue);
+  }
+
+  private String actionName(PersistentEntity<?, ?> entity, Method method) {
+    return String.format("%s%s", method.getName(), entity.getType().getSimpleName());
+  }
+
+  private ActionSpecification saveActionSpecification(PersistentEntity<?, ?> entity, RequestMethod method, String
+      path, HandlerMethod handler) {
     return new ActionSpecification(
+        actionName(entity, handler.getMethod()),
         path,
         newHashSet(method),
         new HashSet<MediaType>(),

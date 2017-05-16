@@ -15,19 +15,19 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Address Entity",
-      "description": "Simple Jpa Repository"
-    },
-    {
       "name": "Tag Entity",
       "description": "Simple Jpa Repository"
     },
     {
-      "name": "Person Entity",
+      "name": "Category Entity",
       "description": "Simple Jpa Repository"
     },
     {
-      "name": "Category Entity",
+      "name": "Address Entity",
+      "description": "Simple Jpa Repository"
+    },
+    {
+      "name": "Person Entity",
       "description": "Simple Jpa Repository"
     }
   ],
@@ -41,8 +41,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "Address",
-        "operationId": "AddressUsingPOST_2",
+        "summary": "saveAddress",
+        "operationId": "saveAddressUsingPOST_2",
         "consumes": [
           "application/json"
         ],
@@ -84,8 +84,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "Address",
-        "operationId": "AddressUsingGET_7",
+        "summary": "findOneAddress",
+        "operationId": "findOneAddressUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -116,8 +116,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "Address",
-        "operationId": "AddressUsingPUT_2",
+        "summary": "saveAddress",
+        "operationId": "saveAddressUsingPUT_2",
         "consumes": [
           "application/json"
         ],
@@ -157,8 +157,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "Address",
-        "operationId": "AddressUsingDELETE_2",
+        "summary": "deleteAddress",
+        "operationId": "deleteAddressUsingDELETE_2",
         "consumes": [
           "application/json"
         ],
@@ -188,8 +188,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "Address",
-        "operationId": "AddressUsingGET_6",
+        "summary": "addressperson",
+        "operationId": "addresspersonUsingGET_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -229,8 +229,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "Address",
-        "operationId": "AddressUsingGET_8",
+        "summary": "findAllAddress",
+        "operationId": "findAllAddressUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -276,8 +276,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "Category",
-        "operationId": "CategoryUsingPOST_2",
+        "summary": "saveCategory",
+        "operationId": "saveCategoryUsingPOST_2",
         "consumes": [
           "application/json"
         ],
@@ -319,8 +319,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "Category",
-        "operationId": "CategoryUsingGET_7",
+        "summary": "findOneCategory",
+        "operationId": "findOneCategoryUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -351,8 +351,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "Category",
-        "operationId": "CategoryUsingPUT_2",
+        "summary": "saveCategory",
+        "operationId": "saveCategoryUsingPUT_2",
         "consumes": [
           "application/json"
         ],
@@ -392,8 +392,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "Category",
-        "operationId": "CategoryUsingDELETE_2",
+        "summary": "deleteCategory",
+        "operationId": "deleteCategoryUsingDELETE_2",
         "consumes": [
           "application/json"
         ],
@@ -423,8 +423,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "Category",
-        "operationId": "CategoryUsingGET_6",
+        "summary": "categorypeople",
+        "operationId": "categorypeopleUsingGET_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -467,8 +467,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "Category",
-        "operationId": "CategoryUsingGET_8",
+        "summary": "findAllCategory",
+        "operationId": "findAllCategoryUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -514,8 +514,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingPOST_2",
+        "summary": "savePerson",
+        "operationId": "savePersonUsingPOST_2",
         "consumes": [
           "application/json"
         ],
@@ -559,7 +559,7 @@
         ],
         "summary": "findByLastName",
         "description": "Finds persons by last name",
-        "operationId": "PersonUsingGET_15",
+        "operationId": "findByLastNamePersonUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -594,8 +594,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingGET_16",
+        "summary": "findOnePerson",
+        "operationId": "findOnePersonUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -626,8 +626,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingPUT_2",
+        "summary": "savePerson",
+        "operationId": "savePersonUsingPUT_2",
         "consumes": [
           "application/json"
         ],
@@ -667,8 +667,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingDELETE_2",
+        "summary": "deletePerson",
+        "operationId": "deletePersonUsingDELETE_2",
         "consumes": [
           "application/json"
         ],
@@ -698,8 +698,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingGET_12",
+        "summary": "personcategory",
+        "operationId": "personcategoryUsingGET_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -739,8 +739,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingGET_13",
+        "summary": "personaddress",
+        "operationId": "personaddressUsingGET_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -780,8 +780,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingGET_14",
+        "summary": "persontags",
+        "operationId": "persontagsUsingGET_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -824,8 +824,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "Person",
-        "operationId": "PersonUsingGET_17",
+        "summary": "findAllPerson",
+        "operationId": "findAllPersonUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -871,8 +871,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "Tag",
-        "operationId": "TagUsingPOST_2",
+        "summary": "saveTag",
+        "operationId": "saveTagUsingPOST_2",
         "consumes": [
           "application/json"
         ],
@@ -914,8 +914,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "Tag",
-        "operationId": "TagUsingGET_7",
+        "summary": "findOneTag",
+        "operationId": "findOneTagUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -946,8 +946,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "Tag",
-        "operationId": "TagUsingPUT_2",
+        "summary": "saveTag",
+        "operationId": "saveTagUsingPUT_2",
         "consumes": [
           "application/json"
         ],
@@ -987,8 +987,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "Tag",
-        "operationId": "TagUsingDELETE_2",
+        "summary": "deleteTag",
+        "operationId": "deleteTagUsingDELETE_2",
         "consumes": [
           "application/json"
         ],
@@ -1018,8 +1018,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "Tag",
-        "operationId": "TagUsingGET_6",
+        "summary": "tagpeople",
+        "operationId": "tagpeopleUsingGET_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1062,8 +1062,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "Tag",
-        "operationId": "TagUsingGET_8",
+        "summary": "findAllTag",
+        "operationId": "findAllTagUsingGET_2",
         "consumes": [
           "application/json"
         ],

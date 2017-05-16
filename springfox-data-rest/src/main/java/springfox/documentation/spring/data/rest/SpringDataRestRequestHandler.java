@@ -73,7 +73,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public String getName() {
-    return entityContext.getName();
+    return actionSpecification.getName();
   }
 
   @Override
