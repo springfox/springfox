@@ -29,98 +29,95 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
   @Unroll
-  def "dependencies are inferred correctly" () {
+  def "dependencies are inferred correctly"() {
     given:
-      def context = inputParam(
-          "group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-      def dependentTypes = modelDependencyProvider.dependentModels(context)
-      def dependentTypeNames = dependentTypes.collect() {
-        typeNameExtractor.typeName(
-            inputParam(
-                "group",
-                it,
-                documentationType,
-                alternateTypeProvider(),
-                namingStrategy,
-                ImmutableSet.builder().build()))
-      }.unique()
-          .sort()
+    def context = inputParam(
+        "group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+    def dependentTypes = modelDependencyProvider.dependentModels(context)
+    def dependentTypeNames = dependentTypes.collect() {
+      typeNameExtractor.typeName(
+          inputParam(
+              "group",
+              it,
+              documentationType,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build()))
+    }.unique()
+        .sort()
 
     expect:
-     dependencies == dependentTypeNames
+    dependencies == dependentTypeNames
 
     where:
-      modelType                       | dependencies
-      simpleType()                    | []
-      complexType()                   | ["Category"]
-      enumType()                      | []
-      typeWithLists()                 | ["List", "Category",  "ComplexType", "Substituted"].sort()
-      typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
-      genericClass()                  | ["List", "SimpleType"].sort()
-      genericClassWithListField()     | ["List", "SimpleType"].sort()
-      genericClassWithGenericField()  | ["List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
-      genericClassWithDeepGenerics()  | ["List", "ResponseEntityAlternative«List«SimpleType»»",
-                                         "SimpleType"].sort()
-      genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
-      recursiveType()                 | ["SimpleType"]
-      listOfMapOfStringToString()     | ["Map«string,string»"]
-      listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
-      listOfErasedMap()               | []
+    modelType                       | dependencies
+    simpleType()                    | []
+    complexType()                   | ["Category"]
+    enumType()                      | []
+    typeWithLists()                 | ["List", "Category", "ComplexType", "Substituted"].sort()
+    typeWithSets()                  | ["Set", "Category", "ComplexType"].sort()
+    typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
+    genericClass()                  | ["List", "SimpleType"].sort()
+    genericClassWithListField()     | ["List", "SimpleType"].sort()
+    genericClassWithGenericField()  | ["List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+    genericClassWithDeepGenerics()  | ["List", "ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort()
+    genericCollectionWithEnum()     | ["List"].sort()
+    recursiveType()                 | ["SimpleType"]
+    listOfMapOfStringToString()     | ["Map«string,string»"]
+    listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
+    listOfErasedMap()               | []
 
   }
 
   @Unroll
-  def "dependencies are inferred correctly for return parameters" () {
+  def "dependencies are inferred correctly for return parameters"() {
     given:
-      def context = returnValue(
-          "group",
-          modelType,
-          documentationType,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-      def dependentTypes = modelDependencyProvider.dependentModels(context)
-      def dependentTypeNames = dependentTypes.collect() {
-        typeNameExtractor.typeName(
-            returnValue(
-                "group",
-                it,
-                documentationType,
-                alternateTypeProvider(),
-                namingStrategy,
-                ImmutableSet.builder().build()))
-      }.unique()
-          .sort()
+    def context = returnValue(
+        "group",
+        modelType,
+        documentationType,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
+    def dependentTypes = modelDependencyProvider.dependentModels(context)
+    def dependentTypeNames = dependentTypes.collect() {
+      typeNameExtractor.typeName(
+          returnValue(
+              "group",
+              it,
+              documentationType,
+              alternateTypeProvider(),
+              namingStrategy,
+              ImmutableSet.builder().build()))
+    }.unique()
+        .sort()
     expect:
-      dependencies == dependentTypeNames
+    dependencies == dependentTypeNames
 
     where:
-      modelType                       | dependencies
-      simpleType()                    | []
-      complexType()                   | ["Category"]
-      enumType()                      | []
-      inheritedComplexType()          | ["Category"]
-      typeWithLists()                 | ["List", "Category",  "ComplexType", "Substituted"].sort()
-      typeWithSets()                  | ["Set", "Category",  "ComplexType"].sort()
-      typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
-      genericClass()                  | ["List", "SimpleType"].sort()
-      genericClassWithListField()     | ["List", "SimpleType"].sort()
-      genericClassWithGenericField()  | ["List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
-      genericClassWithDeepGenerics()  | ["List", "ResponseEntityAlternative«List«SimpleType»»",
-                                         "SimpleType"].sort()
-      genericCollectionWithEnum()     | ["Collection«string»", "List"].sort()
-      recursiveType()                 | ["SimpleType"]
-      listOfMapOfStringToString()     | ["Map«string,string»"]
-      listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
-      listOfErasedMap()               | []
+    modelType                       | dependencies
+    simpleType()                    | []
+    complexType()                   | ["Category"]
+    enumType()                      | []
+    inheritedComplexType()          | ["Category"]
+    typeWithLists()                 | ["List", "Category", "ComplexType", "Substituted"].sort()
+    typeWithSets()                  | ["Set", "Category", "ComplexType"].sort()
+    typeWithArrays()                | ["Array", "Category", "ComplexType", "List", "Substituted"].sort()
+    genericClass()                  | ["List", "SimpleType"].sort()
+    genericClassWithListField()     | ["List", "SimpleType"].sort()
+    genericClassWithGenericField()  | ["List", "ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+    genericClassWithDeepGenerics()  | ["List", "ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort()
+    genericCollectionWithEnum()     | ["List"].sort()
+    recursiveType()                 | ["SimpleType"]
+    listOfMapOfStringToString()     | ["Map«string,string»"]
+    listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
+    listOfErasedMap()               | []
   }
-
 
 
 }

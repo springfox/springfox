@@ -69,7 +69,7 @@ class GenericTypeSpec extends SchemaSpecification {
     genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<springfox.documentation.schema.SimpleType>"
     genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "springfox.documentation.schema.ResponseEntityAlternative<springfox.documentation.schema.SimpleType>"
     genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "springfox.documentation.schema.ResponseEntityAlternative<java.util.List<springfox.documentation.schema.SimpleType>>"
-    genericCollectionWithEnum()     | "Collection«string»"                          | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
+    genericCollectionWithEnum()     | "List"                                        | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
     genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
     genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
     genericResource()               | "List"                                        | "SubclassOfResourceSupport"                   | null
@@ -169,7 +169,12 @@ class GenericTypeSpec extends SchemaSpecification {
       assert item.itemType == null
     } else {
       assert item.collection
-      assert item.itemType == maybeTransformVoid(collectionElementType(modelProperty.type).erasedType.simpleName)
+      def elementType = collectionElementType(modelProperty.type)
+      if (elementType.erasedType.isEnum()) {
+        assert item.itemType == maybeTransformVoid("string")
+      } else {
+        assert item.itemType == maybeTransformVoid(elementType.erasedType.simpleName)
+      }
     }
   }
 

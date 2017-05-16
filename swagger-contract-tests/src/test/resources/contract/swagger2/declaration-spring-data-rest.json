@@ -1183,21 +1183,6 @@
         }
       }
     },
-    "CollectionOfAddress": {
-      "type": "object"
-    },
-    "CollectionOfCategory": {
-      "type": "object"
-    },
-    "CollectionOfListOfPerson": {
-      "type": "object"
-    },
-    "CollectionOfPerson": {
-      "type": "object"
-    },
-    "CollectionOfTag": {
-      "type": "object"
-    },
     "Link": {
       "type": "object",
       "properties": {
@@ -1357,7 +1342,10 @@
       "type": "object",
       "properties": {
         "content": {
-          "$ref": "#/definitions/CollectionOfAddress"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          }
         },
         "links": {
           "type": "array",
@@ -1371,7 +1359,10 @@
       "type": "object",
       "properties": {
         "content": {
-          "$ref": "#/definitions/CollectionOfCategory"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
         },
         "links": {
           "type": "array",
@@ -1385,7 +1376,13 @@
       "type": "object",
       "properties": {
         "content": {
-          "$ref": "#/definitions/CollectionOfListOfPerson"
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Person"
+            }
+          }
         },
         "links": {
           "type": "array",
@@ -1399,7 +1396,10 @@
       "type": "object",
       "properties": {
         "content": {
-          "$ref": "#/definitions/CollectionOfPerson"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Person"
+          }
         },
         "links": {
           "type": "array",
@@ -1413,7 +1413,10 @@
       "type": "object",
       "properties": {
         "content": {
-          "$ref": "#/definitions/CollectionOfTag"
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Tag"
+          }
         },
         "links": {
           "type": "array",
