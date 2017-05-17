@@ -184,12 +184,96 @@
       }
     },
     "/addresses/{id}/person": {
-      "get": {
+      "post": {
         "tags": [
           "Address Entity"
         ],
         "summary": "addressperson",
-        "operationId": "addresspersonUsingGET_2",
+        "operationId": "addresspersonUsingPOST_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "addressperson",
+        "operationId": "addresspersonUsingPUT_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Person"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "addressperson",
+        "operationId": "addresspersonUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -424,12 +508,108 @@
       }
     },
     "/categories/{id}/people": {
-      "get": {
+      "post": {
         "tags": [
           "Category Entity"
         ],
         "summary": "categorypeople",
-        "operationId": "categorypeopleUsingGET_2",
+        "operationId": "categorypeopleUsingPOST_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "categorypeople",
+        "operationId": "categorypeopleUsingPUT_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "categorypeople",
+        "operationId": "categorypeopleUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -704,12 +884,96 @@
       }
     },
     "/people/{id}/category": {
-      "get": {
+      "post": {
         "tags": [
           "Person Entity"
         ],
         "summary": "personcategory",
-        "operationId": "personcategoryUsingGET_2",
+        "operationId": "personcategoryUsingPOST_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personcategory",
+        "operationId": "personcategoryUsingPUT_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personcategory",
+        "operationId": "personcategoryUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -748,12 +1012,96 @@
       }
     },
     "/people/{id}/personAddress": {
-      "get": {
+      "post": {
         "tags": [
           "Person Entity"
         ],
         "summary": "personaddress",
-        "operationId": "personaddressUsingGET_2",
+        "operationId": "personaddressUsingPOST_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personaddress",
+        "operationId": "personaddressUsingPUT_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Address"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personaddress",
+        "operationId": "personaddressUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -792,12 +1140,108 @@
       }
     },
     "/people/{id}/tags": {
-      "get": {
+      "post": {
         "tags": [
           "Person Entity"
         ],
         "summary": "persontags",
-        "operationId": "persontagsUsingGET_2",
+        "operationId": "persontagsUsingPOST_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "persontags",
+        "operationId": "persontagsUsingPUT_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "persontags",
+        "operationId": "persontagsUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1038,12 +1482,108 @@
       }
     },
     "/tags/{id}/people": {
-      "get": {
+      "post": {
         "tags": [
           "Tag Entity"
         ],
         "summary": "tagpeople",
-        "operationId": "tagpeopleUsingGET_2",
+        "operationId": "tagpeopleUsingPOST_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "tagpeople",
+        "operationId": "tagpeopleUsingPUT_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "tagpeople",
+        "operationId": "tagpeopleUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"

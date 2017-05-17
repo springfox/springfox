@@ -208,7 +208,7 @@ class EntityContext {
                   configuration.getBasePath(),
                   resource.getPath(),
                   mapping.getPath()),
-              newHashSet(RequestMethod.GET),
+              newHashSet(RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.POST),
               new HashSet<MediaType>(),
               newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
               null,
