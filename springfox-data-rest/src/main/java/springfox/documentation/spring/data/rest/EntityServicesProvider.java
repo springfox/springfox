@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -44,6 +45,7 @@ public class EntityServicesProvider implements RequestHandlerProvider {
   private final TypeResolver typeResolver;
   private final PersistentEntities entities;
   private final Associations associations;
+  private final List<RequestHandlerExtractor> defaultExtractors;
 
   public EntityServicesProvider(
       RepositoryRestConfiguration configuration,
@@ -58,6 +60,14 @@ public class EntityServicesProvider implements RequestHandlerProvider {
     this.typeResolver = typeResolver;
     this.entities = entities;
     this.associations = associations;
+    this.defaultExtractors = newArrayList(
+        new EntitySaveExtractor(),
+        new EntityDeleteExtractor(),
+        new EntityFindOneExtractor(),
+        new EntityFindAllExtractor(),
+        new EntitySearchExtractor(),
+        new EntityPropertiesExtractor()
+    );
   }
 
   @Override
@@ -77,17 +87,23 @@ public class EntityServicesProvider implements RequestHandlerProvider {
           associations));
 
     }
-    return FluentIterable.from(contexts)
-        .transformAndConcat(toRequestHandler())
-        .toList();
+    
+    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
+    for (EntityContext each: contexts) {
+      handlers.addAll(FluentIterable.from(defaultExtractors)
+          .transformAndConcat(extractFromContext(each))
+          .toList());
+    }
+    return handlers;
   }
 
-  private Function<EntityContext, Iterable<RequestHandler>> toRequestHandler() {
-    return new Function<EntityContext, Iterable<RequestHandler>>() {
+  private Function<RequestHandlerExtractor, List<RequestHandler>> extractFromContext(final EntityContext context) {
+    return new Function<RequestHandlerExtractor, List<RequestHandler>>() {
       @Override
-      public Iterable<RequestHandler> apply(EntityContext input) {
-        return input.requestHandlers();
+      public List<RequestHandler> apply(RequestHandlerExtractor input) {
+        return input.extract(context);
       }
     };
   }
+
 }
