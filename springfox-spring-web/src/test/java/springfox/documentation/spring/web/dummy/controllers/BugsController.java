@@ -29,12 +29,14 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
+import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 
 import javax.servlet.http.HttpServletResponse;
@@ -208,6 +210,26 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
+  @RequestMapping(value = "/1819a", method = PUT)
+  public void modelWithListOfEnumsAsJson(@RequestBody Model1819 model) {
+  }
+
+  @RequestMapping(value = "/1819b", method = POST)
+  public void modelWithListOfEnumsAsModelAttribute(@ModelAttribute Model1819 model) {
+  }
+
+  public class Model1819 {
+
+    private List<EnumType> enumTypes;
+
+    public List<EnumType> getEnumTypes() {
+      return enumTypes;
+    }
+
+    public void setEnumTypes(List<EnumType> enumTypes) {
+      this.enumTypes = enumTypes;
+    }
+  }
 
   class TestClass {
 

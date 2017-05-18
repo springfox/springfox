@@ -11,7 +11,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "localhost:__PORT__",
+  "host": "localhost:56821",
   "basePath": "/",
   "tags": [
     {
@@ -832,6 +832,79 @@
           }
         }
       }
+    },
+    "/bugs/1819a": {
+      "put": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "modelWithListOfEnumsAsJson",
+        "operationId": "modelWithListOfEnumsAsJsonUsingPUT_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "model",
+            "description": "model",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Model1819"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1819b{?enumTypes}": {
+      "post": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "modelWithListOfEnumsAsModelAttribute",
+        "operationId": "modelWithListOfEnumsAsModelAttributeUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "enumTypes",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ONE",
+                "TWO"
+              ]
+            },
+            "collectionFormat": "multi",
+            "enum": [
+              "ONE",
+              "TWO"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -984,6 +1057,21 @@
       "properties": {
         "href": {
           "type": "string"
+        }
+      }
+    },
+    "Model1819": {
+      "type": "object",
+      "properties": {
+        "enumTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ONE",
+              "TWO"
+            ]
+          }
         }
       }
     },
