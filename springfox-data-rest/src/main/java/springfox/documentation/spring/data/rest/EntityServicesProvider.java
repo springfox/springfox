@@ -38,7 +38,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.*;
 
 @Component
-public class EntityServicesProvider implements RequestHandlerProvider {
+class EntityServicesProvider implements RequestHandlerProvider {
   private final RepositoryRestConfiguration configuration;
   private final ResourceMappings mappings;
   private final Repositories repositories;
@@ -66,7 +66,7 @@ public class EntityServicesProvider implements RequestHandlerProvider {
         new EntityFindOneExtractor(),
         new EntityFindAllExtractor(),
         new EntitySearchExtractor(),
-        new EntityPropertiesExtractor()
+        new EntityAssociationsExtractor()
     );
   }
 

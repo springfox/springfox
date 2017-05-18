@@ -41,7 +41,7 @@ import static com.google.common.collect.Sets.*;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
-public class EntityPropertiesExtractor implements RequestHandlerExtractor {
+public class EntityAssociationsExtractor implements RequestHandlerExtractor {
   @Override
   public List<RequestHandler> extract(final EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();

@@ -33,7 +33,7 @@ import org.springframework.data.rest.webmvc.mapping.Associations;
 
 import java.net.URI;
 
-class EntityContext {
+public class EntityContext {
   private final RepositoryRestConfiguration configuration;
   private final RepositoryInformation repository;
   private final Object repositoryInstance;
