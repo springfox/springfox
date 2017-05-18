@@ -271,14 +271,16 @@ class EntityContext {
         handlers.add(new SpringDataRestRequestHandler(entityContext, delete));
 
         if (property.isMap() || property.isCollectionLike()) {
+          String propertyIdentifier = propertyIdentifierName(property);
           ActionSpecification getPropertyItem = new ActionSpecification(
-              String.format("%s%s", lowerCamelCaseName(entity.getType().getSimpleName()), upperCamelCaseName(property
-                  .getName())),
-
-              String.format("%s%s/{id}/%s/{propertyId}",
+              String.format("%s%s",
+                  lowerCamelCaseName(entity.getType().getSimpleName()),
+                  upperCamelCaseName(property.getName())),
+              String.format("%s%s/{id}/%s/{%s}",
                   configuration.getBasePath(),
                   resource.getPath(),
-                  mapping.getPath()),
+                  mapping.getPath(),
+                  propertyIdentifier),
               newHashSet(RequestMethod.GET),
               new HashSet<MediaType>(),
               newHashSet(HAL_JSON),
@@ -290,8 +292,8 @@ class EntityContext {
                       typeResolver.resolve(repository.getIdType())),
                   new ResolvedMethodParameter(
                       1,
-                      "propertyId",
-                      pathAnnotations("propertyId"),
+                      propertyIdentifier,
+                      pathAnnotations(propertyIdentifier),
                       typeResolver.resolve(String.class))),
               propertyItemResponse(property));
           handlers.add(new SpringDataRestRequestHandler(entityContext, getPropertyItem));
@@ -299,10 +301,11 @@ class EntityContext {
           ActionSpecification deleteItem = new ActionSpecification(
               String.format("%s%s", lowerCamelCaseName(entity.getType().getSimpleName()), upperCamelCaseName(property
                   .getName())),
-              String.format("%s%s/{id}/%s/{propertyId}",
+              String.format("%s%s/{id}/%s/{%s}",
                   configuration.getBasePath(),
                   resource.getPath(),
-                  mapping.getPath()),
+                  mapping.getPath(),
+                  propertyIdentifier),
               newHashSet(RequestMethod.DELETE),
               new HashSet<MediaType>(),
               newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
@@ -314,8 +317,8 @@ class EntityContext {
                       typeResolver.resolve(repository.getIdType())),
                   new ResolvedMethodParameter(
                       1,
-                      "propertyId",
-                      pathAnnotations("propertyId"),
+                      propertyIdentifier,
+                      pathAnnotations(propertyIdentifier),
                       typeResolver.resolve(String.class))),
               typeResolver.resolve(Void.TYPE));
           handlers.add(new SpringDataRestRequestHandler(entityContext, deleteItem));
@@ -323,6 +326,16 @@ class EntityContext {
       }
     });
     return handlers;
+  }
+
+  private String propertyIdentifierName(PersistentProperty<?> property) {
+    String propertyName = property.getName();
+    if (property.isCollectionLike()) {
+      propertyName = property.getComponentType().getSimpleName();
+    } else if (property.isMap()) {
+      propertyName = property.getMapValueType().getSimpleName();
+    }
+    return String.format("%sId", propertyName.toLowerCase());
   }
 
   private ResolvedType propertyResponse(PersistentProperty<?> property) {

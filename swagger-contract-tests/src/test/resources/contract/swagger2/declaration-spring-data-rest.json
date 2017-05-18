@@ -770,7 +770,7 @@
         }
       }
     },
-    "/categories/{id}/people/{propertyId}": {
+    "/categories/{id}/people/{personId}": {
       "get": {
         "tags": [
           "Category Entity"
@@ -794,9 +794,9 @@
             "format": "int64"
           },
           {
-            "name": "propertyId",
+            "name": "personId",
             "in": "path",
-            "description": "propertyId",
+            "description": "personId",
             "required": true,
             "type": "string"
           }
@@ -834,9 +834,9 @@
             "format": "int64"
           },
           {
-            "name": "propertyId",
+            "name": "personId",
             "in": "path",
-            "description": "propertyId",
+            "description": "personId",
             "required": true,
             "type": "string"
           }
@@ -1660,7 +1660,7 @@
         }
       }
     },
-    "/people/{id}/tags/{propertyId}": {
+    "/people/{id}/tags/{tagId}": {
       "get": {
         "tags": [
           "Person Entity"
@@ -1684,9 +1684,9 @@
             "format": "int64"
           },
           {
-            "name": "propertyId",
+            "name": "tagId",
             "in": "path",
-            "description": "propertyId",
+            "description": "tagId",
             "required": true,
             "type": "string"
           }
@@ -1724,9 +1724,9 @@
             "format": "int64"
           },
           {
-            "name": "propertyId",
+            "name": "tagId",
             "in": "path",
-            "description": "propertyId",
+            "description": "tagId",
             "required": true,
             "type": "string"
           }
@@ -2134,7 +2134,7 @@
         }
       }
     },
-    "/tags/{id}/people/{propertyId}": {
+    "/tags/{id}/people/{personId}": {
       "get": {
         "tags": [
           "Tag Entity"
@@ -2158,9 +2158,9 @@
             "format": "int64"
           },
           {
-            "name": "propertyId",
+            "name": "personId",
             "in": "path",
-            "description": "propertyId",
+            "description": "personId",
             "required": true,
             "type": "string"
           }
@@ -2198,9 +2198,9 @@
             "format": "int64"
           },
           {
-            "name": "propertyId",
+            "name": "personId",
             "in": "path",
-            "description": "propertyId",
+            "description": "personId",
             "required": true,
             "type": "string"
           }
