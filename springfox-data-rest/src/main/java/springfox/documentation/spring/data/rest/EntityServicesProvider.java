@@ -45,7 +45,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
   private final TypeResolver typeResolver;
   private final PersistentEntities entities;
   private final Associations associations;
-  private final List<RequestHandlerExtractor> defaultExtractors;
+  private final List<EntityOperationsExtractor> defaultExtractors;
 
   public EntityServicesProvider(
       RepositoryRestConfiguration configuration,
@@ -97,10 +97,10 @@ class EntityServicesProvider implements RequestHandlerProvider {
     return handlers;
   }
 
-  private Function<RequestHandlerExtractor, List<RequestHandler>> extractFromContext(final EntityContext context) {
-    return new Function<RequestHandlerExtractor, List<RequestHandler>>() {
+  private Function<EntityOperationsExtractor, List<RequestHandler>> extractFromContext(final EntityContext context) {
+    return new Function<EntityOperationsExtractor, List<RequestHandler>>() {
       @Override
-      public List<RequestHandler> apply(RequestHandlerExtractor input) {
+      public List<RequestHandler> apply(EntityOperationsExtractor input) {
         return input.extract(context);
       }
     };

@@ -36,7 +36,7 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
-class EntitySaveExtractor implements RequestHandlerExtractor {
+class EntitySaveExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();

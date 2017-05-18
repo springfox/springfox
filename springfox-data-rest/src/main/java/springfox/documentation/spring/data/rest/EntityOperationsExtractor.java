@@ -22,6 +22,6 @@ import springfox.documentation.RequestHandler;
 
 import java.util.List;
 
-public interface RequestHandlerExtractor {
+public interface EntityOperationsExtractor {
   List<RequestHandler> extract(EntityContext context);
 }
