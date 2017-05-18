@@ -522,6 +522,7 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </li>
 <li><a href="#additional-extensibility-options">Additional extensibility options</a></li>
+<li><a href="#spring-data-rest-extensibility">Spring Data Rest extensibility</a></li>
 </ul>
 </div>
 </div>
@@ -693,7 +694,7 @@ order specified in the bean. In general spring plugins get the highest priority,
   <span class="directive">public</span> ResponseEntity&lt;User&gt; getUser(
       <span class="annotation">@VersionApi</span> <span class="type">int</span> version, <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="annotation">@RequestParam</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> id) {
-    <span class="keyword">throw</span> <span class="keyword">new</span> NotImplementedException();
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="exception">UnsupportedOperationException</span>();
   }
 }</pre></td>
 </tr></table></code></pre>
@@ -942,10 +943,63 @@ representations. This is a limitation of the OAI Spec 2.0
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="spring-data-rest-extensibility">Spring Data Rest extensibility</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+These are incubating features and may change.
+</td>
+</tr>
+</table>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 3. Spring Data REST Extensibility</caption>
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Since</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EntityOperationsExtractor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This is an extensibility point to extract entity specific operations. This extractor is to allow creation of
+<code>RequestHandler`s that are based on Spring-Data-Rest(SDR) endpoints. The SDR configuration information is available
+via `EntityAssociationContext</code> and can be used to infer the properties needed
+to produce the operation descriptions.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EntityAssociationOperationsExtractor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This is an extensibility point to extract operations related to entity associations. This extractor is to allow
+creation of <code>RequestHandler`s that are based on Spring-Data-Rest(SDR). The SDR configuration information is available
+via `EntityContext</code> and can be used to infer the properties needed to produce the operation descriptions.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RequestHandlerExtractorConfiguration</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Additionally the glue that makes all this possible is the <code>RequestHandlerExtractorConfiguration</code>. When not
+customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-05-09 11:06:49 UTC
+Last updated 2017-05-18 05:44:13 UTC
 </div>
 </div>
 </body>

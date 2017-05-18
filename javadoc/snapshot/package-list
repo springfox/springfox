@@ -17,6 +17,7 @@ springfox.documentation.spi.schema
 springfox.documentation.spi.schema.contexts
 springfox.documentation.spi.service
 springfox.documentation.spi.service.contexts
+springfox.documentation.spring.data.rest
 springfox.documentation.spring.data.rest.configuration
 springfox.documentation.spring.web
 springfox.documentation.spring.web.json
