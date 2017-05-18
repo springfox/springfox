@@ -57,16 +57,21 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
         }
         final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
         handlers.addAll(FluentIterable.from(defaultExtractors)
-            .transformAndConcat(new Function<EntityAssociationOperationsExtractor, Iterable<RequestHandler>>() {
-              @Override
-              public Iterable<RequestHandler> apply(EntityAssociationOperationsExtractor input) {
-                return input.extract(associationContext);
-              }
-            })
+            .transformAndConcat(extractHandlers(associationContext))
             .toList());
       }
     });
     return handlers;
+  }
+
+  private Function<EntityAssociationOperationsExtractor, Iterable<RequestHandler>> extractHandlers(
+      final EntityAssociationContext associationContext) {
+    return new Function<EntityAssociationOperationsExtractor, Iterable<RequestHandler>>() {
+      @Override
+      public Iterable<RequestHandler> apply(EntityAssociationOperationsExtractor input) {
+        return input.extract(associationContext);
+      }
+    };
   }
 
 }
