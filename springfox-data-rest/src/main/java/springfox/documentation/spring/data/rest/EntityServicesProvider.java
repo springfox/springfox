@@ -21,6 +21,7 @@ package springfox.documentation.spring.data.rest;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +47,11 @@ class EntityServicesProvider implements RequestHandlerProvider {
   private final TypeResolver typeResolver;
   private final PersistentEntities entities;
   private final Associations associations;
-  private final List<EntityOperationsExtractor> defaultExtractors;
 
+  @Autowired(required = false)
+  private RequestHandlerExtractorConfiguration extractorConfiguration;
+
+  @Autowired
   public EntityServicesProvider(
       RepositoryRestConfiguration configuration,
       ResourceMappings mappings,
@@ -60,14 +65,13 @@ class EntityServicesProvider implements RequestHandlerProvider {
     this.typeResolver = typeResolver;
     this.entities = entities;
     this.associations = associations;
-    this.defaultExtractors = newArrayList(
-        new EntitySaveExtractor(),
-        new EntityDeleteExtractor(),
-        new EntityFindOneExtractor(),
-        new EntityFindAllExtractor(),
-        new EntitySearchExtractor(),
-        new EntityAssociationsExtractor()
-    );
+  }
+
+  @PostConstruct
+  public void init() {
+    if (extractorConfiguration == null) {
+      extractorConfiguration = new DefaultExtractorConfiguration();
+    }
   }
 
   @Override
@@ -84,13 +88,13 @@ class EntityServicesProvider implements RequestHandlerProvider {
           resource,
           mappings,
           entities,
-          associations));
+          associations, extractorConfiguration));
 
     }
     
     List<RequestHandler> handlers = new ArrayList<RequestHandler>();
     for (EntityContext each: contexts) {
-      handlers.addAll(FluentIterable.from(defaultExtractors)
+      handlers.addAll(FluentIterable.from(extractorConfiguration.getEntityExtractors())
           .transformAndConcat(extractFromContext(each))
           .toList());
     }

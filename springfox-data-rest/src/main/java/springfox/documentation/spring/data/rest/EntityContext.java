@@ -32,6 +32,7 @@ import org.springframework.data.rest.core.mapping.SearchResourceMappings;
 import org.springframework.data.rest.webmvc.mapping.Associations;
 
 import java.net.URI;
+import java.util.Collection;
 
 public class EntityContext {
   private final RepositoryRestConfiguration configuration;
@@ -42,6 +43,7 @@ public class EntityContext {
   private final ResourceMappings mappings;
   private final PersistentEntities entities;
   private final Associations associations;
+  private final RequestHandlerExtractorConfiguration extractorConfiguration;
 
   public EntityContext(
       TypeResolver typeResolver,
@@ -51,7 +53,8 @@ public class EntityContext {
       ResourceMetadata resource,
       ResourceMappings mappings,
       PersistentEntities entities,
-      Associations associations) {
+      Associations associations,
+      RequestHandlerExtractorConfiguration extractorConfiguration) {
 
     this.configuration = configuration;
     this.repository = repository;
@@ -61,6 +64,7 @@ public class EntityContext {
     this.mappings = mappings;
     this.entities = entities;
     this.associations = associations;
+    this.extractorConfiguration = extractorConfiguration;
   }
 
   public String getName() {
@@ -105,5 +109,9 @@ public class EntityContext {
 
   public Associations getAssociations() {
     return associations;
+  }
+
+  public Collection<EntityAssociationOperationsExtractor> getAssociationExtractors() {
+    return extractorConfiguration.getAssociationExtractors();
   }
 }

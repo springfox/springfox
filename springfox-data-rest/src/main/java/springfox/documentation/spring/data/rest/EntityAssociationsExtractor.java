@@ -33,13 +33,6 @@ import static com.google.common.collect.Lists.*;
 
 public class EntityAssociationsExtractor implements EntityOperationsExtractor {
 
-  private final List<EntityAssociationOperationsExtractor> defaultExtractors = newArrayList(
-      new EntityAssociationSaveExtractor(),
-      new EntityAssociationDeleteExtractor(),
-      new EntityAssociationGetExtractor(),
-      new EntityAssociationItemGetExtractor(),
-      new EntityAssociationItemDeleteExtractor()
-  );
 
   @Override
   public List<RequestHandler> extract(final EntityContext context) {
@@ -56,7 +49,7 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
           return;
         }
         final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
-        handlers.addAll(FluentIterable.from(defaultExtractors)
+        handlers.addAll(FluentIterable.from(context.getAssociationExtractors())
             .transformAndConcat(extractHandlers(associationContext))
             .toList());
       }
