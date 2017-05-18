@@ -15,19 +15,19 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Tag Entity",
-      "description": "Simple Jpa Repository"
-    },
-    {
-      "name": "Category Entity",
-      "description": "Simple Jpa Repository"
-    },
-    {
       "name": "Address Entity",
       "description": "Simple Jpa Repository"
     },
     {
+      "name": "Tag Entity",
+      "description": "Simple Jpa Repository"
+    },
+    {
       "name": "Person Entity",
+      "description": "Simple Jpa Repository"
+    },
+    {
+      "name": "Category Entity",
       "description": "Simple Jpa Repository"
     }
   ],
@@ -184,6 +184,39 @@
       }
     },
     "/addresses/{id}/person": {
+      "get": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "addressperson",
+        "operationId": "addresspersonUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json",
+          "application/hal+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourceOfPerson"
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Address Entity"
@@ -221,7 +254,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/ResourceOfPerson"
             }
           }
         }
@@ -263,8 +296,38 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/ResourceOfPerson"
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Address Entity"
+        ],
+        "summary": "addressperson",
+        "operationId": "addresspersonUsingDELETE_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
@@ -305,7 +368,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/ResourceOfPerson"
             }
           }
         }
@@ -323,8 +386,8 @@
         ],
         "produces": [
           "application/xml",
-          "text/uri-list",
           "application/json",
+          "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [
@@ -508,6 +571,39 @@
       }
     },
     "/categories/{id}/people": {
+      "get": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "categorypeople",
+        "operationId": "categorypeopleUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json",
+          "application/hal+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourcesOfPerson"
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Category Entity"
@@ -548,10 +644,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfPerson"
             }
           }
         }
@@ -596,11 +689,38 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfPerson"
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "categorypeople",
+        "operationId": "categorypeopleUsingDELETE_5",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
@@ -644,11 +764,86 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfPerson"
             }
+          }
+        }
+      }
+    },
+    "/categories/{id}/people/{propertyId}": {
+      "get": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "categorypeople",
+        "operationId": "categorypeopleUsingGET_4",
+        "consumes": [
+          "application/hal+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "propertyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourceOfPerson"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Category Entity"
+        ],
+        "summary": "categorypeople",
+        "operationId": "categorypeopleUsingDELETE_4",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "propertyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -665,8 +860,8 @@
         ],
         "produces": [
           "application/xml",
-          "text/uri-list",
           "application/json",
+          "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [
@@ -884,6 +1079,39 @@
       }
     },
     "/people/{id}/category": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personcategory",
+        "operationId": "personcategoryUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json",
+          "application/hal+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourceOfCategory"
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Person Entity"
@@ -921,7 +1149,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "$ref": "#/definitions/ResourceOfCategory"
             }
           }
         }
@@ -963,8 +1191,38 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "$ref": "#/definitions/ResourceOfCategory"
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personcategory",
+        "operationId": "personcategoryUsingDELETE_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
@@ -1005,13 +1263,46 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "$ref": "#/definitions/ResourceOfCategory"
             }
           }
         }
       }
     },
     "/people/{id}/personAddress": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personaddress",
+        "operationId": "personaddressUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json",
+          "application/hal+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourceOfAddress"
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Person Entity"
@@ -1049,7 +1340,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Address"
+              "$ref": "#/definitions/ResourceOfAddress"
             }
           }
         }
@@ -1091,8 +1382,38 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Address"
+              "$ref": "#/definitions/ResourceOfAddress"
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "personaddress",
+        "operationId": "personaddressUsingDELETE_2",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
@@ -1133,13 +1454,46 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Address"
+              "$ref": "#/definitions/ResourceOfAddress"
             }
           }
         }
       }
     },
     "/people/{id}/tags": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "persontags",
+        "operationId": "persontagsUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json",
+          "application/hal+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourcesOfTag"
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Person Entity"
@@ -1180,10 +1534,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfTag"
             }
           }
         }
@@ -1228,11 +1579,38 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfTag"
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "persontags",
+        "operationId": "persontagsUsingDELETE_5",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
@@ -1276,11 +1654,86 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfTag"
             }
+          }
+        }
+      }
+    },
+    "/people/{id}/tags/{propertyId}": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "persontags",
+        "operationId": "persontagsUsingGET_4",
+        "consumes": [
+          "application/hal+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "propertyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourceOfTag"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "persontags",
+        "operationId": "persontagsUsingDELETE_4",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "propertyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -1297,8 +1750,8 @@
         ],
         "produces": [
           "application/xml",
-          "text/uri-list",
           "application/json",
+          "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [
@@ -1482,6 +1935,39 @@
       }
     },
     "/tags/{id}/people": {
+      "get": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "tagpeople",
+        "operationId": "tagpeopleUsingGET_5",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json",
+          "application/hal+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourcesOfPerson"
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Tag Entity"
@@ -1522,10 +2008,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfPerson"
             }
           }
         }
@@ -1570,11 +2053,38 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfPerson"
             }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "tagpeople",
+        "operationId": "tagpeopleUsingDELETE_5",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       },
@@ -1618,11 +2128,86 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "$ref": "#/definitions/ResourcesOfPerson"
             }
+          }
+        }
+      }
+    },
+    "/tags/{id}/people/{propertyId}": {
+      "get": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "tagpeople",
+        "operationId": "tagpeopleUsingGET_4",
+        "consumes": [
+          "application/hal+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "propertyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourceOfPerson"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Tag Entity"
+        ],
+        "summary": "tagpeople",
+        "operationId": "tagpeopleUsingDELETE_4",
+        "consumes": [
+          "text/uri-list",
+          "application/x-spring-data-compact+json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "propertyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -1639,8 +2224,8 @@
         ],
         "produces": [
           "application/xml",
-          "text/uri-list",
           "application/json",
+          "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [
