@@ -38,6 +38,8 @@ public class Collections {
       return elementType(type, Set.class);
     } else if (type.isArray()) {
       return type.getArrayElementType();
+    } else if ((Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type))) {
+      return elementType(type, Collection.class);
     } else {
       return null;
     }
@@ -46,6 +48,7 @@ public class Collections {
   public static boolean isContainerType(ResolvedType type) {
     return List.class.isAssignableFrom(type.getErasedType()) ||
         Set.class.isAssignableFrom(type.getErasedType()) ||
+        (Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type)) ||
         type.isArray();
   }
 
@@ -56,6 +59,8 @@ public class Collections {
       return "Set";
     } else if (type.isArray()) {
       return "Array";
+    } else if (Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type)) {
+      return "List";
     } else {
       throw new UnsupportedOperationException(String.format("Type is not collection type %s", type));
     }

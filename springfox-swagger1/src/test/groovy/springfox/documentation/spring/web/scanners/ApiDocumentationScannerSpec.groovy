@@ -22,7 +22,10 @@ package springfox.documentation.spring.web.scanners
 import com.google.common.collect.LinkedListMultimap
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
-import springfox.documentation.service.*
+import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.ApiKey
+import springfox.documentation.service.Documentation
+import springfox.documentation.service.ResourceListing
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -35,118 +38,118 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)
-  ApiDocumentationScanner  docScanner = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+  ApiDocumentationScanner docScanner = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
-      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-      listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
-      Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(context())
 
     then: "I should should have the correct defaults"
-      ResourceListing resourceListing = scanned.resourceListing
-      def apiListingReferenceList = resourceListing.getApis()
-      def authorizationTypes = resourceListing.getSecuritySchemes()
+    ResourceListing resourceListing = scanned.resourceListing
+    def apiListingReferenceList = resourceListing.getApis()
+    def authorizationTypes = resourceListing.getSecuritySchemes()
 
-      scanned.groupName == "default"
-      resourceListing.getApiVersion() == "1.0"
+    scanned.groupName == "default"
+    resourceListing.getApiVersion() == "1.0"
 
-      resourceListing.getInfo() != null
-      apiListingReferenceList == []
-      authorizationTypes == []
+    resourceListing.getInfo() != null
+    apiListingReferenceList == []
+    authorizationTypes == []
   }
 
   def "resource with api info"() {
     given:
-      ApiInfo expected = new ApiInfo("title", "description", "1.0", "terms", "contact", "license", "licenseUrl")
+    ApiInfo expected = new ApiInfo("title", "description", "1.0", "terms", "contact", "license", "licenseUrl")
     when:
-      plugin
-              .groupName("groupName")
-              .select()
-                .paths(regex(".*"))
-                .build()
-              .apiInfo(expected)
-              .configure(contextBuilder)
-      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-      listingScanner.scan(_) >> LinkedListMultimap.create()
+    plugin
+        .groupName("groupName")
+        .select()
+        .paths(regex(".*"))
+        .build()
+        .apiInfo(expected)
+        .configure(contextBuilder)
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
-      Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(context())
     then:
-      ApiInfo actual = scanned.getResourceListing().getInfo()
-      actual.getTitle() == expected.getTitle()
-      actual.getVersion() == expected.getVersion()
-      actual.getDescription() == expected.getDescription()
-      actual.getTermsOfServiceUrl() == expected.getTermsOfServiceUrl()
-      actual.getContact() == expected.getContact()
-      actual.getLicense() == expected.getLicense()
-      actual.getLicenseUrl() == expected.getLicenseUrl()
+    ApiInfo actual = scanned.getResourceListing().getInfo()
+    actual.getTitle() == expected.getTitle()
+    actual.getVersion() == expected.getVersion()
+    actual.getDescription() == expected.getDescription()
+    actual.getTermsOfServiceUrl() == expected.getTermsOfServiceUrl()
+    actual.getContact() == expected.getContact()
+    actual.getLicense() == expected.getLicense()
+    actual.getLicenseUrl() == expected.getLicenseUrl()
   }
 
   def "resource with authorization types"() {
     given:
-      ApiKey apiKey = new ApiKey("my-key", "api_key", "header")
+    ApiKey apiKey = new ApiKey("my-key", "api_key", "header")
     when:
-      plugin
-              .groupName("groupName")
-              .select()
-                .paths(regex(".*"))
-                .build()
-              .securitySchemes([apiKey])
-              .configure(contextBuilder)
-      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-      listingScanner.scan(_) >> LinkedListMultimap.create()
+    plugin
+        .groupName("groupName")
+        .select()
+        .paths(regex(".*"))
+        .build()
+        .securitySchemes([apiKey])
+        .configure(contextBuilder)
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
-      Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(context())
     then:
-      ResourceListing resourceListing = scanned.resourceListing
-      def authorizationTypes = resourceListing.getSecuritySchemes()
-      def apiKeyAuthType = authorizationTypes[0]
-      apiKeyAuthType instanceof ApiKey
-      apiKeyAuthType.name == "my-key"
-      apiKeyAuthType.keyname == "api_key"
-      apiKeyAuthType.passAs == "header"
+    ResourceListing resourceListing = scanned.resourceListing
+    def authorizationTypes = resourceListing.getSecuritySchemes()
+    def apiKeyAuthType = authorizationTypes[0]
+    apiKeyAuthType instanceof ApiKey
+    apiKeyAuthType.name == "my-key"
+    apiKeyAuthType.keyname == "api_key"
+    apiKeyAuthType.passAs == "header"
   }
 
   def "Should sort based on position"() {
     given:
-      def defaults = new Defaults()
-      def ordering = defaults.apiListingReferenceOrdering()
-      plugin
-              .groupName("groupName")
-              .select()
-                .paths(regex(".*"))
-                .build()
-              .apiListingReferenceOrdering(ordering)
-              .configure(contextBuilder)
+    def defaults = new Defaults()
+    def ordering = defaults.apiListingReferenceOrdering()
+    plugin
+        .groupName("groupName")
+        .select()
+        .paths(regex(".*"))
+        .build()
+        .apiListingReferenceOrdering(ordering)
+        .configure(contextBuilder)
 
-      def listingsMap = LinkedListMultimap.create()
-      def listings = [
-          apiListing(defaults, 1, "/b"),
-          apiListing(defaults, 2, "/c"),
-          apiListing(defaults, 2, "/a"),
-      ]
-      listings.each {
-        listingsMap.put("test", it)
-      }
-      listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-      listingScanner.scan(_) >> listingsMap
+    def listingsMap = LinkedListMultimap.create()
+    def listings = [
+        apiListing(defaults, 1, "/b"),
+        apiListing(defaults, 2, "/c"),
+        apiListing(defaults, 2, "/a"),
+    ]
+    listings.each {
+      listingsMap.put("test", it)
+    }
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingScanner.scan(_) >> listingsMap
 
 
     when:
-      Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(context())
+
     then:
-      scanned.resourceListing.apis.size() == 1
-      scanned.resourceListing.apis.get(0).path == "/groupName/test"
-      scanned.resourceListing.apis.get(0).description.normalize() == """Operation with path /b and position 1
-                                                             |Operation with path /c and position 2
-                                                             |Operation with path /a and position 2""".stripMargin()
+    scanned.resourceListing.apis.get(0).path == "/groupName/test"
+    scanned.resourceListing.apis.get(0).description == """Operation with path /a and position 2
+                                                             |Operation with path /b and position 1
+                                                             |Operation with path /c and position 2""".stripMargin()
 
     where:
-      index | path  | position
-      0     | '/b' | 0
-      1     | '/a' | 0
-      2     | '/c' | 0
+    index | path | position
+    0     | '/b' | 0
+    1     | '/a' | 0
+    2     | '/c' | 0
   }
 
   def apiListing(Defaults defaults, int position, String path) {

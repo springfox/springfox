@@ -2,6 +2,26 @@
   "apiVersion": "1.0",
   "apis": [
     {
+      "description": "Address Entity\nSimple Jpa Repository",
+      "path": "/default/Address Entity",
+      "position": 0
+    },
+    {
+      "description": "Category Entity\nSimple Jpa Repository",
+      "path": "/default/Category Entity",
+      "position": 0
+    },
+    {
+      "description": "Person Entity\nSimple Jpa Repository",
+      "path": "/default/Person Entity",
+      "position": 0
+    },
+    {
+      "description": "Simple Jpa Repository\nTag Entity",
+      "path": "/default/Tag Entity",
+      "position": 0
+    },
+    {
       "description": "Basic Error Controller",
       "path": "/default/basic-error-controller",
       "position": 0
@@ -73,12 +93,6 @@
     }
   ],
   "authorizations": {
-    "apiKey": {
-      "keyname": "api_key",
-      "name": "api_key",
-      "passAs": "header",
-      "type": "apiKey"
-    },
     "oauth2": {
       "grantTypes": {
         "implicit": {
@@ -100,6 +114,12 @@
         }
       ],
       "type": "oauth2"
+    },
+    "apiKey": {
+      "keyname": "api_key",
+      "name": "api_key",
+      "passAs": "header",
+      "type": "apiKey"
     }
   },
   "info": {

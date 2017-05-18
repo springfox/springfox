@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.scanners;
 
+import com.google.common.base.Optional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
@@ -65,11 +66,14 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
 
   @Override
   public void apply(ApiListingContext context) {
-    RequestMapping annotation = findAnnotation(context.getResourceGroup().getControllerClass(), RequestMapping.class);
-    if (annotation != null) {
-      context.apiListingBuilder()
-              .appendProduces(newArrayList(annotation.produces()))
-              .appendConsumes(newArrayList(annotation.consumes()));
+    Optional<? extends Class<?>> controller = context.getResourceGroup().getControllerClass();
+    if (controller.isPresent()) {
+      RequestMapping annotation = findAnnotation(controller.get(), RequestMapping.class);
+      if (annotation != null) {
+        context.apiListingBuilder()
+            .appendProduces(newArrayList(annotation.produces()))
+            .appendConsumes(newArrayList(annotation.consumes()));
+      }
     }
   }
 

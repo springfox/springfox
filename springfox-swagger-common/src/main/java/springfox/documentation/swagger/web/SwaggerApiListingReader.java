@@ -44,18 +44,20 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
-    Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();
-    Optional<Api> apiAnnotation = fromNullable(findAnnotation(controllerClass, Api.class));
-    String description = emptyToNull(apiAnnotation.transform(descriptionExtractor()).orNull());
+    Optional<? extends Class<?>> controller = apiListingContext.getResourceGroup().getControllerClass();
+    if (controller.isPresent()) {
+      Optional<Api> apiAnnotation = fromNullable(findAnnotation(controller.get(), Api.class));
+      String description = emptyToNull(apiAnnotation.transform(descriptionExtractor()).orNull());
 
-    Set<String> tagSet = apiAnnotation.transform(tags())
-        .or(Sets.<String>newTreeSet());
-    if (tagSet.isEmpty()) {
-      tagSet.add(apiListingContext.getResourceGroup().getGroupName());
+      Set<String> tagSet = apiAnnotation.transform(tags())
+          .or(Sets.<String>newTreeSet());
+      if (tagSet.isEmpty()) {
+        tagSet.add(apiListingContext.getResourceGroup().getGroupName());
+      }
+      apiListingContext.apiListingBuilder()
+          .description(description)
+          .tagNames(tagSet);
     }
-    apiListingContext.apiListingBuilder()
-        .description(description)
-        .tagNames(tagSet);
   }
 
   private Function<Api, String> descriptionExtractor() {

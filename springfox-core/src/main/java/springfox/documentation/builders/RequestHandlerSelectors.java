@@ -19,6 +19,8 @@
 
 package springfox.documentation.builders;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import springfox.documentation.RequestHandler;
@@ -73,7 +75,26 @@ public class RequestHandlerSelectors {
     return new Predicate<RequestHandler>() {
       @Override
       public boolean apply(RequestHandler input) {
-        return declaringClass(input).isAnnotationPresent(annotation);
+        return declaringClass(input).transform(annotationPresent(annotation)).or(false);
+      }
+    };
+  }
+
+  private static Function<Class<?>, Boolean> annotationPresent(final Class<? extends Annotation> annotation) {
+    return new Function<Class<?>, Boolean>() {
+      @Override
+      public Boolean apply(Class<?> input) {
+        return input.isAnnotationPresent(annotation);
+      }
+    };
+  }
+
+
+  private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
+    return new Function<Class<?>, Boolean>() {
+      @Override
+      public Boolean apply(Class<?> input) {
+        return input.getPackage().getName().startsWith(basePackage);
       }
     };
   }
@@ -89,13 +110,13 @@ public class RequestHandlerSelectors {
     return new Predicate<RequestHandler>() {
       @Override
       public boolean apply(RequestHandler input) {
-        return declaringClass(input).getPackage().getName().startsWith(basePackage);
+        return declaringClass(input).transform(handlerPackage(basePackage)).or(true);
       }
     };
   }
 
-  private static Class<?> declaringClass(RequestHandler input) {
-    return input.declaringClass();
+  private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
+    return Optional.fromNullable(input.declaringClass());
   }
 
 }

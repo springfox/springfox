@@ -36,6 +36,11 @@ import java.util.Set;
 
 public interface RequestHandler {
 
+  /**
+   * @deprecated @since 2.7.0 This is introduced to preserve backwards compat with groups
+   * @return
+   */
+  @Deprecated
   Class<?> declaringClass();
 
   boolean isAnnotatedWith(Class<? extends Annotation> annotation);

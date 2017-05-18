@@ -18,9 +18,11 @@
  */
 package springfox.documentation.spring.web.scanners;
 
+import com.google.common.base.Function;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
@@ -32,11 +34,22 @@ import static springfox.documentation.spring.web.paths.Paths.*;
 public class ApiListingReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
-    Class<?> controllerClass = apiListingContext.getResourceGroup().getControllerClass();
-    String description = splitCamelCase(controllerClass.getSimpleName(), " ");
+    ResourceGroup group = apiListingContext.getResourceGroup();
+    String description = group.getControllerClass()
+        .transform(description())
+        .or(group.getGroupName());
 
     apiListingContext.apiListingBuilder()
         .description(description);
+  }
+
+  private Function<Class<?>, String> description() {
+    return new Function<Class<?>, String>() {
+      @Override
+      public String apply(Class<?> input) {
+        return splitCamelCase(input.getSimpleName(), " ");
+      }
+    };
   }
 
   @Override

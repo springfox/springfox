@@ -29,6 +29,9 @@ ext {
 
 dependencies {
   compile("org.springframework.boot:spring-boot-starter-web")
+  compile("org.springframework.boot:spring-boot-starter-data-rest")
+  compile("org.springframework.boot:spring-boot-starter-data-jpa")
+  compile("com.h2database:h2")
 
   testCompile libs.test
   testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
@@ -36,6 +39,7 @@ dependencies {
 
   compile project(':springfox-swagger1')
   compile project(':springfox-swagger2')
+  compile project(':springfox-data-rest')
   compile project(':springfox-spring-web').sourceSets.test.output
   compile project(path: ':springfox-petstore')
 

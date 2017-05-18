@@ -22,12 +22,14 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
+import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
@@ -42,6 +44,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 @Configuration
 @EnableSwagger2
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
+@Import(SpringDataRestConfiguration)
 public class Swagger2TestConfig {
 
   @Autowired
@@ -55,12 +58,12 @@ public class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-          .paths(or(
-                  and(
-                      regex("/api/.*"),
-                      not(regex("/api/store/search.*"))),
-                  regex("/generic/.*")))
-          .build()
+        .paths(or(
+        and(
+            regex("/api/.*"),
+            not(regex("/api/store/search.*"))),
+        regex("/generic/.*")))
+        .build()
         .host("petstore.swagger.io")
         .protocols(['http', 'https'] as Set)
   }
@@ -73,8 +76,8 @@ public class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-          .paths(regex("/api/store/search.*"))
-          .build()
+        .paths(regex("/api/store/search.*"))
+        .build()
         .enableUrlTemplating(true)
         .host("petstore.swagger.io")
         .protocols(['http', 'https'] as Set)
@@ -176,10 +179,10 @@ public class Swagger2TestConfig {
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
         .alternateTypeRules(
-          newRule(URL.class, String.class),
-          newRule(
-              resolver.resolve(List.class, Link.class),
-              resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
+        newRule(URL.class, String.class),
+        newRule(
+            resolver.resolve(List.class, Link.class),
+            resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .directModelSubstitute(ByteBuffer.class, String.class)
         .select()
         .paths(regex("/bugs/.*"))
@@ -270,9 +273,27 @@ public class Swagger2TestConfig {
         .paths(regex("/features/.*"))
         .build()
   }
-  
-  @Bean 
+
+  @Bean
   public ApiListingScannerPlugin listingScanner() {
     new Bug1767ListingScanner()
+  }
+
+  @Bean
+  public Docket springDataRest() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("spring-data-rest")
+        .useDefaultResponseMessages(false)
+        .enableUrlTemplating(true)
+        .securitySchemes([])
+        .forCodeGeneration(true)
+        .produces(['application/xml', 'application/json'] as Set)
+        .select()
+        .paths(or(
+        regex("/people.*"),
+        regex("/tags.*"),
+        regex("/categories.*"),
+        regex("/addresses.*")))
+        .build()
   }
 }

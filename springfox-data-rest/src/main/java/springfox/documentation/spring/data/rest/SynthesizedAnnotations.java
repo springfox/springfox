@@ -41,27 +41,7 @@ class SynthesizedAnnotations {
     }
   };
 
-  static final PathVariable PATH_VARIABLE_ANNOTATION = new PathVariable() {
-    @Override
-    public Class<? extends Annotation> annotationType() {
-      return PathVariable.class;
-    }
-
-    @Override
-    public String value() {
-      return "id";
-    }
-
-    @Override
-    public String name() {
-      return "id";
-    }
-
-    @Override
-    public boolean required() {
-      return true;
-    }
-  };
+  static final PathVariable PATH_VARIABLE_ANNOTATION = pathVariable("id");
 
   static final ApiIgnore API_IGNORE_ANNOTATION = new ApiIgnore() {
     @Override
@@ -74,4 +54,28 @@ class SynthesizedAnnotations {
       return ApiIgnore.class;
     }
   };
+
+  static PathVariable pathVariable(final String parameterName) {
+    return new PathVariable() {
+      @Override
+      public Class<? extends Annotation> annotationType() {
+        return PathVariable.class;
+      }
+
+      @Override
+      public String value() {
+        return parameterName;
+      }
+
+      @Override
+      public String name() {
+        return parameterName;
+      }
+
+      @Override
+      public boolean required() {
+        return true;
+      }
+    };
+  }
 }

@@ -979,7 +979,7 @@
     "Resource«string»": {
       "type": "object",
       "properties": {
-        "_links": {
+        "links": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/LinkAlternate"

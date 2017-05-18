@@ -30,6 +30,25 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, ConfiguredObjectMapperSupport, AlternateTypesSupport])
 class UnwrappedTypeSpec extends Specification {
+
+  def "Unwrapped field with regular getter" () {
+    given:
+    def mapper = objectMapperThatUsesFields()
+
+    when:
+    def json = mapper.writer().writeValueAsString(unwrappedType())
+
+    then:
+    json == """{"name":"test"}"""
+  }
+
+  def unwrappedType() {
+    def instance = new UnwrappedTypeForFieldWithGetter()
+    instance.category = new Category()
+    instance.category.name = "test"
+    instance
+  }
+
   @Unroll
   def "Unwrapped types are rendered correctly for fields"() {
     given:
@@ -64,6 +83,7 @@ class UnwrappedTypeSpec extends Specification {
       item.type == "string"
       !item.collection
       item.itemType == null
+
     and:
       asReturn.getName() == UnwrappedTypeForField.simpleName
       asReturn.getProperties().size() == 1
@@ -75,7 +95,55 @@ class UnwrappedTypeSpec extends Specification {
       returnItem.type == "string"
       !returnItem.collection
       returnItem.itemType == null
+  }
 
+  @Unroll
+  def "Unwrapped types are rendered correctly for fields even with getters"() {
+    given:
+    def provider = defaultModelProvider(objectMapperThatUsesFields())
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+
+    when:
+    Model asInput = provider.modelFor(
+        inputParam("group",
+            UnwrappedTypeForFieldWithGetter,
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build()))
+        .get()
+    Model asReturn = provider.modelFor(
+        returnValue("group",
+            UnwrappedTypeForFieldWithGetter,
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build()))
+        .get()
+
+    then:
+    asInput.getName() == UnwrappedTypeForFieldWithGetter.simpleName
+    asInput.getProperties().size() == 1
+    asInput.getProperties().containsKey("name")
+    def modelProperty = asInput.getProperties().get("name")
+    modelProperty.type.erasedType == String
+    modelProperty.getQualifiedType() == "java.lang.String"
+    def item = modelProperty.getModelRef()
+    item.type == "string"
+    !item.collection
+    item.itemType == null
+
+    and:
+    asReturn.getName() == UnwrappedTypeForFieldWithGetter.simpleName
+    asReturn.getProperties().size() == 1
+    asReturn.getProperties().containsKey("name")
+    def returnProperty = asReturn.getProperties().get("name")
+    returnProperty.type.erasedType == String
+    returnProperty.getQualifiedType() == "java.lang.String"
+    def returnItem = modelProperty.getModelRef()
+    returnItem.type == "string"
+    !returnItem.collection
+    returnItem.itemType == null
   }
 
   @Unroll

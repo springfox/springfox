@@ -24,6 +24,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.Ordering;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -116,7 +117,7 @@ public class ApiDocumentationScanner {
   }
 
   private Iterable<String> descriptions(Collection<ApiListing> apiListings) {
-    return FluentIterable.from(apiListings).transform(toDescription());
+    return FluentIterable.from(apiListings).transform(toDescription()).toSortedList(Ordering.natural());
   }
 
   private Function<ApiListing, String> toDescription() {

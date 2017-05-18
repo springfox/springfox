@@ -22,7 +22,6 @@ package springfox.test.contract.swaggertests
 import com.fasterxml.classmate.TypeResolver
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
-import org.skyscreamer.jsonassert.JSONCompareMode
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -69,8 +68,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
       response.statusCode == HttpStatus.OK
 
       def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-      JSONAssert.assertEquals(withPortReplaced, raw, JSONCompareMode.NON_EXTENSIBLE)
-//      println(JsonFormatter.prettyPrint(raw))
+      JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
 
     where:
       contractFile                                                  | groupName
@@ -89,6 +87,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
       'declaration-pet-service.json'                                | 'petService'
       'declaration-groovy-service.json'                             | 'groovyService'
       'declaration-enum-service.json'                               | 'enumService'
+      'declaration-spring-data-rest.json'                           | 'spring-data-rest'
   }
 
   def "should list swagger resources for swagger 2.0"() {
@@ -187,6 +186,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @Configuration
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
+      "springfox.test.contract.swagger.data.rest",
       "springfox.test.contract.swagger",
       "springfox.petstore.controller"
   ])
