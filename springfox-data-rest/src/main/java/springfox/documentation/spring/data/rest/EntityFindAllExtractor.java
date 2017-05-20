@@ -24,7 +24,6 @@ import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.RestMediaTypes;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,6 +38,8 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
+import static org.springframework.http.MediaType.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityFindAllExtractor implements EntityOperationsExtractor {
@@ -59,7 +60,11 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
               context.basePath(),
               context.resourcePath()),
           newHashSet(RequestMethod.GET),
-          newHashSet(RestMediaTypes.SPRING_DATA_COMPACT_JSON, RestMediaTypes.TEXT_URI_LIST),
+          newHashSet(
+              APPLICATION_JSON,
+              HAL_JSON ,
+              SPRING_DATA_COMPACT_JSON,
+              TEXT_URI_LIST),
           new HashSet<MediaType>(),
           handler,
           findAllParameters(context.getConfiguration(), context.getTypeResolver()),

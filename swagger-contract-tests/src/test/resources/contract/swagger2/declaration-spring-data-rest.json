@@ -386,8 +386,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json",
+          "application/hal+json",
           "text/uri-list",
+          "application/json",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [
@@ -860,8 +861,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json",
+          "application/hal+json",
           "text/uri-list",
+          "application/json",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [
@@ -1750,8 +1752,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json",
+          "application/hal+json",
           "text/uri-list",
+          "application/json",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [
@@ -2224,8 +2227,9 @@
         ],
         "produces": [
           "application/xml",
-          "application/json",
+          "application/hal+json",
           "text/uri-list",
+          "application/json",
           "application/x-spring-data-compact+json"
         ],
         "parameters": [

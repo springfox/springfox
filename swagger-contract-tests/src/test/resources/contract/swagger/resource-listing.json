@@ -87,6 +87,11 @@
       "position": 0
     },
     {
+      "description": "Profile Controller",
+      "path": "/default/profile-controller",
+      "position": 0
+    },
+    {
       "description": "Root Controller",
       "path": "/default/root-controller",
       "position": 0
