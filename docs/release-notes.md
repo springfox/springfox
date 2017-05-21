@@ -1,3 +1,98 @@
+# 2.7.0 Release Notes
+
+## PRs 
+- (#1806) Update PropertySourcedRequestMappingHandlerMapping.java  @OzgaRobert 
+- (#1793) [#1770] Remove the requirement for property sources placeholder  @dilipkrish 
+- (#1782) Model property vendor extension  @philippejulien 
+- (#1776) Fix Swagger version error in documentation  @ersinciftci 
+- (#1761) Vendor Extensions for API Info and Documentation  @jkgentry 
+- (#1758) Use double backtick to prevent miss parsing  @naxhh 
+- (#1741) 1740 @JsonUnwrapped is ignored by schema generation test  @StepanLeybo 
+- (#1730) Fix a typo at the common-problems documentation file  @florianrusch 
+- (#1717) Adding vendorExtensions in apiKey class  @cfernandezh 
+- (#1702) Make ApiResourceController methods public  @psyho 
+- (#1699) Make Swagger2Controller respect basePath even if a host is not set  @asdcdow 
+- (#1693) Fix for https://github.com/springfox/springfox/issues/1653  @pjskyboy 
+- (#1667) #1666 allowableValues blank for Optional<Enum> parameter  @madgnome 
+- (#1660) waffle.io Badge  maintenance @waffle
+- (#1617) Updated swagger-ui version to 2.2.8  @acourtiol 
+- (#1593) OAuth2 not initialized when clientSecret undefined  @gonzalad 
+- (#1589) Apply ApiParam hidden attribute to parameters   @defshine 
+- (#1576) Added support for composed bean validation constraints  @jamesbassett 
+- (#1371) JSR-303 for Request parameters, Fix Allowable values not displayed in Apidocs, Externalizing Api Descriptions  @jfiala 
+
+## Features
+- (#1759) Support for property vendor extensions @philippejulien
+- (#1707) Removal of "swagger-ui.html" from uri path causes swagger-ui JavaScript error @LukeHackett 
+- (#1636) VendorExtension support in ApiKey @mlstocks
+- (#1627) Error with group handling response @marchc 
+- (#1592) OAuth2 clientSecret shouldn't be required for implicit flow @gonzalad 
+- (#1590) springfox-data-rest : Pageable not supported duplicate @tooms4444 
+- (#1544) JDK8 JSR310 types support @cbornet 
+- (#1497) springfox-staticdocs : Update to last swagger2markup version @orevial 
+- (#1490) Infer alternate type rules using serializers and deserializers @justcoon 
+- (#1423) @RequestParam with placeholders syntax like ${x.y} @blelem 
+- (#1413) Ability to set VendorExtensions on ApiInfo? @michael-pratt 
+- (#1367) Springfox overwrites swagger path entries with the same base path but with different content types @codecounselor 
+- (#1299) Feature Request: Upgrade swagger2markup version to v1.0.0 duplicate @fayndee 
+- (#1227) Bean Validations API (JSR-303) support for Request Parameters @jfiala 
+- (#1169) Add Support For Documenting Services In Grails Projects @dilipkrish 
+- (#1008) Models with different packages are not represented uniquely in the generated swagger document @tenstriker 
+- (#824)  Support vendor extensions in operations @cbornet 
+
+## Maintenance
+- (#1701) Make ApiResourceController methods public @psyho 
+- (#1694) Fixed the intermittent build failures @dilipkrish 
+- (#1675) Why generic method names are being generated for Spring Data Rest?  @tahir
+- (#1653) springfox-data-rest: 2.6.1 spring-data-rest: 2.6 RepositoryRestHandlerMapping constructor broken @cbbs 
+- (#1644) Update library to support for Spring 5 @binkley 
+- (#1628) swagger-ui 2.2.10 @IanSwift 
+- (#1621) 2.6.1 breaks @Value placeholder replacement @2is10 
+- (#1505) Release process fails when updating the documentation @dilipkrish 
+
+## Bugs
+- (#1797) How to write a custom ApiListingScannerPlugin?   @indrabasak 
+- (#1786) StackOverflowError In 2.6.1   @tcsw1221 
+- (#1785) @ApiOperation "response" value causing docs to ignore model annotations   @bfinleyui 
+- (#1780) ConcurrentModificationException on startup with -20170420.041823-43 @gionn 
+- (#1778) javax @Valid annotation makes parameter as requestbody-parameter @jmattheis 
+- (#1775) Swagger version error in documentation @ersinciftci 
+- (#1772) BasePath can't be defined without host @astafev 
+- (#1770) SNAPSHOT breaks @Value placeholder replacement @stacysimpson 
+- (#1767) Unable to implement and use ApiListingScannerPlugin @stacysimpson 
+- (#1749) Error resolving $ref pointer for input DTO @gionn 
+- (#1746) How to override API-Documentation of generated endpoints (spring-data-rest)   @florianrusch 
+- (#1734) swagger ui not showing the default parameter value zero   @liudonghua123 
+- (#1732) Default value of "supportedSubmitMethods" in springfox.js @thadc23 
+- (#1727) Jackson required/optional @raderio 
+- (#1726) @Size is not working   @raderio 
+- (#1725) If you have both Read and Write operation in single Controller readOnly do not work. But if only Write it works.   @dzmitryhil 
+- (#1724) Swagger methods in multiple groups being renamed   @nitin02 
+- (#1708) @EnableSwagger2 interfering with application configuration.   @rycentious 
+- (#1706) X-Forwarded-Port NumberFormatException: For input string: "443,443"  looking-for-contributions @sixcorners 
+- (#1698) [BUG]  custom swagger endpoint returns a 404. Default endpoint works.  @ahatzz11 
+- (#1697) Problem with direct model substitution   @cbornet 
+- (#1677) OAuth2 request adds `vendorExtension` scope to all auth requests @pmlido 
+- (#1676) Invalid attributes that starts with x or y   @isolisduran 
+- (#1670) Question: how to use @ApiParam annotation on a parameter defined in an interface?   @taxone 
+- (#1666) AllowableValues blank for Optional<Enum> parameter @madgnome 
+- (#1651) ResponseHeaders do not preserve lexical ordering  question @ahatzz11 
+- (#1648) Operation ordering is not working @neil
+- (#1632) Invalid response model for class with name "File" @dreambrother 
+- (#1623) Swagger annotations like @ApiParam, @ApiOperation annotation work for Spring Data Rest operations @taxone 
+- (#1615) api_docs shows content but swagger-ui (2.6.1) is empty @StefanSchubert 
+- (#1613) HTML code in API description in ignored using springfox-swagger-ui 2.6.1 @anouarchattouna 
+- (#1605) Response with a byte array does not work as expected @maukito 
+- (#1603) StackOverflowError on swagger generation @jmattheis 
+- (#1597) @ApiParam value is not respected   @sta
+- (#1594) IndexOutofBoundException when using unbounded Map models @sac10nikam 
+- (#1588) springfox-data-rest : @Param annotation not supported   @tooms4444 
+- (#1580) Can't expand the operation when I set @Api tags by chinese  wontfix @letorn 
+- (#1571) 2.6.1 Cannot read property of custom enum list @jearton 
+- (#1569) When using ApiKey "keyname" is mapped incorrectly  in progress @jmattheis 
+- (#1507) Broken basePath with AbstractPathProvider in version 2.5.0 of springfox-swagger2   @danielbcorreia 
+- (#1435) Setting a Custom basePath Requires Setting a Static Host in 2.5  looking-for-contributions @asdcdow 
+
 # 2.6.1 Release Notes
 
 ### Pull Requests
