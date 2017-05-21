@@ -39,6 +39,7 @@
 - (#1169) Add Support For Documenting Services In Grails Projects @dilipkrish 
 - (#1008) Models with different packages are not represented uniquely in the generated swagger document @tenstriker 
 - (#824)  Support vendor extensions in operations @cbornet 
+- (#1736) Spring-Data-Rest support for property references
 
 ## Maintenance
 - (#1701) Make ApiResourceController methods public @psyho 
