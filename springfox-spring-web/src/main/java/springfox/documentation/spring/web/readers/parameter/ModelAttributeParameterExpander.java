@@ -36,6 +36,7 @@ import springfox.documentation.schema.Types;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -61,13 +62,15 @@ import static springfox.documentation.schema.Types.*;
 public class ModelAttributeParameterExpander {
   private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
   private final FieldProvider fieldProvider;
+  private EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   protected DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ModelAttributeParameterExpander(FieldProvider fields) {
+  public ModelAttributeParameterExpander(FieldProvider fields, EnumTypeDeterminer enumTypeDeterminer) {
     this.fieldProvider = fields;
+    this.enumTypeDeterminer=enumTypeDeterminer;
   }
 
   public List<Parameter> expand(ExpansionContext context) {
@@ -101,7 +104,7 @@ public class ModelAttributeParameterExpander {
       LOG.debug("Attempting to expand collection/array field: {}", each.getField());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
-      if (Types.isBaseType(itemType) || itemType.getErasedType().isEnum()) {
+      if (Types.isBaseType(itemType) || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
         parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
       } else {
         parameters.addAll(
@@ -195,7 +198,7 @@ public class ModelAttributeParameterExpander {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return input.getFieldType().getErasedType().isEnum();
+        return enumTypeDeterminer.isEnum(input.getFieldType().getErasedType());
       }
     };
   }

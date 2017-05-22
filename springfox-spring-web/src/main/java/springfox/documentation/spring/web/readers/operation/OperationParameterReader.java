@@ -32,6 +32,7 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
@@ -57,9 +58,12 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   @Autowired
   private DocumentationPluginsManager pluginsManager;
 
+  private EnumTypeDeterminer enumTypeDeterminer;
+
   @Autowired
-  public OperationParameterReader(ModelAttributeParameterExpander expander) {
+  public OperationParameterReader(ModelAttributeParameterExpander expander, EnumTypeDeterminer enumTypeDeterminer) {
     this.expander = expander;
+    this.enumTypeDeterminer=enumTypeDeterminer;
   }
 
   @Override
@@ -145,7 +149,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     return !parameter.hasParameterAnnotation(RequestBody.class)
         && !parameter.hasParameterAnnotation(RequestPart.class)
         && !isBaseType(typeNameFor(resolvedParamType.getErasedType()))
-        && !resolvedParamType.getErasedType().isEnum()
+        && !enumTypeDeterminer.isEnum(resolvedParamType.getErasedType())
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);
 
