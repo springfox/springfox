@@ -19,7 +19,6 @@
 
 package springfox.documentation.schema
 
-import com.fasterxml.classmate.TypeResolver
 import spock.lang.Shared
 import spock.lang.Specification
 
