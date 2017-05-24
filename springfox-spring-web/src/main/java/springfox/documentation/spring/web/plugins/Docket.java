@@ -61,7 +61,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**
- * A builder which is intended to be the primary interface into the swagger-springmvc framework.
+ * A builder which is intended to be the primary interface into the Springfox framework.
  * Provides sensible defaults and convenience methods for configuration.
  */
 public class Docket implements DocumentationPlugin {
