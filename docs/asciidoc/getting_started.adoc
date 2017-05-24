@@ -121,9 +121,8 @@ via swagger.
 <5> `apis()` allows selection of ``RequestHandler``'s using a predicate. The example here uses an `any` predicate
 (default). Out of the box predicates provided are `any`, `none`, `withClassAnnotation`, `withMethodAnnotation` and
 `basePackage`.
-<6> `paths()` allows selection of ``Path``'s using a predicate. The example here uses an `any` predicate (default)
-<7> The selector requires to be built after configuring the api and path selectors. Out of the box we provide
-predicates for `regex`, `ant`, `any`, `none`
+<6> `paths()` allows selection of ``Path``'s using a predicate. The example here uses an `any` predicate (default). Out of the box we provide predicates for `regex`, `ant`, `any`, `none`.
+<7> The selector requires to be built after configuring the api and path selectors.
 <8> Adds a servlet path mapping, when the servlet has a path mapping. this prefixes paths with the provided path
 mapping
 <9> Convenience rule builder substitutes `LocalDate` with `String` when rendering model properties
