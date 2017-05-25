@@ -53,9 +53,11 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public ExpandedParameterBuilder(TypeResolver resolver, EnumTypeDeterminer enumTypeDeterminer) {
+  public ExpandedParameterBuilder(
+      TypeResolver resolver,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.resolver = resolver;
-    this.enumTypeDeterminer=enumTypeDeterminer;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -81,7 +83,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
       typeName = containerType(resolved);
       itemModel = new ModelRef(itemTypeName, itemAllowables);
     } else if (enumTypeDeterminer.isEnum(resolved.getErasedType())) {
-        typeName = "string";
+      typeName = "string";
     }
     context.getParameterBuilder()
         .name(name)
@@ -97,7 +99,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {
-      return Optional.of(context.getField().getType());
+    return Optional.of(context.getField().getType());
   }
 
   @Override

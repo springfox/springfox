@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
 import spock.lang.Unroll
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
@@ -60,9 +61,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
 
 
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
+    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), new JacksonEnumTypeDeterminer())
     expander.pluginsManager = pluginsManager
-    sut = new OperationParameterReader(expander)
+    sut = new OperationParameterReader(expander, new JacksonEnumTypeDeterminer())
     sut.pluginsManager = pluginsManager
   }
 
@@ -187,7 +188,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "OperationParameterReader supports all documentationTypes"() {
     given:
-      def sut = new OperationParameterReader(Mock(ModelAttributeParameterExpander))
+      def sut = new OperationParameterReader(Mock(ModelAttributeParameterExpander), new JacksonEnumTypeDeterminer())
       sut.pluginsManager = defaultWebPlugins()
     expect:
       sut.supports(DocumentationType.SPRING_WEB)

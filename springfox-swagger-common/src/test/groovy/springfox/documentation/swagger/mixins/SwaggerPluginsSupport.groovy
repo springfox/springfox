@@ -22,6 +22,7 @@ package springfox.documentation.swagger.mixins
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.PluginRegistry
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
@@ -63,7 +64,9 @@ class SwaggerPluginsSupport {
     plugins.documentationPlugins = create([])
     def descriptions = new DescriptionResolver(new MockEnvironment())
     plugins.parameterExpanderPlugins =
-        create([new ExpandedParameterBuilder(resolver), new SwaggerExpandedParameterBuilder(descriptions)])
+        create([
+            new ExpandedParameterBuilder(resolver, new JacksonEnumTypeDeterminer()),
+            new SwaggerExpandedParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())])
     plugins.parameterPlugins = create([new ParameterNameReader(),
                                        new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])

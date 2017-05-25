@@ -62,7 +62,7 @@ import static springfox.documentation.schema.Types.*;
 public class ModelAttributeParameterExpander {
   private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
   private final FieldProvider fieldProvider;
-  private EnumTypeDeterminer enumTypeDeterminer;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   protected DocumentationPluginsManager pluginsManager;
@@ -70,7 +70,7 @@ public class ModelAttributeParameterExpander {
   @Autowired
   public ModelAttributeParameterExpander(FieldProvider fields, EnumTypeDeterminer enumTypeDeterminer) {
     this.fieldProvider = fields;
-    this.enumTypeDeterminer=enumTypeDeterminer;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   public List<Parameter> expand(ExpansionContext context) {
@@ -92,10 +92,10 @@ public class ModelAttributeParameterExpander {
       LOG.debug("Attempting to expand expandable field: {}", each.getField());
       parameters.addAll(
           expand(
-                  context.childContext(
-                          nestedParentName(context.getParentName(), each.getField()),
-                          each.getFieldType(),
-                          context.getDocumentationContext())));
+              context.childContext(
+                  nestedParentName(context.getParentName(), each.getField()),
+                  each.getFieldType(),
+                  context.getDocumentationContext())));
     }
 
     FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
@@ -109,10 +109,10 @@ public class ModelAttributeParameterExpander {
       } else {
         parameters.addAll(
             expand(
-                    context.childContext(
-                            nestedParentName(context.getParentName(), each.getField()),
-                            itemType,
-                            context.getDocumentationContext())));
+                context.childContext(
+                    nestedParentName(context.getParentName(), each.getField()),
+                    itemType,
+                    context.getDocumentationContext())));
       }
     }
 

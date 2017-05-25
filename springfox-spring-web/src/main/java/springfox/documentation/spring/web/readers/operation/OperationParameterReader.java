@@ -54,16 +54,17 @@ import static springfox.documentation.schema.Types.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterReader implements OperationBuilderPlugin {
   private final ModelAttributeParameterExpander expander;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   private DocumentationPluginsManager pluginsManager;
 
-  private EnumTypeDeterminer enumTypeDeterminer;
-
   @Autowired
-  public OperationParameterReader(ModelAttributeParameterExpander expander, EnumTypeDeterminer enumTypeDeterminer) {
+  public OperationParameterReader(
+      ModelAttributeParameterExpander expander,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.expander = expander;
-    this.enumTypeDeterminer=enumTypeDeterminer;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -95,7 +96,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         if (shouldExpand(methodParameter, alternate)) {
           parameters.addAll(
               expander.expand(
-                      new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
+                  new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }
