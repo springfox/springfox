@@ -29,6 +29,7 @@ import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.AllowableListValues
@@ -47,7 +48,10 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
       OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-  def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
+  def typeNameExtractor = new TypeNameExtractor(
+      new TypeResolver(),
+      modelNameRegistry,
+      new JacksonEnumTypeDeterminer())
 
   ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
 
@@ -147,7 +151,10 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     when:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(
+          new TypeResolver(),
+          modelNameRegistry,
+          new JacksonEnumTypeDeterminer())
       def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
       sut.apply(parameterContext)
     then:

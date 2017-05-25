@@ -38,7 +38,10 @@ class SchemaSpecification extends Specification {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     typeNameExtractor =
-            new TypeNameExtractor(new TypeResolver(), modelNameRegistry)
+            new TypeNameExtractor(
+                new TypeResolver(),
+                modelNameRegistry,
+                new JacksonEnumTypeDeterminer())
     modelProvider = defaultModelProvider()
     modelDependencyProvider = defaultModelDependencyProvider()
   }

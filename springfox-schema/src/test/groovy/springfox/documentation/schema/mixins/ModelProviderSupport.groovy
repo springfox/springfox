@@ -43,7 +43,10 @@ class ModelProviderSupport {
     def pluginsManager = defaultSchemaPlugins()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
             OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry)
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
+        typeResolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
 
     def event = new ObjectMapperConfigured(this, objectMapper)
@@ -81,7 +84,10 @@ class ModelProviderSupport {
     def pluginsManager = defaultSchemaPlugins()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver,  modelNameRegistry)
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
+        typeResolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
     def objectMapper = new ObjectMapper()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
 

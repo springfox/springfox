@@ -47,14 +47,15 @@ public class TypeNameExtractor {
   private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public TypeNameExtractor(TypeResolver typeResolver,
-                           @Qualifier("typeNameProviderPluginRegistry")
-                           PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
-                           EnumTypeDeterminer enumTypeDeterminer) {
+  public TypeNameExtractor(
+      TypeResolver typeResolver,
+      @Qualifier("typeNameProviderPluginRegistry")
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
+      EnumTypeDeterminer enumTypeDeterminer) {
 
     this.typeResolver = typeResolver;
     this.typeNameProviders = typeNameProviders;
-    this.enumTypeDeterminer=enumTypeDeterminer;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   public String typeName(ModelContext context) {
@@ -83,7 +84,7 @@ public class TypeNameExtractor {
         first = false;
       } else {
         sb.append(String.format("%s%s", namingStrategy.getTypeListDelimiter(),
-                innerTypeName(typeParam, context)));
+            innerTypeName(typeParam, context)));
       }
     }
     sb.append(namingStrategy.getCloseGeneric());
@@ -106,7 +107,7 @@ public class TypeNameExtractor {
     } else if (type instanceof ResolvedArrayType) {
       GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
       return String.format("Array%s%s%s", namingStrategy.getOpenGeneric(),
-              simpleTypeName(type.getArrayElementType(), context), namingStrategy.getCloseGeneric());
+          simpleTypeName(type.getArrayElementType(), context), namingStrategy.getCloseGeneric());
     } else if (type instanceof ResolvedObjectType) {
       String typeName = typeNameFor(erasedType);
       if (typeName != null) {

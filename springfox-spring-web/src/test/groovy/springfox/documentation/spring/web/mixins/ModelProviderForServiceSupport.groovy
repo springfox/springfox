@@ -41,7 +41,10 @@ class ModelProviderForServiceSupport {
   def typeNameExtractor() {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-    new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
+    new TypeNameExtractor(
+        new TypeResolver(),
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
   }
 
   ModelProvider modelProvider(SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),

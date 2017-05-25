@@ -24,6 +24,7 @@ import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -39,7 +40,10 @@ class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
     given:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(
+          new TypeResolver(),
+          modelNameRegistry,
+          new JacksonEnumTypeDeterminer())
       OperationContext operationContext =
         operationContext(context(), handlerMethod)
 

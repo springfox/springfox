@@ -55,7 +55,10 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
 
   @Autowired
-  public ParameterDataTypeReader(TypeNameExtractor nameExtractor, TypeResolver resolver, EnumTypeDeterminer enumTypeDeterminer) {
+  public ParameterDataTypeReader(
+      TypeNameExtractor nameExtractor,
+      TypeResolver resolver,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.nameExtractor = nameExtractor;
     this.resolver = resolver;
     this.enumTypeDeterminer=enumTypeDeterminer;
