@@ -59,17 +59,20 @@ public class DefaultModelProvider implements ModelProvider {
   private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public DefaultModelProvider(TypeResolver resolver,
+  public DefaultModelProvider(
+      TypeResolver resolver,
       @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
       @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
       SchemaPluginsManager schemaPluginsManager,
-      TypeNameExtractor typeNameExtractor, EnumTypeDeterminer enumTypeDeterminer) {
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
+    
     this.resolver = resolver;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
     this.schemaPluginsManager = schemaPluginsManager;
     this.typeNameExtractor = typeNameExtractor;
-    this.enumTypeDeterminer=enumTypeDeterminer;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override

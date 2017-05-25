@@ -62,10 +62,19 @@ class ModelProviderForServiceSupport {
         pluginsManager, typeNameExtractor)
 
     modelPropertiesProvider.onApplicationEvent(event)
-    def modelDependenciesProvider = new DefaultModelDependencyProvider(typeResolver,
-            modelPropertiesProvider, typeNameExtractor)
-    new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
-            pluginsManager, typeNameExtractor)
+    def modelDependenciesProvider =
+        new DefaultModelDependencyProvider(
+            typeResolver,
+            modelPropertiesProvider,
+            typeNameExtractor,
+            new JacksonEnumTypeDeterminer())
+    new DefaultModelProvider(
+        typeResolver,
+        modelPropertiesProvider,
+        modelDependenciesProvider,
+        pluginsManager,
+        typeNameExtractor,
+        new JacksonEnumTypeDeterminer())
   }
 
   ModelProvider modelProviderWithSnakeCaseNamingStrategy(SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
@@ -83,10 +92,19 @@ class ModelProviderForServiceSupport {
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
         pluginsManager, typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
-    def modelDependenciesProvider = new DefaultModelDependencyProvider(typeResolver,
-            modelPropertiesProvider, typeNameExtractor)
-    new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
-            pluginsManager, typeNameExtractor)
+    def modelDependenciesProvider =
+        new DefaultModelDependencyProvider(
+            typeResolver,
+            modelPropertiesProvider,
+            typeNameExtractor,
+            new JacksonEnumTypeDeterminer())
+    new DefaultModelProvider(
+        typeResolver,
+        modelPropertiesProvider,
+        modelDependenciesProvider,
+        pluginsManager,
+        typeNameExtractor,
+        new JacksonEnumTypeDeterminer())
   }
 
 

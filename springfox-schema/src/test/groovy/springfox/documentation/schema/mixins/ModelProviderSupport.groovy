@@ -69,13 +69,17 @@ class ModelProviderSupport {
         modelPropertiesProvider,
         modelDependenciesProvider,
         pluginsManager,
-        typeNameExtractor)
+        typeNameExtractor, new springfox.documentation.schema.JacksonEnumTypeDeterminer())
   }
 
   DefaultModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
       ModelPropertiesProvider modelPropertiesProvider,
       TypeNameExtractor typeNameExtractor) {
-    new DefaultModelDependencyProvider(resolver, modelPropertiesProvider, typeNameExtractor)
+    new DefaultModelDependencyProvider(
+        resolver,
+        modelPropertiesProvider,
+        typeNameExtractor,
+        new JacksonEnumTypeDeterminer())
   }
 
   DefaultModelDependencyProvider defaultModelDependencyProvider() {

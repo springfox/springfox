@@ -53,7 +53,10 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       modelNameRegistry,
       new JacksonEnumTypeDeterminer())
 
-  ParameterDataTypeReader sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
+  ParameterDataTypeReader sut = new ParameterDataTypeReader(
+      typeNameExtractor,
+      new TypeResolver(),
+      new JacksonEnumTypeDeterminer())
 
   def "Should support all documentation types"() {
     expect:
@@ -155,7 +158,10 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
           new TypeResolver(),
           modelNameRegistry,
           new JacksonEnumTypeDeterminer())
-      def sut = new ParameterDataTypeReader(typeNameExtractor, new TypeResolver())
+      def sut = new ParameterDataTypeReader(
+          typeNameExtractor,
+          new TypeResolver(),
+          new JacksonEnumTypeDeterminer())
       sut.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().modelRef.type == "List"

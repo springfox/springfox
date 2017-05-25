@@ -56,7 +56,8 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   public DefaultModelDependencyProvider(
       TypeResolver typeResolver,
       @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
-      TypeNameExtractor nameExtractor, EnumTypeDeterminer enumTypeDeterminer) {
+      TypeNameExtractor nameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
 
     this.typeResolver = typeResolver;
     this.propertiesProvider = propertiesProvider;

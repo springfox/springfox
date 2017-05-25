@@ -51,7 +51,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOG = LoggerFactory.getLogger(ParameterDataTypeReader.class);
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;
-  private EnumTypeDeterminer enumTypeDeterminer;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
 
   @Autowired
@@ -61,7 +61,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       EnumTypeDeterminer enumTypeDeterminer) {
     this.nameExtractor = nameExtractor;
     this.resolver = resolver;
-    this.enumTypeDeterminer=enumTypeDeterminer;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -100,9 +100,9 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         context.getGenericNamingStrategy(),
         context.getIgnorableParameterTypes());
     context.parameterBuilder()
-            .type(parameterType)
-            .modelRef(Optional.fromNullable(modelRef)
-                .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
+        .type(parameterType)
+        .modelRef(Optional.fromNullable(modelRef)
+            .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {
@@ -112,6 +112,6 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
   private boolean treatAsAString(ResolvedType parameterType) {
     return !(isBaseType(typeNameFor(parameterType.getErasedType()))
-        || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
+                 || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
   }
 }
