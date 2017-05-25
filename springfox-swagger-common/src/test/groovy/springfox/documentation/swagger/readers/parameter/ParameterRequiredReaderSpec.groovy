@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -80,6 +81,6 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
   }
 
   def stubbedParamBuilder() {
-    new ApiParamParameterBuilder(descriptions)
+    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
   }
 }

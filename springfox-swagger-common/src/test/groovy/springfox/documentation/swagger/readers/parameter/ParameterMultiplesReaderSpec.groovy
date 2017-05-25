@@ -27,6 +27,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -52,7 +53,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
           context(), genericNamingStrategy, Mock(OperationContext))
 
     when:
-      def operationCommand = stubbedParamBuilder(apiParamAnnotation);
+      def operationCommand = stubbedParamBuilder();
       operationCommand.apply(parameterContext)
     then:
       parameterContext.parameterBuilder().build().isAllowMultiple() == expected
@@ -70,8 +71,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
       null                              | Iterable.class                  | false
   }
 
-  def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder(descriptions) {
-    }
+  def stubbedParamBuilder() {
+    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
   }
 }

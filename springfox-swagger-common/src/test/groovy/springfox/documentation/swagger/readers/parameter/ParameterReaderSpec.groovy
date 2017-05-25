@@ -25,6 +25,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -67,7 +68,6 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
   }
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder(descriptions) {
-    }
+    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
   }
 }

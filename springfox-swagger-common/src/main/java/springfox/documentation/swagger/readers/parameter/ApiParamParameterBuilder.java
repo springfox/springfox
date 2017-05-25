@@ -44,12 +44,14 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
-  private EnumTypeDeterminer enumTypeDeterminer;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public ApiParamParameterBuilder(DescriptionResolver descriptions, EnumTypeDeterminer enumTypeDeterminer) {
+  public ApiParamParameterBuilder(
+      DescriptionResolver descriptions,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.descriptions = descriptions;
-    this.enumTypeDeterminer=enumTypeDeterminer;
+    this.enumTypeDeterminer= enumTypeDeterminer;
   }
 
   @Override
