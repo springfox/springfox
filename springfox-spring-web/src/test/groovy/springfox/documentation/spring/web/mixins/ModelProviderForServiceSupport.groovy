@@ -33,6 +33,7 @@ import springfox.documentation.schema.property.OptimizedModelPropertiesProvider
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
 @SuppressWarnings("GrMethodMayBeStatic")
@@ -41,11 +42,12 @@ class ModelProviderForServiceSupport {
   def typeNameExtractor() {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-    new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
+    new TypeNameExtractor(new TypeResolver(), modelNameRegistry, new JacksonEnumTypeDeterminer())
   }
 
   ModelProvider modelProvider(SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
-                              TypeResolver typeResolver = new TypeResolver()) {
+                              TypeResolver typeResolver = new TypeResolver(),
+                              EnumTypeDeterminer enumTypeDeterminer= new JacksonEnumTypeDeterminer()) {
 
     def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
@@ -60,14 +62,14 @@ class ModelProviderForServiceSupport {
 
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = new DefaultModelDependencyProvider(typeResolver,
-            modelPropertiesProvider, typeNameExtractor)
+            modelPropertiesProvider, typeNameExtractor, enumTypeDeterminer)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
-            pluginsManager, typeNameExtractor)
+            pluginsManager, typeNameExtractor, enumTypeDeterminer)
   }
 
   ModelProvider modelProviderWithSnakeCaseNamingStrategy(SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
       TypeResolver typeResolver = new TypeResolver()) {
-
+      EnumTypeDeterminer enumTypeDeterminer=new JacksonEnumTypeDeterminer();
     def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
     objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
@@ -81,9 +83,9 @@ class ModelProviderForServiceSupport {
         pluginsManager, typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = new DefaultModelDependencyProvider(typeResolver,
-            modelPropertiesProvider, typeNameExtractor)
+            modelPropertiesProvider, typeNameExtractor, enumTypeDeterminer)
     new DefaultModelProvider(typeResolver, modelPropertiesProvider, modelDependenciesProvider,
-            pluginsManager, typeNameExtractor)
+            pluginsManager, typeNameExtractor, enumTypeDeterminer)
   }
 
 

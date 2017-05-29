@@ -23,9 +23,11 @@ import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
 import springfox.documentation.schema.AlternateTypeRule
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.WildcardType
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.service.DefaultsProviderPlugin
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
@@ -44,12 +46,14 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 @Mixin([SwaggerPluginsSupport])
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   TypeResolver typeResolver
+  EnumTypeDeterminer enumTypeDeterminer;
   ModelAttributeParameterExpander sut
 
   def setup() {
     typeResolver = new TypeResolver()
+    enumTypeDeterminer=new JacksonEnumTypeDeterminer();
     plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
+    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver) ,enumTypeDeterminer)
     sut.pluginsManager = swaggerServicePlugins([new SwaggerDefaults(new Defaults(), new TypeResolver(),
         Mock(ServletContext))])
   }

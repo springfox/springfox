@@ -23,9 +23,11 @@ import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
 import spock.lang.Unroll
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Example
@@ -50,6 +52,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def pluginsManager = defaultWebPlugins()
   def setup() {
     def typeResolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer();
     plugin
             .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
               HttpServletResponse, BindingResult, ServletContext,
@@ -60,9 +63,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
 
 
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver))
+    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), enumTypeDeterminer)
     expander.pluginsManager = pluginsManager
-    sut = new OperationParameterReader(expander)
+    sut = new OperationParameterReader(expander, enumTypeDeterminer)
     sut.pluginsManager = pluginsManager
   }
 
@@ -187,7 +190,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "OperationParameterReader supports all documentationTypes"() {
     given:
-      def sut = new OperationParameterReader(Mock(ModelAttributeParameterExpander))
+      def sut = new OperationParameterReader(Mock(ModelAttributeParameterExpander), Mock(EnumTypeDeterminer))
       sut.pluginsManager = defaultWebPlugins()
     expect:
       sut.supports(DocumentationType.SPRING_WEB)

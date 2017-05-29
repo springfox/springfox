@@ -27,6 +27,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -39,6 +40,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
+  def enumTypeDeterminer=new JacksonEnumTypeDeterminer()
   @Unroll
   def "param multiples for swagger reader"() {
     given:
@@ -71,7 +73,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
   }
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder(descriptions) {
+    new ApiParamParameterBuilder(descriptions, enumTypeDeterminer) {
     }
   }
 }

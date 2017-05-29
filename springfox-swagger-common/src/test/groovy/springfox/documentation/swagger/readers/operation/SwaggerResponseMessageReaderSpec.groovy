@@ -24,6 +24,7 @@ import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.TypeNameExtractor
@@ -48,7 +49,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
       def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry, new JacksonEnumTypeDeterminer())
 
     when:
       new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
@@ -76,7 +77,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
       def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry, new JacksonEnumTypeDeterminer())
 
     when:
       new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
@@ -105,7 +106,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
       def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry, new JacksonEnumTypeDeterminer())
 
     when:
       new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
@@ -166,7 +167,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
       def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry, new JacksonEnumTypeDeterminer())
 
     when:
       def sut = new SwaggerResponseMessageReader(typeNameExtractor, resolver)

@@ -24,6 +24,7 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.service.contexts.Defaults
@@ -57,6 +58,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def setup() {
     def typeResolver = new TypeResolver()
+    def enumTypeDeterminer=new JacksonEnumTypeDeterminer();
     pluginsManager = swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(), typeResolver, Mock(ServletContext))])
     plugin
             .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
@@ -65,10 +67,10 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
             .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
             .configure(contextBuilder)
 
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(new TypeResolver()))
+    def expander = new ModelAttributeParameterExpander(new FieldProvider(new TypeResolver()), new JacksonEnumTypeDeterminer())
     expander.pluginsManager = pluginsManager
 
-    sut = new OperationParameterReader(expander)
+    sut = new OperationParameterReader(expander, enumTypeDeterminer)
     sut.pluginsManager = pluginsManager
   }
 

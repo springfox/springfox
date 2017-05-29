@@ -46,7 +46,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
       BeanPropertyNamingStrategy namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry)
+      TypeNameExtractor typeNameExtractor = new TypeNameExtractor(typeResolver, modelNameRegistry, new JacksonEnumTypeDeterminer())
       OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
           new AccessorsProvider(typeResolver),
           new FieldProvider(typeResolver),
@@ -91,7 +91,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
           typeResolver,
-          modelNameRegistry)
+          modelNameRegistry,
+          new JacksonEnumTypeDeterminer())
       OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
           new AccessorsProvider(typeResolver),
           new FieldProvider(typeResolver),
@@ -139,7 +140,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
               [new DefaultTypeNameProvider()])
       TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
           typeResolver,
-          modelNameRegistry)
+          modelNameRegistry,
+          new JacksonEnumTypeDeterminer())
       OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
           new AccessorsProvider(typeResolver),
           new FieldProvider(typeResolver),
@@ -189,7 +191,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
       TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
           typeResolver,
-          modelNameRegistry)
+          modelNameRegistry,
+          new JacksonEnumTypeDeterminer())
       OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
           new AccessorsProvider(typeResolver),
           new FieldProvider(typeResolver),

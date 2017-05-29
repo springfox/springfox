@@ -25,6 +25,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -37,6 +38,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
+  def enumTypeDeterminer=new JacksonEnumTypeDeterminer()
 
   @Unroll("property #resultProperty expected: #expected")
   def "should set basic properties based on ApiParam annotation or a sensible default"() {
@@ -67,7 +69,7 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
   }
 
   def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder(descriptions) {
+    new ApiParamParameterBuilder(descriptions, enumTypeDeterminer) {
     }
   }
 }

@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -34,10 +35,12 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterNameReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+  def descriptions = new DescriptionResolver(new MockEnvironment())
+  def enumTypeDeterminer=new JacksonEnumTypeDeterminer()
 
   def "Should all swagger documentation types"() {
     given:
-      def sut = new ApiParamParameterBuilder()
+      def sut = new ApiParamParameterBuilder(descriptions, enumTypeDeterminer)
     expect:
       !sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
@@ -68,7 +71,8 @@ class ParameterNameReaderSpec extends DocumentationContextSpec implements ApiPar
 
   def nameReader(annotation) {
     def descriptions = new DescriptionResolver(new MockEnvironment())
-    new ApiParamParameterBuilder(descriptions) {
+    def enumTypeDeterminer=new JacksonEnumTypeDeterminer()
+    new ApiParamParameterBuilder(descriptions, enumTypeDeterminer) {
     }
   }
 }

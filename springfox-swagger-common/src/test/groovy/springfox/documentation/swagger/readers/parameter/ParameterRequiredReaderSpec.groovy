@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -33,6 +34,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 @Mixin([RequestMappingSupport])
 class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
+  def enumTypeDeterminer=new JacksonEnumTypeDeterminer()
   
   def "parameters required using default reader"() {
     given:
@@ -80,6 +82,6 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
   }
 
   def stubbedParamBuilder() {
-    new ApiParamParameterBuilder(descriptions)
+    new ApiParamParameterBuilder(descriptions, enumTypeDeterminer)
   }
 }

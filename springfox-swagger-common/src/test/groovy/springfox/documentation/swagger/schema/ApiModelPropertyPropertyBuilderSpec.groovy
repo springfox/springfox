@@ -156,7 +156,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
           ImmutableSet.builder().build())
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry, new JacksonEnumTypeDeterminer())
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property }.getter.annotated, resolver,
               DocumentationType.SWAGGER_12)
@@ -193,7 +193,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
           ImmutableSet.builder().build())
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry, new JacksonEnumTypeDeterminer())
       def context = new ModelPropertyContext(new ModelPropertyBuilder(),
               properties.find { it.name == property }.getter.annotated, resolver,
               DocumentationType.SWAGGER_12)
