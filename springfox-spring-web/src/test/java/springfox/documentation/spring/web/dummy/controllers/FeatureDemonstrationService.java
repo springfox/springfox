@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.schema.EnumJsonFormatObject;
 import springfox.documentation.spring.web.dummy.models.*;
 
 import java.math.BigDecimal;
