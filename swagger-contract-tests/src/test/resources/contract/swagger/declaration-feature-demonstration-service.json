@@ -1292,6 +1292,45 @@
       "path": "/features/effectives"
     },
     {
+      "description": "getEnumObject",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "getEnumObject",
+          "nickname": "getEnumObjectUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "EnumObjectType"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "EnumObjectType"
+        }
+      ],
+      "path": "/features/enumObject"
+    },
+    {
       "description": "updateListOfExamples",
       "operations": [
         {
@@ -1925,6 +1964,20 @@
         },
         "readOnlyString": {
           "description": "A read only string",
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "EnumObjectType": {
+      "description": "",
+      "id": "EnumObjectType",
+      "properties": {
+        "name": {
+          "required": false,
+          "type": "string"
+        },
+        "description": {
           "required": false,
           "type": "string"
         }

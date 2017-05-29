@@ -696,6 +696,29 @@
         }
       }
     },
+    "/features/enumObject": {
+      "get": {
+        "tags": [
+          "enum-object-demonstration-service"
+        ],
+        "summary": "getEnumObject",
+        "operationId": "getEnumObjectUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EnumObjectType"
+            }
+          }
+        }
+      }
+    },
     "/features/examples": {
       "put": {
         "tags": [

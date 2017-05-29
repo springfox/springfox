@@ -39,17 +39,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.spring.web.dummy.models.Business;
-import springfox.documentation.spring.web.dummy.models.EnumType;
-import springfox.documentation.spring.web.dummy.models.Example;
-import springfox.documentation.spring.web.dummy.models.FancyPet;
-import springfox.documentation.spring.web.dummy.models.ModelAttributeExample;
-import springfox.documentation.spring.web.dummy.models.ModelWithArrayOfArrays;
-import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
-import springfox.documentation.spring.web.dummy.models.ModelWithObjectNode;
-import springfox.documentation.spring.web.dummy.models.NestedType;
-import springfox.documentation.spring.web.dummy.models.Pet;
-import springfox.documentation.spring.web.dummy.models.PetWithSerializer;
+import springfox.documentation.schema.EnumJsonFormatObject;
+import springfox.documentation.spring.web.dummy.models.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -96,6 +87,12 @@ public class FeatureDemonstrationService {
     return new ResponseEntity<List<Example>>(newArrayList(new Example("Hello", 1, EnumType.ONE,
         new NestedType("test"))),
         HttpStatus.OK);
+  }
+
+  //No request body annotation or swagger annotation
+  @RequestMapping(value = "/enumObject", method = RequestMethod.GET)
+  public ResponseEntity<EnumObjectType> getEnumAsObject() {
+    return ResponseEntity.ok(EnumObjectType.ONE);
   }
 
   //No request body annotation or swagger annotation
