@@ -41,10 +41,11 @@ class ServicePluginsSupport {
 
   DocumentationPluginsManager defaultWebPlugins() {
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new ApiListingReader()))
     plugins.documentationPlugins = create([])
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, new JacksonEnumTypeDeterminer())])
+    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
     plugins.parameterPlugins = create([new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])
     plugins.resourceGroupingStrategies = create([])
@@ -70,10 +71,11 @@ class ServicePluginsSupport {
                                              new QueryStringUriTemplateDecorator()]) {
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader()))
     plugins.documentationPlugins = create(documentationPlugins)
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, new JacksonEnumTypeDeterminer())])
+    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
     plugins.parameterPlugins = create(paramPlugins)
     plugins.operationBuilderPlugins = create(operationPlugins)
     plugins.resourceGroupingStrategies = create(groupingStrategyPlugins)

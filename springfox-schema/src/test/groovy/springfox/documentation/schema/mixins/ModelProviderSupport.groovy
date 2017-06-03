@@ -31,14 +31,17 @@ import springfox.documentation.schema.property.OptimizedModelPropertiesProvider
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
 @SuppressWarnings("GrMethodMayBeStatic")
 @Mixin([SchemaPluginsSupport])
 class ModelProviderSupport {
 
-  ModelProvider defaultModelProvider(ObjectMapper objectMapper = new ObjectMapper(),
-                                     TypeResolver typeResolver = new TypeResolver()) {
+  ModelProvider defaultModelProvider(
+      ObjectMapper objectMapper = new ObjectMapper(),
+      TypeResolver typeResolver = new TypeResolver(),
+      EnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer()) {
 
     def pluginsManager = defaultSchemaPlugins()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
@@ -62,14 +65,19 @@ class ModelProviderSupport {
         typeNameExtractor)
 
     modelPropertiesProvider.onApplicationEvent(event)
-    def modelDependenciesProvider = modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
+    def modelDependenciesProvider = modelDependencyProvider(
+        typeResolver,
+        modelPropertiesProvider,
+        typeNameExtractor)
 
     new DefaultModelProvider(
         typeResolver,
         modelPropertiesProvider,
         modelDependenciesProvider,
         pluginsManager,
-        typeNameExtractor, new springfox.documentation.schema.JacksonEnumTypeDeterminer())
+        typeNameExtractor,
+        enumTypeDeterminer
+    )
   }
 
   DefaultModelDependencyProvider modelDependencyProvider(TypeResolver resolver,
@@ -84,7 +92,7 @@ class ModelProviderSupport {
 
   DefaultModelDependencyProvider defaultModelDependencyProvider() {
     def typeResolver = new TypeResolver()
-
+    def enumTypeDeterminer=new JacksonEnumTypeDeterminer();
     def pluginsManager = defaultSchemaPlugins()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])

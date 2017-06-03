@@ -33,6 +33,7 @@ import springfox.documentation.schema.property.OptimizedModelPropertiesProvider
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
 @SuppressWarnings("GrMethodMayBeStatic")
@@ -47,8 +48,10 @@ class ModelProviderForServiceSupport {
         new JacksonEnumTypeDeterminer())
   }
 
-  ModelProvider modelProvider(SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
-                              TypeResolver typeResolver = new TypeResolver()) {
+  ModelProvider modelProvider(
+      SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
+      TypeResolver typeResolver = new TypeResolver(),
+      EnumTypeDeterminer enumTypeDeterminer= new JacksonEnumTypeDeterminer()) {
 
     def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
@@ -67,19 +70,21 @@ class ModelProviderForServiceSupport {
             typeResolver,
             modelPropertiesProvider,
             typeNameExtractor,
-            new JacksonEnumTypeDeterminer())
+            enumTypeDeterminer)
     new DefaultModelProvider(
         typeResolver,
         modelPropertiesProvider,
         modelDependenciesProvider,
         pluginsManager,
         typeNameExtractor,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
   }
 
-  ModelProvider modelProviderWithSnakeCaseNamingStrategy(SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
+  ModelProvider modelProviderWithSnakeCaseNamingStrategy(
+      SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
       TypeResolver typeResolver = new TypeResolver()) {
 
+    EnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
     objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
@@ -97,14 +102,14 @@ class ModelProviderForServiceSupport {
             typeResolver,
             modelPropertiesProvider,
             typeNameExtractor,
-            new JacksonEnumTypeDeterminer())
+            enumTypeDeterminer)
     new DefaultModelProvider(
         typeResolver,
         modelPropertiesProvider,
         modelDependenciesProvider,
         pluginsManager,
         typeNameExtractor,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
   }
 
 

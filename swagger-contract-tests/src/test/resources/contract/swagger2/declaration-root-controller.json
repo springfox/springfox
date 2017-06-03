@@ -1752,10 +1752,30 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Example"
-              }
+              "$ref": "#/definitions/Example"
+            }
+          }
+        }
+      }
+    },
+    "/features/enumObject": {
+      "get": {
+        "tags": [
+          "enum-object-demonstration-service"
+        ],
+        "summary": "getEnumObject",
+        "operationId": "getEnumObjectUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EnumObjectType"
             }
           }
         }
@@ -3272,6 +3292,17 @@
           "type": "string"
         },
         "propertyWithNoSetterMethod": {
+          "type": "string"
+        }
+      }
+    },
+    "EnumObjectType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         }
       }

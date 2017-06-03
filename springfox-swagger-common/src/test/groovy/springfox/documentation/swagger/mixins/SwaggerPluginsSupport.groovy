@@ -59,6 +59,7 @@ class SwaggerPluginsSupport {
 
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer();
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new SwaggerApiListingReader()))
     plugins.documentationPlugins = create([])

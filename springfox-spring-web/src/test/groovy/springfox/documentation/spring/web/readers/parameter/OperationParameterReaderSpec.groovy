@@ -51,6 +51,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def pluginsManager = defaultWebPlugins()
   def setup() {
     def typeResolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     plugin
             .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
               HttpServletResponse, BindingResult, ServletContext,
@@ -59,11 +60,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
             .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
             .configure(contextBuilder)
 
-
-
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), new JacksonEnumTypeDeterminer())
+    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), enumTypeDeterminer)
     expander.pluginsManager = pluginsManager
-    sut = new OperationParameterReader(expander, new JacksonEnumTypeDeterminer())
+    sut = new OperationParameterReader(expander, enumTypeDeterminer)
     sut.pluginsManager = pluginsManager
   }
 

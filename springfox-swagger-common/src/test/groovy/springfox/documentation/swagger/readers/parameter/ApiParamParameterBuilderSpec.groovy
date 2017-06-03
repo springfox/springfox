@@ -31,6 +31,7 @@ import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.DescriptionResolver

@@ -68,7 +68,10 @@ public class ModelAttributeParameterExpander {
   protected DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ModelAttributeParameterExpander(FieldProvider fields, EnumTypeDeterminer enumTypeDeterminer) {
+  public ModelAttributeParameterExpander(
+      FieldProvider fields,
+      EnumTypeDeterminer enumTypeDeterminer) {
+    
     this.fieldProvider = fields;
     this.enumTypeDeterminer = enumTypeDeterminer;
   }

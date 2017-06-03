@@ -51,7 +51,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
       DescriptionResolver descriptions,
       EnumTypeDeterminer enumTypeDeterminer) {
     this.descriptions = descriptions;
-    this.enumTypeDeterminer= enumTypeDeterminer;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override

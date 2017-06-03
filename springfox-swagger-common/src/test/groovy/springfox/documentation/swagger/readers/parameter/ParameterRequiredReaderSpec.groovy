@@ -34,35 +34,42 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 @Mixin([RequestMappingSupport])
 class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
-  
+  def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
+
   def "parameters required using default reader"() {
     given:
-      def parameterContext = setupParameterContext(paramAnnotation)
+    def parameterContext = setupParameterContext(paramAnnotation)
+
     when:
-      def operationCommand = stubbedParamBuilder()
-      operationCommand.apply(parameterContext)
+    def operationCommand = stubbedParamBuilder()
+    operationCommand.apply(parameterContext)
+
     then:
-      parameterContext.parameterBuilder().build().isRequired() == expected
+    parameterContext.parameterBuilder().build().isRequired() == expected
+
     where:
-      paramAnnotation             | expected
-      apiParamWithRequired(false) | false
-      apiParamWithRequired(true)  | true
-      null                        | false
+    paramAnnotation             | expected
+    apiParamWithRequired(false) | false
+    apiParamWithRequired(true)  | true
+    null                        | false
   }
 
   def "parameters hidden using default reader"() {
     given:
-      def parameterContext = setupParameterContext(paramAnnotation)
+    def parameterContext = setupParameterContext(paramAnnotation)
+
     when:
-      def operationCommand = stubbedParamBuilder()
-      operationCommand.apply(parameterContext)
+    def operationCommand = stubbedParamBuilder()
+    operationCommand.apply(parameterContext)
+
     then:
-      parameterContext.parameterBuilder().build().isHidden() == expected
+    parameterContext.parameterBuilder().build().isHidden() == expected
+
     where:
-      paramAnnotation             | expected
-      apiParamWithHidden(false)   | false
-      apiParamWithHidden(true)    | true
-      null                        | false
+    paramAnnotation           | expected
+    apiParamWithHidden(false) | false
+    apiParamWithHidden(true)  | true
+    null                      | false
   }
 
   def setupParameterContext(paramAnnotation) {
@@ -81,6 +88,6 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
   }
 
   def stubbedParamBuilder() {
-    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    new ApiParamParameterBuilder(descriptions, enumTypeDeterminer)
   }
 }

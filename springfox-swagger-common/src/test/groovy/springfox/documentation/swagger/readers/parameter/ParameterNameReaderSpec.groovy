@@ -35,42 +35,44 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterNameReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+  def descriptions = new DescriptionResolver(new MockEnvironment())
+  def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
 
   def "Should all swagger documentation types"() {
     given:
-      def sut = new ApiParamParameterBuilder(
-          new DescriptionResolver(new MockEnvironment()),
-          new JacksonEnumTypeDeterminer())
+    def sut = new ApiParamParameterBuilder(
+        descriptions,
+        enumTypeDeterminer)
+
     expect:
-      !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "param required"() {
     given:
-      def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "someName", [apiParam], new TypeResolver().resolve(Object.class))
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(
-          resolvedMethodParameter,
-          new ParameterBuilder(),
-          context(),
-          genericNamingStrategy,
-          Mock(OperationContext))
+    def resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "someName", [apiParam], new TypeResolver().resolve(Object.class))
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter,
+        new ParameterBuilder(),
+        context(),
+        genericNamingStrategy,
+        Mock(OperationContext))
     when:
-      def sut = nameReader()
-      sut.apply(parameterContext)
+    def sut = nameReader()
+    sut.apply(parameterContext)
     then:
-      parameterContext.parameterBuilder().build().name == expectedName
+    parameterContext.parameterBuilder().build().name == expectedName
     where:
-      apiParam                                            | paramType | expectedName
-      apiParamWithNameAndValue("bodyParam", "body Param") | "body"    | "bodyParam"
-      null                                                | "body"    | null
+    apiParam                                            | paramType | expectedName
+    apiParamWithNameAndValue("bodyParam", "body Param") | "body"    | "bodyParam"
+    null                                                | "body"    | null
   }
 
   def nameReader() {
-    def descriptions = new DescriptionResolver(new MockEnvironment())
-    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    new ApiParamParameterBuilder(descriptions, enumTypeDeterminer)
   }
 }

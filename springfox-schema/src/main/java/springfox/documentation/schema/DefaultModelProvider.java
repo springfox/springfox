@@ -66,7 +66,6 @@ public class DefaultModelProvider implements ModelProvider {
       SchemaPluginsManager schemaPluginsManager,
       TypeNameExtractor typeNameExtractor,
       EnumTypeDeterminer enumTypeDeterminer) {
-    
     this.resolver = resolver;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
