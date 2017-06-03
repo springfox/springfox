@@ -36,9 +36,9 @@
         ],
         "produces": [
           "application/xml",
+          "application/vnd.com.fancy-pet+json",
           "application/json",
-          "application/vnd.com.pet+json",
-          "application/vnd.com.fancy-pet+json"
+          "application/vnd.com.pet+json"
         ],
         "parameters": [
           {
@@ -696,6 +696,30 @@
         }
       }
     },
+    "/features/enumObject": {
+      "get": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "getEnumAsObject",
+        "operationId": "getEnumAsObjectUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EnumObjectType"
+            }
+          }
+        }
+      }
+    },
     "/features/examples": {
       "put": {
         "tags": [
@@ -1125,6 +1149,17 @@
     }
   },
   "definitions": {
+    "EnumObjectType": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "Example": {
       "type": "object",
       "properties": {

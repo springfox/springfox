@@ -26,6 +26,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Specification
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.ExampleEnum
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
@@ -35,7 +36,7 @@ class SwaggerExpandedParameterBuilderSpec extends Specification {
   def "Swagger parameter expander expands as expected" () {
     given:
       def env = new DescriptionResolver(new MockEnvironment())
-      SwaggerExpandedParameterBuilder sut = new SwaggerExpandedParameterBuilder(env)
+      SwaggerExpandedParameterBuilder sut = new SwaggerExpandedParameterBuilder(env, new JacksonEnumTypeDeterminer())
     and:
       ParameterExpansionContext context = new ParameterExpansionContext("Test", "", field,
           DocumentationType.SWAGGER_12, new ParameterBuilder())

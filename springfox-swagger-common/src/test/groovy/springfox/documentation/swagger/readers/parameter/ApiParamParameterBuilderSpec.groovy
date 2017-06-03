@@ -21,16 +21,17 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.DescriptionResolver
@@ -41,6 +42,8 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+
+  def descriptions = new DescriptionResolver(new MockEnvironment())
 
   def "enum types"() {
     given:
@@ -56,7 +59,8 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
           Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand = new ApiParamParameterBuilder();
+      ApiParamParameterBuilder operationCommand =
+          new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
       operationCommand.apply(parameterContext)
       AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     then:
@@ -83,7 +87,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
               Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation)
+      ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
       operationCommand.apply(parameterContext)
       AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     then:
@@ -110,7 +114,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
           Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand = stubbedParamBuilder(apiParamAnnotation);
+      ApiParamParameterBuilder operationCommand = stubbedParamBuilder();
       operationCommand.apply(parameterContext)
       AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
     then:
@@ -125,17 +129,15 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
 
   def "supports all swagger types" () {
     given:
-      ApiParamParameterBuilder sut = new ApiParamParameterBuilder()
+      ApiParamParameterBuilder sut = new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
     expect:
       sut.supports(documentationType)
     where:
       documentationType << [DocumentationType.SWAGGER_12, DocumentationType.SWAGGER_2]
   }
 
-  def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    def descriptions = new DescriptionResolver(new MockEnvironment())
-    new ApiParamParameterBuilder(descriptions) {
-    }
+  def stubbedParamBuilder() {
+    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
   }
 
   def stubbedResolvedType() {

@@ -24,6 +24,7 @@ import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -35,45 +36,51 @@ import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 @Mixin([RequestMappingSupport, SwaggerPluginsSupport])
 class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
   @Unroll
-   def "should have correct response class"() {
+  def "should have correct response class"() {
     given:
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(new TypeResolver(),  modelNameRegistry)
-      OperationContext operationContext =
+    def typeNameExtractor = new TypeNameExtractor(
+        new TypeResolver(),
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
+    OperationContext operationContext =
         operationContext(context(), handlerMethod)
 
-      SwaggerOperationResponseClassReader sut =
-              new SwaggerOperationResponseClassReader(new TypeResolver(), typeNameExtractor)
+    SwaggerOperationResponseClassReader sut =
+        new SwaggerOperationResponseClassReader(new TypeResolver(), typeNameExtractor)
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
-    then:
-      if (operation.responseModel.collection) {
-        assert expectedClass == String.format("%s[%s]", operation.responseModel.type, operation.responseModel.itemType)
-      } else {
-        assert expectedClass == operation.responseModel.type
-      }
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
-      if (allowableValues == null) {
-        assert operation.responseModel.allowableValues == null
-      } else {
-        assert allowableValues == operation.responseModel.allowableValues.values
-      }
+    then:
+    if (operation.responseModel.collection) {
+      assert expectedClass == String.format("%s[%s]", operation.responseModel.type, operation.responseModel.itemType)
+    } else {
+      assert expectedClass == operation.responseModel.type
+    }
+
+    if (allowableValues == null) {
+      assert operation.responseModel.allowableValues == null
+    } else {
+      assert allowableValues == operation.responseModel.allowableValues.values
+    }
+
     and:
-      !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
+
     where:
-      handlerMethod                                                        | expectedClass          | allowableValues
-      dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'        | null
-      dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'        | null
-      dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»'    | null
-      dummyHandlerMethod('methodApiResponseClass')                         | 'FunkyBusiness'        | null
-      dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'Array[byte]'          | null
-      dummyHandlerMethod('methodWithGenericComplexArray')                  | 'Array[DummyClass]'    | null
-      dummyHandlerMethod('methodWithEnumResponse')                         | 'string'               | ['ONE', 'TWO']
-   }
+    handlerMethod                                                        | expectedClass       | allowableValues
+    dummyHandlerMethod('methodWithConcreteResponseBody')                 | 'BusinessModel'     | null
+    dummyHandlerMethod('methodWithAPiAnnotationButWithoutResponseClass') | 'FunkyBusiness'     | null
+    dummyHandlerMethod('methodWithGenericType')                          | 'Paginated«string»' | null
+    dummyHandlerMethod('methodApiResponseClass')                         | 'FunkyBusiness'     | null
+    dummyHandlerMethod('methodWithGenericPrimitiveArray')                | 'Array[byte]'       | null
+    dummyHandlerMethod('methodWithGenericComplexArray')                  | 'Array[DummyClass]' | null
+    dummyHandlerMethod('methodWithEnumResponse')                         | 'string'            | ['ONE', 'TWO']
+  }
 
 }

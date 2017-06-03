@@ -56,7 +56,10 @@ class ModelReferenceProviderSpec extends Specification {
   def aTypeNameExtractor(TypeResolver resolver) {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-    def typeNameExtractor = new TypeNameExtractor(resolver, modelNameRegistry)
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
     typeNameExtractor
   }
 

@@ -34,6 +34,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
@@ -50,12 +51,17 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOG = LoggerFactory.getLogger(ParameterDataTypeReader.class);
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
 
   @Autowired
-  public ParameterDataTypeReader(TypeNameExtractor nameExtractor, TypeResolver resolver) {
+  public ParameterDataTypeReader(
+      TypeNameExtractor nameExtractor,
+      TypeResolver resolver,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.nameExtractor = nameExtractor;
     this.resolver = resolver;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -94,9 +100,9 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         context.getGenericNamingStrategy(),
         context.getIgnorableParameterTypes());
     context.parameterBuilder()
-            .type(parameterType)
-            .modelRef(Optional.fromNullable(modelRef)
-                .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
+        .type(parameterType)
+        .modelRef(Optional.fromNullable(modelRef)
+            .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {
@@ -106,6 +112,6 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
   private boolean treatAsAString(ResolvedType parameterType) {
     return !(isBaseType(typeNameFor(parameterType.getErasedType()))
-        || parameterType.getErasedType().isEnum());
+                 || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
   }
 }

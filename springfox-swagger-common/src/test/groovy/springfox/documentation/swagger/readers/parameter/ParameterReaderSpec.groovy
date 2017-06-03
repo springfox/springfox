@@ -20,11 +20,11 @@
 package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
-import io.swagger.annotations.ApiParam
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -37,37 +37,40 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
+  def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
 
   @Unroll("property #resultProperty expected: #expected")
   def "should set basic properties based on ApiParam annotation or a sensible default"() {
     given:
-      def nonNullAnnotations = [apiParamAnnotation, reqParamAnnot].findAll { it != null }
-      def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy, Mock(OperationContext))
-      def sut = stubbedParamBuilder(apiParamAnnotation)
+    def nonNullAnnotations = [apiParamAnnotation, reqParamAnnot].findAll { it != null }
+    def resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+        context(), genericNamingStrategy, Mock(OperationContext))
+    def sut = stubbedParamBuilder()
+
     when:
-      sut.apply(parameterContext)
+    sut.apply(parameterContext)
 
     then:
-      parameterContext.parameterBuilder().build()."$resultProperty" == expected
+    parameterContext.parameterBuilder().build()."$resultProperty" == expected
+
     and:
-      !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
+
     where:
-      resultProperty | apiParamAnnotation                     | reqParamAnnot | expected
-      'description'  | null                                   | null          | null
-      'name'         | apiParamWithNameAndValue("AnDesc", "") | null          | 'AnDesc'
-      'description'  | apiParamWithNameAndValue("", "AnDesc") | null          | 'AnDesc'
-      'defaultValue' | apiParamWithDefault('defl')            | null          | 'defl'
-      'paramAccess'  | apiParamWithAccess('myAccess')         | null          | 'myAccess'
+    resultProperty | apiParamAnnotation                     | reqParamAnnot | expected
+    'description'  | null                                   | null          | null
+    'name'         | apiParamWithNameAndValue("AnDesc", "") | null          | 'AnDesc'
+    'description'  | apiParamWithNameAndValue("", "AnDesc") | null          | 'AnDesc'
+    'defaultValue' | apiParamWithDefault('defl')            | null          | 'defl'
+    'paramAccess'  | apiParamWithAccess('myAccess')         | null          | 'myAccess'
   }
 
-  def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder(descriptions) {
-    }
+  def stubbedParamBuilder() {
+    new ApiParamParameterBuilder(descriptions, enumTypeDeterminer)
   }
 }

@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
@@ -55,26 +56,31 @@ public class DefaultModelProvider implements ModelProvider {
   private final ModelDependencyProvider dependencyProvider;
   private final SchemaPluginsManager schemaPluginsManager;
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public DefaultModelProvider(TypeResolver resolver,
+  public DefaultModelProvider(
+      TypeResolver resolver,
       @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
       @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
       SchemaPluginsManager schemaPluginsManager,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.resolver = resolver;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
     this.schemaPluginsManager = schemaPluginsManager;
     this.typeNameExtractor = typeNameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
   public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
+
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
-        || propertiesHost.getErasedType().isEnum()
+        || enumTypeDeterminer.isEnum(propertiesHost.getErasedType())
         || isBaseType(propertiesHost)
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "

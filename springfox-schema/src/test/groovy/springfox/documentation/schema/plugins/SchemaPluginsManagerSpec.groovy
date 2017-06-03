@@ -60,7 +60,10 @@ class SchemaPluginsManagerSpec extends Specification {
     namePlugin.supports(SPRING_WEB) >> true
 
     sut = new SchemaPluginsManager(propRegistry, modelRegistry)
-    typeNames = new TypeNameExtractor(new TypeResolver(), modelNameRegistry)
+    typeNames = new TypeNameExtractor(
+        new TypeResolver(),
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
   }
 
   def "enriches model property when plugins are found"() {

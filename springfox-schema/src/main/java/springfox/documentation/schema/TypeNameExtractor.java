@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -43,14 +44,18 @@ import static springfox.documentation.schema.Types.*;
 public class TypeNameExtractor {
   private final TypeResolver typeResolver;
   private final PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public TypeNameExtractor(TypeResolver typeResolver,
-                           @Qualifier("typeNameProviderPluginRegistry")
-                           PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders) {
+  public TypeNameExtractor(
+      TypeResolver typeResolver,
+      @Qualifier("typeNameProviderPluginRegistry")
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
+      EnumTypeDeterminer enumTypeDeterminer) {
 
     this.typeResolver = typeResolver;
     this.typeNameProviders = typeNameProviders;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   public String typeName(ModelContext context) {
@@ -79,7 +84,7 @@ public class TypeNameExtractor {
         first = false;
       } else {
         sb.append(String.format("%s%s", namingStrategy.getTypeListDelimiter(),
-                innerTypeName(typeParam, context)));
+            innerTypeName(typeParam, context)));
       }
     }
     sb.append(namingStrategy.getCloseGeneric());
@@ -97,12 +102,12 @@ public class TypeNameExtractor {
     Class<?> erasedType = type.getErasedType();
     if (type instanceof ResolvedPrimitiveType) {
       return typeNameFor(erasedType);
-    } else if (erasedType.isEnum()) {
+    } else if (enumTypeDeterminer.isEnum(erasedType)) {
       return "string";
     } else if (type instanceof ResolvedArrayType) {
       GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
       return String.format("Array%s%s%s", namingStrategy.getOpenGeneric(),
-              simpleTypeName(type.getArrayElementType(), context), namingStrategy.getCloseGeneric());
+          simpleTypeName(type.getArrayElementType(), context), namingStrategy.getCloseGeneric());
     } else if (type instanceof ResolvedObjectType) {
       String typeName = typeNameFor(erasedType);
       if (typeName != null) {

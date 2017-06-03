@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.mixins
 import com.fasterxml.classmate.TypeResolver
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.PathDecorator
 import springfox.documentation.spi.service.*
 import springfox.documentation.spring.web.paths.OperationPathDecorator
@@ -40,10 +41,11 @@ class ServicePluginsSupport {
 
   DocumentationPluginsManager defaultWebPlugins() {
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new ApiListingReader()))
     plugins.documentationPlugins = create([])
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver)])
+    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
     plugins.parameterPlugins = create([new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])
     plugins.resourceGroupingStrategies = create([])
@@ -69,10 +71,11 @@ class ServicePluginsSupport {
                                              new QueryStringUriTemplateDecorator()]) {
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader()))
     plugins.documentationPlugins = create(documentationPlugins)
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver)])
+    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
     plugins.parameterPlugins = create(paramPlugins)
     plugins.operationBuilderPlugins = create(operationPlugins)
     plugins.resourceGroupingStrategies = create(groupingStrategyPlugins)

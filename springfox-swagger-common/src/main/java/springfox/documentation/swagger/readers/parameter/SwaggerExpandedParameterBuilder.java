@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.DescriptionResolver;
@@ -49,10 +50,14 @@ import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public SwaggerExpandedParameterBuilder(DescriptionResolver descriptions) {
+  public SwaggerExpandedParameterBuilder(
+      DescriptionResolver descriptions,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.descriptions = descriptions;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -77,37 +82,36 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
-            .description(descriptions.resolve(apiParam.value()))
-            .defaultValue(apiParam.defaultValue())
-            .required(apiParam.required())
-            .allowMultiple(apiParam.allowMultiple())
-            .allowableValues(allowable)
-            .parameterAccess(apiParam.access())
-            .hidden(apiParam.hidden())
-            .build();
+        .description(descriptions.resolve(apiParam.value()))
+        .defaultValue(apiParam.defaultValue())
+        .required(apiParam.required())
+        .allowMultiple(apiParam.allowMultiple())
+        .allowableValues(allowable)
+        .parameterAccess(apiParam.access())
+        .hidden(apiParam.hidden())
+        .build();
   }
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
-            .description(descriptions.resolve(apiModelProperty.value()))
-            .required(apiModelProperty.required())
-            .allowableValues(allowable)
-            .parameterAccess(apiModelProperty.access())
-            .hidden(apiModelProperty.hidden())
-            .build();
+        .description(descriptions.resolve(apiModelProperty.value()))
+        .required(apiModelProperty.required())
+        .allowableValues(allowable)
+        .parameterAccess(apiModelProperty.access())
+        .hidden(apiModelProperty.hidden())
+        .build();
   }
 
   private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
 
     AllowableValues allowable = null;
-    if (field.getType().isEnum()) {
+    if (enumTypeDeterminer.isEnum(field.getType())) {
       allowable = new AllowableListValues(getEnumValues(field.getType()), "LIST");
     } else if (optionalAllowable.isPresent()) {
       allowable = ApiModelProperties.allowableValueFromString(optionalAllowable.get());
     }
-
     return allowable;
   }
 

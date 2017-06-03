@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.List;
@@ -49,16 +50,19 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   private final TypeResolver typeResolver;
   private final ModelPropertiesProvider propertiesProvider;
   private final TypeNameExtractor nameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   public DefaultModelDependencyProvider(
       TypeResolver typeResolver,
       @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
-      TypeNameExtractor nameExtractor) {
+      TypeNameExtractor nameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
 
     this.typeResolver = typeResolver;
     this.propertiesProvider = propertiesProvider;
     this.nameExtractor = nameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -130,7 +134,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   }
 
   private List<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {
-    if (modelContext.hasSeenBefore(resolvedType) || resolvedType.getErasedType().isEnum()) {
+    if (modelContext.hasSeenBefore(resolvedType) || enumTypeDeterminer.isEnum(resolvedType.getErasedType())) {
       return newArrayList();
     }
     modelContext.seen(resolvedType);
