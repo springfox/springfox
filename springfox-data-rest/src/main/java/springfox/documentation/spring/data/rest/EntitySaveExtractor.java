@@ -64,6 +64,13 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
           handler,
           context.getTypeResolver(), resource);
       handlers.add(new SpringDataRestRequestHandler(context, post));
+      ActionSpecification patch = saveActionSpecification(
+          entity,
+          RequestMethod.PATCH,
+          String.format("%s%s", context.basePath(), context.resourcePath()),
+          handler,
+          context.getTypeResolver(), resource);
+      handlers.add(new SpringDataRestRequestHandler(context, patch));
     }
     return handlers;
   }
