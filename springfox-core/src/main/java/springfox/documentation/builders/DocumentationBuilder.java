@@ -21,7 +21,6 @@ package springfox.documentation.builders;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 import com.google.common.collect.TreeMultimap;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
