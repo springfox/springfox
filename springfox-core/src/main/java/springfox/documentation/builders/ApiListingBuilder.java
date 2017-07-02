@@ -172,7 +172,7 @@ public class ApiListingBuilder {
   }
 
   /**
-   * Updates the references to the security definitiosn
+   * Updates the references to the security definitions
    *
    * @param securityReferences - security definition references
    * @return this

@@ -23,8 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.bean.validators.plugins.models.NullablityTestModel
-import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin
+import springfox.bean.validators.plugins.models.NullabilityTestModel
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
@@ -41,7 +40,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
   def "@NotNull annotations are reflected in the model properties that are AnnotatedElements"()  {
     given:
       def sut = new NotNullAnnotationPlugin()
-      def element = NullablityTestModel.getDeclaredField(propertyName)
+      def element = NullabilityTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
           new ModelPropertyBuilder(),
           element,
@@ -87,7 +86,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
     def mapper = new ObjectMapper()
     mapper
         .serializationConfig
-        .introspect(TypeFactory.defaultInstance().constructType(NullablityTestModel))
+        .introspect(TypeFactory.defaultInstance().constructType(NullabilityTestModel))
         .findProperties()
         .find { p -> property.equals(p.name) };
   }

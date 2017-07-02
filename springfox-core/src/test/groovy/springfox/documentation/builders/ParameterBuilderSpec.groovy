@@ -26,7 +26,7 @@ import spock.lang.Unroll
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
 
-class ParameterBulderSpec extends Specification {
+class ParameterBuilderSpec extends Specification {
   @Unroll
   def "Setting properties on the builder with non-null values"() {
     given:

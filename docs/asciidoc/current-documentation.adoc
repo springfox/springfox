@@ -58,7 +58,7 @@ library always has a configured ObjectMapper that is customized to serialize swa
 
 In order to do this implement the ```ApplicationListener<ObjectMapperConfigured>``` interface. The event has a handle
  to the ObjectMapper that was configured. Configuring application specific ObjectMapper customizations in this
- applicaiton event handler guarantees that application specific  customizations will be applied to each and every
+ application event handler guarantees that application specific  customizations will be applied to each and every
  ObjectMapper that is in play.
 
 If you encounter a NullPointerException during application startup like https://github.com/springfox/springfox/issues/635[this issue]. Its because most likely the ```WebMvcConfigurerAdapter``` isn't working.
@@ -299,7 +299,7 @@ public Model getAllThePets() {
 
 ===== Customizing the value of _operationId_
 
-In the event you wish to overide the default `operationId` which Springfox renders, you may do so by providing the
+In the event you wish to override the default `operationId` which Springfox renders, you may do so by providing the
 `nickname` element in an `@ApiOperation` annotation.
 
 ====== Given this annotated method ...

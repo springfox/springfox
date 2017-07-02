@@ -285,7 +285,7 @@
         {
           "method": "GET",
           "summary": "Find Pet by status",
-          "notes": "Multiple status values can be provided with comma seperated strings",
+          "notes": "Multiple status values can be provided with comma-separated strings",
           "nickname": "findPetsByStatusUsingGET",
           "produces": [
             "*/*"
@@ -344,7 +344,7 @@
         {
           "method": "GET",
           "summary": "Find Pet by tags",
-          "notes": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+          "notes": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
           "nickname": "findPetsByTagsUsingGET",
           "produces": [
             "*/*"
@@ -772,7 +772,7 @@
         {
           "method": "GET",
           "summary": "Find pet by ID",
-          "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+          "notes": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
           "nickname": "getPetByIdUsingGET_1",
           "produces": [
             "*/*"

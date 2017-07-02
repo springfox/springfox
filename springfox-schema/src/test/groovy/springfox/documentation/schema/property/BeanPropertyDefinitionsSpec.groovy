@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import spock.lang.Specification
 
 class BeanPropertyDefinitionsSpec extends Specification {
-  def "Connot intantiate static type"() {
+  def "Cannot instantiate static type"() {
     when:
       new BeanPropertyDefinitions()
     then:

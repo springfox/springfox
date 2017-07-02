@@ -1818,7 +1818,7 @@
         {
           "method": "GET",
           "summary": "Find pet by ID",
-          "notes": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+          "notes": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
           "nickname": "getPetByIdUsingGET",
           "produces": [
             "*/*"

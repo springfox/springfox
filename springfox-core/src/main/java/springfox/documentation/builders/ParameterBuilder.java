@@ -89,7 +89,7 @@ public class ParameterBuilder {
   }
 
   /**
-   * Updates the default value of the parametr
+   * Updates the default value of the parameter
    *
    * @param defaultValue - default value
    * @return this
@@ -126,7 +126,7 @@ public class ParameterBuilder {
    *
    * @param allowableValues - allowable values (instance of @see springfox.documentation.service.AllowableListValues
    *                        or @see springfox.documentation.service.AllowableRangeValues)
-   * @return
+   * @return this
    */
   public ParameterBuilder allowableValues(AllowableValues allowableValues) {
     this.allowableValues = emptyToNull(allowableValues, this.allowableValues);
@@ -171,7 +171,7 @@ public class ParameterBuilder {
    * Consolidate or figure out whats can be rolled into the other.
    *
    * @param modelRef
-   * @return
+   * @return this
    */
   public ParameterBuilder modelRef(ModelReference modelRef) {
     this.modelRef = defaultIfAbsent(modelRef, this.modelRef);

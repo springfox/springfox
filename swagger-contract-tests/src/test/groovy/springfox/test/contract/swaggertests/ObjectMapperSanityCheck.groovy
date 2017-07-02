@@ -81,8 +81,8 @@ class ObjectMapperSanityCheck extends Specification {
     @Bean
     @Primary
     public ObjectMapper objectMapperWithIncludeAlways(){
-      /* Replaces spring boots object mapper
-       * //http://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html
+      /* Replaces Spring Boot's object mapper
+       * http://docs.spring.io/spring-boot/docs/current/reference/html/howto-spring-mvc.html
        */
       ObjectMapper objectMapper = new ObjectMapper();
       objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, true )

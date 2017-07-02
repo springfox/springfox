@@ -90,8 +90,8 @@ public class OperationBuilder {
   /**
    * Updates the operation notes
    *
-   * @param notes - notes to describe the operaiton
-   * @return
+   * @param notes - notes to describe the operation
+   * @return this
    */
   public OperationBuilder notes(String notes) {
     this.notes = defaultIfAbsent(notes, this.notes);
@@ -112,7 +112,7 @@ public class OperationBuilder {
   /**
    * This is an optional override that provides a custom method name stem, such that the method name
    * that is generated for the purposes of code-gen can be customized. However it must be kept in mind
-   * that in-order the guarantee uniqueness of the name for code-gen the algoritm will still try to
+   * that in-order the guarantee uniqueness of the name for code-gen the algorithm will still try to
    * append and indexer at the end of it e.g. someMethod_1, someMethod_2 etc. to preserve uniqueness in
    * the case there are duplicate names.
    *
@@ -184,7 +184,7 @@ public class OperationBuilder {
    * Updates the input parameters this operation needs
    *
    * @param parameters - input parameter definitions
-   * @return
+   * @return this
    */
   public OperationBuilder parameters(final List<Parameter> parameters) {
     List<Parameter> source = nullToEmptyList(parameters);
@@ -243,7 +243,7 @@ public class OperationBuilder {
    * Updates the tags that identify this operation
    *
    * @param tags - new set of tags
-   * @return
+   * @return this
    */
   public OperationBuilder tags(Set<String> tags) {
     this.tags = nullToEmptySet(tags);

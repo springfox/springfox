@@ -117,9 +117,9 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
       sorted.get(2).name == 'methodWithTwoArgs'
     where:
       handlerMethods  << [
-              methodOnDummyClasss('methodWithTwoArgs', int, String),
-              methodOnDummyClasss('methodWithOneArgs', int),
-              methodOnDummyClasss('methodWithNoArgs')
+              methodOnDummyClass('methodWithTwoArgs', int, String),
+              methodOnDummyClass('methodWithOneArgs', int),
+              methodOnDummyClass('methodWithNoArgs')
               ]
   }
 

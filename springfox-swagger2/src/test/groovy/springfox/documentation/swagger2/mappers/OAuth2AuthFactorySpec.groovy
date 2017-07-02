@@ -26,12 +26,12 @@ class OAuth2AuthFactorySpec extends Specification {
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
     when:
-      def securityDefintion = factory.create(security)
+      def securityDefinition = factory.create(security)
     then:
-      securityDefintion.type == "oauth2"
-      ((OAuth2Definition)securityDefintion).getFlow() == "accessCode"
-      ((OAuth2Definition)securityDefintion).tokenUrl == "te:uri"
-      ((OAuth2Definition)securityDefintion).authorizationUrl == "tre:uri"
+      securityDefinition.type == "oauth2"
+      ((OAuth2Definition)securityDefinition).getFlow() == "accessCode"
+      ((OAuth2Definition)securityDefinition).tokenUrl == "te:uri"
+      ((OAuth2Definition)securityDefinition).authorizationUrl == "tre:uri"
   }
 
   def "Maps application grant" () {
@@ -42,11 +42,11 @@ class OAuth2AuthFactorySpec extends Specification {
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
     when:
-      def securityDefintion = factory.create(security)
+      def securityDefinition = factory.create(security)
     then:
-      securityDefintion.type == "oauth2"
-      ((OAuth2Definition)securityDefintion).getFlow() == "application"
-      ((OAuth2Definition)securityDefintion).tokenUrl == "token:uri"
+      securityDefinition.type == "oauth2"
+      ((OAuth2Definition)securityDefinition).getFlow() == "application"
+      ((OAuth2Definition)securityDefinition).tokenUrl == "token:uri"
   }
 
   def "Maps password grant" () {
@@ -57,11 +57,11 @@ class OAuth2AuthFactorySpec extends Specification {
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
     when:
-      def securityDefintion = factory.create(security)
+      def securityDefinition = factory.create(security)
     then:
-      securityDefintion.type == "oauth2"
-      ((OAuth2Definition)securityDefintion).getFlow() == "password"
-      ((OAuth2Definition)securityDefintion).tokenUrl == "token:uri"
+      securityDefinition.type == "oauth2"
+      ((OAuth2Definition)securityDefinition).getFlow() == "password"
+      ((OAuth2Definition)securityDefinition).tokenUrl == "token:uri"
   }
 
   def "Throws exception when it receives an unknown grant" () {

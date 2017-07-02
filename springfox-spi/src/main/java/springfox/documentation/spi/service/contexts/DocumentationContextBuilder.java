@@ -123,7 +123,7 @@ public class DocumentationContextBuilder {
   }
 
   /**
-   @deprecated  @since 2.2.0 - only here for backward compatibiltiy
+   @deprecated  @since 2.2.0 - only here for backward compatibility
    */
   @Deprecated
   public DocumentationContextBuilder withResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
