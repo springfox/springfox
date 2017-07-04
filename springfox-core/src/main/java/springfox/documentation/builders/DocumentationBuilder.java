@@ -40,7 +40,7 @@ public class DocumentationBuilder {
   private String groupName;
   private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Ordering.natural(), byListingPosition());
   private ResourceListing resourceListing;
-  private Set<Tag> tags = newHashSet();
+  private Set<Tag> tags = newLinkedHashSet();
   private String basePath;
   private Set<String> produces = newHashSet();
   private Set<String> consumes = newHashSet();

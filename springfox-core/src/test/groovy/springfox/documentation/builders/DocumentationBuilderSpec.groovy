@@ -24,7 +24,10 @@ import spock.lang.Specification
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ListVendorExtension
 import springfox.documentation.service.ResourceListing
+import springfox.documentation.service.Tag
 import springfox.documentation.service.VendorExtension
+
+import static com.google.common.collect.Sets.newLinkedHashSet
 
 class DocumentationBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -95,5 +98,25 @@ class DocumentationBuilderSpec extends Specification {
       'host'                            | 'host1'                         | 'host'
       'schemes'                         | ['http']  as Set                | 'schemes'
       'tags'                            | ['pet'] as Set                  | 'tags'
+  }
+
+  def "Setting ordered tags should preserve ordering"() {
+    given:
+    def sut = new DocumentationBuilder()
+    def tags = newLinkedHashSet()
+    def firstTag = new Tag("First", "First")
+    def secondTag = new Tag("Second", "Second")
+    def thirdTag = new Tag("Third", "Third")
+    tags.add(firstTag)
+    tags.add(secondTag)
+    tags.add(thirdTag)
+    when:
+    sut.tags(tags)
+    and:
+    def builtDocumentationTags = sut.build().getTags()
+    then:
+      assert builtDocumentationTags[0] == firstTag
+      assert builtDocumentationTags[1] == secondTag
+      assert builtDocumentationTags[2] == thirdTag
   }
 }
