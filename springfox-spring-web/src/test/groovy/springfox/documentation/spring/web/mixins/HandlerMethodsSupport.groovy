@@ -62,7 +62,7 @@ trait HandlerMethodsSupport {
     new HandlerMethod(clazz, c.getMethod("methodToTest", Integer, DummyClass.Parent))
   }
 
-  HandlerMethod methodOnDummyClasss(String method, Class ... params) {
+  HandlerMethod methodOnDummyClass(String method, Class ... params) {
     def clazz = new DummyClass()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod(method, params))

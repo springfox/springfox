@@ -31,12 +31,12 @@ class ApiKeyAuthFactorySpec extends Specification {
     and:
       ApiKeyAuthFactory factory = new ApiKeyAuthFactory()
     when:
-      def securityDefintion = factory.create(security)
+      def securityDefinition = factory.create(security)
     then:
-      securityDefintion.type == "apiKey"
-      ((ApiKeyAuthDefinition)securityDefintion).getName() == "key1"
-      ((ApiKeyAuthDefinition)securityDefintion).getIn() == In.HEADER
-      ((ApiKeyAuthDefinition)securityDefintion).vendorExtensions == expectedExtensions()
+      securityDefinition.type == "apiKey"
+      ((ApiKeyAuthDefinition)securityDefinition).getName() == "key1"
+      ((ApiKeyAuthDefinition)securityDefinition).getIn() == In.HEADER
+      ((ApiKeyAuthDefinition)securityDefinition).vendorExtensions == expectedExtensions()
   }
 
   def amazonVendorExtensions(

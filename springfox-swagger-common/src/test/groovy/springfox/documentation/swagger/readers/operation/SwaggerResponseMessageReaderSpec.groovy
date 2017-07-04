@@ -130,7 +130,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
 
     where:
     methodName             | headers
-    "noAnnnotationHeaders" | []
+    "noAnnotationHeaders"  | []
     "defaultWithBoth"      | []
     "operationHeadersOnly" | [["name": "header1", "type": new ModelRef("string")]]
     "operationHeadersOnly" | [["name": "header1", "type": new ModelRef("List", new ModelRef("string"))]]

@@ -100,7 +100,7 @@ public class ModelContext {
   }
 
   /**
-   * @return alternate type provider thats available to this context
+   * @return alternate type provider that's available to this context
    */
   public AlternateTypeProvider getAlternateTypeProvider() {
     return alternateTypeProvider;
@@ -126,7 +126,7 @@ public class ModelContext {
    *
    * @param group                 - group name of the docket
    * @param type                  - type
-   * @param documentationType     - for documenation type
+   * @param documentationType     - for documentation type
    * @param alternateTypeProvider - alternate type provider
    * @param genericNamingStrategy - how generic types should be named
    * @param ignorableTypes        - types that can be ignored
@@ -156,7 +156,7 @@ public class ModelContext {
    *
    * @param groupName             - group name of the docket
    * @param type                  - type
-   * @param documentationType     - for documenation type
+   * @param documentationType     - for documentation type
    * @param alternateTypeProvider - alternate type provider
    * @param genericNamingStrategy - how generic types should be named
    * @param ignorableTypes        - types that can be ignored

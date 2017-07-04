@@ -30,7 +30,7 @@ code reviewer can focus on reviewing what has actually changed, without having t
 context as to what the thought processes is or how you arrived at the final solution
 - If you encounter significant cleanup required mid-way through your work try to isolate that as a separate commit. 
 This is not to say ever single minute cleanup needs to be in its own commit, just the large chunks of cleanup.
-- Finally clean up all the merge commits by rebaseing against the source repo often.
+- Finally clean up all the merge commits by rebasing against the source repo often.
 
 Along the lines of the _agile manifesto_:
 

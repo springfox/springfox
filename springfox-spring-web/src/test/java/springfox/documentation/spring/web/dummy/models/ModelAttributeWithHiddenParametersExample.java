@@ -27,9 +27,9 @@ public class ModelAttributeWithHiddenParametersExample extends ModelAttributeExa
   private Integer category;
   private String[] modelAttributeProperty;
   @ApiModelProperty(hidden=true)
-  private String hiddenPropertry1;
+  private String hiddenProperty1;
   @ApiModelProperty(hidden=true)
-  private String hiddenPropertry2;
+  private String hiddenProperty2;
   
   public Integer getCategory() {
     return category;
@@ -47,19 +47,19 @@ public class ModelAttributeWithHiddenParametersExample extends ModelAttributeExa
     this.modelAttributeProperty = modelAttributeProperty;
   }
   
-  public String getHiddenPropertry1() {
-    return hiddenPropertry1;
+  public String getHiddenProperty1() {
+    return hiddenProperty1;
   }
   
-  public void setHiddenPropertry1(String hiddenPropertry1) {
-    this.hiddenPropertry1 = hiddenPropertry1;
+  public void setHiddenProperty1(String hiddenProperty1) {
+    this.hiddenProperty1 = hiddenProperty1;
   }
   
-  public String getHiddenPropertry2() {
-    return hiddenPropertry2;
+  public String getHiddenProperty2() {
+    return hiddenProperty2;
   }
   
-  public void setHiddenPropertry2(String hiddenPropertry2) {
-    this.hiddenPropertry2 = hiddenPropertry2;
+  public void setHiddenProperty2(String hiddenProperty2) {
+    this.hiddenProperty2 = hiddenProperty2;
   }
 }

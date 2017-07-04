@@ -29,7 +29,7 @@ public interface ApiListingScannerPlugin extends Plugin<DocumentationType> {
   /**
    * Implement this method to manually add ApiDescriptions
    *
-   * @param context - Documentatio ncontext that can be used infer documentation context
+   * @param context - Documentation context that can be used infer documentation context
    * @see springfox.documentation.service.ApiDescription
    * @return List of {@link ApiDescription}
    */

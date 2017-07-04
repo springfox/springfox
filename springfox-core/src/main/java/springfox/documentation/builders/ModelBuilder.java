@@ -79,7 +79,7 @@ public class ModelBuilder {
   /**
    * Updates the model properties
    *
-   * @param properties - map of properies by name
+   * @param properties - map of properties by name
    * @return this
    */
   public ModelBuilder properties(Map<String, ModelProperty> properties) {
