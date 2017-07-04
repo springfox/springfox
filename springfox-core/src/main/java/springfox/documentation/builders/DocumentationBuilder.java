@@ -40,12 +40,12 @@ public class DocumentationBuilder {
   private String groupName;
   private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Ordering.natural(), byListingPosition());
   private ResourceListing resourceListing;
-  private Set<Tag> tags = newHashSet();
+  private Set<Tag> tags = newLinkedHashSet();
   private String basePath;
-  private Set<String> produces = newHashSet();
-  private Set<String> consumes = newHashSet();
+  private Set<String> produces = newLinkedHashSet();
+  private Set<String> consumes = newLinkedHashSet();
   private String host;
-  private Set<String> schemes = newHashSet();
+  private Set<String> schemes = newLinkedHashSet();
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
 

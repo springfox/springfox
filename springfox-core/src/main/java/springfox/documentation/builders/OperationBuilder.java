@@ -49,13 +49,13 @@ public class OperationBuilder {
   private String uniqueId;
   private String codeGenMethodNameStem;
   private int position;
-  private Set<String> produces = newHashSet();
-  private Set<String> consumes = newHashSet();
-  private Set<String> protocol = newHashSet();
+  private Set<String> produces = newLinkedHashSet();
+  private Set<String> consumes = newLinkedHashSet();
+  private Set<String> protocol = newLinkedHashSet();
   private List<SecurityReference> securityReferences = newArrayList();
   private List<Parameter> parameters = newArrayList();
   private Set<ResponseMessage> responseMessages = newHashSet();
-  private Set<String> tags = newHashSet();
+  private Set<String> tags = newLinkedHashSet();
   private String deprecated;
   private boolean isHidden;
   private ModelReference responseModel;
