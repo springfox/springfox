@@ -20,6 +20,9 @@ package springfox.bean.validators.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.bean.validators.plugins.parameter.ExpandedParameterMinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.parameter.ExpandedParameterNotNullAnnotationPlugin;
+import springfox.bean.validators.plugins.parameter.ExpandedParameterSizeAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.MinMaxAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin;
@@ -29,10 +32,36 @@ import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin;
 @Configuration
 public class BeanValidatorPluginsConfiguration {
 
-    /**
-     * define MinMax-Plugin
-     * @return
-     */
+  @Bean
+  public ExpandedParameterMinMaxAnnotationPlugin expanderMinMax() {
+    return new ExpandedParameterMinMaxAnnotationPlugin();
+  }
+
+  @Bean
+  public ExpandedParameterNotNullAnnotationPlugin expanderNotNull() {
+    return new ExpandedParameterNotNullAnnotationPlugin();
+  }
+
+  @Bean
+  public ExpandedParameterSizeAnnotationPlugin expanderSize() {
+    return new ExpandedParameterSizeAnnotationPlugin();
+  }
+
+  @Bean
+  public springfox.bean.validators.plugins.parameter.MinMaxAnnotationPlugin parameterMinMax() {
+    return new springfox.bean.validators.plugins.parameter.MinMaxAnnotationPlugin();
+  }
+
+  @Bean
+  public springfox.bean.validators.plugins.parameter.NotNullAnnotationPlugin parameterNotNull() {
+    return new springfox.bean.validators.plugins.parameter.NotNullAnnotationPlugin();
+  }
+
+  @Bean
+  public springfox.bean.validators.plugins.parameter.SizeAnnotationPlugin parameterSize() {
+    return new springfox.bean.validators.plugins.parameter.SizeAnnotationPlugin();
+  }
+
   @Bean
   public MinMaxAnnotationPlugin minMaxPlugin() {
     return new MinMaxAnnotationPlugin();
@@ -48,10 +77,6 @@ public class BeanValidatorPluginsConfiguration {
     return new SizeAnnotationPlugin();
   }
 
-  /**
-     * define Size-Plugin
-     * @return
-     */
   @Bean
   public NotNullAnnotationPlugin notNullPlugin() {
     return new NotNullAnnotationPlugin();
