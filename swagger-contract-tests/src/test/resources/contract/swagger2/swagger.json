@@ -15,16 +15,16 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "pet-store-resource",
-      "description": "Operations about store"
+      "name": "generic-pet-controller",
+      "description": "Generic Pet Controller"
     },
     {
       "name": "pet-controller",
       "description": "Operations about pets"
     },
     {
-      "name": "generic-pet-controller",
-      "description": "Generic Pet Controller"
+      "name": "pet-store-resource",
+      "description": "Operations about store"
     },
     {
       "name": "user-controller",
@@ -32,8 +32,8 @@
     }
   ],
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "produces": [
     "application/xml",
