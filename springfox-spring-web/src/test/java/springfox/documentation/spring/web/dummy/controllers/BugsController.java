@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,7 @@ import springfox.documentation.spring.web.dummy.models.Example;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -216,6 +218,24 @@ public class BugsController {
 
   @RequestMapping(value = "/1819b", method = POST)
   public void modelWithListOfEnumsAsModelAttribute(@ModelAttribute Model1819 model) {
+  }
+
+  @GetMapping("/1864")
+  public void test(@Valid Model1864 req) {
+
+  }
+
+  public class Model1864 {
+    @NotNull
+    private String somename;
+
+    public String getSomename() {
+      return somename;
+    }
+
+    public void setSomename(String somename) {
+      this.somename = somename;
+    }
   }
 
   public class Model1819 {

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,56 +29,62 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
-      new NotNullAnnotationPlugin().supports(types)
+    new NotNullAnnotationPlugin().supports(types)
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@NotNull annotations are reflected in the model properties that are AnnotatedElements"()  {
+  def "@NotNull annotations are reflected in the model properties that are AnnotatedElements"() {
     given:
-      def sut = new NotNullAnnotationPlugin()
-      def element = NullabilityTestModel.getDeclaredField(propertyName)
-      def context = new ModelPropertyContext(
-          new ModelPropertyBuilder(),
-          element,
-          new TypeResolver(),
-          DocumentationType.SWAGGER_12)
+    def sut = new NotNullAnnotationPlugin()
+    def element = NullabilityTestModel.getDeclaredField(propertyName)
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(),
+        element,
+        new TypeResolver(),
+        DocumentationType.SWAGGER_12)
+
     when:
-      sut.apply(context)
-      def property = context.builder.build()
+    sut.apply(context)
+    def property = context.builder.build()
+
     then:
-      property.isRequired() == required
+    property.isRequired() == required
+
     where:
-      propertyName                  | required
-      "notNullString"               | true
-      "notNullGetter"               | false
-      "string"                      | false
+    propertyName    | required
+    "notNullString" | true
+    "notNullGetter" | false
+    "string"        | false
 
   }
 
   @Unroll
-  def "@NotNull annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
+  def "@NotNull annotations are reflected in the model properties that are BeanPropertyDefinitions"() {
     given:
-      def sut = new NotNullAnnotationPlugin()
-      def beanProperty = beanProperty(propertyName)
-      def context = new ModelPropertyContext(
-          new ModelPropertyBuilder(),
-          beanProperty,
-          new TypeResolver(),
-          DocumentationType.SWAGGER_12)
+    def sut = new NotNullAnnotationPlugin()
+    def beanProperty = beanProperty(propertyName)
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(),
+        beanProperty,
+        new TypeResolver(),
+        DocumentationType.SWAGGER_12)
+
     when:
-      sut.apply(context)
-      def property = context.builder.build()
+    sut.apply(context)
+    def property = context.builder.build()
+
     then:
-      property.isRequired() == required
+    property.isRequired() == required
+
     where:
-      propertyName                    | required
-      "notNullString"               | true
-      "notNullGetter"               | true
-      "string"                      | false
+    propertyName    | required
+    "notNullString" | true
+    "notNullGetter" | true
+    "string"        | false
 
   }
 
@@ -88,7 +94,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
         .serializationConfig
         .introspect(TypeFactory.defaultInstance().constructType(NullabilityTestModel))
         .findProperties()
-        .find { p -> property.equals(p.name) };
+        .find { p -> (property == p.name) }
   }
 
 }

@@ -36,6 +36,7 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
@@ -190,7 +191,11 @@ class FunctionContractSpec extends Specification implements FileAccess {
       "springfox.test.contract.swagger",
       "springfox.petstore.controller"
   ])
-  @Import([SecuritySupport, Swagger12TestConfig, Swagger2TestConfig])
+  @Import([
+      SecuritySupport,
+      Swagger12TestConfig,
+      Swagger2TestConfig,
+      BeanValidatorPluginsConfiguration])
   static class Config {
 
     @Bean
