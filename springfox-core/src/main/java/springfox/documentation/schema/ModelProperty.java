@@ -19,15 +19,14 @@
 
 package springfox.documentation.schema;
 
-import static com.google.common.collect.Lists.newArrayList;
+import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Function;
+import springfox.documentation.service.AllowableValues;
+import springfox.documentation.service.VendorExtension;
 
 import java.util.List;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-
-import springfox.documentation.service.AllowableValues;
-import springfox.documentation.service.VendorExtension;
+import static com.google.common.collect.Lists.*;
 
 public class ModelProperty {
   private final String name;
@@ -49,9 +48,9 @@ public class ModelProperty {
       ResolvedType type,
       String qualifiedType,
       int position,
-      Boolean required,
-      Boolean isHidden,
-      Boolean readOnly,
+      boolean required,
+      boolean isHidden,
+      boolean readOnly,
       String description,
       AllowableValues allowableValues,
       String example,
