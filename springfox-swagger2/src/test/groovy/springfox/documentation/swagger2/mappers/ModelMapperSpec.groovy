@@ -387,7 +387,8 @@ class ModelMapperSpec extends SchemaSpecification {
         null,
         '',
         '',
-        []).with {
+        [],
+        null).with {
       it.updateModelRef({ rt -> new ModelRef(simpleQualifiedTypeName(stringProperty)) })
       it
     }
@@ -405,7 +406,8 @@ class ModelMapperSpec extends SchemaSpecification {
         '',
         '',
         null,
-        '')
+        '',
+        null)
     model
   }
 
