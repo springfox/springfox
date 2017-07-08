@@ -190,7 +190,9 @@ public abstract class ModelMapper {
   }
 
   private Xml mapXml(springfox.documentation.schema.Xml xml) {
-    if (xml == null) return null;
+    if (xml == null) {
+      return null;
+    }
     return new Xml()
         .name(xml.getName())
         .attribute(xml.getAttribute())
