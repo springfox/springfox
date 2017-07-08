@@ -95,7 +95,7 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
 
   /**
    * The lookup handler method, maps the SEOMapper method to the request URL.
-   * <p>If no mapping is found, or if the URL is disabled, it will simply drop throug
+   * <p>If no mapping is found, or if the URL is disabled, it will simply drop through
    * to the standard 404 handling.</p>
    *
    * @param urlPath the path to match.

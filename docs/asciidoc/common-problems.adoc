@@ -19,7 +19,7 @@ spring services can serve it up.
 
 A. Thanks to https://github.com/chrishuttonch[@chrishuttonch] for describing the solution to https://github.com/springfox/springfox/issues/867[this issue]
 
-TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serialisers for the following classes:
+TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that none of the objects would produce any data. To get around this I created several serializers for the following classes:
 
 [source,java]
 ----
@@ -72,7 +72,7 @@ public class MyWebAutoConfiguration extends WebMvcConfigurerAdapter {
 }
 ----
 
-[[q5]]*Q. How do we use Java 8 types esply. LocalDateTime?*
+[[q5]]*Q. How do we use Java 8 types easily. LocalDateTime?*
 
 A. The easiest way to to configure dates is via `Docket#directModelSubstitute(LocalDateTime.class, String.class)`. If
 these are ISO 8601 dates that conform to a string format i.e. `yyyy-MM-dd'T'HH:mm'Z'`. However you won't have any format or validation info.

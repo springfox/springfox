@@ -15,12 +15,12 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "foo",
-      "description": "Foo Description"
-    },
-    {
       "name": "bugs-controller",
       "description": "Bugs Controller"
+    },
+    {
+      "name": "foo",
+      "description": "Foo Description"
     }
   ],
   "produces": [
@@ -541,8 +541,8 @@
         "description": "Remove an apple from a user. You must specify the user name and the apple name.",
         "operationId": "bug1722UsingPOST_1",
         "consumes": [
-          "application/xml",
-          "application/json"
+          "application/json",
+          "application/xml"
         ],
         "produces": [
           "application/xml",
@@ -640,15 +640,17 @@
           {
             "name": "pageNumber",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "integer",
+            "minimum": 1.0,
             "format": "int32"
           },
           {
             "name": "pageSize",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "integer",
+            "maximum": 50.0,
             "format": "int32"
           },
           {
@@ -897,6 +899,35 @@
               "ONE",
               "TWO"
             ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1864{?somename}": {
+      "get": {
+        "tags": [
+          "bugs-controller"
+        ],
+        "summary": "test",
+        "operationId": "testUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "somename",
+            "in": "query",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {

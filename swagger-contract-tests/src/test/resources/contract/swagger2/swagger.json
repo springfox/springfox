@@ -15,16 +15,16 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "pet-store-resource",
-      "description": "Operations about store"
+      "name": "generic-pet-controller",
+      "description": "Generic Pet Controller"
     },
     {
       "name": "pet-controller",
       "description": "Operations about pets"
     },
     {
-      "name": "generic-pet-controller",
-      "description": "Generic Pet Controller"
+      "name": "pet-store-resource",
+      "description": "Operations about store"
     },
     {
       "name": "user-controller",
@@ -32,8 +32,8 @@
     }
   ],
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "produces": [
     "application/xml",
@@ -142,7 +142,7 @@
           "pet-controller"
         ],
         "summary": "Finds Pets by status",
-        "description": "Multiple status values can be provided with comma seperated strings",
+        "description": "Multiple status values can be provided with comma-separated strings",
         "operationId": "findPetsByStatusUsingGET_2",
         "consumes": [
           "application/json"
@@ -196,7 +196,7 @@
           "pet-controller"
         ],
         "summary": "Finds Pets by tags",
-        "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+        "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTagsUsingGET_2",
         "consumes": [
           "application/json"
@@ -245,7 +245,7 @@
           "pet-controller"
         ],
         "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_5",
         "consumes": [
           "application/json"
@@ -429,7 +429,7 @@
           "pet-store-resource"
         ],
         "summary": "Delete purchase order by ID",
-        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
+        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors",
         "operationId": "deleteOrderUsingDELETE",
         "consumes": [
           "application/json"

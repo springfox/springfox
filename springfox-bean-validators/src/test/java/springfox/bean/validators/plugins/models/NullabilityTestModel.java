@@ -20,7 +20,7 @@ package springfox.bean.validators.plugins.models;
 
 import javax.validation.constraints.NotNull;
 
-public class NullablityTestModel {
+public class NullabilityTestModel {
   @NotNull
   private String notNullString;
   private String string;

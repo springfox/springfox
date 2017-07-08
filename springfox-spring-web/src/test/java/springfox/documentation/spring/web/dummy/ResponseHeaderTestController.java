@@ -25,7 +25,7 @@ import io.swagger.annotations.ResponseHeader;
 
 public class ResponseHeaderTestController {
 
-  public void noAnnnotationHeaders() {
+  public void noAnnotationHeaders() {
   }
 
   @ApiOperation(value = "operationHeadersOnly")

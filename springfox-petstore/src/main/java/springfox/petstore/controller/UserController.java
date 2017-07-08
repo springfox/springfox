@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.petstore.Responses;
 import springfox.petstore.model.User;
-import springfox.petstore.repository.MapBackedRepository;
+import springfox.petstore.repository.UserRepository;
 
 import java.util.List;
 
@@ -46,9 +46,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Api(value = "/user", description = "Operations about user")
 public class UserController {
   UserRepository userRepository = new UserRepository();
-
-  static class UserRepository extends MapBackedRepository<String, User> {
-  }
 
   @RequestMapping(method = POST)
   @ResponseBody

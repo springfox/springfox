@@ -1097,7 +1097,7 @@
           "feature-demonstration-service"
         ],
         "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_3",
         "consumes": [
           "application/json"

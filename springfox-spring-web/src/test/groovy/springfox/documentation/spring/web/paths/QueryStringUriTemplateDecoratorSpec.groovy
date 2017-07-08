@@ -10,7 +10,7 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
-  def "Is active only when the uri tempalate is enabled" () {
+  def "Is active only when the uri template is enabled" () {
     given:
       def sut = new QueryStringUriTemplateDecorator()
     expect:

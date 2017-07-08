@@ -112,9 +112,9 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     then:
     enriched.allowableValues?.values == allowableValues
-    enriched.isRequired() == required
+    enriched.isRequired() == (required == null ? false : required)
     enriched.description == description
-    enriched.readOnly == readOnly
+    enriched.readOnly == (readOnly == null ? false : readOnly)
     !enriched.isHidden()
 
     where:

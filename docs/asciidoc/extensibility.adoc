@@ -93,7 +93,7 @@ include::../../springfox-spring-config/src/main/java/springfox/springconfig/Vers
 <2> Check if the https://github.com/springfox/springfox/blob/master/springfox-spring-config/src/main/java/springfox/springconfig/VersionApi.java[VersionApi]
 is applied to the parameter.
 <3> Build the parameter with the necessary information using the builder methods.
-<4> Return true if we want this plugin to apply to all documenation types.
+<4> Return true if we want this plugin to apply to all documentation types.
 
 ==== Example ApiListingScannerPlugin
 
@@ -108,7 +108,7 @@ include::../../swagger-contract-tests/src/main/java/springfox/test/contract/swag
 <1> Add a list of custom ``ApiDescription``s
 <2> Add a list of ``Operation``s for each description
 <3> NOTE: the code generated names are not guaranteed to be unique. For these custom endpoints it is the
-resposibility of the service author to ensure.
+responsibility of the service author to ensure.
 <4> NOTE: It is important to also ensure we pass in a model reference even for primitive types
 
 == Additional extensibility options
