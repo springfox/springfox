@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.Xml;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
@@ -42,6 +43,7 @@ public class ModelPropertyBuilder {
   private String example;
   private String pattern;
   private List<VendorExtension> vendorExtensions = newArrayList();
+  private Xml xml;
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -103,6 +105,12 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  public ModelPropertyBuilder xml(Xml xml) {
+    this.xml = defaultIfAbsent(xml, this.xml);
+    return this;
+  }
+
+
   public ModelProperty build() {
     return new ModelProperty(
         name,
@@ -116,6 +124,7 @@ public class ModelPropertyBuilder {
         allowableValues,
         example,
         pattern,
-        vendorExtensions);
+        vendorExtensions,
+        xml);
   }
 }
