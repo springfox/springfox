@@ -31,9 +31,11 @@ import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntitySaveExtractor implements EntityOperationsExtractor {
@@ -49,20 +51,35 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
       RepositoryMetadata resource = context.getRepositoryMetadata();
       ActionSpecification put = saveActionSpecification(
           entity,
-          RequestMethod.PUT,
+          newHashSet(PUT, PATCH),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
           handler,
           context.getTypeResolver(),
-          resource);
+          resource, newArrayList(
+              new ResolvedMethodParameter(
+                  0,
+                  "id",
+                  pathAnnotations("id", handler),
+                  context.getTypeResolver().resolve(resource.getIdType())),
+              new ResolvedMethodParameter(
+                  0,
+                  "body",
+                  bodyAnnotations(handler),
+                  context.getTypeResolver().resolve(resource.getDomainType()))));
       handlers.add(new SpringDataRestRequestHandler(context, put));
       ActionSpecification post = saveActionSpecification(
           entity,
-          RequestMethod.POST,
+          newHashSet(POST),
           String.format("%s%s", context.basePath(), context.resourcePath()),
           handler,
-          context.getTypeResolver(), resource);
+          context.getTypeResolver(), resource, newArrayList(
+              new ResolvedMethodParameter(
+                  0,
+                  "body",
+                  bodyAnnotations(handler),
+                  context.getTypeResolver().resolve(resource.getDomainType()))));
       handlers.add(new SpringDataRestRequestHandler(context, post));
     }
     return handlers;
@@ -70,30 +87,21 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
 
   private ActionSpecification saveActionSpecification(
       PersistentEntity<?, ?> entity,
-      RequestMethod method,
+      Set<RequestMethod> methods,
       String path,
       HandlerMethod handler,
       TypeResolver typeResolver,
-      RepositoryMetadata repository) {
+      RepositoryMetadata repository,
+      List<ResolvedMethodParameter> parameters) {
 
     return new ActionSpecification(
         actionName(entity, handler.getMethod()),
         path,
-        newHashSet(method),
+        methods,
         new HashSet<MediaType>(),
         new HashSet<MediaType>(),
         handler,
-        newArrayList(
-            new ResolvedMethodParameter(
-                0,
-                "id",
-                pathAnnotations("id", handler),
-                typeResolver.resolve(repository.getIdType())),
-            new ResolvedMethodParameter(
-                0,
-                "body",
-                bodyAnnotations(handler),
-                typeResolver.resolve(repository.getDomainType()))),
+        parameters,
         typeResolver.resolve(Resource.class, repository.getReturnedDomainClass(handler.getMethod())));
   }
 }
