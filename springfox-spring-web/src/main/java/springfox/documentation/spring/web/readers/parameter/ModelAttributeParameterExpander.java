@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.Types;
@@ -210,7 +211,7 @@ public class ModelAttributeParameterExpander {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return packageName(input.getFieldType().getErasedType()).startsWith("java.lang");
+        return ClassUtils.getPackageName(input.getFieldType().getErasedType()).startsWith("java.lang");
       }
     };
   }
@@ -260,19 +261,6 @@ public class ModelAttributeParameterExpander {
 
   private ResolvedType fieldType(AlternateTypeProvider alternateTypeProvider, ResolvedField field) {
     return alternateTypeProvider.alternateFor(field.getType());
-  }
-
-  private String packageName(Class<?> type) {
-    return Optional.fromNullable(type.getPackage()).transform(toPackageName()).or("java");
-  }
-
-  private Function<Package, String> toPackageName() {
-    return new Function<Package, String>() {
-      @Override
-      public String apply(Package input) {
-        return input.getName();
-      }
-    };
   }
 
   private Set<String> getBeanPropertyNames(final Class<?> clazz) {
