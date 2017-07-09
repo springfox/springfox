@@ -43,6 +43,7 @@ public class ParameterBuilder {
   private ResolvedType type;
   private ModelReference modelRef;
   private boolean hidden;
+  private String pattern;
   private List<VendorExtension> vendorExtensions = newArrayList();
 
   /**
@@ -213,6 +214,12 @@ public class ParameterBuilder {
         paramType,
         paramAccess,
         hidden,
+        pattern,
         vendorExtensions);
   }
+
+    public ParameterBuilder pattern(String pattern) {
+      this.pattern = defaultIfAbsent(pattern, this.pattern);
+      return this;
+    }
 }

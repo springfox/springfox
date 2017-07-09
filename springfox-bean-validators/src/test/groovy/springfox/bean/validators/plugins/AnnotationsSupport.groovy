@@ -22,4 +22,7 @@ trait AnnotationsSupport {
   DecimalMax decimalMax(value) {
     [value: { -> value}] as DecimalMax
   }
+  Pattern pattern(regexp) {
+    [regexp: { -> regexp}] as Pattern
+  }
 }

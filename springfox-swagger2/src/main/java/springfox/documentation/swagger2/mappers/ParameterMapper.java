@@ -48,6 +48,7 @@ public class ParameterMapper {
         .name(source.getName())
         .schema(fromModelRef(source.getModelRef()));
     parameter.setAccess(source.getParamAccess());
+    parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
 
     //TODO: swagger-core Body parameter does not have an enum property
