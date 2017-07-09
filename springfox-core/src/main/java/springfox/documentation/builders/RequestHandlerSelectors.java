@@ -23,6 +23,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import org.springframework.util.ClassUtils;
 import springfox.documentation.RequestHandler;
 
 import java.lang.annotation.Annotation;
@@ -94,7 +95,7 @@ public class RequestHandlerSelectors {
     return new Function<Class<?>, Boolean>() {
       @Override
       public Boolean apply(Class<?> input) {
-        return input.getPackage().getName().startsWith(basePackage);
+        return ClassUtils.getPackageName(input).startsWith(basePackage);
       }
     };
   }
