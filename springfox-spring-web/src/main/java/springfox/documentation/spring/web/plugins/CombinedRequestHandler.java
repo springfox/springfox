@@ -125,7 +125,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return first.findAnnotation(annotation).or(second.findAnnotation(annotation)) ;
+    return first.findControllerAnnotation(annotation).or(second.findControllerAnnotation(annotation)) ;
   }
 
   @Override

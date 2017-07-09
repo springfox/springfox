@@ -19,6 +19,7 @@
 package springfox.documentation.spring.web.dummy.controllers;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModel;
@@ -28,6 +29,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,6 +54,7 @@ import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+@Api(tags = "Bugs")
 @RestController
 @RequestMapping("/bugs")
 public class BugsController {
@@ -223,6 +226,14 @@ public class BugsController {
   @GetMapping("/1864")
   public void test(@Valid Model1864 req) {
 
+  }
+
+  @GetMapping(value = "/1841", produces = MediaType.APPLICATION_ATOM_XML_VALUE)
+  public void method1() {
+  }
+
+  @GetMapping(value = "/1841", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public void method2() {
   }
 
   public class Model1864 {
