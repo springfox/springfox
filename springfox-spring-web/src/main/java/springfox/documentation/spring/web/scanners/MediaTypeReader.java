@@ -31,6 +31,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
+import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.List;
@@ -47,21 +48,23 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
   @Override
   public void apply(OperationContext context) {
 
-    Set<String> consumesList = toSet(context.consumes());
-    Set<String> producesList = toSet(context.produces());
+    DocumentationContext documentationContext = context.getDocumentationContext();
+
+    Set<String> operationConsumesList = toSet(context.consumes());
+    Set<String> operationProducesList = toSet(context.produces());
 
     if (handlerMethodHasFileParameter(context)) {
-      consumesList = newHashSet(MediaType.MULTIPART_FORM_DATA_VALUE);
+      operationConsumesList = newHashSet(MediaType.MULTIPART_FORM_DATA_VALUE);
     }
 
-    if (producesList.isEmpty()) {
-      producesList.add(MediaType.ALL_VALUE);
+    if (operationProducesList.isEmpty() && documentationContext.getProduces().isEmpty()) {
+      operationProducesList.add(MediaType.ALL_VALUE);
     }
-    if (consumesList.isEmpty()) {
-      consumesList.add(MediaType.APPLICATION_JSON_VALUE);
+    if (operationConsumesList.isEmpty() && documentationContext.getConsumes().isEmpty()) {
+      operationConsumesList.add(MediaType.APPLICATION_JSON_VALUE);
     }
-    context.operationBuilder().consumes(consumesList);
-    context.operationBuilder().produces(producesList);
+    context.operationBuilder().consumes(operationConsumesList);
+    context.operationBuilder().produces(operationProducesList);
   }
 
   @Override
@@ -93,7 +96,7 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
     return false;
   }
 
-  private Set<String> toSet(Set<MediaType> mediaTypeSet) {
+  private Set<String> toSet(Set<? extends MediaType> mediaTypeSet) {
     Set<String> mediaTypes = newHashSet();
     for (MediaType mediaType : mediaTypeSet) {
       mediaTypes.add(mediaType.toString());

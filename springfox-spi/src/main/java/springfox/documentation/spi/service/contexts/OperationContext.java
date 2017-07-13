@@ -24,7 +24,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +42,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.service.MediaTypes.*;
 
 public class OperationContext {
   private final OperationBuilder operationBuilder;
@@ -119,14 +117,12 @@ public class OperationContext {
     return getAlternateTypeProvider().alternateFor(resolved);
   }
 
-  public Set<MediaType> produces() {
-    return Sets.union(requestContext.produces(),
-        toMediaTypes(getDocumentationContext().getProduces()));
+  public Set<? extends MediaType> produces() {
+    return requestContext.produces();
   }
 
-  public Set<MediaType> consumes() {
-    return Sets.union(requestContext.consumes(),
-        toMediaTypes(getDocumentationContext().getConsumes()));
+  public Set<? extends MediaType> consumes() {
+    return requestContext.consumes();
   }
 
   public ImmutableSet<Class> getIgnorableParameterTypes() {
