@@ -35,10 +35,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -66,10 +62,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -92,10 +84,6 @@
         "summary": "Example with wrapped enum collection",
         "operationId": "getCollectionValueUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {

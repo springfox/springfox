@@ -35,10 +35,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -55,10 +51,6 @@
         "summary": "updateGroovyModel",
         "operationId": "updateGroovyModelUsingPUT_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [

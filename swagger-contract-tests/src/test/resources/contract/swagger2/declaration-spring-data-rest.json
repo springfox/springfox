@@ -46,10 +46,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -81,10 +77,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -111,10 +103,6 @@
         "summary": "saveAddress",
         "operationId": "saveAddressUsingPUT_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -154,10 +142,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -181,10 +165,6 @@
         "summary": "saveAddress",
         "operationId": "saveAddressUsingPATCH_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -227,9 +207,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
-          "application/json"
+          "application/hal+json"
         ],
         "parameters": [
           {
@@ -259,10 +237,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -302,10 +276,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -344,10 +314,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -373,10 +339,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -418,9 +380,8 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
           "application/json",
+          "application/hal+json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
@@ -467,10 +428,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -502,10 +459,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -532,10 +485,6 @@
         "summary": "saveCategory",
         "operationId": "saveCategoryUsingPUT_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -575,10 +524,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -602,10 +547,6 @@
         "summary": "saveCategory",
         "operationId": "saveCategoryUsingPATCH_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -648,9 +589,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
-          "application/json"
+          "application/hal+json"
         ],
         "parameters": [
           {
@@ -680,10 +619,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -726,10 +661,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -771,10 +702,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -800,10 +727,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -847,10 +770,6 @@
         "consumes": [
           "application/hal+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -887,10 +806,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -926,9 +841,8 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
           "application/json",
+          "application/hal+json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
@@ -975,10 +889,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -1011,10 +921,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "name",
@@ -1044,10 +950,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1074,10 +976,6 @@
         "summary": "savePerson",
         "operationId": "savePersonUsingPUT_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -1117,10 +1015,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1144,10 +1038,6 @@
         "summary": "savePerson",
         "operationId": "savePersonUsingPATCH_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -1190,9 +1080,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
-          "application/json"
+          "application/hal+json"
         ],
         "parameters": [
           {
@@ -1222,10 +1110,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -1265,10 +1149,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1307,10 +1187,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1336,10 +1212,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -1381,9 +1253,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
-          "application/json"
+          "application/hal+json"
         ],
         "parameters": [
           {
@@ -1413,10 +1283,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -1456,10 +1322,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1498,10 +1360,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1527,10 +1385,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -1572,9 +1426,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
-          "application/json"
+          "application/hal+json"
         ],
         "parameters": [
           {
@@ -1604,10 +1456,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -1650,10 +1498,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1695,10 +1539,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1724,10 +1564,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -1771,10 +1607,6 @@
         "consumes": [
           "application/hal+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1811,10 +1643,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1850,9 +1678,8 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
           "application/json",
+          "application/hal+json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
@@ -1899,10 +1726,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -1934,10 +1757,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1964,10 +1783,6 @@
         "summary": "saveTag",
         "operationId": "saveTagUsingPUT_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -2007,10 +1822,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -2034,10 +1845,6 @@
         "summary": "saveTag",
         "operationId": "saveTagUsingPATCH_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -2080,9 +1887,7 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
-          "application/json"
+          "application/hal+json"
         ],
         "parameters": [
           {
@@ -2112,10 +1917,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -2158,10 +1959,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -2203,10 +2000,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -2232,10 +2025,6 @@
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
         ],
         "parameters": [
           {
@@ -2279,10 +2068,6 @@
         "consumes": [
           "application/hal+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -2319,10 +2104,6 @@
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -2358,9 +2139,8 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/hal+json",
           "application/json",
+          "application/hal+json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],

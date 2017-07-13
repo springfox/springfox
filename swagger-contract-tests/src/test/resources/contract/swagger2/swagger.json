@@ -325,7 +325,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -395,7 +394,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -435,7 +433,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -476,7 +473,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -511,7 +507,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -549,7 +544,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -587,7 +581,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -630,7 +623,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -654,7 +646,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -692,7 +683,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -780,7 +770,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -816,10 +805,6 @@
         "summary": "test",
         "operationId": "testUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
