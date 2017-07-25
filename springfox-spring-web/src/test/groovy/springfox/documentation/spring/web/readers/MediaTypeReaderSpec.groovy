@@ -49,8 +49,8 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
                         'producesRequestCondition': producesRequestCondition(produces)
                   ]
             )
-    OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo)
+      OperationContext operationContext =
+            operationContext(context(), handlerMethod, 0, requestMappingInfo)
 
     when:
       sut.apply(operationContext)
@@ -68,5 +68,58 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
       ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | dummyHandlerMethod()
   }
 
+  @Unroll
+  def "should only set default 'application/json' consumes if no consumes is set for the operation and document context"() {
+    given:
+      contextBuilder.consumes(newHashSet(documentConsumes))
+      RequestMappingInfo requestMappingInfo =
+              requestMappingInfo('/somePath',
+                      [
+                              'consumesRequestCondition': consumesRequestCondition(operationConsumes)
+                      ]
+              )
+      OperationContext operationContext =
+              operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
+
+    when:
+      sut.apply(operationContext)
+      def operation = operationContext.operationBuilder().build()
+
+    then:
+      operation.consumes == newHashSet(expectedOperationConsumes)
+
+    where:
+      documentConsumes                  | operationConsumes                 | expectedOperationConsumes
+      [] as String[]                    | [] as String[]                    | ['application/json'] as String[]
+      ['application/xml'] as String[]   | [] as String[]                    | [] as String[]
+      [] as String[]                    | ['application/xml'] as String[]   | ['application/xml'] as String[]
+  }
+
+  @Unroll
+  def "should only set default '*/*' produces if no produces is set for the operation and document context"() {
+    given:
+    contextBuilder.produces(newHashSet(documentProduces))
+    RequestMappingInfo requestMappingInfo =
+            requestMappingInfo('/somePath',
+                    [
+                            'producesRequestCondition': producesRequestCondition(operationProduces)
+                    ]
+            )
+    OperationContext operationContext =
+            operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
+
+    when:
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
+
+    then:
+    operation.produces == newHashSet(expectedOperationProduces)
+
+    where:
+    documentProduces                  | operationProduces                 | expectedOperationProduces
+    [] as String[]                    | [] as String[]                    | ['*/*'] as String[]
+    ['application/xml'] as String[]   | [] as String[]                    | [] as String[]
+    [] as String[]                    | ['application/xml'] as String[]   | ['application/xml'] as String[]
+  }
 
 }
