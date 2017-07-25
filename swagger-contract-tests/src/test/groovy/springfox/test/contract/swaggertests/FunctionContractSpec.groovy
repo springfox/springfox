@@ -40,8 +40,8 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
-import static org.skyscreamer.jsonassert.JSONCompareMode.*
-import static org.springframework.boot.test.context.SpringBootTest.*
+import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = Config)
@@ -89,6 +89,8 @@ class FunctionContractSpec extends Specification implements FileAccess {
       'declaration-groovy-service.json'                             | 'groovyService'
       'declaration-enum-service.json'                               | 'enumService'
       'declaration-spring-data-rest.json'                           | 'spring-data-rest'
+      'declaration-consumes-produces-not-on-document-context.json'  | 'consumesProducesNotOnDocumentContext'
+      'declaration-consumes-produces-on-document-context.json'      | 'consumesProducesOnDocumentContext'
   }
 
   def "should list swagger resources for swagger 2.0"() {

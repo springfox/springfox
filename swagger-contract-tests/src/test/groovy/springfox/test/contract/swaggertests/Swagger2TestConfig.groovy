@@ -38,8 +38,8 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 import java.nio.ByteBuffer
 
 import static com.google.common.base.Predicates.*
-import static springfox.documentation.builders.PathSelectors.*
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.builders.PathSelectors.regex
+import static springfox.documentation.schema.AlternateTypeRules.newRule
 
 @Configuration
 @EnableSwagger2
@@ -272,6 +272,30 @@ public class Swagger2TestConfig {
         .select()
         .paths(regex("/features/.*"))
         .build()
+  }
+
+  @Bean
+  public Docket consumesProducesNotOnDocumentContext(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+            .groupName("consumesProducesNotOnDocumentContext")
+            .useDefaultResponseMessages(false)
+            .securitySchemes(authorizationTypes)
+            .select()
+            .paths(regex("/consumes-produces/.*"))
+            .build()
+  }
+
+  @Bean
+  public Docket consumesProducesOnDocumentContext(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+            .groupName("consumesProducesOnDocumentContext")
+            .useDefaultResponseMessages(false)
+            .securitySchemes(authorizationTypes)
+            .consumes(['text/plain'] as Set)
+            .produces(['application/json'] as Set)
+            .select()
+            .paths(regex("/consumes-produces/.*"))
+            .build()
   }
 
   @Bean
