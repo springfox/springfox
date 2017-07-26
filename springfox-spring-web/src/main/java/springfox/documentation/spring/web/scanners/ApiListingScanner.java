@@ -98,12 +98,14 @@ public class ApiListingScanner {
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
 
       String resourcePath = longestCommonPath(sortedApis);
-      if (resourceGroup.getControllerClass().isAnnotationPresent(RequestMapping.class)) {
-        // determine resourcePath from @RequestMapping annotation if exists
-        RequestMapping requestMappingAnnotation = (RequestMapping) resourceGroup.getControllerClass().getAnnotation(RequestMapping.class);
-        String[] paths = requestMappingAnnotation.path();
-        if (paths.length == 1) {
-          resourcePath = paths[0];
+      if (resourceGroup.getControllerClass().isPresent()) {
+        if (resourceGroup.getControllerClass().get().isAnnotationPresent(RequestMapping.class)) {
+          // determine resourcePath from @RequestMapping annotation if exists
+          RequestMapping requestMappingAnnotation = (RequestMapping) resourceGroup.getControllerClass().getAnnotation(RequestMapping.class);
+          String[] paths = requestMappingAnnotation.path();
+          if (paths.length == 1) {
+            resourcePath = paths[0];
+          }
         }
       }
 
