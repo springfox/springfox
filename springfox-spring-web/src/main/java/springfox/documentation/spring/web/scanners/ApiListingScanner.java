@@ -26,6 +26,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
@@ -97,6 +98,14 @@ public class ApiListingScanner {
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
 
       String resourcePath = longestCommonPath(sortedApis);
+      if (resourceGroup.getControllerClass().isAnnotationPresent(RequestMapping.class)) {
+        // determine resourcePath from @RequestMapping annotation if exists
+        RequestMapping requestMappingAnnotation = (RequestMapping) resourceGroup.getControllerClass().getAnnotation(RequestMapping.class);
+        String[] paths = requestMappingAnnotation.path();
+        if (paths.length == 1) {
+          resourcePath = paths[0];
+        }
+      }
 
       PathProvider pathProvider = documentationContext.getPathProvider();
       String basePath = pathProvider.getApplicationBasePath();
