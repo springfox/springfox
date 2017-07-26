@@ -236,6 +236,23 @@ public class BugsController {
   public void method2() {
   }
 
+  @RequestMapping(value = "/1939",
+      method = RequestMethod.GET,
+      produces = "application/jwt")
+  @ApiOperation(value = "authenticate a user using a given set of "
+      + "credentials, producing a JWT token that may be "
+      + "used for future API operations if successful")
+  @Valid
+  public ResponseEntity<String>
+    authenticate(@RequestParam("username")
+                   String username,
+               @RequestParam("password")
+                   String password,
+               @RequestParam(required = false, name = "credential-source-id")
+                   String credentialSourceID) {
+    return ResponseEntity.ok("Success!");
+  }
+
   public class Model1864 {
     @NotNull
     private String somename;

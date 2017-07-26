@@ -960,6 +960,54 @@
           }
         }
       }
+    },
+    "/bugs/1939{?username,password,credential-source-id}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "authenticate a user using a given set of credentials, producing a JWT token that may be used for future API operations if successful",
+        "operationId": "authenticateUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json",
+          "application/jwt"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "password",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "credential-source-id",
+            "in": "query",
+            "description": "credential-source-id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
