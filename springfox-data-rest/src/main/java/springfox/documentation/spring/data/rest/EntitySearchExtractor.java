@@ -20,7 +20,9 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Optional;
 import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.mapping.MethodResourceMapping;
 import org.springframework.data.rest.core.mapping.SearchResourceMappings;
 import org.springframework.hateoas.Resource;
@@ -31,8 +33,10 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Types;
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -61,7 +65,7 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
           new HashSet<MediaType>(),
           new HashSet<MediaType>(),
           handler,
-          methodResolver.methodParameters(handler),
+          transferResolvedMethodParameterList(methodResolver.methodParameters(handler)),
           inferReturnType(methodResolver, handler, context.getTypeResolver()));
       handlers.add(new SpringDataRestRequestHandler(context, spec));
     }
@@ -80,5 +84,21 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
       return returnType;
     }
     return resolver.resolve(Resource.class, returnType);
+  }
+
+  private List<ResolvedMethodParameter> transferResolvedMethodParameterList(List<ResolvedMethodParameter> srcList) {
+    List<ResolvedMethodParameter> targetList = new ArrayList<ResolvedMethodParameter>(srcList.size());
+    for(ResolvedMethodParameter resolvedMethodParameter : srcList) {
+      targetList.add(transferResolvedMethodParameter(resolvedMethodParameter));
+    }
+    return targetList;
+  }
+
+  private ResolvedMethodParameter transferResolvedMethodParameter(ResolvedMethodParameter src) {
+    Optional<Param> param = src.findAnnotation(Param.class);
+    if (param.isPresent()) {
+      return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
+    }
+    return src;
   }
 }
