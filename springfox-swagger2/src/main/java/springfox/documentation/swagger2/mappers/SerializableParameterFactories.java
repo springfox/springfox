@@ -66,6 +66,7 @@ public class SerializableParameterFactories {
     toReturn.setName(source.getName());
     toReturn.setDescription(source.getDescription());
     toReturn.setAccess(source.getParamAccess());
+    toReturn.setPattern(source.getPattern());
     toReturn.setRequired(source.isRequired());
     maybeAddAllowableValuesToParameter(toReturn, source.getAllowableValues());
     if (paramModel.isCollection()) {
