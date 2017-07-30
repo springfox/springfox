@@ -24,6 +24,7 @@ import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.DecimalProperty;
 import io.swagger.models.properties.MapProperty;
+import io.swagger.models.properties.StringProperty;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -77,6 +78,32 @@ public class PropertyExampleSerializerTest {
     String serialized = objectMapper.writeValueAsString(mapProperty);
     Assert.assertTrue(serialized.contains(
             "\"example\":{\"0\": {\"name\": \"foo\", \"age\": 42}, \"1\": {\"name\": \"bar\", \"valid\": true}}"));
+  }
+
+  @Test
+  public void serializePropertyExampleString() throws Exception {
+    StringProperty stringProperty = new StringProperty();
+    stringProperty.setExample("2017-07-30");
+
+    String serialized = objectMapper.writeValueAsString(stringProperty);
+    Assert.assertTrue(serialized.contains("\"example\":\"2017-07-30\""));
+  }
+
+  @Test
+  public void serializePropertyExampleNull() throws Exception {
+    StringProperty stringProperty = new StringProperty();
+
+    String serialized = objectMapper.writeValueAsString(stringProperty);
+    Assert.assertFalse(serialized.contains("\"example\":"));
+  }
+
+  @Test
+  public void serializePropertyExampleEmpty() throws Exception {
+    StringProperty stringProperty = new StringProperty();
+    stringProperty.setExample("   ");
+
+    String serialized = objectMapper.writeValueAsString(stringProperty);
+    Assert.assertFalse(serialized.contains("\"example\":"));
   }
 
 }
