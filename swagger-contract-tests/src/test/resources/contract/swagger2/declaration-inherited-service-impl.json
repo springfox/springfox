@@ -36,7 +36,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -66,10 +65,6 @@
         "summary": "getSomething",
         "operationId": "getSomethingUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [

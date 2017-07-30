@@ -38,10 +38,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -61,10 +57,6 @@
         "summary": "bug1209",
         "operationId": "bug1209UsingPOST_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -96,10 +88,6 @@
         "summary": "bug1306",
         "operationId": "bug1306UsingPOST_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -139,10 +127,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -161,10 +145,6 @@
         "summary": "issue1376Input",
         "operationId": "issue1376InputUsingPOST_4",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -193,10 +173,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "url",
@@ -222,10 +198,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -245,10 +217,6 @@
         "summary": "issue1420",
         "operationId": "issue1420UsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -271,10 +239,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -293,10 +257,6 @@
         "summary": "mapOfLists",
         "operationId": "mapOfListsUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -325,10 +285,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -355,10 +311,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -380,10 +332,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -399,10 +347,6 @@
         "summary": "fileCustomType",
         "operationId": "fileCustomTypeUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -431,10 +375,6 @@
         "summary": "filesCustomType",
         "operationId": "filesCustomTypeUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -468,10 +408,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -498,10 +434,6 @@
         "summary": "payloadWithByteBuffer",
         "operationId": "payloadWithByteBufferUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -566,10 +498,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "offset",
@@ -598,10 +526,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -620,10 +544,6 @@
         "summary": "Retrieve all the companies",
         "operationId": "getAllPagedUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -704,10 +624,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "list of ids",
@@ -729,10 +645,6 @@
         "summary": "1750b",
         "operationId": "bug1750bUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -776,10 +688,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -798,10 +706,6 @@
         "summary": "bug1778",
         "operationId": "bug1778UsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -835,10 +739,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -865,10 +765,6 @@
         "summary": "modelWithListOfEnumsAsModelAttribute",
         "operationId": "modelWithListOfEnumsAsModelAttributeUsingPOST_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -909,10 +805,8 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
           "application/atom+xml",
-          "application/json;charset=UTF-8",
-          "application/json"
+          "application/json;charset=UTF-8"
         ],
         "responses": {
           "200": {
@@ -929,10 +823,6 @@
         "summary": "test",
         "operationId": "testUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [

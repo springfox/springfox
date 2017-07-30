@@ -42,6 +42,11 @@
       "position": 0
     },
     {
+      "description": "Services to demonstrate produces/consumes override behaviour on document and operation level",
+      "path": "/default/consumes-produces-service",
+      "position": 0
+    },
+    {
       "description": "Controller With No Request Mapping Service",
       "path": "/default/controller-with-no-request-mapping-service",
       "position": 0
