@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,10 @@ import static com.google.common.collect.Sets.*
 @Mixin([RequestMappingSupport])
 class MediaTypeReaderSpec extends DocumentationContextSpec {
   MediaTypeReader sut
-  @Shared Set<String> emptySet = newHashSet()
+
+  @Shared
+  Set<String> emptySet = newHashSet()
+
   def setup() {
     sut = new MediaTypeReader()
   }
@@ -42,57 +45,57 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
   def "should read media types"() {
 
     given:
-      RequestMappingInfo requestMappingInfo =
-            requestMappingInfo('/somePath',
-                  [
-                        'consumesRequestCondition': consumesRequestCondition(consumes),
-                        'producesRequestCondition': producesRequestCondition(produces)
-                  ]
-            )
-      OperationContext operationContext =
-            operationContext(context(), handlerMethod, 0, requestMappingInfo)
+    RequestMappingInfo requestMappingInfo =
+        requestMappingInfo('/somePath',
+            [
+                'consumesRequestCondition': consumesRequestCondition(consumes),
+                'producesRequestCondition': producesRequestCondition(produces)
+            ]
+        )
+    OperationContext operationContext =
+        operationContext(context(), handlerMethod, 0, requestMappingInfo)
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
     then:
-      operation.consumes == newHashSet(consumes)
-      operation.produces == newHashSet(produces)
+    operation.consumes == newHashSet(consumes)
+    operation.produces == newHashSet(produces)
 
     where:
-      consumes                                            | produces                         | handlerMethod
-      ['application/json'] as String[]                    | ['application/json'] as String[] | dummyHandlerMethod()
-      ['application/json'] as String[]                    | ['application/xml'] as String[]  | dummyHandlerMethod()
-      ['multipart/form-data'] as String[]                 | ['application/json'] as String[] | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
-      ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | dummyHandlerMethod()
+    consumes                                            | produces                         | handlerMethod
+    ['application/json'] as String[]                    | ['application/json'] as String[] | dummyHandlerMethod()
+    ['application/json'] as String[]                    | ['application/xml'] as String[]  | dummyHandlerMethod()
+    ['multipart/form-data'] as String[]                 | ['application/json'] as String[] | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
+    ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | dummyHandlerMethod()
   }
 
   @Unroll
   def "should only set default 'application/json' consumes if no consumes is set for the operation and document context"() {
     given:
-      contextBuilder.consumes(newHashSet(documentConsumes))
-      RequestMappingInfo requestMappingInfo =
-              requestMappingInfo('/somePath',
-                      [
-                              'consumesRequestCondition': consumesRequestCondition(operationConsumes)
-                      ]
-              )
-      OperationContext operationContext =
-              operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
+    contextBuilder.consumes(newHashSet(documentConsumes))
+    RequestMappingInfo requestMappingInfo =
+        requestMappingInfo('/somePath',
+            [
+                'consumesRequestCondition': consumesRequestCondition(operationConsumes)
+            ]
+        )
+    OperationContext operationContext =
+        operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
     then:
-      operation.consumes == newHashSet(expectedOperationConsumes)
+    operation.consumes == newHashSet(expectedOperationConsumes)
 
     where:
-      documentConsumes                  | operationConsumes                 | expectedOperationConsumes
-      [] as String[]                    | [] as String[]                    | ['application/json'] as String[]
-      ['application/xml'] as String[]   | [] as String[]                    | [] as String[]
-      [] as String[]                    | ['application/xml'] as String[]   | ['application/xml'] as String[]
+    documentConsumes                | operationConsumes               | expectedOperationConsumes
+    [] as String[]                  | [] as String[]                  | ['application/json'] as String[]
+    ['application/xml'] as String[] | [] as String[]                  | [] as String[]
+    [] as String[]                  | ['application/xml'] as String[] | ['application/xml'] as String[]
   }
 
   @Unroll
@@ -100,13 +103,13 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     given:
     contextBuilder.produces(newHashSet(documentProduces))
     RequestMappingInfo requestMappingInfo =
-            requestMappingInfo('/somePath',
-                    [
-                            'producesRequestCondition': producesRequestCondition(operationProduces)
-                    ]
-            )
+        requestMappingInfo('/somePath',
+            [
+                'producesRequestCondition': producesRequestCondition(operationProduces)
+            ]
+        )
     OperationContext operationContext =
-            operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
+        operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
 
     when:
     sut.apply(operationContext)
@@ -116,10 +119,10 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     operation.produces == newHashSet(expectedOperationProduces)
 
     where:
-    documentProduces                  | operationProduces                 | expectedOperationProduces
-    [] as String[]                    | [] as String[]                    | ['*/*'] as String[]
-    ['application/xml'] as String[]   | [] as String[]                    | [] as String[]
-    [] as String[]                    | ['application/xml'] as String[]   | ['application/xml'] as String[]
+    documentProduces                | operationProduces               | expectedOperationProduces
+    [] as String[]                  | [] as String[]                  | ['*/*'] as String[]
+    ['application/xml'] as String[] | [] as String[]                  | [] as String[]
+    [] as String[]                  | ['application/xml'] as String[] | ['application/xml'] as String[]
   }
 
 }
