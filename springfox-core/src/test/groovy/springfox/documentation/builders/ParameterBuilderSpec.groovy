@@ -50,6 +50,7 @@ class ParameterBuilderSpec extends Specification {
       'modelRef'        | new ModelRef('string')                 | 'modelRef'
       'parameterType'   | 'string'                               | 'paramType'
       'parameterAccess' | 'public'                               | 'paramAccess'
+      'pattern'         | '[a-zA-Z0-9_]'                         | 'pattern'
       'allowMultiple'   | true                                   | 'allowMultiple'
       'required'        | true                                   | 'required'
       'allowableValues' | new AllowableListValues(['a'], "LIST") | 'allowableValues'
@@ -80,6 +81,7 @@ class ParameterBuilderSpec extends Specification {
       'modelRef'        | new ModelRef('string')                 | 'modelRef'
       'parameterType'   | 'string'                               | 'paramType'
       'parameterAccess' | 'public'                               | 'paramAccess'
+      'pattern'         | '[a-zA-Z0-9_]'                         | 'pattern'
       'allowableValues' | new AllowableListValues(['a'], "LIST") | 'allowableValues'
       'type'            | Mock(ResolvedType)                     | 'type'
   }
