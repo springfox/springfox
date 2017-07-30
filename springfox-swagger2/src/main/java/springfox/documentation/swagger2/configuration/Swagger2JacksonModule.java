@@ -21,9 +21,13 @@ package springfox.documentation.swagger2.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.Info;
@@ -42,13 +46,16 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 
+import java.io.IOException;
+import java.util.regex.Pattern;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
 public class Swagger2JacksonModule extends SimpleModule implements JacksonModuleRegistrar {
 
   public void maybeRegisterModule(ObjectMapper objectMapper) {
     if (objectMapper.findMixInClassFor(Swagger.class) == null) {
-      objectMapper.registerModule(new Swagger2JacksonModule());
+      objectMapper.registerModule(this);
       objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
   }
@@ -63,7 +70,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
     context.setMixInAnnotations(SecurityRequirement.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(SecuritySchemeDefinition.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Model.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Property.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(Property.class, PropertyExampleSerializerMixin.class);
     context.setMixInAnnotations(Operation.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Path.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Response.class, CustomizedSwaggerSerializer.class);
@@ -77,6 +84,66 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
   @JsonAutoDetect
   @JsonInclude(value = Include.NON_EMPTY)
   private class CustomizedSwaggerSerializer {
+  }
+
+  @JsonAutoDetect
+  @JsonInclude(value = Include.NON_EMPTY)
+  private interface PropertyExampleSerializerMixin {
+
+    @JsonSerialize(using = PropertyExampleSerializer.class)
+    Object getExample();
+
+    class PropertyExampleSerializer extends StdSerializer<Object> {
+
+      private final static Pattern JSON_NUMBER_PATTERN = Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
+
+      @SuppressWarnings("unused")
+      public PropertyExampleSerializer() {
+        this(null);
+      }
+
+      PropertyExampleSerializer(Class<Object> t) {
+        super(t);
+      }
+
+      @Override
+      public void serialize(Object value, JsonGenerator gen, SerializerProvider provider)
+              throws IOException {
+        String stringValue = (value instanceof String) ? ((String) value).trim() : value.toString().trim();
+        if (isNotJsonString(stringValue)) {
+          gen.writeRawValue(stringValue);
+        } else {
+          gen.writeString(stringValue);
+        }
+      }
+
+      private boolean isNotJsonString(final String value) throws IOException {
+        // strictly speaking, should also test for equals("null") since {"example": null} would be valid JSON
+        // but swagger2 does not support null values
+        // and an example value of "null" probably does not make much sense anyway
+        return value.startsWith("{")                              // object
+                || value.startsWith("[")                          // array
+                || value.equals("true")                           // true
+                || value.equals("false")                          // false
+                || JSON_NUMBER_PATTERN.matcher(value).matches();  // number
+      }
+
+      @Override
+      public boolean isEmpty(SerializerProvider provider, Object value) {
+        return internalIsEmpty(value);
+      }
+
+      @SuppressWarnings("deprecation")
+      @Override
+      public boolean isEmpty(Object value) {
+        return internalIsEmpty(value);
+      }
+
+      private boolean internalIsEmpty(Object value) {
+        return value == null || value.toString().trim().length() == 0;
+      }
+
+    }
   }
 
 }
