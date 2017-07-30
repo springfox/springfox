@@ -123,8 +123,8 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
         // and an example value of "null" probably does not make much sense anyway
         return value.startsWith("{")                              // object
                 || value.startsWith("[")                          // array
-                || value.equals("true")                           // true
-                || value.equals("false")                          // false
+                || "true".equals(value)                           // true
+                || "false".equals(value)                          // false
                 || JSON_NUMBER_PATTERN.matcher(value).matches();  // number
       }
 
