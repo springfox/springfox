@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2017-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -56,67 +56,71 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @Unroll
   def 'should honor swagger v2 resource listing #groupName'() {
     given:
-      RequestEntity<Void> request = RequestEntity.get(
-          new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
-          .accept(MediaType.APPLICATION_JSON)
-          .build()
-      String contract = fileContents("/contract/swagger2/$contractFile")
+    RequestEntity<Void> request = RequestEntity.get(
+        new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
+    String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
-      def response = http.exchange(request, String)
-      then:
-      String raw = response.body
-      response.statusCode == HttpStatus.OK
+    def response = http.exchange(request, String)
+    then:
+    String raw = response.body
+    response.statusCode == HttpStatus.OK
 
-      def withPortReplaced = contract.replaceAll("__PORT__", "$port")
-      JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
+    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+    JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
 
     where:
-      contractFile                                                  | groupName
-      'swagger.json'                                                | 'petstore'
-      'swaggerTemplated.json'                                       | 'petstoreTemplated'
-      'declaration-bugs-service.json'                               | 'bugs'
-      'declaration-bugs-different-service.json'                     | 'bugsDifferent'
-      'declaration-business-service.json'                           | 'businessService'
-      'declaration-concrete-controller.json'                        | 'concrete'
-      'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
-      'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
-      'declaration-feature-demonstration-service.json'              | 'featureService'
-      'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
-      'declaration-inherited-service-impl.json'                     | 'inheritedService'
-      'declaration-pet-grooming-service.json'                       | 'petGroomingService'
-      'declaration-pet-service.json'                                | 'petService'
-      'declaration-groovy-service.json'                             | 'groovyService'
-      'declaration-enum-service.json'                               | 'enumService'
-      'declaration-spring-data-rest.json'                           | 'spring-data-rest'
+    contractFile                                                  | groupName
+    'swagger.json'                                                | 'petstore'
+    'swaggerTemplated.json'                                       | 'petstoreTemplated'
+    'declaration-bugs-service.json'                               | 'bugs'
+    'declaration-bugs-different-service.json'                     | 'bugsDifferent'
+    'declaration-business-service.json'                           | 'businessService'
+    'declaration-concrete-controller.json'                        | 'concrete'
+    'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
+    'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
+    'declaration-feature-demonstration-service.json'              | 'featureService'
+    'declaration-feature-demonstration-service-codeGen.json'      | 'featureService-codeGen'
+    'declaration-inherited-service-impl.json'                     | 'inheritedService'
+    'declaration-pet-grooming-service.json'                       | 'petGroomingService'
+    'declaration-pet-service.json'                                | 'petService'
+    'declaration-groovy-service.json'                             | 'groovyService'
+    'declaration-enum-service.json'                               | 'enumService'
+    'declaration-spring-data-rest.json'                           | 'spring-data-rest'
+    'declaration-consumes-produces-not-on-document-context.json'  | 'consumesProducesNotOnDocumentContext'
+    'declaration-consumes-produces-on-document-context.json'      | 'consumesProducesOnDocumentContext'
   }
 
   def "should list swagger resources for swagger 2.0"() {
     given:
-      def http = new TestRestTemplate()
-      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
-          .accept(MediaType.APPLICATION_JSON)
-          .build()
+    def http = new TestRestTemplate()
+    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
+
     when:
-      def response = http.exchange(request, String)
-      def slurper = new JsonSlurper()
-      def result = slurper.parseText(response.body)
+    def response = http.exchange(request, String)
+    def slurper = new JsonSlurper()
+    def result = slurper.parseText(response.body)
+
     then:
-      result.find {
-        it.name == 'petstore' &&
-            it.location == '/v2/api-docs?group=petstore' &&
-            it.swaggerVersion == '2.0'
-      }
-      result.find {
-        it.name == 'businessService' &&
-            it.location == '/v2/api-docs?group=businessService' &&
-            it.swaggerVersion == '2.0'
-      }
-      result.find {
-        it.name == 'concrete' &&
-            it.location == '/v2/api-docs?group=concrete' &&
-            it.swaggerVersion == '2.0'
-      }
+    result.find {
+      it.name == 'petstore' &&
+          it.location == '/v2/api-docs?group=petstore' &&
+          it.swaggerVersion == '2.0'
+    }
+    result.find {
+      it.name == 'businessService' &&
+          it.location == '/v2/api-docs?group=businessService' &&
+          it.swaggerVersion == '2.0'
+    }
+    result.find {
+      it.name == 'concrete' &&
+          it.location == '/v2/api-docs?group=concrete' &&
+          it.swaggerVersion == '2.0'
+    }
   }
 
   def 'should honor swagger resource listing'() {
@@ -129,6 +133,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
     when:
     def response = http.exchange(request, String)
+
     then:
     response.statusCode == HttpStatus.OK
 
@@ -138,46 +143,49 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @Unroll
   def 'should honor api v1.2 contract [#contractFile] at endpoint [#declarationPath]'() {
     given:
-      def http = new TestRestTemplate()
-      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs${declarationPath}"))
-          .accept(MediaType.APPLICATION_JSON)
-          .build()
-      String contract = fileContents("/contract/swagger/$contractFile")
-    when:
-      def response = http.exchange(request, String)
-    then:
-      String raw = response.body
-      response.statusCode == HttpStatus.OK
+    def http = new TestRestTemplate()
+    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs${declarationPath}"))
+        .accept(MediaType.APPLICATION_JSON)
+        .build()
+    String contract = fileContents("/contract/swagger/$contractFile")
 
-      JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
+    when:
+    def response = http.exchange(request, String)
+
+    then:
+    String raw = response.body
+    response.statusCode == HttpStatus.OK
+    JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
     where:
-      contractFile                                                  | declarationPath
-      'declaration-business-service.json'                           | '/default/business-service'
-      'declaration-concrete-controller.json'                        | '/default/concrete-controller'
-      'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
-      'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
-      'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
-      'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
-      'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
-      'declaration-pet-service.json'                                | '/default/pet-service'
-      'declaration-root-controller.json'                            | '/default/root-controller'
-      'declaration-groovy-service.json'                             | '/default/groovy-service'
+    contractFile                                                  | declarationPath
+    'declaration-business-service.json'                           | '/default/business-service'
+    'declaration-concrete-controller.json'                        | '/default/concrete-controller'
+    'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
+    'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
+    'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
+    'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
+    'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
+    'declaration-pet-service.json'                                | '/default/pet-service'
+    'declaration-root-controller.json'                            | '/default/root-controller'
+    'declaration-groovy-service.json'                             | '/default/groovy-service'
   }
 
 
   def "should list swagger resources for swagger 1.2"() {
     given:
-      def http = new TestRestTemplate()
-      RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
+    def http = new TestRestTemplate()
+    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
+
     when:
-      def response = http.exchange(request, String)
-      def slurper = new JsonSlurper()
-      def result = slurper.parseText(response.body)
+    def response = http.exchange(request, String)
+    def slurper = new JsonSlurper()
+    def result = slurper.parseText(response.body)
+
     then:
-      result.find {
+    result.find {
       it.name == 'default' &&
           it.location == '/api-docs' &&
           it.swaggerVersion == '1.2'

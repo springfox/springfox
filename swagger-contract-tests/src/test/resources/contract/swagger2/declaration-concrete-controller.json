@@ -34,10 +34,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -64,10 +60,6 @@
         "summary": "delete",
         "operationId": "deleteUsingDELETE_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -100,10 +92,6 @@
         "summary": "get",
         "operationId": "getUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
