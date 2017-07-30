@@ -107,8 +107,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
       }
 
       @Override
-      public void serialize(Object value, JsonGenerator gen, SerializerProvider provider)
-              throws IOException {
+      public void serialize(Object value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         String stringValue = (value instanceof String) ? ((String) value).trim() : value.toString().trim();
         if (isNotJsonString(stringValue)) {
           gen.writeRawValue(stringValue);
