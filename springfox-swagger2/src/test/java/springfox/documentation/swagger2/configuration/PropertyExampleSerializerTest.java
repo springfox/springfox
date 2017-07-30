@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,18 +25,18 @@ import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.DecimalProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.StringProperty;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class PropertyExampleSerializerTest {
 
-  private static final ObjectMapper objectMapper = new ObjectMapper();
-  private static final Swagger2JacksonModule swagger2JacksonModule = new Swagger2JacksonModule();
+  private static final ObjectMapper sut = new ObjectMapper();
 
   @BeforeClass
   public static void setupClass() {
-    swagger2JacksonModule.maybeRegisterModule(objectMapper);
+    sut.registerModule(new Swagger2JacksonModule());
   }
 
   @Test
@@ -46,10 +46,10 @@ public class PropertyExampleSerializerTest {
     BooleanProperty booleanPropertyFalse = new BooleanProperty();
     booleanPropertyFalse.setExample("false");
 
-    String serializedTrue = objectMapper.writeValueAsString(booleanPropertyTrue);
-    Assert.assertTrue(serializedTrue.contains("\"example\":true"));
-    String serializedFalse = objectMapper.writeValueAsString(booleanPropertyFalse);
-    Assert.assertTrue(serializedFalse.contains("\"example\":false"));
+    String serializedTrue = sut.writeValueAsString(booleanPropertyTrue);
+    assertTrue(serializedTrue.contains("\"example\":true"));
+    String serializedFalse = sut.writeValueAsString(booleanPropertyFalse);
+    assertTrue(serializedFalse.contains("\"example\":false"));
   }
 
   @Test
@@ -57,8 +57,8 @@ public class PropertyExampleSerializerTest {
     DecimalProperty decimalProperty = new DecimalProperty();
     decimalProperty.setExample("-0.42");
 
-    String serialized = objectMapper.writeValueAsString(decimalProperty);
-    Assert.assertTrue(serialized.contains("\"example\":-0.42"));
+    String serialized = sut.writeValueAsString(decimalProperty);
+    assertTrue(serialized.contains("\"example\":-0.42"));
   }
 
   @Test
@@ -66,8 +66,8 @@ public class PropertyExampleSerializerTest {
     ArrayProperty arrayProperty = new ArrayProperty();
     arrayProperty.setExample("[42, \"foo\", true]");
 
-    String serialized = objectMapper.writeValueAsString(arrayProperty);
-    Assert.assertTrue(serialized.contains("[42, \"foo\", true]"));
+    String serialized = sut.writeValueAsString(arrayProperty);
+    assertTrue(serialized.contains("[42, \"foo\", true]"));
   }
 
   @Test
@@ -75,9 +75,9 @@ public class PropertyExampleSerializerTest {
     MapProperty mapProperty = new MapProperty();
     mapProperty.setExample("{\"0\": {\"name\": \"foo\", \"age\": 42}, \"1\": {\"name\": \"bar\", \"valid\": true}}");
 
-    String serialized = objectMapper.writeValueAsString(mapProperty);
-    Assert.assertTrue(serialized.contains(
-            "\"example\":{\"0\": {\"name\": \"foo\", \"age\": 42}, \"1\": {\"name\": \"bar\", \"valid\": true}}"));
+    String serialized = sut.writeValueAsString(mapProperty);
+    assertTrue(serialized.contains(
+        "\"example\":{\"0\": {\"name\": \"foo\", \"age\": 42}, \"1\": {\"name\": \"bar\", \"valid\": true}}"));
   }
 
   @Test
@@ -85,16 +85,16 @@ public class PropertyExampleSerializerTest {
     StringProperty stringProperty = new StringProperty();
     stringProperty.setExample("2017-07-30");
 
-    String serialized = objectMapper.writeValueAsString(stringProperty);
-    Assert.assertTrue(serialized.contains("\"example\":\"2017-07-30\""));
+    String serialized = sut.writeValueAsString(stringProperty);
+    assertTrue(serialized.contains("\"example\":\"2017-07-30\""));
   }
 
   @Test
   public void serializePropertyExampleNull() throws Exception {
     StringProperty stringProperty = new StringProperty();
 
-    String serialized = objectMapper.writeValueAsString(stringProperty);
-    Assert.assertFalse(serialized.contains("\"example\":"));
+    String serialized = sut.writeValueAsString(stringProperty);
+    assertFalse(serialized.contains("\"example\":"));
   }
 
   @Test
@@ -102,8 +102,8 @@ public class PropertyExampleSerializerTest {
     StringProperty stringProperty = new StringProperty();
     stringProperty.setExample("   ");
 
-    String serialized = objectMapper.writeValueAsString(stringProperty);
-    Assert.assertFalse(serialized.contains("\"example\":"));
+    String serialized = sut.writeValueAsString(stringProperty);
+    assertFalse(serialized.contains("\"example\":"));
   }
 
 }

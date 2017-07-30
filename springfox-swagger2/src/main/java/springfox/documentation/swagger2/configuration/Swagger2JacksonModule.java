@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -70,7 +70,6 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
     context.setMixInAnnotations(SecurityRequirement.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(SecuritySchemeDefinition.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Model.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Property.class, PropertyExampleSerializerMixin.class);
     context.setMixInAnnotations(Operation.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Path.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Response.class, CustomizedSwaggerSerializer.class);
@@ -79,6 +78,8 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
     context.setMixInAnnotations(Xml.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Tag.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Contact.class, CustomizedSwaggerSerializer.class);
+
+    context.setMixInAnnotations(Property.class, PropertyExampleSerializerMixin.class);
   }
 
   @JsonAutoDetect
@@ -95,7 +96,8 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
     class PropertyExampleSerializer extends StdSerializer<Object> {
 
-      private final static Pattern JSON_NUMBER_PATTERN = Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
+      private final static Pattern JSON_NUMBER_PATTERN =
+          Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
 
       @SuppressWarnings("unused")
       public PropertyExampleSerializer() {
@@ -121,10 +123,10 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
         // but swagger2 does not support null values
         // and an example value of "null" probably does not make much sense anyway
         return value.startsWith("{")                              // object
-                || value.startsWith("[")                          // array
-                || "true".equals(value)                           // true
-                || "false".equals(value)                          // false
-                || JSON_NUMBER_PATTERN.matcher(value).matches();  // number
+            || value.startsWith("[")                          // array
+            || "true".equals(value)                           // true
+            || "false".equals(value)                          // false
+            || JSON_NUMBER_PATTERN.matcher(value).matches();  // number
       }
 
       @Override
@@ -141,7 +143,6 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
       private boolean internalIsEmpty(Object value) {
         return value == null || value.toString().trim().length() == 0;
       }
-
     }
   }
 
