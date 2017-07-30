@@ -862,8 +862,6 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/json",
           "application/jwt"
         ],
         "parameters": [

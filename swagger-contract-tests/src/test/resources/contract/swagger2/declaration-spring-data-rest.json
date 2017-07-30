@@ -380,8 +380,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
           "application/hal+json",
+          "application/json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
@@ -841,8 +841,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
           "application/hal+json",
+          "application/json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
@@ -910,6 +910,35 @@
         }
       }
     },
+    "/people/search/findByFirstName{?firstName}": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "findByFirstNamePerson",
+        "operationId": "findByFirstNamePersonUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "query",
+            "description": "firstName",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourcesOfListOfPerson"
+            }
+          }
+        }
+      }
+    },
     "/people/search/findByLastName{?name}": {
       "get": {
         "tags": [
@@ -926,39 +955,6 @@
             "name": "name",
             "in": "query",
             "description": "name parameter",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ResourcesOfListOfPerson"
-            }
-          }
-        }
-      }
-    },
-    "/people/search/findByFirstName{?firstName}": {
-      "get": {
-        "tags": [
-          "Person Entity"
-        ],
-        "summary": "findByFirstNamePerson",
-        "operationId": "findByFirstNamePersonUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "firstName",
-            "in": "query",
-            "description": "firstName",
             "required": false,
             "type": "string"
           }
@@ -1711,8 +1707,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
           "application/hal+json",
+          "application/json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
@@ -2172,8 +2168,8 @@
           "application/json"
         ],
         "produces": [
-          "application/json",
           "application/hal+json",
+          "application/json",
           "text/uri-list",
           "application/x-spring-data-compact+json"
         ],
