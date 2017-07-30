@@ -1034,6 +1034,39 @@
         }
       }
     },
+    "/people/search/findByFirstName{?firstName}": {
+      "get": {
+        "tags": [
+          "Person Entity"
+        ],
+        "summary": "findByFirstNamePerson",
+        "operationId": "findByFirstNamePersonUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "query",
+            "description": "firstName",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ResourcesOfListOfPerson"
+            }
+          }
+        }
+      }
+    },
     "/people/{id}": {
       "get": {
         "tags": [
