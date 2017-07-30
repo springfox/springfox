@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,9 +30,8 @@ import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelReference;
 
 import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValues;
+import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
-
 
 @Mapper
 public class ParameterMapper {
@@ -61,7 +60,7 @@ public class ParameterMapper {
         ModelImpl baseModel = new ModelImpl();
         baseModel.setType("string");
         baseModel.setFormat("byte");
-        return EnumMapper.maybeAddAllowableValuesToParameter(baseModel, modelRef.getAllowableValues());
+        return maybeAddAllowableValuesToParameter(baseModel, modelRef.getAllowableValues());
       }
       ModelReference itemModel = modelRef.itemModel().get();
       return new ArrayModel()
@@ -70,7 +69,10 @@ public class ParameterMapper {
     if (modelRef.isMap()) {
       ModelImpl baseModel = new ModelImpl();
       ModelReference itemModel = modelRef.itemModel().get();
-      baseModel.additionalProperties(maybeAddAllowableValues(itemTypeProperty(itemModel), itemModel.getAllowableValues()));
+      baseModel.additionalProperties(
+          maybeAddAllowableValues(
+              itemTypeProperty(itemModel),
+              itemModel.getAllowableValues()));
       return baseModel;
     }
     if (isBaseType(modelRef.getType())) {
@@ -78,7 +80,7 @@ public class ParameterMapper {
       ModelImpl baseModel = new ModelImpl();
       baseModel.setType(property.getType());
       baseModel.setFormat(property.getFormat());
-      return EnumMapper.maybeAddAllowableValuesToParameter(baseModel, modelRef.getAllowableValues());
+      return maybeAddAllowableValuesToParameter(baseModel, modelRef.getAllowableValues());
 
     }
     return new RefModel(modelRef.getType());

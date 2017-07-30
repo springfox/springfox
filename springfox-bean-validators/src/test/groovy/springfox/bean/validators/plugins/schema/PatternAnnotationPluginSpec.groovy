@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,26 +24,22 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.PatternTestModel
-import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
-/**
- * @author : ashutosh 
- * 29/04/2016
- */
-class PatternAnnotationPluginSpec extends Specification{
+class PatternAnnotationPluginSpec extends Specification {
 
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
     new PatternAnnotationPlugin().supports(types)
+
     where:
     types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@Pattern annotations are reflected in the model properties that are AnnotatedElements"()  {
+  def "@Pattern annotations are reflected in the model properties that are AnnotatedElements"() {
     given:
     def sut = new PatternAnnotationPlugin()
     def element = PatternTestModel.getDeclaredField(propertyName)
@@ -52,21 +48,24 @@ class PatternAnnotationPluginSpec extends Specification{
         element,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
+
     when:
     sut.apply(context)
     def property = context.builder.build()
+
     then:
     property.getPattern() == pattern
+
     where:
-    propertyName                  | pattern
-    "patternString"               | "[a-zA-Z0-9_]"
-    "getterPatternString"         | null
-    "noPatternString"             | null
+    propertyName          | pattern
+    "patternString"       | "[a-zA-Z0-9_]"
+    "getterPatternString" | null
+    "noPatternString"     | null
 
   }
 
   @Unroll
-  def "@Pattern annotations are reflected in the model properties that are BeanPropertyDefinitions"()  {
+  def "@Pattern annotations are reflected in the model properties that are BeanPropertyDefinitions"() {
     given:
     def sut = new PatternAnnotationPlugin()
     def beanProperty = beanProperty(propertyName)
@@ -75,16 +74,19 @@ class PatternAnnotationPluginSpec extends Specification{
         beanProperty,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
+
     when:
     sut.apply(context)
     def property = context.builder.build()
+
     then:
     property.getPattern() == pattern
+
     where:
-    propertyName                  | pattern
-    "patternString"               | "[a-zA-Z0-9_]"
-    "getterPatternString"         | "[A-Z]"
-    "noPatternString"             | null
+    propertyName          | pattern
+    "patternString"       | "[a-zA-Z0-9_]"
+    "getterPatternString" | "[A-Z]"
+    "noPatternString"     | null
 
   }
 

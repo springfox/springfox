@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Pattern;
 
-import static springfox.bean.validators.plugins.Validators.validatorFromExpandedParameter;
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -49,7 +49,7 @@ public class ExpandedParameterPatternAnnotationPlugin implements ExpandedParamet
     Optional<Pattern> pattern = validatorFromExpandedParameter(context, Pattern.class);
 
     if (pattern.isPresent()) {
-      LOG.debug("@Pattern present: setting pattern as required");
+      LOG.debug("@Pattern present: {}", pattern.get().regexp());
       context.getParameterBuilder().pattern(pattern.get().regexp());
     }
   }

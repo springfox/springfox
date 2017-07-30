@@ -1,3 +1,21 @@
+/*
+ *
+ *  Copyright 2017-2018 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
 package springfox.bean.validators.plugins.parameter
 
 import spock.lang.Specification
@@ -8,39 +26,42 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 
-import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
 class ExpandedParameterPatternAnnotationPluginSpec
     extends Specification
     implements AnnotationsSupport, ReflectionSupport {
-  def "Always supported" () {
+
+  def "Always supported"() {
     expect:
-      new ExpandedParameterPatternAnnotationPlugin().supports(types)
+    new ExpandedParameterPatternAnnotationPlugin().supports(types)
+
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@Pattern annotations are reflected in the model properties that are AnnotatedElements for #fieldName"()  {
+  def "@Pattern annotations are reflected in the model properties that are AnnotatedElements for #fieldName"() {
     given:
-      def sut = new ExpandedParameterPatternAnnotationPlugin()
-      ParameterExpansionContext context = new ParameterExpansionContext(
-          "Test",
-          "",
-          named(Subject, fieldName),
-          DocumentationType.SWAGGER_12,
-          new ParameterBuilder())
+    def sut = new ExpandedParameterPatternAnnotationPlugin()
+    ParameterExpansionContext context = new ParameterExpansionContext(
+        "Test",
+        "",
+        named(Subject, fieldName),
+        DocumentationType.SWAGGER_12,
+        new ParameterBuilder())
 
     when:
-      sut.apply(context)
-      def property = context.parameterBuilder.build()
+    sut.apply(context)
+    def property = context.parameterBuilder.build()
+
     then:
-      property?.pattern == annotation?.regexp()
+    property?.pattern == annotation?.regexp()
+
     where:
-      fieldName       | annotation
-      "noAnnotation"  | null
-      "annotated"     | pattern("[a-zA-Z0-9_]")
+    fieldName      | annotation
+    "noAnnotation" | null
+    "annotated"    | pattern("[a-zA-Z0-9_]")
   }
 
   class Subject {
