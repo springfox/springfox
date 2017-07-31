@@ -25,6 +25,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.PathProvider;
@@ -100,7 +101,9 @@ public class ApiListingScanner {
       String resourcePath = longestCommonPath(sortedApis);
       if (resourceGroup.getControllerClass().isPresent() && resourceGroup.getControllerClass().get().isAnnotationPresent(RequestMapping.class)) {
         // determine resourcePath from @RequestMapping annotation if exists
-        RequestMapping requestMappingAnnotation = (RequestMapping) resourceGroup.getControllerClass().get().getAnnotation(RequestMapping.class);
+        Class controllerClass = resourceGroup.getControllerClass().get();
+        RequestMapping requestMappingAnnotation = (RequestMapping) AnnotationUtils
+            .synthesizeAnnotation(controllerClass.getAnnotation(RequestMapping.class), controllerClass);
         String[] paths = requestMappingAnnotation.path();
         if (paths.length == 1) {
           resourcePath = paths[0];
