@@ -411,6 +411,6 @@
     "application/json",
     "*/*"
   ],
-  "resourcePath": "/businesses",
+  "resourcePath": "/",
   "swaggerVersion": "1.2"
 }
