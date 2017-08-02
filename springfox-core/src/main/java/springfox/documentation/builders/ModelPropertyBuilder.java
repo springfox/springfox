@@ -105,7 +105,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder defaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
+    this.defaultValue = defaultIfAbsent(defaultValue, this.defaultValue);
     return this;
   }
 
