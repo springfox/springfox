@@ -170,6 +170,7 @@ public abstract class ModelMapper {
       if (source.getPattern() != null) {
         stringProperty.setPattern(source.getPattern());
       }
+      property.setDefault(source.getDefaultValue());
     }
 
     if (property != null) {
