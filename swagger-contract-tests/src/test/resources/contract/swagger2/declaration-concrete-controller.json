@@ -152,7 +152,8 @@
         "body": {
           "$ref": "#/definitions/Resource«Pet»"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Link": {
       "type": "object",

@@ -289,6 +289,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .position(modelProperty.position)
         .type(modelProperty.type)
         .example(modelProperty.example)
+        .xml(modelProperty.xml)
       .build()
     newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
   }
