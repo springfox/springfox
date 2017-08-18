@@ -129,7 +129,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return parameters;
   }
 
-  private List<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {
+  protected List<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {
     if (modelContext.hasSeenBefore(resolvedType) || resolvedType.getErasedType().isEnum()) {
       return newArrayList();
     }
