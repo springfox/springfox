@@ -72,11 +72,7 @@ public class DefaultModelProvider implements ModelProvider {
   @Override
   public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
-    if (isContainerType(propertiesHost)
-        || isMapType(propertiesHost)
-        || propertiesHost.getErasedType().isEnum()
-        || isBaseType(propertiesHost)
-        || modelContext.hasSeenBefore(propertiesHost)) {
+    if (isSkipModelFor(modelContext, propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
@@ -88,6 +84,14 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, ModelProperty> properties = newTreeMap();
     properties.putAll(propertiesIndex);
     return Optional.of(modelBuilder(propertiesHost, properties, modelContext));
+  }
+
+  protected boolean isSkipModelFor(ModelContext modelContext, ResolvedType propertiesHost) {
+    return isContainerType(propertiesHost)
+        || isMapType(propertiesHost)
+        || propertiesHost.getErasedType().isEnum()
+        || isBaseType(propertiesHost)
+        || modelContext.hasSeenBefore(propertiesHost);
   }
 
   private Model modelBuilder(ResolvedType propertiesHost,
