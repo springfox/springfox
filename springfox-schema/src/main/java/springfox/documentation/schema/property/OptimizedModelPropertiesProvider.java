@@ -228,7 +228,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     if (jsonView != null) {
       classToRestrictOn = jsonView.value()[0];
     }
-    List<Class> allInterfaces = getAllInterfaces(classToRestrictOn, new ArrayList<Class>());
+    List<Class> allInterfaces = getAllClasses(classToRestrictOn, new ArrayList<Class>());
 
     if (allInterfaces.isEmpty()) {
       return true;
@@ -247,9 +247,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return false;
   }
 
-  private static List<Class> getAllInterfaces(Class clazz, List<Class> collectedClasses) {
+  private static List<Class> getAllClasses(Class clazz, List<Class> collectedClasses) {
 
-    // Already recurse on it.
+    // Already recursed on it.
     if (clazz == null || collectedClasses.contains(clazz)) {
       return collectedClasses;
     }
@@ -258,7 +258,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
     Class[] nextInterfaces = clazz.getInterfaces();
     for (Class clazzz : nextInterfaces) {
-      getAllInterfaces(clazzz, collectedClasses);
+      getAllClasses(clazzz, collectedClasses);
     }
     return collectedClasses;
   }

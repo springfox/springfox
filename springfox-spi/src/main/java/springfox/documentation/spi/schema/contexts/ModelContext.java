@@ -153,6 +153,18 @@ public class ModelContext {
         ignorableTypes, null);
   }
 
+  /**
+   * Convenience method to provide an new context for an input parameter
+   *
+   * @param group                 - group name of the docket
+   * @param type                  - type
+   * @param documentationType     - for documentation type
+   * @param alternateTypeProvider - alternate type provider
+   * @param genericNamingStrategy - how generic types should be named
+   * @param ignorableTypes        - types that can be ignored
+   * @param jsonView              - the json view associated
+   * @return new context
+   */
   public static ModelContext inputParam(
       String group,
       Type type,
@@ -200,6 +212,18 @@ public class ModelContext {
         ignorableTypes, null);
   }
 
+  /**
+   * Convenience method to provide an new context for an return parameter
+   *
+   * @param groupName             - group name of the docket
+   * @param type                  - type
+   * @param documentationType     - for documentation type
+   * @param alternateTypeProvider - alternate type provider
+   * @param genericNamingStrategy - how generic types should be named
+   * @param ignorableTypes        - types that can be ignored
+   * @param jsonView              - the json view associated
+   * @return new context
+   */
   public static ModelContext returnValue(
       String groupName,
       Type type,
@@ -242,7 +266,7 @@ public class ModelContext {
 
   private boolean internalSeen(ResolvedType resolvedType, JsonView jsonView) {
     JsonView jsonViewMap = seenTypes.get(resolvedType);
-    return (jsonView == jsonViewMap);
+    return Objects.equal(jsonView, jsonViewMap);
   }
 
   public DocumentationType getDocumentationType() {
