@@ -24,6 +24,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -50,7 +51,7 @@ public class TypeNameExtractor {
   public TypeNameExtractor(
       TypeResolver typeResolver,
       @Qualifier("typeNameProviderPluginRegistry")
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
+          PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
       EnumTypeDeterminer enumTypeDeterminer) {
 
     this.typeResolver = typeResolver;
@@ -114,7 +115,14 @@ public class TypeNameExtractor {
         return typeName;
       }
     }
-    return typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()));
+    return typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()), context.getJsonView());
+  }
+
+  private String typeName(ModelNameContext context, JsonView jsonView) {
+    if (jsonView == null) {
+      return typeName(context);
+    }
+    return typeName(context) + "JsonView" + jsonView.value()[0].getSimpleName();
   }
 
   private String typeName(ModelNameContext context) {

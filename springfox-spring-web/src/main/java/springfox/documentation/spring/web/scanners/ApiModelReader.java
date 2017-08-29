@@ -125,7 +125,7 @@ public class ApiModelReader  {
                                        ModelContext modelContext) {
 
     for (Class ignorableParameterType : ignorableParameterTypes) {
-      modelContext.seen(typeResolver.resolve(ignorableParameterType));
+      modelContext.seen(typeResolver.resolve(ignorableParameterType), modelContext.getJsonView());
     }
   }
 

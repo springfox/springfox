@@ -77,7 +77,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
           context.getDocumentationType(),
           context.getAlternateTypeProvider(),
           context.getGenericsNamingStrategy(),
-          context.getIgnorableParameterTypes());
+          context.getIgnorableParameterTypes(),
+          context.getJsonView());
       modelRef = modelRefFactory(modelContext, typeNameExtractor).apply(returnType);
     }
     ResponseMessage built = new ResponseMessageBuilder()

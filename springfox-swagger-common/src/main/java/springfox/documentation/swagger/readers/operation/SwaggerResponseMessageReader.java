@@ -104,7 +104,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context.getDocumentationType(),
               context.getAlternateTypeProvider(),
               context.getGenericsNamingStrategy(),
-              context.getIgnorableParameterTypes());
+              context.getIgnorableParameterTypes(),
+              context.getJsonView());
           Optional<ModelReference> responseModel = Optional.absent();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
           if (isSuccessful(apiResponse.code())) {
@@ -134,7 +135,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           context.getDocumentationType(),
           context.getAlternateTypeProvider(),
           context.getGenericsNamingStrategy(),
-          context.getIgnorableParameterTypes());
+          context.getIgnorableParameterTypes(),
+          context.getJsonView());
       ResolvedType resolvedType = context.alternateFor(operationResponse.get());
 
       ModelReference responseModel = modelRefFactory(modelContext, typeNameExtractor).apply(resolvedType);

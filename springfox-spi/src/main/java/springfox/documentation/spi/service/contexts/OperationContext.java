@@ -20,6 +20,7 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
@@ -40,8 +41,8 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
 public class OperationContext {
   private final OperationBuilder operationBuilder;
@@ -166,7 +167,17 @@ public class OperationContext {
     return requestContext.findControllerAnnotation(annotation);
   }
 
-  public <T extends Annotation> List<T > findAllAnnotations(Class<T> annotation) {
+  public <T extends Annotation> List<T> findAllAnnotations(Class<T> annotation) {
     return requestContext.findAnnotations(annotation);
   }
+
+  public JsonView getJsonView() {
+    Optional<JsonView> jsonViewOptional = this.findAnnotation(JsonView.class);
+    if (jsonViewOptional.isPresent()) {
+      return jsonViewOptional.get();
+    }
+    return null;
+  }
+
+
 }

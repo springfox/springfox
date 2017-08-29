@@ -21,6 +21,8 @@ package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import java.util.List;
 
-import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
 
 
 @Component
@@ -74,7 +76,14 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     ResolvedType modelType = context.getReturnType();
     modelType = context.alternateFor(modelType);
     LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-    context.operationModelsBuilder().addReturn(modelType);
+
+    Optional<JsonView> jsonView = context.findAnnotation(JsonView.class);
+    if (jsonView.isPresent()) {
+      context.operationModelsBuilder().addReturn(modelType, jsonView.get());
+    } else {
+      context.operationModelsBuilder().addReturn(modelType);
+    }
+
   }
 
   private void collectParameters(RequestMappingContext context) {
@@ -84,12 +93,12 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
     List<ResolvedMethodParameter> parameterTypes = context.getParameters();
     for (ResolvedMethodParameter parameterType : parameterTypes) {
-        if (parameterType.hasParameterAnnotation(RequestBody.class)
-            || parameterType.hasParameterAnnotation(RequestPart.class)) {
-          ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
-          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-          context.operationModelsBuilder().addInputParam(modelType);
-        }
+      if (parameterType.hasParameterAnnotation(RequestBody.class)
+          || parameterType.hasParameterAnnotation(RequestPart.class)) {
+        ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
+        LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
+        context.operationModelsBuilder().addInputParam(modelType, parameterType.getJsonView());
+      }
     }
     LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());
   }

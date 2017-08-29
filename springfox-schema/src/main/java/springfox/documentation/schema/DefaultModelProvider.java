@@ -82,7 +82,7 @@ public class DefaultModelProvider implements ModelProvider {
         || isMapType(propertiesHost)
         || enumTypeDeterminer.isEnum(propertiesHost.getErasedType())
         || isBaseType(propertiesHost)
-        || modelContext.hasSeenBefore(propertiesHost)) {
+        || modelContext.hasSeenBefore(propertiesHost, modelContext.getJsonView())) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
@@ -127,7 +127,7 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   private Optional<Model> mapModel(ModelContext parentContext, ResolvedType resolvedType) {
-    if (isMapType(resolvedType) && !parentContext.hasSeenBefore(resolvedType)) {
+    if (isMapType(resolvedType) && !parentContext.hasSeenBefore(resolvedType, parentContext.getJsonView())) {
       String typeName = typeNameExtractor.typeName(parentContext);
       return Optional.of(parentContext.getBuilder()
           .id(typeName)

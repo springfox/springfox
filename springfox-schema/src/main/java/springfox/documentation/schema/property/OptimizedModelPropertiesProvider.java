@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,20 +59,21 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.schema.Annotations.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
-import static springfox.documentation.schema.property.FactoryMethodProvider.*;
-import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Iterables.tryFind;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.uniqueIndex;
+import static springfox.documentation.schema.Annotations.memberIsUnwrapped;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.name;
+import static springfox.documentation.schema.property.FactoryMethodProvider.factoryMethodOf;
+import static springfox.documentation.schema.property.bean.BeanModelProperty.paramOrReturnType;
+import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
 
 @Primary
 @Component("optimized")
@@ -155,9 +157,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public List<ModelProperty> apply(ResolvedMethod input) {
         ResolvedType type = paramOrReturnType(typeResolver, input);
-        if (!givenContext.canIgnore(type)) {
+        if (!givenContext.canIgnore(type) && shouldBeIncludeDueToJsonView(jacksonProperty, givenContext)) {
           if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
-              return propertiesFor(type, fromParent(givenContext, type));
+            return propertiesFor(type, fromParent(givenContext, type));
           }
           return newArrayList(beanModelProperty(input, jacksonProperty, givenContext));
         }
@@ -174,9 +176,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return new Function<ResolvedField, List<ModelProperty>>() {
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
-        if (!givenContext.canIgnore(input.getType())) {
+        if (!givenContext.canIgnore(input.getType()) && shouldBeIncludeDueToJsonView(jacksonProperty, givenContext)) {
           if (memberIsUnwrapped(jacksonProperty.getField())) {
-              return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
+            return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
           }
           return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
         }
@@ -218,6 +220,49 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   }
 
+  private boolean shouldBeIncludeDueToJsonView(BeanPropertyDefinition jacksonProperty,
+                                               ModelContext givenContext) {
+
+    Class classToRestrictOn = null;
+    JsonView jsonView = givenContext.getJsonView();
+    if (jsonView != null) {
+      classToRestrictOn = jsonView.value()[0];
+    }
+    List<Class> allInterfaces = getAllInterfaces(classToRestrictOn, new ArrayList<Class>());
+
+    if (allInterfaces.isEmpty()) {
+      return true;
+    } else {
+      Class[] views = jacksonProperty.findViews();
+      if (views != null) {
+        List<Class<?>> fieldViews = Arrays.asList(jacksonProperty.findViews());
+        for (Class eachView : fieldViews) {
+          if (allInterfaces.contains(eachView)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private static List<Class> getAllInterfaces(Class clazz, List<Class> collectedClasses) {
+
+    // Already recurse on it.
+    if (clazz == null || collectedClasses.contains(clazz)) {
+      return collectedClasses;
+    }
+
+    collectedClasses.add(clazz);
+
+    Class[] nextInterfaces = clazz.getInterfaces();
+    for (Class clazzz : nextInterfaces) {
+      getAllInterfaces(clazzz, collectedClasses);
+    }
+    return collectedClasses;
+  }
+
   private Predicate<? super ModelProperty> hiddenProperties() {
     return new Predicate<ModelProperty>() {
       @Override
@@ -245,11 +290,11 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     String fieldName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     FieldModelProperty fieldModelProperty
         = new FieldModelProperty(
-            fieldName,
-            childField,
-            typeResolver,
-            modelContext.getAlternateTypeProvider(),
-            jacksonProperty);
+        fieldName,
+        childField,
+        typeResolver,
+        modelContext.getAlternateTypeProvider(),
+        jacksonProperty);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(fieldModelProperty.getName())
         .type(fieldModelProperty.getType())
@@ -309,12 +354,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     ParameterModelProperty parameterModelProperty
         = new ParameterModelProperty(
-            propertyName,
-            parameter,
-            constructor,
-            typeResolver,
-            modelContext.getAlternateTypeProvider(),
-            jacksonProperty);
+        propertyName,
+        parameter,
+        constructor,
+        typeResolver,
+        modelContext.getAlternateTypeProvider(),
+        jacksonProperty);
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()

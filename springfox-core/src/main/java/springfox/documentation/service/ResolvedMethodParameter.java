@@ -20,6 +20,7 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import org.springframework.core.MethodParameter;
@@ -86,5 +87,13 @@ public class ResolvedMethodParameter {
     List<Annotation> annotations = newArrayList(this.annotations);
     annotations.add(annotation);
     return new ResolvedMethodParameter(parameterIndex, defaultName, annotations, parameterType);
+  }
+
+  public JsonView getJsonView() {
+    Optional<JsonView> jsonViewOptional = this.findAnnotation(JsonView.class);
+    if (jsonViewOptional.isPresent()) {
+      return jsonViewOptional.get();
+    }
+    return null;
   }
 }

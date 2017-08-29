@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spi.service.contexts;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableSet;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
@@ -27,7 +28,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.lang.reflect.Type;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Sets.newHashSet;
 
 public class OperationModelContextsBuilder {
   private final String group;
@@ -62,6 +63,18 @@ public class OperationModelContextsBuilder {
     return this;
   }
 
+  public OperationModelContextsBuilder addReturn(Type type, JsonView jsonView) {
+    ModelContext returnValue = ModelContext.returnValue(
+        group,
+        type,
+        documentationType,
+        alternateTypeProvider,
+        genericsNamingStrategy,
+        ignorableTypes, jsonView);
+    this.contexts.add(returnValue);
+    return this;
+  }
+
   public OperationModelContextsBuilder addInputParam(Type type) {
     ModelContext inputParam = ModelContext.inputParam(
         group,
@@ -70,6 +83,18 @@ public class OperationModelContextsBuilder {
         alternateTypeProvider,
         genericsNamingStrategy,
         ignorableTypes);
+    this.contexts.add(inputParam);
+    return this;
+  }
+
+  public OperationModelContextsBuilder addInputParam(Type type, JsonView jsonView) {
+    ModelContext inputParam = ModelContext.inputParam(
+        group,
+        type,
+        documentationType,
+        alternateTypeProvider,
+        genericsNamingStrategy,
+        ignorableTypes, jsonView);
     this.contexts.add(inputParam);
     return this;
   }

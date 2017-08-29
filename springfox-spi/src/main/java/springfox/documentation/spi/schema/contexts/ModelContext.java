@@ -20,6 +20,7 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
@@ -29,9 +30,8 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.reflect.Type;
-import java.util.Set;
-
-import static com.google.common.collect.Sets.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModelContext {
   private final Type type;
@@ -40,11 +40,12 @@ public class ModelContext {
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
-  private final Set<ResolvedType> seenTypes = newHashSet();
+  private final Map<ResolvedType, JsonView> seenTypes = new HashMap<ResolvedType, JsonView>();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
+  private final JsonView jsonView;
 
   ModelContext(
       String groupName,
@@ -53,7 +54,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      ImmutableSet<Class> ignorableTypes, JsonView jsonView) {
     this.groupName = groupName;
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
@@ -62,6 +63,7 @@ public class ModelContext {
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
+    this.jsonView = jsonView;
     this.modelBuilder = new ModelBuilder();
   }
 
@@ -74,6 +76,7 @@ public class ModelContext {
     this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
+    this.jsonView = parentContext.jsonView;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
   }
 
@@ -147,12 +150,29 @@ public class ModelContext {
         documentationType,
         alternateTypeProvider,
         genericNamingStrategy,
-        ignorableTypes);
+        ignorableTypes, null);
+  }
+
+  public static ModelContext inputParam(
+      String group,
+      Type type,
+      DocumentationType documentationType,
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericNamingStrategy,
+      ImmutableSet<Class> ignorableTypes, JsonView jsonView) {
+
+    return new ModelContext(
+        group,
+        type,
+        false,
+        documentationType,
+        alternateTypeProvider,
+        genericNamingStrategy,
+        ignorableTypes, jsonView);
   }
 
   /**
    * Convenience method to provide an new context for an return parameter
-   *
    *
    * @param groupName             - group name of the docket
    * @param type                  - type
@@ -177,7 +197,25 @@ public class ModelContext {
         documentationType,
         alternateTypeProvider,
         genericNamingStrategy,
-        ignorableTypes);
+        ignorableTypes, null);
+  }
+
+  public static ModelContext returnValue(
+      String groupName,
+      Type type,
+      DocumentationType documentationType,
+      AlternateTypeProvider alternateTypeProvider,
+      GenericTypeNamingStrategy genericNamingStrategy,
+      ImmutableSet<Class> ignorableTypes, JsonView jsonView) {
+
+    return new ModelContext(
+        groupName,
+        type,
+        true,
+        documentationType,
+        alternateTypeProvider,
+        genericNamingStrategy,
+        ignorableTypes, jsonView);
   }
 
   /**
@@ -196,10 +234,15 @@ public class ModelContext {
    * @param resolvedType - type to check
    * @return true or false
    */
-  public boolean hasSeenBefore(ResolvedType resolvedType) {
-    return seenTypes.contains(resolvedType)
-        || seenTypes.contains(new TypeResolver().resolve(resolvedType.getErasedType()))
-        || parentHasSeenBefore(resolvedType);
+  public boolean hasSeenBefore(ResolvedType resolvedType, JsonView jsonView) {
+    return internalSeen(resolvedType, jsonView)
+        || internalSeen(new TypeResolver().resolve(resolvedType.getErasedType()), jsonView)
+        || parentHasSeenBefore(resolvedType, jsonView);
+  }
+
+  private boolean internalSeen(ResolvedType resolvedType, JsonView jsonView) {
+    JsonView jsonViewMap = seenTypes.get(resolvedType);
+    return (jsonView == jsonViewMap);
   }
 
   public DocumentationType getDocumentationType() {
@@ -212,11 +255,11 @@ public class ModelContext {
    * @param resolvedType - type to check
    * @return true or false
    */
-  private boolean parentHasSeenBefore(ResolvedType resolvedType) {
+  private boolean parentHasSeenBefore(ResolvedType resolvedType, JsonView jsonView) {
     if (parentContext == null) {
       return false;
     }
-    return parentContext.hasSeenBefore(resolvedType);
+    return parentContext.hasSeenBefore(resolvedType, jsonView);
   }
 
   public GenericTypeNamingStrategy getGenericNamingStrategy() {
@@ -230,8 +273,8 @@ public class ModelContext {
     return modelBuilder;
   }
 
-  public void seen(ResolvedType resolvedType) {
-    seenTypes.add(resolvedType);
+  public void seen(ResolvedType resolvedType, JsonView jsonView) {
+    seenTypes.put(resolvedType, jsonView);
   }
 
   @Override
@@ -248,10 +291,10 @@ public class ModelContext {
 
     return
         Objects.equal(groupName, that.groupName) &&
-        Objects.equal(type, that.type) &&
-        Objects.equal(documentationType, that.documentationType) &&
-        Objects.equal(returnType, that.returnType) &&
-        Objects.equal(namingStrategy(), that.namingStrategy());
+            Objects.equal(type, that.type) &&
+            Objects.equal(documentationType, that.documentationType) &&
+            Objects.equal(returnType, that.returnType) &&
+            Objects.equal(namingStrategy(), that.namingStrategy());
 
   }
 
@@ -282,5 +325,9 @@ public class ModelContext {
 
   public boolean canIgnore(ResolvedType type) {
     return ignorableTypes.contains(type.getErasedType());
+  }
+
+  public JsonView getJsonView() {
+    return jsonView;
   }
 }
