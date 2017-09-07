@@ -13,7 +13,7 @@ ext {
   mapstruct = "1.3.1.Final"
   mockito = "2.24.5"
   objenesis = "3.0.1"
-  oasCore = "2.0.0-rc1"
+  oasCore = "2.0.0-rc2"
   servlet = "3.1.0"
   slf4j = "1.7.25"
   snakeyaml = '1.23'
@@ -31,7 +31,7 @@ ext {
 
   libs = [
 
-      test                               : [
+      test                  : [
           "org.springframework:spring-test:${spring}",
           "cglib:cglib-nodep:$cglib",
           "org.objenesis:objenesis:$objenesis",
