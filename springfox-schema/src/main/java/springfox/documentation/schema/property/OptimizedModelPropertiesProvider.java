@@ -228,16 +228,16 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     if (jsonView != null) {
       classToRestrictOn = jsonView.value()[0];
     }
-    List<Class> allInterfaces = getAllClasses(classToRestrictOn, new ArrayList<Class>());
+    List<Class> expectedClasses = getAllClasses(classToRestrictOn, new ArrayList<Class>());
 
-    if (allInterfaces.isEmpty()) {
+    if (expectedClasses.isEmpty()) {
       return true;
     } else {
       Class[] views = jacksonProperty.findViews();
       if (views != null) {
         List<Class<?>> fieldViews = Arrays.asList(jacksonProperty.findViews());
         for (Class eachView : fieldViews) {
-          if (allInterfaces.contains(eachView)) {
+          if (expectedClasses.contains(eachView)) {
             return true;
           }
         }
@@ -249,16 +249,25 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   private static List<Class> getAllClasses(Class clazz, List<Class> collectedClasses) {
 
-    // Already recursed on it.
+    // Already recurse on it.
     if (clazz == null || collectedClasses.contains(clazz)) {
       return collectedClasses;
     }
 
     collectedClasses.add(clazz);
 
-    Class[] nextInterfaces = clazz.getInterfaces();
-    for (Class clazzz : nextInterfaces) {
-      getAllClasses(clazzz, collectedClasses);
+    Class[] nextClasses;
+
+    // If the class is an interface, we get all extended interfaces.
+    if (clazz.isInterface()) {
+      nextClasses = clazz.getInterfaces();
+    } else {
+      // Otherwise we get the only extended class.
+      nextClasses = new Class[]{clazz.getSuperclass()};
+    }
+
+    for (Class currentClass : nextClasses) {
+      getAllClasses(currentClass, collectedClasses);
     }
     return collectedClasses;
   }
