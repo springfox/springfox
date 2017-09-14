@@ -32,13 +32,16 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
+import springfox.documentation.service.Header;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
@@ -296,12 +299,19 @@ public class OperationBuilder {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
         String message = defaultIfAbsent(emptyToNull(each.getMessage()), responseMessage.getMessage());
         ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
+        Map<String, Header> headers = newHashMap();
+        if (responseMessage.getHeaders() != null) {
+          headers.putAll(responseMessage.getHeaders());
+        }
+        if (each.getHeaders() != null ){
+          headers.putAll(each.getHeaders());
+        }
         merged.remove(responseMessage);
         merged.add(new ResponseMessageBuilder()
             .code(each.getCode())
             .message(message)
             .responseModel(responseWithModel)
-            .headersWithDescription(each.getHeaders())
+            .headersWithDescription(headers)
             .build());
       } else {
         merged.add(each);
