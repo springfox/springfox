@@ -25,6 +25,7 @@ import com.google.common.collect.TreeMultimap;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
+import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 
@@ -46,6 +47,7 @@ public class DocumentationBuilder {
   private Set<String> consumes = newLinkedHashSet();
   private String host;
   private Set<String> schemes = newLinkedHashSet();
+  private List<Server> servers = new ArrayList<Server>();
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
 
@@ -159,6 +161,17 @@ public class DocumentationBuilder {
     return this;
   }
 
+  /**
+   * Adds servers information for this API
+   *
+   * @param servers - servers
+   * @return this
+   */
+  public DocumentationBuilder servers(List<Server> servers) {
+    this.servers.addAll(nullToEmptyList(servers));
+    return this;
+  }
+
 
   public static Comparator<ApiListing> byListingPosition() {
     return new Comparator<ApiListing>() {
@@ -180,6 +193,7 @@ public class DocumentationBuilder {
         consumes,
         host,
         schemes,
+        servers,
         vendorExtensions);
   }
 }
