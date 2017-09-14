@@ -36,7 +36,7 @@ public class Documentation {
   private final Set<String> consumes;
   private final String host;
   private final Set<String> schemes;
-  private final List<Server> servers;
+  private final List<Server> servers = new ArrayList<>();
   private final DocumentationReference documentationReference;
   private final List<VendorExtension> vendorExtensions;
 
@@ -64,7 +64,7 @@ public class Documentation {
     this.consumes = consumes;
     this.host = host;
     this.schemes = schemes;
-    this.servers = servers;
+    this.servers.addAll(servers);
     this.documentationReference = documentationReference;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }

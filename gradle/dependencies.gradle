@@ -30,7 +30,6 @@ ext {
   validationApiVersion = '2.0.1.Final'
 
   libs = [
-
       test                  : [
           "org.springframework:spring-test:${spring}",
           "cglib:cglib-nodep:$cglib",

@@ -51,7 +51,6 @@ public class DocumentationBuilder {
   private List<Server> servers = new ArrayList<>();
   private DocumentationReference documentationReference;
 
-
   /**
    * Name of the documentation group
    *
