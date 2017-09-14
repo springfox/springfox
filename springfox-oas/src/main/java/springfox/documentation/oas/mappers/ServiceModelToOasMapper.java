@@ -18,6 +18,7 @@
  */
 package springfox.documentation.oas.mappers;
 
+import io.swagger.oas.models.ExternalDocumentation;
 import io.swagger.oas.models.OpenAPI;
 import io.swagger.oas.models.info.Contact;
 import io.swagger.oas.models.info.Info;
@@ -35,7 +36,7 @@ public abstract class ServiceModelToOasMapper {
   @Mappings({
       @Mapping(target = "openapi", constant = "3.0.0"),
       @Mapping(target = "info", source = "resourceListing.info"),
-      @Mapping(target = "externalDocs", ignore = true),
+      @Mapping(target = "externalDocs", source = "documentationReference"),
       @Mapping(target = "security", ignore = true),
       @Mapping(target = "paths", ignore = true),
       @Mapping(target = "components", ignore = true),
@@ -66,4 +67,6 @@ public abstract class ServiceModelToOasMapper {
   protected abstract Server mapServer(springfox.documentation.service.Server from);
 
   protected abstract ServerVariable mapServerVariable(springfox.documentation.service.ServerVariable from);
+
+  protected abstract ExternalDocumentation mapExternalDocs(springfox.documentation.service.DocumentationReference from);
 }

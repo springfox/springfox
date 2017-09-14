@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.service.DocumentationReference;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
@@ -47,7 +48,8 @@ public class DocumentationBuilder {
   private String host;
   private Set<String> schemes = new LinkedHashSet<>();
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
-  private List<Server> servers = new ArrayList<Server>();
+  private List<Server> servers = new ArrayList<>();
+  private DocumentationReference documentationReference;
 
   /**
    * Name of the documentation group
@@ -180,6 +182,16 @@ public class DocumentationBuilder {
     return this;
   }
 
+  /**
+   * Adds external documentation information for this API
+   *
+   * @param documentationReference - external documentation reference
+   * @return this
+   */
+  public DocumentationBuilder documentationReference(DocumentationReference documentationReference) {
+    this.documentationReference = defaultIfAbsent(documentationReference, this.documentationReference);
+    return this;
+  }
 
   public static Comparator<ApiListing> byListingPosition() {
     return Comparator.comparingInt(ApiListing::getPosition);
@@ -197,6 +209,7 @@ public class DocumentationBuilder {
         host,
         schemes,
         servers,
+        documentationReference,
         vendorExtensions);
   }
 }
