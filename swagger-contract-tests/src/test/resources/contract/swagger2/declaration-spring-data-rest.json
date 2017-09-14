@@ -201,8 +201,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "addressperson",
-        "operationId": "addresspersonUsingGET_2",
+        "summary": "addressPerson",
+        "operationId": "addressPersonUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -232,8 +232,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "addressperson",
-        "operationId": "addresspersonUsingPOST_2",
+        "summary": "addressPerson",
+        "operationId": "addressPersonUsingPOST_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -270,8 +270,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "addressperson",
-        "operationId": "addresspersonUsingPUT_2",
+        "summary": "addressPerson",
+        "operationId": "addressPersonUsingPUT_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -308,8 +308,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "addressperson",
-        "operationId": "addresspersonUsingDELETE_2",
+        "summary": "addressPerson",
+        "operationId": "addressPersonUsingDELETE_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -334,8 +334,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "addressperson",
-        "operationId": "addresspersonUsingPATCH_2",
+        "summary": "addressPerson",
+        "operationId": "addressPersonUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -583,8 +583,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "categorypeople",
-        "operationId": "categorypeopleUsingGET_5",
+        "summary": "categoryPeople",
+        "operationId": "categoryPeopleUsingGET_5",
         "consumes": [
           "application/json"
         ],
@@ -614,8 +614,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "categorypeople",
-        "operationId": "categorypeopleUsingPOST_2",
+        "summary": "categoryPeople",
+        "operationId": "categoryPeopleUsingPOST_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -655,8 +655,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "categorypeople",
-        "operationId": "categorypeopleUsingPUT_2",
+        "summary": "categoryPeople",
+        "operationId": "categoryPeopleUsingPUT_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -696,8 +696,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "categorypeople",
-        "operationId": "categorypeopleUsingDELETE_5",
+        "summary": "categoryPeople",
+        "operationId": "categoryPeopleUsingDELETE_5",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -722,8 +722,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "categorypeople",
-        "operationId": "categorypeopleUsingPATCH_2",
+        "summary": "categoryPeople",
+        "operationId": "categoryPeopleUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -765,8 +765,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "categorypeople",
-        "operationId": "categorypeopleUsingGET_4",
+        "summary": "categoryPeople",
+        "operationId": "categoryPeopleUsingGET_4",
         "consumes": [
           "application/hal+json"
         ],
@@ -800,8 +800,8 @@
         "tags": [
           "Category Entity"
         ],
-        "summary": "categorypeople",
-        "operationId": "categorypeopleUsingDELETE_4",
+        "summary": "categoryPeople",
+        "operationId": "categoryPeopleUsingDELETE_4",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1103,8 +1103,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personcategory",
-        "operationId": "personcategoryUsingGET_2",
+        "summary": "personCategory",
+        "operationId": "personCategoryUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -1134,8 +1134,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personcategory",
-        "operationId": "personcategoryUsingPOST_2",
+        "summary": "personCategory",
+        "operationId": "personCategoryUsingPOST_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1172,8 +1172,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personcategory",
-        "operationId": "personcategoryUsingPUT_2",
+        "summary": "personCategory",
+        "operationId": "personCategoryUsingPUT_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1210,8 +1210,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personcategory",
-        "operationId": "personcategoryUsingDELETE_2",
+        "summary": "personCategory",
+        "operationId": "personCategoryUsingDELETE_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1236,8 +1236,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personcategory",
-        "operationId": "personcategoryUsingPATCH_2",
+        "summary": "personCategory",
+        "operationId": "personCategoryUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1276,8 +1276,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personaddress",
-        "operationId": "personaddressUsingGET_2",
+        "summary": "personAddress",
+        "operationId": "personAddressUsingGET_2",
         "consumes": [
           "application/json"
         ],
@@ -1307,8 +1307,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personaddress",
-        "operationId": "personaddressUsingPOST_2",
+        "summary": "personAddress",
+        "operationId": "personAddressUsingPOST_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1345,8 +1345,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personaddress",
-        "operationId": "personaddressUsingPUT_2",
+        "summary": "personAddress",
+        "operationId": "personAddressUsingPUT_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1383,8 +1383,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personaddress",
-        "operationId": "personaddressUsingDELETE_2",
+        "summary": "personAddress",
+        "operationId": "personAddressUsingDELETE_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1409,8 +1409,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "personaddress",
-        "operationId": "personaddressUsingPATCH_2",
+        "summary": "personAddress",
+        "operationId": "personAddressUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1449,8 +1449,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "persontags",
-        "operationId": "persontagsUsingGET_5",
+        "summary": "personTags",
+        "operationId": "personTagsUsingGET_5",
         "consumes": [
           "application/json"
         ],
@@ -1480,8 +1480,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "persontags",
-        "operationId": "persontagsUsingPOST_2",
+        "summary": "personTags",
+        "operationId": "personTagsUsingPOST_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1521,8 +1521,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "persontags",
-        "operationId": "persontagsUsingPUT_2",
+        "summary": "personTags",
+        "operationId": "personTagsUsingPUT_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1562,8 +1562,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "persontags",
-        "operationId": "persontagsUsingDELETE_5",
+        "summary": "personTags",
+        "operationId": "personTagsUsingDELETE_5",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1588,8 +1588,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "persontags",
-        "operationId": "persontagsUsingPATCH_2",
+        "summary": "personTags",
+        "operationId": "personTagsUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1631,8 +1631,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "persontags",
-        "operationId": "persontagsUsingGET_4",
+        "summary": "personTags",
+        "operationId": "personTagsUsingGET_4",
         "consumes": [
           "application/hal+json"
         ],
@@ -1666,8 +1666,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "persontags",
-        "operationId": "persontagsUsingDELETE_4",
+        "summary": "personTags",
+        "operationId": "personTagsUsingDELETE_4",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1910,8 +1910,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "tagpeople",
-        "operationId": "tagpeopleUsingGET_5",
+        "summary": "tagPeople",
+        "operationId": "tagPeopleUsingGET_5",
         "consumes": [
           "application/json"
         ],
@@ -1941,8 +1941,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "tagpeople",
-        "operationId": "tagpeopleUsingPOST_2",
+        "summary": "tagPeople",
+        "operationId": "tagPeopleUsingPOST_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -1982,8 +1982,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "tagpeople",
-        "operationId": "tagpeopleUsingPUT_2",
+        "summary": "tagPeople",
+        "operationId": "tagPeopleUsingPUT_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -2023,8 +2023,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "tagpeople",
-        "operationId": "tagpeopleUsingDELETE_5",
+        "summary": "tagPeople",
+        "operationId": "tagPeopleUsingDELETE_5",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -2049,8 +2049,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "tagpeople",
-        "operationId": "tagpeopleUsingPATCH_2",
+        "summary": "tagPeople",
+        "operationId": "tagPeopleUsingPATCH_2",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
@@ -2092,8 +2092,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "tagpeople",
-        "operationId": "tagpeopleUsingGET_4",
+        "summary": "tagPeople",
+        "operationId": "tagPeopleUsingGET_4",
         "consumes": [
           "application/hal+json"
         ],
@@ -2127,8 +2127,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "tagpeople",
-        "operationId": "tagpeopleUsingDELETE_4",
+        "summary": "tagPeople",
+        "operationId": "tagPeopleUsingDELETE_4",
         "consumes": [
           "text/uri-list",
           "application/x-spring-data-compact+json"
