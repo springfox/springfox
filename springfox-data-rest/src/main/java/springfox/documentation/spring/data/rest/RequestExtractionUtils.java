@@ -45,7 +45,7 @@ class RequestExtractionUtils {
   }
 
   public static String upperCamelCaseName(String stringValue) {
-    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, stringValue);
+    return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, stringValue);
   }
 
   public static String actionName(PersistentEntity<?, ?> entity, Method method) {
