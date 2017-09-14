@@ -36,7 +36,7 @@ import springfox.documentation.service.VendorExtension;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
+import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -301,6 +301,7 @@ public class OperationBuilder {
             .code(each.getCode())
             .message(message)
             .responseModel(responseWithModel)
+            .headersWithDescription(responseMessage.getHeaders())
             .headersWithDescription(each.getHeaders())
             .build());
       } else {
