@@ -36,6 +36,7 @@ public class Documentation {
   private final Set<String> consumes;
   private final String host;
   private final Set<String> schemes;
+  private final List<Server> servers;
   private final List<VendorExtension> vendorExtensions;
   
   @SuppressWarnings("ParameterNumber")
@@ -49,6 +50,7 @@ public class Documentation {
       Set<String> consumes,
       String host,
       Set<String> schemes,
+      List<Server> servers,
       Collection<VendorExtension> vendorExtensions) {
 
     this.groupName = groupName;
@@ -61,6 +63,7 @@ public class Documentation {
     this.host = host;
     this.schemes = schemes;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);
+    this.servers = servers;
   }
 
   public String getGroupName() {
@@ -101,5 +104,9 @@ public class Documentation {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  public List<Server> getServers() {
+    return servers;
   }
 }
