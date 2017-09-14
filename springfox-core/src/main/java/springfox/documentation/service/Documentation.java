@@ -38,6 +38,7 @@ public class Documentation {
   private final String host;
   private final Set<String> schemes;
   private final List<Server> servers;
+  private final DocumentationReference documentationReference;
   private final List<VendorExtension> vendorExtensions;
 
   public Documentation(
@@ -51,6 +52,7 @@ public class Documentation {
       String host,
       Set<String> schemes,
       List<Server> servers,
+      DocumentationReference documentationReference,
       Collection<VendorExtension> vendorExtensions) {
 
     this.groupName = groupName;
@@ -63,6 +65,7 @@ public class Documentation {
     this.host = host;
     this.schemes = schemes;
     this.servers = servers;
+    this.documentationReference = documentationReference;
     this.vendorExtensions = newArrayList(vendorExtensions);
   }
 
@@ -108,5 +111,9 @@ public class Documentation {
 
   public List<Server> getServers() {
     return servers;
+  }
+
+  public DocumentationReference getDocumentationReference() {
+    return documentationReference;
   }
 }
