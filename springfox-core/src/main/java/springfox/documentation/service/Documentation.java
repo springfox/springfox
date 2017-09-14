@@ -36,7 +36,11 @@ public class Documentation {
   private final Set<String> consumes;
   private final String host;
   private final Set<String> schemes;
+<<<<<<< HEAD
   private final List<Server> servers = new ArrayList<>();
+=======
+  private final List<Server> servers;
+>>>>>>> Added mapping support for external docs
   private final DocumentationReference documentationReference;
   private final List<VendorExtension> vendorExtensions;
 
