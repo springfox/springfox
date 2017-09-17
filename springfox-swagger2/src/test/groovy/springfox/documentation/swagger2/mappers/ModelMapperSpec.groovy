@@ -43,9 +43,9 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
 
-  def "models are serialized correctly" (){
+  def "models are serialized correctly"() {
     given:
-      Model model = modelProvider.modelFor(
+    Model model = modelProvider.modelFor(
         inputParam(
             "group",
             typeToTest,
@@ -54,44 +54,52 @@ class ModelMapperSpec extends SchemaSpecification {
             namingStrategy,
             ImmutableSet.builder().build())).get()
     def modelMap = newHashMap()
+
     and:
-      modelMap.put("test", model)
+    modelMap.put("test", model)
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.containsKey("test")
+    mapped.containsKey("test")
+
     and:
-      def mappedModel = mapped.get("test")
-      mappedModel.properties.size() == model.properties.size()
+    def mappedModel = mapped.get("test")
+    mappedModel.properties.size() == model.properties.size()
+
     where:
-      typeToTest  << [simpleType(), mapsContainer(), enumType(), typeWithLists()]
+    typeToTest << [simpleType(), mapsContainer(), enumType(), typeWithLists()]
   }
 
-  def "void properties or collection of voids are filtered in the model" (){
+  def "void properties or collection of voids are filtered in the model"() {
     given:
-      Model model = modelProvider.modelFor(
-          inputParam(
-              "group",
-              typeWithVoidLists(),
-              DocumentationType.SWAGGER_2,
-              alternateTypeProvider(),
-              namingStrategy,
-              ImmutableSet.builder().build()))
-          .get()
-      def modelMap = newHashMap()
+    Model model = modelProvider.modelFor(
+        inputParam(
+            "group",
+            typeWithVoidLists(),
+            DocumentationType.SWAGGER_2,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build()))
+        .get()
+    def modelMap = newHashMap()
+
     and:
-      modelMap.put("test", model)
+    modelMap.put("test", model)
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      def mappedModel = mapped.get("test")
-      model.properties.size() == 3
-      mappedModel.properties == null
+    def mappedModel = mapped.get("test")
+    model.properties.size() == 3
+    mappedModel.properties == null
   }
 
-  def "model dependences are inferred correctly for list of map of string to string" (){
+  def "model dependences are inferred correctly for list of map of string to string"() {
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
             listOfMapOfStringToString(),
@@ -99,18 +107,21 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.containsKey("MapOfstringAndstring")
+    mapped.containsKey("MapOfstringAndstring")
+
     and:
-      def mappedModel = mapped.get("MapOfstringAndstring")
-      mappedModel.additionalProperties instanceof StringProperty
+    def mappedModel = mapped.get("MapOfstringAndstring")
+    mappedModel.additionalProperties instanceof StringProperty
   }
 
-  def "model dependencies are inferred correctly for list of ModelMap" (){
+  def "model dependencies are inferred correctly for list of ModelMap"() {
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
             listOfModelMap(),
@@ -118,18 +129,21 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.containsKey("ModelMap")
+    mapped.containsKey("ModelMap")
+
     and:
-      def mappedModel = mapped.get("ModelMap")
-      mappedModel.additionalProperties instanceof ObjectProperty
+    def mappedModel = mapped.get("ModelMap")
+    mappedModel.additionalProperties instanceof ObjectProperty
   }
 
-  def "model dependencies are inferred correctly for list of map of string to Simpletype" (){
+  def "model dependencies are inferred correctly for list of map of string to Simpletype"() {
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
             listOfMapOfStringToSimpleType(),
@@ -137,19 +151,22 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.containsKey("MapOfstringAndSimpleType")
-      mapped.containsKey("SimpleType")
+    mapped.containsKey("MapOfstringAndSimpleType")
+    mapped.containsKey("SimpleType")
+
     and:
-      def mappedModel = mapped.get("MapOfstringAndSimpleType")
-      mappedModel.additionalProperties instanceof RefProperty
+    def mappedModel = mapped.get("MapOfstringAndSimpleType")
+    mappedModel.additionalProperties instanceof RefProperty
   }
 
-  def "model dependencies are inferred correctly for list of erased map" (){
+  def "model dependencies are inferred correctly for list of erased map"() {
     given:
-      Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
             listOfErasedMap(),
@@ -157,15 +174,17 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.size() == 0
+    mapped.size() == 0
   }
 
-  def "when the source models contain a property that has a generic type with one of the type bindings as Void" (){
+  def "when the source models contain a property that has a generic type with one of the type bindings as Void"() {
     given:
-      Model model = modelProvider.modelFor(
+    Model model = modelProvider.modelFor(
         inputParam(
             "group",
             genericClassOfType(Void),
@@ -173,31 +192,37 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
-      def modelMap = newHashMap()
+    def modelMap = newHashMap()
+
     and:
-      modelMap.put("test", model)
+    modelMap.put("test", model)
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.containsKey("test")
+    mapped.containsKey("test")
+
     and:
-      def mappedModel = mapped.get("test")
-      mappedModel.properties.size() == (model.properties.size() - 1)
-      !mappedModel.properties.containsKey("genericField")
+    def mappedModel = mapped.get("test")
+    mappedModel.properties.size() == (model.properties.size() - 1)
+    !mappedModel.properties.containsKey("genericField")
   }
 
-  def "when the source models map is null" (){
+  def "when the source models map is null"() {
     given:
-      def modelMap = null
+    def modelMap = null
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped == null
+    mapped == null
   }
 
-  def "models with allowable ranges are serialized correctly" (){
+  def "models with allowable ranges are serialized correctly"() {
     given:
-      Model model = modelProvider.modelFor(
+    Model model = modelProvider.modelFor(
         inputParam(
             "group",
             simpleType(),
@@ -205,77 +230,93 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
-      def modelMap = newHashMap()
+    def modelMap = newHashMap()
+
     and:
-      modelMap.put("test", model)
+    modelMap.put("test", model)
+
     and: "we add a fake allowable range"
-      def intObject = model.properties.get("anObjectInt")
-      model.properties.put("anObjectInt", updatedIntObject(intObject))
+    def intObject = model.properties.get("anObjectInt")
+    model.properties.put("anObjectInt", updatedIntObject(intObject))
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.containsKey("test")
+    mapped.containsKey("test")
+
     and: "Required values contains the modified property"
-      def mappedModel = mapped.get("test")
-      mappedModel.properties.size() == model.properties.size()
-      mappedModel.getRequired().size() == 1
-      mappedModel.getRequired().contains("anObjectInt")
+    def mappedModel = mapped.get("test")
+    mappedModel.properties.size() == model.properties.size()
+    mappedModel.getRequired().size() == 1
+    mappedModel.getRequired().contains("anObjectInt")
+
     and: "Range expectations are mapped correctly"
-      def mappedIntObject = mappedModel.properties.get("anObjectInt")
-      ((AbstractNumericProperty)mappedIntObject).minimum == 1
-      ((AbstractNumericProperty)mappedIntObject).maximum == 2000
+    def mappedIntObject = mappedModel.properties.get("anObjectInt")
+    ((AbstractNumericProperty) mappedIntObject).minimum == 1
+    ((AbstractNumericProperty) mappedIntObject).maximum == 2000
   }
 
   def "Properties that are Map subclasses that close closed generic types are supported"() {
     given:
-      def model = Mock(Model)
+    def model = Mock(Model)
+
     and:
-      model.type >> customMapOfType(SimpleType)
+    model.type >> customMapOfType(SimpleType)
+
     when:
-      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+
     then:
-      valueClass.isPresent()
-      valueClass.get() == SimpleType
+    valueClass.isPresent()
+    valueClass.get() == SimpleType
   }
 
   def "Properties that are Map subclasses that close the open generic types are supported"() {
     given:
-      def model = Mock(Model)
+    def model = Mock(Model)
+
     and:
-      model.type >> customMapOpen()
+    model.type >> customMapOpen()
+
     when:
-      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+
     then:
-      valueClass.isPresent()
-      valueClass.get() == Object
+    valueClass.isPresent()
+    valueClass.get() == Object
   }
 
   def "Properties that are not maps will have the value class absent"() {
     given:
-      def model = Mock(Model)
+    def model = Mock(Model)
+
     and:
-      model.type >> genericClassWithTypeErased()
+    model.type >> genericClassWithTypeErased()
+
     when:
-      def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+    def valueClass = Mappers.getMapper(ModelMapper).typeOfValue(model)
+
     then:
-      !valueClass.isPresent()
+    !valueClass.isPresent()
   }
 
   @Unroll
-  def "safe parses #stringValue" () {
+  def "safe parses #stringValue"() {
     when:
-      def safeParsed = safeInteger(stringValue)
+    def safeParsed = safeInteger(stringValue)
+
     then:
-      safeParsed == expected
+    safeParsed == expected
+
     where:
-      stringValue | expected
-      "0"         | 0
-      "infinity"  | null
-      "-infinity" | null
-      "1.0"       | null
+    stringValue | expected
+    "0"         | 0
+    "infinity"  | null
+    "-infinity" | null
+    "1.0"       | null
 
   }
-
 
 
   ModelProperty updatedIntObject(ModelProperty modelProperty) {
@@ -289,14 +330,14 @@ class ModelMapperSpec extends SchemaSpecification {
         .position(modelProperty.position)
         .type(modelProperty.type)
         .example(modelProperty.example)
-      .build()
+        .build()
     newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
   }
 
 
-  def "models with allowable ranges are serialized correctly for string property" (){
+  def "models with allowable ranges are serialized correctly for string property"() {
     given:
-      Model model = modelProvider.modelFor(
+    Model model = modelProvider.modelFor(
         inputParam(
             "group",
             simpleType(),
@@ -304,25 +345,31 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
-      def modelMap = newHashMap()
+    def modelMap = newHashMap()
+
     and:
-      modelMap.put("test", model)
+    modelMap.put("test", model)
+
     and: "we add a fake allowable range"
-      def stringObject = model.properties.get("aString")
-      model.properties.put("aString", updatedStringObject(stringObject))
+    def stringObject = model.properties.get("aString")
+    model.properties.put("aString", updatedStringObject(stringObject))
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
     then:
-      mapped.containsKey("test")
+    mapped.containsKey("test")
+
     and: "Required values contains the modified property"
-      def mappedModel = mapped.get("test")
-      mappedModel.properties.size() == model.properties.size()
-      mappedModel.getRequired().size() == 1
-      mappedModel.getRequired().contains("aString")
+    def mappedModel = mapped.get("test")
+    mappedModel.properties.size() == model.properties.size()
+    mappedModel.getRequired().size() == 1
+    mappedModel.getRequired().contains("aString")
+
     and: "Range expectations are mapped correctly"
-      def mappedStringObject = mappedModel.properties.get("aString")
-      ((StringProperty)mappedStringObject).minLength == 1
-      ((StringProperty)mappedStringObject).maxLength == 255
+    def mappedStringObject = mappedModel.properties.get("aString")
+    ((StringProperty) mappedStringObject).minLength == 1
+    ((StringProperty) mappedStringObject).maxLength == 255
   }
 
   ModelProperty updatedStringObject(ModelProperty modelProperty) {
@@ -335,42 +382,46 @@ class ModelMapperSpec extends SchemaSpecification {
         .name(modelProperty.name)
         .position(modelProperty.position)
         .type(modelProperty.type)
-      .build()
+        .build()
     newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
   }
 
-  def "model property positions affect the serialization order" () {
+  def "model property positions affect the serialization order"() {
     given:
-      def properties = [
+    def properties = [
         'a': createModelPropertyWithPosition('a', 3),
         'b': createModelPropertyWithPosition('b', 2),
         'c': createModelPropertyWithPosition('c', 1),
         'd': createModelPropertyWithPosition('d', 0),
         'e': createModelPropertyWithPosition('e', 4),
-      ]
-      Model model = createModel(properties)
+    ]
+    Model model = createModel(properties)
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+    def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+
     then:
-      mapped != null
-      ['d', 'c', 'b', 'a', 'e'] == mapped['test'].properties.keySet().toList()
+    mapped != null
+    ['d', 'c', 'b', 'a', 'e'] == mapped['test'].properties.keySet().toList()
   }
 
-  def "model property positions affect the serialization order with same positions" () {
+  def "model property positions affect the serialization order with same positions"() {
     given:
-      def properties = [
+    def properties = [
         'a': createModelPropertyWithPosition('a', 0),
         'b': createModelPropertyWithPosition('b', 0),
         'c': createModelPropertyWithPosition('c', 0),
         'd': createModelPropertyWithPosition('d', 0),
         'e': createModelPropertyWithPosition('e', 0),
-      ]
-      Model model = createModel(properties)
+    ]
+    Model model = createModel(properties)
+
     when:
-      def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+    def mapped = Mappers.getMapper(ModelMapper).mapModels([test: model])
+
     then:
-      mapped != null
-      ['a', 'b', 'c', 'd', 'e'] == mapped['test'].properties.keySet().toList()
+    mapped != null
+    ['a', 'b', 'c', 'd', 'e'] == mapped['test'].properties.keySet().toList()
   }
 
   ModelProperty createModelPropertyWithPosition(String name, int position) {
@@ -387,7 +438,9 @@ class ModelMapperSpec extends SchemaSpecification {
         null,
         '',
         '',
-        []).with {
+        '',
+        []
+    ).with {
       it.updateModelRef({ rt -> new ModelRef(simpleQualifiedTypeName(stringProperty)) })
       it
     }
