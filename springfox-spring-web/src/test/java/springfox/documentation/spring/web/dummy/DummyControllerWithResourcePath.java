@@ -16,15 +16,16 @@
  *
  *
  */
+
 package springfox.documentation.spring.web.dummy;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@Api(tags = {"Tag1", "Tag2"})
-public class DummyControllerWithTags {
-  @ApiOperation(value = "dummyMethod", tags = {"Tag3", "Tag4"})
+@Api
+@RequestMapping(value = "/resource-path")
+public class DummyControllerWithResourcePath {
   public void dummyMethod() {
-    // empty method
+
   }
 }

@@ -25,11 +25,12 @@ import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
+import springfox.documentation.spring.web.dummy.DummyControllerWithResourcePath
 import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -38,10 +39,11 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import static com.google.common.collect.Lists.newArrayList
-import static com.google.common.collect.Maps.*
-import static org.springframework.http.MediaType.*
-import static springfox.documentation.builders.PathSelectors.*
-import static ApiListingScanner.*
+import static com.google.common.collect.Maps.newHashMap
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
+import static springfox.documentation.builders.PathSelectors.regex
+import static springfox.documentation.spring.web.scanners.ApiListingScanner.longestCommonPath
 
 @Mixin([RequestMappingSupport, AuthSupport, ModelProviderForServiceSupport,
         ServicePluginsSupport, ApiDescriptionSupport, SchemaPluginsSupport])
@@ -111,6 +113,29 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     then:
       Collection<ApiListing> listings = apiListingMap.get('businesses')
       listings.first().getSecurityReferences().size() == 0
+  }
+
+  def "should assign resource form @RequestMapping annotation"() {
+    given:
+      RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
+
+      def context = context()
+      def requestMappingContext = new RequestMappingContext(
+          context,
+          new WebMvcRequestHandler(requestMappingInfo, dummyControllerWithResourcePath("dummyMethod")))
+      def resourceGroupRequestMappings = newHashMap()
+      resourceGroupRequestMappings.put(new ResourceGroup("resourcePath", DummyControllerWithResourcePath), [requestMappingContext])
+
+      listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+    when:
+      apiDescriptionReader.read(requestMappingContext) >> []
+
+    and:
+      def scanned = scanner.scan(listingContext)
+    then:
+      scanned.containsKey("resourcePath")
+      Collection<ApiListing> listings = scanned.get("resourcePath")
+      listings.first().resourcePath == "/resource-path"
   }
 
   @Unroll
