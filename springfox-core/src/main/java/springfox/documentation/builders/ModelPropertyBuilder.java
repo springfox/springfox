@@ -122,7 +122,8 @@ public class ModelPropertyBuilder {
         allowableValues,
         example,
         pattern,
-        vendorExtensions,
-        defaultValue);
+        defaultValue,
+        vendorExtensions
+    );
   }
 }

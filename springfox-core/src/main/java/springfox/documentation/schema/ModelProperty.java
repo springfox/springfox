@@ -41,8 +41,8 @@ public class ModelProperty {
   private ModelReference modelRef;
   private final String example;
   private final String pattern;
-  private final List<VendorExtension> vendorExtensions;
   private final String defaultValue;
+  private final List<VendorExtension> vendorExtensions;
 
   public ModelProperty(
       String name,
@@ -56,8 +56,8 @@ public class ModelProperty {
       AllowableValues allowableValues,
       String example,
       String pattern,
-      List<VendorExtension> vendorExtensions,
-      String defaultValue) {
+      String defaultValue,
+      List<VendorExtension> vendorExtensions) {
 
     this.name = name;
     this.type = type;
