@@ -66,8 +66,8 @@ public class ResourceGroup {
     final ResourceGroup rhs = (ResourceGroup) obj;
 
     return equal(this.groupName, rhs.groupName)
-      && equal(this.position, rhs.position)
-      && equal(this.controllerClazz, rhs.controllerClazz);
+        && equal(this.position, rhs.position)
+        && equal(this.controllerClazz, rhs.controllerClazz);
   }
 
   @Override
@@ -77,7 +77,10 @@ public class ResourceGroup {
 
   @Override
   public String toString() {
-    return String.format("ResourceGroup{groupName='%s', position=%d, controller=%s}", groupName, position,
-            controllerClazz.getName());
+    return String.format(
+        "ResourceGroup{groupName='%s', position=%d, controller=%s}",
+        groupName,
+        position,
+        controllerClazz.getName());
   }
 }

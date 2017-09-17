@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
  */
 package springfox.documentation.spring.web.dummy;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@Api(tags = {"Tag1", "Tag2"})
-public class DummyControllerWithTags {
-  @ApiOperation(value = "dummyMethod", tags = {"Tag3", "Tag4"})
-  public void dummyMethod() {
-    // empty method
-  }
+@RequestMapping("/dummy")
+public class DummyClassWithRequestMapping {
 }
