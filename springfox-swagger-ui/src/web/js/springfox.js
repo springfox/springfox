@@ -88,7 +88,8 @@ $(function() {
         $('pre code').each(function(i, e) {
           hljs.highlightBlock(e)
         });
-
+        //custome the weg page title as swagger.title when had set it
+         document.title = $('.info_title').html() || document.title;
       },
       onFailure: function(data) {
         log("Unable to Load SwaggerUI");
