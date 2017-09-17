@@ -45,8 +45,13 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE
 import static springfox.documentation.builders.PathSelectors.regex
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.longestCommonPath
 
-@Mixin([RequestMappingSupport, AuthSupport, ModelProviderForServiceSupport,
-        ServicePluginsSupport, ApiDescriptionSupport, SchemaPluginsSupport])
+@Mixin([
+    RequestMappingSupport,
+    AuthSupport,
+    ModelProviderForServiceSupport,
+    ServicePluginsSupport,
+    ApiDescriptionSupport,
+    SchemaPluginsSupport])
 class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
