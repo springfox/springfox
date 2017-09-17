@@ -307,12 +307,8 @@
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
-  "produces": [
-
-  ],
-  "resourcePath": "/",
+  "consumes": [],
+  "produces": [],
+  "resourcePath": "/petgrooming",
   "swaggerVersion": "1.2"
 }
