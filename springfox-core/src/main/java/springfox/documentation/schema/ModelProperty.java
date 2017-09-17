@@ -42,6 +42,7 @@ public class ModelProperty {
   private final String example;
   private final String pattern;
   private final List<VendorExtension> vendorExtensions;
+  private final String defaultValue;
 
   public ModelProperty(
       String name,
@@ -55,7 +56,8 @@ public class ModelProperty {
       AllowableValues allowableValues,
       String example,
       String pattern,
-      List<VendorExtension> vendorExtensions) {
+      List<VendorExtension> vendorExtensions,
+      String defaultValue) {
 
     this.name = name;
     this.type = type;
@@ -69,6 +71,7 @@ public class ModelProperty {
     this.example = example;
     this.pattern = pattern;
     this.vendorExtensions = newArrayList(vendorExtensions);
+    this.defaultValue = defaultValue;
   }
 
   public String getName() {
@@ -126,5 +129,9 @@ public class ModelProperty {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  public String getDefaultValue() {
+    return defaultValue;
   }
 }

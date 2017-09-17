@@ -42,6 +42,7 @@ public class ModelPropertyBuilder {
   private String example;
   private String pattern;
   private List<VendorExtension> vendorExtensions = newArrayList();
+  private String defaultValue;
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -103,6 +104,11 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  public ModelPropertyBuilder defaultValue(String defaultValue) {
+    this.defaultValue = defaultIfAbsent(defaultValue, this.defaultValue);
+    return this;
+  }
+
   public ModelProperty build() {
     return new ModelProperty(
         name,
@@ -116,6 +122,7 @@ public class ModelPropertyBuilder {
         allowableValues,
         example,
         pattern,
-        vendorExtensions);
+        vendorExtensions,
+        defaultValue);
   }
 }
