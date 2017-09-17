@@ -36,6 +36,14 @@ public class ApiListing {
   private final List<SecurityReference> securityReferences;
   private final List<ApiDescription> apis;
   private final Map<String, Model> models;
+//  private Map<String, ApiResponse> responses = null;
+//  private Map<String, Parameter> parameters = null;
+//  private Map<String, Example> examples = null;
+//  private Map<String, RequestBody> requestBodies = null;
+//  private Map<String, Header> headers = null;
+//  private Map<String, SecurityScheme> securitySchemes = null;
+//  private Map<String, Link> links = null;
+//  private Map<String, Callback> callbacks = null;
   private final String description;
   private final int position;
   private final Set<Tag> tags;

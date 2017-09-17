@@ -52,7 +52,8 @@ public class Types {
       "date-time",
       "__file",
       "biginteger",
-      "bigdecimal");
+      "bigdecimal",
+      "uuid");
   private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
       .put(Long.TYPE, "long")
       .put(Short.TYPE, "int")
@@ -77,7 +78,7 @@ public class Types {
       .put(BigDecimal.class, "bigdecimal")
       .put(BigInteger.class, "biginteger")
       .put(Currency.class, "string")
-      .put(UUID.class, "string")
+      .put(UUID.class, "uuid")
       .put(MultipartFile.class, "__file")
       .build();
 
