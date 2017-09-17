@@ -109,8 +109,18 @@ public class DefaultModelProvider implements ModelProvider {
         .description("")
         .baseModel("")
         .discriminator("")
-        .subTypes(new ArrayList<String>());
+        .subTypes(new ArrayList<String>())
+        .xml(buildXml());
     return schemaPluginsManager.model(modelContext);
+  }
+
+  private Xml buildXml() {
+    return new Xml()
+        .name("")
+        .attribute(false)
+        .namespace("")
+        .prefix("")
+        .wrapped(false);
   }
 
   @Override

@@ -89,7 +89,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "FancyPet": {
       "type": "object",
@@ -110,7 +111,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     }
   }
 }

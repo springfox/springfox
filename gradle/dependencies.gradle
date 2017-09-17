@@ -25,6 +25,7 @@ ext {
   springfoxRfc6570Version = "1.0.0"
   undercouch = "3.2.0"
   validationApiVersion = '1.1.0.Final'
+  equalsverifierVersion = '2.3.2'
 
   libs = [
 
@@ -39,7 +40,8 @@ ext {
                   "org.spockframework:spock-spring:${spock}",
                   "org.spockframework:spock-core:${spock}",
                   "org.codehaus.groovy:groovy-all:${groovy}",
-                  "org.springframework.hateoas:spring-hateoas:${springHateoas}"
+                  "org.springframework.hateoas:spring-hateoas:${springHateoas}",
+                  "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
           ],
           swagger2Core  : [
                   "io.swagger:swagger-annotations:${swagger2Core}",

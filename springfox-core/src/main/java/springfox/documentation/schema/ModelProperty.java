@@ -42,6 +42,7 @@ public class ModelProperty {
   private final String example;
   private final String pattern;
   private final String defaultValue;
+  private final Xml xml;
   private final List<VendorExtension> vendorExtensions;
 
   public ModelProperty(
@@ -57,6 +58,7 @@ public class ModelProperty {
       String example,
       String pattern,
       String defaultValue,
+      Xml xml,
       List<VendorExtension> vendorExtensions) {
 
     this.name = name;
@@ -70,8 +72,9 @@ public class ModelProperty {
     this.allowableValues = allowableValues;
     this.example = example;
     this.pattern = pattern;
-    this.vendorExtensions = newArrayList(vendorExtensions);
     this.defaultValue = defaultValue;
+    this.xml = xml;
+    this.vendorExtensions = newArrayList(vendorExtensions);
   }
 
   public String getName() {
@@ -133,5 +136,9 @@ public class ModelProperty {
 
   public String getDefaultValue() {
     return defaultValue;
+  }
+  
+  public Xml getXml() {
+    return xml;
   }
 }

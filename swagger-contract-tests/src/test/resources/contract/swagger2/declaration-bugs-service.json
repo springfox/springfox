@@ -921,7 +921,8 @@
         "url": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Bug1627": {
       "type": "object",
@@ -929,7 +930,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Bug1676": {
       "type": "object",
@@ -946,7 +948,8 @@
           "example": 500.0,
           "description": "Vertical position"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Bug1697": {
       "type": "object",
@@ -954,7 +957,8 @@
         "bar": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Bug1740": {
       "type": "object",
@@ -965,7 +969,8 @@
         "value": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Bug1777": {
       "type": "object",
@@ -979,7 +984,8 @@
           "description": "经度"
         }
       },
-      "description": "Test 1777"
+      "description": "Test 1777",
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Example": {
       "type": "object",
@@ -1033,7 +1039,8 @@
           "description": "A read only string",
           "readOnly": true
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "File": {
       "type": "object",
@@ -1049,7 +1056,8 @@
         "href": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Model1819": {
       "type": "object",
@@ -1064,7 +1072,8 @@
             ]
           }
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "NestedType": {
       "type": "object",
@@ -1072,7 +1081,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     },
     "Resource«string»": {
       "type": "object",
@@ -1083,7 +1093,8 @@
             "$ref": "#/definitions/LinkAlternate"
           }
         }
-      }
+      },
+      "xml":{"attribute":false,"wrapped":false}
     }
   }
 }
