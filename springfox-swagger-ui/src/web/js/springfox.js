@@ -89,6 +89,8 @@ $(function() {
           hljs.highlightBlock(e)
         });
 
+        //Use the API info title as the web page title as when it is set
+         document.title = $('.info_title').html() || document.title;
       },
       onFailure: function(data) {
         log("Unable to Load SwaggerUI");
