@@ -27,6 +27,7 @@ import springfox.documentation.schema.Xml;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -163,6 +164,9 @@ public class ModelBuilder {
   }
 
   public Model build() {
+    if (xml != null && isNullOrEmpty(xml.getName())) {
+      xml.setName(name);
+    }
     return new Model(
         id,
         name,

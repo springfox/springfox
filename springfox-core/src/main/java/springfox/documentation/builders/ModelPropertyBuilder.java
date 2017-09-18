@@ -27,6 +27,7 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.List;
 
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -87,7 +88,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
-    this.allowableValues = emptyToNull(allowableValues, this.allowableValues);
+    this.allowableValues = BuilderDefaults.emptyToNull(allowableValues, this.allowableValues);
     return this;
   }
 
@@ -117,6 +118,9 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
+    if (xml != null && isNullOrEmpty(xml.getName())) {
+      xml.setName(name);
+    }
     return new ModelProperty(
         name,
         type,
