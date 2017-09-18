@@ -43,7 +43,7 @@ class ModelProviderSpec extends Specification {
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      context.seen(new TypeResolver().resolve(HttpHeaders))
+      context.seen(new TypeResolver().resolve(HttpHeaders), null)
       def dependentTypeNames = sut.dependencies(context).keySet().sort()
 
     expect:

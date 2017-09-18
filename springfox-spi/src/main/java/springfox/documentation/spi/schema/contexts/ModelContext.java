@@ -265,8 +265,7 @@ public class ModelContext {
   }
 
   private boolean internalSeen(ResolvedType resolvedType, JsonView jsonView) {
-    JsonView jsonViewMap = seenTypes.get(resolvedType);
-    return Objects.equal(jsonView, jsonViewMap);
+    return seenTypes.containsKey(resolvedType) && Objects.equal(seenTypes.get(resolvedType), jsonView);
   }
 
   public DocumentationType getDocumentationType() {

@@ -176,8 +176,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
     when:
-      inputContext.seen(typeResolver.resolve(Category))
-      returnContext.seen(typeResolver.resolve(Category))
+      inputContext.seen(typeResolver.resolve(Category), null)
+      returnContext.seen(typeResolver.resolve(Category), null)
     and:
       def inputValue = sut.propertiesFor(type, inputContext)
       def returnValue = sut.propertiesFor(type, returnContext)
