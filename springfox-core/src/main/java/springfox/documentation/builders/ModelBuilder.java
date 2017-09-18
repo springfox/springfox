@@ -22,10 +22,12 @@ package springfox.documentation.builders;
 import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.Xml;
 
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -39,6 +41,7 @@ public class ModelBuilder {
   private String discriminator;
   private ResolvedType modelType;
   private String example;
+  private Xml xml;
 
   private Map<String, ModelProperty> properties = newHashMap();
   private List<String> subTypes = newArrayList();
@@ -155,8 +158,26 @@ public class ModelBuilder {
     return this;
   }
 
+  public ModelBuilder xml(Xml xml) {
+    this.xml = defaultIfAbsent(xml, this.xml);
+    return this;
+  }
+
   public Model build() {
-    return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
-        example);
+    if (xml != null && isNullOrEmpty(xml.getName())) {
+      xml.setName(name);
+    }
+    return new Model(
+        id,
+        name,
+        modelType,
+        qualifiedType,
+        properties,
+        description,
+        baseModel,
+        discriminator,
+        subTypes,
+        example,
+        xml);
   }
 }

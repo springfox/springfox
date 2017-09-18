@@ -26,7 +26,13 @@ import io.swagger.models.properties.StringProperty
 import org.mapstruct.factory.Mappers
 import spock.lang.Unroll
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.*
+import springfox.documentation.schema.AlternateTypesSupport
+import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
+import springfox.documentation.schema.Model
+import springfox.documentation.schema.ModelProperty
+import springfox.documentation.schema.ModelRef
+import springfox.documentation.schema.SchemaSpecification
+import springfox.documentation.schema.SimpleType
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
@@ -36,7 +42,7 @@ import static com.google.common.base.Suppliers.*
 import static com.google.common.collect.Maps.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
-import static springfox.documentation.swagger2.mappers.ModelMapper.safeInteger
+import static springfox.documentation.swagger2.mappers.ModelMapper.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelMapperSpec extends SchemaSpecification {
@@ -330,6 +336,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .position(modelProperty.position)
         .type(modelProperty.type)
         .example(modelProperty.example)
+        .xml(modelProperty.xml)
         .build()
     newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
   }
@@ -439,6 +446,7 @@ class ModelMapperSpec extends SchemaSpecification {
         '',
         '',
         '',
+        null,
         []
     ).with {
       it.updateModelRef({ rt -> new ModelRef(simpleQualifiedTypeName(stringProperty)) })
@@ -458,7 +466,8 @@ class ModelMapperSpec extends SchemaSpecification {
         '',
         '',
         null,
-        '')
+        '',
+        null)
     model
   }
 

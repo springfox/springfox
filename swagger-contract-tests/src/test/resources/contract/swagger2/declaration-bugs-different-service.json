@@ -840,6 +840,37 @@
         }
       }
     },
+    "/bugs/1907": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "xmlPayload",
+        "operationId": "xmlPayloadUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "xml",
+            "description": "xml",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Model1907"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/bugs/1939{?username,password,credential-source-id}": {
       "get": {
         "tags": [
@@ -1047,6 +1078,37 @@
         }
       }
     },
+    "Model1907": {
+      "type": "object",
+      "required": [
+        "example",
+        "somename"
+      ],
+      "properties": {
+        "example": {
+          "xml": {
+            "name": "example",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Example"
+        },
+        "somename": {
+          "type": "string",
+          "xml": {
+            "name": "somename",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "xml": {
+        "name": "model1907",
+        "namespace": "urn:bugs",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
     "NestedType": {
       "type": "object",
       "properties": {
@@ -1060,6 +1122,12 @@
       "properties": {
         "links": {
           "type": "object",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "additionalProperties": {
             "$ref": "#/definitions/LinkAlternate"
           }
