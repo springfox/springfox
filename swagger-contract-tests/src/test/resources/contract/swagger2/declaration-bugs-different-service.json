@@ -840,6 +840,37 @@
         }
       }
     },
+    "/bugs/1907": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "xmlPayload",
+        "operationId": "xmlPayloadUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "xml",
+            "description": "xml",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Model1907"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/bugs/1939{?username,password,credential-source-id}": {
       "get": {
         "tags": [
@@ -1045,8 +1076,24 @@
             ]
           }
         }
+      }
+    },
+    "Model1907": {
+      "type": "object",
+      "required": [
+        "somename"
+      ],
+      "properties": {
+        "somename": {
+          "type": "string"
+        }
       },
-      "xml":{"attribute":false,"wrapped":false}
+      "xml": {
+        "name": "model1907",
+        "namespace": "urn:bugs",
+        "attribute": false,
+        "wrapped": false
+      }
     },
     "NestedType": {
       "type": "object",
