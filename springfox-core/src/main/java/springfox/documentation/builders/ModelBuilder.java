@@ -163,7 +163,17 @@ public class ModelBuilder {
   }
 
   public Model build() {
-    return new Model(id, name, modelType, qualifiedType, properties, description, baseModel, discriminator, subTypes,
-        example, xml);
+    return new Model(
+        id,
+        name,
+        modelType,
+        qualifiedType,
+        properties,
+        description,
+        baseModel,
+        discriminator,
+        subTypes,
+        example,
+        xml);
   }
 }
