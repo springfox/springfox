@@ -2382,8 +2382,7 @@
             "$ref": "#/definitions/Tag"
           }
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "ResourceOfTag": {
       "type": "object",
@@ -2424,8 +2423,7 @@
             "$ref": "#/definitions/Link"
           }
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "ResourcesOfCategory": {
       "type": "object",
@@ -2442,8 +2440,7 @@
             "$ref": "#/definitions/Link"
           }
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "ResourcesOfListOfPerson": {
       "type": "object",
@@ -2463,8 +2460,7 @@
             "$ref": "#/definitions/Link"
           }
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "ResourcesOfPerson": {
       "type": "object",
@@ -2498,8 +2494,7 @@
             "$ref": "#/definitions/Link"
           }
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "Tag": {
       "type": "object",

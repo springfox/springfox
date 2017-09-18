@@ -117,8 +117,7 @@
         "name": {
           "type": "string"
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     }
   }
 }

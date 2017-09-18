@@ -1028,8 +1028,7 @@
         "name": {
           "type": "string"
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "Example": {
       "type": "object",
@@ -1110,8 +1109,7 @@
             }
           }
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "ModelWithMapProperty": {
       "type": "object",
@@ -1124,8 +1122,7 @@
           }
         }
       },
-      "description": "Describes model with map property",
-      "xml":{"attribute":false,"wrapped":false}
+      "description": "Describes model with map property"
     },
     "ModelWithObjectNode": {
       "type": "object",
@@ -1133,8 +1130,7 @@
         "anyObject": {
           "$ref": "#/definitions/ObjectNode"
         }
-      },
-      "xml":{"attribute":false,"wrapped":false}
+      }
     },
     "NestedType": {
       "type": "object",
@@ -1145,8 +1141,7 @@
       }
     },
     "ObjectNode": {
-      "type": "object",
-      "xml":{"attribute":false,"wrapped":false}
+      "type": "object"
     },
     "Pet": {
       "type": "object",
