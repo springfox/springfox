@@ -45,6 +45,8 @@ import springfox.documentation.spring.web.dummy.models.Example;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -445,7 +447,12 @@ public class BugsController {
     }
 
     @NotNull
+    @XmlAttribute
     private String somename;
+
+    @NotNull
+    @XmlElement
+    private Example example;
 
     public String getSomename() {
       return somename;
@@ -453,6 +460,14 @@ public class BugsController {
 
     public void setSomename(String somename) {
       this.somename = somename;
+    }
+
+    public Example getExample() {
+      return example;
+    }
+
+    public void setExample(Example example) {
+      this.example = example;
     }
   }
 }

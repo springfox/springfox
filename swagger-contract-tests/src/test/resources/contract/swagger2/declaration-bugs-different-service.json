@@ -1081,11 +1081,25 @@
     "Model1907": {
       "type": "object",
       "required": [
+        "example",
         "somename"
       ],
       "properties": {
+        "example": {
+          "xml": {
+            "name": "example",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Example"
+        },
         "somename": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "somename",
+            "attribute": true,
+            "wrapped": false
+          }
         }
       },
       "xml": {
@@ -1108,6 +1122,12 @@
       "properties": {
         "links": {
           "type": "object",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "additionalProperties": {
             "$ref": "#/definitions/LinkAlternate"
           }

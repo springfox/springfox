@@ -47,10 +47,14 @@ public class XmlModelPlugin implements ModelBuilderPlugin {
 
   private Xml buildXml(XmlType annotation) {
     return new Xml()
-        .name(annotation.name())
+        .name(defaultToNull(annotation.name()))
         .attribute(false)
-        .namespace(annotation.namespace())
+        .namespace(defaultToNull(annotation.namespace()))
         .wrapped(false);
+  }
+
+  private String defaultToNull(String value) {
+    return "##default".equalsIgnoreCase(value) ? null : value;
   }
 
   private Class<?> forClass(ModelContext context) {

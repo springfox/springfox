@@ -2257,10 +2257,20 @@
       "type": "object",
       "properties": {
         "href": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "href",
+            "attribute": true,
+            "wrapped": false
+          }
         },
         "rel": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "rel",
+            "attribute": true,
+            "wrapped": false
+          }
         },
         "templated": {
           "type": "boolean"
@@ -2312,6 +2322,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2336,6 +2352,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2372,6 +2394,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2393,6 +2421,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2419,6 +2453,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2436,6 +2476,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2456,6 +2502,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2473,6 +2525,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
@@ -2490,6 +2548,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link"
           }
