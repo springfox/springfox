@@ -16,8 +16,11 @@
  *
  *
  */
-package springfox.documentation.schema
+package springfox.documentation.schema;
 
-class JsonViewChild {
-    interface SubView1 {}
+public class JsonViewParent {
+
+    interface View1 extends JsonViewChild.SubView1 {}
+
+    interface View2 {}
 }
