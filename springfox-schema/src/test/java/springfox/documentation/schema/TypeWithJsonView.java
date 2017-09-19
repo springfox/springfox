@@ -19,8 +19,6 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import springfox.documentation.schema.JsonViewChild;
-import springfox.documentation.schema.JsonViewParent;
 
 public class TypeWithJsonView {
 
