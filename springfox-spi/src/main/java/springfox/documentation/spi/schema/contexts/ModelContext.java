@@ -171,7 +171,8 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes, JsonView jsonView) {
+      ImmutableSet<Class> ignorableTypes,
+      JsonView jsonView) {
 
     return new ModelContext(
         group,
@@ -317,7 +318,8 @@ public class ModelContext {
             Objects.equal(type, that.type) &&
             Objects.equal(documentationType, that.documentationType) &&
             Objects.equal(returnType, that.returnType) &&
-            Objects.equal(namingStrategy(), that.namingStrategy());
+            Objects.equal(namingStrategy(), that.namingStrategy()) &&
+            Objects.equal(jsonView, that.jsonView);
 
   }
 

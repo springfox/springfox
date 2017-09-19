@@ -18,84 +18,98 @@
  */
 package springfox.documentation.schema.plugins
 
+import com.fasterxml.jackson.annotation.JsonView
 import com.google.common.collect.ImmutableSet
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.ExampleWithEnums
+import springfox.documentation.schema.JsonViewParent
+import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
 
-import static springfox.documentation.spi.DocumentationType.*
-import static springfox.documentation.spi.schema.contexts.ModelContext.*
+import static springfox.documentation.spi.DocumentationType.SWAGGER_12
+import static springfox.documentation.spi.schema.contexts.ModelContext.inputParam
+import static springfox.documentation.spi.schema.contexts.ModelContext.returnValue
 
 class ModelContextSpec extends Specification {
-  @Shared
-  AlternateTypeProvider provider = Mock(AlternateTypeProvider)
-  @Shared
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    @Shared
+    AlternateTypeProvider provider = Mock(AlternateTypeProvider)
+    @Shared
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    @Shared
+    def jsonView = TypesForTestingSupport.getJsonView(JsonViewParent.View1);
 
-  def "ModelContext equals works as expected"() {
-    given:
-      ModelContext context = inputParam(
-          "group",
-          ExampleEnum,
-          SWAGGER_12,
-          provider,
-          namingStrategy,
-          ImmutableSet.builder().build())
-    expect:
-      context.equals(test) == expectedEquality
-      context.equals(context)
-    where:
-      test                         | expectedEquality
-      inputParam(ExampleEnum)      | true
-      inputParam(ExampleWithEnums) | false
-      returnValue(ExampleEnum)     | false
-      ExampleEnum                  | false
-  }
+    def "ModelContext equals works as expected"() {
+        given:
+        ModelContext context = inputParam(
+                "group",
+                ExampleEnum,
+                SWAGGER_12,
+                provider,
+                namingStrategy,
+                ImmutableSet.builder().build(),
+                jsonView)
+        expect:
+        context.equals(test) == expectedEquality
+        context.equals(context)
+        where:
+        test                                    | expectedEquality
+        inputParam(ExampleEnum, jsonView)       | true
+        inputParam(ExampleEnum, null)     | false
+        inputParam(ExampleWithEnums, jsonView)  | false
+        returnValue(ExampleEnum)                | false
+        ExampleEnum                             | false
+    }
 
-  def inputParam(Class ofType) {
-    inputParam("group",
-        ofType,
-        SWAGGER_12,
-        provider,
-        namingStrategy,
-        ImmutableSet.builder().build())
-  }
+    def inputParam(Class ofType, JsonView view) {
+        inputParam("group",
+                ofType,
+                SWAGGER_12,
+                provider,
+                namingStrategy,
+                ImmutableSet.builder().build(),
+                view)
+    }
 
-  def returnValue(Class ofType) {
-    returnValue("group",
-        ofType,
-        SWAGGER_12,
-        provider,
-        namingStrategy,
-        ImmutableSet.builder().build())
-  }
+    def returnValue(Class ofType) {
+        returnValue("group",
+                ofType,
+                SWAGGER_12,
+                provider,
+                namingStrategy,
+                ImmutableSet.builder().build(),
+                jsonView)
+    }
 
-  def "ModelContext hashcode generated takes into account immutable values"() {
-    given:
-      ModelContext context = inputParam("group",
-          ExampleEnum,
-          SWAGGER_12,
-          provider,
-          namingStrategy,
-          ImmutableSet.builder().build())
-      ModelContext other = inputParam("group",
-          ExampleEnum,
-          SWAGGER_12,
-          provider,
-          namingStrategy,
-          ImmutableSet.builder().build())
-      ModelContext otherReturn = returnValue("group",
-          ExampleEnum,
-          SWAGGER_12,
-          provider,
-          namingStrategy,
-          ImmutableSet.builder().build())
-    expect:
-      context.hashCode() == other.hashCode()
-      context.hashCode() != otherReturn.hashCode()
-  }
+    def "ModelContext hashcode generated takes into account immutable values"() {
+        given:
+        def jsonView = TypesForTestingSupport.getJsonView(JsonViewParent.View1);
+        ModelContext context = inputParam("group",
+                ExampleEnum,
+                SWAGGER_12,
+                provider,
+                namingStrategy,
+                ImmutableSet.builder().build(),
+                jsonView)
+        ModelContext other = inputParam("group",
+                ExampleEnum,
+                SWAGGER_12,
+                provider,
+                namingStrategy,
+                ImmutableSet.builder().build(),
+                jsonView)
+        ModelContext otherReturn = returnValue("group",
+                ExampleEnum,
+                SWAGGER_12,
+                provider,
+                namingStrategy,
+                ImmutableSet.builder().build(),
+                jsonView)
+        expect:
+        context.hashCode() == other.hashCode()
+        context.hashCode() != otherReturn.hashCode()
+    }
 }

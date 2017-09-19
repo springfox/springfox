@@ -18,8 +18,11 @@
  */
 package springfox.documentation.schema
 
+import com.fasterxml.jackson.annotation.JsonView
 import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.TypesForTestingSupport
+
+import java.lang.annotation.Annotation
 
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -73,6 +76,24 @@ class TypeNameExtractorSpec extends SchemaSpecification {
       genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
       hashMap(String, SimpleType)    | "Map«string,SimpleType»"
       hashMap(String, String)        | "Map«string,string»"
+  }
+
+  def "Input class for container types are inferred correctly with a JsonView"() {
+    given:
+    def referenceJsonView = TypesForTestingSupport.getJsonView(JsonViewParent.View2)
+    def context = returnValue("group",
+            containerType,
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            ImmutableSet.builder().build(),
+            referenceJsonView)
+    expect:
+    typeNameExtractor.typeName(context) == name
+
+    where:
+    containerType                  | name
+    typeForTestingJsonView()      | "TypeWithJsonViewJsonViewView2"
   }
   //TODO: test cases for parent (withAndWithout)
 }
