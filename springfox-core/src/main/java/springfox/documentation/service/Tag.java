@@ -20,17 +20,24 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Objects;
+import org.springframework.core.Ordered;
 
 import static com.google.common.base.Preconditions.*;
 import static com.google.common.base.Strings.*;
 
-public class Tag {
+public class Tag implements Ordered {
   private final String name;
   private final String description;
+  private final int order;
 
   public Tag(String name, String description) {
+    this(name, description, Integer.MAX_VALUE);
+  }
+
+  public Tag(String name, String description, int order) {
     this.name = checkNotNull(emptyToNull(name));
     this.description = description;
+    this.order = order;
   }
 
   public String getName() {
@@ -39,6 +46,11 @@ public class Tag {
 
   public String getDescription() {
     return description;
+  }
+
+  @Override
+  public int getOrder() {
+    return order;
   }
 
   @Override

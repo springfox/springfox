@@ -45,16 +45,17 @@ public class Tags {
     List<Tag> tags = from(allListings)
         .transformAndConcat(collectTags())
         .toList();
-    TreeSet<Tag> tagSet = newTreeSet(tagNameComparator());
+    TreeSet<Tag> tagSet = newTreeSet(tagComparator());
     tagSet.addAll(tags);
     return tagSet;
   }
 
-  public static Comparator<Tag> tagNameComparator() {
+  public static Comparator<Tag> tagComparator() {
     return new Comparator<Tag>() {
       @Override
       public int compare(Tag first, Tag second) {
-        return first.getName().compareTo(second.getName());
+        int orderCompare = Integer.valueOf(first.getOrder()).compareTo(second.getOrder());
+        return orderCompare != 0 ? orderCompare : first.getName().compareTo(second.getName());
       }
     };
   }
