@@ -20,6 +20,8 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Optional;
+
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +67,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     ModelContext modelContext = returnValue(
         context.getGroupName(),
         returnType,
+        Optional.<ResolvedType>absent(),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
         context.getGenericsNamingStrategy(),

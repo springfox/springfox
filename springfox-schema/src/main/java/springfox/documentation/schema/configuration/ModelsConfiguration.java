@@ -25,6 +25,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
+import springfox.documentation.spi.schema.ModelProjectionProviderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 
@@ -35,7 +36,8 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 @EnablePluginRegistries({
     ModelBuilderPlugin.class,
     ModelPropertyBuilderPlugin.class,
-    TypeNameProviderPlugin.class
+    TypeNameProviderPlugin.class,
+    ModelProjectionProviderPlugin.class
 })
 public class ModelsConfiguration {
   @Bean

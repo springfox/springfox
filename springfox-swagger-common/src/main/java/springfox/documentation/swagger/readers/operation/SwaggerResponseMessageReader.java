@@ -100,7 +100,9 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
         if (!seenResponsesByCode.containsKey(apiResponse.code())) {
           seenResponsesByCode.put(apiResponse.code(), apiResponse);
           ModelContext modelContext = returnValue(
-              context.getGroupName(), apiResponse.response(),
+              context.getGroupName(),
+              apiResponse.response(),
+              Optional.<ResolvedType>absent(),
               context.getDocumentationType(),
               context.getAlternateTypeProvider(),
               context.getGenericsNamingStrategy(),
@@ -131,6 +133,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       ModelContext modelContext = returnValue(
           context.getGroupName(),
           operationResponse.get(),
+          Optional.<ResolvedType>absent(),
           context.getDocumentationType(),
           context.getAlternateTypeProvider(),
           context.getGenericsNamingStrategy(),

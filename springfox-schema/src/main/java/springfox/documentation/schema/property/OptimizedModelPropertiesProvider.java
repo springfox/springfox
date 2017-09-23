@@ -366,10 +366,20 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
     if (context.isReturnType()) {
       SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
-      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
+      if (context.getProjection().isPresent()) {
+        return serializationConfig.withView(context.getProjection().get().getErasedType())
+              .introspect(serializationConfig.constructType(type.getErasedType()));
+      } else {
+        return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
+      }
     } else {
       DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
-      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
+      if (context.getProjection().isPresent()) {
+        return serializationConfig.withView(context.getProjection().get().getErasedType())
+              .introspect(serializationConfig.constructType(type.getErasedType()));
+      } else {
+        return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
+      }
     }
   }
 }

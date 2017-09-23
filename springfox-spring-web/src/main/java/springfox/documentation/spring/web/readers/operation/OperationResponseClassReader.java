@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import springfox.documentation.schema.ModelProjectionExtractor;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -38,10 +40,12 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
   private final TypeNameExtractor nameExtractor;
+  private final ModelProjectionExtractor projectionExtractor;
 
   @Autowired
-  public OperationResponseClassReader(TypeNameExtractor nameExtractor) {
+  public OperationResponseClassReader(TypeNameExtractor nameExtractor, ModelProjectionExtractor projectionExtractor) {
     this.nameExtractor = nameExtractor;
+    this.projectionExtractor = projectionExtractor;
   }
 
   @Override
@@ -51,6 +55,9 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     ModelContext modelContext = ModelContext.returnValue(
         context.getGroupName(),
         returnType,
+        projectionExtractor.extractProjection(returnType,
+                context.getAnnotations(),
+                context.getDocumentationType()),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
         context.getGenericsNamingStrategy(),

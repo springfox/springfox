@@ -34,6 +34,8 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -113,6 +115,11 @@ public class WebMvcRequestHandler implements RequestHandler {
     return Optional.fromNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
   }
 
+  @Override
+  public List<Annotation> getAnnotations() {
+    return new ArrayList<Annotation>(Arrays.<Annotation>asList(handlerMethod.getMethod().getAnnotations()));
+  }
+  
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(

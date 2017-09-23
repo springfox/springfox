@@ -22,7 +22,10 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
+
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
@@ -31,7 +34,8 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import java.lang.reflect.Type;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.ImmutableSet.copyOf;
 
 public class ModelContext {
   private final Type type;
@@ -39,6 +43,9 @@ public class ModelContext {
   private final String groupName;
   private final DocumentationType documentationType;
 
+  private final Optional<ResolvedType> projection;
+  private final Set<ResolvedType> validationGroups;
+  
   private final ModelContext parentContext;
   private final Set<ResolvedType> seenTypes = newHashSet();
   private final ModelBuilder modelBuilder;
@@ -50,6 +57,8 @@ public class ModelContext {
       String groupName,
       Type type,
       boolean returnType,
+      Optional<ResolvedType> projection,
+      Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
@@ -62,6 +71,8 @@ public class ModelContext {
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
+    this.projection = projection;
+    this.validationGroups = copyOf(validationGroups);
     this.modelBuilder = new ModelBuilder();
   }
 
@@ -70,6 +81,8 @@ public class ModelContext {
     this.type = input;
     this.groupName = parentContext.groupName;
     this.returnType = parentContext.isReturnType();
+    this.projection = parentContext.getProjection();
+    this.validationGroups = parentContext.getValidationGroups();
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
@@ -97,6 +110,20 @@ public class ModelContext {
    */
   public boolean isReturnType() {
     return returnType;
+  }
+
+  /**
+   * @return projection
+   */
+  public Optional<ResolvedType> getProjection() {
+    return projection;
+  }
+  
+  /**
+   * @return a set of jsr-303 validation groups
+   */
+  public Set<ResolvedType> getValidationGroups() {
+    return validationGroups;
   }
 
   /**
@@ -135,6 +162,8 @@ public class ModelContext {
   public static ModelContext inputParam(
       String group,
       Type type,
+      Optional<ResolvedType> projection,
+      Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
@@ -144,6 +173,8 @@ public class ModelContext {
         group,
         type,
         false,
+        projection,
+        validationGroups,
         documentationType,
         alternateTypeProvider,
         genericNamingStrategy,
@@ -165,6 +196,7 @@ public class ModelContext {
   public static ModelContext returnValue(
       String groupName,
       Type type,
+      Optional<ResolvedType> projection,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
@@ -174,6 +206,8 @@ public class ModelContext {
         groupName,
         type,
         true,
+        projection,
+        Sets.<ResolvedType>newHashSet(),
         documentationType,
         alternateTypeProvider,
         genericNamingStrategy,
@@ -249,6 +283,8 @@ public class ModelContext {
     return
         Objects.equal(groupName, that.groupName) &&
         Objects.equal(type, that.type) &&
+        Objects.equal(projection, that.projection) &&
+        Objects.equal(validationGroups, that.validationGroups) &&
         Objects.equal(documentationType, that.documentationType) &&
         Objects.equal(returnType, that.returnType) &&
         Objects.equal(namingStrategy(), that.namingStrategy());
@@ -267,6 +303,8 @@ public class ModelContext {
     return Objects.hashCode(
         groupName,
         type,
+        projection,
+        validationGroups,
         documentationType,
         returnType,
         namingStrategy());
@@ -277,6 +315,7 @@ public class ModelContext {
         .add("groupName", this.getGroupName())
         .add("type", this.getType())
         .add("isReturnType", this.isReturnType())
+        .add("projection", this.getProjection())
         .toString();
   }
 

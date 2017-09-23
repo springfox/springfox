@@ -109,6 +109,11 @@ public class MockRequestHandler implements RequestHandler {
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
     return null;
   }
+  
+  @Override
+  public List<Annotation> getAnnotations() {
+    return null;
+  }
 
   @Override
   public RequestHandlerKey key() {

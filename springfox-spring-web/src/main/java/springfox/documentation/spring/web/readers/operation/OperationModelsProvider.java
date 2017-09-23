@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
+
+import springfox.documentation.schema.ModelProjectionExtractor;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
+import java.util.HashSet;
 import java.util.List;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -45,10 +49,12 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(OperationModelsProvider.class);
   private final TypeResolver typeResolver;
+  private final ModelProjectionExtractor projectionExtractor;
 
   @Autowired
-  public OperationModelsProvider(TypeResolver typeResolver) {
+  public OperationModelsProvider(TypeResolver typeResolver, ModelProjectionExtractor projectionExtractor) {
     this.typeResolver = typeResolver;
+    this.projectionExtractor = projectionExtractor;
   }
 
   @Override
@@ -74,7 +80,10 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     ResolvedType modelType = context.getReturnType();
     modelType = context.alternateFor(modelType);
     LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-    context.operationModelsBuilder().addReturn(modelType);
+    context.operationModelsBuilder().addReturn(modelType,
+            projectionExtractor.extractProjection(modelType,
+                    context.getAnnotations(),
+                    context.getDocumentationContext().getDocumentationType()));
   }
 
   private void collectParameters(RequestMappingContext context) {
@@ -88,7 +97,13 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
             || parameterType.hasParameterAnnotation(RequestPart.class)) {
           ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-          context.operationModelsBuilder().addInputParam(modelType);
+          
+          context.operationModelsBuilder().addInputParam(modelType,
+                  projectionExtractor.extractProjection(
+                          parameterType.getParameterType(),
+                          parameterType.getAnnotations(),
+                          context.getDocumentationContext().getDocumentationType()),
+                  new HashSet<ResolvedType>());
         }
     }
     LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());

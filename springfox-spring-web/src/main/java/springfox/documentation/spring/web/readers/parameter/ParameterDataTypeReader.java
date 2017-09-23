@@ -29,6 +29,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import springfox.documentation.schema.ModelProjectionExtractor;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -45,6 +47,8 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
+import java.util.HashSet;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterDataTypeReader implements ParameterBuilderPlugin {
@@ -52,16 +56,19 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  private final ModelProjectionExtractor projectionExtractor;
 
 
   @Autowired
   public ParameterDataTypeReader(
       TypeNameExtractor nameExtractor,
       TypeResolver resolver,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      ModelProjectionExtractor projectionExtractor) {
     this.nameExtractor = nameExtractor;
     this.resolver = resolver;
     this.enumTypeDeterminer = enumTypeDeterminer;
+    this.projectionExtractor = projectionExtractor;
   }
 
   @Override
@@ -95,6 +102,10 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     ModelContext modelContext = inputParam(
         context.getGroupName(),
         parameterType,
+        projectionExtractor.extractProjection(parameterType,
+                methodParameter.getAnnotations(),
+                context.getDocumentationType()),
+        new HashSet<ResolvedType>(),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
         context.getGenericNamingStrategy(),

@@ -74,6 +74,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
       ModelContext modelContext = ModelContext.returnValue(
           context.getGroupName(),
           returnType,
+          Optional.<ResolvedType>absent(),
           context.getDocumentationType(),
           context.getAlternateTypeProvider(),
           context.getGenericsNamingStrategy(),

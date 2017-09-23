@@ -35,6 +35,7 @@ import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -108,6 +109,14 @@ class SpringDataRestRequestHandler implements RequestHandler {
     }
     return Optional.absent();
   }
+  
+  @Override
+  public List<Annotation> getAnnotations() {
+    if (getHandlerMethod() != null) {
+      return new ArrayList<Annotation>(Arrays.<Annotation>asList(getHandlerMethod().getMethod().getAnnotations()));
+    }
+    return new ArrayList<Annotation>();
+  }
 
   @Override
   public RequestHandlerKey key() {
@@ -147,5 +156,4 @@ class SpringDataRestRequestHandler implements RequestHandler {
   public RequestHandler combine(RequestHandler other) {
     return new CombinedRequestHandler(this, other);
   }
-
 }

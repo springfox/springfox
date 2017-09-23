@@ -18,7 +18,10 @@
  */
 package springfox.documentation.spi.service.contexts;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -49,11 +52,16 @@ public class OperationModelContextsBuilder {
     this.genericsNamingStrategy = genericsNamingStrategy;
     ignorableTypes = ignorableParameterTypes;
   }
-
+  
   public OperationModelContextsBuilder addReturn(Type type) {
+    return addReturn(type, Optional.<ResolvedType>absent());
+  }
+
+  public OperationModelContextsBuilder addReturn(Type type, Optional<ResolvedType> projection) {
     ModelContext returnValue = ModelContext.returnValue(
         group,
         type,
+        projection,
         documentationType,
         alternateTypeProvider,
         genericsNamingStrategy,
@@ -63,9 +71,15 @@ public class OperationModelContextsBuilder {
   }
 
   public OperationModelContextsBuilder addInputParam(Type type) {
+    return addInputParam(type, Optional.<ResolvedType>absent(), Sets.<ResolvedType>newHashSet());
+  }
+  
+  public OperationModelContextsBuilder addInputParam(Type type, Optional<ResolvedType> projection, Set<ResolvedType> validationGroups) {
     ModelContext inputParam = ModelContext.inputParam(
         group,
         type,
+        projection,
+        validationGroups,
         documentationType,
         alternateTypeProvider,
         genericsNamingStrategy,
