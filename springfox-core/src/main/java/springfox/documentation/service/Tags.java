@@ -24,6 +24,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Ordering;
 
 import java.util.Comparator;
 import java.util.List;
@@ -51,11 +52,24 @@ public class Tags {
   }
 
   public static Comparator<Tag> tagComparator() {
+    return Ordering.from(byOrder())
+        .compound(thenByName());
+  }
+
+  private static Comparator<Tag> thenByName() {
     return new Comparator<Tag>() {
       @Override
       public int compare(Tag first, Tag second) {
-        int orderCompare = Integer.valueOf(first.getOrder()).compareTo(second.getOrder());
-        return orderCompare != 0 ? orderCompare : first.getName().compareTo(second.getName());
+        return first.getName().compareTo(second.getName());
+      }
+    };
+  }
+
+  private static Comparator<Tag> byOrder() {
+    return new Comparator<Tag>() {
+      @Override
+      public int compare(Tag first, Tag second) {
+        return Integer.valueOf(first.getOrder()).compareTo(second.getOrder());
       }
     };
   }
@@ -76,7 +90,7 @@ public class Tags {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-          return Optional.fromNullable(tagLookup.get(input))
+        return Optional.fromNullable(tagLookup.get(input))
             .transform(toTagDescription())
             .or(defaultDescription);
       }
