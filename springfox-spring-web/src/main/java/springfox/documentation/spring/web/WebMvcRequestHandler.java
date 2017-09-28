@@ -40,6 +40,7 @@ import java.util.Set;
 public class WebMvcRequestHandler implements RequestHandler {
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
+  private HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
 
   public WebMvcRequestHandler(
       RequestMappingInfo requestMapping,
@@ -124,13 +125,11 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public List<ResolvedMethodParameter> getParameters() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
     return handlerMethodResolver.methodParameters(handlerMethod);
   }
 
   @Override
   public ResolvedType getReturnType() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
     return handlerMethodResolver.methodReturnType(handlerMethod);
   }
 
