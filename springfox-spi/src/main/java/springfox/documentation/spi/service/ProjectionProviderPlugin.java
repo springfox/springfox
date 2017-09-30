@@ -52,5 +52,5 @@ public interface ProjectionProviderPlugin extends Plugin<DocumentationType> {
    * @param annotation - projections of type 
    * @return resolved projection names
    */
-  boolean applyProjection(ResolvedType activeProjection, ResolvedType typeToApply, List<ResolvedType> typeProjections);
+  boolean applyProjection(ResolvedType activeProjection, ResolvedType typeToApply, Optional<? extends Annotation> requiredAnnotation);
 }

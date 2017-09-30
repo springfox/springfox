@@ -38,6 +38,7 @@ import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.service.ProjectionProviderPlugin;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -46,6 +47,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,6 +91,10 @@ public class ModelAttributeParameterExpander {
     FluentIterable<ModelAttributeField> modelAttributes = from(fields)
         .transform(toModelAttributeField(alternateTypeProvider));
 
+    if (context.getProjection().isPresent()) {
+      modelAttributes = modelAttributes.filter(inProjection(context.getProjection().get(), context.getDocumentationContext()));
+    }
+    
     FluentIterable<ModelAttributeField> expendables = modelAttributes
         .filter(not(simpleType()))
         .filter(not(recursiveType(context)));
@@ -242,6 +248,26 @@ public class ModelAttributeParameterExpander {
       @Override
       public boolean apply(ResolvedField input) {
         return beanPropNames.contains(input.getName());
+      }
+    };
+  }
+  
+  private Predicate<ModelAttributeField> inProjection(final ResolvedType activeProjection,
+      final DocumentationContext documentationContext) {
+    return new Predicate<ModelAttributeField>() {
+      @Override
+      public boolean apply(ModelAttributeField input) {
+        ProjectionProviderPlugin projectionProvider =
+            pluginsManager.projectionProvider(documentationContext.getDocumentationType());
+        Optional<? extends Annotation> annotation = Optional.absent();
+        if (projectionProvider.getRequiredAnnotation().isPresent()) {
+            annotation = FluentIterable.from(input.getField().getAnnotations())
+                .filter(projectionProvider.getRequiredAnnotation().get()).first();
+            if (!annotation.isPresent()) {
+              return true;
+            }
+        }   
+        return projectionProvider.applyProjection(activeProjection, input.getFieldType(), annotation);
       }
     };
   }

@@ -30,20 +30,25 @@ import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.spi.service.ProjectionProviderPlugin;
 
 @Component
 public class SchemaPluginsManager {
   private final PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers;
   private final PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers;
+  private final PluginRegistry<ProjectionProviderPlugin, DocumentationType> projectionProviders;
 
   @Autowired
   public SchemaPluginsManager(
       @Qualifier("modelPropertyBuilderPluginRegistry")
       PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers,
       @Qualifier("modelBuilderPluginRegistry")
-      PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers) {
+      PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers,
+      @Qualifier("projectionProviderRegistry")
+      PluginRegistry<ProjectionProviderPlugin, DocumentationType> projectionProviders) {
     this.propertyEnrichers = propertyEnrichers;
     this.modelEnrichers = modelEnrichers;
+    this.projectionProviders = projectionProviders;
   }
 
   public ModelProperty property(ModelPropertyContext context) {
@@ -58,6 +63,10 @@ public class SchemaPluginsManager {
       enricher.apply(context);
     }
     return context.getBuilder().build();
+  }
+  
+  public ProjectionProviderPlugin projectionProvider(DocumentationType documentationType) {
+    return projectionProviders.getPluginFor(documentationType);
   }
 
 }

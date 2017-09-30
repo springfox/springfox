@@ -35,7 +35,6 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
@@ -60,7 +59,6 @@ import java.util.List;
     ResourceGroupingStrategy.class,
     OperationModelsProviderPlugin.class,
     DefaultsProviderPlugin.class,
-    ProjectionProviderPlugin.class,
     PathDecorator.class,
     
     ApiListingScannerPlugin.class

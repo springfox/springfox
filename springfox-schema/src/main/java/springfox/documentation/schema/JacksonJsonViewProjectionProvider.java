@@ -54,12 +54,15 @@ public class JacksonJsonViewProjectionProvider implements ProjectionProviderPlug
 
   @Override
   public boolean applyProjection(ResolvedType activeProjection, ResolvedType typeToApply,
-    List<ResolvedType> typeProjections) {
+      Optional<? extends Annotation> requiredAnnotation) {
     final Class<?> activeView = activeProjection.getErasedType();
-    if (activeView != null) {
-      int i = 0, len = typeProjections.size();
+    if (requiredAnnotation.isPresent() &&
+        requiredAnnotation.get() instanceof JsonView &&
+        activeView != null) {
+      final Class<?>[] typeProjections = ((JsonView)requiredAnnotation.get()).value();
+      int i = 0, len = typeProjections.length;
       for (; i < len; ++i) {
-        if (typeProjections.get(i).getErasedType().isAssignableFrom(activeView)) {
+        if (typeProjections[i].isAssignableFrom(activeView)) {
           return true;
         }
       }

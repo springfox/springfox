@@ -54,6 +54,7 @@ import springfox.documentation.schema.property.field.FieldModelProperty;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.spi.service.ProjectionProviderPlugin;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -214,8 +215,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext modelContext = ModelContext.fromParent(givenContext, type);
       properties.addAll(fromFactoryMethod(type, jacksonProperty, (AnnotatedParameter) member, modelContext));
     }
-    return from(properties).filter(hiddenProperties()).toList();
-
+    return from(properties)
+        .filter(hiddenProperties())
+        .filter(inProjection(givenContext, member))
+        .toList();
   }
 
   private Predicate<? super ModelProperty> hiddenProperties() {
@@ -223,6 +226,24 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public boolean apply(ModelProperty input) {
         return !input.isHidden();
+      }
+    };
+  }
+  
+  private Predicate<? super ModelProperty> inProjection(final ModelContext context, final AnnotatedMember member) {
+    return new Predicate<ModelProperty>() {
+      @Override
+      public boolean apply(ModelProperty input) {
+        if (context.getProjection().isPresent()) {
+          ProjectionProviderPlugin projectionProvider =
+              schemaPluginsManager.projectionProvider(context.getDocumentationType());
+          Optional<? extends Annotation> annotation = Optional.absent();
+          if (projectionProvider.getRequiredAnnotation().isPresent()) {
+            annotation = Optional.fromNullable(member.getAnnotation(projectionProvider.getRequiredAnnotation().get()));
+          }
+          return projectionProvider.applyProjection(context.getProjection().get(), input.getType(), annotation);
+        }
+        return true;
       }
     };
   }
@@ -366,20 +387,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
     if (context.isReturnType()) {
       SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
-      if (context.getProjection().isPresent()) {
-        return serializationConfig.withView(context.getProjection().get().getErasedType())
-              .introspect(serializationConfig.constructType(type.getErasedType()));
-      } else {
-        return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
-      }
+      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
     } else {
       DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
-      if (context.getProjection().isPresent()) {
-        return serializationConfig.withView(context.getProjection().get().getErasedType())
-              .introspect(serializationConfig.constructType(type.getErasedType()));
-      } else {
-        return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
-      }
+      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
     }
   }
 }

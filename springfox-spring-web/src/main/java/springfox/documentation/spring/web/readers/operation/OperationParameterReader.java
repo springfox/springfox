@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
+import springfox.documentation.spi.service.ProjectionProviderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -94,9 +96,22 @@ public class OperationParameterReader implements OperationBuilderPlugin {
             context);
 
         if (shouldExpand(methodParameter, alternate)) {
+          
+          ProjectionProviderPlugin projectionProvider = 
+              pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
+          Optional<? extends Annotation> annotation = Optional.absent();
+          if (projectionProvider.getRequiredAnnotation().isPresent()) {
+            annotation = methodParameter.findAnnotation(projectionProvider.getRequiredAnnotation().get());
+          }
+          Optional<ResolvedType> projection = Optional.absent();
+          List<ResolvedType> projections = projectionProvider.projectionsFor(alternate, annotation);
+          if (!projections.isEmpty()) {
+            projection = Optional.of(projections.get(0));
+          }
+
           parameters.addAll(
               expander.expand(
-                  new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
+                  new ExpansionContext("", methodParameter.getParameterType(), projection, context.getDocumentationContext())));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }
