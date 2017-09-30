@@ -192,11 +192,6 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       def <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
         return null
       }
-      
-      @Override
-      List<Annotation> getAnnotations() {
-        return null;
-      }
 
       RequestHandlerKey key() {
         handlerKey == null ? null : new RequestHandlerKey([] as Set, [] as Set, [] as Set, [] as Set)

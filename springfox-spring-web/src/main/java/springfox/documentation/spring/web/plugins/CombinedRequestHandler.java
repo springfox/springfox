@@ -35,7 +35,6 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.*;
 
 public class CombinedRequestHandler implements RequestHandler {
@@ -105,20 +104,6 @@ public class CombinedRequestHandler implements RequestHandler {
     return first.findAnnotation(annotation).or(second.findAnnotation(annotation));
   }
 
-  @Override
-  public List<Annotation> getAnnotations () {
-    List<Annotation> annotations = newArrayList();
-    List<Annotation> firstAnnotations = first.getAnnotations();
-    List<Annotation> secondAnnotations = second.getAnnotations();
-    if (firstAnnotations.size() > 0) {
-      annotations.addAll(firstAnnotations);
-    }
-    if (secondAnnotations.size() > 0) {
-      annotations.addAll(secondAnnotations);
-    }
-    return annotations;
-  }
-  
   @Override
   public RequestHandlerKey key() {
       return new RequestHandlerKey(

@@ -169,8 +169,4 @@ public class OperationContext {
   public <T extends Annotation> List<T > findAllAnnotations(Class<T> annotation) {
     return requestContext.findAnnotations(annotation);
   }
-  
-  public List<Annotation> getAnnotations() {
-    return requestContext.getAnnotations();
-  }
 }

@@ -19,6 +19,8 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,38 +28,54 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import springfox.documentation.schema.ModelProjectionExtractor;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
+import springfox.documentation.spi.service.ProjectionProviderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
   private final TypeNameExtractor nameExtractor;
-  private final ModelProjectionExtractor projectionExtractor;
+  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public OperationResponseClassReader(TypeNameExtractor nameExtractor, ModelProjectionExtractor projectionExtractor) {
+  public OperationResponseClassReader(DocumentationPluginsManager pluginsManager, TypeNameExtractor nameExtractor) {
     this.nameExtractor = nameExtractor;
-    this.projectionExtractor = projectionExtractor;
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
   public void apply(OperationContext context) {
     ResolvedType returnType = context.getReturnType();
     returnType = context.alternateFor(returnType);
+    
+    ProjectionProviderPlugin projectionProvider = 
+        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
+    Optional<? extends Annotation> annotation = Optional.absent();
+    if (projectionProvider.getRequiredAnnotation().isPresent()) {
+      annotation = context.findAnnotation(projectionProvider.getRequiredAnnotation().get());
+    }
+    Optional<ResolvedType> projection = Optional.absent();
+    List<ResolvedType> projections = projectionProvider.projectionsFor(returnType, annotation);
+    if (!projections.isEmpty()) {
+      projection = Optional.of(projections.get(0));
+      log.debug("Found projection {} for type {}", resolvedTypeSignature(projections.get(0)).or("<null>"), resolvedTypeSignature(returnType).or("<null>"));
+    }
+
     ModelContext modelContext = ModelContext.returnValue(
         context.getGroupName(),
         returnType,
-        projectionExtractor.extractProjection(returnType,
-                context.getAnnotations(),
-                context.getDocumentationType()),
+        projection,
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
         context.getGenericsNamingStrategy(),

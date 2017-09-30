@@ -62,8 +62,6 @@ public interface RequestHandler {
   Set<NameValueExpression<String>> params();
 
   <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation);
-  
-  List<Annotation> getAnnotations();
 
   RequestHandlerKey key();
 

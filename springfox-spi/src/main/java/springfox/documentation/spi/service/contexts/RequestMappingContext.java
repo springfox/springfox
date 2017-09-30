@@ -187,10 +187,6 @@ public class RequestMappingContext {
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     return handler.findControllerAnnotation(annotation);
   }
-  
-  public List<Annotation> getAnnotations() {
-    return handler.getAnnotations();
-  }
 
   public <T extends Annotation> List<T> findAnnotations(Class<T> annotation) {
     List<T> annotations = newArrayList();

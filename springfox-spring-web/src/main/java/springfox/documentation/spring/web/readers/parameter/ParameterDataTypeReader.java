@@ -30,7 +30,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import springfox.documentation.schema.ModelProjectionExtractor;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -39,7 +38,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
+import springfox.documentation.spi.service.ProjectionProviderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
@@ -47,7 +48,9 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
+import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -56,19 +59,18 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;
   private final EnumTypeDeterminer enumTypeDeterminer;
-  private final ModelProjectionExtractor projectionExtractor;
-
+  private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
   public ParameterDataTypeReader(
+      DocumentationPluginsManager pluginsManager,
       TypeNameExtractor nameExtractor,
       TypeResolver resolver,
-      EnumTypeDeterminer enumTypeDeterminer,
-      ModelProjectionExtractor projectionExtractor) {
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.nameExtractor = nameExtractor;
     this.resolver = resolver;
     this.enumTypeDeterminer = enumTypeDeterminer;
-    this.projectionExtractor = projectionExtractor;
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
@@ -99,12 +101,24 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         LOG.warn("Trying to infer dataType {}", parameterType);
       }
     }
+    
+    ProjectionProviderPlugin projectionProvider = 
+        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
+    Optional<? extends Annotation> annotation = Optional.absent();
+    if (projectionProvider.getRequiredAnnotation().isPresent()) {
+      annotation = methodParameter.findAnnotation(projectionProvider.getRequiredAnnotation().get());
+    }
+    Optional<ResolvedType> projection = Optional.absent();
+    List<ResolvedType> projections = projectionProvider.projectionsFor(parameterType, annotation);
+    if (!projections.isEmpty()) {
+      projection = Optional.of(projections.get(0));
+      LOG.debug("Found projection {} for type {}", resolvedTypeSignature(projections.get(0)).or("<null>"), resolvedTypeSignature(parameterType).or("<null>"));
+    }
+    
     ModelContext modelContext = inputParam(
         context.getGroupName(),
         parameterType,
-        projectionExtractor.extractProjection(parameterType,
-                methodParameter.getAnnotations(),
-                context.getDocumentationType()),
+        projection,
         new HashSet<ResolvedType>(),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
