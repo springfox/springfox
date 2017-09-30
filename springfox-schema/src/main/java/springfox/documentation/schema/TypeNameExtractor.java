@@ -24,6 +24,9 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -35,6 +38,8 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.common.base.Optional.*;
 import static springfox.documentation.schema.Collections.*;
@@ -42,9 +47,14 @@ import static springfox.documentation.schema.Types.*;
 
 @Component
 public class TypeNameExtractor {
+  private static final Logger LOG = LoggerFactory.getLogger(TypeNameExtractor.class);
+  
   private final TypeResolver typeResolver;
   private final PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  
+  private final Map<String, Integer> generated = new HashMap<String, Integer>();
+  private final Map<Integer, String> modelNameCache = new HashMap<Integer, String>();
 
   @Autowired
   public TypeNameExtractor(
@@ -73,8 +83,7 @@ public class TypeNameExtractor {
   private String genericTypeName(ResolvedType resolvedType, ModelContext context) {
     Class<?> erasedType = resolvedType.getErasedType();
     GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
-    ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), context.getDocumentationType());
-    String simpleName = fromNullable(typeNameFor(erasedType)).or(typeName(nameContext));
+    String simpleName = fromNullable(typeNameFor(erasedType)).or(modelName(ModelContext.fromParent(context, resolvedType)));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
@@ -114,12 +123,26 @@ public class TypeNameExtractor {
         return typeName;
       }
     }
-    return typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()));
+    return modelName(ModelContext.fromParent(context, type));
   }
 
-  private String typeName(ModelNameContext context) {
+  private String modelName(ModelContext context) {
+    if (modelNameCache.containsKey(context.hashCode())) {
+      return modelNameCache.get(context.hashCode());
+    }
     TypeNameProviderPlugin selected =
         typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
-    return selected.nameFor(context.getType());
+    String modelName = selected.nameFor(((ResolvedType)context.getType()).getErasedType());
+    if (generated.containsKey(modelName)) {
+      generated.put(modelName, generated.get(modelName) + 1);
+      String nextUniqueModelName = String.format("%s_%s", modelName, generated.get(modelName));
+      LOG.info("Generating unique model named: {}", nextUniqueModelName);
+      modelNameCache.put(context.hashCode(), nextUniqueModelName);
+      return nextUniqueModelName;
+    } else {
+      generated.put(modelName, 0);
+      modelNameCache.put(context.hashCode(), modelName);
+      return modelName;
+    }
   }
 }
