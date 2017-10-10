@@ -82,7 +82,7 @@ public class ApiDescriptionReader {
             } catch (Error e) {
                 String contentMsg = "Process path[" + path + "],method[" + methodName + "] error";
                 log.error(contentMsg, e);
-                throw new Error(contentMsg, e);
+                throw new AssertionError(contentMsg, e);
             }
         }
         return apiDescriptionList;
