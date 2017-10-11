@@ -337,7 +337,8 @@ public class ModelContext {
         type,
         documentationType,
         returnType,
-        namingStrategy());
+        namingStrategy(),
+        jsonView);
   }
 
   public String description() {

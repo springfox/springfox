@@ -25,6 +25,7 @@ import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.base.CaseFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -37,9 +38,10 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
 
-import static com.google.common.base.Optional.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
+import static com.google.common.base.Optional.fromNullable;
+import static springfox.documentation.schema.Collections.containerType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Types.typeNameFor;
 
 @Component
 public class TypeNameExtractor {
@@ -122,7 +124,12 @@ public class TypeNameExtractor {
     if (jsonView == null) {
       return typeName(context);
     }
-    return typeName(context) + "JsonView" + jsonView.value()[0].getSimpleName();
+    return typeName(context) + "_" + generatedViewName(jsonView);
+  }
+
+  private String generatedViewName(JsonView jsonView) {
+    String str = jsonView.value()[0].getName().replace(".", "_").replace("$", "_");
+    return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, str);
   }
 
   private String typeName(ModelNameContext context) {
