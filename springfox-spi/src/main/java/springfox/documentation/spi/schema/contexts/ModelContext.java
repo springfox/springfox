@@ -43,7 +43,7 @@ public class ModelContext {
   private final String groupName;
   private final DocumentationType documentationType;
 
-  private final Optional<ResolvedType> projection;
+  private final Optional<ResolvedType> view;
   private final Set<ResolvedType> validationGroups;
   
   private final ModelContext parentContext;
@@ -57,7 +57,7 @@ public class ModelContext {
       String groupName,
       Type type,
       boolean returnType,
-      Optional<ResolvedType> projection,
+      Optional<ResolvedType> view,
       Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
@@ -71,7 +71,7 @@ public class ModelContext {
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
-    this.projection = projection;
+    this.view= view;
     this.validationGroups = copyOf(validationGroups);
     this.modelBuilder = new ModelBuilder();
   }
@@ -81,7 +81,7 @@ public class ModelContext {
     this.type = input;
     this.groupName = parentContext.groupName;
     this.returnType = parentContext.isReturnType();
-    this.projection = parentContext.getProjection();
+    this.view = parentContext.getView();
     this.validationGroups = parentContext.getValidationGroups();
     this.documentationType = parentContext.getDocumentationType();
     this.modelBuilder = new ModelBuilder();
@@ -113,10 +113,10 @@ public class ModelContext {
   }
 
   /**
-   * @return projection
+   * @return view
    */
-  public Optional<ResolvedType> getProjection() {
-    return projection;
+  public Optional<ResolvedType> getView() {
+    return view;
   }
   
   /**
@@ -162,7 +162,7 @@ public class ModelContext {
   public static ModelContext inputParam(
       String group,
       Type type,
-      Optional<ResolvedType> projection,
+      Optional<ResolvedType> view,
       Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
@@ -173,7 +173,7 @@ public class ModelContext {
         group,
         type,
         false,
-        projection,
+        view,
         validationGroups,
         documentationType,
         alternateTypeProvider,
@@ -196,7 +196,7 @@ public class ModelContext {
   public static ModelContext returnValue(
       String groupName,
       Type type,
-      Optional<ResolvedType> projection,
+      Optional<ResolvedType> view,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
@@ -206,7 +206,7 @@ public class ModelContext {
         groupName,
         type,
         true,
-        projection,
+        view,
         Sets.<ResolvedType>newHashSet(),
         documentationType,
         alternateTypeProvider,
@@ -283,7 +283,7 @@ public class ModelContext {
     return
         Objects.equal(groupName, that.groupName) &&
         Objects.equal(type, that.type) &&
-        Objects.equal(projection, that.projection) &&
+        Objects.equal(view, that.view) &&
         Objects.equal(validationGroups, that.validationGroups) &&
         Objects.equal(documentationType, that.documentationType) &&
         Objects.equal(returnType, that.returnType) &&
@@ -303,7 +303,7 @@ public class ModelContext {
     return Objects.hashCode(
         groupName,
         type,
-        projection,
+        view,
         validationGroups,
         documentationType,
         returnType,
@@ -315,7 +315,7 @@ public class ModelContext {
         .add("groupName", this.getGroupName())
         .add("type", this.getType())
         .add("isReturnType", this.isReturnType())
-        .add("projection", this.getProjection())
+        .add("view", this.getView())
         .toString();
   }
 

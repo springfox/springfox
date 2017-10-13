@@ -27,7 +27,7 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
+import springfox.documentation.spi.service.ViewProviderPlugin;
 
 @Configuration
 @ComponentScan(basePackages = {
@@ -37,7 +37,7 @@ import springfox.documentation.spi.service.ProjectionProviderPlugin;
     ModelBuilderPlugin.class,
     ModelPropertyBuilderPlugin.class,
     TypeNameProviderPlugin.class,
-    ProjectionProviderPlugin.class,
+    ViewProviderPlugin.class,
 })
 public class ModelsConfiguration {
   @Bean

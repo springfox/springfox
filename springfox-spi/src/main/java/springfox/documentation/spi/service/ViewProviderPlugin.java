@@ -30,44 +30,44 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-public interface ProjectionProviderPlugin extends Plugin<DocumentationType> {
+public interface ViewProviderPlugin extends Plugin<DocumentationType> {
 
   /**
-   * Finds a active projection for the parameter type
-   * @param type - resolved type to provide projection for
+   * Finds a active view for the parameter type
+   * @param type - resolved type to provide view for
    * @param parameter - resolved method parameter to take additional information from, if needed 
-   * @return resolved projection name, if found
+   * @return resolved view name, if found
    */
-  Optional<ResolvedType> projectionFor(ResolvedType type, ResolvedMethodParameter parameter);
+  Optional<ResolvedType> viewFor(ResolvedType type, ResolvedMethodParameter parameter);
 
   /**
-   * Finds a active projection for the  return type
-   * @param type - resolved type to provide projection for
+   * Finds a active view for the  return type
+   * @param type - resolved type to provide view for
    * @param context - method context to take additional information from, if needed 
-   * @return resolved projection name, if found
+   * @return resolved view name, if found
    */
-  Optional<ResolvedType> projectionFor(ResolvedType type, RequestMappingContext context);
+  Optional<ResolvedType> viewFor(ResolvedType type, RequestMappingContext context);
   
   /**
-   * Finds a active projection for the  return type
-   * @param type - resolved type to provide projection for
+   * Finds a active view for the  return type
+   * @param type - resolved type to provide view for
    * @param context - operation context to take additional information from, if needed 
-   * @return resolved projection name, if found
+   * @return resolved view name, if found
    */
-  Optional<ResolvedType> projectionFor(ResolvedType type, OperationContext context);
+  Optional<ResolvedType> viewFor(ResolvedType type, OperationContext context);
 
   /**
-   * Defines if a type is in a active projection
-   * @param activeProjection - resolved projection type
+   * Defines if a type is in a active view
+   * @param activeView - resolved view type
    * @param field - field that contains additional information
    * @return true if active view in a type views, false otherwise
    */
-  boolean applyProjection(ResolvedType activeProjection, ResolvedField field);
+  boolean applyView(ResolvedType activeView, ResolvedField field);
 
   /**
-   * Defines if a type is in a active projection
+   * Defines if a type is in a active view
    * @param typeViews - resolved type views
    * @return true if active view in a type views, false otherwise
    */
-  boolean applyProjection(ResolvedType activeProjection, Class<?>[] typeViews);
+  boolean applyView(ResolvedType activeView, Class<?>[] typeViews);
 }

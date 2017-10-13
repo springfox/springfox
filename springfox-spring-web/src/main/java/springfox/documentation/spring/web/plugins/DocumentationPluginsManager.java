@@ -40,7 +40,7 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
+import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
@@ -91,8 +91,8 @@ public class DocumentationPluginsManager {
   @Qualifier("pathDecoratorRegistry")
   private PluginRegistry<PathDecorator, DocumentationContext> pathDecorators;
   @Autowired
-  @Qualifier("projectionProviderRegistry")
-  private PluginRegistry<ProjectionProviderPlugin, DocumentationType> projectionProviders;
+  @Qualifier("viewProviderRegistry")
+  private PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders;
   @Autowired
   @Qualifier("apiListingScannerPluginRegistry")
   private PluginRegistry<ApiListingScannerPlugin, DocumentationType> apiListingScanners;
@@ -184,8 +184,8 @@ public class DocumentationPluginsManager {
     };
   }
   
-  public ProjectionProviderPlugin projectionProvider(DocumentationType documentationType) {
-    return projectionProviders.getPluginFor(documentationType);
+  public ViewProviderPlugin viewProvider(DocumentationType documentationType) {
+    return viewProviders.getPluginFor(documentationType);
   }
 
   public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {

@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
+import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
@@ -78,9 +78,9 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     ResolvedType modelType = context.getReturnType();
     modelType = context.alternateFor(modelType);
     LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-    ProjectionProviderPlugin projectionProvider = 
-        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
-    context.operationModelsBuilder().addReturn(modelType, projectionProvider.projectionFor(modelType, context));
+    ViewProviderPlugin viewProvider = 
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
+    context.operationModelsBuilder().addReturn(modelType, viewProvider.viewFor(modelType, context));
   }
 
   private void collectParameters(RequestMappingContext context) {
@@ -88,8 +88,8 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
     LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
     
-    ProjectionProviderPlugin projectionProvider = 
-        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
+    ViewProviderPlugin viewProvider = 
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
     List<ResolvedMethodParameter> parameterTypes = context.getParameters();
     for (ResolvedMethodParameter parameterType : parameterTypes) {
@@ -98,7 +98,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
           ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
           context.operationModelsBuilder().addInputParam(modelType, 
-              projectionProvider.projectionFor(modelType, context), new HashSet<ResolvedType>());
+              viewProvider.viewFor(modelType, context), new HashSet<ResolvedType>());
         }
     }
     LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());

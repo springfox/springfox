@@ -38,7 +38,7 @@ import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
+import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -90,8 +90,8 @@ public class ModelAttributeParameterExpander {
     FluentIterable<ModelAttributeField> modelAttributes = from(fields)
         .transform(toModelAttributeField(alternateTypeProvider));
 
-    if (context.getProjection().isPresent()) {
-      modelAttributes = modelAttributes.filter(inProjection(context.getProjection().get(), context.getDocumentationContext()));
+    if (context.getView().isPresent()) {
+      modelAttributes = modelAttributes.filter(inView(context.getView().get(), context.getDocumentationContext()));
     }
     
     FluentIterable<ModelAttributeField> expendables = modelAttributes
@@ -251,14 +251,14 @@ public class ModelAttributeParameterExpander {
     };
   }
   
-  private Predicate<ModelAttributeField> inProjection(final ResolvedType activeProjection,
+  private Predicate<ModelAttributeField> inView(final ResolvedType activeView,
       final DocumentationContext documentationContext) {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        ProjectionProviderPlugin projectionProvider =
-            pluginsManager.projectionProvider(documentationContext.getDocumentationType());
-        return projectionProvider.applyProjection(activeProjection, input.getField());
+        ViewProviderPlugin viewProvider =
+            pluginsManager.viewProvider(documentationContext.getDocumentationType());
+        return viewProvider.applyView(activeView, input.getField());
       }
     };
   }

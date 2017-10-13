@@ -32,27 +32,27 @@ import static com.google.common.collect.Sets.newHashSet;
 public class ExpansionContext {
     private final String parentName;
     private final ResolvedType paramType;
-    private final Optional<ResolvedType> projection;
+    private final Optional<ResolvedType> view;
     private final DocumentationContext documentationContext;
     private final Set<ResolvedType> seenTypes;
 
     public ExpansionContext(
             String parentName,
             ResolvedType paramType, 
-            Optional<ResolvedType> projection,
+            Optional<ResolvedType> view,
             DocumentationContext documentationContext) {
-        this(parentName, paramType, projection, documentationContext, Sets.<ResolvedType>newHashSet());
+        this(parentName, paramType, view, documentationContext, Sets.<ResolvedType>newHashSet());
     }
 
     private ExpansionContext(
             String parentName,
             ResolvedType paramType,
-            Optional<ResolvedType> projection,
+            Optional<ResolvedType> view,
             DocumentationContext documentationContext,
             Set<ResolvedType> seenTypes) {
         this.parentName = parentName;
         this.paramType = paramType;
-        this.projection = projection;
+        this.view = view;
         this.documentationContext = documentationContext;
         this.seenTypes = newHashSet(seenTypes);
     }
@@ -65,8 +65,8 @@ public class ExpansionContext {
         return paramType;
     }
 
-    public Optional<ResolvedType> getProjection() {
-        return projection;
+    public Optional<ResolvedType> getView() {
+        return view;
     }
 
     public DocumentationContext getDocumentationContext() {
@@ -83,6 +83,6 @@ public class ExpansionContext {
             ResolvedType paramType,
             DocumentationContext documentationContext) {
         seenTypes.add(paramType);
-        return new ExpansionContext(parentName, paramType, projection, documentationContext, seenTypes);
+        return new ExpansionContext(parentName, paramType, view, documentationContext, seenTypes);
     }
 }

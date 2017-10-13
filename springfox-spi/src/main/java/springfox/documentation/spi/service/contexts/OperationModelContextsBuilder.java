@@ -57,11 +57,11 @@ public class OperationModelContextsBuilder {
     return addReturn(type, Optional.<ResolvedType>absent());
   }
 
-  public OperationModelContextsBuilder addReturn(Type type, Optional<ResolvedType> projection) {
+  public OperationModelContextsBuilder addReturn(Type type, Optional<ResolvedType> view) {
     ModelContext returnValue = ModelContext.returnValue(
         group,
         type,
-        projection,
+        view,
         documentationType,
         alternateTypeProvider,
         genericsNamingStrategy,
@@ -74,11 +74,11 @@ public class OperationModelContextsBuilder {
     return addInputParam(type, Optional.<ResolvedType>absent(), Sets.<ResolvedType>newHashSet());
   }
   
-  public OperationModelContextsBuilder addInputParam(Type type, Optional<ResolvedType> projection, Set<ResolvedType> validationGroups) {
+  public OperationModelContextsBuilder addInputParam(Type type, Optional<ResolvedType> view, Set<ResolvedType> validationGroups) {
     ModelContext inputParam = ModelContext.inputParam(
         group,
         type,
-        projection,
+        view,
         validationGroups,
         documentationType,
         alternateTypeProvider,

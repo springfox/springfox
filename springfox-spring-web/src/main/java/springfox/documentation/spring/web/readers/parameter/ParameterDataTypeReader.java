@@ -38,7 +38,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
+import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
@@ -100,13 +100,13 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       }
     }
     
-    ProjectionProviderPlugin projectionProvider = 
-        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
+    ViewProviderPlugin viewProvider = 
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
     ModelContext modelContext = inputParam(
         context.getGroupName(),
         parameterType,
-        projectionProvider.projectionFor(parameterType, methodParameter),
+        viewProvider.viewFor(parameterType, methodParameter),
         new HashSet<ResolvedType>(),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),

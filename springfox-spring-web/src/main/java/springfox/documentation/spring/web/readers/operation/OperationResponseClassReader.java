@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
+import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
@@ -56,13 +55,13 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     ResolvedType returnType = context.getReturnType();
     returnType = context.alternateFor(returnType);
     
-    ProjectionProviderPlugin projectionProvider = 
-        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
+    ViewProviderPlugin viewProvider = 
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
     ModelContext modelContext = ModelContext.returnValue(
         context.getGroupName(),
         returnType,
-        projectionProvider.projectionFor(returnType, context),
+        viewProvider.viewFor(returnType, context),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
         context.getGenericsNamingStrategy(),

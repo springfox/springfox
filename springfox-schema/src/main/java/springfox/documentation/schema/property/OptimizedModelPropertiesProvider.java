@@ -54,7 +54,7 @@ import springfox.documentation.schema.property.field.FieldModelProperty;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-import springfox.documentation.spi.service.ProjectionProviderPlugin;
+import springfox.documentation.spi.service.ViewProviderPlugin;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -175,7 +175,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
         if (!givenContext.canIgnore(input.getType())) {
-          if (inProjection(input, givenContext)) {
+          if (inView(input, givenContext)) {
             if (memberIsUnwrapped(jacksonProperty.getField())) {
                 return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
             }
@@ -230,11 +230,11 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     };
   }
   
-  private boolean inProjection(final ResolvedField field, final ModelContext context) {
-    if (context.getProjection().isPresent()) {
-      ProjectionProviderPlugin projectionProvider =
-          schemaPluginsManager.projectionProvider(context.getDocumentationType());     
-      return projectionProvider.applyProjection(context.getProjection().get(), field);
+  private boolean inView(final ResolvedField field, final ModelContext context) {
+    if (context.getView().isPresent()) {
+      ViewProviderPlugin viewProvider =
+          schemaPluginsManager.viewProvider(context.getDocumentationType());     
+      return viewProvider.applyView(context.getView().get(), field);
     }
     return true;
   }
