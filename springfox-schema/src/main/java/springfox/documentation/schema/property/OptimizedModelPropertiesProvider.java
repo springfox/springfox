@@ -111,7 +111,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     objectMapper = event.getObjectMapper();
   }
 
-
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
     List<ModelProperty> properties = newArrayList();
@@ -176,10 +175,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
         if (!givenContext.canIgnore(input.getType())) {
-          if (memberIsUnwrapped(jacksonProperty.getField())) {
-              return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
+          if (inProjection(input, givenContext)) {
+            if (memberIsUnwrapped(jacksonProperty.getField())) {
+                return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
+            }
+            return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
           }
-          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
         }
         return newArrayList();
       }
@@ -217,7 +218,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     }
     return from(properties)
         .filter(hiddenProperties())
-        .filter(inProjection(givenContext, member))
         .toList();
   }
 
@@ -230,22 +230,13 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     };
   }
   
-  private Predicate<? super ModelProperty> inProjection(final ModelContext context, final AnnotatedMember member) {
-    return new Predicate<ModelProperty>() {
-      @Override
-      public boolean apply(ModelProperty input) {
-        if (context.getProjection().isPresent()) {
-          ProjectionProviderPlugin projectionProvider =
-              schemaPluginsManager.projectionProvider(context.getDocumentationType());
-          Optional<? extends Annotation> annotation = Optional.absent();
-          if (projectionProvider.getRequiredAnnotation().isPresent()) {
-            annotation = Optional.fromNullable(member.getAnnotation(projectionProvider.getRequiredAnnotation().get()));
-          }
-          return projectionProvider.applyProjection(context.getProjection().get(), input.getType(), annotation);
-        }
-        return true;
-      }
-    };
+  private boolean inProjection(final ResolvedField field, final ModelContext context) {
+    if (context.getProjection().isPresent()) {
+      ProjectionProviderPlugin projectionProvider =
+          schemaPluginsManager.projectionProvider(context.getDocumentationType());     
+      return projectionProvider.applyProjection(context.getProjection().get(), field);
+    }
+    return true;
   }
 
   private Optional<ResolvedField> findField(

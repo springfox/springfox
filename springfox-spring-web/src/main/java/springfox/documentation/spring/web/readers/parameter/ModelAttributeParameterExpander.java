@@ -47,7 +47,6 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -259,15 +258,7 @@ public class ModelAttributeParameterExpander {
       public boolean apply(ModelAttributeField input) {
         ProjectionProviderPlugin projectionProvider =
             pluginsManager.projectionProvider(documentationContext.getDocumentationType());
-        Optional<? extends Annotation> annotation = Optional.absent();
-        if (projectionProvider.getRequiredAnnotation().isPresent()) {
-            annotation = FluentIterable.from(input.getField().getAnnotations())
-                .filter(projectionProvider.getRequiredAnnotation().get()).first();
-            if (!annotation.isPresent()) {
-              return true;
-            }
-        }   
-        return projectionProvider.applyProjection(activeProjection, input.getFieldType(), annotation);
+        return projectionProvider.applyProjection(activeProjection, input.getField());
       }
     };
   }

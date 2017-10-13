@@ -19,38 +19,55 @@
 
 package springfox.documentation.spi.service;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
-
 import org.springframework.plugin.core.Plugin;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.members.ResolvedField;
 import com.google.common.base.Optional;
 
+import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 public interface ProjectionProviderPlugin extends Plugin<DocumentationType> {
-  
+
   /**
-   * Given a required annotation, if needed, to determine the active projection
-   * @return optional of annotation class
-   */
-  Optional<Class<? extends Annotation>> getRequiredAnnotation();
-  
-  /**
-   * Given a type provides a active projection for it
+   * Finds a active projection for the parameter type
    * @param type - resolved type to provide projection for
-   * @param requiredAnnotation - type annotation taken from controller, if needed 
-   * @return resolved projection names
+   * @param parameter - resolved method parameter to take additional information from, if needed 
+   * @return resolved projection name, if found
    */
-  List<ResolvedType> projectionsFor(ResolvedType type, Optional<? extends Annotation> requiredAnnotation);
+  Optional<ResolvedType> projectionFor(ResolvedType type, ResolvedMethodParameter parameter);
+
+  /**
+   * Finds a active projection for the  return type
+   * @param type - resolved type to provide projection for
+   * @param context - method context to take additional information from, if needed 
+   * @return resolved projection name, if found
+   */
+  Optional<ResolvedType> projectionFor(ResolvedType type, RequestMappingContext context);
   
   /**
-   * Given a type provides is it in a active projection
-   * @param activeProjection - resolved projection type
-   * @param type - type to apply projection
-   * @param annotation - projections of type 
-   * @return resolved projection names
+   * Finds a active projection for the  return type
+   * @param type - resolved type to provide projection for
+   * @param context - operation context to take additional information from, if needed 
+   * @return resolved projection name, if found
    */
-  boolean applyProjection(ResolvedType activeProjection, ResolvedType typeToApply, Optional<? extends Annotation> requiredAnnotation);
+  Optional<ResolvedType> projectionFor(ResolvedType type, OperationContext context);
+
+  /**
+   * Defines if a type is in a active projection
+   * @param activeProjection - resolved projection type
+   * @param field - field that contains additional information
+   * @return true if active view in a type views, false otherwise
+   */
+  boolean applyProjection(ResolvedType activeProjection, ResolvedField field);
+
+  /**
+   * Defines if a type is in a active projection
+   * @param typeViews - resolved type views
+   * @return true if active view in a type views, false otherwise
+   */
+  boolean applyProjection(ResolvedType activeProjection, Class<?>[] typeViews);
 }

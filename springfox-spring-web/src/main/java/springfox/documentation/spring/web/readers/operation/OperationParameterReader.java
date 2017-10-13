@@ -84,6 +84,9 @@ public class OperationParameterReader implements OperationBuilderPlugin {
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
     List<Parameter> parameters = newArrayList();
+    
+    ProjectionProviderPlugin projectionProvider = 
+        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
@@ -96,22 +99,12 @@ public class OperationParameterReader implements OperationBuilderPlugin {
             context);
 
         if (shouldExpand(methodParameter, alternate)) {
-          
-          ProjectionProviderPlugin projectionProvider = 
-              pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
-          Optional<? extends Annotation> annotation = Optional.absent();
-          if (projectionProvider.getRequiredAnnotation().isPresent()) {
-            annotation = methodParameter.findAnnotation(projectionProvider.getRequiredAnnotation().get());
-          }
-          Optional<ResolvedType> projection = Optional.absent();
-          List<ResolvedType> projections = projectionProvider.projectionsFor(alternate, annotation);
-          if (!projections.isEmpty()) {
-            projection = Optional.of(projections.get(0));
-          }
-
           parameters.addAll(
               expander.expand(
-                  new ExpansionContext("", methodParameter.getParameterType(), projection, context.getDocumentationContext())));
+                  new ExpansionContext("",
+                      methodParameter.getParameterType(),
+                      projectionProvider.projectionFor(alternate, methodParameter),
+                      context.getDocumentationContext())));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }

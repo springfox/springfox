@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,6 @@ import springfox.documentation.spi.service.ProjectionProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
 
@@ -80,27 +78,18 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     ResolvedType modelType = context.getReturnType();
     modelType = context.alternateFor(modelType);
     LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-
     ProjectionProviderPlugin projectionProvider = 
         pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
-    Optional<? extends Annotation> annotation = Optional.absent();
-    if (projectionProvider.getRequiredAnnotation().isPresent()) {
-      annotation = context.findAnnotation(projectionProvider.getRequiredAnnotation().get());
-    }
-    Optional<ResolvedType> projection = Optional.absent();
-    List<ResolvedType> projections = projectionProvider.projectionsFor(modelType, annotation);
-    if (!projections.isEmpty()) {
-      projection = Optional.of(projections.get(0));
-      LOG.debug("Found projection {} for type {}", resolvedTypeSignature(projections.get(0)).or("<null>"), resolvedTypeSignature(modelType).or("<null>"));
-    }
-
-    context.operationModelsBuilder().addReturn(modelType, projection);
+    context.operationModelsBuilder().addReturn(modelType, projectionProvider.projectionFor(modelType, context));
   }
 
   private void collectParameters(RequestMappingContext context) {
 
 
     LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
+    
+    ProjectionProviderPlugin projectionProvider = 
+        pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
 
     List<ResolvedMethodParameter> parameterTypes = context.getParameters();
     for (ResolvedMethodParameter parameterType : parameterTypes) {
@@ -108,21 +97,8 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
             || parameterType.hasParameterAnnotation(RequestPart.class)) {
           ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
-          
-          ProjectionProviderPlugin projectionProvider = 
-              pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
-          Optional<? extends Annotation> annotation = Optional.absent();
-          if (projectionProvider.getRequiredAnnotation().isPresent()) {
-            annotation = parameterType.findAnnotation(projectionProvider.getRequiredAnnotation().get());
-          }
-          Optional<ResolvedType> projection = Optional.absent();
-          List<ResolvedType> projections = projectionProvider.projectionsFor(modelType, annotation);
-          if (!projections.isEmpty()) {
-            projection = Optional.of(projections.get(0));
-            LOG.debug("Found projection {} for type {}", resolvedTypeSignature(projections.get(0)).or("<null>"), resolvedTypeSignature(modelType).or("<null>"));
-          }
-
-          context.operationModelsBuilder().addInputParam(modelType, projection, new HashSet<ResolvedType>());
+          context.operationModelsBuilder().addInputParam(modelType, 
+              projectionProvider.projectionFor(modelType, context), new HashSet<ResolvedType>());
         }
     }
     LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());

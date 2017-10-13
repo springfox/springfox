@@ -38,9 +38,6 @@ import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
-
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
@@ -61,21 +58,11 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     
     ProjectionProviderPlugin projectionProvider = 
         pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
-    Optional<? extends Annotation> annotation = Optional.absent();
-    if (projectionProvider.getRequiredAnnotation().isPresent()) {
-      annotation = context.findAnnotation(projectionProvider.getRequiredAnnotation().get());
-    }
-    Optional<ResolvedType> projection = Optional.absent();
-    List<ResolvedType> projections = projectionProvider.projectionsFor(returnType, annotation);
-    if (!projections.isEmpty()) {
-      projection = Optional.of(projections.get(0));
-      log.debug("Found projection {} for type {}", resolvedTypeSignature(projections.get(0)).or("<null>"), resolvedTypeSignature(returnType).or("<null>"));
-    }
 
     ModelContext modelContext = ModelContext.returnValue(
         context.getGroupName(),
         returnType,
-        projection,
+        projectionProvider.projectionFor(returnType, context),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
         context.getGenericsNamingStrategy(),

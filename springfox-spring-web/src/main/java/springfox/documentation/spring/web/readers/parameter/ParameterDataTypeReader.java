@@ -48,9 +48,7 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
-import java.lang.annotation.Annotation;
 import java.util.HashSet;
-import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -104,21 +102,11 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     
     ProjectionProviderPlugin projectionProvider = 
         pluginsManager.projectionProvider(context.getDocumentationContext().getDocumentationType());
-    Optional<? extends Annotation> annotation = Optional.absent();
-    if (projectionProvider.getRequiredAnnotation().isPresent()) {
-      annotation = methodParameter.findAnnotation(projectionProvider.getRequiredAnnotation().get());
-    }
-    Optional<ResolvedType> projection = Optional.absent();
-    List<ResolvedType> projections = projectionProvider.projectionsFor(parameterType, annotation);
-    if (!projections.isEmpty()) {
-      projection = Optional.of(projections.get(0));
-      LOG.debug("Found projection {} for type {}", resolvedTypeSignature(projections.get(0)).or("<null>"), resolvedTypeSignature(parameterType).or("<null>"));
-    }
-    
+
     ModelContext modelContext = inputParam(
         context.getGroupName(),
         parameterType,
-        projection,
+        projectionProvider.projectionFor(parameterType, methodParameter),
         new HashSet<ResolvedType>(),
         context.getDocumentationType(),
         context.getAlternateTypeProvider(),
