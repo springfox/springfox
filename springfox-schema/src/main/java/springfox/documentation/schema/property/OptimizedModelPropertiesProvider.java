@@ -175,12 +175,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
         if (!givenContext.canIgnore(input.getType())) {
-          if (inView(input, givenContext)) {
-            if (memberIsUnwrapped(jacksonProperty.getField())) {
-                return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
-            }
-            return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
+          if (memberIsUnwrapped(jacksonProperty.getField()) && inView(input, givenContext)) {
+              return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
           }
+          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
         }
         return newArrayList();
       }
