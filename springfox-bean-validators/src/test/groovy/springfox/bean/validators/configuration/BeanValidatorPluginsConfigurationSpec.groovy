@@ -19,6 +19,12 @@
 package springfox.bean.validators.configuration
 
 import spock.lang.Specification
+import springfox.bean.validators.plugins.parameter.ExpandedParameterMinMaxAnnotationPlugin
+import springfox.bean.validators.plugins.parameter.ExpandedParameterNotNullAnnotationPlugin
+import springfox.bean.validators.plugins.parameter.ExpandedParameterPatternAnnotationPlugin
+import springfox.bean.validators.plugins.parameter.ExpandedParameterSizeAnnotationPlugin
+import springfox.bean.validators.plugins.parameter.NotNullAnnotationPluginSpec
+import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin
 import springfox.bean.validators.plugins.schema.MinMaxAnnotationPlugin
 import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin
 import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin
@@ -29,12 +35,37 @@ class BeanValidatorPluginsConfigurationSpec extends Specification {
         given:
         def config = new BeanValidatorPluginsConfiguration()
         when:
-        def clazz1 = config.minMaxPlugin()
-        def clazz2 = config.notNullPlugin()
-        def clazz3 = config.sizePlugin()
+        def minMaxPlugin = config.minMaxPlugin()
+        def notNullPlugin = config.notNullPlugin()
+        def patternPlugin = config.patternPlugin()
+        def sizePlugin = config.sizePlugin()
+
+        def parameterMinMax = config.parameterMinMax()
+        def parameterNotNull = config.parameterNotNull()
+        def parameterPattern = config.parameterPattern()
+        def parameterSize = config.parameterSize()
+
+        def expanderMinMax = config.expanderMinMax()
+        def expanderNotNull = config.expanderNotNull()
+        def expanderPattern = config.expanderPattern()
+        def expanderSize = config.expanderSize()
+
         then:
-        clazz1 instanceof  MinMaxAnnotationPlugin
-        clazz2 instanceof  NotNullAnnotationPlugin
-        clazz3 instanceof  SizeAnnotationPlugin
+        minMaxPlugin instanceof  MinMaxAnnotationPlugin
+        notNullPlugin instanceof  NotNullAnnotationPlugin
+        patternPlugin instanceof PatternAnnotationPlugin
+        sizePlugin instanceof  SizeAnnotationPlugin
+
+        parameterMinMax instanceof springfox.bean.validators.plugins.parameter.MinMaxAnnotationPlugin
+        parameterNotNull instanceof springfox.bean.validators.plugins.parameter.NotNullAnnotationPlugin
+        parameterPattern instanceof springfox.bean.validators.plugins.parameter.PatternAnnotationPlugin
+        parameterSize instanceof springfox.bean.validators.plugins.parameter.SizeAnnotationPlugin
+
+        expanderMinMax instanceof ExpandedParameterMinMaxAnnotationPlugin
+        expanderNotNull instanceof ExpandedParameterNotNullAnnotationPlugin
+        expanderPattern instanceof ExpandedParameterPatternAnnotationPlugin
+        expanderSize instanceof ExpandedParameterSizeAnnotationPlugin
+
+
     }
 }

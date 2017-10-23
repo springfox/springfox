@@ -113,6 +113,6 @@
   "produces": [
 
   ],
-  "resourcePath": "/groovy/groovyModel",
+  "resourcePath": "/groovy",
   "swaggerVersion": "1.2"
 }

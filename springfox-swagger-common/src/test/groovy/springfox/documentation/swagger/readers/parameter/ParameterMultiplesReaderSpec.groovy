@@ -27,6 +27,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
@@ -39,39 +40,41 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
 class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
+
   @Unroll
   def "param multiples for swagger reader"() {
     given:
-      MethodParameter methodParameter = Stub(MethodParameter)
-      methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
-      methodParameter.getParameterType() >> paramType
-      ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
-      ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy, Mock(OperationContext))
+    MethodParameter methodParameter = Stub(MethodParameter)
+    methodParameter.getParameterAnnotation(ApiParam.class) >> apiParamAnnotation
+    methodParameter.getParameterType() >> paramType
+    ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
+    ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+        context(), genericNamingStrategy, Mock(OperationContext))
 
     when:
-      def operationCommand = stubbedParamBuilder(apiParamAnnotation);
-      operationCommand.apply(parameterContext)
+    def operationCommand = stubbedParamBuilder();
+    operationCommand.apply(parameterContext)
+
     then:
-      parameterContext.parameterBuilder().build().isAllowMultiple() == expected
+    parameterContext.parameterBuilder().build().isAllowMultiple() == expected
+
     where:
-      apiParamAnnotation                | paramType                       | expected
-      apiParamWithAllowMultiple(false)  | String[].class                  | false
-      apiParamWithAllowMultiple(false)  | DummyClass.BusinessType[].class | false
-      null                              | String[].class                  | false
-      null                              | List.class                      | false
-      null                              | Collection.class                | false
-      null                              | Set.class                       | false
-      null                              | Vector.class                    | false
-      null                              | Object[].class                  | false
-      null                              | Integer.class                   | false
-      null                              | Iterable.class                  | false
+    apiParamAnnotation               | paramType                       | expected
+    apiParamWithAllowMultiple(false) | String[].class                  | false
+    apiParamWithAllowMultiple(false) | DummyClass.BusinessType[].class | false
+    null                             | String[].class                  | false
+    null                             | List.class                      | false
+    null                             | Collection.class                | false
+    null                             | Set.class                       | false
+    null                             | Vector.class                    | false
+    null                             | Object[].class                  | false
+    null                             | Integer.class                   | false
+    null                             | Iterable.class                  | false
   }
 
-  def stubbedParamBuilder(ApiParam apiParamAnnotation) {
-    new ApiParamParameterBuilder(descriptions) {
-    }
+  def stubbedParamBuilder() {
+    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
   }
 }

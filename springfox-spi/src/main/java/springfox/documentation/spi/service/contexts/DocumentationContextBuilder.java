@@ -66,7 +66,7 @@ public class DocumentationContextBuilder {
   private final Set<String> produces = newHashSet();
   private final Set<String> consumes = newHashSet();
   private final Set<ResolvedType> additionalModels = newHashSet();
-  private final Set<Tag> tags = newTreeSet(Tags.tagNameComparator());
+  private final Set<Tag> tags = newTreeSet(Tags.tagComparator());
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
   private TypeResolver typeResolver;
@@ -123,7 +123,7 @@ public class DocumentationContextBuilder {
   }
 
   /**
-   @deprecated  @since 2.2.0 - only here for backward compatibiltiy
+   @deprecated  @since 2.2.0 - only here for backward compatibility
    */
   @Deprecated
   public DocumentationContextBuilder withResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {

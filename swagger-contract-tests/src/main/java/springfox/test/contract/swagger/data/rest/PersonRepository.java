@@ -36,4 +36,6 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
       @ApiParam(name = "name", value = "name parameter")
       @Param("name") String name);
 
+  List<Person> findByFirstName(@Param("firstName") String firstName);
+
 }

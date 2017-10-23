@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -66,6 +66,7 @@ public class SerializableParameterFactories {
     toReturn.setName(source.getName());
     toReturn.setDescription(source.getDescription());
     toReturn.setAccess(source.getParamAccess());
+    toReturn.setPattern(source.getPattern());
     toReturn.setRequired(source.isRequired());
     maybeAddAllowableValuesToParameter(toReturn, source.getAllowableValues());
     if (paramModel.isCollection()) {
@@ -77,7 +78,9 @@ public class SerializableParameterFactories {
         toReturn.setType("array");
         ModelReference paramItemModelRef = paramModel.itemModel().get();
         Property itemProperty
-            = maybeAddAllowableValues(itemTypeProperty(paramItemModelRef), paramItemModelRef.getAllowableValues());
+            = maybeAddAllowableValues(
+                itemTypeProperty(paramItemModelRef),
+                paramItemModelRef.getAllowableValues());
         toReturn.setItems(itemProperty);
         maybeAddAllowableValuesToParameter(toReturn, paramItemModelRef.getAllowableValues());
       }

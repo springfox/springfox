@@ -19,6 +19,7 @@
 package springfox.documentation.spring.web.dummy.controllers;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModel;
@@ -28,7 +29,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +44,10 @@ import springfox.documentation.spring.web.dummy.models.Example;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -50,6 +57,7 @@ import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+@Api(tags = "Bugs")
 @RestController
 @RequestMapping("/bugs")
 public class BugsController {
@@ -218,6 +226,53 @@ public class BugsController {
   public void modelWithListOfEnumsAsModelAttribute(@ModelAttribute Model1819 model) {
   }
 
+  @GetMapping("/1864")
+  public void test(@Valid Model1864 req) {
+
+  }
+
+  @GetMapping(value = "/1841", produces = MediaType.APPLICATION_ATOM_XML_VALUE)
+  public void method1() {
+  }
+
+  @GetMapping(value = "/1841", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public void method2() {
+  }
+
+  @RequestMapping(value = "/1939",
+      method = RequestMethod.GET,
+      produces = "application/jwt")
+  @ApiOperation(value = "authenticate a user using a given set of "
+      + "credentials, producing a JWT token that may be "
+      + "used for future API operations if successful")
+  @Valid
+  public ResponseEntity<String>
+    authenticate(@RequestParam("username")
+                   String username,
+               @RequestParam("password")
+                   String password,
+               @RequestParam(required = false, name = "credential-source-id")
+                   String credentialSourceID) {
+    return ResponseEntity.ok("Success!");
+  }
+
+  @GetMapping(value = "/1907", produces = MediaType.APPLICATION_XML_VALUE)
+  public void xmlPayload(@RequestBody Model1907 xml) {
+  }
+
+  public class Model1864 {
+    @NotNull
+    private String somename;
+
+    public String getSomename() {
+      return somename;
+    }
+
+    public void setSomename(String somename) {
+      this.somename = somename;
+    }
+  }
+
   public class Model1819 {
 
     private List<EnumType> enumTypes;
@@ -381,6 +436,38 @@ public class BugsController {
       public String getInnerValue() {
         return innerValue;
       }
+    }
+  }
+
+
+  @XmlType(name = "model1907", namespace = "urn:bugs")
+  public static class Model1907 {
+
+    public Model1907() {
+    }
+
+    @NotNull
+    @XmlAttribute
+    private String somename;
+
+    @NotNull
+    @XmlElement
+    private Example example;
+
+    public String getSomename() {
+      return somename;
+    }
+
+    public void setSomename(String somename) {
+      this.somename = somename;
+    }
+
+    public Example getExample() {
+      return example;
+    }
+
+    public void setExample(Example example) {
+      this.example = example;
     }
   }
 }

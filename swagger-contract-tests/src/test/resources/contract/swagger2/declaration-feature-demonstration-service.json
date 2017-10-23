@@ -35,10 +35,8 @@
           "application/json"
         ],
         "produces": [
-          "application/xml",
-          "application/json",
-          "application/vnd.com.pet+json",
-          "application/vnd.com.fancy-pet+json"
+          "application/vnd.com.fancy-pet+json",
+          "application/vnd.com.pet+json"
         ],
         "parameters": [
           {
@@ -67,10 +65,6 @@
         "summary": "base64EncodedBody",
         "operationId": "base64EncodedBodyUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -102,10 +96,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "base64Encoded",
@@ -131,10 +121,6 @@
         "summary": "serializablePetEntity",
         "operationId": "serializablePetEntityUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -166,10 +152,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "itemId",
@@ -195,10 +177,6 @@
         "summary": "updateSerializablePet",
         "operationId": "updateSerializablePetUsingPUT_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -236,10 +214,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "files",
@@ -270,10 +244,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -287,10 +257,6 @@
         "summary": "allMethodAllowed",
         "operationId": "allMethodAllowedUsingHEAD_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -308,10 +274,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -325,10 +287,6 @@
         "summary": "allMethodAllowed",
         "operationId": "allMethodAllowedUsingPUT_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -346,10 +304,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -363,10 +317,6 @@
         "summary": "allMethodAllowed",
         "operationId": "allMethodAllowedUsingOPTIONS_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -384,10 +334,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -403,10 +349,6 @@
         "summary": "arrayOfArrays",
         "operationId": "arrayOfArraysUsingPOST",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -455,10 +397,6 @@
         "summary": "getBare",
         "operationId": "getBareUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -564,10 +502,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "input",
@@ -594,10 +528,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "input",
@@ -622,10 +552,6 @@
         "summary": "updateDate",
         "operationId": "updateDateUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -655,10 +581,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -679,10 +601,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -696,6 +614,26 @@
         }
       }
     },
+    "/features/enumObject": {
+      "get": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "getEnumAsObject",
+        "operationId": "getEnumAsObjectUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EnumObjectType"
+            }
+          }
+        }
+      }
+    },
     "/features/examples": {
       "put": {
         "tags": [
@@ -704,10 +642,6 @@
         "summary": "updateListOfExamples",
         "operationId": "updateListOfExamplesUsingPUT_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -738,10 +672,6 @@
         "summary": "updateListOfIntegers",
         "operationId": "updateListOfIntegersUsingPUT_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -775,10 +705,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -800,10 +726,6 @@
         "summary": "mapOfMapOfExample",
         "operationId": "mapOfMapOfExampleUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -832,10 +754,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -854,10 +772,6 @@
         "summary": "getModelAttribute",
         "operationId": "getModelAttributeUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -937,10 +851,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -967,10 +877,6 @@
         "summary": "propertyWithObjectNode",
         "operationId": "propertyWithObjectNodeUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -1001,10 +907,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "enumType",
@@ -1033,10 +935,6 @@
         "summary": "updateBazes",
         "operationId": "updateBazesUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -1073,13 +971,9 @@
           "feature-demonstration-service"
         ],
         "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -1125,6 +1019,17 @@
     }
   },
   "definitions": {
+    "EnumObjectType": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "Example": {
       "type": "object",
       "properties": {

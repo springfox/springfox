@@ -52,7 +52,7 @@ public class PetController {
 
   @RequestMapping(value = "/{petId}", method = GET)
   @ApiOperation(
-          value = "Find pet by ID", notes = "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API " +
+          value = "Find pet by ID", notes = "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API " +
           "error conditions",
           response = Pet.class,
           responseHeaders = {
@@ -115,7 +115,7 @@ public class PetController {
   @RequestMapping(value = "/findByStatus", method = GET)
   @ApiOperation(
           value = "Finds Pets by status",
-          notes = "Multiple status values can be provided with comma seperated strings",
+          notes = "Multiple status values can be provided with comma-separated strings",
           response = Pet.class,
           responseContainer = "List",
           authorizations = @Authorization(value = "petstore_auth", scopes = {
@@ -147,7 +147,7 @@ public class PetController {
   @RequestMapping(value = "/findByTags", method = GET)
   @ApiOperation(
           value = "Finds Pets by tags",
-          notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+          notes = "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
           response = Pet.class,
           responseContainer = "List",
           authorizations = @Authorization(value = "petstore_auth", scopes = {

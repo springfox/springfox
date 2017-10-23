@@ -45,13 +45,13 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 @EnableSwagger2
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @Import(SpringDataRestConfiguration)
-public class Swagger2TestConfig {
+class Swagger2TestConfig {
 
   @Autowired
   private TypeResolver resolver
 
   @Bean
-  public Docket petstore(List<SecurityScheme> authorizationTypes) {
+  Docket petstore(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("petstore")
         .useDefaultResponseMessages(false)
@@ -69,7 +69,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket petstoreWithUriTemplating(List<SecurityScheme> authorizationTypes) {
+  Docket petstoreWithUriTemplating(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("petstoreTemplated")
         .useDefaultResponseMessages(false)
@@ -84,7 +84,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket business(List<SecurityScheme> authorizationTypes) {
+  Docket business(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("businessService")
         .useDefaultResponseMessages(false)
@@ -96,7 +96,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket concrete(List<SecurityScheme> authorizationTypes) {
+  Docket concrete(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("concrete")
         .useDefaultResponseMessages(false)
@@ -108,7 +108,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket noRequestMapping(List<SecurityScheme> authorizationTypes) {
+  Docket noRequestMapping(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("noRequestMapping")
         .useDefaultResponseMessages(false)
@@ -120,7 +120,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket fancyPetstore(List<SecurityScheme> authorizationTypes) {
+  Docket fancyPetstore(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("fancyPetstore")
         .useDefaultResponseMessages(false)
@@ -132,7 +132,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket featureService(List<SecurityScheme> authorizationTypes) {
+  Docket featureService(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("featureService")
         .useDefaultResponseMessages(false)
@@ -157,7 +157,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket pet(List<SecurityScheme> authorizationTypes) {
+  Docket pet(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("petService")
         .useDefaultResponseMessages(false)
@@ -170,7 +170,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket bugs(List<SecurityScheme> authorizationTypes) {
+  Docket bugs(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugs")
         .useDefaultResponseMessages(false)
@@ -190,7 +190,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket bugsDifferent(List<SecurityScheme> authorizationTypes) {
+  Docket bugsDifferent(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugsDifferent")
         .useDefaultResponseMessages(false)
@@ -211,7 +211,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket petGrooming(List<SecurityScheme> authorizationTypes) {
+  Docket petGrooming(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("petGroomingService")
         .useDefaultResponseMessages(false)
@@ -223,7 +223,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket root(List<SecurityScheme> authorizationTypes) {
+  Docket root(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("root")
         .useDefaultResponseMessages(false)
@@ -236,7 +236,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket groovyServiceBean(List<SecurityScheme> authorizationTypes) {
+  Docket groovyServiceBean(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("groovyService")
         .useDefaultResponseMessages(false)
@@ -250,7 +250,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket enumServiceBean(List<SecurityScheme> authorizationTypes) {
+  Docket enumServiceBean(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("enumService")
         .useDefaultResponseMessages(false)
@@ -262,7 +262,7 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public Docket featureServiceForCodeGen(List<SecurityScheme> authorizationTypes) {
+  Docket featureServiceForCodeGen(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("featureService-codeGen")
         .useDefaultResponseMessages(false)
@@ -275,12 +275,36 @@ public class Swagger2TestConfig {
   }
 
   @Bean
-  public ApiListingScannerPlugin listingScanner() {
+  Docket consumesProducesNotOnDocumentContext(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("consumesProducesNotOnDocumentContext")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .select()
+        .paths(regex("/consumes-produces/.*"))
+        .build()
+  }
+
+  @Bean
+  Docket consumesProducesOnDocumentContext(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("consumesProducesOnDocumentContext")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .consumes(['text/plain'] as Set)
+        .produces(['application/json'] as Set)
+        .select()
+        .paths(regex("/consumes-produces/.*"))
+        .build()
+  }
+
+  @Bean
+  ApiListingScannerPlugin listingScanner() {
     new Bug1767ListingScanner()
   }
 
   @Bean
-  public Docket springDataRest() {
+  Docket springDataRest() {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("spring-data-rest")
         .useDefaultResponseMessages(false)
@@ -290,10 +314,10 @@ public class Swagger2TestConfig {
         .produces(['application/xml', 'application/json'] as Set)
         .select()
         .paths(or(
-        regex("/people.*"),
-        regex("/tags.*"),
-        regex("/categories.*"),
-        regex("/addresses.*")))
+          regex("/people.*"),
+          regex("/tags.*"),
+          regex("/categories.*"),
+          regex("/addresses.*")))
         .build()
   }
 }

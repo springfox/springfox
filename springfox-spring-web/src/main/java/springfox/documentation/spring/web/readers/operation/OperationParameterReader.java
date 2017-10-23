@@ -32,6 +32,7 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
@@ -53,13 +54,17 @@ import static springfox.documentation.schema.Types.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterReader implements OperationBuilderPlugin {
   private final ModelAttributeParameterExpander expander;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   private DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public OperationParameterReader(ModelAttributeParameterExpander expander) {
+  public OperationParameterReader(
+      ModelAttributeParameterExpander expander,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.expander = expander;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -91,7 +96,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         if (shouldExpand(methodParameter, alternate)) {
           parameters.addAll(
               expander.expand(
-                      new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
+                  new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }
@@ -145,7 +150,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     return !parameter.hasParameterAnnotation(RequestBody.class)
         && !parameter.hasParameterAnnotation(RequestPart.class)
         && !isBaseType(typeNameFor(resolvedParamType.getErasedType()))
-        && !resolvedParamType.getErasedType().isEnum()
+        && !enumTypeDeterminer.isEnum(resolvedParamType.getErasedType())
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);
 

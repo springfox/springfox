@@ -50,7 +50,7 @@ public class PetService {
 
   @RequestMapping(value = "/{petId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. "
-      + "ID > 10 or nonintegers will simulate API error conditions",
+      + "ID > 10 or non-integers will simulate API error conditions",
       response = Pet.class
   )
   public Pet getPetById(
@@ -79,7 +79,7 @@ public class PetService {
 
   @RequestMapping(value = "/findByStatus", method = RequestMethod.GET, params = {"status"})
   @ApiOperation(value = "Find Pet by status",
-      notes = "Multiple status values can be provided with comma seperated strings",
+      notes = "Multiple status values can be provided with comma-separated strings",
       response = Pet.class)
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid status value") })
   public Pet findPetsByStatus(
@@ -91,7 +91,7 @@ public class PetService {
 
   @RequestMapping(value = "/findByTags", method = RequestMethod.GET)
   @ApiOperation(value = "Find Pet by tags",
-      notes = "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+      notes = "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
       response = Pet.class)
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid tag value") })
   @Deprecated

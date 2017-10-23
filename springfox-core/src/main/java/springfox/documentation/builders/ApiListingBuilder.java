@@ -52,7 +52,7 @@ public class ApiListingBuilder {
   private List<SecurityReference> securityReferences = newArrayList();
   private List<ApiDescription> apis = newArrayList();
 
-  private final Set<Tag> tags = newTreeSet(tagNameComparator());
+  private final Set<Tag> tags = newTreeSet(tagComparator());
   private final Set<String> tagNames = newHashSet();
   private final Map<String, Model> models = newHashMap();
   private final Map<String, Tag> tagLookup = newHashMap();
@@ -172,7 +172,7 @@ public class ApiListingBuilder {
   }
 
   /**
-   * Updates the references to the security definitiosn
+   * Updates the references to the security definitions
    *
    * @param securityReferences - security definition references
    * @return this

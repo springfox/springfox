@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.LinkedListMultimap;
@@ -96,7 +97,10 @@ public class ApiListingScanner {
       List<ApiDescription> sortedApis = newArrayList(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
 
-      String resourcePath = longestCommonPath(sortedApis);
+      String resourcePath = new ResourcePathProvider(resourceGroup)
+          .resourcePath()
+          .or(longestCommonPath(sortedApis))
+          .orNull();
 
       PathProvider pathProvider = documentationContext.getPathProvider();
       String basePath = pathProvider.getApplicationBasePath();
@@ -141,10 +145,10 @@ public class ApiListingScanner {
     return from(contexts).toSortedList(methodComparator());
   }
 
-  static String longestCommonPath(List<ApiDescription> apiDescriptions) {
+  static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
     List<String> commons = newArrayList();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
-      return null;
+      return Optional.absent();
     }
     List<String> firstWords = urlParts(apiDescriptions.get(0));
 
@@ -163,7 +167,7 @@ public class ApiListingScanner {
       }
     }
     Joiner joiner = Joiner.on("/").skipNulls();
-    return "/" + joiner.join(commons);
+    return Optional.of("/" + joiner.join(commons));
   }
 
   static List<String> urlParts(ApiDescription apiDescription) {

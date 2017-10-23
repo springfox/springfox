@@ -19,15 +19,14 @@
 
 package springfox.documentation.schema;
 
-import static com.google.common.collect.Lists.newArrayList;
+import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Function;
+import springfox.documentation.service.AllowableValues;
+import springfox.documentation.service.VendorExtension;
 
 import java.util.List;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-
-import springfox.documentation.service.AllowableValues;
-import springfox.documentation.service.VendorExtension;
+import static com.google.common.collect.Lists.*;
 
 public class ModelProperty {
   private final String name;
@@ -42,6 +41,8 @@ public class ModelProperty {
   private ModelReference modelRef;
   private final String example;
   private final String pattern;
+  private final String defaultValue;
+  private final Xml xml;
   private final List<VendorExtension> vendorExtensions;
 
   public ModelProperty(
@@ -49,13 +50,15 @@ public class ModelProperty {
       ResolvedType type,
       String qualifiedType,
       int position,
-      Boolean required,
-      Boolean isHidden,
-      Boolean readOnly,
+      boolean required,
+      boolean isHidden,
+      boolean readOnly,
       String description,
       AllowableValues allowableValues,
       String example,
       String pattern,
+      String defaultValue,
+      Xml xml,
       List<VendorExtension> vendorExtensions) {
 
     this.name = name;
@@ -69,6 +72,8 @@ public class ModelProperty {
     this.allowableValues = allowableValues;
     this.example = example;
     this.pattern = pattern;
+    this.defaultValue = defaultValue;
+    this.xml = xml;
     this.vendorExtensions = newArrayList(vendorExtensions);
   }
 
@@ -127,5 +132,13 @@ public class ModelProperty {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+  
+  public Xml getXml() {
+    return xml;
   }
 }

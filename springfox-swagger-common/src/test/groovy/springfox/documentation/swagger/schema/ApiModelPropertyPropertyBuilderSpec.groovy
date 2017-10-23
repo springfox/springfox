@@ -54,172 +54,200 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
   def "Should all swagger documentation types"() {
     given:
-      def sut = new ApiModelPropertyPropertyBuilder()
+    def sut = new ApiModelPropertyPropertyBuilder()
+
     expect:
-      !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(SPRING_WEB)
+    sut.supports(SWAGGER_12)
+    sut.supports(SWAGGER_2)
   }
 
-  def "ApiModelProperty annotated models get enriched with additional info given a bean property" (){
+  def "ApiModelProperty annotated models get enriched with additional info given a bean property"() {
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
-      def properties = beanDescription.findProperties()
-      def context = new ModelPropertyContext(
-          new ModelPropertyBuilder(),
-          properties.find { it.name == property },
-          new TypeResolver(),
-          DocumentationType.SWAGGER_12)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def properties = beanDescription.findProperties()
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(),
+        properties.find { it.name == property },
+        new TypeResolver(),
+        SWAGGER_12)
+
     when:
-      sut.apply(context)
+    sut.apply(context)
+
     and:
-      def enriched = context.getBuilder().build()
+    def enriched = context.getBuilder().build()
+
     then:
-      enriched.allowableValues?.values == allowableValues
-      enriched.isRequired() == required
-      enriched.description == description
-      enriched.readOnly == readOnly
-      !enriched.isHidden()
+    enriched.allowableValues?.values == allowableValues
+    enriched.isRequired() == required
+    enriched.description == description
+    enriched.readOnly == readOnly
+    !enriched.isHidden()
+
     where:
-      property    | required | description              | allowableValues | readOnly
-      "intProp"   | true     | "int Property Field"     | null            | false
-      "boolProp"  | false    | "bool Property Getter"   | null            | false
-      "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]         | false
-      "readOnlyProp" | false    | "readOnly property getter" | null       | true
-      "listOfStrings"| false    | "Some description"    | null            | false
+    property        | required | description                | allowableValues | readOnly
+    "intProp"       | true     | "int Property Field"       | null            | false
+    "boolProp"      | false    | "bool Property Getter"     | null            | false
+    "enumProp"      | true     | "enum Prop Getter value"   | ["ONE"]         | false
+    "readOnlyProp"  | false    | "readOnly property getter" | null            | true
+    "listOfStrings" | false    | "Some description"         | null            | false
   }
 
-  def "ApiModelProperty annotated models get enriched with additional info given an annotated element" (){
+  def "ApiModelProperty annotated models get enriched with additional info given an annotated element"() {
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
-      def properties = beanDescription.findProperties()
-      def context = new ModelPropertyContext(
-          new ModelPropertyBuilder(),
-          properties.find { it.name == property }.getter.annotated,
-          new TypeResolver(),
-          DocumentationType.SWAGGER_12)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def properties = beanDescription.findProperties()
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(),
+        properties.find { it.name == property }.getter.annotated,
+        new TypeResolver(),
+        SWAGGER_12)
+
     when:
-      sut.apply(context)
+    sut.apply(context)
+
     and:
-      def enriched = context.getBuilder().build()
+    def enriched = context.getBuilder().build()
+
     then:
-      enriched.allowableValues?.values == allowableValues
-      enriched.isRequired() == required
-      enriched.description == description
-      enriched.readOnly == readOnly
-      !enriched.isHidden()
+    enriched.allowableValues?.values == allowableValues
+    enriched.isRequired() == (required == null ? false : required)
+    enriched.description == description
+    enriched.readOnly == (readOnly == null ? false : readOnly)
+    !enriched.isHidden()
+
     where:
-      property    | required | description              | allowableValues | readOnly
-      "intProp"   | null     | null                     | null            | null
-      "boolProp"  | false    | "bool Property Getter"   | null            | false
-      "enumProp"  | true     | "enum Prop Getter value" | ["ONE"]         | false
-      "readOnlyProp" | false    | "readOnly property getter" | null       | true
-      "listOfStrings"| false    | "Some description"    | null            | false
+    property        | required | description                | allowableValues | readOnly
+    "intProp"       | null     | null                       | null            | null
+    "boolProp"      | false    | "bool Property Getter"     | null            | false
+    "enumProp"      | true     | "enum Prop Getter value"   | ["ONE"]         | false
+    "readOnlyProp"  | false    | "readOnly property getter" | null            | true
+    "listOfStrings" | false    | "Some description"         | null            | false
 
   }
 
-  def "ApiModelProperties marked as hidden properties are respected" (){
+  def "ApiModelProperties marked as hidden properties are respected"() {
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
-      def properties = beanDescription.findProperties()
-      def context = new ModelPropertyContext(
-          new ModelPropertyBuilder(),
-          properties.find { it.name == property }.getter.annotated,
-          new TypeResolver(),
-          DocumentationType.SWAGGER_12)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def properties = beanDescription.findProperties()
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(),
+        properties.find { it.name == property }.getter.annotated,
+        new TypeResolver(),
+        SWAGGER_12)
+
     when:
-      sut.apply(context)
+    sut.apply(context)
+
     and:
-      def enriched = context.getBuilder().build()
+    def enriched = context.getBuilder().build()
+
     then:
-      enriched.allowableValues?.values == allowableValues
-      enriched.isRequired() == required
-      enriched.description == description
-      enriched.isHidden()
+    enriched.allowableValues?.values == allowableValues
+    enriched.isRequired() == required
+    enriched.description == description
+    enriched.isHidden()
+
     where:
-      property    | required | description              | allowableValues
-      "hiddenProp"| false    | ""                       | null
+    property     | required | description | allowableValues
+    "hiddenProp" | false    | ""          | null
   }
 
-  def "Supports ApiModelProperty annotated models with dataType overrides" (){
+  def "Supports ApiModelProperty annotated models with dataType overrides"() {
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
-      def properties = beanDescription.findProperties()
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def properties = beanDescription.findProperties()
 
-      def resolver = new TypeResolver()
-      ModelContext modelContext = inputParam(
-          "group",
-          resolver.resolve(TypeWithAnnotatedGettersAndSetters),
-          SWAGGER_12,
-          alternateTypeProvider(),
-          new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+    def resolver = new TypeResolver()
+    ModelContext modelContext = inputParam(
+        "group",
+        resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        ImmutableSet.builder().build())
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
-      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
-              properties.find { it.name == property }.getter.annotated, resolver,
-              DocumentationType.SWAGGER_12)
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
+    def context = new ModelPropertyContext(new ModelPropertyBuilder(),
+        properties.find { it.name == property }.getter.annotated, resolver,
+        SWAGGER_12)
+
     when:
-      sut.apply(context)
+    sut.apply(context)
+
     and:
-      def enriched = context.getBuilder().build()
-      enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    def enriched = context.getBuilder().build()
+    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+
     then:
-      enriched.allowableValues?.values == null
-      !enriched.isRequired()
-      enriched.description == ""
-      !enriched.isHidden()
-      enriched.type.getErasedType() == dataType
-      enriched.modelRef.type == modelRef
+    enriched.allowableValues?.values == null
+    !enriched.isRequired()
+    enriched.description == ""
+    !enriched.isHidden()
+    enriched.type.getErasedType() == dataType
+    enriched.modelRef.type == modelRef
+
     where:
-      property          | dataType  | modelRef
-      "validOverride"    | String   | "string"
-      "invalidOverride"  | Object   | "object"
+    property          | dataType | modelRef
+    "validOverride"   | String   | "string"
+    "invalidOverride" | Object   | "object"
   }
 
-  def "Supports ApiModelProperty annotated models with dataType overrides but protects specific types" (){
+  def "Supports ApiModelProperty annotated models with dataType overrides but protects specific types"() {
     given:
-      ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
-      def properties = beanDescription.findProperties()
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def properties = beanDescription.findProperties()
 
-      def resolver = new TypeResolver()
-      ModelContext modelContext = inputParam(
-          "group",
-          resolver.resolve(TypeWithAnnotatedGettersAndSetters),
-          SWAGGER_12,
-          alternateTypeProvider(),
-          new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+    def resolver = new TypeResolver()
+    ModelContext modelContext = inputParam(
+        "group",
+        resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        ImmutableSet.builder().build())
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
-      def context = new ModelPropertyContext(new ModelPropertyBuilder(),
-              properties.find { it.name == property }.getter.annotated, resolver,
-              DocumentationType.SWAGGER_12)
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
+    def context = new ModelPropertyContext(new ModelPropertyBuilder(),
+        properties.find { it.name == property }.getter.annotated, resolver,
+        SWAGGER_12)
+
     when:
-      context.builder.type(resolver.resolve(dataType))
+    context.builder.type(resolver.resolve(dataType))
+
     and:
-      sut.apply(context)
+    sut.apply(context)
+
     and:
-      def enriched = context.getBuilder().build()
-      enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    def enriched = context.getBuilder().build()
+    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+
     then:
-      enriched.allowableValues?.values == null
-      !enriched.isRequired()
-      enriched.description == ""
-      !enriched.isHidden()
-      enriched.type.getErasedType() == dataType
-      enriched.modelRef.type == modelRef
+    enriched.allowableValues?.values == null
+    !enriched.isRequired()
+    enriched.description == ""
+    !enriched.isHidden()
+    enriched.type.getErasedType() == dataType
+    enriched.modelRef.type == modelRef
+
     where:
-      property            | dataType  | modelRef
-      "validOverride"     | String    | "string"
-      "invalidOverride"   | LocalDate | "LocalDate"
+    property          | dataType  | modelRef
+    "validOverride"   | String    | "string"
+    "invalidOverride" | LocalDate | "LocalDate"
   }
 
   BeanDescription beanDescription(Class<TypeWithAnnotatedGettersAndSetters> clazz) {
     def objectMapper = new ObjectMapper()
     objectMapper.getDeserializationConfig()
-            .introspect(TypeFactory.defaultInstance().constructType(clazz))
+        .introspect(TypeFactory.defaultInstance().constructType(clazz))
   }
 }

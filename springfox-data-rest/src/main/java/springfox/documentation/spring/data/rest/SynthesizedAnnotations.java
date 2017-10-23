@@ -20,6 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.lang.annotation.Annotation;
@@ -75,6 +76,35 @@ class SynthesizedAnnotations {
       @Override
       public boolean required() {
         return true;
+      }
+    };
+  }
+
+  static RequestParam requestParam(final String parameterName) {
+    return new RequestParam() {
+      @Override
+      public Class<? extends Annotation> annotationType() {
+        return RequestParam.class;
+      }
+
+      @Override
+      public String value() {
+        return parameterName;
+      }
+
+      @Override
+      public String name() {
+        return parameterName;
+      }
+
+      @Override
+      public boolean required() {
+        return false;
+      }
+
+      @Override
+      public String defaultValue() {
+        return null;
       }
     };
   }

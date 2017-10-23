@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.operation
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -36,44 +37,46 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
 
   def "Should add implicit parameters"() {
     given:
-      OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0)
+    OperationContext operationContext = operationContext(context(), handlerMethod, 0)
+    def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
+    def plugins = defaultWebPlugins()
+    def expander = new ModelAttributeParameterExpander(new FieldProvider(resolver), enumTypeDeterminer)
+    expander.pluginsManager = plugins
+    OperationParameterReader sut = new OperationParameterReader(expander, enumTypeDeterminer)
+    sut.pluginsManager = plugins
+    def env = new DescriptionResolver(new MockEnvironment())
+    OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader(env)
+    OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader(env)
 
-      def resolver = new TypeResolver()
-
-      def plugins = defaultWebPlugins()
-      def expander = new ModelAttributeParameterExpander(new FieldProvider(resolver))
-      expander.pluginsManager = plugins
-      OperationParameterReader sut = new OperationParameterReader(expander)
-      sut.pluginsManager = plugins
-      def env = new DescriptionResolver(new MockEnvironment())
-      OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader(env)
-      OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader(env)
     when:
-      sut.apply(operationContext)
-      operationImplicitParametersReader.apply(operationContext)
-      operationImplicitParameterReader.apply(operationContext)
-    and:
-      def operation = operationContext.operationBuilder().build()
-    then:
-      operation.parameters.size() == expectedSize
-    and:
-      !operationImplicitParametersReader.supports(DocumentationType.SPRING_WEB)
-      operationImplicitParametersReader.supports(DocumentationType.SWAGGER_12)
-      operationImplicitParametersReader.supports(DocumentationType.SWAGGER_2)
+    sut.apply(operationContext)
+    operationImplicitParametersReader.apply(operationContext)
+    operationImplicitParameterReader.apply(operationContext)
 
     and:
-      !operationImplicitParameterReader.supports(DocumentationType.SPRING_WEB)
-      operationImplicitParameterReader.supports(DocumentationType.SWAGGER_12)
-      operationImplicitParameterReader.supports(DocumentationType.SWAGGER_2)
+    def operation = operationContext.operationBuilder().build()
+
+    then:
+    operation.parameters.size() == expectedSize
+
+    and:
+    !operationImplicitParametersReader.supports(DocumentationType.SPRING_WEB)
+    operationImplicitParametersReader.supports(DocumentationType.SWAGGER_12)
+    operationImplicitParametersReader.supports(DocumentationType.SWAGGER_2)
+
+    and:
+    !operationImplicitParameterReader.supports(DocumentationType.SPRING_WEB)
+    operationImplicitParameterReader.supports(DocumentationType.SWAGGER_12)
+    operationImplicitParameterReader.supports(DocumentationType.SWAGGER_2)
     where:
-      handlerMethod                                                                     | expectedSize
-      dummyHandlerMethod('dummyMethod')                                                 | 0
-      dummyHandlerMethod('methodWithApiImplicitParam')                                  | 1
-      dummyHandlerMethod('methodWithApiImplicitParamAndInteger', Integer.class)         | 2
-      dummyHandlerMethod('methodWithApiImplicitParamAndExample', Integer.class)         | 2
-      dummyHandlerMethod('methodWithApiImplicitParamAndAllowMultiple', Integer.class)   | 2
-      dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)                  | 3
-      handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')           | 2
+    handlerMethod                                                                   | expectedSize
+    dummyHandlerMethod('dummyMethod')                                               | 0
+    dummyHandlerMethod('methodWithApiImplicitParam')                                | 1
+    dummyHandlerMethod('methodWithApiImplicitParamAndInteger', Integer.class)       | 2
+    dummyHandlerMethod('methodWithApiImplicitParamAndExample', Integer.class)       | 2
+    dummyHandlerMethod('methodWithApiImplicitParamAndAllowMultiple', Integer.class) | 2
+    dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)                | 3
+    handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')         | 2
   }
 }

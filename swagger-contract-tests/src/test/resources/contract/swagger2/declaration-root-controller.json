@@ -108,10 +108,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -150,10 +146,6 @@
         "summary": "Update an existing pet",
         "operationId": "updatePetUsingPUT",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -200,13 +192,9 @@
           "pet"
         ],
         "summary": "Finds Pets by status",
-        "description": "Multiple status values can be provided with comma seperated strings",
+        "description": "Multiple status values can be provided with comma-separated strings",
         "operationId": "findPetsByStatusUsingGET",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -249,13 +237,9 @@
           "pet"
         ],
         "summary": "Finds Pets by tags",
-        "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+        "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTagsUsingGET",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -298,13 +282,9 @@
           "pet"
         ],
         "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -425,7 +405,7 @@
           "store"
         ],
         "summary": "Delete purchase order by ID",
-        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
+        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors",
         "operationId": "deleteOrderUsingDELETE",
         "consumes": [
           "application/json"
@@ -1752,10 +1732,30 @@
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Example"
-              }
+              "$ref": "#/definitions/Example"
+            }
+          }
+        }
+      }
+    },
+    "/features/enumObject": {
+      "get": {
+        "tags": [
+          "enum-object-demonstration-service"
+        ],
+        "summary": "getEnumObject",
+        "operationId": "getEnumObjectUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EnumObjectType"
             }
           }
         }
@@ -1829,7 +1829,7 @@
           "feature-demonstration-service"
         ],
         "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET",
         "consumes": [
           "application/json"
@@ -2207,10 +2207,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "input",
@@ -2404,7 +2400,7 @@
           "pet-service"
         ],
         "summary": "Finds Pets by status",
-        "description": "Multiple status values can be provided with comma seperated strings",
+        "description": "Multiple status values can be provided with comma-separated strings",
         "operationId": "findPetsByStatusUsingGET",
         "consumes": [
           "application/json"
@@ -2441,7 +2437,7 @@
           "pet-service"
         ],
         "summary": "Finds Pets by tags",
-        "description": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
+        "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTagsUsingGET",
         "consumes": [
           "application/json"
@@ -2512,10 +2508,6 @@
         "summary": "groomingFunctionThatReturnsVoid",
         "operationId": "groomingFunctionThatReturnsVoidUsingGET",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -2718,10 +2710,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "input",
@@ -2812,7 +2800,7 @@
           "pet-service"
         ],
         "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions",
+        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET",
         "consumes": [
           "application/json"
@@ -3272,6 +3260,17 @@
           "type": "string"
         },
         "propertyWithNoSetterMethod": {
+          "type": "string"
+        }
+      }
+    },
+    "EnumObjectType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         }
       }

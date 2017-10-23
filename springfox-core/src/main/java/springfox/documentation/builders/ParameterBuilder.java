@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ public class ParameterBuilder {
   private ResolvedType type;
   private ModelReference modelRef;
   private boolean hidden;
+  private String pattern;
   private List<VendorExtension> vendorExtensions = newArrayList();
 
   /**
@@ -89,7 +90,7 @@ public class ParameterBuilder {
   }
 
   /**
-   * Updates the default value of the parametr
+   * Updates the default value of the parameter
    *
    * @param defaultValue - default value
    * @return this
@@ -126,7 +127,7 @@ public class ParameterBuilder {
    *
    * @param allowableValues - allowable values (instance of @see springfox.documentation.service.AllowableListValues
    *                        or @see springfox.documentation.service.AllowableRangeValues)
-   * @return
+   * @return this
    */
   public ParameterBuilder allowableValues(AllowableValues allowableValues) {
     this.allowableValues = emptyToNull(allowableValues, this.allowableValues);
@@ -171,7 +172,7 @@ public class ParameterBuilder {
    * Consolidate or figure out whats can be rolled into the other.
    *
    * @param modelRef
-   * @return
+   * @return this
    */
   public ParameterBuilder modelRef(ModelReference modelRef) {
     this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
@@ -213,6 +214,12 @@ public class ParameterBuilder {
         paramType,
         paramAccess,
         hidden,
+        pattern,
         vendorExtensions);
   }
+
+    public ParameterBuilder pattern(String pattern) {
+      this.pattern = defaultIfAbsent(pattern, this.pattern);
+      return this;
+    }
 }

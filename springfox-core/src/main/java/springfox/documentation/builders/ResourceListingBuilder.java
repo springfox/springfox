@@ -60,7 +60,7 @@ public class ResourceListingBuilder {
   /**
    * Updates the security definitions that protect this resource listing
    *
-   * @param authorizations - security definitiosn
+   * @param authorizations - security definitions
    * @return this
    */
   public ResourceListingBuilder securitySchemes(List<? extends SecurityScheme> authorizations) {

@@ -81,7 +81,7 @@ public class PetStoreResource {
   @RequestMapping(value = "/order/{orderId}", method = DELETE)
   @ApiOperation(
       value = "Delete purchase order by ID", notes = "For valid response try integer IDs with value < 1000. " +
-      "Anything above 1000 or nonintegers will generate API errors"
+      "Anything above 1000 or non-integers will generate API errors"
   )
   @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied"),
       @ApiResponse(code = 404, message = "Order not found") })

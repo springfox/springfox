@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ public class Parameter {
   private final String paramType;
   private final String paramAccess;
   private final Boolean hidden;
+  private final String pattern;
   private final List<VendorExtension> vendorExtensions;
 
   public Parameter(
@@ -51,6 +52,7 @@ public class Parameter {
       String paramType,
       String paramAccess,
       boolean hidden,
+      String pattern,
       List<VendorExtension> vendorExtensions) {
 
     this.description = description;
@@ -64,6 +66,7 @@ public class Parameter {
     this.paramAccess = paramAccess;
     this.name = name;
     this.hidden = hidden;
+    this.pattern = pattern;
     this.vendorExtensions = vendorExtensions;
   }
 
@@ -109,6 +112,10 @@ public class Parameter {
   
   public Boolean isHidden() {
     return hidden;
+  }
+
+  public String getPattern() {
+    return pattern;
   }
 
   public List<VendorExtension> getVendorExtentions() {

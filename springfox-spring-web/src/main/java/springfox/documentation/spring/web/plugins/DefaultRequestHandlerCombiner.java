@@ -65,6 +65,9 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
       RequestHandler toCombine = path.get();
       if (handlers.size() > 1) {
         for (RequestHandler each : handlers) {
+          if (each.equals(toCombine)) {
+            continue;
+          }
           toCombine = combine(toCombine, each);
         }
       }

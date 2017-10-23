@@ -11,7 +11,7 @@
 |[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![codecov](https://codecov.io/gh/springfox/springfox/branch/master/graph/badge.svg)](https://codecov.io/gh/springfox/springfox) |
 
 ### About
-For more information on this project visit the [Springfox Website] (http://springfox.io) or
+For more information on this project visit the [Springfox Website](http://springfox.io) or
  [http://springfox.github.io/springfox/](http://springfox.github.io/springfox/)
 
 ### Useful links

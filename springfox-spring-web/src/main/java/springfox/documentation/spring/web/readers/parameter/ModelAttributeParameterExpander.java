@@ -30,12 +30,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.Types;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -61,13 +63,18 @@ import static springfox.documentation.schema.Types.*;
 public class ModelAttributeParameterExpander {
   private static final Logger LOG = LoggerFactory.getLogger(ModelAttributeParameterExpander.class);
   private final FieldProvider fieldProvider;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   protected DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ModelAttributeParameterExpander(FieldProvider fields) {
+  public ModelAttributeParameterExpander(
+      FieldProvider fields,
+      EnumTypeDeterminer enumTypeDeterminer) {
+    
     this.fieldProvider = fields;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   public List<Parameter> expand(ExpansionContext context) {
@@ -89,10 +96,10 @@ public class ModelAttributeParameterExpander {
       LOG.debug("Attempting to expand expandable field: {}", each.getField());
       parameters.addAll(
           expand(
-                  context.childContext(
-                          nestedParentName(context.getParentName(), each.getField()),
-                          each.getFieldType(),
-                          context.getDocumentationContext())));
+              context.childContext(
+                  nestedParentName(context.getParentName(), each.getField()),
+                  each.getFieldType(),
+                  context.getDocumentationContext())));
     }
 
     FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
@@ -101,15 +108,15 @@ public class ModelAttributeParameterExpander {
       LOG.debug("Attempting to expand collection/array field: {}", each.getField());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
-      if (Types.isBaseType(itemType) || itemType.getErasedType().isEnum()) {
+      if (Types.isBaseType(itemType) || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
         parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
       } else {
         parameters.addAll(
             expand(
-                    context.childContext(
-                            nestedParentName(context.getParentName(), each.getField()),
-                            itemType,
-                            context.getDocumentationContext())));
+                context.childContext(
+                    nestedParentName(context.getParentName(), each.getField()),
+                    itemType,
+                    context.getDocumentationContext())));
       }
     }
 
@@ -195,7 +202,7 @@ public class ModelAttributeParameterExpander {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return input.getFieldType().getErasedType().isEnum();
+        return enumTypeDeterminer.isEnum(input.getFieldType().getErasedType());
       }
     };
   }
@@ -204,7 +211,7 @@ public class ModelAttributeParameterExpander {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return packageName(input.getFieldType().getErasedType()).startsWith("java.lang");
+        return ClassUtils.getPackageName(input.getFieldType().getErasedType()).startsWith("java.lang");
       }
     };
   }
@@ -254,19 +261,6 @@ public class ModelAttributeParameterExpander {
 
   private ResolvedType fieldType(AlternateTypeProvider alternateTypeProvider, ResolvedField field) {
     return alternateTypeProvider.alternateFor(field.getType());
-  }
-
-  private String packageName(Class<?> type) {
-    return Optional.fromNullable(type.getPackage()).transform(toPackageName()).or("java");
-  }
-
-  private Function<Package, String> toPackageName() {
-    return new Function<Package, String>() {
-      @Override
-      public String apply(Package input) {
-        return input.getName();
-      }
-    };
   }
 
   private Set<String> getBeanPropertyNames(final Class<?> clazz) {

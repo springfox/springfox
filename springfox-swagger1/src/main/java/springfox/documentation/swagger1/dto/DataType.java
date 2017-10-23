@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 //CHECKSTYLE:OFF CyclomaticComplexityCheck
 public class DataType implements SwaggerDataType {
-  private static final Pattern containerPattern = Pattern.compile("([a-zA-Z]+)\\[([_a-zA-Z\\.\\-]+)\\]");
+  private static final Pattern containerPattern = Pattern.compile("([a-zA-Z]+)\\[([_a-zA-Z0-9\\.\\-]+)\\]");
   @JsonUnwrapped
   @JsonProperty
   private SwaggerDataType dataType;

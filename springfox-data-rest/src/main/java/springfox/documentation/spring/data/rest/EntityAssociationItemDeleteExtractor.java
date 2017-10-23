@@ -54,8 +54,9 @@ public class EntityAssociationItemDeleteExtractor implements EntityAssociationOp
     if (property.isMap() || property.isCollectionLike()) {
       String propertyIdentifier = propertyIdentifierName(property);
       ActionSpecification deleteItem = new ActionSpecification(
-          String.format("%s%s", lowerCamelCaseName(entity.getType().getSimpleName()), upperCamelCaseName(property
-              .getName())),
+          String.format("%s%s",
+              lowerCamelCaseName(entity.getType().getSimpleName()),
+              upperCamelCaseName(property.getName())),
           String.format("%s%s/{id}/%s/{%s}",
               entityContext.basePath(),
               entityContext.resourcePath(),

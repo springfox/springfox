@@ -280,7 +280,7 @@ By default, when using Springfox in Swagger 2.0 mode, the value of `operationID`
 ```
 
 ===== Customizing the value of `operationId`
-In the event you wish to overide the default `operationId` which Springfox renders, you may do so by providing the `nickname` element in an `@ApiOperation` annotation.
+In the event you wish to override the default `operationId` which Springfox renders, you may do so by providing the `nickname` element in an `@ApiOperation` annotation.
 
 ====== Given this annotated method ...
 

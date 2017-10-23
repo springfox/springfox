@@ -25,5 +25,6 @@ import io.swagger.annotations.ApiOperation;
 public class DummyControllerWithTags {
   @ApiOperation(value = "dummyMethod", tags = {"Tag3", "Tag4"})
   public void dummyMethod() {
+    // empty method
   }
 }

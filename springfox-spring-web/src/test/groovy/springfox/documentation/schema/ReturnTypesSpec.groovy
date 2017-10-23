@@ -43,7 +43,10 @@ class ReturnTypesSpec extends Specification {
   def setup() {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-    sut = new TypeNameExtractor(new TypeResolver(), modelNameRegistry)
+    sut = new TypeNameExtractor(
+        new TypeResolver(),
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
   }
 
    def "model types"() {

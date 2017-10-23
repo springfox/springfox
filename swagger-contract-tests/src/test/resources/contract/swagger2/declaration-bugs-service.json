@@ -15,12 +15,12 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "foo",
-      "description": "Foo Description"
+      "name": "Bugs",
+      "description": "Bugs Controller"
     },
     {
-      "name": "bugs-controller",
-      "description": "Bugs Controller"
+      "name": "foo",
+      "description": "Foo Description"
     }
   ],
   "produces": [
@@ -31,15 +31,11 @@
     "/bugs/1162": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1162",
         "operationId": "bug1162UsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -56,15 +52,11 @@
     "/bugs/1209": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1209",
         "operationId": "bug1209UsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -91,15 +83,11 @@
     "/bugs/1306{?paramMap}": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1306",
         "operationId": "bug1306UsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -132,15 +120,11 @@
     "/bugs/1376-bare": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "issue1376Bare",
         "operationId": "issue1376BareUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -156,15 +140,11 @@
     "/bugs/1376-input-bare{?url}": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "issue1376Input",
         "operationId": "issue1376InputUsingPOST_2",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -186,15 +166,11 @@
     "/bugs/1376-input-property{?url}": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "issue1376Input",
         "operationId": "issue1376InputUsingPOST_3",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -215,15 +191,11 @@
     "/bugs/1376-property": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "issue1376Property",
         "operationId": "issue1376PropertyUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -239,15 +211,12 @@
     "/bugs/1420": {
       "get": {
         "tags": [
-          "foo"
+          "foo",
+          "Bugs"
         ],
         "summary": "issue1420",
         "operationId": "issue1420UsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -263,15 +232,11 @@
     "/bugs/1440": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "issue1440",
         "operationId": "issue1440UsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -287,15 +252,11 @@
     "/bugs/1475": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "mapOfLists",
         "operationId": "mapOfListsUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -317,15 +278,11 @@
     "/bugs/1475-example": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "mapOfListOfExample",
         "operationId": "mapOfListOfExampleUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -347,15 +304,11 @@
     "/bugs/1605": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "byteArrayResponse",
         "operationId": "byteArrayResponseUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -372,15 +325,11 @@
     "/bugs/1627": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1627",
         "operationId": "bug1627UsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -404,15 +353,11 @@
     "/bugs/1632": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "fileCustomType",
         "operationId": "fileCustomTypeUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -436,15 +381,11 @@
     "/bugs/1632s": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "filesCustomType",
         "operationId": "filesCustomTypeUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -471,15 +412,11 @@
     "/bugs/1676": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "apiModelProperty",
         "operationId": "apiModelPropertyUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -503,15 +440,11 @@
     "/bugs/1697": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "payloadWithByteBuffer",
         "operationId": "payloadWithByteBufferUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -535,14 +468,14 @@
     "/bugs/1722": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "Remove an apple from a user",
         "description": "Remove an apple from a user. You must specify the user name and the apple name.",
         "operationId": "bug1722UsingPOST_1",
         "consumes": [
-          "application/xml",
-          "application/json"
+          "application/json",
+          "application/xml"
         ],
         "produces": [
           "application/xml",
@@ -569,15 +502,11 @@
     "/bugs/1734{?offset}": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1734",
         "operationId": "bug1734UsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -601,15 +530,11 @@
     "/bugs/1740": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1740",
         "operationId": "bug1740UsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -625,30 +550,28 @@
     "/bugs/1749{?pageNumber,pageSize,sortDirection,sortField,email,companyName,like}": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "Retrieve all the companies",
         "operationId": "getAllPagedUsingGET_1",
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "pageNumber",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "integer",
+            "minimum": 1.0,
             "format": "int32"
           },
           {
             "name": "pageSize",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "integer",
+            "maximum": 50.0,
             "format": "int32"
           },
           {
@@ -705,15 +628,11 @@
     "/bugs/1750a": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1750a",
         "operationId": "bug1750aUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -732,15 +651,11 @@
     "/bugs/1750b": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "1750b",
         "operationId": "bug1750bUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -777,15 +692,11 @@
     "/bugs/1777": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1777",
         "operationId": "bug1777UsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "responses": {
@@ -801,15 +712,11 @@
     "/bugs/1778{?s,e}": {
       "get": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "bug1778",
         "operationId": "bug1778UsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -836,15 +743,11 @@
     "/bugs/1819a": {
       "put": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "modelWithListOfEnumsAsJson",
         "operationId": "modelWithListOfEnumsAsJsonUsingPUT_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -868,15 +771,11 @@
     "/bugs/1819b{?enumTypes}": {
       "post": {
         "tags": [
-          "bugs-controller"
+          "Bugs"
         ],
         "summary": "modelWithListOfEnumsAsModelAttribute",
         "operationId": "modelWithListOfEnumsAsModelAttributeUsingPOST_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -902,6 +801,129 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1841": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "method1",
+        "operationId": "method1UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/atom+xml",
+          "application/json;charset=UTF-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1864{?somename}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "test",
+        "operationId": "testUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "somename",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1907": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "xmlPayload",
+        "operationId": "xmlPayloadUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "xml",
+            "description": "xml",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Model1907"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1939{?username,password,credential-source-id}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "authenticate a user using a given set of credentials, producing a JWT token that may be used for future API operations if successful",
+        "operationId": "authenticateUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/jwt"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "password",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "credential-source-id",
+            "in": "query",
+            "description": "credential-source-id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
@@ -1075,6 +1097,37 @@
         }
       }
     },
+    "Model1907": {
+      "type": "object",
+      "required": [
+        "example",
+        "somename"
+      ],
+      "properties": {
+        "example": {
+          "xml": {
+            "name": "example",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Example"
+        },
+        "somename": {
+          "type": "string",
+          "xml": {
+            "name": "somename",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "xml": {
+        "name": "model1907",
+        "namespace": "urn:bugs",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
     "NestedType": {
       "type": "object",
       "properties": {
@@ -1088,6 +1141,12 @@
       "properties": {
         "links": {
           "type": "object",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "additionalProperties": {
             "$ref": "#/definitions/LinkAlternate"
           }

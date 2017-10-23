@@ -32,12 +32,13 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
-import springfox.documentation.spring.web.dummy.DummyControllerWithTags
-import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.dummy.DummyControllerWithApiDescription
+import springfox.documentation.spring.web.dummy.DummyControllerWithResourcePath
+import springfox.documentation.spring.web.dummy.DummyControllerWithTags
 import springfox.documentation.spring.web.dummy.controllers.FancyPetService
+import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FancyPet
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -101,6 +102,13 @@ class RequestMappingSupport {
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
+  HandlerMethod dummyControllerWithResourcePath(String methodName = "dummyMethod",
+       parameterTypes = null) {
+
+    def clazz = new DummyControllerWithResourcePath()
+    Class c = clazz.getClass();
+    new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+  }
 
   HandlerMethod petServiceHandlerMethod(String methodName = "getPetById", parameterTypes = String) {
     def clazz = new PetService()

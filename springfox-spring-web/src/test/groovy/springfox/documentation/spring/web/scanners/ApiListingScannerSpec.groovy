@@ -25,11 +25,12 @@ import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
+import springfox.documentation.spring.web.dummy.DummyControllerWithResourcePath
 import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -37,14 +38,19 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.collect.Lists.newArrayList
+import static com.google.common.collect.Lists.*
 import static com.google.common.collect.Maps.*
 import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
-import static ApiListingScanner.*
+import static springfox.documentation.spring.web.scanners.ApiListingScanner.*
 
-@Mixin([RequestMappingSupport, AuthSupport, ModelProviderForServiceSupport,
-        ServicePluginsSupport, ApiDescriptionSupport, SchemaPluginsSupport])
+@Mixin([
+    RequestMappingSupport,
+    AuthSupport,
+    ModelProviderForServiceSupport,
+    ServicePluginsSupport,
+    ApiDescriptionSupport,
+    SchemaPluginsSupport])
 class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
@@ -53,14 +59,14 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def setup() {
     SecurityContext securityContext = SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .forPaths(regex('/anyPath.*'))
-            .build()
+        .securityReferences(defaultAuth())
+        .forPaths(regex('/anyPath.*'))
+        .build()
 
     contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
-            .securityContexts(newArrayList(securityContext))
-            .configure(contextBuilder)
+        .securityContexts(newArrayList(securityContext))
+        .configure(contextBuilder)
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
@@ -70,65 +76,95 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "Should create an api listing for a single resource grouping "() {
     given:
-      RequestMappingInfo requestMappingInfo = requestMappingInfo("/businesses")
+    RequestMappingInfo requestMappingInfo = requestMappingInfo("/businesses")
 
+    def context = context()
+    RequestMappingContext requestMappingContext = new RequestMappingContext(
+        context,
+        new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
 
-      def context = context()
-      RequestMappingContext requestMappingContext = new RequestMappingContext(
-          context,
-          new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
-      ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
-      Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
-      resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
-      listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+    ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
+    listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+
     when:
-      apiDescriptionReader.read(requestMappingContext) >> []
+    apiDescriptionReader.read(requestMappingContext) >> []
 
     and:
-      def scanned = scanner.scan(listingContext)
+    def scanned = scanner.scan(listingContext)
+
     then:
-      scanned.containsKey("businesses")
-      Collection<ApiListing> listings = scanned.get("businesses")
-      listings.first().consumes == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE] as Set
-      listings.first().produces == [APPLICATION_JSON_VALUE] as Set
-      listings.first().description == 'Dummy Class'
+    scanned.containsKey("businesses")
+    Collection<ApiListing> listings = scanned.get("businesses")
+    listings.first().consumes == [APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE] as Set
+    listings.first().produces == [APPLICATION_JSON_VALUE] as Set
+    listings.first().description == 'Dummy Class'
   }
 
   def "should assign global authorizations"() {
     given:
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
 
-      def context = context()
-      def requestMappingContext = new RequestMappingContext(
-          context,
-          new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
-      def resourceGroupRequestMappings = newHashMap()
-      resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
+    def context = context()
+    def requestMappingContext = new RequestMappingContext(
+        context,
+        new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
+    def resourceGroupRequestMappings = newHashMap()
+    resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 
-      listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+    listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+
     when:
-      Multimap<String, ApiListing> apiListingMap = scanner.scan(listingContext)
+    Multimap<String, ApiListing> apiListingMap = scanner.scan(listingContext)
+
     then:
-      Collection<ApiListing> listings = apiListingMap.get('businesses')
-      listings.first().getSecurityReferences().size() == 0
+    Collection<ApiListing> listings = apiListingMap.get('businesses')
+    listings.first().getSecurityReferences().size() == 0
+  }
+
+  def "should assign resource form @RequestMapping annotation"() {
+    given:
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
+
+    def context = context()
+    def requestMappingContext = new RequestMappingContext(
+        context,
+        new WebMvcRequestHandler(requestMappingInfo, dummyControllerWithResourcePath("dummyMethod")))
+    def resourceGroupRequestMappings = newHashMap()
+    resourceGroupRequestMappings.put(new ResourceGroup("resourcePath", DummyControllerWithResourcePath), [requestMappingContext])
+
+    listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+
+    when:
+    apiDescriptionReader.read(requestMappingContext) >> []
+
+    and:
+    def scanned = scanner.scan(listingContext)
+
+    then:
+    scanned.containsKey("resourcePath")
+    Collection<ApiListing> listings = scanned.get("resourcePath")
+    listings.first().resourcePath == "/resource-path"
   }
 
   @Unroll
   def "should find longest common path"() {
     given:
-      String result = longestCommonPath(apiDescriptions(paths))
+    String result = longestCommonPath(apiDescriptions(paths)).orNull()
 
     expect:
-      result == expected
+    result == expected
+
     where:
-      paths                                        | expected
-      []                                           | null
-      ['/a/b', '/a/b']                             | '/a/b'
-      ['/a/b', '/a/b/c']                           | '/a/b'
-      ['/a/b', '/a/']                              | '/a'
-      ['/a/b', '/a/d/e/f']                         | '/a'
-      ['/a/b/c/d/e/f', '/a', '/a/b']               | '/a'
-      ['/d', '/e', 'f']                            | '/'
-      ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g'] | '/a/b/c'
+    paths                                        | expected
+    []                                           | null
+    ['/a/b', '/a/b']                             | '/a/b'
+    ['/a/b', '/a/b/c']                           | '/a/b'
+    ['/a/b', '/a/']                              | '/a'
+    ['/a/b', '/a/d/e/f']                         | '/a'
+    ['/a/b/c/d/e/f', '/a', '/a/b']               | '/a'
+    ['/d', '/e', 'f']                            | '/'
+    ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g'] | '/a/b/c'
   }
 }

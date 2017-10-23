@@ -61,7 +61,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**
- * A builder which is intended to be the primary interface into the swagger-springmvc framework.
+ * A builder which is intended to be the primary interface into the Springfox framework.
  * Provides sensible defaults and convenience methods for configuration.
  */
 public class Docket implements DocumentationPlugin {
@@ -263,7 +263,7 @@ public class Docket implements DocumentationPlugin {
    * specifying position might not work.
    *
    * @param operationOrdering
-   * @return
+   * @return this Docket
    */
   public Docket operationOrdering(Ordering<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
@@ -387,10 +387,10 @@ public class Docket implements DocumentationPlugin {
    * might have multiple request mappings for each search use case.
    *
    * This is an incubating feature that may not continue to be supported after the swagger specification is modified
-   * to accomodate the usecase as described in issue #711
+   * to accommodate the use case as described in issue #711
    *
    * @param enabled
-   * @return
+   * @return this Docket
    */
   @Incubating("2.1.0")
   public Docket enableUrlTemplating(boolean enabled) {
@@ -415,9 +415,9 @@ public class Docket implements DocumentationPlugin {
   /**
    * Method to add global tags to the docket
    *
-   * @param first     - atleast one tag is required to use this method
+   * @param first     - at least one tag is required to use this method
    * @param remaining - remaining tags
-   * @return
+   * @return this Docket
    */
   public Docket tags(Tag first, Tag... remaining) {
     tags.add(first);

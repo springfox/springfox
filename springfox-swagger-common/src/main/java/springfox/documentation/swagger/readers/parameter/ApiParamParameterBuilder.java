@@ -30,6 +30,7 @@ import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
@@ -43,10 +44,14 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  public ApiParamParameterBuilder(DescriptionResolver descriptions) {
+  public ApiParamParameterBuilder(
+      DescriptionResolver descriptions,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.descriptions = descriptions;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -82,7 +87,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     if (!isNullOrEmpty(allowableValueString)) {
       allowableValues = ApiModelProperties.allowableValueFromString(allowableValueString);
     } else {
-      if (parameterType.getErasedType().isEnum()) {
+      if (enumTypeDeterminer.isEnum(parameterType.getErasedType())) {
         allowableValues = Enums.allowableValues(parameterType.getErasedType());
       }
       if (Collections.isContainerType(parameterType)) {

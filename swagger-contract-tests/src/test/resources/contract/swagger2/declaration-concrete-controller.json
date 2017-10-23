@@ -34,10 +34,6 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -64,10 +60,6 @@
         "summary": "delete",
         "operationId": "deleteUsingDELETE_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -100,10 +92,6 @@
         "summary": "get",
         "operationId": "getUsingGET_1",
         "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
@@ -158,10 +146,20 @@
       "type": "object",
       "properties": {
         "href": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "href",
+            "attribute": true,
+            "wrapped": false
+          }
         },
         "rel": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "rel",
+            "attribute": true,
+            "wrapped": false
+          }
         },
         "templated": {
           "type": "boolean"
@@ -186,18 +184,18 @@
     "Resource«Pet»": {
       "type": "object",
       "properties": {
-        "links": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Link"
-          }
-        },
         "age": {
           "type": "integer",
           "format": "int32"
         },
         "id": {
           "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
         },
         "name": {
           "type": "string"

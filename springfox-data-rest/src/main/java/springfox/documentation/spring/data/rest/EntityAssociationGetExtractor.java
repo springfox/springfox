@@ -53,8 +53,9 @@ public class EntityAssociationGetExtractor implements EntityAssociationOperation
     RepositoryMetadata repository = entityContext.getRepositoryMetadata();
     
     ActionSpecification get = new ActionSpecification(
-        String.format("%s%s", lowerCamelCaseName(entity.getType().getSimpleName()), upperCamelCaseName(property
-            .getName())),
+        String.format("%s%s",
+            lowerCamelCaseName(entity.getType().getSimpleName()),
+            upperCamelCaseName(property.getName())),
         String.format("%s%s/{id}/%s",
             entityContext.basePath(),
             entityContext.resourcePath(),

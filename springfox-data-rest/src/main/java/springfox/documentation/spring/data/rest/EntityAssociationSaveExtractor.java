@@ -53,8 +53,9 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
     RepositoryMetadata repository = entityContext.getRepositoryMetadata();
     if (property.isWritable() && property.getOwner().equals(entity)) {
       ActionSpecification update = new ActionSpecification(
-          String.format("%s%s", lowerCamelCaseName(entity.getType().getSimpleName()), upperCamelCaseName(property
-              .getName())),
+          String.format("%s%s",
+              lowerCamelCaseName(entity.getType().getSimpleName()),
+              upperCamelCaseName(property.getName())),
           String.format("%s%s/{id}/%s",
               entityContext.basePath(),
               entityContext.resourcePath(),

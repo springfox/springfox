@@ -23,10 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
-import springfox.documentation.schema.DefaultTypeNameProvider
-import springfox.documentation.schema.ModelRef
-import springfox.documentation.schema.ModelReference
-import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.*
 import springfox.documentation.service.Header
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -41,96 +38,105 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "ApiResponse annotation should override when using swagger reader"() {
     given:
-      OperationContext operationContext =
+    OperationContext operationContext =
         operationContext(context(), dummyHandlerMethod('methodWithApiResponses'))
 
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
-      def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+    def resolver = new TypeResolver()
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
 
     when:
-      new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
 
     and:
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
 
     then:
-      responseMessages.size() == 2
-      def annotatedResponse = responseMessages.find { it.code == 413 }
-      annotatedResponse != null
-      annotatedResponse.message == "a message"
-      def classLevelResponse = responseMessages.find { it.code == 404 }
-      classLevelResponse != null
-      classLevelResponse.message == "Not Found"
+    responseMessages.size() == 2
+    def annotatedResponse = responseMessages.find { it.code == 413 }
+    annotatedResponse != null
+    annotatedResponse.message == "a message"
+    def classLevelResponse = responseMessages.find { it.code == 404 }
+    classLevelResponse != null
+    classLevelResponse.message == "Not Found"
   }
 
   def "ApiOperation annotation should provide response"() {
     given:
-      OperationContext operationContext =
+    OperationContext operationContext =
         operationContext(context(), dummyHandlerMethod('methodApiResponseClass'))
 
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-          OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
-      def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+    def resolver = new TypeResolver()
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
 
     when:
-      new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
 
     and:
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
 
     then:
-      responseMessages.size() == 2
-      def annotatedResponse = responseMessages.find { it.code == 200 }
-      annotatedResponse != null
-      annotatedResponse.message == "OK"
-      def classLevelResponse = responseMessages.find { it.code == 404 }
-      classLevelResponse != null
-      classLevelResponse.message == "Not Found"
+    responseMessages.size() == 2
+    def annotatedResponse = responseMessages.find { it.code == 200 }
+    annotatedResponse != null
+    annotatedResponse.message == "OK"
+    def classLevelResponse = responseMessages.find { it.code == 404 }
+    classLevelResponse != null
+    classLevelResponse.message == "Not Found"
   }
 
   @Unroll
   def "ApiOperation#responseHeaders and ApiResponse#responseHeader are merged for method #methodName"() {
     given:
-      OperationContext operationContext =
+    OperationContext operationContext =
         operationContext(context(), handlerMethodIn(ResponseHeaderTestController, methodName))
 
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-          OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
-      def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+    def resolver = new TypeResolver()
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
 
     when:
-      new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
 
     and:
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
 
     then:
-      responseMessages.size() == 0 || responseMessages.inject(true) {
-        soFar, r ->
-          soFar &&
-          r.headers.size() == headers.size() &&
-          headersMatch(r.headers, headers)
-      }
+    responseMessages.size() == 0 || responseMessages.inject(true) {
+      soFar, r ->
+        soFar &&
+            r.headers.size() == headers.size() &&
+            headersMatch(r.headers, headers)
+    }
 
     where:
-      methodName                | headers
-      "noAnnnotationHeaders"    | []
-      "defaultWithBoth"         | []
-      "operationHeadersOnly"    | [["name": "header1", "type": new ModelRef("string")]]
-      "operationHeadersOnly"    | [["name": "header1", "type": new ModelRef("List", new ModelRef("string"))]]
-      "responseHeadersOnly"     | [["name": "header1", "type": new ModelRef("string")]]
-      "bothWithOverride"        | [["name": "header1", "type": new ModelRef("int")]]
-      "bothWithoutOverride"     | [["name": "header1", "type": new ModelRef("string")],["name": "header2", "type": new ModelRef("int")]]
+    methodName             | headers
+    "noAnnotationHeaders"  | []
+    "defaultWithBoth"      | []
+    "operationHeadersOnly" | [["name": "header1", "type": new ModelRef("string")]]
+    "operationHeadersOnly" | [["name": "header1", "type": new ModelRef("List", new ModelRef("string"))]]
+    "responseHeadersOnly"  | [["name": "header1", "type": new ModelRef("string")]]
+    "bothWithOverride"     | [["name": "header1", "type": new ModelRef("int")]]
+    "bothWithoutOverride"  | [["name": "header1", "type": new ModelRef("string")], ["name": "header2", "type": new ModelRef("int")]]
   }
 
   boolean headersMatch(Map<String, ModelReference> headers, List<Header> expectedHeaders) {
@@ -148,32 +154,35 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
     return false
   }
 
-  def "Successful status series is inferred" () {
+  def "Successful status series is inferred"() {
     expect:
-      SwaggerResponseMessageReader.isSuccessful(status)
+    SwaggerResponseMessageReader.isSuccessful(status)
     where:
-      status << [200, 204]
+    status << [200, 204]
   }
 
-  def "Unknown integers are treated as failures" () {
+  def "Unknown integers are treated as failures"() {
     expect:
-      !SwaggerResponseMessageReader.isSuccessful(1001)
+    !SwaggerResponseMessageReader.isSuccessful(1001)
   }
 
   def "Supports all documentation types"() {
     given:
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
-      def resolver = new TypeResolver()
-      def typeNameExtractor = new TypeNameExtractor(resolver,  modelNameRegistry)
+    def resolver = new TypeResolver()
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
 
     when:
-      def sut = new SwaggerResponseMessageReader(typeNameExtractor, resolver)
+    def sut = new SwaggerResponseMessageReader(typeNameExtractor, resolver)
 
     then:
-      !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
   }
 }
