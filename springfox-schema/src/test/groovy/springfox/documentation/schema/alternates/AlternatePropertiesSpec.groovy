@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema.alternates
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
@@ -38,6 +39,8 @@ class AlternatePropertiesSpec extends Specification {
       ModelProvider modelProvider = defaultModelProvider()
       Model model = modelProvider.modelFor(inputParam("group",
           typeWithAlternateProperty(),
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
           provider,
           namingStrategy,
@@ -61,6 +64,8 @@ class AlternatePropertiesSpec extends Specification {
       ModelProvider modelProvider = defaultModelProvider()
       Model model = modelProvider.modelFor(inputParam("group",
           typeWithResponseEntityOfVoid(),
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,

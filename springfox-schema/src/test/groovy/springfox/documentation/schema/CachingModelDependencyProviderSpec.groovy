@@ -19,6 +19,7 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -34,6 +35,8 @@ class CachingModelDependencyProviderSpec extends Specification {
     given:
       def context = inputParam("group",
           complexType(),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
@@ -51,6 +54,8 @@ class CachingModelDependencyProviderSpec extends Specification {
     given:
       def context = inputParam("group",
           complexType(),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),

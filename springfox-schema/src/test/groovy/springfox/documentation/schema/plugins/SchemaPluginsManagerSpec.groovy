@@ -19,6 +19,7 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -31,7 +32,7 @@ import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
-
+import springfox.documentation.spi.service.ViewProviderPlugin
 import java.lang.reflect.AnnotatedElement
 
 import static com.google.common.collect.Lists.*
@@ -58,8 +59,12 @@ class SchemaPluginsManagerSpec extends Specification {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
             OrderAwarePluginRegistry.create(newArrayList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
+    
+    PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderPlugin =
+            OrderAwarePluginRegistry.create(newArrayList(namePlugin))
+    namePlugin.supports(SPRING_WEB) >> true
 
-    sut = new SchemaPluginsManager(propRegistry, modelRegistry)
+    sut = new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderPlugin)
     typeNames = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
@@ -82,6 +87,8 @@ class SchemaPluginsManagerSpec extends Specification {
       def context = inputParam(
           "group",
           TypeForTestingPropertyNames,
+          Optional.absent(),
+          new HashSet<>(),
           SPRING_WEB,
           new AlternateTypeProvider([]),
           namingStrategy,
@@ -99,6 +106,8 @@ class SchemaPluginsManagerSpec extends Specification {
       def context = inputParam(
           "group",
           ExampleWithEnums,
+          Optional.absent(),
+          new HashSet<>(),
           SPRING_WEB,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),

@@ -18,11 +18,15 @@
  */
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.ResolvedType
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
+
+import java.util.Set
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
 class BeanWithFactoryMethodSpec extends SchemaSpecification {
@@ -33,6 +37,8 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def reqContext = inputParam(
           "group",
           typeToTest,
+          Optional.absent(),
+          new HashSet<>(),
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
@@ -40,6 +46,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def resContext = returnValue(
           "group",
           typeToTest,
+          Optional.absent(),
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
@@ -73,6 +80,8 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def reqContext = inputParam(
           "group",
           typeToTest,
+          Optional.absent(),
+          new HashSet<>(),
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
@@ -80,6 +89,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def resContext = returnValue(
           "group",
           typeToTest,
+          Optional.absent(),
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
@@ -113,6 +123,8 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def reqContext = inputParam(
           "group",
           typeToTest,
+          Optional.absent(),
+          new HashSet<>(),
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
@@ -120,6 +132,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def resContext = returnValue(
           "group",
           typeToTest,
+          Optional.absent(),
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),

@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema.plugins
 
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import spock.lang.Shared
 import spock.lang.Specification
@@ -41,6 +42,8 @@ class ModelContextSpec extends Specification {
       ModelContext context = inputParam(
           "group",
           ExampleEnum,
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
           provider,
           namingStrategy,
@@ -59,6 +62,8 @@ class ModelContextSpec extends Specification {
   def inputParam(Class ofType) {
     inputParam("group",
         ofType,
+        Optional.absent(),
+        new HashSet<>(),
         SWAGGER_12,
         provider,
         namingStrategy,
@@ -68,6 +73,7 @@ class ModelContextSpec extends Specification {
   def returnValue(Class ofType) {
     returnValue("group",
         ofType,
+        Optional.absent(),
         SWAGGER_12,
         provider,
         namingStrategy,
@@ -78,18 +84,23 @@ class ModelContextSpec extends Specification {
     given:
       ModelContext context = inputParam("group",
           ExampleEnum,
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
       ModelContext other = inputParam("group",
           ExampleEnum,
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
       ModelContext otherReturn = returnValue("group",
           ExampleEnum,
+          Optional.absent(),
           SWAGGER_12,
           provider,
           namingStrategy,

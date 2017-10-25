@@ -20,6 +20,7 @@ package springfox.documentation.schema.property
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
@@ -35,6 +36,8 @@ class CachingModelPropertiesProviderSpec extends Specification {
     given:
       def context = inputParam("group",
           complexType(),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
@@ -53,6 +56,8 @@ class CachingModelPropertiesProviderSpec extends Specification {
     given:
       def context = inputParam("group",
           complexType(),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),

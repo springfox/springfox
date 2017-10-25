@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
@@ -37,6 +38,8 @@ class EnumTypeSpec extends Specification {
       Model asInput = provider.modelFor(
           inputParam("group",
               enumType(),
+              Optional.absent(),
+              new HashSet<>(),
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
@@ -44,6 +47,7 @@ class EnumTypeSpec extends Specification {
       Model asReturn = provider.modelFor(
           returnValue("group",
               enumType(),
+              Optional.absent(),
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
@@ -63,7 +67,7 @@ class EnumTypeSpec extends Specification {
       modelProperty.getModelRef().itemType == null
       modelProperty.getAllowableValues().getValues() == list
 
-      asReturn.getName() == "ExampleWithEnums"
+      asReturn.getName() == "ExampleWithEnums_1"
       asReturn.getProperties().containsKey("exampleEnum")
       def retModelPropertyOption = asReturn.getProperties().get("exampleEnum")
       def retModelProperty = retModelPropertyOption

@@ -33,6 +33,8 @@ class CachingModelProviderSpec extends Specification {
     given:
       def context = inputParam("group",
           complexType(),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
@@ -51,6 +53,8 @@ class CachingModelProviderSpec extends Specification {
     given:
       def context = inputParam("group",
           complexType(),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),

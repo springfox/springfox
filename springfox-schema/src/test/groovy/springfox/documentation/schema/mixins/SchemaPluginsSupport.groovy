@@ -24,6 +24,7 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
+import springfox.documentation.spi.service.ViewProviderPlugin
 
 import static com.google.common.collect.Lists.*
 
@@ -35,7 +36,11 @@ class SchemaPluginsSupport {
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
             OrderAwarePluginRegistry.create(newArrayList())
+            
+    PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
+            OrderAwarePluginRegistry.create(newArrayList())
+            
 
-    new SchemaPluginsManager(propRegistry, modelRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry)
   }
 }

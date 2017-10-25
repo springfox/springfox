@@ -19,6 +19,7 @@
 package springfox.documentation.schema.property.constructor
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
@@ -44,6 +45,8 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
       def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
       def modelContext = inputParam("group",
           typeToTest,
+          Optional.absent(),
+          new HashSet<>(),
           documentationType,
           alternateTypeProvider(),
           genericNamingStrategy,

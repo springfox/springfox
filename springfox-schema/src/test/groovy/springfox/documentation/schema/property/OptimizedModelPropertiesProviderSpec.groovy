@@ -21,6 +21,7 @@ package springfox.documentation.schema.property
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -69,6 +70,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         type,
         inputParam("group",
             type,
+            Optional.absent(),
+            new HashSet<>(),
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
@@ -77,6 +80,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         type,
         returnValue("group",
             type,
+            Optional.absent(),
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
@@ -117,6 +121,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           type,
           inputParam("group",
               type,
+              Optional.absent(),
+              new HashSet<>(),
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
@@ -125,6 +131,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           type,
           returnValue("group",
               type,
+              Optional.absent(),
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
@@ -165,12 +172,15 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     and:
       def inputContext = inputParam("group",
           type,
+          Optional.absent(),
+          new HashSet<>(),
           SPRING_WEB,
           new AlternateTypeProvider(newArrayList()),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
       def returnContext = returnValue("group",
           type,
+          Optional.absent(),
           SPRING_WEB,
           new AlternateTypeProvider(newArrayList()),
           new DefaultGenericTypeNamingStrategy(),
@@ -217,6 +227,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           type,
           inputParam("group",
               type,
+              Optional.absent(),
+              new HashSet<>(),
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
@@ -225,6 +237,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           type,
           returnValue("group",
               type,
+              Optional.absent(),
               SPRING_WEB,
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
