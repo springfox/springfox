@@ -91,7 +91,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return new Predicate<ResolvedType>() {
       @Override
       public boolean apply(ResolvedType input) {
-        return !modelContext.hasSeenBefore(input, modelContext.getJsonView());
+        return !modelContext.hasSeenBefore(input);
       }
     };
   }
@@ -101,7 +101,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     ResolvedType resolvedType = modelContext.alternateFor(modelContext.resolvedType(typeResolver));
     if (isBaseType(ModelContext.fromParent(modelContext, resolvedType))) {
       LOG.debug("Marking base type {} as seen", resolvedType.getSignature());
-      modelContext.seen(resolvedType, modelContext.getJsonView());
+      modelContext.seen(resolvedType);
       return newArrayList();
     }
     List<ResolvedType> dependencies = newArrayList(resolvedTypeParameters(modelContext, resolvedType));
@@ -134,10 +134,10 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   }
 
   private List<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {
-    if (modelContext.hasSeenBefore(resolvedType, modelContext.getJsonView()) || enumTypeDeterminer.isEnum(resolvedType.getErasedType())) {
+    if (modelContext.hasSeenBefore(resolvedType) || enumTypeDeterminer.isEnum(resolvedType.getErasedType())) {
       return newArrayList();
     }
-    modelContext.seen(resolvedType, modelContext.getJsonView());
+    modelContext.seen(resolvedType);
     List<ResolvedType> properties = newArrayList();
     for (ModelProperty property : nonTrivialProperties(modelContext, resolvedType)) {
       LOG.debug("Adding type {} for parameter {}", property.getType().getSignature(), property.getName());

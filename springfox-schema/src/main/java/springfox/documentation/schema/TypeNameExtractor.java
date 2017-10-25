@@ -53,7 +53,7 @@ public class TypeNameExtractor {
   public TypeNameExtractor(
       TypeResolver typeResolver,
       @Qualifier("typeNameProviderPluginRegistry")
-          PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
       EnumTypeDeterminer enumTypeDeterminer) {
 
     this.typeResolver = typeResolver;

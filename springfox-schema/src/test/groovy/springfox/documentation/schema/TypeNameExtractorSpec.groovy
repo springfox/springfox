@@ -78,22 +78,22 @@ class TypeNameExtractorSpec extends SchemaSpecification {
       hashMap(String, String)        | "Map«string,string»"
   }
 
-  def "Input class for container types are inferred correctly with a JsonView"() {
-    given:
-    def referenceJsonView = TypesForTestingSupport.getJsonView(JsonViewParent.View2)
-    def context = returnValue("group",
-            containerType,
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            ImmutableSet.builder().build(),
-            referenceJsonView)
-    expect:
-    typeNameExtractor.typeName(context) == name
-
-    where:
-    containerType                  | name
-    typeForTestingJsonView()      | "TypeWithJsonViewJsonViewView2"
-  }
+//  def "Input class for container types are inferred correctly with a JsonView"() {
+//    given:
+//    def referenceJsonView = TypesForTestingSupport.getJsonView(JsonViewParent.View2)
+//    def context = returnValue("group",
+//            containerType,
+//            SWAGGER_12,
+//            alternateTypeProvider(),
+//            namingStrategy,
+//            ImmutableSet.builder().build(),
+//            referenceJsonView)
+//    expect:
+//    typeNameExtractor.typeName(context) == name
+//
+//    where:
+//    containerType                  | name
+//    typeForTestingJsonView()      | "TypeWithJsonViewJsonViewView2"
+//  }
   //TODO: test cases for parent (withAndWithout)
 }

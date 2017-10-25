@@ -18,20 +18,22 @@
  */
 package springfox.documentation.spi.schema.contexts;
 
+import static com.google.common.collect.Sets.newHashSet;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class ModelContext {
   private final Type type;
@@ -40,7 +42,7 @@ public class ModelContext {
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
-  private final Map<ResolvedType, JsonView> seenTypes = new HashMap<ResolvedType, JsonView>();
+  private final Set<ResolvedJsonViewType> seenTypes = newHashSet();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
@@ -259,6 +261,10 @@ public class ModelContext {
    * @param resolvedType - type to check
    * @return true or false
    */
+  public boolean hasSeenBefore(ResolvedType resolvedType) {
+    return hasSeenBefore( resolvedType, jsonView);
+  }
+
   public boolean hasSeenBefore(ResolvedType resolvedType, JsonView jsonView) {
     return internalSeen(resolvedType, jsonView)
         || internalSeen(new TypeResolver().resolve(resolvedType.getErasedType()), jsonView)
@@ -266,7 +272,7 @@ public class ModelContext {
   }
 
   private boolean internalSeen(ResolvedType resolvedType, JsonView jsonView) {
-    return seenTypes.containsKey(resolvedType) && Objects.equal(seenTypes.get(resolvedType), jsonView);
+    return seenTypes.contains(new ResolvedJsonViewType(resolvedType,jsonView));
   }
 
   public DocumentationType getDocumentationType() {
@@ -297,8 +303,12 @@ public class ModelContext {
     return modelBuilder;
   }
 
+  public void seen(ResolvedType resolvedType) {
+    seen(resolvedType, jsonView);
+  }
+
   public void seen(ResolvedType resolvedType, JsonView jsonView) {
-    seenTypes.put(resolvedType, jsonView);
+    seenTypes.add(new ResolvedJsonViewType(resolvedType,jsonView));
   }
 
   @Override
