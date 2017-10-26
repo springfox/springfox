@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.web.scanners
 
+import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.Operation
@@ -25,23 +26,25 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.readers.operation.OperationReader
 
 @Mixin([TypesForTestingSupport, RequestMappingSupport])
 class CachingOperationReaderSpec extends DocumentationContextSpec {
-  def "Implementation caches the invocations" () {
+  def "Implementation caches the invocations"() {
     given:
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
+    def methodResolver = new HandlerMethodResolver(new TypeResolver())
 
-      def context = context()
-      def requestMappingContext = new RequestMappingContext(
-          context,
-          new WebMvcRequestHandler(
-              requestMappingInfo,
-              dummyHandlerMethod("methodWithConcreteResponseBody")))
-      def mock = Mock(OperationReader) {
-        read(requestMappingContext) >> [anOperation()]
-      }
+    def context = context()
+    def requestMappingContext = new RequestMappingContext(
+        context,
+        new WebMvcRequestHandler(methodResolver,
+            requestMappingInfo,
+            dummyHandlerMethod("methodWithConcreteResponseBody")))
+    def mock = Mock(OperationReader) {
+      read(requestMappingContext) >> [anOperation()]
+    }
     when:
     def sut = new CachingOperationReader(mock)
     then:

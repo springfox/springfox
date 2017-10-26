@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.mixins
 
+import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
@@ -42,6 +43,7 @@ import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FancyPet
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import javax.servlet.ServletContext
 
@@ -182,7 +184,7 @@ class RequestMappingSupport {
         httpMethod,
         new RequestMappingContext(
             context,
-            new WebMvcRequestHandler(
+            new WebMvcRequestHandler(new HandlerMethodResolver(new TypeResolver()),
                 requestMapping,
                 handlerMethod)),
         operationIndex)

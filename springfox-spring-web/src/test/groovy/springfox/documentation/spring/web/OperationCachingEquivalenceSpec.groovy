@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,11 +19,19 @@
 package springfox.documentation.spring.web
 
 import com.fasterxml.classmate.ResolvedType
+import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Optional
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
-import org.springframework.web.servlet.mvc.condition.*
+import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
+import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
+import org.springframework.web.servlet.mvc.condition.NameValueExpression
+import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
+import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
+import org.springframework.web.servlet.mvc.condition.RequestCondition
+import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import springfox.documentation.RequestHandler
@@ -33,10 +41,13 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import java.lang.annotation.Annotation
 
 class OperationCachingEquivalenceSpec extends Specification implements HandlerMethodsSupport {
+  def methodResolver = new HandlerMethodResolver(new TypeResolver())
+
   def "Two request handlers backed by the same method must be equal" () {
     given:
       OperationCachingEquivalence sut = new OperationCachingEquivalence()
@@ -57,10 +68,10 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     and:
       def first = new RequestMappingContext(
           documentationContext,
-          new WebMvcRequestHandler(firstMapping, anyMethod))
+          new WebMvcRequestHandler(methodResolver, firstMapping, anyMethod))
       def second = new RequestMappingContext(
           documentationContext,
-          new WebMvcRequestHandler(secondMapping, anyMethod))
+          new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
     then:
       sut.doEquivalent(first, second)
   }
@@ -103,10 +114,10 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     and:
       def first = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(firstMapping, anyMethod))
+        new WebMvcRequestHandler(methodResolver, firstMapping, anyMethod))
       def second = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(secondMapping, anyMethod))
+        new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
     then:
       !sut.doEquivalent(first, second)
   }

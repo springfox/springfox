@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.scanners.ApiModelReader
 
 import javax.servlet.http.HttpServletResponse
@@ -48,6 +49,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
   DocumentationPluginsManager pluginsManager
+  def methodResolver = new HandlerMethodResolver(new TypeResolver())
 
   def setup() {
     pluginsManager = defaultWebPlugins()
@@ -86,8 +88,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def requestMappingContext(HandlerMethod handlerMethod) {
     return new RequestMappingContext(
         context(),
-        new WebMvcRequestHandler(requestMappingInfo('/somePath'),
-        handlerMethod))
+        new WebMvcRequestHandler(methodResolver, requestMappingInfo('/somePath'),
+            handlerMethod))
   }
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
@@ -169,7 +171,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       RequestMappingContext context =
               new RequestMappingContext(pluginContext,
-                  new WebMvcRequestHandler(
+                  new WebMvcRequestHandler(methodResolver,
                       requestMappingInfo('/businesses/responseEntity/{businessId}'),
                       handlerMethod))
     when:
