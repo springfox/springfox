@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.scanners
 
+import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
@@ -30,6 +31,7 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.paths.Paths
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import javax.servlet.ServletContext
 
@@ -49,6 +51,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         RequestMappingContext mappingContext = new RequestMappingContext(
             context(),
             new WebMvcRequestHandler(
+                new HandlerMethodResolver(new TypeResolver()),
                 requestMappingInfo,
                 dummyHandlerMethod()))
         operationReader.read(_) >> [Mock(Operation), Mock(Operation)]

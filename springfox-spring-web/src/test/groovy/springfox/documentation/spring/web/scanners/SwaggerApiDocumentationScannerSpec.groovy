@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.scanners
 
+import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.LinkedListMultimap
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
@@ -30,6 +31,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.paths.AbstractPathProvider
 import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import static com.google.common.collect.Maps.*
 import static springfox.documentation.builders.PathSelectors.*
@@ -131,7 +133,10 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .configure(contextBuilder)
 
     RequestMappingContext requestMappingContext = new RequestMappingContext(context(),
-        new WebMvcRequestHandler(requestMappingInfo("somePath/"), dummyHandlerMethod()))
+        new WebMvcRequestHandler(
+            new HandlerMethodResolver(new TypeResolver()),
+            requestMappingInfo("somePath/"),
+            dummyHandlerMethod()))
 
     and:
     def mockListingRef = Mock(ApiListingReference)

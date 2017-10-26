@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
@@ -171,11 +172,13 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
+    def methodResolver = new HandlerMethodResolver(new TypeResolver())
+
     OperationContext operationContext = new OperationContext(
         new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET,
         new RequestMappingContext(context(),
-            new WebMvcRequestHandler(
+            new WebMvcRequestHandler(methodResolver,
                 requestMappingInfo("/somePath"),
                 dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))), 0)
     when:

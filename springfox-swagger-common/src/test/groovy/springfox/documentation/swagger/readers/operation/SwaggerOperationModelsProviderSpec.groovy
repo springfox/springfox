@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,17 +24,19 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 @Mixin([RequestMappingSupport])
 class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
   def "should read from annotations"() {
     given:
-      RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
+    def methodResolver = new HandlerMethodResolver(new TypeResolver())
+    RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
           [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )
       RequestMappingContext requestContext = new RequestMappingContext(
           context(),
-          new WebMvcRequestHandler(
+          new WebMvcRequestHandler(methodResolver,
               requestMappingInfo,
               dummyHandlerMethod(operationName)))
       SwaggerOperationModelsProvider sut = new SwaggerOperationModelsProvider(new TypeResolver())
