@@ -85,7 +85,6 @@ to provide an expressive predicate based for api selection.
 
 ```java
   import static springfox.documentation.builders.PathSelectors.regex;
-  import static com.google.common.base.Predicates.or;
 
   @Bean
   public Docket swaggerSpringMvcPlugin() {
@@ -93,7 +92,7 @@ to provide an expressive predicate based for api selection.
             .groupName("business-api")
             .select() 
                //Ignores controllers annotated with @CustomIgnore
-              .apis(not(withClassAnnotation(CustomIgnore.class)) //Selection by RequestHandler
+              .apis(withClassAnnotation(CustomIgnore.class).negate()) //Selection by RequestHandler
               .paths(paths()) // and by paths
               .build()
             .apiInfo(apiInfo())
@@ -103,13 +102,13 @@ to provide an expressive predicate based for api selection.
 
   //Here is an example where we select any api that matches one of these paths
   private Predicate<String> paths() {
-    return or(
-        regex("/business.*"),
-        regex("/some.*"),
-        regex("/contacts.*"),
-        regex("/pet.*"),
-        regex("/springsRestController.*"),
-        regex("/test.*"));
+    return 
+        regex("/business.*"))
+        .or(regex("/some.*"))
+        .or(regex("/contacts.*"))
+        .or(regex("/pet.*"))
+        .or(regex("/springsRestController.*"))
+        .or(regex("/test.*")));
   }
 
 ```
