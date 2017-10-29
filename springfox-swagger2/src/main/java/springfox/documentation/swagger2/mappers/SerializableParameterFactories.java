@@ -41,14 +41,14 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Parameter;
 
 public class SerializableParameterFactories {
-  public static final Map<String, SerializableParameterFactory> factory = new HashMap<String,
-      SerializableParameterFactory>() {{
-      put("header", new HeaderSerializableParameterFactory());
-      put("form", new FormSerializableParameterFactory());
-      put("path", new PathSerializableParameterFactory());
-      put("query", new QuerySerializableParameterFactory());
-      put("cookie", new CookieSerializableParameterFactory());
-      }};
+  private static final Map<String, SerializableParameterFactory> factory = new HashMap<String, SerializableParameterFactory>();
+  static {
+    factory.put("header", new HeaderSerializableParameterFactory());
+    factory.put("form", new FormSerializableParameterFactory());
+    factory.put("path", new PathSerializableParameterFactory());
+    factory.put("query", new QuerySerializableParameterFactory());
+    factory.put("cookie", new CookieSerializableParameterFactory());
+   };
 
   private SerializableParameterFactories() {
     throw new UnsupportedOperationException();

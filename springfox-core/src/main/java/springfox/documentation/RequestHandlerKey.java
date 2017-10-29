@@ -61,13 +61,7 @@ public class RequestHandlerKey {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((pathMappings == null) ? 0 : pathMappings.hashCode());
-    result = prime * result + ((producibleMediaTypes == null) ? 0 : producibleMediaTypes.hashCode());
-    result = prime * result + ((supportedMediaTypes == null) ? 0 : supportedMediaTypes.hashCode());
-    result = prime * result + ((supportedMethods == null) ? 0 : supportedMethods.hashCode());
-    return result;
+    return Objects.hash(pathMappings, producibleMediaTypes, supportedMediaTypes, supportedMethods);
   }
 
   @Override

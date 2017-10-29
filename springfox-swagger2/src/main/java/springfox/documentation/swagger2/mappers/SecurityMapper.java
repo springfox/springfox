@@ -34,11 +34,12 @@ import springfox.documentation.service.SecurityScheme;
 
 @Mapper
 public class SecurityMapper {
-  private Map<String, SecuritySchemeFactory> factories = new HashMap<String, SecuritySchemeFactory>() {{
-      put("oauth2", new OAuth2AuthFactory());
-      put("apiKey", new ApiKeyAuthFactory());
-      put("basicAuth", new BasicAuthFactory());
-  }};
+  private static Map<String, SecuritySchemeFactory> factories = new HashMap<String, SecuritySchemeFactory>();
+  static {
+    factories.put("oauth2", new OAuth2AuthFactory());
+    factories.put("apiKey", new ApiKeyAuthFactory());
+    factories.put("basicAuth", new BasicAuthFactory());
+  };
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
     if (from == null) {

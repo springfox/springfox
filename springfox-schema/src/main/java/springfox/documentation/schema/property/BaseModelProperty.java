@@ -28,8 +28,6 @@ import springfox.documentation.schema.ResolvedTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
-import static springfox.documentation.schema.ResolvedTypes.*;
-
 import java.util.Optional;
 
 public abstract class BaseModelProperty implements ModelProperty {
@@ -79,7 +77,7 @@ public abstract class BaseModelProperty implements ModelProperty {
     if (getType().getTypeParameters().size() > 0) {
       return getType().toString();
     }
-    return simpleQualifiedTypeName(getType());
+    return ResolvedTypes.simpleQualifiedTypeName(getType());
   }
 
   @Override

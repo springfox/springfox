@@ -55,22 +55,23 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.util.Strings;
 
 class Properties {
-  private static final Map<String, Function<String, ? extends Property>> typeFactory = new HashMap<String, Function<String, ? extends Property>>() {{
-      put("int", newInstanceOf(IntegerProperty.class));
-      put("long", newInstanceOf(LongProperty.class));
-      put("float", newInstanceOf(FloatProperty.class));
-      put("double", newInstanceOf(DoubleProperty.class));
-      put("string", newInstanceOf(StringProperty.class));
-      put("boolean", newInstanceOf(BooleanProperty.class));
-      put("date", newInstanceOf(DateProperty.class));
-      put("date-time", newInstanceOf(DateTimeProperty.class));
-      put("bigdecimal", newInstanceOf(DecimalProperty.class));
-      put("biginteger", newInstanceOf(BaseIntegerProperty.class));
-      put("uuid", newInstanceOf(UUIDProperty.class));
-      put("object", newInstanceOf(ObjectProperty.class));
-      put("byte", bytePropertyFactory());
-      put("__file", filePropertyFactory());
-  }};
+  private static final Map<String, Function<String, ? extends Property>> typeFactory = new HashMap<String, Function<String, ? extends Property>>();
+  static {
+    typeFactory.put("int", newInstanceOf(IntegerProperty.class));
+    typeFactory.put("long", newInstanceOf(LongProperty.class));
+    typeFactory.put("float", newInstanceOf(FloatProperty.class));
+    typeFactory.put("double", newInstanceOf(DoubleProperty.class));
+    typeFactory.put("string", newInstanceOf(StringProperty.class));
+    typeFactory.put("boolean", newInstanceOf(BooleanProperty.class));
+    typeFactory.put("date", newInstanceOf(DateProperty.class));
+    typeFactory.put("date-time", newInstanceOf(DateTimeProperty.class));
+    typeFactory.put("bigdecimal", newInstanceOf(DecimalProperty.class));
+    typeFactory.put("biginteger", newInstanceOf(BaseIntegerProperty.class));
+    typeFactory.put("uuid", newInstanceOf(UUIDProperty.class));
+    typeFactory.put("object", newInstanceOf(ObjectProperty.class));
+    typeFactory.put("byte", bytePropertyFactory());
+    typeFactory.put("__file", filePropertyFactory());
+  };
 
   private Properties() {
     throw new UnsupportedOperationException();

@@ -27,8 +27,6 @@ import java.util.function.Predicate;
 
 
 public class SecurityContextBuilder {
-  SecurityContextBuilder() {
-  }
 
   private List<SecurityReference> securityReferences = new ArrayList<>();
   private Predicate<String> pathSelector = x -> true;

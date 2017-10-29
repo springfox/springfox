@@ -61,15 +61,6 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
         .sorted(byPatternsCondition()).collect(Collectors.toList());
   }
 
-  private Function<? super RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-    return new Function<RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>>() {
-      @Override
-      public Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>> apply(RequestMappingInfoHandlerMapping input) {
-        return input.getHandlerMethods().entrySet();
-      }
-    };
-  }
-
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
     return new Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
       @Override
