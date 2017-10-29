@@ -21,42 +21,12 @@ package springfox.documentation.spring.web;
 import java.util.Objects;
 
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.util.Equivalence;
 
-public class OperationCachingEquivalence {
-
-  private RequestMappingContext requestMappingContext;
+public class OperationCachingEquivalence extends Equivalence<RequestMappingContext> {
 
   public OperationCachingEquivalence(RequestMappingContext requestMappingContext) {
-    this.requestMappingContext = requestMappingContext;
-  }
-
-  public RequestMappingContext get() {
-    return requestMappingContext;
-  }
-
-  @Override
-  public int hashCode() {
-    if (requestMappingContext == null) {
-      return 0;
-    }
-    return doHash(requestMappingContext);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof OperationCachingEquivalence) {
-      obj = ((OperationCachingEquivalence) obj).get();
-    }
-    if (requestMappingContext == obj) {
-      return true;
-    }
-    if (requestMappingContext == null || obj == null) {
-      return false;
-    }
-    if (requestMappingContext.getClass() != obj.getClass()) {
-      return false;
-    }
-    return doEquivalent(requestMappingContext, (RequestMappingContext) obj);
+    super(requestMappingContext);
   }
 
   protected boolean doEquivalent(RequestMappingContext first, RequestMappingContext second) {

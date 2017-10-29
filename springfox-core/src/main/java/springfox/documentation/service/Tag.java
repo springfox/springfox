@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import org.springframework.core.Ordered;
 
+import springfox.documentation.util.Assert;
 import springfox.documentation.util.Strings;
 
 public class Tag implements Ordered {
@@ -35,16 +36,9 @@ public class Tag implements Ordered {
   }
 
   public Tag(String name, String description, int order) {
-    this.name = checkNotNull(Strings.emptyToNull(name));
+    this.name = Assert.checkNotNull(Strings.emptyToNull(name), "Tag name can not be null");
     this.description = description;
     this.order = order;
-  }
-  
-  private String checkNotNull(String name) {
-    if (name == null) {
-      throw new NullPointerException("Tag name can not be null");
-    }
-    return name;
   }
 
   public String getName() {

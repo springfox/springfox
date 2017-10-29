@@ -20,6 +20,7 @@ package springfox.documentation.spring.web.plugins;
 
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.util.Equivalence;
 import springfox.documentation.util.Sets;
 
 import java.util.List;
@@ -29,41 +30,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 // RequestHandlerWrapper
-class PathAndParametersEquivalence {
-
-  private RequestHandler requestHandler;
+class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
 
   public PathAndParametersEquivalence(RequestHandler requestHandler) {
-    this.requestHandler = requestHandler;
-  }
-
-  public RequestHandler get() {
-    return requestHandler;
-  }
-
-  @Override
-  public int hashCode() {
-    if (requestHandler == null) {
-      return 0;
-    }
-    return doHash(requestHandler);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof PathAndParametersEquivalence) {
-      obj = ((PathAndParametersEquivalence) obj).get();
-    }
-    if (requestHandler == obj) {
-      return true;
-    }
-    if (requestHandler == null || obj == null) {
-      return false;
-    }
-    if (!(obj instanceof RequestHandler)) {
-      return false;
-    }
-    return doEquivalent(requestHandler, (RequestHandler) obj);
+    super(requestHandler);
   }
 
   protected boolean doEquivalent(RequestHandler a, RequestHandler b) {
@@ -90,41 +60,10 @@ class PathAndParametersEquivalence {
         requestHandler.params(), wrapped(requestHandler.getParameters()));
   }
 
-  protected static class ResolvedMethodParameterWrapper {
-
-    private ResolvedMethodParameter delegate;
+  protected static class ResolvedMethodParameterWrapper extends Equivalence<ResolvedMethodParameter> {
 
     ResolvedMethodParameterWrapper(ResolvedMethodParameter delegate) {
-      this.delegate = delegate;
-    }
-
-    public ResolvedMethodParameter get() {
-      return delegate;
-    }
-
-    @Override
-    public int hashCode() {
-      if (delegate == null) {
-        return 0;
-      }
-      return doHash(delegate);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (obj instanceof ResolvedMethodParameterWrapper) {
-        obj = ((ResolvedMethodParameterWrapper) obj).get();
-      }
-      if (delegate == obj) {
-        return true;
-      }
-      if (delegate == null || obj == null) {
-        return false;
-      }
-      if (delegate.getClass() != obj.getClass()) {
-        return false;
-      }
-      return doEquivalent(delegate, (ResolvedMethodParameter) obj);
+      super(delegate);
     }
 
     protected boolean doEquivalent(ResolvedMethodParameter a, ResolvedMethodParameter b) {
