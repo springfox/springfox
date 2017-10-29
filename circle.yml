@@ -5,7 +5,7 @@ general:
 
 machine:
   java:
-    version: oraclejdk7
+    version: oraclejdk8
   environment:
     TERM: dumb
     CI_NAME: Circle-CI
