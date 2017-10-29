@@ -18,17 +18,19 @@
  */
 package springfox.bean.validators.plugins.schema;
 
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.Validators.extractAnnotation;
+
+import java.util.Optional;
+
+import javax.validation.constraints.Pattern;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-
-import javax.validation.constraints.Pattern;
-
-import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)

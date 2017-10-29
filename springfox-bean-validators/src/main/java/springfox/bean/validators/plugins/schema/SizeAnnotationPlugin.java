@@ -18,19 +18,22 @@
  */
 package springfox.bean.validators.plugins.schema;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.RangeAnnotations.stringLengthRange;
+import static springfox.bean.validators.plugins.Validators.annotationFromBean;
+import static springfox.bean.validators.plugins.Validators.annotationFromField;
+
+import java.util.Optional;
+
+import javax.validation.constraints.Size;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-
-import javax.validation.constraints.Size;
-
-import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
+import springfox.documentation.util.Predicates;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -51,8 +54,7 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
     }
   }
 
-  @VisibleForTesting
   Optional<Size> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, Size.class).or(annotationFromField(context, Size.class));
+    return Predicates.or(annotationFromBean(context, Size.class), annotationFromField(context, Size.class));
   }
 }

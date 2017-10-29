@@ -19,14 +19,26 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
+import static springfox.documentation.spi.service.contexts.Orderings.methodComparator;
+import static springfox.documentation.spi.service.contexts.Orderings.resourceGroupComparator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
@@ -40,24 +52,15 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
-
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spi.service.contexts.Orderings.*;
+import springfox.documentation.util.Strings;
 
 @Component
 public class ApiListingScanner {
   private final ApiDescriptionReader apiDescriptionReader;
   private final ApiModelReader apiModelReader;
   private final DocumentationPluginsManager pluginsManager;
+  
+  private final static Pattern SLASH_PATTERN = Pattern.compile("/");
 
   @Autowired
   public ApiListingScanner(ApiDescriptionReader apiDescriptionReader,
@@ -68,13 +71,13 @@ public class ApiListingScanner {
     this.pluginsManager = pluginsManager;
   }
 
-  public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
-    Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
+  public Map<String, List<ApiListing>> scan(ApiListingScanningContext context) {
+    Map<String, List<ApiListing>> apiListingMap = new LinkedHashMap<>();
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
             = context.getRequestMappingsByResourceGroup();
-    List<SecurityReference> securityReferences = newArrayList();
+    List<SecurityReference> securityReferences = new ArrayList<>();
     for (ResourceGroup resourceGroup : sortedByName(requestMappingsByResourceGroup.keySet())) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
@@ -82,7 +85,7 @@ public class ApiListingScanner {
       Set<String> consumes = new LinkedHashSet<String>(documentationContext.getConsumes());
       String host = documentationContext.getHost();
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
-      Set<ApiDescription> apiDescriptions = newHashSet();
+      Set<ApiDescription> apiDescriptions = new HashSet<>();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
       for (RequestMappingContext each : sortedByMethods(requestMappingsByResourceGroup.get(resourceGroup))) {
@@ -90,17 +93,16 @@ public class ApiListingScanner {
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      apiDescriptions.addAll(from(pluginsManager.additionalListings(context))
+      apiDescriptions.addAll(pluginsManager.additionalListings(context).stream()
           .filter(onlySelectedApis(documentationContext))
-          .toList());
+          .collect(Collectors.toList()));
 
-      List<ApiDescription> sortedApis = newArrayList(apiDescriptions);
+      List<ApiDescription> sortedApis = new ArrayList<>(apiDescriptions);
       Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
 
       String resourcePath = new ResourcePathProvider(resourceGroup)
           .resourcePath()
-          .or(longestCommonPath(sortedApis))
-          .orNull();
+          .orElse(longestCommonPath(sortedApis).orElse(null));
 
       PathProvider pathProvider = documentationContext.getPathProvider();
       String basePath = pathProvider.getApplicationBasePath();
@@ -123,7 +125,7 @@ public class ApiListingScanner {
           context.getDocumentationType(),
           resourceGroup,
           apiListingBuilder);
-      apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.apiListing(apiListingContext));
+      apiListingMap.computeIfAbsent(resourceGroup.getGroupName(), k -> new ArrayList<>()).add(pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;
   }
@@ -131,24 +133,24 @@ public class ApiListingScanner {
   private Predicate<ApiDescription> onlySelectedApis(final DocumentationContext context) {
     return new Predicate<ApiDescription>() {
       @Override
-      public boolean apply(ApiDescription input) {
-        return context.getApiSelector().getPathSelector().apply(input.getPath());
+      public boolean test(ApiDescription input) {
+        return context.getApiSelector().getPathSelector().test(input.getPath());
       }
     };
   }
 
-  private Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
-    return from(resourceGroups).toSortedList(resourceGroupComparator());
+  private List<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
+    return resourceGroups.stream().sorted(resourceGroupComparator()).collect(Collectors.toList());
   }
 
-  private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
-    return from(contexts).toSortedList(methodComparator());
+  private List<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
+    return contexts.stream().sorted(methodComparator()).collect(Collectors.toList());
   }
 
   static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
-    List<String> commons = newArrayList();
+    List<String> commons = new ArrayList<>();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
-      return Optional.absent();
+      return Optional.empty();
     }
     List<String> firstWords = urlParts(apiDescriptions.get(0));
 
@@ -166,15 +168,16 @@ public class ApiListingScanner {
         commons.add(word);
       }
     }
-    Joiner joiner = Joiner.on("/").skipNulls();
-    return Optional.of("/" + joiner.join(commons));
+    return Optional.of("/" + commons.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining("/")));
   }
 
   static List<String> urlParts(ApiDescription apiDescription) {
-    return Splitter.on('/')
-            .omitEmptyStrings()
-            .trimResults()
-            .splitToList(apiDescription.getPath());
+    return SLASH_PATTERN.splitAsStream(apiDescription.getPath())
+        .filter(s -> !Strings.isNullOrEmpty(s))
+        .map(String::trim)
+        .collect(Collectors.toList());
   }
 
 }

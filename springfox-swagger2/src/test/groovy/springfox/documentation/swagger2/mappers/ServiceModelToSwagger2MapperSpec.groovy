@@ -2,9 +2,6 @@ package springfox.documentation.swagger2.mappers
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Functions
-import com.google.common.base.Suppliers
-import com.google.common.collect.LinkedListMultimap
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.*
@@ -13,7 +10,6 @@ import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
-import static com.google.common.collect.Sets.*
 
 class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSupport {
   def "Maps the api operation correctly"() {
@@ -21,8 +17,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       def built = apiListing()
       def sut = swagger2Mapper()
     when:
-      def apiListings = LinkedListMultimap.create()
-      apiListings.put("new", built)
+      def apiListings = new LinkedHashMap()
+      apiListings.put("new", Arrays.asList(built))
       def mappedListing = sut.mapApiListings(apiListings)
     and:
       def mappedPath = mappedListing.entrySet().first()
@@ -100,8 +96,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
 
   def "Maps documentation with api listing to swagger models"() {
     given:
-      def listingLookup = LinkedListMultimap.create()
-      listingLookup.put("test", apiListing())
+      def listingLookup = new LinkedHashMap()
+      listingLookup.put("test", Arrays.asList(apiListing()))
       Documentation documentation = new DocumentationBuilder()
           .basePath("base:uri")
           .produces(["application/json"] as Set)
@@ -174,13 +170,13 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                              .reference("basic")
                              .scopes(scope)
                              .build()])
-        .consumes(newHashSet("application/json"))
-        .produces(newHashSet("application/json"))
+        .consumes(Collections.singleton("application/json"))
+        .produces(Collections.singleton("application/json"))
         .deprecated("true")
         .method(HttpMethod.GET)
         .uniqueId("op1")
         .notes("operation 1 notes")
-        .tags(newHashSet("sometag"))
+        .tags(Collections.singleton("sometag"))
         .parameters([new ParameterBuilder()
                          .allowableValues(new AllowableListValues(["FIRST", "SECOND"], "string"))
                          .allowMultiple(false)
@@ -194,9 +190,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                          .build()])
         .position(1)
         .codegenMethodNameStem("")
-        .protocols(newHashSet("HTTPS"))
+        .protocols(Collections.singleton("HTTPS"))
         .responseModel(new ModelRef("string"))
-        .responseMessages(newHashSet(response))
+        .responseMessages(Collections.singleton(response))
         .extensions([first, second])
         .build()
     def description = new ApiDescriptionBuilder(defaults.operationOrdering())
@@ -216,7 +212,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .required(true)
         .type(resolved)
         .build()
-    modelProperty.updateModelRef(Functions.forSupplier(Suppliers.ofInstance(new ModelRef("string"))))
+    //modelProperty.updateModelRef(Functions.forSupplier(Suppliers.ofInstance(new ModelRef("string"))))
+      def f = { t -> new ModelRef("string") }
+      modelProperty.updateModelRef(f)
     new ApiListingBuilder(defaults.apiDescriptionOrdering())
         .apis([description])
         .apiVersion("1.0")

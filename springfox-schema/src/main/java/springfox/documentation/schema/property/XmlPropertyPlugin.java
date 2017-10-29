@@ -18,95 +18,84 @@
  */
 package springfox.documentation.schema.property;
 
-import com.google.common.base.Optional;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.stereotype.Component;
-import springfox.documentation.schema.Xml;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
-import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import static springfox.documentation.schema.Annotations.findPropertyAnnotation;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 
-import static com.google.common.base.Strings.*;
-import static springfox.documentation.schema.Annotations.*;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
+
+import springfox.documentation.schema.Xml;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.util.Predicates;
+import springfox.documentation.util.Strings;
 
 @Component
 public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<XmlElement> elementAnnotation = Optional.absent();
-    Optional<XmlAttribute> attributeAnnotation = Optional.absent();
+    Optional<XmlElement> elementAnnotation = Optional.empty();
+    Optional<XmlAttribute> attributeAnnotation = Optional.empty();
 
     if (context.getAnnotatedElement().isPresent()) {
-      elementAnnotation = elementAnnotation.or(findAnnotation(
-          context.getAnnotatedElement().get(),
-          XmlElement.class));
-      attributeAnnotation = attributeAnnotation.or(findAnnotation(
-          context.getAnnotatedElement().get(),
-          XmlAttribute.class));
+      elementAnnotation = Predicates.or(elementAnnotation,
+          findAnnotation(context.getAnnotatedElement().get(), XmlElement.class));
+      attributeAnnotation = Predicates.or(attributeAnnotation,
+          findAnnotation(context.getAnnotatedElement().get(), XmlAttribute.class));
     }
 
     if (context.getBeanPropertyDefinition().isPresent()) {
-      elementAnnotation = elementAnnotation.or(findPropertyAnnotation(
-          context.getBeanPropertyDefinition().get(),
-          XmlElement.class));
-      attributeAnnotation = attributeAnnotation.or(findPropertyAnnotation(
-          context.getBeanPropertyDefinition().get(),
-          XmlAttribute.class));
+      elementAnnotation = Predicates.or(elementAnnotation,
+          findPropertyAnnotation(context.getBeanPropertyDefinition().get(), XmlElement.class));
+      attributeAnnotation = Predicates.or(attributeAnnotation,
+          findPropertyAnnotation(context.getBeanPropertyDefinition().get(), XmlAttribute.class));
     }
 
     if (elementAnnotation.isPresent()) {
-      Optional<XmlElementWrapper> wrapper = findPropertyAnnotation(
-          context.getBeanPropertyDefinition().get(),
+      Optional<XmlElementWrapper> wrapper = findPropertyAnnotation(context.getBeanPropertyDefinition().get(),
           XmlElementWrapper.class);
 
-      context.getBuilder()
-          .xml(new Xml()
-              .attribute(false)
-              .namespace(defaultToNull(elementAnnotation.get().namespace()))
-              .name(wrapperName(wrapper, elementAnnotation))
-              .wrapped(wrapper.isPresent()));
+      context.getBuilder().xml(new Xml().attribute(false).namespace(defaultToNull(elementAnnotation.get().namespace()))
+          .name(wrapperName(wrapper, elementAnnotation)).wrapped(wrapper.isPresent()));
     } else if (attributeAnnotation.isPresent()) {
-      context.getBuilder()
-          .xml(new Xml()
-              .attribute(true)
-              .namespace(defaultToNull(attributeAnnotation.get().namespace()))
-              .name(attributeName(attributeAnnotation))
-              .wrapped(false));
+      context.getBuilder().xml(new Xml().attribute(true).namespace(defaultToNull(attributeAnnotation.get().namespace()))
+          .name(attributeName(attributeAnnotation)).wrapped(false));
     }
   }
 
   public static <T extends Annotation> Optional<T> findAnnotation(
       AnnotatedElement annotated,
       Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, annotation));
+    return Optional.ofNullable(AnnotationUtils.getAnnotation(annotated, annotation));
   }
 
   private String wrapperName(Optional<XmlElementWrapper> wrapper, Optional<XmlElement> element) {
     if (wrapper.isPresent()) {
-      return Optional.fromNullable(defaultToNull(emptyToNull(wrapper.get().name())))
-          .or(Optional.fromNullable(elementName(element)))
-          .orNull();
+      return Predicates.or(Optional.ofNullable(defaultToNull(Strings.emptyToNull(wrapper.get().name()))),
+          Optional.ofNullable(elementName(element))).orElse(null);
     }
     return elementName(element);
   }
 
   private String elementName(Optional<XmlElement> element) {
     if (element.isPresent()) {
-      return defaultToNull(emptyToNull(element.get().name()));
+      return defaultToNull(Strings.emptyToNull(element.get().name()));
     }
     return null;
   }
 
   private String attributeName(Optional<XmlAttribute> attribute) {
     if (attribute.isPresent()) {
-      return defaultToNull(emptyToNull(attribute.get().name()));
+      return defaultToNull(Strings.emptyToNull(attribute.get().name()));
     }
     return null;
   }

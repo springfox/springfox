@@ -19,24 +19,24 @@
 
 package springfox.documentation.swagger.annotations;
 
+import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+import static org.springframework.core.annotation.AnnotationUtils.getAnnotation;
+
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.Lists.*;
-import static org.springframework.core.annotation.AnnotationUtils.*;
 
 public class Annotations {
 
@@ -45,11 +45,11 @@ public class Annotations {
   }
 
   public static Optional<ApiParam> findApiParamAnnotation(AnnotatedElement annotated) {
-    return fromNullable(getAnnotation(annotated, ApiParam.class));
+    return Optional.ofNullable(getAnnotation(annotated, ApiParam.class));
   }
 
   public static List<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    List<ApiResponses> results = newArrayList();
+    List<ApiResponses> results = new ArrayList<>();
     ApiResponses currentLevel = getAnnotation(annotated, ApiResponses.class);
     if (currentLevel != null) {
       results.add(currentLevel);
@@ -85,7 +85,6 @@ public class Annotations {
     };
   }
 
-  @VisibleForTesting
   static ResolvedType getResolvedType(ApiOperation annotation,
       TypeResolver typeResolver, ResolvedType defaultType) {
 
@@ -101,7 +100,6 @@ public class Annotations {
     return defaultType;
   }
 
-  @VisibleForTesting
   static ResolvedType getResolvedType(ApiResponse annotation,
       TypeResolver typeResolver, ResolvedType defaultType) {
 

@@ -18,6 +18,31 @@
  */
 package springfox.documentation.schema.property;
 
+import static springfox.documentation.schema.Annotations.memberIsUnwrapped;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.name;
+import static springfox.documentation.schema.property.FactoryMethodProvider.factoryMethodOf;
+import static springfox.documentation.schema.property.bean.BeanModelProperty.paramOrReturnType;
+import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
@@ -32,17 +57,9 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
+
 import springfox.documentation.builders.ModelPropertyBuilder;
+import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
@@ -54,24 +71,6 @@ import springfox.documentation.schema.property.field.FieldModelProperty;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.schema.Annotations.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
-import static springfox.documentation.schema.property.FactoryMethodProvider.*;
-import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Primary
 @Component("optimized")
@@ -113,23 +112,25 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
-    List<ModelProperty> properties = newArrayList();
+    List<ModelProperty> properties = new ArrayList<>();
     BeanDescription beanDescription = beanDescription(type, givenContext);
-    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
+    Map<String, BeanPropertyDefinition> propertyLookup = Maps.uniqueIndex(beanDescription.findProperties(),
         BeanPropertyDefinitions.beanPropertyByInternalName());
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
       Optional<AnnotatedMember> annotatedMember
-          = Optional.fromNullable(safeGetPrimaryMember(jacksonProperty));
+          = Optional.ofNullable(safeGetPrimaryMember(jacksonProperty));
       if (annotatedMember.isPresent()) {
         properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext));
       }
     }
-    return FluentIterable.from(properties).toSortedSet(byPropertyName()).asList();
+    return properties.stream().sorted(byPropertyName()).collect(Collectors.toList());
   }
 
-  private Comparator<ModelProperty> byPropertyName() {
+  
+
+private Comparator<ModelProperty> byPropertyName() {
     return new Comparator<ModelProperty>() {
       @Override
       public int compare(ModelProperty first, ModelProperty second) {
@@ -159,9 +160,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
           if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
               return propertiesFor(type, fromParent(givenContext, type));
           }
-          return newArrayList(beanModelProperty(input, jacksonProperty, givenContext));
+          return new ArrayList<>(Arrays.asList(beanModelProperty(input, jacksonProperty, givenContext)));
         }
-        return newArrayList();
+        return new ArrayList<>();
       }
     };
   }
@@ -178,9 +179,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
           if (memberIsUnwrapped(jacksonProperty.getField())) {
               return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
           }
-          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
+          return new ArrayList<>(Arrays.asList(fieldModelProperty(input, jacksonProperty, givenContext)));
         }
-        return newArrayList();
+        return new ArrayList<>();
       }
     };
   }
@@ -188,54 +189,46 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private Predicate<? super Annotation> ofType(final Class<?> annotationType) {
     return new Predicate<Annotation>() {
       @Override
-      public boolean apply(Annotation input) {
+      public boolean test(Annotation input) {
         return annotationType.isAssignableFrom(input.getClass());
       }
     };
   }
 
-  @VisibleForTesting
   List<ModelProperty> candidateProperties(
       ResolvedType type,
       AnnotatedMember member,
       BeanPropertyDefinition jacksonProperty,
       ModelContext givenContext) {
 
-    List<ModelProperty> properties = newArrayList();
+    List<ModelProperty> properties = new ArrayList<>();
     if (member instanceof AnnotatedMethod) {
       properties.addAll(findAccessorMethod(type, member)
-          .transform(propertyFromBean(givenContext, jacksonProperty))
-          .or(new ArrayList<ModelProperty>()));
+          .map(propertyFromBean(givenContext, jacksonProperty))
+          .orElse(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedField) {
       properties.addAll(findField(type, jacksonProperty.getInternalName())
-          .transform(propertyFromField(givenContext, jacksonProperty))
-          .or(new ArrayList<ModelProperty>()));
+          .map(propertyFromField(givenContext, jacksonProperty))
+          .orElse(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedParameter) {
       ModelContext modelContext = ModelContext.fromParent(givenContext, type);
       properties.addAll(fromFactoryMethod(type, jacksonProperty, (AnnotatedParameter) member, modelContext));
     }
-    return from(properties).filter(hiddenProperties()).toList();
+    return properties.stream().filter(hiddenProperties()).collect(Collectors.toList());
 
   }
 
   private Predicate<? super ModelProperty> hiddenProperties() {
     return new Predicate<ModelProperty>() {
       @Override
-      public boolean apply(ModelProperty input) {
+      public boolean test(ModelProperty input) {
         return !input.isHidden();
       }
     };
   }
 
-  private Optional<ResolvedField> findField(
-      ResolvedType resolvedType,
-      final String fieldName) {
-
-    return tryFind(fields.in(resolvedType), new Predicate<ResolvedField>() {
-      public boolean apply(ResolvedField input) {
-        return fieldName.equals(input.getName());
-      }
-    });
+  private Optional<ResolvedField> findField(ResolvedType resolvedType, final String fieldName) {
+    return fields.in(resolvedType).stream().filter(input -> fieldName.equals(input.getName())).findFirst();
   }
 
   private ModelProperty fieldModelProperty(
@@ -336,12 +329,11 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
-    return tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
-      public boolean apply(ResolvedMethod accessorMethod) {
-        SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
-        return methodComparer.equivalent(accessorMethod.getRawMember(), (Method) member.getMember());
-      }
-    });
+      return accessors.in(resolvedType).stream().filter(new Predicate<ResolvedMethod>() {
+        public boolean test(ResolvedMethod accessorMethod) {
+          return SimpleMethodSignatureEquality.equivalent(accessorMethod.getRawMember(), (Method) member.getMember());
+        }
+      }).findFirst();
   }
 
   private List<ModelProperty> fromFactoryMethod(
@@ -351,16 +343,16 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final ModelContext givenContext) {
 
     Optional<ModelProperty> property = factoryMethods.in(resolvedType, factoryMethodOf(member))
-        .transform(new Function<ResolvedParameterizedMember, ModelProperty>() {
+        .map(new Function<ResolvedParameterizedMember, ModelProperty>() {
           @Override
           public ModelProperty apply(ResolvedParameterizedMember input) {
             return paramModelProperty(input, beanProperty, member, givenContext);
           }
         });
     if (property.isPresent()) {
-      return newArrayList(property.get());
+      return new ArrayList<>(Arrays.asList(property.get()));
     }
-    return newArrayList();
+    return new ArrayList<>();
   }
 
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {

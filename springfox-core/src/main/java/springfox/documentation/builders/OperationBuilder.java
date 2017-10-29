@@ -19,11 +19,22 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptySet;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpMethod;
+
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.ModelReference;
@@ -32,14 +43,7 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
-
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.base.Strings.emptyToNull;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import springfox.documentation.util.Strings;
 
 public class OperationBuilder {
   private final OperationNameGenerator nameGenerator;
@@ -49,17 +53,17 @@ public class OperationBuilder {
   private String uniqueId;
   private String codeGenMethodNameStem;
   private int position;
-  private Set<String> produces = newLinkedHashSet();
-  private Set<String> consumes = newLinkedHashSet();
-  private Set<String> protocol = newLinkedHashSet();
-  private List<SecurityReference> securityReferences = newArrayList();
-  private List<Parameter> parameters = newArrayList();
-  private Set<ResponseMessage> responseMessages = newHashSet();
-  private Set<String> tags = newLinkedHashSet();
+  private Set<String> produces = new LinkedHashSet<>();
+  private Set<String> consumes = new LinkedHashSet<>();
+  private Set<String> protocol = new LinkedHashSet<>();
+  private List<SecurityReference> securityReferences = new ArrayList<>();
+  private List<Parameter> parameters = new ArrayList<>();
+  private Set<ResponseMessage> responseMessages = new HashSet<>();
+  private Set<String> tags = new LinkedHashSet<>();
   private String deprecated;
   private boolean isHidden;
   private ModelReference responseModel;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;
@@ -188,9 +192,9 @@ public class OperationBuilder {
    */
   public OperationBuilder parameters(final List<Parameter> parameters) {
     List<Parameter> source = nullToEmptyList(parameters);
-    List<Parameter> destination = newArrayList(this.parameters);
+    List<Parameter> destination = new ArrayList<>(this.parameters);
     ParameterMerger merger = new ParameterMerger(destination, source);
-    this.parameters = newArrayList(merger.merged());
+    this.parameters = new ArrayList<>(merger.merged());
     return this;
   }
 
@@ -202,7 +206,7 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = newHashSet(mergeResponseMessages(responseMessages));
+    this.responseMessages = new HashSet<>(mergeResponseMessages(responseMessages));
     return this;
   }
 
@@ -284,17 +288,17 @@ public class OperationBuilder {
 
   private String uniqueOperationIdStem() {
     String defaultStem = String.format("%sUsing%s", uniqueId, method);
-    return Optional.fromNullable(emptyToNull(codeGenMethodNameStem)).or(defaultStem);
+    return Optional.ofNullable(Strings.emptyToNull(codeGenMethodNameStem)).orElse(defaultStem);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
-    ImmutableMap<Integer, ResponseMessage> responsesByCode = Maps.uniqueIndex(this.responseMessages, byStatusCode());
-    Set<ResponseMessage> merged = newHashSet(this.responseMessages);
+    Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream().collect(Collectors.toMap(byStatusCode(), Function.identity()));
+    Set<ResponseMessage> merged = new HashSet<>(this.responseMessages);
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
-        String message = defaultIfAbsent(emptyToNull(each.getMessage()), responseMessage.getMessage());
+        String message = defaultIfAbsent(Strings.emptyToNull(each.getMessage()), responseMessage.getMessage());
         ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
         merged.remove(responseMessage);
         merged.add(new ResponseMessageBuilder()

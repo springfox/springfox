@@ -18,9 +18,16 @@
  */
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.schema.Types.isBaseType;
+import static springfox.documentation.schema.Types.typeNameFor;
+import static springfox.documentation.spi.schema.contexts.ModelContext.inputParam;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +36,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -38,12 +49,6 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
-
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -101,8 +106,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         context.getIgnorableParameterTypes());
     context.parameterBuilder()
         .type(parameterType)
-        .modelRef(Optional.fromNullable(modelRef)
-            .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
+        .modelRef(Optional.ofNullable(modelRef)
+            .orElse(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {

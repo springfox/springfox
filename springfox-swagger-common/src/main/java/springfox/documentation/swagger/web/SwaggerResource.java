@@ -20,7 +20,6 @@ package springfox.documentation.swagger.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ComparisonChain;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SwaggerResource implements Comparable<SwaggerResource> {
@@ -57,9 +56,10 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
 
   @Override
   public int compareTo(SwaggerResource other) {
-    return ComparisonChain.start()
-        .compare(this.swaggerVersion, other.swaggerVersion)
-        .compare(this.name, other.name)
-        .result();
+    int i = this.swaggerVersion.compareTo(other.swaggerVersion);
+    if(i == 0) {
+      return this.name.compareTo(other.name);
+    }
+    return i;
   }
 }

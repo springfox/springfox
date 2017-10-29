@@ -37,7 +37,6 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 import springfox.documentation.spring.web.readers.operation.DefaultOperationReader
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.collect.Lists.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin([RequestMappingSupport, AuthSupport, ServicePluginsSupport])
@@ -50,7 +49,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
             .securityReferences(defaultAuth())
             .forPaths(PathSelectors.regex(".*"))
             .build()
-    plugin.securityContexts(newArrayList(securityContext))
+    plugin.securityContexts(Arrays.asList(securityContext))
     sut = new ApiOperationReader(customWebPlugins([], [], [new DefaultOperationReader()]), new CachingOperationNameGenerator())
   }
 

@@ -19,13 +19,21 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Optional;
+import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -33,13 +41,6 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
-
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -54,7 +55,7 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
     Set<String> operationProducesList = toSet(context.produces());
 
     if (handlerMethodHasFileParameter(context)) {
-      operationConsumesList = newHashSet(MediaType.MULTIPART_FORM_DATA_VALUE);
+      operationConsumesList = new HashSet<>(Arrays.asList(MediaType.MULTIPART_FORM_DATA_VALUE));
     }
 
     if (operationProducesList.isEmpty() && documentationContext.getProduces().isEmpty()) {
@@ -74,8 +75,8 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
       RequestMapping annotation = findAnnotation(controller.get(), RequestMapping.class);
       if (annotation != null) {
         context.apiListingBuilder()
-            .appendProduces(newArrayList(annotation.produces()))
-            .appendConsumes(newArrayList(annotation.consumes()));
+            .appendProduces(Arrays.asList(annotation.produces()))
+            .appendConsumes(Arrays.asList(annotation.consumes()));
       }
     }
   }
@@ -97,7 +98,7 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
   }
 
   private Set<String> toSet(Set<? extends MediaType> mediaTypeSet) {
-    Set<String> mediaTypes = newHashSet();
+    Set<String> mediaTypes = new HashSet<>();
     for (MediaType mediaType : mediaTypeSet) {
       mediaTypes.add(mediaType.toString());
     }

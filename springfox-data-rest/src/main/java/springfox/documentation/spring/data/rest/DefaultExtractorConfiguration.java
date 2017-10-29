@@ -18,12 +18,12 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 
 class DefaultExtractorConfiguration implements RequestHandlerExtractorConfiguration {
-  private final List<EntityOperationsExtractor> defaultEntityExtractors  = newArrayList(
+  private final List<EntityOperationsExtractor> defaultEntityExtractors  = Arrays.asList(
       new EntitySaveExtractor(),
       new EntityDeleteExtractor(),
       new EntityFindOneExtractor(),
@@ -33,7 +33,7 @@ class DefaultExtractorConfiguration implements RequestHandlerExtractorConfigurat
   );
 
 
-  private final List<EntityAssociationOperationsExtractor> defaultAssociationExtractors = newArrayList(
+  private final List<EntityAssociationOperationsExtractor> defaultAssociationExtractors = Arrays.asList(
       new EntityAssociationSaveExtractor(),
       new EntityAssociationDeleteExtractor(),
       new EntityAssociationGetExtractor(),

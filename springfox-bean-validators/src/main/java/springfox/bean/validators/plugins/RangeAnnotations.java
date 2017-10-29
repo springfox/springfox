@@ -19,14 +19,16 @@
 
 package springfox.bean.validators.plugins;
 
-import com.google.common.base.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import springfox.documentation.service.AllowableRangeValues;
+import java.util.Optional;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import springfox.documentation.service.AllowableRangeValues;
 
 public class RangeAnnotations {
   private static final Logger LOG = LoggerFactory.getLogger(RangeAnnotations.class);

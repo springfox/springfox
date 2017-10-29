@@ -18,7 +18,14 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
+import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -26,17 +33,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
-
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.collect.FluentIterable.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -45,8 +46,7 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
   private final HandlerMethodResolver methodResolver;
 
   @Autowired
-  public WebMvcRequestHandlerProvider(
-      HandlerMethodResolver methodResolver,
+  public WebMvcRequestHandlerProvider(HandlerMethodResolver methodResolver,
       List<RequestMappingInfoHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
     this.methodResolver = methodResolver;
@@ -54,13 +54,14 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    return byPatternsCondition().sortedCopy(from(nullToEmptyList(handlerMappings))
-        .transformAndConcat(toMappingEntries())
-        .transform(toRequestHandler()));
+    if (handlerMappings == null) {
+      return new ArrayList<>();
+    }
+    return handlerMappings.stream().flatMap(hm -> hm.getHandlerMethods().entrySet().stream()).map(toRequestHandler())
+        .sorted(byPatternsCondition()).collect(Collectors.toList());
   }
 
-  private Function<? super RequestMappingInfoHandlerMapping,
-      Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+  private Function<? super RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
     return new Function<RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>>() {
       @Override
       public Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>> apply(RequestMappingInfoHandlerMapping input) {
@@ -73,10 +74,7 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
     return new Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
       @Override
       public WebMvcRequestHandler apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
-        return new WebMvcRequestHandler(
-            methodResolver,
-            input.getKey(),
-            input.getValue());
+        return new WebMvcRequestHandler(methodResolver, input.getKey(), input.getValue());
       }
     };
   }

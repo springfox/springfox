@@ -19,11 +19,10 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +34,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import springfox.documentation.spring.web.dummy.models.Pet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.collect.Lists.*;
 
 @Controller
 @RequestMapping("/pets")
@@ -113,7 +113,7 @@ public class PetService {
   public
   @ResponseBody
   List<Pet> listPets() {
-    return newArrayList();
+    return new ArrayList<>();
   }
 
   @RequestMapping(value = "/{name}", method = RequestMethod.POST)

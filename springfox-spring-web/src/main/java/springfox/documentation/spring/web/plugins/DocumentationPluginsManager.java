@@ -19,11 +19,21 @@
 
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
+import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.ensureNoDuplicateGroups;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Operation;
@@ -50,14 +60,6 @@ import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.SpringGroupingStrategy;
 import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
 @Component
 public class DocumentationPluginsManager {
@@ -92,11 +94,11 @@ public class DocumentationPluginsManager {
   @Qualifier("apiListingScannerPluginRegistry")
   private PluginRegistry<ApiListingScannerPlugin, DocumentationType> apiListingScanners;
 
-  public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
+  public List<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
     ensureNoDuplicateGroups(plugins);
     if (plugins.isEmpty()) {
-      return newArrayList(defaultDocumentationPlugin());
+      return Arrays.asList(defaultDocumentationPlugin());
     }
     return plugins;
   }
@@ -158,9 +160,9 @@ public class DocumentationPluginsManager {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        Iterable<Function<String, String>> decorators
-            = from(pathDecorators.getPluginsFor(context.documentationContext()))
-            .transform(toDecorator(context));
+        List<Function<String, String>> decorators
+            = pathDecorators.getPluginsFor(context.documentationContext()).stream()
+            .map(toDecorator(context)).collect(Collectors.toList());
         String decorated = input;
         for (Function<String, String> decorator : decorators) {
           decorated = decorator.apply(decorated);
@@ -181,7 +183,7 @@ public class DocumentationPluginsManager {
 
   public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {
     final DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
-    List<ApiDescription> additional = newArrayList();
+    List<ApiDescription> additional = new ArrayList<>();
     for (ApiListingScannerPlugin each : apiListingScanners.getPluginsFor(documentationType)) {
       additional.addAll(each.apply(context.getDocumentationContext()));
     }

@@ -38,7 +38,6 @@ import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static com.google.common.collect.Lists.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -175,7 +174,7 @@ class DocketSpec extends DocumentationContextSpec {
   }
 
   def validContexts() {
-    newArrayList(SecurityContext.builder().build())
+    Arrays.asList(SecurityContext.builder().build())
   }
 
   def "non nullable swaggerApiResourceListing properties"() {

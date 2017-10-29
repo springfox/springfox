@@ -20,13 +20,12 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.Sets;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.collect.Sets.newHashSet;
 
 public class ExpansionContext {
     private final String parentName;
@@ -38,7 +37,7 @@ public class ExpansionContext {
             String parentName,
             ResolvedType paramType,
             DocumentationContext documentationContext) {
-        this(parentName, paramType, documentationContext, Sets.<ResolvedType>newHashSet());
+        this(parentName, paramType, documentationContext, new HashSet<ResolvedType>());
     }
 
     private ExpansionContext(
@@ -49,7 +48,7 @@ public class ExpansionContext {
         this.parentName = parentName;
         this.paramType = paramType;
         this.documentationContext = documentationContext;
-        this.seenTypes = newHashSet(seenTypes);
+        this.seenTypes = new HashSet<>(seenTypes);
     }
 
     public String getParentName() {
@@ -66,7 +65,7 @@ public class ExpansionContext {
 
     public boolean hasSeenType(ResolvedType type) {
         return seenTypes.contains(type)
-                || equal(type, paramType);
+                || Objects.equals(type, paramType);
     }
 
     public ExpansionContext childContext(

@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.Multimap
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
@@ -40,8 +39,6 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.collect.Lists.*
-import static com.google.common.collect.Maps.*
 import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.*
@@ -68,12 +65,12 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
     contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
-        .securityContexts(newArrayList(securityContext))
+        .securityContexts(Arrays.asList(securityContext))
         .configure(contextBuilder)
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
-    apiModelReader.read(_) >> newHashMap()
+    apiModelReader.read(_) >> new HashMap()
     scanner = new ApiListingScanner(apiDescriptionReader, apiModelReader, defaultWebPlugins())
   }
 
@@ -87,7 +84,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
         new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
 
     ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
-    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = new HashMap()
     resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
 
@@ -113,13 +110,13 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def requestMappingContext = new RequestMappingContext(
         context,
         new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
-    def resourceGroupRequestMappings = newHashMap()
+    def resourceGroupRequestMappings = new HashMap()
     resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
 
     when:
-    Multimap<String, ApiListing> apiListingMap = scanner.scan(listingContext)
+    Map<String, List<ApiListing>> apiListingMap = scanner.scan(listingContext)
 
     then:
     Collection<ApiListing> listings = apiListingMap.get('businesses')
@@ -134,7 +131,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def requestMappingContext = new RequestMappingContext(
         context,
         new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyControllerWithResourcePath("dummyMethod")))
-    def resourceGroupRequestMappings = newHashMap()
+    def resourceGroupRequestMappings = new HashMap()
     resourceGroupRequestMappings.put(new ResourceGroup("resourcePath", DummyControllerWithResourcePath), [requestMappingContext])
 
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
@@ -147,14 +144,14 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
     then:
     scanned.containsKey("resourcePath")
-    Collection<ApiListing> listings = scanned.get("resourcePath")
+    List<ApiListing> listings = scanned.get("resourcePath")
     listings.first().resourcePath == "/resource-path"
   }
 
   @Unroll
   def "should find longest common path"() {
     given:
-    String result = longestCommonPath(apiDescriptions(paths)).orNull()
+    String result = longestCommonPath(apiDescriptions(paths)).orElse(null)
 
     expect:
     result == expected

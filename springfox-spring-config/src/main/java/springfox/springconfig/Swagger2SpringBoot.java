@@ -49,9 +49,9 @@ import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import springfox.petstore.controller.PetController;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @SpringBootApplication
@@ -83,16 +83,16 @@ public class Swagger2SpringBoot {
                 typeResolver.resolve(WildcardType.class)))//<10>
         .useDefaultResponseMessages(false)//<11>
         .globalResponseMessage(RequestMethod.GET,//<12>
-            newArrayList(new ResponseMessageBuilder()
+            Arrays.asList(new ResponseMessageBuilder()
                 .code(500)
                 .message("500 message")
                 .responseModel(new ModelRef("Error"))//<13>
                 .build()))
-        .securitySchemes(newArrayList(apiKey()))//<14>
-        .securityContexts(newArrayList(securityContext()))//<15>
+        .securitySchemes(Arrays.asList(apiKey()))//<14>
+        .securityContexts(Arrays.asList(securityContext()))//<15>
         .enableUrlTemplating(true)//<21>
         .globalOperationParameters(//<22>
-            newArrayList(new ParameterBuilder() 
+            Arrays.asList(new ParameterBuilder() 
                 .name("someGlobalParameter")
                 .description("Description of someGlobalParameter")
                 .modelRef(new ModelRef("string"))
@@ -123,7 +123,7 @@ public class Swagger2SpringBoot {
         = new AuthorizationScope("global", "accessEverything");
     AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
     authorizationScopes[0] = authorizationScope;
-    return newArrayList(
+    return Arrays.asList(
         new SecurityReference("mykey", authorizationScopes));//<18>
   }
 

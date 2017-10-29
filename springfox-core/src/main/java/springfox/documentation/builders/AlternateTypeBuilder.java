@@ -18,19 +18,19 @@
  */
 package springfox.documentation.builders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import springfox.documentation.annotations.Incubating;
 
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 
 @Incubating("2.7.0")
 public class AlternateTypeBuilder {
   private String fullyQualifiedClassName;
-  private List<AlternateTypePropertyBuilder> properties = newArrayList();
+  private List<AlternateTypePropertyBuilder> properties = new ArrayList<>();
 
   public AlternateTypeBuilder fullyQualifiedClassName(String fullyQualifiedClassName) {
     this.fullyQualifiedClassName = fullyQualifiedClassName;

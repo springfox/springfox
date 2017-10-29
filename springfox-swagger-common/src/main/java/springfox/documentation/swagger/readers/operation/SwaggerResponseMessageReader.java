@@ -18,17 +18,34 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ResponseHeader;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.spi.schema.contexts.ModelContext.returnValue;
+import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.httpStatusCode;
+import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.message;
+import static springfox.documentation.swagger.annotations.Annotations.resolvedTypeFromOperation;
+import static springfox.documentation.swagger.annotations.Annotations.resolvedTypeFromResponse;
+import static springfox.documentation.swagger.readers.operation.ResponseHeaders.headers;
+import static springfox.documentation.swagger.readers.operation.ResponseHeaders.responseHeaders;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -39,19 +56,6 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
-import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
-import static springfox.documentation.swagger.annotations.Annotations.*;
-import static springfox.documentation.swagger.readers.operation.ResponseHeaders.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -83,17 +87,17 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
-        operationAnnotation.transform(resolvedTypeFromOperation(typeResolver, defaultResponse));
-    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.transform(responseHeaders());
-    Map<String, Header> defaultHeaders = newHashMap();
+        operationAnnotation.map(resolvedTypeFromOperation(typeResolver, defaultResponse));
+    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(responseHeaders());
+    Map<String, Header> defaultHeaders = new HashMap<>();
     if (defaultResponseHeaders.isPresent()) {
       defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
     }
 
     List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
-    Set<ResponseMessage> responseMessages = newHashSet();
+    Set<ResponseMessage> responseMessages = new HashSet<>();
 
-    Map<Integer, ApiResponse> seenResponsesByCode = newHashMap();
+    Map<Integer, ApiResponse> seenResponsesByCode = new HashMap<>();
     for (ApiResponses apiResponses : allApiResponses) {
       ApiResponse[] apiResponseAnnotations = apiResponses.value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
@@ -105,23 +109,23 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context.getAlternateTypeProvider(),
               context.getGenericsNamingStrategy(),
               context.getIgnorableParameterTypes());
-          Optional<ModelReference> responseModel = Optional.absent();
+          Optional<ModelReference> responseModel = Optional.empty();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
           if (isSuccessful(apiResponse.code())) {
-            type = type.or(operationResponse);
+            type = type.isPresent() ? type : operationResponse;
           }
           if (type.isPresent()) {
             responseModel = Optional.of(
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
-          Map<String, Header> headers = newHashMap(defaultHeaders);
+          Map<String, Header> headers = new HashMap<>(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
           responseMessages.add(new ResponseMessageBuilder()
               .code(apiResponse.code())
               .message(apiResponse.message())
-              .responseModel(responseModel.orNull())
+              .responseModel(responseModel.orElse(null))
               .headersWithDescription(headers)
               .build());
         }
@@ -161,7 +165,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   }
 
   private Optional<ResolvedType> resolvedType(ResolvedType resolvedType, ApiResponse apiResponse) {
-    return fromNullable(resolvedTypeFromResponse(typeResolver, resolvedType).apply(apiResponse));
+    return Optional.ofNullable(resolvedTypeFromResponse(typeResolver, resolvedType).apply(apiResponse));
   }
 
 }

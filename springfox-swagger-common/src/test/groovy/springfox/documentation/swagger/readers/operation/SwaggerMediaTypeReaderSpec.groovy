@@ -26,7 +26,6 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.collect.Sets.*
 
 @Mixin([RequestMappingSupport])
 class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
@@ -54,12 +53,12 @@ class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
       sut.supports(DocumentationType.SWAGGER_12)
       sut.supports(DocumentationType.SWAGGER_2)
     where:
-      expectedConsumes                                  | expectedProduces                                  | handlerMethod
-      newHashSet('application/xml')                     | newHashSet()                                      | dummyHandlerMethod('methodWithXmlConsumes')
-      newHashSet()                                      | newHashSet('application/xml')                     |  dummyHandlerMethod('methodWithXmlProduces')
-      newHashSet('application/xml')                     | newHashSet('application/json')                    | dummyHandlerMethod ('methodWithMediaTypeAndFile', MultipartFile)
-      newHashSet('application/xml')                     | newHashSet('application/xml')                     | dummyHandlerMethod  ('methodWithBothXmlMediaTypes')
-      newHashSet('application/xml', 'application/json') | newHashSet('application/xml', 'application/json') | dummyHandlerMethod('methodWithMultipleMediaTypes')
+      expectedConsumes                            | expectedProduces                             | handlerMethod
+      Collections.singleton('application/xml')    | new HashSet()                                | dummyHandlerMethod('methodWithXmlConsumes')
+      new HashSet()                               | Collections.singleton('application/xml')     | dummyHandlerMethod('methodWithXmlProduces')
+      Collections.singleton('application/xml')    | Collections.singleton('application/json')    | dummyHandlerMethod ('methodWithMediaTypeAndFile', MultipartFile)
+      Collections.singleton('application/xml')    | Collections.singleton('application/xml')     | dummyHandlerMethod  ('methodWithBothXmlMediaTypes')
+      new HashSet(Arrays.asList('application/xml', 'application/json')) | new HashSet(Arrays.asList('application/xml', 'application/json')) | dummyHandlerMethod('methodWithMultipleMediaTypes')
 
   }
 }

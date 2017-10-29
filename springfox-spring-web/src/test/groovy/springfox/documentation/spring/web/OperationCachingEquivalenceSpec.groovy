@@ -20,7 +20,6 @@ package springfox.documentation.spring.web
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
@@ -50,7 +49,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
 
   def "Two request handlers backed by the same method must be equal" () {
     given:
-      OperationCachingEquivalence sut = new OperationCachingEquivalence()
+      //OperationCachingEquivalence sut = new OperationCachingEquivalence()
       def documentationContext = Mock(DocumentationContext)
       def firstMapping = requestMapping(
           paths("/a"),
@@ -73,12 +72,12 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
           documentationContext,
           new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
     then:
-      sut.doEquivalent(first, second)
+      new OperationCachingEquivalence(first).doEquivalent(first, second)
   }
 
   def "One or the other is null" () {
     given:
-      OperationCachingEquivalence sut = new OperationCachingEquivalence()
+      //OperationCachingEquivalence sut = new OperationCachingEquivalence()
       def first = new RequestMappingContext(
           Mock(DocumentationContext),
           requestHandler(firstKey))
@@ -86,7 +85,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
           Mock(DocumentationContext),
           requestHandler(secondKey))
     expect:
-      sut.doEquivalent(first, second) == outcome
+      new OperationCachingEquivalence(first).doEquivalent(first, second) == outcome
     where:
       firstKey  | secondKey | outcome
       null      | null      | true
@@ -96,7 +95,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
 
   def "Two request handlers backed by different methods must NOT be equal" () {
     given:
-      OperationCachingEquivalence sut = new OperationCachingEquivalence()
+      //OperationCachingEquivalence sut = new OperationCachingEquivalence()
       def documentationContext = Mock(DocumentationContext)
       def firstMapping = requestMapping(
           paths("/ab"),
@@ -119,7 +118,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
         documentationContext,
         new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
     then:
-      !sut.doEquivalent(first, second)
+      !new OperationCachingEquivalence(first).doEquivalent(first, second)
   }
 
   def paths(String ... paths) {

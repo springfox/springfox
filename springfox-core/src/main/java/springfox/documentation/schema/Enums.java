@@ -19,22 +19,23 @@
 
 package springfox.documentation.schema;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import org.springframework.core.annotation.AnnotationUtils;
-import springfox.documentation.service.AllowableListValues;
-import springfox.documentation.service.AllowableValues;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static java.util.Arrays.asList;
+import org.springframework.core.annotation.AnnotationUtils;
+
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.AllowableValues;
+import springfox.documentation.util.Strings;
 
 public class Enums {
 
@@ -55,8 +56,8 @@ public class Enums {
       @Override
       public String apply(Object input) {
         Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
-                .transform(evaluateJsonValue(input));
-        if (jsonValue.isPresent() && !isNullOrEmpty(jsonValue.get())) {
+                .map(evaluateJsonValue(input));
+        if (jsonValue.isPresent() && !Strings.isNullOrEmpty(jsonValue.get())) {
           return jsonValue.get();
         }
         return input.toString();
@@ -78,7 +79,7 @@ public class Enums {
   }
 
   private static <E> List<String> transformUnique(E[] values, Function<E, String> mapper) {
-    List<String> nonUniqueValues = transform(asList(values), mapper);
+    List<String> nonUniqueValues = Arrays.asList(values).stream().map(mapper).collect(Collectors.toList());
     Set<String> uniqueValues = new LinkedHashSet<String>(nonUniqueValues);
     return new ArrayList<String>(uniqueValues);
   }
@@ -90,7 +91,7 @@ public class Enums {
         return Optional.of(each);
       }
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   public static AllowableValues emptyListValuesToNull(AllowableListValues values) {

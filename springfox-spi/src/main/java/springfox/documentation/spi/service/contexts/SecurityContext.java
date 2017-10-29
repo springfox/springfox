@@ -19,10 +19,10 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.base.Predicate;
 import springfox.documentation.service.SecurityReference;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * A class to represent a default set of authorizations to apply to each api operation
@@ -41,7 +41,7 @@ public class SecurityContext {
   }
 
   public List<SecurityReference> securityForPath(String path) {
-    if (selector.apply(path)) {
+    if (selector.test(path)) {
       return securityReferences;
     }
     return null;

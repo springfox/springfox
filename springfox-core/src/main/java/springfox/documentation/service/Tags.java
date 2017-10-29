@@ -18,42 +18,40 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
+
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import springfox.documentation.util.Strings;
 
 public class Tags {
   private Tags() {
     throw new UnsupportedOperationException();
   }
 
-  public static Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
-    Iterable<ApiListing> allListings = Iterables.concat(nullToEmptyMultimap(apiListings).asMap().values());
-    List<Tag> tags = from(allListings)
-        .transformAndConcat(collectTags())
-        .toList();
-    TreeSet<Tag> tagSet = newTreeSet(tagComparator());
+  public static Set<Tag> toTags(Map<String, List<ApiListing>> apiListings) {
+
+    List<Tag> tags = apiListings.values().stream()
+        .flatMap(List::stream)
+        .map(collectTags())
+        .flatMap(Set::stream)
+        .collect(Collectors.toList());
+
+    TreeSet<Tag> tagSet = new TreeSet<>(tagComparator());
     tagSet.addAll(tags);
     return tagSet;
   }
 
   public static Comparator<Tag> tagComparator() {
-    return Ordering.from(byOrder())
-        .compound(thenByName());
+    return byOrder().thenComparing(thenByName());
   }
 
   private static Comparator<Tag> thenByName() {
@@ -90,9 +88,7 @@ public class Tags {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return Optional.fromNullable(tagLookup.get(input))
-            .transform(toTagDescription())
-            .or(defaultDescription);
+        return Optional.ofNullable(tagLookup.get(input)).map(toTagDescription()).orElse(defaultDescription);
       }
     };
   }
@@ -115,10 +111,10 @@ public class Tags {
     };
   }
 
-  static Function<ApiListing, Iterable<Tag>> collectTags() {
-    return new Function<ApiListing, Iterable<Tag>>() {
+  static Function<ApiListing, Set<Tag>> collectTags() {
+    return new Function<ApiListing, Set<Tag>>() {
       @Override
-      public Iterable<Tag> apply(ApiListing input) {
+      public Set<Tag> apply(ApiListing input) {
         return input.getTags();
       }
     };
@@ -127,7 +123,7 @@ public class Tags {
   public static Predicate<String> emptyTags() {
     return new Predicate<String>() {
       @Override
-      public boolean apply(String input) {
+      public boolean test(String input) {
         return !Strings.isNullOrEmpty(input);
       }
     };

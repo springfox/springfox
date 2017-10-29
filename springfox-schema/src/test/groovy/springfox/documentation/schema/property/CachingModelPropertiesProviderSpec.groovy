@@ -20,7 +20,6 @@ package springfox.documentation.schema.property
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -38,7 +37,7 @@ class CachingModelPropertiesProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
       def property = aProperty()
       def mock = Mock(ModelPropertiesProvider) {
         propertiesFor(_, context) >> [ property ]
@@ -56,7 +55,7 @@ class CachingModelPropertiesProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
       def mock = Mock(ModelPropertiesProvider) {
         propertiesFor(_, context) >> { throw new NullPointerException("") }
       }

@@ -19,8 +19,6 @@
 
 package springfox.documentation.swagger1.web
 
-import com.google.common.collect.LinkedListMultimap
-import com.google.common.collect.Multimap
 import org.springframework.http.HttpStatus
 import spock.lang.Unroll
 import springfox.documentation.builders.DocumentationBuilder
@@ -40,7 +38,6 @@ import springfox.documentation.spring.web.scanners.ApiListingScanner
 import springfox.documentation.swagger1.configuration.SwaggerJacksonModule
 import springfox.documentation.swagger1.mixins.MapperSupport
 
-import static com.google.common.collect.Maps.*
 
 @Mixin([ApiListingSupport, AuthSupport])
 class Swagger1ControllerSpec extends DocumentationContextSpec
@@ -58,8 +55,8 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
   def setup() {
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingScanner = Mock(ApiListingScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
+    listingScanner.scan(_) >> new LinkedHashMap()
   }
 
   @Unroll
@@ -80,8 +77,8 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
 
   def "should respond with api listing for a given resource group"() {
     given:
-      Multimap<String, ApiListing> listings = LinkedListMultimap.<String, ApiListing>create()
-      listings.put('businesses', apiListing())
+      Map<String, List<ApiListing>> listings = new LinkedHashMap()
+      listings.put('businesses', Arrays.asList(apiListing()))
     and:
       Documentation group = new DocumentationBuilder()
               .name("groupName")

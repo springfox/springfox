@@ -19,11 +19,12 @@
 
 package springfox.documentation.schema.property;
 
+import java.util.function.Function;
+
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder;
-import com.google.common.base.Function;
 
 public class BeanPropertyDefinitions {
   private BeanPropertyDefinitions() {

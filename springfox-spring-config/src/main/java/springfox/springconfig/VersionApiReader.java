@@ -18,10 +18,13 @@
  */
 package springfox.springconfig;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
+import java.util.Optional;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;

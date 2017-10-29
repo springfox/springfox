@@ -18,16 +18,6 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.CaseFormat;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
-import org.springframework.web.method.HandlerMethod;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,17 +25,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
 class RequestExtractionUtils {
   private RequestExtractionUtils() {
     throw new UnsupportedOperationException();
   }
 
-  public static String lowerCamelCaseName(String stringValue) {
-    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, stringValue);
+  // REVISIT: Check what is really needed for CaseFormat. Probably we simplified to much.
+  public static String lowerCamelCaseName(String str) {
+    //return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, stringValue);
+    return str != null && !str.isEmpty() ? str.substring(0, 1).toLowerCase() + str.substring(1) : str;
   }
 
-  public static String upperCamelCaseName(String stringValue) {
-    return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, stringValue);
+  public static String upperCamelCaseName(String str) {
+    //return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, stringValue);
+    return str != null && !str.isEmpty() ? str.substring(0, 1).toUpperCase() + str.substring(1) : str;
   }
 
   public static String actionName(PersistentEntity<?, ?> entity, Method method) {
@@ -120,4 +123,6 @@ class RequestExtractionUtils {
     }
     return resolver.resolve(Resource.class, property.getType());
   }
+  
+  
 }

@@ -18,16 +18,17 @@
  */
 package springfox.documentation.swagger.web;
 
-import com.google.common.base.Optional;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
 @ApiIgnore
@@ -51,14 +52,14 @@ public class ApiResourceController {
   @ResponseBody
   public ResponseEntity<SecurityConfiguration> securityConfiguration() {
     return new ResponseEntity<SecurityConfiguration>(
-        Optional.fromNullable(securityConfiguration).or(SecurityConfiguration.DEFAULT), HttpStatus.OK);
+        Optional.ofNullable(securityConfiguration).orElse(SecurityConfiguration.DEFAULT), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/configuration/ui")
   @ResponseBody
   public ResponseEntity<UiConfiguration> uiConfiguration() {
     return new ResponseEntity<UiConfiguration>(
-        Optional.fromNullable(uiConfiguration).or(UiConfiguration.DEFAULT), HttpStatus.OK);
+        Optional.ofNullable(uiConfiguration).orElse(UiConfiguration.DEFAULT), HttpStatus.OK);
   }
 
   @RequestMapping

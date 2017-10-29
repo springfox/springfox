@@ -19,10 +19,23 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.swagger2.mappers.ModelMapper.modelRefToProperty;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+
 import io.swagger.models.Contact;
 import io.swagger.models.Info;
 import io.swagger.models.Operation;
@@ -32,9 +45,6 @@ import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
 import io.swagger.models.properties.Property;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
@@ -43,16 +53,6 @@ import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
 @Mapper(uses = { ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class,
     VendorExtensionsMapper.class })
@@ -104,22 +104,22 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
-    return from(from).transform(toScheme()).toList();
+    return from.stream().map(toScheme()).collect(Collectors.toList());
   }
 
   protected List<Map<String, List<String>>> mapAuthorizations(
       Map<String, List<AuthorizationScope>> from) {
-    List<Map<String, List<String>>> security = newArrayList();
+    List<Map<String, List<String>>> security = new ArrayList<>();
     for (Map.Entry<String, List<AuthorizationScope>> each : from.entrySet()) {
-      Map<String, List<String>> newEntry = newHashMap();
-      newEntry.put(each.getKey(), from(each.getValue()).transform(scopeToString()).toList());
+      Map<String, List<String>> newEntry = new HashMap<>();
+      newEntry.put(each.getKey(), each.getValue().stream().map(scopeToString()).collect(Collectors.toList()));
       security.add(newEntry);
     }
     return security;
   }
 
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
-    Map<String, Response> responses = newTreeMap();
+    Map<String, Response> responses = new TreeMap<>();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
       ModelReference modelRef = responseMessage.getResponseModel();
@@ -127,8 +127,10 @@ public abstract class ServiceModelToSwagger2Mapper {
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
-      response.setExamples(Maps.<String, Object>newHashMap());
-      response.setHeaders(transformEntries(responseMessage.getHeaders(), toPropertyEntry()));
+      response.setExamples(new HashMap<>());
+      Map<String, Property> transformedHeaders = responseMessage.getHeaders().entrySet().stream()
+          .collect(Collectors.toMap(Map.Entry::getKey, this::toPropertyEntry));
+      response.setHeaders(transformedHeaders);
       Map<String, Object> extensions = new VendorExtensionsMapper()
           .mapExtensions(responseMessage.getVendorExtensions());
       response.getVendorExtensions().putAll(extensions);
@@ -137,22 +139,20 @@ public abstract class ServiceModelToSwagger2Mapper {
     return responses;
   }
 
-  private EntryTransformer<String, Header, Property> toPropertyEntry() {
-    return new EntryTransformer<String, Header, Property>() {
-      @Override
-      public Property transformEntry(String key, Header value) {
-        Property property = modelRefToProperty(value.getModelReference());
-        property.setDescription(value.getDescription());
-        return property;
-      }
-    };
+  private Property toPropertyEntry(Map.Entry<String, Header> entry) {
+    Header value = entry.getValue();
+    Property property = modelRefToProperty(value.getModelReference());
+    property.setDescription(value.getDescription());
+    return property;
   }
 
-  protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, Path> paths = newTreeMap();
-    for (ApiListing each : apiListings.values()) {
-      for (ApiDescription api : each.getApis()) {
-        paths.put(api.getPath(), mapOperations(api, Optional.fromNullable(paths.get(api.getPath()))));
+  protected Map<String, Path> mapApiListings(Map<String, List<ApiListing>> apiListings) {
+    Map<String, Path> paths = new TreeMap<>();
+    for(List<ApiListing> l : apiListings.values()) {
+      for (ApiListing each : l) {
+        for (ApiDescription api : each.getApis()) {
+          paths.put(api.getPath(), mapOperations(api, Optional.ofNullable(paths.get(api.getPath()))));
+        }
       }
     }
     return paths;
@@ -168,7 +168,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
-    Path path = existingPath.or(new Path());
+    Path path = existingPath.orElse(new Path());
     for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
       Operation operation = mapOperation(each);
       path.set(each.getMethod().toString().toLowerCase(), operation);

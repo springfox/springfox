@@ -18,20 +18,23 @@
  */
 package springfox.bean.validators.plugins.schema;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import springfox.bean.validators.plugins.Validators;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
-import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
+import static springfox.bean.validators.plugins.Validators.annotationFromBean;
+import static springfox.bean.validators.plugins.Validators.annotationFromField;
+
+import java.util.Optional;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+import springfox.documentation.util.Predicates;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -52,13 +55,11 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
     context.getBuilder().allowableValues(allowableRange(min, max));
   }
 
-  @VisibleForTesting
   Optional<Min> extractMin(ModelPropertyContext context) {
-    return annotationFromBean(context, Min.class).or(annotationFromField(context, Min.class));
+    return Predicates.or(annotationFromBean(context, Min.class), annotationFromField(context, Min.class));
   }
 
-  @VisibleForTesting
   Optional<Max> extractMax(ModelPropertyContext context) {
-    return annotationFromBean(context, Max.class).or(annotationFromField(context, Max.class));
+    return Predicates.or(annotationFromBean(context, Max.class), annotationFromField(context, Max.class));
   }
 }

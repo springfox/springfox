@@ -19,8 +19,15 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValues;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValuesToParameter;
+import static springfox.documentation.swagger2.mappers.Properties.itemTypeProperty;
+import static springfox.documentation.swagger2.mappers.Properties.property;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.CookieParameter;
 import io.swagger.models.parameters.FormParameter;
@@ -33,34 +40,27 @@ import io.swagger.models.properties.Property;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Parameter;
 
-import java.util.Map;
-
-import static com.google.common.base.Functions.*;
-import static springfox.documentation.swagger2.mappers.EnumMapper.*;
-import static springfox.documentation.swagger2.mappers.Properties.*;
-
 public class SerializableParameterFactories {
-  public static final Map<String, SerializableParameterFactory> factory = ImmutableMap.<String,
-      SerializableParameterFactory>builder()
-      .put("header", new HeaderSerializableParameterFactory())
-      .put("form", new FormSerializableParameterFactory())
-      .put("path", new PathSerializableParameterFactory())
-      .put("query", new QuerySerializableParameterFactory())
-      .put("cookie", new CookieSerializableParameterFactory())
-      .build();
+  public static final Map<String, SerializableParameterFactory> factory = new HashMap<String,
+      SerializableParameterFactory>() {{
+      put("header", new HeaderSerializableParameterFactory());
+      put("form", new FormSerializableParameterFactory());
+      put("path", new PathSerializableParameterFactory());
+      put("query", new QuerySerializableParameterFactory());
+      put("cookie", new CookieSerializableParameterFactory());
+      }};
 
   private SerializableParameterFactories() {
     throw new UnsupportedOperationException();
   }
 
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
-    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory,
-        new NullSerializableParameterFactory())
-        .apply(source.getParamType().toLowerCase());
+    SerializableParameterFactory factory = SerializableParameterFactories.factory
+        .getOrDefault(source.getParamType().toLowerCase(), new NullSerializableParameterFactory());
 
     SerializableParameter toReturn = factory.create(source);
     if (toReturn == null) {
-      return Optional.absent();
+      return Optional.empty();
     }
     ModelReference paramModel = source.getModelRef();
     toReturn.setName(source.getName());

@@ -18,12 +18,12 @@
  */
 package springfox.documentation.builders;
 
+import static org.springframework.util.StringUtils.capitalize;
+
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
 import springfox.documentation.annotations.Incubating;
-
-import static org.springframework.util.StringUtils.*;
 
 @Incubating("2.7.0")
 public class AlternateTypePropertyBuilder {

@@ -18,20 +18,18 @@
  */
 package springfox.documentation.schema.property;
 
-import com.google.common.base.Equivalence;
 
 import java.lang.reflect.Method;
 
-class SimpleMethodSignatureEquality extends Equivalence<Method> {
+class SimpleMethodSignatureEquality {
 
-  @Override
-  protected boolean doEquivalent(Method first, Method other) {
+  public static boolean equivalent(Method first, Method other) {
     return first.getName().equals(other.getName())
         && first.getReturnType().equals(other.getReturnType())
         && equalParamTypes(first.getParameterTypes(), other.getParameterTypes());
   }
 
-  private boolean equalParamTypes(Class<?>[] params1, Class<?>[] params2) {
+  private static boolean equalParamTypes(Class<?>[] params1, Class<?>[] params2) {
     if (params1.length == params2.length) {
       for (int i = 0; i < params1.length; i++) {
         if (params1[i] != params2[i]) {
@@ -41,10 +39,5 @@ class SimpleMethodSignatureEquality extends Equivalence<Method> {
       return true;
     }
     return false;
-  }
-
-  @Override
-  protected int doHash(Method method) {
-    return method.hashCode();
   }
 }

@@ -19,15 +19,23 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
+
+import com.fasterxml.classmate.ResolvedType;
+
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -35,13 +43,6 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationContext {
   private final OperationBuilder operationBuilder;
@@ -77,7 +78,7 @@ public class OperationContext {
     if (documentationContext.getGlobalResponseMessages().containsKey(RequestMethod.valueOf(forHttpMethod))) {
       return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
     }
-    return newArrayList();
+    return new ArrayList<ResponseMessage>();
   }
 
   public List<Parameter> getGlobalOperationParameters() {
@@ -85,13 +86,13 @@ public class OperationContext {
   }
 
   public Optional<SecurityContext> securityContext() {
-    return Iterables.tryFind(getDocumentationContext().getSecurityContexts(), pathMatches());
+    return getDocumentationContext().getSecurityContexts().stream().filter(pathMatches()).findAny();
   }
 
   private Predicate<SecurityContext> pathMatches() {
     return new Predicate<SecurityContext>() {
       @Override
-      public boolean apply(SecurityContext input) {
+      public boolean test(SecurityContext input) {
         return input.securityForPath(requestMappingPattern()) != null;
       }
     };
@@ -125,8 +126,8 @@ public class OperationContext {
     return requestContext.consumes();
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
-    return ImmutableSet.copyOf(getDocumentationContext().getIgnorableParameterTypes());
+  public Set<Class> getIgnorableParameterTypes() {
+    return Collections.unmodifiableSet(getDocumentationContext().getIgnorableParameterTypes());
   }
 
   public GenericTypeNamingStrategy getGenericsNamingStrategy() {

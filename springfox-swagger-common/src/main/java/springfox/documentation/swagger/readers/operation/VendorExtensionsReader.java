@@ -19,16 +19,20 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Extension;
-import io.swagger.annotations.ExtensionProperty;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Extension;
+import io.swagger.annotations.ExtensionProperty;
 import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
@@ -36,11 +40,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
+import springfox.documentation.util.Strings;
 
-import java.util.List;
-
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -62,25 +63,25 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private List<VendorExtension> readExtensions(Extension[] vendorAnnotations) {
-    return FluentIterable.from(newArrayList(vendorAnnotations))
-        .transform(toVendorExtension()).toList();
+    return Arrays.stream(vendorAnnotations)
+        .map(toVendorExtension()).collect(Collectors.toList());
   }
 
   private Function<Extension, VendorExtension> toVendorExtension() {
     return new Function<Extension, VendorExtension>() {
       @Override
       public VendorExtension apply(Extension input) {
-        return Optional.fromNullable(emptyToNull(input.name()))
-            .transform(propertyExtension(input))
-            .or(objectExtension(input));
+        return Optional.ofNullable(Strings.emptyToNull(input.name()))
+            .map(propertyExtension(input))
+            .orElse(objectExtension(input));
       }
     };
   }
 
   private VendorExtension objectExtension(Extension each) {
-    ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(nullToEmpty(each.name())));
+    ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(Strings.nullToEmpty(each.name())));
     for (ExtensionProperty property : each.properties()) {
-      if (!isNullOrEmpty(property.name()) && !isNullOrEmpty(property.value())) {
+      if (!Strings.isNullOrEmpty(property.name()) && !Strings.isNullOrEmpty(property.value())) {
         extension.addProperty(new StringVendorExtension(property.name(), property.value()));
       }
     }
@@ -101,7 +102,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private String ensurePrefixed(String name) {
-    if (!isNullOrEmpty(name) && !name.startsWith("x-")) {
+    if (!Strings.isNullOrEmpty(name) && !name.startsWith("x-")) {
       return "x-" + name;
     }
     return name;

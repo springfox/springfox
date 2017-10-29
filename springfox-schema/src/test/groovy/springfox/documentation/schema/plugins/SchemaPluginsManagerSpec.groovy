@@ -19,7 +19,6 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -34,7 +33,6 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import java.lang.reflect.AnnotatedElement
 
-import static com.google.common.collect.Lists.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -48,15 +46,15 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(propertyPlugin))
+            OrderAwarePluginRegistry.create(Arrays.asList(propertyPlugin))
     propertyPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(modelPlugin))
+            OrderAwarePluginRegistry.create(Arrays.asList(modelPlugin))
     modelPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(namePlugin))
+            OrderAwarePluginRegistry.create(Arrays.asList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
 
     sut = new SchemaPluginsManager(propRegistry, modelRegistry)
@@ -85,7 +83,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           new AlternateTypeProvider([]),
           namingStrategy,
-          ImmutableSet.builder().build())
+          new HashSet())
     and:
       context.documentationType >> SPRING_WEB
     when:
@@ -102,7 +100,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
     and:
       context.documentationType >> SPRING_WEB
     when:

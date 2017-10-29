@@ -41,7 +41,7 @@ class ResolvedMethodParameterSpec extends Specification {
       sut.parameterIndex == 1
       !sut.hasParameterAnnotations()
       sut.parameterType == resolved
-      sut.defaultName().orNull() == "defaultName"
+      sut.defaultName().orElse(null) == "defaultName"
   }
 
   def "Finds annotations" () {
@@ -79,7 +79,7 @@ class ResolvedMethodParameterSpec extends Specification {
       sut.parameterIndex == 1
       sut.parameterType == resolved
       sutReplaced.parameterType == replaced
-      sut.defaultName().orNull() == "defaultName"
+      sut.defaultName().orElse(null) == "defaultName"
   }
 
   def "Adding extra annotations" () {

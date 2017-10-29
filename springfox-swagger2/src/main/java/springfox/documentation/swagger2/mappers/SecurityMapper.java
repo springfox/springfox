@@ -18,33 +18,37 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-import io.swagger.models.auth.SecuritySchemeDefinition;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.mapstruct.Mapper;
+
+import io.swagger.models.auth.SecuritySchemeDefinition;
+import springfox.documentation.schema.Maps;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.SecurityScheme;
 
-import java.util.Map;
-import java.util.TreeMap;
-
-import static com.google.common.collect.Maps.*;
 
 @Mapper
 public class SecurityMapper {
-  private Map<String, SecuritySchemeFactory> factories = ImmutableMap.<String, SecuritySchemeFactory>builder()
-      .put("oauth2", new OAuth2AuthFactory())
-      .put("apiKey", new ApiKeyAuthFactory())
-      .put("basicAuth", new BasicAuthFactory())
-      .build();
+  private Map<String, SecuritySchemeFactory> factories = new HashMap<String, SecuritySchemeFactory>() {{
+      put("oauth2", new OAuth2AuthFactory());
+      put("apiKey", new ApiKeyAuthFactory());
+      put("basicAuth", new BasicAuthFactory());
+  }};
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
     if (from == null) {
-      return newHashMap();
+      return new HashMap<>();
     }
-    TreeMap<String, SecuritySchemeDefinition> result = newTreeMap();
-    result.putAll(transformValues(uniqueIndex(from.getSecuritySchemes(), schemeName()),
-        toSecuritySchemeDefinition()));
+    TreeMap<String, SecuritySchemeDefinition> result = new TreeMap<>();
+    Map<String, SecuritySchemeDefinition> bySchemeName = Maps.uniqueIndex(from.getSecuritySchemes(), schemeName())
+        .entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> toSecuritySchemeDefinition(e.getValue())));
+    result.putAll(bySchemeName);
     return result;
   }
 
@@ -57,12 +61,7 @@ public class SecurityMapper {
     };
   }
 
-  private Function<SecurityScheme, SecuritySchemeDefinition> toSecuritySchemeDefinition() {
-    return new Function<SecurityScheme, SecuritySchemeDefinition>() {
-      @Override
-      public SecuritySchemeDefinition apply(SecurityScheme input) {
-        return factories.get(input.getType()).create(input);
-      }
-    };
+  private SecuritySchemeDefinition toSecuritySchemeDefinition(SecurityScheme input) {
+    return factories.get(input.getType()).create(input);
   }
 }

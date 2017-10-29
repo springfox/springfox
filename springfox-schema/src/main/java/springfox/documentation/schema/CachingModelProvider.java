@@ -18,48 +18,51 @@
  */
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import springfox.documentation.spi.schema.contexts.ModelContext;
 
 @Component
 @Qualifier("cachedModels")
 public class CachingModelProvider implements ModelProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelProvider.class);
-  private final LoadingCache<ModelContext, Optional<Model>> cache;
+  //private final LoadingCache<ModelContext, Optional<Model>> cache;
+  private final Map<ModelContext, Optional<Model>> cache = new LinkedHashMap<ModelContext, Optional<Model>>() {
+    protected boolean removeEldestEntry(Map.Entry<ModelContext, Optional<Model>> eldest) {
+      return size() > 1000;
+    }
+  };
   private final ModelProvider delegate;
 
   @Autowired
   public CachingModelProvider(@Qualifier("default") final ModelProvider delegate) {
     this.delegate = delegate;
-    cache = CacheBuilder.newBuilder()
-        .maximumSize(1000)
-        .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(
-            new CacheLoader<ModelContext, Optional<Model>>() {
-              public Optional<Model> load(ModelContext key) {
-                return delegate.modelFor(key);
-              }
-            });
+//    cache = CacheBuilder.newBuilder()
+//        .maximumSize(1000)
+//        .expireAfterWrite(24, TimeUnit.HOURS)
+//        .build(
+//            new CacheLoader<ModelContext, Optional<Model>>() {
+//              public Optional<Model> load(ModelContext key) {
+//                return delegate.modelFor(key);
+//              }
+//            });
   }
 
   @Override
   public Optional<Model> modelFor(ModelContext modelContext) {
     try {
-      return cache.get(modelContext);
+      return cache.computeIfAbsent(modelContext, key -> delegate.modelFor(key));
     } catch (Exception e) {
       LOGGER.warn("Failed to get the model for -> {}. {}", modelContext.description(), e.getMessage());
-      return Optional.absent();
+      return Optional.empty();
     }
   }
 

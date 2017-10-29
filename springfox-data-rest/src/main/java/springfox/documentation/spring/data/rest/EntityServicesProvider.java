@@ -19,8 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -36,8 +34,8 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.*;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {
@@ -76,7 +74,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    List<EntityContext> contexts = newArrayList();
+    List<EntityContext> contexts = new ArrayList<>();
     for (Class each : repositories) {
       RepositoryInformation repositoryInfo = repositories.getRepositoryInformationFor(each);
       Object repositoryInstance = repositories.getRepositoryFor(each);
@@ -94,20 +92,11 @@ class EntityServicesProvider implements RequestHandlerProvider {
     
     List<RequestHandler> handlers = new ArrayList<RequestHandler>();
     for (EntityContext each: contexts) {
-      handlers.addAll(FluentIterable.from(extractorConfiguration.getEntityExtractors())
-          .transformAndConcat(extractFromContext(each))
-          .toList());
+      handlers.addAll(extractorConfiguration.getEntityExtractors().stream()
+              .flatMap(i -> i.extract(each).stream())
+              .collect(Collectors.toList()));
     }
     return handlers;
-  }
-
-  private Function<EntityOperationsExtractor, List<RequestHandler>> extractFromContext(final EntityContext context) {
-    return new Function<EntityOperationsExtractor, List<RequestHandler>>() {
-      @Override
-      public List<RequestHandler> apply(EntityOperationsExtractor input) {
-        return input.extract(context);
-      }
-    };
   }
 
 }

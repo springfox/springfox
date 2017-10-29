@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.scanners
 
-import com.google.common.base.Optional
 import spock.lang.Specification
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spring.web.paths.PathMappingAdjuster
@@ -29,7 +28,7 @@ class PathMappingAdjusterSpec extends Specification {
     given:
       def context = Mock(DocumentationContext)
     and:
-      context.pathMapping >> Optional.fromNullable(pathMapping)
+      context.pathMapping >> Optional.ofNullable(pathMapping)
     when:
       def sut = new PathMappingAdjuster(context)
     then:

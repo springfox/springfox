@@ -18,20 +18,18 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import springfox.documentation.spi.service.DocumentationPlugin;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.FluentIterable.*;
+import springfox.documentation.spi.service.DocumentationPlugin;
+
 
 class DuplicateGroupsDetector {
   private DuplicateGroupsDetector() {
@@ -39,39 +37,37 @@ class DuplicateGroupsDetector {
   }
 
   public static void ensureNoDuplicateGroups(List<DocumentationPlugin> allPlugins) throws IllegalStateException {
-    Multimap<String, DocumentationPlugin> plugins = Multimaps.index(allPlugins, byGroupName());
-    Iterable<String> duplicateGroups = from(plugins.asMap().entrySet()).filter(duplicates()).transform(toGroupNames());
-    if (Iterables.size(duplicateGroups) > 0) {
-      throw new IllegalStateException(String.format("Multiple Dockets with the same group name are not supported. "
-              + "The following duplicate groups were discovered. %s", Joiner.on(',').join(duplicateGroups)));
+    Map<String, List<DocumentationPlugin>> plugins = new HashMap<>();
+    for (DocumentationPlugin documentationPlugin : allPlugins) {
+      plugins.computeIfAbsent(Optional.ofNullable(documentationPlugin.getGroupName()).orElse("default"),
+          k -> new ArrayList<>()).add(documentationPlugin);
+    }
+    List<String> duplicateGroups = plugins.entrySet().stream().filter(duplicates()).map(toGroupNames())
+        .collect(Collectors.toList());
+    if (duplicateGroups.size() > 0) {
+      throw new IllegalStateException(String.format(
+          "Multiple Dockets with the same group name are not supported. "
+              + "The following duplicate groups were discovered. %s",
+          duplicateGroups.stream().collect(Collectors.joining(","))));
     }
   }
 
-  private static Function<? super Map.Entry<String, Collection<DocumentationPlugin>>, String> toGroupNames() {
-    return new Function<Map.Entry<String, Collection<DocumentationPlugin>>, String>() {
+  private static Function<? super Map.Entry<String, List<DocumentationPlugin>>, String> toGroupNames() {
+    return new Function<Map.Entry<String, List<DocumentationPlugin>>, String>() {
       @Override
-      public String apply(Map.Entry<String, Collection<DocumentationPlugin>> input) {
+      public String apply(Map.Entry<String, List<DocumentationPlugin>> input) {
         return input.getKey();
       }
     };
   }
 
-  private static Predicate<? super Map.Entry<String, Collection<DocumentationPlugin>>> duplicates() {
-    return new Predicate<Map.Entry<String, Collection<DocumentationPlugin>>>() {
+  private static Predicate<? super Map.Entry<String, List<DocumentationPlugin>>> duplicates() {
+    return new Predicate<Map.Entry<String, List<DocumentationPlugin>>>() {
       @Override
-      public boolean apply(Map.Entry<String, Collection<DocumentationPlugin>> input) {
+      public boolean test(Map.Entry<String, List<DocumentationPlugin>> input) {
         return input.getValue().size() > 1;
       }
     };
   }
 
-
-  private static Function<? super DocumentationPlugin, String> byGroupName() {
-    return new Function<DocumentationPlugin, String>() {
-      @Override
-      public String apply(DocumentationPlugin input) {
-        return Optional.fromNullable(input.getGroupName()).or("default");
-      }
-    };
-  }
 }

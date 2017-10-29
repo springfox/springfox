@@ -18,27 +18,31 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.pathAnnotations;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
-
-import java.util.HashSet;
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityDeleteExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList<>();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
@@ -52,11 +56,11 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
-          newHashSet(RequestMethod.DELETE),
+          Collections.singleton(RequestMethod.DELETE),
           new HashSet<MediaType>(),
           new HashSet<MediaType>(),
           handler,
-          newArrayList(new ResolvedMethodParameter(
+          Arrays.asList(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id", handler),

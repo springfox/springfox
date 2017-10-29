@@ -19,10 +19,8 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-
-import static com.google.common.base.Objects.*;
+import java.util.Objects;
+import java.util.Optional;
 
 public class ResourceGroup {
   private final String groupName;
@@ -48,7 +46,7 @@ public class ResourceGroup {
   }
 
   public Optional<? extends Class<?>> getControllerClass() {
-    return Optional.fromNullable(controllerClazz);
+    return Optional.ofNullable(controllerClazz);
   }
 
   @Override
@@ -65,14 +63,14 @@ public class ResourceGroup {
     }
     final ResourceGroup rhs = (ResourceGroup) obj;
 
-    return equal(this.groupName, rhs.groupName)
-        && equal(this.position, rhs.position)
-        && equal(this.controllerClazz, rhs.controllerClazz);
+    return Objects.equals(this.groupName, rhs.groupName)
+        && Objects.equals(this.position, rhs.position)
+        && Objects.equals(this.controllerClazz, rhs.controllerClazz);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(groupName, controllerClazz, position);
+    return Objects.hash(groupName, controllerClazz, position);
   }
 
   @Override
