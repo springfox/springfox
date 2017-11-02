@@ -38,7 +38,7 @@ public class ParameterMapper {
 
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
     Parameter bodyParameter = bodyParameter(source);
-    return SerializableParameterFactories.create(source).or(bodyParameter);
+    return SerializableParameterFactories.create(source).orElse(bodyParameter);
   }
 
   private Parameter bodyParameter(springfox.documentation.service.Parameter source) {

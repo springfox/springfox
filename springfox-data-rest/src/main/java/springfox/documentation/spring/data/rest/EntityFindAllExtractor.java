@@ -18,8 +18,18 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.Lists;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.HAL_JSON;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.SPRING_DATA_COMPACT_JSON;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.TEXT_URI_LIST;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -28,24 +38,16 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
-
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
-import static org.springframework.http.MediaType.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList<>();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
@@ -59,12 +61,12 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
           String.format("%s%s",
               context.basePath(),
               context.resourcePath()),
-          newHashSet(RequestMethod.GET),
-          newHashSet(
+          Collections.singleton(RequestMethod.GET),
+          new HashSet<>(Arrays.asList(
               APPLICATION_JSON,
               HAL_JSON ,
               SPRING_DATA_COMPACT_JSON,
-              TEXT_URI_LIST),
+              TEXT_URI_LIST)),
           new HashSet<MediaType>(),
           handler,
           findAllParameters(context.getConfiguration(), context.getTypeResolver()),
@@ -81,17 +83,17 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
     parameters.add(new ResolvedMethodParameter(
         0,
         configuration.getPageParamName(),
-        Lists.<Annotation>newArrayList(),
+        new ArrayList<>(),
         resolver.resolve(String.class)));
     parameters.add(new ResolvedMethodParameter(
         1,
         configuration.getLimitParamName(),
-        Lists.<Annotation>newArrayList(),
+        new ArrayList<>(),
         resolver.resolve(String.class)));
     parameters.add(new ResolvedMethodParameter(
         2,
         configuration.getSortParamName(),
-        Lists.<Annotation>newArrayList(),
+        new ArrayList<>(),
         resolver.resolve(String.class)));
     return parameters;
   }

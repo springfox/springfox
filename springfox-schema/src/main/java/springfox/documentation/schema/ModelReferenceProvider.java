@@ -18,16 +18,22 @@
  */
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.spi.schema.contexts.ModelContext;
-
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.schema.Maps.mapValueType;
 import static springfox.documentation.schema.ResolvedTypes.allowableValues;
 import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
+
+import java.util.Optional;
+import java.util.function.Function;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.util.Predicates;
 
 class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private final TypeNameExtractor typeNameExtractor;
@@ -40,9 +46,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
 
   @Override
   public ModelReference apply(ResolvedType type) {
-    return collectionReference(type)
-        .or(mapReference(type))
-        .or(modelReference(type));
+    return Predicates.or(collectionReference(type), mapReference(type)).orElse(modelReference(type));
   }
 
   private ModelReference modelReference(ResolvedType type) {
@@ -62,7 +66,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
       return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), true));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Optional<ModelReference> collectionReference(ResolvedType type) {
@@ -75,6 +79,6 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
               apply(collectionElementType),
               allowableValues(collectionElementType)));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 }

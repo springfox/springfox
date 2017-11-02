@@ -46,7 +46,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                 Arrays.asList( //<2>
                     new OperationBuilder(
                         new CachingOperationNameGenerator())
-                        .authorizations(new ArrayList())
+                        .authorizations(new ArrayList<>())
                         .codegenMethodNameStem("bug1767GET") //<3>
                         .method(HttpMethod.GET)
                         .notes("This is a test method")

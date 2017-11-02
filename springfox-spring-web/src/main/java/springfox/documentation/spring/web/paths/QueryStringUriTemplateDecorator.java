@@ -18,24 +18,24 @@
  */
 package springfox.documentation.spring.web.paths;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
-
-import java.util.Set;
-
-import static com.google.common.base.Predicates.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
+import springfox.documentation.util.Strings;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 60)
@@ -47,7 +47,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
       public String apply(String input) {
         StringBuilder sb = new StringBuilder(input);
         String prefilled = prefilledQueryParams(context);
-        if (!isNullOrEmpty(prefilled)) {
+        if (!Strings.isNullOrEmpty(prefilled)) {
           sb.append(requiresContinuation(input) ? "&" : "?");
           sb.append(prefilled);
         }
@@ -56,7 +56,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
           return sb.toString();
         }
         String prefix = queryTemplatePrefix(input, prefilled);
-        String queryTemplate = Joiner.on(',').join(expressions);
+        String queryTemplate = expressions.stream().collect(Collectors.joining(","));
         sb.append(prefix).append(queryTemplate).append("}");
         return sb.toString();
       }
@@ -65,7 +65,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
 
   private String queryTemplatePrefix(String input, String prefilled) {
     String prefix;
-    if (isNullOrEmpty(prefilled)) {
+    if (Strings.isNullOrEmpty(prefilled)) {
       if (requiresContinuation(input)) {
         prefix = "{&";
       } else {
@@ -82,24 +82,22 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   }
 
   private Set<String> queryParamNames(PathContext context) {
-    return from(context.getParameters())
-        .filter(and(queryStringParams(), not(onlyOneAllowableValue())))
-        .transform(paramName())
-        .toSet();
+    return context.getParameters().stream()
+        .filter(queryStringParams())
+        .filter(onlyOneAllowableValue().negate())
+        .map(paramName())
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   private String prefilledQueryParams(PathContext context) {
-    return Joiner.on("&").join(from(context.getParameters())
-        .filter(onlyOneAllowableValue())
-        .transform(queryStringWithValue())
-        .toSet())
-        .trim();
+    return context.getParameters().stream().filter(onlyOneAllowableValue()).map(queryStringWithValue()).distinct()
+        .collect(Collectors.joining("&")).trim();
   }
 
   private Predicate<Parameter> onlyOneAllowableValue() {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         AllowableValues allowableValues = input.getAllowableValues();
         return allowableValues != null
             && allowableValues instanceof AllowableListValues
@@ -111,7 +109,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   private Predicate<Parameter> queryStringParams() {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         return "query".equals(input.getParamType());
       }
     };

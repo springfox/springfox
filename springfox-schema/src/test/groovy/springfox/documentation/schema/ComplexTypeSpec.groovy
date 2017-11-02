@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
@@ -40,13 +39,13 @@ class ComplexTypeSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
       Model asReturn = provider.modelFor(returnValue("group",
           complexType(),
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
 
     expect:
       asInput.getName() == "ComplexType"
@@ -84,13 +83,13 @@ class ComplexTypeSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
       Model asReturn = provider.modelFor(returnValue("group",
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
 
     expect:
       asInput.getName() == "RecursiveType"
@@ -125,13 +124,13 @@ class ComplexTypeSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
       Model asReturn = provider.modelFor(returnValue("group",
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
 
     expect:
       asInput.getName() == "InheritedComplexType"

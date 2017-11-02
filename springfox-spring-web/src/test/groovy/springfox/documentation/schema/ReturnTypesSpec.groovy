@@ -21,7 +21,6 @@ package springfox.documentation.schema
 import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
-import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -71,7 +70,7 @@ class ReturnTypesSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              new HashSet()))
       modelResponseClass == expectedResponseClassName
 
     where:

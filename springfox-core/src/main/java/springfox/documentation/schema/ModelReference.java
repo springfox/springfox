@@ -19,7 +19,8 @@
 
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
+
 import springfox.documentation.service.AllowableValues;
 
 public interface ModelReference {

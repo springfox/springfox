@@ -46,7 +46,7 @@ import springfox.test.contract.swagger.listeners.ObjectMapperEventListener
 import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = Config)
+@ContextConfiguration(classes = Config.class)
 class ObjectMapperSanityCheck extends Specification {
 
   @Value('${local.server.port}')

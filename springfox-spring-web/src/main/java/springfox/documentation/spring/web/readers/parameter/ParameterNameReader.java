@@ -19,8 +19,11 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import static java.lang.String.format;
+
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,13 +31,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
-
-import static com.google.common.base.Strings.*;
-import static java.lang.String.*;
+import springfox.documentation.util.Predicates;
+import springfox.documentation.util.Strings;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -43,7 +46,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     String name = findParameterNameFromAnnotations(context.resolvedMethodParameter());
-    if (isNullOrEmpty(name)) {
+    if (Strings.isNullOrEmpty(name)) {
       Optional<String> discoveredName = context.resolvedMethodParameter().defaultName();
       name = discoveredName.isPresent()
              ? discoveredName.get()
@@ -60,11 +63,11 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   }
 
   private String findParameterNameFromAnnotations(ResolvedMethodParameter methodParameter) {
-    return methodParameter.findAnnotation(PathVariable.class).transform(pathVariableValue())
-        .or(methodParameter.findAnnotation(ModelAttribute.class).transform(modelAttributeValue()))
-        .or(methodParameter.findAnnotation(RequestParam.class).transform(requestParamValue()))
-        .or(methodParameter.findAnnotation(RequestHeader.class).transform(requestHeaderValue()))
-        .orNull();
+    return Predicates.or(methodParameter.findAnnotation(PathVariable.class).map(pathVariableValue()),
+        methodParameter.findAnnotation(ModelAttribute.class).map(modelAttributeValue()),
+        methodParameter.findAnnotation(RequestParam.class).map(requestParamValue()),
+        methodParameter.findAnnotation(RequestHeader.class).map(requestHeaderValue()))
+        .orElse(null);
   }
 
 

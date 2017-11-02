@@ -23,8 +23,6 @@ import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.MemberResolver
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.members.ResolvedMethod
-import com.google.common.base.Predicate
-import com.google.common.collect.FluentIterable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.util.MultiValueMap
@@ -36,8 +34,8 @@ import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import java.util.function.Predicate
 
-import static com.google.common.collect.Lists.*
 import static HandlerMethodResolver.*
 
 class HandlerMethodResolverSpec extends Specification implements HandlerMethodsSupport{
@@ -105,11 +103,11 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
       def resolver = new TypeResolver()
       def memberResolver = new MemberResolver(resolver)
       def dummyClass = memberResolver.resolve(resolver.resolve(DummyClass), null, null)
-      def allMethods = newArrayList(dummyClass.memberMethods)
+      def allMethods = Arrays.asList(dummyClass.memberMethods)
 
     when:
-      def list = FluentIterable.from(allMethods).filter(subset())
-      def sorted = byArgumentCount().sortedCopy(list)
+      def list = allMethods.stream().filter(subset())
+      def sorted = list.sorted(byArgumentCount()).collect()
 
     then:
       sorted.get(0).name == 'methodWithNoArgs'
@@ -126,7 +124,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
   private Predicate<ResolvedMethod> subset() {
     new Predicate<ResolvedMethod>() {
       @Override
-      boolean apply(ResolvedMethod input) {
+      boolean test(ResolvedMethod input) {
         return ['methodWithNoArgs', 'methodWithOneArgs', 'methodWithTwoArgs'].contains(input.name)
       }
     }

@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -36,14 +35,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
@@ -76,14 +75,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
@@ -116,14 +115,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]

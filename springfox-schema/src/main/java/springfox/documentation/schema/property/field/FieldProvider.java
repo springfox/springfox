@@ -27,7 +27,9 @@ import com.fasterxml.classmate.members.ResolvedField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.google.common.collect.Lists.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class FieldProvider {
@@ -38,12 +40,12 @@ public class FieldProvider {
     this.typeResolver = typeResolver;
   }
 
-  public Iterable<ResolvedField> in(ResolvedType resolvedType) {
+  public List<ResolvedField> in(ResolvedType resolvedType) {
     MemberResolver memberResolver = new MemberResolver(typeResolver);
     if (resolvedType.getErasedType() == Object.class) {
-      return newArrayList();
+      return new ArrayList<>();
     }
     ResolvedTypeWithMembers resolvedMemberWithMembers = memberResolver.resolve(resolvedType, null, null);
-    return newArrayList(resolvedMemberWithMembers.getMemberFields());
+    return Arrays.asList(resolvedMemberWithMembers.getMemberFields());
   }
 }

@@ -25,16 +25,15 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 
-import static com.google.common.collect.Lists.*
 
 class SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList())
+            OrderAwarePluginRegistry.create(new ArrayList())
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList())
+            OrderAwarePluginRegistry.create(new ArrayList())
 
     new SchemaPluginsManager(propRegistry, modelRegistry)
   }

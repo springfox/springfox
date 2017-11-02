@@ -19,18 +19,34 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.members.ResolvedField;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Types.typeNameFor;
+
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.members.ResolvedField;
+
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.Types;
@@ -41,23 +57,7 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
-
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.base.Objects.*;
-import static com.google.common.base.Predicates.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
+import springfox.documentation.util.Strings;
 
 @Component
 public class ModelAttributeParameterExpander {
@@ -79,19 +79,20 @@ public class ModelAttributeParameterExpander {
 
   public List<Parameter> expand(ExpansionContext context) {
 
-    List<Parameter> parameters = newArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     Set<String> beanPropNames = getBeanPropertyNames(context.getParamType().getErasedType());
-    Iterable<ResolvedField> fields = FluentIterable.from(fieldProvider.in(context.getParamType()))
+    Stream<ResolvedField> fields = fieldProvider.in(context.getParamType()).stream()
         .filter(onlyBeanProperties(beanPropNames));
     LOG.debug("Expanding parameter type: {}", context.getParamType());
     AlternateTypeProvider alternateTypeProvider = context.getDocumentationContext().getAlternateTypeProvider();
 
-    FluentIterable<ModelAttributeField> modelAttributes = from(fields)
-        .transform(toModelAttributeField(alternateTypeProvider));
+    List<ModelAttributeField> modelAttributes = fields
+        .map(toModelAttributeField(alternateTypeProvider)).collect(Collectors.toList());
 
-    FluentIterable<ModelAttributeField> expendables = modelAttributes
-        .filter(not(simpleType()))
-        .filter(not(recursiveType(context)));
+    List<ModelAttributeField> expendables = modelAttributes.stream()
+        .filter(simpleType().negate())
+        .filter(recursiveType(context).negate())
+        .collect(Collectors.toList());
     for (ModelAttributeField each : expendables) {
       LOG.debug("Attempting to expand expandable field: {}", each.getField());
       parameters.addAll(
@@ -102,8 +103,10 @@ public class ModelAttributeParameterExpander {
                   context.getDocumentationContext())));
     }
 
-    FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
-        .filter(and(isCollection(), not(recursiveCollectionItemType(context.getParamType()))));
+    List<ModelAttributeField> collectionTypes = modelAttributes.stream()
+        .filter(isCollection())
+        .filter(recursiveCollectionItemType(context.getParamType()).negate())
+        .collect(Collectors.toList());
     for (ModelAttributeField each : collectionTypes) {
       LOG.debug("Attempting to expand collection/array field: {}", each.getField());
 
@@ -120,18 +123,18 @@ public class ModelAttributeParameterExpander {
       }
     }
 
-    FluentIterable<ModelAttributeField> simpleFields = modelAttributes.filter(simpleType());
+    List<ModelAttributeField> simpleFields = modelAttributes.stream().filter(simpleType()).collect(Collectors.toList());
     for (ModelAttributeField each : simpleFields) {
       parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
     }
-    return FluentIterable.from(parameters).filter(not(hiddenParameters())).toList();
+    return parameters.stream().filter(hiddenParameters().negate()).collect(Collectors.toList());
   }
 
   private Predicate<ModelAttributeField> recursiveCollectionItemType(final ResolvedType paramType) {
     return new Predicate<ModelAttributeField>() {
       @Override
-      public boolean apply(ModelAttributeField input) {
-        return equal(collectionElementType(input.getFieldType()), paramType);
+      public boolean test(ModelAttributeField input) {
+        return Objects.equals(collectionElementType(input.getFieldType()), paramType);
       }
     };
   }
@@ -139,7 +142,7 @@ public class ModelAttributeParameterExpander {
   private Predicate<Parameter> hiddenParameters() {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         return input.isHidden();
       }
     };
@@ -150,8 +153,8 @@ public class ModelAttributeParameterExpander {
       DocumentationContext documentationContext,
       ModelAttributeField each) {
     LOG.debug("Attempting to expand field: {}", each);
-    String dataTypeName = Optional.fromNullable(typeNameFor(each.getFieldType().getErasedType()))
-        .or(each.getFieldType().getErasedType().getSimpleName());
+    String dataTypeName = Optional.ofNullable(typeNameFor(each.getFieldType().getErasedType()))
+        .orElse(each.getFieldType().getErasedType().getSimpleName());
     LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,
@@ -166,24 +169,21 @@ public class ModelAttributeParameterExpander {
   private Predicate<ModelAttributeField> recursiveType(final ExpansionContext context) {
     return new Predicate<ModelAttributeField>() {
       @Override
-      public boolean apply(ModelAttributeField input) {
+      public boolean test(ModelAttributeField input) {
         return context.hasSeenType(input.getFieldType());
       }
     };
   }
 
   private Predicate<ModelAttributeField> simpleType() {
-    return and(not(isCollection()), not(isMap()),
-        or(
-            belongsToJavaPackage(),
-            isBaseType(),
-            isEnum()));
+    return isCollection().negate().and(isMap().negate())
+        .and(belongsToJavaPackage()).or(isBaseType()).or(isEnum());
   }
 
   private Predicate<ModelAttributeField> isCollection() {
     return new Predicate<ModelAttributeField>() {
       @Override
-      public boolean apply(ModelAttributeField input) {
+      public boolean test(ModelAttributeField input) {
         return isContainerType(input.getFieldType());
       }
     };
@@ -192,7 +192,7 @@ public class ModelAttributeParameterExpander {
   private Predicate<ModelAttributeField> isMap() {
     return new Predicate<ModelAttributeField>() {
       @Override
-      public boolean apply(ModelAttributeField input) {
+      public boolean test(ModelAttributeField input) {
         return Maps.isMapType(input.getFieldType());
       }
     };
@@ -201,7 +201,7 @@ public class ModelAttributeParameterExpander {
   private Predicate<ModelAttributeField> isEnum() {
     return new Predicate<ModelAttributeField>() {
       @Override
-      public boolean apply(ModelAttributeField input) {
+      public boolean test(ModelAttributeField input) {
         return enumTypeDeterminer.isEnum(input.getFieldType().getErasedType());
       }
     };
@@ -210,7 +210,7 @@ public class ModelAttributeParameterExpander {
   private Predicate<ModelAttributeField> belongsToJavaPackage() {
     return new Predicate<ModelAttributeField>() {
       @Override
-      public boolean apply(ModelAttributeField input) {
+      public boolean test(ModelAttributeField input) {
         return ClassUtils.getPackageName(input.getFieldType().getErasedType()).startsWith("java.lang");
       }
     };
@@ -219,7 +219,7 @@ public class ModelAttributeParameterExpander {
   private Predicate<ModelAttributeField> isBaseType() {
     return new Predicate<ModelAttributeField>() {
       @Override
-      public boolean apply(ModelAttributeField input) {
+      public boolean test(ModelAttributeField input) {
         return Types.isBaseType(input.getFieldType())
             || input.getField().getType().isPrimitive();
       }
@@ -240,7 +240,7 @@ public class ModelAttributeParameterExpander {
   private Predicate<ResolvedField> onlyBeanProperties(final Set<String> beanPropNames) {
     return new Predicate<ResolvedField>() {
       @Override
-      public boolean apply(ResolvedField input) {
+      public boolean test(ResolvedField input) {
         return beanPropNames.contains(input.getName());
       }
     };
@@ -253,7 +253,7 @@ public class ModelAttributeParameterExpander {
       name += "[0]";
     }
 
-    if (isNullOrEmpty(parentName)) {
+    if (Strings.isNullOrEmpty(parentName)) {
       return name;
     }
     return String.format("%s.%s", parentName, name);
@@ -281,10 +281,10 @@ public class ModelAttributeParameterExpander {
     } catch (IntrospectionException e) {
       LOG.warn(String.format("Failed to get bean properties on (%s)", clazz), e);
     }
-    return newHashSet();
+    return new HashSet<>();
   }
 
-  @VisibleForTesting
+  
   BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
     return Introspector.getBeanInfo(clazz);
   }

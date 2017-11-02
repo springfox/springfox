@@ -19,14 +19,24 @@
 
 package springfox.documentation.spring.web.plugins;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import static springfox.documentation.spi.service.contexts.Orderings.pluginOrdering;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
+import javax.servlet.ServletContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
@@ -39,14 +49,6 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
-
-import javax.servlet.ServletContext;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.google.common.collect.FluentIterable.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 /**
  * After an application context refresh, builds and executes all DocumentationConfigurer instances found in the
@@ -101,38 +103,21 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
 
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin plugin) {
     DocumentationType documentationType = plugin.getDocumentationType();
-    List<RequestHandler> requestHandlers = from(handlerProviders)
-        .transformAndConcat(handlers())
-        .toList();
-    List<AlternateTypeRule> rules = from(nullToEmptyList(typeConventions))
-          .transformAndConcat(toRules())
-          .toList();
+    List<RequestHandler> requestHandlers = handlerProviders.stream()
+        .flatMap(hp -> hp.requestHandlers().stream())
+        .collect(Collectors.toList());
+    List<AlternateTypeRule> rules = typeConventions == null ? Collections.emptyList() : 
+            typeConventions.stream()
+            .flatMap(tc -> tc.rules().stream())
+            .collect(Collectors.toList());
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
         .rules(rules)
         .requestHandlers(combiner().combine(requestHandlers));
   }
 
-  private Function<AlternateTypeRuleConvention, List<AlternateTypeRule>> toRules() {
-    return new Function<AlternateTypeRuleConvention, List<AlternateTypeRule>>() {
-      @Override
-      public List<AlternateTypeRule> apply(AlternateTypeRuleConvention input) {
-        return input.rules();
-      }
-    };
-  }
-
   private RequestHandlerCombiner combiner() {
-    return Optional.fromNullable(combiner).or(new DefaultRequestHandlerCombiner());
-  }
-
-  private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
-    return new Function<RequestHandlerProvider, Iterable<RequestHandler>>() {
-      @Override
-      public Iterable<RequestHandler> apply(RequestHandlerProvider input) {
-        return input.requestHandlers();
-      }
-    };
+    return Optional.ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   @Override
@@ -149,8 +134,8 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   public void start() {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      List<DocumentationPlugin> plugins = pluginOrdering()
-          .sortedCopy(documentationPluginsManager.documentationPlugins());
+      List<DocumentationPlugin> plugins = documentationPluginsManager.documentationPlugins().stream()
+                        .sorted(pluginOrdering()).collect(Collectors.toList());
       log.info("Found {} custom documentation plugin(s)", plugins.size());
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();

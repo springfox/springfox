@@ -16,21 +16,22 @@
  *
  *
  */
+package springfox.documentation.util;
 
-package springfox.documentation.swagger1.mappers;
+public class Assert {
 
-import com.google.common.collect.Maps;
-import springfox.documentation.swagger1.dto.ApiListing;
-
-public class Mappers {
-  public static Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>
-    toApiListingDto(final ServiceModelToSwaggerMapper mapper) {
-
-    return new Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>() {
-      @Override
-      public ApiListing transformEntry(String key, springfox.documentation.service.ApiListing value) {
-        return mapper.toSwaggerApiListing(value);
-      }
-    };
+  // REVISIT: We keep interface like done before, but if Exception class is not important
+  // we could change to Spring Assert class instead and remove this.
+  public static String checkNotNull(String obj, String msg) {
+    if (obj == null) {
+      throw new NullPointerException(msg);
+    }
+    return obj;
+  }
+  
+  public static void checkArgument(boolean b, String msg) {
+    if (!b) {
+      throw new IllegalArgumentException(msg);
+    }
   }
 }

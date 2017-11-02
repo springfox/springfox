@@ -19,13 +19,27 @@
 
 package springfox.documentation.swagger2.mappers;
 
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValues;
+import static springfox.documentation.swagger2.mappers.EnumMapper.safeBigDecimal;
+import static springfox.documentation.swagger2.mappers.Properties.defaultOrdering;
+import static springfox.documentation.swagger2.mappers.Properties.property;
+import static springfox.documentation.swagger2.mappers.Properties.voidProperties;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Multimap;
+
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.Xml;
@@ -35,23 +49,11 @@ import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
-import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.swagger2.mappers.EnumMapper.*;
-import static springfox.documentation.swagger2.mappers.Properties.*;
 
 @Mapper
 public abstract class ModelMapper {
@@ -60,7 +62,7 @@ public abstract class ModelMapper {
       return null;
     }
 
-    Map<String, Model> map = newTreeMap();
+    Map<String, Model> map = new TreeMap<>();
 
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
@@ -79,14 +81,15 @@ public abstract class ModelMapper {
         .name(source.getName())
         .xml(mapXml(source.getXml()));
 
-    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
+    Map<String, ModelProperty> sortedProperties = sort(source.getProperties());
     Map<String, Property> modelProperties = mapProperties(sortedProperties);
     model.setProperties(modelProperties);
 
-    FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
+    List<String> requiredFields = source.getProperties().values().stream()
         .filter(requiredProperty())
-        .transform(propertyName());
-    model.setRequired(requiredFields.toList());
+        .map(propertyName())
+        .collect(Collectors.toList());
+    model.setRequired(requiredFields);
     model.setSimple(false);
     model.setType(ModelImpl.OBJECT);
     if (isMapType(source.getType())) {
@@ -100,11 +103,12 @@ public abstract class ModelMapper {
     return model;
   }
 
-  private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
+  private Map<String, Property> mapProperties(Map<String, ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<String, Property>();
-    SortedMap<String, ModelProperty> nonVoidProperties = filterEntries(properties, not(voidProperties()));
-    for (Map.Entry<String, ModelProperty> propertyEntry : nonVoidProperties.entrySet()) {
-      mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
+    for (Map.Entry<String, ModelProperty> propertyEntry : properties.entrySet()) {
+      if(!voidProperties().test(propertyEntry)) {
+        mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
+      }
     }
     return mappedProperties;
   }
@@ -123,7 +127,6 @@ public abstract class ModelMapper {
     return sortedMap;
   }
 
-  @VisibleForTesting
   Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {
@@ -132,11 +135,11 @@ public abstract class ModelMapper {
       }
       return Optional.of((Class) Object.class);
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Optional<ResolvedType> findMapInterface(ResolvedType type) {
-    return Optional.fromNullable(type.findSupertype(Map.class));
+    return Optional.ofNullable(type.findSupertype(Map.class));
   }
 
   private Property mapProperty(ModelProperty source) {
@@ -229,10 +232,12 @@ public abstract class ModelMapper {
     return responseProperty;
   }
 
-  Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, springfox.documentation.schema.Model> definitions = newTreeMap();
-    for (ApiListing each : apiListings.values()) {
-      definitions.putAll(each.getModels());
+  Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
+    Map<String, springfox.documentation.schema.Model> definitions = new TreeMap<>();
+    for (List<ApiListing> l : apiListings.values()) {
+      for(ApiListing each : l) {
+        definitions.putAll(each.getModels());
+      }
     }
     return mapModels(definitions);
   }
@@ -249,7 +254,7 @@ public abstract class ModelMapper {
   private Predicate<ModelProperty> requiredProperty() {
     return new Predicate<ModelProperty>() {
       @Override
-      public boolean apply(ModelProperty input) {
+      public boolean test(ModelProperty input) {
         return input.isRequired();
       }
     };

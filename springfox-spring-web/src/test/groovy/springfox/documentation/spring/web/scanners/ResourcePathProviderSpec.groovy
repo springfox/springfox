@@ -17,7 +17,7 @@ class ResourcePathProviderSpec extends Specification {
     def sut = new ResourcePathProvider(new ResourceGroup("test", clazz))
 
     expect:
-    path == sut.resourcePath().orNull()
+    path == sut.resourcePath().orElse(null)
 
     where:
     clazz                                            | path

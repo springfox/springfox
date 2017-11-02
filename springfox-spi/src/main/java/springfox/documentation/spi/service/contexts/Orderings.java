@@ -19,8 +19,6 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
@@ -28,10 +26,10 @@ import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.DocumentationPlugin;
+import springfox.documentation.util.Strings;
 
 import java.util.Comparator;
 
-import static com.google.common.base.Strings.*;
 
 public class Orderings {
   private Orderings() {
@@ -42,7 +40,7 @@ public class Orderings {
     return new Comparator<Operation>() {
       @Override
       public int compare(Operation first, Operation second) {
-        return nullToEmpty(first.getUniqueId()).compareTo(nullToEmpty(second.getUniqueId()));
+        return Strings.nullToEmpty(first.getUniqueId()).compareTo(Strings.nullToEmpty(second.getUniqueId()));
       }
     };
   }
@@ -51,7 +49,7 @@ public class Orderings {
     return new Comparator<Operation>() {
       @Override
       public int compare(Operation first, Operation second) {
-        return Ints.compare(first.getPosition(), second.getPosition());
+        return Integer.compare(first.getPosition(), second.getPosition());
       }
     };
   }
@@ -69,7 +67,7 @@ public class Orderings {
     return new Comparator<ApiListingReference>() {
       @Override
       public int compare(ApiListingReference first, ApiListingReference second) {
-        return Ints.compare(first.getPosition(), second.getPosition());
+        return Integer.compare(first.getPosition(), second.getPosition());
       }
     };
   }
@@ -106,34 +104,34 @@ public class Orderings {
   }
 
 
-  public static Ordering<RequestHandler> byPatternsCondition() {
-    return Ordering.from(new Comparator<RequestHandler>() {
+  public static Comparator<RequestHandler> byPatternsCondition() {
+    return new Comparator<RequestHandler>() {
       @Override
       public int compare(RequestHandler first, RequestHandler second) {
         return patternsCondition(first).toString()
             .compareTo(patternsCondition(second).toString());
       }
-    });
+    };
   }
 
   public static PatternsRequestCondition patternsCondition(RequestHandler handler) {
     return handler.getPatternsCondition();
   }
 
-  public static Ordering<? super DocumentationPlugin> pluginOrdering() {
-    return Ordering.from(byPluginType()).compound(byPluginName());
+  public static Comparator<? super DocumentationPlugin> pluginOrdering() {
+    return byPluginType().thenComparing(byPluginName());
   }
 
-  public static Comparator<? super DocumentationPlugin> byPluginType() {
+  public static Comparator<DocumentationPlugin> byPluginType() {
     return new Comparator<DocumentationPlugin>() {
       @Override
       public int compare(DocumentationPlugin first, DocumentationPlugin second) {
-        return Ints.compare(first.getDocumentationType().hashCode(), second.getDocumentationType().hashCode());
+        return Integer.compare(first.getDocumentationType().hashCode(), second.getDocumentationType().hashCode());
       }
     };
   }
 
-  public static Comparator<? super DocumentationPlugin> byPluginName() {
+  public static Comparator<DocumentationPlugin> byPluginName() {
     return new Comparator<DocumentationPlugin>() {
       @Override
       public int compare(DocumentationPlugin first, DocumentationPlugin second) {

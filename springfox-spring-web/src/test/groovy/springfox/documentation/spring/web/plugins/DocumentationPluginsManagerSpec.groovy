@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.plugins
 
-import com.google.common.base.Optional
 import spock.lang.Specification
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
@@ -140,7 +139,7 @@ class DocumentationPluginsManagerSpec extends Specification {
     and:
       pathContext.pathProvider() >> new RelativePathProvider(Mock(ServletContext))
       pathContext.documentationContext() >> context
-      context.getPathMapping() >> Optional.absent()
+      context.getPathMapping() >> Optional.empty()
       pathContext.parameters >> []
     when:
       def sut = defaultWebPlugins()

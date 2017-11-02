@@ -18,8 +18,9 @@
  */
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Strings;
 import org.springframework.core.env.Environment;
+
+import springfox.documentation.util.Strings;
 
 import java.util.HashMap;
 import java.util.Map;

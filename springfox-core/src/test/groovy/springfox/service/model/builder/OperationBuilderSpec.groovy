@@ -29,7 +29,6 @@ import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.VendorExtension
 
-import static com.google.common.collect.Sets.*
 
 class OperationBuilderSpec extends Specification {
   def nameGenerator = Mock(OperationNameGenerator)
@@ -47,10 +46,10 @@ class OperationBuilderSpec extends Specification {
 
   def "Merges response messages when new response messages are applied" () {
     given:
-      sut.responseMessages(newHashSet(partialOk))
+      sut.responseMessages(Collections.singleton(partialOk))
     when:
       nameGenerator.startingWith(_) >> _
-      sut.responseMessages(newHashSet(fullOk))
+      sut.responseMessages(Collections.singleton(fullOk))
     and:
       def operation = sut.build()
     then:
@@ -63,9 +62,9 @@ class OperationBuilderSpec extends Specification {
 
   def "Response message builder is non-destructive" () {
     given:
-      sut.responseMessages(newHashSet(fullOk))
+      sut.responseMessages(Collections.singleton(fullOk))
     when:
-      sut.responseMessages(newHashSet(partialOk))
+      sut.responseMessages(Collections.singleton(partialOk))
     and:
       def operation = sut.build()
     then:
@@ -95,10 +94,10 @@ class OperationBuilderSpec extends Specification {
       'responseModel'   | new ModelRef('string')                     | 'responseModel'
       'deprecated'      | 'deprecated'                               | 'deprecated'
       'uniqueId'        | 'method1'                                  | 'uniqueId'
-      'produces'        | newHashSet('app/json')                     | 'produces'
-      'consumes'        | newHashSet('app/json')                     | 'consumes'
-      'protocols'       | newHashSet('https')                        | 'protocol'
-      'tags'            | newHashSet('tag')                          | 'tags'
+      'produces'        | Collections.singleton('app/json')          | 'produces'
+      'consumes'        | Collections.singleton('app/json')          | 'consumes'
+      'protocols'       | Collections.singleton('https')             | 'protocol'
+      'tags'            | Collections.singleton('tag')               | 'tags'
       'position'        | 1                                          | 'position'
       'hidden'          | true                                       | 'hidden'
       'extensions'      | [Mock(VendorExtension)]                    | 'vendorExtensions'
@@ -138,10 +137,10 @@ class OperationBuilderSpec extends Specification {
       'responseModel'   | new ModelRef('string') | 'responseModel'
       'deprecated'      | 'deprecated'           | 'deprecated'
       'uniqueId'        | 'method1'              | 'uniqueId'
-      'produces'        | newHashSet('app/json') | 'produces'
-      'consumes'        | newHashSet('app/json') | 'consumes'
-      'protocols'       | newHashSet('https')    | 'protocol'
-      'tags'            | newHashSet()           | 'tags'
+      'produces'        | Collections.singleton('app/json') | 'produces'
+      'consumes'        | Collections.singleton('app/json') | 'consumes'
+      'protocols'       | Collections.singleton('https')    | 'protocol'
+      'tags'            | new HashSet()          | 'tags'
       'parameters'      | [new ParameterBuilder().name("p").build()] | 'parameters'
   }
 

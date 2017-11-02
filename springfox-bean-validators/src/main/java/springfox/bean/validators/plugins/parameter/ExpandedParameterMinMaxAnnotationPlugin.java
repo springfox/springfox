@@ -18,22 +18,24 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
+import static springfox.bean.validators.plugins.Validators.validatorFromExpandedParameter;
+
+import java.util.Optional;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-
-import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)

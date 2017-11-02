@@ -19,9 +19,13 @@
 
 package springfox.documentation.swagger2.web;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
-import io.swagger.models.Swagger;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
+import static springfox.documentation.swagger2.web.HostNameProvider.componentsFrom;
+
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -32,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponents;
+
+import io.swagger.models.Swagger;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -40,12 +46,7 @@ import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
-
-import javax.servlet.http.HttpServletRequest;
-
-import static com.google.common.base.Strings.*;
-import static org.springframework.util.MimeTypeUtils.*;
-import static springfox.documentation.swagger2.web.HostNameProvider.*;
+import springfox.documentation.util.Strings;
 
 @Controller
 @ApiIgnore
@@ -84,7 +85,7 @@ public class Swagger2Controller {
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
-    String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
+    String groupName = Optional.ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
@@ -92,7 +93,7 @@ public class Swagger2Controller {
     Swagger swagger = mapper.mapDocumentation(documentation);
     UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
     swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
-    if (isNullOrEmpty(swagger.getHost())) {
+    if (Strings.isNullOrEmpty(swagger.getHost())) {
       swagger.host(hostName(uriComponents));
     }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);

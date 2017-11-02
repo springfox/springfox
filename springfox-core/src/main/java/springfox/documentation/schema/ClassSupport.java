@@ -18,18 +18,18 @@
  */
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 public class ClassSupport {
   private ClassSupport() {
     throw new UnsupportedOperationException();
   }
 
-  public static Optional<? extends Class> classByName(String className) {
+  public static Optional<? extends Class<?>> classByName(String className) {
     try {
       return Optional.of(Class.forName(className));
     } catch (ClassNotFoundException e) {
-      return Optional.absent();
+      return Optional.empty();
     }
   }
 }

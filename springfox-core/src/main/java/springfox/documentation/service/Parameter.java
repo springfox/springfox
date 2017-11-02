@@ -19,11 +19,12 @@
 
 package springfox.documentation.service;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import springfox.documentation.schema.ModelReference;
-
 import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.schema.ModelReference;
 
 public class Parameter {
   private final String name;

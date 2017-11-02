@@ -27,7 +27,7 @@ apply plugin: 'springfox-multi-release'
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  jdkVersion = 1.6
+  jdkVersion = 1.8
 }
 
 allprojects {

@@ -18,13 +18,17 @@
  */
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Equivalence;
-import com.google.common.base.Objects;
-import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import java.util.Objects;
 
+import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.util.Equivalence;
 
 public class OperationCachingEquivalence extends Equivalence<RequestMappingContext> {
-  @Override
+
+  public OperationCachingEquivalence(RequestMappingContext requestMappingContext) {
+    super(requestMappingContext);
+  }
+
   protected boolean doEquivalent(RequestMappingContext first, RequestMappingContext second) {
     if (bothAreNull(first, second)) {
       return true;
@@ -32,8 +36,8 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
     if (eitherOfThemIsNull(first, second)) {
       return false;
     }
-    return Objects.equal(first.key(), second.key())
-        && Objects.equal(first.getGenericsNamingStrategy(), second.getGenericsNamingStrategy());
+    return Objects.equals(first.key(), second.key())
+        && Objects.equals(first.getGenericsNamingStrategy(), second.getGenericsNamingStrategy());
   }
 
   private boolean eitherOfThemIsNull(RequestMappingContext first, RequestMappingContext second) {
@@ -44,10 +48,8 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
     return first.key() == null && second.key() == null;
   }
 
-  @Override
   protected int doHash(RequestMappingContext requestMappingContext) {
-    return Objects.hashCode(requestMappingContext.key(),
-        requestMappingContext.getRequestMappingPattern(),
+    return Objects.hash(requestMappingContext.key(), requestMappingContext.getRequestMappingPattern(),
         requestMappingContext.getGenericsNamingStrategy());
   }
 }

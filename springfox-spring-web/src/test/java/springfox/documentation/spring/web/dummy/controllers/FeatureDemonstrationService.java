@@ -19,11 +19,11 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.Extension;
-import io.swagger.annotations.ExtensionProperty;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.joda.time.LocalDate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -39,13 +39,25 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.spring.web.dummy.models.*;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Extension;
+import io.swagger.annotations.ExtensionProperty;
+import springfox.documentation.spring.web.dummy.models.Business;
+import springfox.documentation.spring.web.dummy.models.EnumObjectType;
+import springfox.documentation.spring.web.dummy.models.EnumType;
+import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.FancyPet;
+import springfox.documentation.spring.web.dummy.models.ModelAttributeExample;
+import springfox.documentation.spring.web.dummy.models.ModelWithArrayOfArrays;
+import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
+import springfox.documentation.spring.web.dummy.models.ModelWithObjectNode;
+import springfox.documentation.spring.web.dummy.models.NestedType;
+import springfox.documentation.spring.web.dummy.models.Pet;
+import springfox.documentation.spring.web.dummy.models.PetWithSerializer;
 
-import static com.google.common.collect.Lists.*;
 
 @Controller
 @RequestMapping("/features")
@@ -83,7 +95,7 @@ public class FeatureDemonstrationService {
   //Returns nested generic types
   @RequestMapping(value = "/effectives", method = RequestMethod.GET)
   private ResponseEntity<List<Example>> getEffectives() {
-    return new ResponseEntity<List<Example>>(newArrayList(new Example("Hello", 1, EnumType.ONE,
+    return new ResponseEntity<List<Example>>(Arrays.asList(new Example("Hello", 1, EnumType.ONE,
         new NestedType("test"))),
         HttpStatus.OK);
   }

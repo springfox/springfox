@@ -18,15 +18,15 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.collect.ImmutableList;
 
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-
 public class ListVendorExtension<T> implements VendorExtension<List<T>> {
-  private final List<T> values = newArrayList();
+  private final List<T> values = new ArrayList<>();
   private final String name;
 
   public ListVendorExtension(String name, List<T> values) {
@@ -41,6 +41,6 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
 
   @Override
   public List<T> getValue() {
-    return ImmutableList.copyOf(values);
+    return Collections.unmodifiableList(values);
   }
 }

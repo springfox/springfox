@@ -19,13 +19,11 @@
 
 package springfox.petstore.repository;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MapBackedRepository<K, V extends Identifiable<K>> {
   Map<K, V> service = new HashMap<K, V>();
@@ -47,12 +45,12 @@ public class MapBackedRepository<K, V extends Identifiable<K>> {
   }
 
   public V first() {
-    return Iterables.getFirst(service.values(), null);
+    return service.values().isEmpty() ? null : service.values().iterator().next();
   }
   
   public List<V> where(Predicate<V> criteria) {
-    return FluentIterable
-            .from(service.values())
-            .filter(criteria).toList();
+    return service.values().stream()
+            .filter(criteria)
+            .collect(Collectors.toList());
   }
 }

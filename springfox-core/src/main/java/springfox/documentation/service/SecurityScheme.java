@@ -17,20 +17,19 @@
  *
  */
 package springfox.documentation.service;
+  
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class SecurityScheme {
   protected final String name;
   protected final String type;
-  private final List<VendorExtension> vendorExtensions = newArrayList();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   protected SecurityScheme(String name, String type) {
     this.type = type;
@@ -46,17 +45,12 @@ public abstract class SecurityScheme {
   }
 
   public List<VendorExtension> getVendorExtensions() {
-    return ImmutableList.copyOf(vendorExtensions);
+    return Collections.unmodifiableList(vendorExtensions);
   }
 
   protected void addValidVendorExtensions(List<VendorExtension> vendorExtensions) {
-    this.vendorExtensions.addAll(FluentIterable.from(nullToEmptyList(vendorExtensions))
-        .filter(new Predicate<VendorExtension>() {
-          @Override
-          public boolean apply(VendorExtension input) {
-            return input.getName().toLowerCase().startsWith("x-");
-          }
-        })
-        .toList());
+    this.vendorExtensions.addAll(nullToEmptyList(vendorExtensions).stream()
+        .filter(input -> input.getName().toLowerCase().startsWith("x-"))
+        .collect(Collectors.toList()));
   }
 }

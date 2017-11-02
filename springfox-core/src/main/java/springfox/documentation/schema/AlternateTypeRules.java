@@ -19,12 +19,13 @@
 
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.core.Ordered;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.core.Ordered;
+
+import com.fasterxml.classmate.TypeResolver;
 
 public class AlternateTypeRules {
   public static final int DIRECT_SUBSTITUTION_RULE_ORDER = Ordered.HIGHEST_PRECEDENCE + 3000;

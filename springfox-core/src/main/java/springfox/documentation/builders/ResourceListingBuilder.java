@@ -19,20 +19,21 @@
 
 package springfox.documentation.builders;
 
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.ResourceListing;
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiListingReference;
+import springfox.documentation.service.ResourceListing;
+import springfox.documentation.service.SecurityScheme;
 
 public class ResourceListingBuilder {
   private String apiVersion;
-  private List<ApiListingReference> apis = newArrayList();
-  private List<SecurityScheme> securitySchemes = newArrayList();
+  private List<ApiListingReference> apis = new ArrayList<>();
+  private List<SecurityScheme> securitySchemes = new ArrayList<>();
   private ApiInfo info;
 
   /**

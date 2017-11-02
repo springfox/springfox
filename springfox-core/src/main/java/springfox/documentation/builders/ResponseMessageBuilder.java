@@ -19,24 +19,28 @@
 
 package springfox.documentation.builders;
 
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyMap;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-
 public class ResponseMessageBuilder {
   private int code;
   private String message;
   private ModelReference responseModel;
-  private Map<String, Header> headers = newTreeMap();
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private Map<String, Header> headers = new TreeMap<>();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Updates the http response code
@@ -76,24 +80,19 @@ public class ResponseMessageBuilder {
    *
    * @param headers
    * @return this
-   * @deprecated Use the {@link ResponseMessageBuilder#headersWithDescription} instead
+   * @deprecated Use the {@link ResponseMessageBuilder#headersWithDescription}
+   *             instead
    * @since 2.5.0
    */
   @Deprecated
   public ResponseMessageBuilder headers(Map<String, ModelReference> headers) {
-    this.headers.putAll(transformEntries(nullToEmptyMap(headers), toHeaderEntry()));
+    Map<String, ModelReference> h = headers == null ? Collections.emptyMap() : headers;
+    Map<String, Header> transformedHeaders = h.entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> new Header(e.getKey(), "", e.getValue())));
+    this.headers.putAll(transformedHeaders);
     return this;
   }
-
-
-  private EntryTransformer<String, ModelReference, Header> toHeaderEntry() {
-    return new EntryTransformer<String, ModelReference, Header>() {
-      @Override
-      public Header transformEntry(String key, ModelReference value) {
-        return new Header(key, "", value);
-      }
-    };
-  }
+  
 
   /**
    * Updates the response headers

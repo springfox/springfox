@@ -18,15 +18,18 @@
  */
 package springfox.documentation.spring.web.paths;
 
-import com.google.common.base.Function;
+import static springfox.documentation.spring.web.paths.Paths.removeAdjacentForwardSlashes;
+import static springfox.documentation.spring.web.paths.Paths.sanitizeRequestMappingPattern;
+
+import java.util.function.Function;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
-
-import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 20)

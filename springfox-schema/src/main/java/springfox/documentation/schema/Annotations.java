@@ -19,12 +19,14 @@
 
 package springfox.documentation.schema;
 
+import java.lang.annotation.Annotation;
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Optional;
 
-import java.lang.annotation.Annotation;
+import springfox.documentation.util.Predicates;
 
 public class Annotations {
 
@@ -33,28 +35,31 @@ public class Annotations {
   }
 
   /**
-   * Finds first annotation of the given type on the given bean property and returns it.
-   * Search precedence is getter, setter, field.
+   * Finds first annotation of the given type on the given bean property and
+   * returns it. Search precedence is getter, setter, field.
    *
-   * @param beanPropertyDefinition introspected jackson property definition
-   * @param annotationClass        class object representing desired annotation
-   * @param <A>                    type that extends Annotation
+   * @param beanPropertyDefinition
+   *          introspected jackson property definition
+   * @param annotationClass
+   *          class object representing desired annotation
+   * @param <A>
+   *          type that extends Annotation
    * @return first annotation found for property
    */
-  public static <A extends Annotation> Optional<A> findPropertyAnnotation(
-      BeanPropertyDefinition beanPropertyDefinition,
+  public static <A extends Annotation> Optional<A> findPropertyAnnotation(BeanPropertyDefinition beanPropertyDefinition,
       Class<A> annotationClass) {
 
-    return tryGetFieldAnnotation(beanPropertyDefinition, annotationClass)
-            .or(tryGetGetterAnnotation(beanPropertyDefinition, annotationClass))
-            .or(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass));
+    return Predicates.or(tryGetFieldAnnotation(beanPropertyDefinition, annotationClass),
+        Predicates.or(tryGetGetterAnnotation(beanPropertyDefinition, annotationClass),
+            tryGetSetterAnnotation(beanPropertyDefinition, annotationClass)));
+
   }
 
   public static boolean memberIsUnwrapped(AnnotatedMember member) {
     if (member == null) {
       return false;
     }
-    return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
+    return Optional.ofNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
   }
 
   @SuppressWarnings("PMD")
@@ -63,27 +68,27 @@ public class Annotations {
           Class<A> annotationClass) {
 
     if (beanPropertyDefinition.hasGetter()) {
-      return Optional.fromNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
+      return Optional.ofNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetSetterAnnotation(
           BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
     if (beanPropertyDefinition.hasSetter()) {
-      return Optional.fromNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
+      return Optional.ofNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetFieldAnnotation(
           BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
     if (beanPropertyDefinition.hasField()) {
-      return Optional.fromNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
+      return Optional.ofNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   public static String memberName(AnnotatedMember member) {

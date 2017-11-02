@@ -19,10 +19,14 @@
 
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
+import static springfox.documentation.schema.WildcardType.exactMatch;
+import static springfox.documentation.schema.WildcardType.hasWildcards;
+import static springfox.documentation.schema.WildcardType.replaceWildcardsFrom;
+import static springfox.documentation.schema.WildcardType.wildcardMatch;
+
 import org.springframework.core.Ordered;
 
-import static springfox.documentation.schema.WildcardType.*;
+import com.fasterxml.classmate.ResolvedType;
 
 public class AlternateTypeRule implements Ordered {
   protected final ResolvedType original;

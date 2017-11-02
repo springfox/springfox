@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger.schema;
 
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -33,6 +32,8 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
+import java.util.Optional;
+
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlugin {
@@ -45,26 +46,26 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
   
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<ApiModelProperty> annotation = Optional.absent();
+    Optional<ApiModelProperty> annotation = Optional.empty();
 
     if (context.getAnnotatedElement().isPresent()) {
-      annotation = annotation.or(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
+      annotation = annotation.isPresent() ? annotation : findApiModePropertyAnnotation(context.getAnnotatedElement().get());
     }
     if (context.getBeanPropertyDefinition().isPresent()) {
-      annotation = annotation.or(findPropertyAnnotation(
+      annotation = annotation.isPresent() ? annotation : findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
-          ApiModelProperty.class));
+          ApiModelProperty.class);
     }
     if (annotation.isPresent()) {
       context.getBuilder()
-          .allowableValues(annotation.transform(toAllowableValues()).orNull())
-          .required(annotation.transform(toIsRequired()).or(false))
-          .readOnly(annotation.transform(toIsReadOnly()).or(false))
-          .description(annotation.transform(toDescription(descriptions)).orNull())
-          .isHidden(annotation.transform(toHidden()).or(false))
-          .type(annotation.transform(toType(context.getResolver())).orNull())
-          .position(annotation.transform(toPosition()).or(0))
-          .example(annotation.transform(toExample()).orNull());
+          .allowableValues(annotation.map(toAllowableValues()).orElse(null))
+          .required(annotation.map(toIsRequired()).orElse(false))
+          .readOnly(annotation.map(toIsReadOnly()).orElse(false))
+          .description(annotation.map(toDescription(descriptions)).orElse(null))
+          .isHidden(annotation.map(toHidden()).orElse(false))
+          .type(annotation.map(toType(context.getResolver())).orElse(null))
+          .position(annotation.map(toPosition()).orElse(0))
+          .example(annotation.map(toExample()).orElse(null));
     }
   }
 

@@ -19,26 +19,28 @@
 
 package springfox.documentation.swagger.schema;
 
+import static org.springframework.util.StringUtils.hasText;
+
+import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.springframework.core.annotation.AnnotationUtils;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spring.web.DescriptionResolver;
-
-import java.lang.reflect.AnnotatedElement;
-import java.util.Collections;
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
-import static org.springframework.util.StringUtils.*;
+import springfox.documentation.util.Strings;
 
 public final class ApiModelProperties {
 
@@ -56,16 +58,21 @@ public final class ApiModelProperties {
   }
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
-    AllowableValues allowableValues = new AllowableListValues(Lists.<String>newArrayList(), "LIST");
+    AllowableValues allowableValues = new AllowableListValues(new ArrayList<>(), "LIST");
     String trimmed = allowableValueString.trim();
     if (trimmed.startsWith("range[")) {
       trimmed = trimmed.replaceAll("range\\[", "").replaceAll("]", "");
-      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
-      List<String> ranges = newArrayList(split);
+      List<String> ranges = Arrays.stream(trimmed.split(","))
+          .map(String::trim)
+          .filter(s -> s.length() > 0)
+          .collect(Collectors.toList());
       allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
     } else if (trimmed.contains(",")) {
-      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
-      allowableValues = new AllowableListValues(newArrayList(split), "LIST");
+      List<String> ranges = Arrays.stream(trimmed.split(","))
+          .map(String::trim)
+          .filter(s -> s.length() > 0)
+          .collect(Collectors.toList());
+      allowableValues = new AllowableListValues(ranges, "LIST");
     } else if (hasText(trimmed)) {
       List<String> singleVal = Collections.singletonList(trimmed);
       allowableValues = new AllowableListValues(singleVal, "LIST");
@@ -131,7 +138,7 @@ public final class ApiModelProperties {
   }
 
   public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
+    return Optional.ofNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
   }
 
   static Function<ApiModelProperty, Boolean> toHidden() {

@@ -18,16 +18,15 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springfox.documentation.service.ResourceGroup;
 
-import java.util.Arrays;
+import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.util.Strings;
 
 class ResourcePathProvider {
   private final ResourceGroup resourceGroup;
@@ -37,17 +36,17 @@ class ResourcePathProvider {
   }
 
   public Optional<String> resourcePath() {
-    return Optional.fromNullable(
+    return Optional.ofNullable(
         Strings.emptyToNull(controllerClass()
-            .transform(resourcePathExtractor())
-            .or("")));
+            .map(resourcePathExtractor())
+            .orElse("")));
   }
 
   private Function<Class<?>, String> resourcePathExtractor() {
     return new Function<Class<?>, String>() {
       @Override
       public String apply(Class<?> input) {
-        String path = Iterables.getFirst(Arrays.asList(paths(input)), "");
+        String path = Arrays.asList(paths(input)).stream().findFirst().orElse("");
         if (Strings.isNullOrEmpty(path)) {
           return "";
         }
@@ -59,7 +58,6 @@ class ResourcePathProvider {
     };
   }
 
-  @VisibleForTesting
   String[] paths(Class<?> controller) {
     RequestMapping annotation
         = AnnotationUtils.findAnnotation(controller, RequestMapping.class);

@@ -18,24 +18,23 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
+import static springfox.documentation.schema.Types.typeNameFor;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Header;
-
-import java.util.Map;
-
-import static com.google.common.base.Optional.fromNullable;
-import static com.google.common.base.Predicates.not;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMap;
-import static springfox.documentation.schema.Types.typeNameFor;
+import springfox.documentation.util.Strings;
 
 public class ResponseHeaders {
   private ResponseHeaders() {
@@ -52,8 +51,9 @@ public class ResponseHeaders {
   }
 
   public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
-    Map<String, Header> headers = newHashMap();
-    for (ResponseHeader each : from(newArrayList(responseHeaders)).filter(not(emptyOrVoid()))) {
+    Map<String, Header> headers = new HashMap<>();
+    List<ResponseHeader> filtered = Arrays.stream(responseHeaders).filter(emptyOrVoid().negate()).collect(Collectors.toList());
+    for (ResponseHeader each : filtered) {
       headers.put(each.name(), new Header(each.name(), each.description(), headerModel(each)));
     }
     return headers;
@@ -62,7 +62,7 @@ public class ResponseHeaders {
   private static Predicate<ResponseHeader> emptyOrVoid() {
     return new Predicate<ResponseHeader>() {
       @Override
-      public boolean apply(ResponseHeader input) {
+      public boolean test(ResponseHeader input) {
         return Strings.isNullOrEmpty(input.name()) || Void.class.equals(input.response());
       }
     };
@@ -70,8 +70,8 @@ public class ResponseHeaders {
 
   private static ModelReference headerModel(ResponseHeader each) {
     ModelReference modelReference;
-    String typeName = fromNullable(typeNameFor(each.response())).or("string");
-    if (isNullOrEmpty(each.responseContainer())) {
+    String typeName = Optional.ofNullable(typeNameFor(each.response())).orElse("string");
+    if (Strings.isNullOrEmpty(each.responseContainer())) {
       modelReference = new ModelRef(typeName);
     } else {
       modelReference = new ModelRef(each.responseContainer(), new ModelRef(typeName));

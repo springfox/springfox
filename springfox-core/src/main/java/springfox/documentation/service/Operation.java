@@ -19,18 +19,18 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
-import org.springframework.http.HttpMethod;
-import springfox.documentation.schema.ModelReference;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+import org.springframework.http.HttpMethod;
+
+import springfox.documentation.schema.ModelReference;
+
 
 public class Operation {
   private final HttpMethod method;
@@ -83,7 +83,7 @@ public class Operation {
     this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public boolean isHidden() {
@@ -99,17 +99,12 @@ public class Operation {
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
-    return Maps.transformEntries(Maps.uniqueIndex(securityReferences, byType()), toScopes());
+    Map<String, SecurityReference> typeReferences = securityReferences.stream()
+        .collect(Collectors.toMap(byType(), Function.identity()));
+    return typeReferences.entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> new ArrayList<>(e.getValue().getScopes())));
   }
 
-  private EntryTransformer<? super String, ? super SecurityReference, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, SecurityReference, List<AuthorizationScope>>() {
-      @Override
-      public List<AuthorizationScope> transformEntry(String key, SecurityReference value) {
-        return newArrayList(value.getScopes());
-      }
-    };
-  }
 
   private Function<? super SecurityReference, String> byType() {
     return new Function<SecurityReference, String>() {

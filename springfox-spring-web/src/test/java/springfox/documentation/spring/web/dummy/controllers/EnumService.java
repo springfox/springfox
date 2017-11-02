@@ -19,19 +19,21 @@
 
 package springfox.documentation.spring.web.dummy.controllers;
 
-import com.google.common.collect.Sets;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.spring.web.dummy.models.EnumCollection;
 import springfox.documentation.spring.web.dummy.models.EnumType;
-
-import java.util.Collections;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/enums")
@@ -42,7 +44,7 @@ public class EnumService {
     @ApiOperation(value = "Example with wrapped enum collection")
     public EnumCollection getCollectionValue() {
         EnumCollection result = new EnumCollection();
-        result.setTypes(Sets.newHashSet(EnumType.ONE, EnumType.TWO));
+        result.setTypes(new HashSet<>(Arrays.asList(EnumType.ONE, EnumType.TWO)));
         return result;
     }
 

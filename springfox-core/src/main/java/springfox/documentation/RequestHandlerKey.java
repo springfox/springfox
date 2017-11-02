@@ -18,12 +18,11 @@
  */
 package springfox.documentation;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
+import java.util.Objects;
+import java.util.Set;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.Set;
 
 public class RequestHandlerKey {
 
@@ -61,22 +60,26 @@ public class RequestHandlerKey {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    RequestHandlerKey that = (RequestHandlerKey) o;
-    return Sets.symmetricDifference(pathMappings, that.pathMappings).isEmpty() &&
-        Sets.symmetricDifference(supportedMethods, that.supportedMethods).isEmpty() &&
-        Sets.symmetricDifference(supportedMediaTypes, that.supportedMediaTypes).isEmpty() &&
-        Sets.symmetricDifference(producibleMediaTypes, that.producibleMediaTypes).isEmpty();
+  public int hashCode() {
+    return Objects.hash(pathMappings, producibleMediaTypes, supportedMediaTypes, supportedMethods);
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hashCode(pathMappings, supportedMethods, supportedMediaTypes, producibleMediaTypes);
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    RequestHandlerKey other = (RequestHandlerKey) obj;
+    return Objects.equals(pathMappings, other.pathMappings)
+        && Objects.equals(producibleMediaTypes, other.producibleMediaTypes)
+        && Objects.equals(supportedMediaTypes, other.supportedMediaTypes)
+        && Objects.equals(supportedMethods, other.supportedMethods);
   }
+
 }

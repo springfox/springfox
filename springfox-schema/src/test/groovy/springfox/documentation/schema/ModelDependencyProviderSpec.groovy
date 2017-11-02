@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -37,7 +36,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
     def dependentTypes = modelDependencyProvider.dependentModels(context)
     def dependentTypeNames = dependentTypes.collect() {
       typeNameExtractor.typeName(
@@ -47,7 +46,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              new HashSet()))
     }.unique()
         .sort()
 
@@ -83,7 +82,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
     def dependentTypes = modelDependencyProvider.dependentModels(context)
     def dependentTypeNames = dependentTypes.collect() {
       typeNameExtractor.typeName(
@@ -93,7 +92,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              new HashSet()))
     }.unique()
         .sort()
     expect:
