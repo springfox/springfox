@@ -19,10 +19,12 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
-import io.swagger.annotations.ApiOperation;
+import java.util.Optional;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;

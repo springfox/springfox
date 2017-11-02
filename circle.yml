@@ -5,14 +5,14 @@ general:
 
 machine:
   java:
-    version: oraclejdk7
+    version: oraclejdk8
   environment:
     TERM: dumb
     CI_NAME: Circle-CI
     CI_BRANCH: $CIRCLE_BRANCH
     CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
     CI_BUILD_URL: $CIRCLE_COMPARE_URL
-    _JAVA_OPTIONS: "-Xmx1024M -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512M"
+    _JAVA_OPTIONS: "-Xmx1024M -XX:ReservedCodeCacheSize=512M"
     GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3840m -XX:+HeapDumpOnOutOfMemoryError"'
 
 checkout:

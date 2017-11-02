@@ -19,17 +19,20 @@
 
 package springfox.documentation.builders;
 
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.replaceIfMoreSpecific;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.classmate.ResolvedType;
+
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
-
-import java.util.List;
-
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import springfox.documentation.util.Strings;
 
 public class ModelPropertyBuilder {
   private ResolvedType type;
@@ -45,7 +48,7 @@ public class ModelPropertyBuilder {
   private String pattern;
   private String defaultValue;
   private Xml xml;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -118,7 +121,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    if (xml != null && isNullOrEmpty(xml.getName())) {
+    if (xml != null && Strings.isNullOrEmpty(xml.getName())) {
       xml.setName(name);
     }
     return new ModelProperty(

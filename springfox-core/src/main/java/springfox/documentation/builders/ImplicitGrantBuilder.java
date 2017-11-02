@@ -19,10 +19,10 @@
 
 package springfox.documentation.builders;
 
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+
 import springfox.documentation.service.ImplicitGrant;
 import springfox.documentation.service.LoginEndpoint;
-
-import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ImplicitGrantBuilder {
   private LoginEndpoint loginEndpoint;

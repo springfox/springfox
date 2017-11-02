@@ -18,8 +18,12 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.AbstractNumericProperty;
@@ -32,13 +36,6 @@ import io.swagger.models.properties.StringProperty;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
-
-import java.math.BigDecimal;
-import java.util.List;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
 
 public class EnumMapper {
   static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {
@@ -110,7 +107,12 @@ public class EnumMapper {
   }
 
   private static <T extends Number> List<T> convert(List<String> values, Class<T> toType) {
-    return newArrayList(presentInstances(from(values).transform(converterOfType(toType))));
+    //return newArrayList(presentInstances(values.stream().map(converterOfType(toType))));
+    return values.stream()
+      .map(converterOfType(toType))
+      .filter(p -> p.isPresent())
+      .map(p -> p.get())
+      .collect(Collectors.toList());
   }
 
   private static <T extends Number> Function<? super String, Optional<T>> converterOfType(final Class<T> toType) {
@@ -130,7 +132,7 @@ public class EnumMapper {
           }
         } catch (NumberFormatException ignored) {
         }
-        return Optional.absent();
+        return Optional.empty();
       }
     };
   }

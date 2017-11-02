@@ -1,6 +1,5 @@
 package springfox.documentation.spring.web
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -25,8 +24,8 @@ class HandlerMethodReturnTypesSpec extends Specification {
 
         where:
         input                         || expected
-        getProxy(test.class).class    || Optional.<Class>absent()
-        Class.class                   || Optional.<Class>absent()
+        getProxy(test.class).class    || Optional.<Class>empty()
+        Class.class                   || Optional.<Class>empty()
         String.class                  || Optional.<Class>of(String.class)
     }
 

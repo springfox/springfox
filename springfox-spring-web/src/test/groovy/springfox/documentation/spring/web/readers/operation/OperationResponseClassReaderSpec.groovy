@@ -32,8 +32,8 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.util.Strings
 
-import static com.google.common.base.Strings.*
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class OperationResponseClassReaderSpec extends DocumentationContextSpec {
@@ -70,7 +70,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
         assert expectedClass == operation.responseModel.type
         if ("Map".equals(operation.responseModel.type)) {
           assert operation.responseModel.isMap()
-          assert !isNullOrEmpty(operation.responseModel.itemType)
+          assert !Strings.isNullOrEmpty(operation.responseModel.itemType)
         }
         if (allowableValues == null) {
           assert operation.responseModel.getAllowableValues() == null

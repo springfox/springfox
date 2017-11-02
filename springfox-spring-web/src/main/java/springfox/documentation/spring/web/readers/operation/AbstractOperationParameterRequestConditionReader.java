@@ -19,22 +19,24 @@
 
 package springfox.documentation.spring.web.readers.operation;
 
-import com.fasterxml.classmate.TypeResolver;
+import static springfox.documentation.builders.Parameters.withName;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
+
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
-
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Iterables.any;
-import static com.google.common.collect.Lists.newArrayList;
-import static springfox.documentation.builders.Parameters.withName;
+import springfox.documentation.util.Strings;
 
 public abstract class AbstractOperationParameterRequestConditionReader implements OperationBuilderPlugin {
 
@@ -45,7 +47,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   public List<Parameter> getParameters(Set<NameValueExpression<String>> expressions, String parameterType) {
-    List<Parameter> parameters = newArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     for (NameValueExpression<String> expression : expressions) {
       if (skipParameter(parameters, expression)) {
         continue;
@@ -53,8 +55,8 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
 
       String paramValue = expression.getValue();
       AllowableListValues allowableValues = null;
-      if (!isNullOrEmpty(paramValue)) {
-        allowableValues = new AllowableListValues(newArrayList(paramValue), "string");
+      if (!Strings.isNullOrEmpty(paramValue)) {
+        allowableValues = new AllowableListValues(Arrays.asList(paramValue), "string");
       }
       Parameter parameter = new ParameterBuilder()
               .name(expression.getName())
@@ -78,7 +80,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {
-    return any(parameters, withName(expression.getName()));
+    return parameters.stream().anyMatch(withName(expression.getName()));
   }
 
   @Override

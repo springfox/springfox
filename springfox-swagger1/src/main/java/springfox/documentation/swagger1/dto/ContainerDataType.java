@@ -22,7 +22,8 @@ package springfox.documentation.swagger1.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.google.common.base.Preconditions;
+
+import springfox.documentation.util.Assert;
 
 @JsonPropertyOrder({"type", "items"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -33,8 +34,8 @@ public class ContainerDataType implements SwaggerDataType {
   private final SwaggerDataType items;
 
   public ContainerDataType(String innerType, boolean uniqueItems) {
-    Preconditions.checkNotNull(innerType);
-    Preconditions.checkArgument(!innerType.equalsIgnoreCase("array"), "Nested arrays not supported");
+    Assert.checkNotNull(innerType, "innertype should not be null");
+    Assert.checkArgument(!innerType.equalsIgnoreCase("array"), "Nested arrays not supported");
     items = new DataType(innerType);
     this.uniqueItems = uniqueItems ? true : null;
   }
@@ -55,4 +56,5 @@ public class ContainerDataType implements SwaggerDataType {
   public String getAbsoluteType() {
     return type;
   }
+
 }

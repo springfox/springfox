@@ -18,50 +18,62 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Equivalence;
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Sets;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.util.Equivalence;
+import springfox.documentation.util.Sets;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+// RequestHandlerWrapper
 class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
-  private static final ResolvedMethodParameterEquivalence parameterEquivalence
-      = new ResolvedMethodParameterEquivalence();
 
-  @Override
+  public PathAndParametersEquivalence(RequestHandler requestHandler) {
+    super(requestHandler);
+  }
+
   protected boolean doEquivalent(RequestHandler a, RequestHandler b) {
     return a.getPatternsCondition().equals(b.getPatternsCondition())
-        && !Sets.intersection(a.supportedMethods(), b.supportedMethods()).isEmpty()
-        && a.params().equals(b.params())
+        && !Sets.intersection(a.supportedMethods(), b.supportedMethods()).isEmpty() && a.params().equals(b.params())
         && Sets.difference(wrapped(a.getParameters()), wrapped(b.getParameters())).isEmpty();
   }
 
-  private Set<Wrapper<ResolvedMethodParameter>> wrapped(List<ResolvedMethodParameter> parameters) {
-    return FluentIterable.from(parameters)
-        .transform(wrappingFunction())
-        .toSet();
+  private Set<ResolvedMethodParameterWrapper> wrapped(List<ResolvedMethodParameter> parameters) {
+    return parameters.stream().map(wrappingFunction()).collect(Collectors.toSet());
   }
 
-  private Function<ResolvedMethodParameter, Wrapper<ResolvedMethodParameter>> wrappingFunction() {
-    return new Function<ResolvedMethodParameter, Wrapper<ResolvedMethodParameter>>() {
+  private Function<ResolvedMethodParameter, ResolvedMethodParameterWrapper> wrappingFunction() {
+    return new Function<ResolvedMethodParameter, ResolvedMethodParameterWrapper>() {
       @Override
-      public Wrapper<ResolvedMethodParameter> apply(ResolvedMethodParameter input) {
-        return parameterEquivalence.wrap(input);
+      public ResolvedMethodParameterWrapper apply(ResolvedMethodParameter input) {
+        return new ResolvedMethodParameterWrapper(input);
       }
     };
   }
 
-  @Override
   protected int doHash(RequestHandler requestHandler) {
-    return Objects.hashCode(
-        requestHandler.getPatternsCondition().getPatterns(),
-        requestHandler.supportedMethods(),
-        requestHandler.params(),
-        wrapped(requestHandler.getParameters()));
+    return Objects.hash(requestHandler.getPatternsCondition().getPatterns(), requestHandler.supportedMethods(),
+        requestHandler.params(), wrapped(requestHandler.getParameters()));
+  }
+
+  protected static class ResolvedMethodParameterWrapper extends Equivalence<ResolvedMethodParameter> {
+
+    ResolvedMethodParameterWrapper(ResolvedMethodParameter delegate) {
+      super(delegate);
+    }
+
+    protected boolean doEquivalent(ResolvedMethodParameter a, ResolvedMethodParameter b) {
+      return Objects.equals(a.defaultName(), b.defaultName())
+          && Objects.equals(a.getParameterIndex(), b.getParameterIndex())
+          && Objects.equals(a.getParameterType(), b.getParameterType());
+    }
+
+    protected int doHash(ResolvedMethodParameter self) {
+      return Objects.hash(self.defaultName(), self.getParameterIndex(), self.getParameterType());
+    }
   }
 }

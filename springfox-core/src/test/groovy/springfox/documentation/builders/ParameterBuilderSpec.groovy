@@ -20,7 +20,7 @@
 package springfox.documentation.builders
 
 import com.fasterxml.classmate.ResolvedType
-import com.google.common.base.Optional
+import java.util.Optional
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.ModelRef

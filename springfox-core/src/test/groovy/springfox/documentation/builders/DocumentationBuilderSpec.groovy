@@ -19,16 +19,12 @@
 
 package springfox.documentation.builders
 
-import com.google.common.collect.LinkedListMultimap
-import com.google.common.collect.Multimap
 import spock.lang.Specification
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ListVendorExtension
 import springfox.documentation.service.ResourceListing
 import springfox.documentation.service.Tag
 import springfox.documentation.service.VendorExtension
-
-import static com.google.common.collect.Sets.*
 
 class DocumentationBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
@@ -44,7 +40,7 @@ class DocumentationBuilderSpec extends Specification {
     then:
     if (value instanceof Set) {
       assert built."$property".containsAll(value)
-    } else if (value instanceof Multimap) {
+    } else if (value instanceof Map) {
       assert built."$property".keySet().containsAll(value.keySet())
     } else {
       assert built."$property" == value
@@ -78,7 +74,7 @@ class DocumentationBuilderSpec extends Specification {
     then:
     if (value instanceof Set) {
       assert built."$property".containsAll(value)
-    } else if (value instanceof Multimap) {
+    } else if (value instanceof Map) {
       assert built."$property".keySet().containsAll(value.keySet())
     } else {
       assert built."$property" == value
@@ -100,7 +96,7 @@ class DocumentationBuilderSpec extends Specification {
   def "Setting ordered tags should preserve ordering"() {
     given:
     def sut = new DocumentationBuilder()
-    def tags = newLinkedHashSet()
+    def tags = new LinkedHashSet()
     def firstTag = new Tag("First", "First")
     def secondTag = new Tag("Second", "Second")
     def thirdTag = new Tag("Third", "Third")
@@ -119,8 +115,8 @@ class DocumentationBuilderSpec extends Specification {
     assert builtDocumentationTags[2] == thirdTag
   }
 
-  Multimap<String, ApiListing> multiMap() {
-    Multimap<String, ApiListing> multiMap = LinkedListMultimap.create()
+  Map<String, List<ApiListing>> multiMap() {
+    Map<String, ApiListing> multiMap = new LinkedHashMap();
     multiMap.put("group1", Mock(ApiListing))
     return multiMap
   }

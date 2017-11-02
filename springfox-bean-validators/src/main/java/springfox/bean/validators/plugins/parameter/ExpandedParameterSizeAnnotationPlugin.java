@@ -18,21 +18,24 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.base.Optional;
+import static springfox.bean.validators.plugins.RangeAnnotations.stringLengthRange;
+import static springfox.bean.validators.plugins.Validators.validatorFromExpandedParameter;
+
+import java.util.Optional;
+
+import javax.validation.constraints.Size;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
-import javax.validation.constraints.Size;
-
-import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
+import springfox.documentation.util.Predicates;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -48,8 +51,8 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<Size> size = validatorFromExpandedParameter(context, Size.class)
-        .or(validatorFromExpandedParameter(context, Size.class));
+    Optional<Size> size = Predicates.or(validatorFromExpandedParameter(context, Size.class)
+        , validatorFromExpandedParameter(context, Size.class));
 
     if (size.isPresent()) {
       AllowableRangeValues values = stringLengthRange(size.get());

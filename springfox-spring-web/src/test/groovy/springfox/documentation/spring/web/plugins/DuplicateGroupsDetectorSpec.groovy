@@ -22,7 +22,6 @@ import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DocumentationPlugin
 
-import static com.google.common.collect.Lists.*
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*
 
 class DuplicateGroupsDetectorSpec extends Specification {
@@ -35,7 +34,7 @@ class DuplicateGroupsDetectorSpec extends Specification {
 
   def "The plugin list is empty"() {
     when:
-      def plugins = newArrayList()
+      def plugins = new ArrayList()
     and:
       ensureNoDuplicateGroups(plugins)
     then:
@@ -45,7 +44,7 @@ class DuplicateGroupsDetectorSpec extends Specification {
   def "The plugin list has one element"() {
     given:
       def plugin1 = Mock(DocumentationPlugin)
-      def plugins = newArrayList(plugin1)
+      def plugins = Arrays.asList(plugin1)
     and:
       plugin1.getGroupName() >> "group1"
     when:
@@ -58,7 +57,7 @@ class DuplicateGroupsDetectorSpec extends Specification {
     given:
       def plugin1 = Mock(DocumentationPlugin)
       def plugin2 = Mock(DocumentationPlugin)
-      def plugins = newArrayList(plugin1, plugin2)
+      def plugins = Arrays.asList(plugin1, plugin2)
     and:
       plugin1.getGroupName() >> "group1"
       plugin2.getGroupName() >> "group2"
@@ -72,7 +71,7 @@ class DuplicateGroupsDetectorSpec extends Specification {
     given:
       def plugin1 = Mock(DocumentationPlugin)
       def plugin2 = Mock(DocumentationPlugin)
-      def plugins = newArrayList(plugin1, plugin2)
+      def plugins = Arrays.asList(plugin1, plugin2)
     and:
       plugin1.getGroupName() >> "group1"
       plugin2.getGroupName() >> "group1"

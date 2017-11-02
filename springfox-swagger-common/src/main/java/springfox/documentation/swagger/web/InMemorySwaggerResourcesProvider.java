@@ -18,30 +18,28 @@
  */
 package springfox.documentation.swagger.web;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-import springfox.documentation.service.Documentation;
-import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.plugins.Docket;
+import static springfox.documentation.schema.ClassSupport.classByName;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import static springfox.documentation.schema.ClassSupport.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
+import springfox.documentation.service.Documentation;
+import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.spring.web.plugins.Docket;
 
 @Component
 public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvider {
   private final String swagger1Url;
   private final String swagger2Url;
 
-  @VisibleForTesting
   boolean swagger1Available;
-  @VisibleForTesting
   boolean swagger2Available;
 
   private final DocumentationCache documentationCache;

@@ -19,14 +19,26 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.containerType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Types.typeNameFor;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
@@ -36,15 +48,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
+import springfox.documentation.util.Strings;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -64,7 +68,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   public void apply(ParameterExpansionContext context) {
     AllowableValues allowable = allowableValues(context.getField().getRawMember());
 
-    String name = isNullOrEmpty(context.getParentName())
+    String name = Strings.isNullOrEmpty(context.getParentName())
                   ? context.getField().getName()
                   : String.format("%s.%s", context.getParentName(), context.getField().getName());
 
@@ -72,7 +76,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     ModelReference itemModel = null;
     ResolvedType resolved = resolver.resolve(context.getField().getType());
     if (isContainerType(resolved)) {
-      resolved = fieldType(context).or(resolved);
+      resolved = fieldType(context).orElse(resolved);
       ResolvedType elementType = collectionElementType(resolved);
       String itemTypeName = typeNameFor(elementType.getErasedType());
       AllowableValues itemAllowables = null;
@@ -118,11 +122,11 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
+    return Arrays.stream(subject.getEnumConstants()).map(new Function<Object, String>() {
       @Override
       public String apply(final Object input) {
         return input.toString();
       }
-    });
+    }).collect(Collectors.toList());
   }
 }

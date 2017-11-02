@@ -29,19 +29,20 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntitySaveExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList<>();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
     if (crudMethods.hasSaveMethod()) {
@@ -51,13 +52,13 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
       RepositoryMetadata resource = context.getRepositoryMetadata();
       ActionSpecification put = saveActionSpecification(
           entity,
-          newHashSet(PUT, PATCH),
+          new HashSet<>(Arrays.asList(PUT, PATCH)),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
           handler,
           context.getTypeResolver(),
-          resource, newArrayList(
+          resource, Arrays.asList(
               new ResolvedMethodParameter(
                   0,
                   "id",
@@ -71,10 +72,10 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
       handlers.add(new SpringDataRestRequestHandler(context, put));
       ActionSpecification post = saveActionSpecification(
           entity,
-          newHashSet(POST),
+          Collections.singleton(POST),
           String.format("%s%s", context.basePath(), context.resourcePath()),
           handler,
-          context.getTypeResolver(), resource, newArrayList(
+          context.getTypeResolver(), resource, Arrays.asList(
               new ResolvedMethodParameter(
                   0,
                   "body",

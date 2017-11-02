@@ -21,11 +21,11 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Optional;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.spi.DocumentationType;
 
 import java.lang.reflect.AnnotatedElement;
+import java.util.Optional;
 
 public class ModelPropertyContext {
   private final ModelPropertyBuilder builder;
@@ -42,8 +42,8 @@ public class ModelPropertyContext {
 
     this.builder = builder;
     this.resolver = resolver;
-    this.annotatedElement = Optional.fromNullable(annotatedElement);
-    this.beanPropertyDefinition = Optional.absent();
+    this.annotatedElement = Optional.ofNullable(annotatedElement);
+    this.beanPropertyDefinition = Optional.empty();
     this.documentationType = documentationType;
   }
 
@@ -55,9 +55,9 @@ public class ModelPropertyContext {
 
     this.builder = builder;
     this.resolver = resolver;
-    this.beanPropertyDefinition = Optional.fromNullable(beanPropertyDefinition);
+    this.beanPropertyDefinition = Optional.ofNullable(beanPropertyDefinition);
     this.documentationType = documentationType;
-    annotatedElement = Optional.absent();
+    this.annotatedElement = Optional.empty();
   }
 
   /**

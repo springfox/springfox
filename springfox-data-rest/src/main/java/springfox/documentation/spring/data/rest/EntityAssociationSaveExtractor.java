@@ -32,11 +32,10 @@ import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 public class EntityAssociationSaveExtractor implements EntityAssociationOperationsExtractor {
@@ -60,11 +59,11 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
               entityContext.basePath(),
               entityContext.resourcePath(),
               mapping.getPath()),
-          newHashSet(RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.POST),
+          new HashSet<>(Arrays.asList(RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.POST)),
           new HashSet<MediaType>(),
-          newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
+          new HashSet<>(Arrays.asList(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON)),
           null,
-          newArrayList(new ResolvedMethodParameter(
+          Arrays.asList(new ResolvedMethodParameter(
                   0,
                   "id",
                   pathAnnotations("id"),

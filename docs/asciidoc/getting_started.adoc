@@ -99,19 +99,6 @@ include::../../springfox-spring-config/src/main/java/springfox/springconfig/Swag
 ----
 
 === Configuration explained
-IMPORTANT: This library extensively uses https://github.com/google/guava[googles guava library]. For e.g. when you
-see `newArrayList(...)` its actually the guava equivalent of creating an normal array list and adding item(s) to it.
-
-[source,groovy]
-[subs="verbatim,attributes"]
-----
-//This guava code snippet
-List<Something> guavaList = newArrayList(new Something);
-
-//... is equivalent to
-List<Something> list = new ArrayList<Something>();
-list.add(new Something());
-----
 
 <1> Enables Springfox swagger 2
 <2> Instructs spring where to scan for API controllers

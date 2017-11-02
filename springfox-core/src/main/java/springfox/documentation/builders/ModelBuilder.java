@@ -19,18 +19,20 @@
 
 package springfox.documentation.builders;
 
-import com.fasterxml.classmate.ResolvedType;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.Xml;
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyMap;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.Xml;
+import springfox.documentation.util.Strings;
 
 public class ModelBuilder {
   private String id;
@@ -43,8 +45,8 @@ public class ModelBuilder {
   private String example;
   private Xml xml;
 
-  private Map<String, ModelProperty> properties = newHashMap();
-  private List<String> subTypes = newArrayList();
+  private Map<String, ModelProperty> properties = new HashMap<>();
+  private List<String> subTypes = new ArrayList<>();
 
   /**
    * Updates the Id of the model, usually the type name
@@ -164,7 +166,7 @@ public class ModelBuilder {
   }
 
   public Model build() {
-    if (xml != null && isNullOrEmpty(xml.getName())) {
+    if (xml != null && Strings.isNullOrEmpty(xml.getName())) {
       xml.setName(name);
     }
     return new Model(

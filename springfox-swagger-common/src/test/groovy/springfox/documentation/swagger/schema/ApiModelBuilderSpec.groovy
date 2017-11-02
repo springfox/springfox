@@ -19,7 +19,6 @@
 package springfox.documentation.swagger.schema
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import io.swagger.annotations.ApiModel
 import spock.lang.Shared
 import spock.lang.Specification
@@ -49,7 +48,7 @@ class ApiModelBuilderSpec extends Specification {
           DocumentationType.SWAGGER_12,
           new AlternateTypeProvider([]),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          new HashSet())
     when:
       sut.apply(context)
     then:

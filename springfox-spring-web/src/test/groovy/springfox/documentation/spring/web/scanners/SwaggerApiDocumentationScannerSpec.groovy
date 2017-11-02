@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.LinkedListMultimap
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
 import springfox.documentation.service.*
@@ -33,8 +32,9 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.collect.Maps.*
 import static springfox.documentation.builders.PathSelectors.*
+
+import java.util.ArrayList
 
 @Mixin([RequestMappingSupport])
 class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
@@ -45,8 +45,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
+    listingScanner.scan(_) >> new LinkedHashMap()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(context())
@@ -76,8 +76,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .apiInfo(expected)
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
+    listingScanner.scan(_) >> new LinkedHashMap()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(context())
@@ -105,8 +105,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .securitySchemes([apiKey])
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
+    listingScanner.scan(_) >> new LinkedHashMap()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(context())
@@ -145,7 +145,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     when:
     listingReferenceScanner.scan(_) >>
         new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingScanner.scan(_) >> new LinkedHashMap()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(context())
@@ -168,27 +168,28 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .apiListingReferenceOrdering(ordering)
         .configure(contextBuilder)
 
-    def listingsMap = LinkedListMultimap.create()
+    def listingsMap = new LinkedHashMap<String,List<ApiListing>>()
     def listings = [
         apiListing(defaults, 1, "/b"),
         apiListing(defaults, 2, "/c"),
         apiListing(defaults, 2, "/a"),
     ]
+    listingsMap.put("test", new ArrayList())
     listings.each {
-      listingsMap.put("test", it)
+      listingsMap.get("test").add(it)
     }
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner.scan(_) >> listingsMap
 
     when:
-    Documentation scanned = swaggerApiResourceListing.scan(context())
+    def scanned = swaggerApiResourceListing.scan(context())
 
     then:
       scanned.resourceListing.apis.size() == 1
       scanned.resourceListing.apis.get(0).path == "/groupName/test"
       scanned.resourceListing.apis.get(0).description == """Operation with path /a and position 2
                                                            |Operation with path /b and position 1
-                                                           |Operation with path /c and position 2""".stripMargin()
+                                                           |Operation with path /c and position 2""".stripMargin().denormalize()
 
     where:
     index | path | position

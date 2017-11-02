@@ -22,8 +22,11 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Maps {
   private Maps() {
@@ -48,5 +51,9 @@ public class Maps {
 
   public static boolean isMapType(ResolvedType type) {
     return Map.class.isAssignableFrom(type.getErasedType());
+  }
+  
+  public static <K, V> Map<K, V> uniqueIndex(Collection<V> coll, Function<V, K> keyMapper) {
+    return coll.stream().collect(Collectors.toMap(keyMapper, Function.identity()));
   }
 }

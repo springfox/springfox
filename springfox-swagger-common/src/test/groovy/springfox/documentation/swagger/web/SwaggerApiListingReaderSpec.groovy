@@ -1,5 +1,4 @@
 package springfox.documentation.swagger.web
-import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.builders.ApiListingBuilder
 import springfox.documentation.service.ResourceGroup
@@ -26,7 +25,7 @@ class SwaggerApiListingReaderSpec extends Specification {
     when:
       context.resourceGroup >> new ResourceGroup("test", clazz)
     and:
-      context.apiListingBuilder() >> new ApiListingBuilder(Ordering.from(Orderings.apiPathCompatator()))
+      context.apiListingBuilder() >> new ApiListingBuilder(Orderings.apiPathCompatator())
     then:
       sut.apply(context)
     where:

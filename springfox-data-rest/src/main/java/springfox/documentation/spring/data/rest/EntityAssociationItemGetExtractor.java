@@ -31,11 +31,11 @@ import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
@@ -62,11 +62,11 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
               entityContext.resourcePath(),
               mapping.getPath(),
               propertyIdentifier),
-          newHashSet(RequestMethod.GET),
+          Collections.singleton(RequestMethod.GET),
           new HashSet<MediaType>(),
-          newHashSet(HAL_JSON),
+          Collections.singleton(HAL_JSON),
           null,
-          newArrayList(new ResolvedMethodParameter(
+          Arrays.asList(new ResolvedMethodParameter(
                   0,
                   "id",
                   pathAnnotations("id"),

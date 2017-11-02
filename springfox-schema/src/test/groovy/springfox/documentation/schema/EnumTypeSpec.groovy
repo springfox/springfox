@@ -18,20 +18,18 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 
-import static com.google.common.collect.Lists.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
 class EnumTypeSpec extends Specification {
   def "enum type are inferred as type string with allowable values" () {
     given:
-      def list = newArrayList("ONE", "TWO")
+      def list = Arrays.asList("ONE", "TWO")
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       Model asInput = provider.modelFor(
@@ -40,14 +38,14 @@ class EnumTypeSpec extends Specification {
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              new HashSet())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
               enumType(),
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              new HashSet())).get()
 
     expect:
       asInput.getName() == "ExampleWithEnums"

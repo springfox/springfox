@@ -19,15 +19,16 @@
 
 package springfox.documentation.service;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.core.MethodParameter;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
+import com.fasterxml.classmate.ResolvedType;
 
-import static com.google.common.collect.Lists.*;
 
 public class ResolvedMethodParameter {
   private final int parameterIndex;
@@ -38,7 +39,7 @@ public class ResolvedMethodParameter {
   public ResolvedMethodParameter(String paramName, MethodParameter methodParameter, ResolvedType parameterType) {
     this(methodParameter.getParameterIndex(),
         paramName,
-        newArrayList(methodParameter.getParameterAnnotations()),
+        Arrays.asList(methodParameter.getParameterAnnotations()),
         parameterType);
   }
 
@@ -59,11 +60,11 @@ public class ResolvedMethodParameter {
   }
 
   public boolean hasParameterAnnotation(Class<? extends Annotation> annotation) {
-    return FluentIterable.from(annotations).filter(annotation).size() > 0;
+    return annotations.stream().filter(a -> annotation.isInstance(a)).count() > 0;
   }
 
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return FluentIterable.from(annotations).filter(annotation).first();
+    return (Optional<T>) annotations.stream().filter(a -> annotation.isInstance(a)).findFirst();
   }
 
   public int getParameterIndex() {
@@ -71,7 +72,7 @@ public class ResolvedMethodParameter {
   }
 
   public Optional<String> defaultName() {
-    return Optional.fromNullable(defaultName);
+    return Optional.ofNullable(defaultName);
   }
 
   public ResolvedMethodParameter replaceResolvedParameterType(ResolvedType parameterType) {
@@ -83,7 +84,7 @@ public class ResolvedMethodParameter {
   }
 
   public ResolvedMethodParameter annotate(Annotation annotation) {
-    List<Annotation> annotations = newArrayList(this.annotations);
+    List<Annotation> annotations = new ArrayList<>(this.annotations);
     annotations.add(annotation);
     return new ResolvedMethodParameter(parameterIndex, defaultName, annotations, parameterType);
   }

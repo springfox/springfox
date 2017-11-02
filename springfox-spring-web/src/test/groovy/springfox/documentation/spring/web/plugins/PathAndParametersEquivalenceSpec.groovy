@@ -10,16 +10,16 @@ import spock.lang.Unroll
 import springfox.documentation.RequestHandler
 import springfox.documentation.service.ResolvedMethodParameter
 
-import static com.google.common.collect.Sets.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 class PathAndParametersEquivalenceSpec extends Specification {
   @Unroll
   def "two methods parameters are considered same => #areSame" (){
     given:
-      def sut = new PathAndParametersEquivalence()
+      //def sut = new PathAndParametersEquivalence(null)
     expect:
-      sut.equivalent(first, second) == areSame
+      def sut = new PathAndParametersEquivalence(first)
+      sut.equals(second) == areSame
       (sut.doHash(first) == sut.doHash(second)) == sameHash
     where:
       first                                                | second                                                       | sameHash | areSame
@@ -44,7 +44,7 @@ class PathAndParametersEquivalenceSpec extends Specification {
       Set<NameValueExpression<String>> params) {
     def handler = Mock(RequestHandler)
     handler.patternsCondition >> new PatternsRequestCondition(path)
-    handler.produces() >> newHashSet(produces)
+    handler.produces() >> new HashSet(produces)
     handler.parameters >> [parameter]
     handler.supportedMethods() >> methods
     handler.params() >> params

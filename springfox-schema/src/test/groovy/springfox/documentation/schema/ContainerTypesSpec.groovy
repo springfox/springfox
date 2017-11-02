@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -37,13 +36,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
 
     expect:
       asInput.getName() == "ListsContainer"
@@ -84,13 +83,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
 
     expect:
       asInput.getName() == "SetsContainer"
@@ -131,13 +130,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
 
     expect:
       asInput.getName() == "ArraysContainer"
@@ -181,13 +180,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          new HashSet())).get()
 
     expect:
       asInput.getName() == "MapsContainer"
@@ -226,7 +225,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          new HashSet())
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
     def returnContext = returnValue("group",
@@ -234,7 +233,7 @@ class ContainerTypesSpec extends SchemaSpecification {
         SWAGGER_12,
         alternateRulesWithWildcardMap(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:
@@ -275,7 +274,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_2,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          new HashSet())
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
       def returnContext = returnValue("group",
@@ -283,7 +282,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_2,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          new HashSet())
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:

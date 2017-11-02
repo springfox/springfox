@@ -18,7 +18,8 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
+
 import org.springframework.plugin.core.Plugin;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.spi.service.contexts.DocumentationContext;

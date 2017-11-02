@@ -19,8 +19,10 @@
 
 package springfox.documentation.spring.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterables;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,12 +30,10 @@ import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
-
-import java.util.List;
-
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
 
 public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
 
@@ -60,22 +60,25 @@ public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEve
   }
 
   private List<HttpMessageConverter<?>> configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-    Iterable<MappingJackson2HttpMessageConverter> jackson2Converters = jackson2Converters(converters);
-    if (Iterables.size(jackson2Converters) > 0) {
+    List<MappingJackson2HttpMessageConverter> jackson2Converters = jackson2Converters(converters);
+    if (jackson2Converters.size() > 0) {
       for (MappingJackson2HttpMessageConverter each : jackson2Converters) {
         fireObjectMapperConfiguredEvent(each.getObjectMapper());
       }
     } else {
       converters.add(configuredMessageConverter());
     }
-    return newArrayList(converters);
+    return new ArrayList<>(converters);
   }
 
-  private Iterable<MappingJackson2HttpMessageConverter> jackson2Converters(
-      List<HttpMessageConverter<?>> messageConverters) {
-    return reverse(from(messageConverters)
-        .filter(MappingJackson2HttpMessageConverter.class)
-        .toList());
+  private List<MappingJackson2HttpMessageConverter> jackson2Converters(List<HttpMessageConverter<?>> messageConverters) {
+    List<MappingJackson2HttpMessageConverter> j2c = new LinkedList<>();
+    for (HttpMessageConverter<?> c : messageConverters) {
+      if (c instanceof MappingJackson2HttpMessageConverter) {
+        j2c.add(0, (MappingJackson2HttpMessageConverter) c);
+      }
+    }
+    return j2c;
   }
 
   private MappingJackson2HttpMessageConverter configuredMessageConverter() {

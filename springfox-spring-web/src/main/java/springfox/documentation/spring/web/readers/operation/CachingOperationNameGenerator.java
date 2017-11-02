@@ -23,14 +23,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import springfox.documentation.OperationNameGenerator;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
 
 @Component
 public class CachingOperationNameGenerator implements OperationNameGenerator {
   private static final Logger LOG = LoggerFactory.getLogger(CachingOperationNameGenerator.class);
-  private Map<String, Integer> generated = newHashMap();
+  private Map<String, Integer> generated = new HashMap<>();
 
   @Override
   public String startingWith(String prefix) {

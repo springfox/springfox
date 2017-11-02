@@ -19,23 +19,22 @@
 
 package springfox.documentation.swagger1.dto;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.base.Function;
-import com.google.common.primitives.Ints;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-
-import static com.google.common.collect.ImmutableSortedSet.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+import springfox.documentation.schema.Maps;
 
 @JsonPropertyOrder({
         "method", "summary", "notes", "type", "nickname", "produces",
@@ -60,7 +59,7 @@ public class Operation {
   @JsonInclude(JsonInclude.Include.NON_EMPTY)
   private Map<String, List<AuthorizationScope>> authorizations;
   private List<Parameter> parameters;
-  private SortedSet<ResponseMessage> responseMessages;
+  private Set<ResponseMessage> responseMessages;
   private String deprecated;
 
   public Operation() {
@@ -82,7 +81,9 @@ public class Operation {
     this.protocol = protocol;
     this.authorizations = toAuthorizationsMap(authorizations);
     this.parameters = parameters;
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.responseMessages = responseMessages.stream()
+                              .sorted(responseMessageOrdering())
+                              .collect(Collectors.toCollection(LinkedHashSet::new));
     this.deprecated = deprecated;
   }
 
@@ -90,25 +91,22 @@ public class Operation {
     return new Comparator<ResponseMessage>() {
       @Override
       public int compare(ResponseMessage first, ResponseMessage second) {
-        return Ints.compare(first.getCode(), second.getCode());
+        return Integer.compare(first.getCode(), second.getCode());
       }
     };
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
-    return transformEntries(uniqueIndex(authorizations, byType()), toScopes());
+    return Maps.uniqueIndex(authorizations, byType()).entrySet().stream()
+          .collect(Collectors.toMap(Map.Entry::getKey, this::toScopes));
   }
 
-  private EntryTransformer<? super String, ? super Authorization, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, Authorization, List<AuthorizationScope>>() {
-      @Override
-      public List<AuthorizationScope> transformEntry(String key, Authorization value) {
-        return newArrayList(value.getScopes());
-      }
-    };
+  private List<AuthorizationScope> toScopes(Map.Entry<String, Authorization> entry) {
+    Authorization value = entry.getValue();
+    return new ArrayList<>(value.getScopes());
   }
 
-  private Function<? super Authorization, String> byType() {
+  private Function<Authorization, String> byType() {
     return new Function<Authorization, String>() {
       @Override
       public String apply(Authorization input) {
@@ -203,7 +201,9 @@ public class Operation {
   }
 
   public void setResponseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.responseMessages = responseMessages.stream()
+        .sorted(responseMessageOrdering())
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   public String getDeprecated() {

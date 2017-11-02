@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.ResolvedType
-import com.google.common.base.Optional
-import com.google.common.collect.Ordering
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
@@ -45,7 +43,6 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static com.google.common.collect.Lists.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -221,19 +218,19 @@ class DocketSpec extends DocumentationContextSpec {
     where:
     builderMethod     | object  | path
     'pathMapping'     | "/test" | Optional.of("/test")
-    'pathMapping'     | null    | Optional.absent()
+    'pathMapping'     | null    | Optional.empty()
   }
 
-  Ordering<ApiDescription> apiDescriptionOrdering() {
+  Comparator<ApiDescription> apiDescriptionOrdering() {
     new Defaults().apiDescriptionOrdering()
   }
 
-  Ordering<ApiDescription> operationOrdering() {
+  Comparator<ApiDescription> operationOrdering() {
     new Defaults().operationOrdering()
   }
 
   private List<SecurityContext> validContexts() {
-    newArrayList(SecurityContext.builder()
+    Arrays.asList(SecurityContext.builder()
             .forPaths(PathSelectors.any())
             .build())
   }

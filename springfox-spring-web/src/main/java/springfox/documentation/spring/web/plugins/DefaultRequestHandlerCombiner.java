@@ -18,48 +18,47 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Equivalence;
-import com.google.common.base.Function;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.spi.service.RequestHandlerCombiner;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
+import static springfox.documentation.spi.service.contexts.Orderings.patternsCondition;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.spi.service.contexts.Orderings.*;
+import springfox.documentation.RequestHandler;
+import springfox.documentation.spi.service.RequestHandlerCombiner;
 
 class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
 
-  private static final PathAndParametersEquivalence EQUIVALENCE = new PathAndParametersEquivalence();
-
   public List<RequestHandler> combine(List<RequestHandler> source) {
     List<RequestHandler> combined = new ArrayList<RequestHandler>();
-    Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
+    Map<String, List<RequestHandler>> byPath = new LinkedHashMap<>();
     for (RequestHandler each : nullToEmptyList(source)) {
-      byPath.put(patternsCondition(each).toString(), each);
+      byPath.computeIfAbsent(patternsCondition(each).toString(), k -> new ArrayList<>()).add(each);
     }
     for (String key : byPath.keySet()) {
       combined.addAll(combined(byPath.get(key)));
     }
-    return byPatternsCondition().sortedCopy(combined);
+    return combined.stream().sorted(byPatternsCondition()).collect(Collectors.toList());
   }
 
   private Collection<? extends RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
-    List<RequestHandler> source = newArrayList(requestHandlers);
+    List<RequestHandler> source = new ArrayList<>(requestHandlers);
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;
     }
-    ListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> groupByEquality
-        = Multimaps.index(source, equivalenceAsKey());
-    List<RequestHandler> combined = newArrayList();
-    for (Equivalence.Wrapper<RequestHandler> path : groupByEquality.keySet()) {
+
+    Map<PathAndParametersEquivalence, List<RequestHandler>> groupByEquality = new LinkedHashMap<>();
+    for (RequestHandler requestHandler : source) {
+      groupByEquality.computeIfAbsent(new PathAndParametersEquivalence(requestHandler), k -> new ArrayList<>())
+          .add(requestHandler);
+    }
+    List<RequestHandler> combined = new ArrayList<>();
+    for (PathAndParametersEquivalence path : groupByEquality.keySet()) {
       List<RequestHandler> handlers = groupByEquality.get(path);
 
       RequestHandler toCombine = path.get();
@@ -76,17 +75,8 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     return combined;
   }
 
-  private Function<RequestHandler, Equivalence.Wrapper<RequestHandler>> equivalenceAsKey() {
-    return new
-        Function<RequestHandler, Equivalence.Wrapper<RequestHandler>>() {
-      @Override
-      public Equivalence.Wrapper<RequestHandler> apply(RequestHandler input) {
-        return EQUIVALENCE.wrap(input);
-      }
-    };
-  }
-
   private RequestHandler combine(RequestHandler first, RequestHandler second) {
     return new CombinedRequestHandler(first, second);
   }
+
 }

@@ -19,16 +19,18 @@
 
 package springfox.documentation.spring.web;
 
+import static springfox.documentation.spring.web.paths.Paths.splitCamelCase;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
-
-import java.util.Set;
-
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.web.paths.Paths.*;
 
 /**
  * TODO - fix or remove
@@ -61,7 +63,7 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
   private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
     Class<?> controllerClazz = handlerMethod.getBeanType();
     String controllerAsGroup = splitCamelCase(controllerClazz.getSimpleName(), "-").toLowerCase();
-    return newHashSet(new ResourceGroup(controllerAsGroup, controllerClazz));
+    return new HashSet<>(Arrays.asList(new ResourceGroup(controllerAsGroup, controllerClazz)));
   }
 
   private String getDescription(Class<?> controllerClass) {

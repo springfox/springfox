@@ -10,9 +10,10 @@ class ResolvedMethodParameterEquivalenceSpec extends Specification {
   @Unroll
   def "two methods parameters are considered same => #areSame" (){
     given:
-      def sut = new ResolvedMethodParameterEquivalence()
+      //def sut = new PathAndParametersEquivalence.ResolvedMethodParameterWrapper(null)
     expect:
-      sut.equivalent(first, second) == areSame
+      def sut = new PathAndParametersEquivalence.ResolvedMethodParameterWrapper(first)
+      sut.equals(second) == areSame
       (sut.doHash(first) == sut.doHash(second)) == areSame
     where:
       first                   | second                | areSame

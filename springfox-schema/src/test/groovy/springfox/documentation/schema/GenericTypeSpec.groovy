@@ -18,11 +18,10 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
+import springfox.documentation.util.Strings
 
-import static com.google.common.base.Strings.*
 import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -39,13 +38,13 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
     def returnContext = returnValue("group",
         modelType,
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
     def propertyLookup = ["GenericType": "genericField", "Resource": "links"]
 
     when:
@@ -84,13 +83,13 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
     def returnContext = returnValue("group",
         modelType,
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
 
     when:
     Model asInput = modelProvider.modelFor(inputContext).get()
@@ -118,7 +117,7 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
     Model asInput = modelProvider.modelFor(inputContext).get()
 
     def returnContext = returnValue("group",
@@ -126,7 +125,7 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        new HashSet())
     Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:
@@ -151,7 +150,7 @@ class GenericTypeSpec extends SchemaSpecification {
   }
 
   def expectedModelName(String modelName, String hostType = "GenericType") {
-    if (!isNullOrEmpty(modelName)) {
+    if (!Strings.isNullOrEmpty(modelName)) {
       "$hostType«$modelName»"
     } else {
       hostType

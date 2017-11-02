@@ -41,7 +41,6 @@ import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 import springfox.documentation.swagger.web.SwaggerApiListingReader
 
-import static com.google.common.collect.Lists.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
@@ -49,10 +48,10 @@ class SwaggerPluginsSupport {
   SchemaPluginsManager swaggerSchemaPlugins() {
     def descriptions = new DescriptionResolver(new MockEnvironment())
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        create(newArrayList(new ApiModelPropertyPropertyBuilder(descriptions)))
+        create(Arrays.asList(new ApiModelPropertyPropertyBuilder(descriptions)))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        create(newArrayList(new ApiModelBuilder(new TypeResolver())))
+        create(Arrays.asList(new ApiModelBuilder(new TypeResolver())))
 
     new SchemaPluginsManager(propRegistry, modelRegistry)
   }
@@ -61,7 +60,7 @@ class SwaggerPluginsSupport {
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer();
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new SwaggerApiListingReader()))
+    plugins.apiListingPlugins = create(Arrays.asList(new MediaTypeReader(), new SwaggerApiListingReader()))
     plugins.documentationPlugins = create([])
     def descriptions = new DescriptionResolver(new MockEnvironment())
     plugins.parameterExpanderPlugins =

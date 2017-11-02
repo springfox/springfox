@@ -19,11 +19,12 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
+
 import org.springframework.core.Ordered;
 
-import static com.google.common.base.Preconditions.*;
-import static com.google.common.base.Strings.*;
+import springfox.documentation.util.Assert;
+import springfox.documentation.util.Strings;
 
 public class Tag implements Ordered {
   private final String name;
@@ -35,7 +36,7 @@ public class Tag implements Ordered {
   }
 
   public Tag(String name, String description, int order) {
-    this.name = checkNotNull(emptyToNull(name));
+    this.name = Assert.checkNotNull(Strings.emptyToNull(name), "Tag name can not be null");
     this.description = description;
     this.order = order;
   }
@@ -62,12 +63,12 @@ public class Tag implements Ordered {
       return false;
     }
     Tag tag = (Tag) o;
-    return Objects.equal(name, tag.name) &&
-        Objects.equal(description, tag.description);
+    return Objects.equals(name, tag.name) &&
+        Objects.equals(description, tag.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, description);
+    return Objects.hash(name, description);
   }
 }

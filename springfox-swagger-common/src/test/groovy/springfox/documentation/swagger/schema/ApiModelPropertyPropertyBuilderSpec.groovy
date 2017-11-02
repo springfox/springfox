@@ -23,7 +23,6 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
-import com.google.common.collect.ImmutableSet
 import org.joda.time.LocalDate
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -166,7 +165,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        new HashSet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(
@@ -210,7 +209,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        new HashSet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(

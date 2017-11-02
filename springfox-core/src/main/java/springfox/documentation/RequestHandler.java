@@ -19,20 +19,22 @@
 
 package springfox.documentation;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
+import java.lang.annotation.Annotation;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+
+import com.fasterxml.classmate.ResolvedType;
+
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ResolvedMethodParameter;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Set;
 
 public interface RequestHandler {
 
