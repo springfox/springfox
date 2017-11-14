@@ -77,11 +77,12 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
 
   private String mappingPath(final PropertySourcedMapping mapper) {
     final String key = mapper.propertyKey();
+    final String target = mapper.value();
     return Optional.fromNullable(environment.getProperty(key))
         .transform(new Function<String, String>() {
           @Override
           public String apply(String input) {
-            return input.replace(String.format("${%s}", key), input);
+            return target.replace(String.format("${%s}", key), input);
           }
         })
         .orNull();
