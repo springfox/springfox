@@ -61,6 +61,7 @@ ext {
                   "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}",
+                  "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jackson}",
                   "joda-time:joda-time:$joda"
           ],
           core          : [

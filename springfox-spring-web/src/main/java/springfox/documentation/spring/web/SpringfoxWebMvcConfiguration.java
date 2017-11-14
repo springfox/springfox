@@ -38,7 +38,9 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.Defaults;
+import springfox.documentation.spring.web.doc.FormatSerializer;
 import springfox.documentation.spring.web.doc.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.doc.JsonFormatSerializer;
 import springfox.documentation.spring.web.doc.Serializer;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
@@ -47,6 +49,7 @@ import java.util.List;
 @Configuration
 @Import({ ModelsConfiguration.class })
 @ComponentScan(basePackages = {
+    "springfox.documentation.spring.web.conditionals",
     "springfox.documentation.spring.web.scanners",
     "springfox.documentation.spring.web.readers.operation",
     "springfox.documentation.spring.web.readers.parameter",
@@ -82,8 +85,13 @@ public class SpringfoxWebMvcConfiguration {
   }
 
   @Bean
-  public Serializer jsonSerializer(List<JacksonModuleRegistrar> moduleRegistrars) {
-    return new Serializer(moduleRegistrars);
+  public FormatSerializer jsonFormatSerializer() {
+    return new JsonFormatSerializer();
+  }
+
+  @Bean
+  public Serializer jsonSerializer(List<FormatSerializer> formatSerializers, List<JacksonModuleRegistrar> moduleRegistrars) {
+    return new Serializer(formatSerializers, moduleRegistrars);
   }
 
   @Bean

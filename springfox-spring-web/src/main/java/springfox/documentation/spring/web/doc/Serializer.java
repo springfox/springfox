@@ -19,25 +19,56 @@
 
 package springfox.documentation.spring.web.doc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.Collections.unmodifiableMap;
 
 public class Serializer {
-  private ObjectMapper objectMapper = new ObjectMapper();
 
-  public Serializer(List<JacksonModuleRegistrar> modules) {
-    for (JacksonModuleRegistrar each : modules) {
-      each.maybeRegisterModule(objectMapper);
+  private final Map<String, FormatSerializer> formatSerializers;
+
+  public Serializer(List<FormatSerializer> formatSerializers, List<JacksonModuleRegistrar> modules) {
+
+    this.formatSerializers = convertToMap(formatSerializers);
+
+    for (FormatSerializer formatSerializer : formatSerializers) {
+      for (JacksonModuleRegistrar each : modules) {
+        formatSerializer.maybeRegisterModule(each);
+      }
     }
+
+  }
+
+  private static Map<String, FormatSerializer> convertToMap(List<FormatSerializer> formatSerializers) {
+    Map<String, FormatSerializer> formatSerializerMap = new HashMap<String, FormatSerializer>();
+    for (FormatSerializer formatSerializer : formatSerializers) {
+      for (String format : formatSerializer.getSupportedFormats()) {
+        formatSerializerMap.put(format, formatSerializer);
+      }
+    }
+    return unmodifiableMap(formatSerializerMap);
   }
 
   public DocOutput toJson(Object toSerialize) {
-    try {
-      return new DocOutput(objectMapper.writeValueAsString(toSerialize));
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("Could not write JSON", e);
-    }
+    return serialize(toSerialize, "json");
   }
+
+  public DocOutput serialize(Object toSerialize, String format) {
+    FormatSerializer formatSerializer = getFormatSerializer(format);
+    return new DocOutput(formatSerializer.serialize(toSerialize));
+  }
+
+  private FormatSerializer getFormatSerializer(String format) {
+    if (!supports(format)) {
+      throw new IllegalArgumentException("No serializer registered for " + format);
+    }
+    return formatSerializers.get(format);
+  }
+
+  public boolean supports(String format) {
+    return formatSerializers.containsKey(format);
+  }
+
 }

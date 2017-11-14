@@ -26,11 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
@@ -47,11 +45,10 @@ import static com.google.common.base.Strings.*;
 import static org.springframework.util.MimeTypeUtils.*;
 import static springfox.documentation.swagger2.web.HostNameProvider.*;
 
-@Controller
+@RestController
 @ApiIgnore
 public class Swagger2Controller {
 
-  public static final String DEFAULT_URL = "/v2/api-docs";
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
   private final String hostNameOverride;
@@ -72,17 +69,36 @@ public class Swagger2Controller {
     this.serializer = serializer;
   }
 
-  @RequestMapping(
-      value = DEFAULT_URL,
-      method = RequestMethod.GET,
+  @GetMapping(
+      path = "/v2/api-docs",
       produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
   @PropertySourcedMapping(
       value = "${springfox.documentation.swagger.v2.path}",
       propertyKey = "springfox.documentation.swagger.v2.path")
-  @ResponseBody
   public ResponseEntity<DocOutput> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
+    return getDocumentationGeneric(null, swaggerGroup, servletRequest);
+  }
+
+  @GetMapping("/v2/api-docs.yml")
+  @PropertySourcedMapping(
+      value = "${springfox.documentation.swagger.v2.path}.yml",
+      propertyKey = "springfox.documentation.swagger.v2.path")
+  public ResponseEntity<DocOutput> getDocumentationYml(
+      @RequestParam(value = "group", required = false) String swaggerGroup,
+      HttpServletRequest servletRequest) {
+    if (!serializer.supports("yml")) {
+      throw new IllegalArgumentException("YML not supported under current configuration." +
+              " To enable support for YML add jackson-dataformat-yaml as a dependency.");
+    }
+    return getDocumentationGeneric("yml", swaggerGroup, servletRequest);
+  }
+
+  private ResponseEntity<DocOutput> getDocumentationGeneric(
+          String format,
+          String swaggerGroup,
+          HttpServletRequest servletRequest) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
@@ -95,7 +111,7 @@ public class Swagger2Controller {
     if (isNullOrEmpty(swagger.getHost())) {
       swagger.host(hostName(uriComponents));
     }
-    return new ResponseEntity<DocOutput>(serializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<DocOutput>(serializer.serialize(swagger, format), HttpStatus.OK);
   }
 
   private String hostName(UriComponents uriComponents) {
