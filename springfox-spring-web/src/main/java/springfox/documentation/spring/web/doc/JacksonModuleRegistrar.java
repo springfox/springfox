@@ -17,14 +17,10 @@
  *
  */
 
-package springfox.documentation.spring.web.json
+package springfox.documentation.spring.web.doc;
 
-import spock.lang.Specification
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-class JsonTest extends Specification {
-
-  def "should pass coverage"() {
-    expect:
-      new Json("Something").value()
-  }
+public interface JacksonModuleRegistrar {
+  void maybeRegisterModule(ObjectMapper objectMapper);
 }

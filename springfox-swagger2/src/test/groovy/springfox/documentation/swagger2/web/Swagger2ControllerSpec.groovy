@@ -10,7 +10,7 @@ import springfox.documentation.PathProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.DocumentationCache
-import springfox.documentation.spring.web.json.JsonSerializer
+import springfox.documentation.spring.web.doc.Serializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
@@ -38,7 +38,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       mockEnvironment(),
       new DocumentationCache(),
       swagger2Mapper(),
-      new JsonSerializer([new Swagger2JacksonModule()]))
+      new Serializer([new Swagger2JacksonModule()]))
 
   ApiListingReferenceScanner listingReferenceScanner
   ApiListingScanner listingScanner

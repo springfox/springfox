@@ -27,8 +27,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.HandlerMapping;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
-import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.doc.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.doc.Serializer;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping;
@@ -51,9 +51,9 @@ public class Swagger2DocumentationConfiguration {
       Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
-      JsonSerializer jsonSerializer) {
+      Serializer serializer) {
     return new PropertySourcedRequestMappingHandlerMapping(
         environment,
-        new Swagger2Controller(environment, documentationCache, mapper, jsonSerializer));
+        new Swagger2Controller(environment, documentationCache, mapper, serializer));
   }
 }

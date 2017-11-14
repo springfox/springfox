@@ -17,25 +17,25 @@
  *
  */
 
-package springfox.documentation.spring.web.json;
+package springfox.documentation.spring.web.doc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
-public class JsonSerializer {
+public class Serializer {
   private ObjectMapper objectMapper = new ObjectMapper();
 
-  public JsonSerializer(List<JacksonModuleRegistrar> modules) {
+  public Serializer(List<JacksonModuleRegistrar> modules) {
     for (JacksonModuleRegistrar each : modules) {
       each.maybeRegisterModule(objectMapper);
     }
   }
 
-  public Json toJson(Object toSerialize) {
+  public DocOutput toJson(Object toSerialize) {
     try {
-      return new Json(objectMapper.writeValueAsString(toSerialize));
+      return new DocOutput(objectMapper.writeValueAsString(toSerialize));
     } catch (JsonProcessingException e) {
       throw new RuntimeException("Could not write JSON", e);
     }

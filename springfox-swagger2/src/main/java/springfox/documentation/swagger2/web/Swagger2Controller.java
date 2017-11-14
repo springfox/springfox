@@ -36,8 +36,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.PropertySourcedMapping;
-import springfox.documentation.spring.web.json.Json;
-import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.doc.DocOutput;
+import springfox.documentation.spring.web.doc.Serializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
@@ -57,19 +57,19 @@ public class Swagger2Controller {
   private final String hostNameOverride;
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
-  private final JsonSerializer jsonSerializer;
+  private final Serializer serializer;
 
   @Autowired
   public Swagger2Controller(
       Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
-      JsonSerializer jsonSerializer) {
+      Serializer serializer) {
 
     this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
-    this.jsonSerializer = jsonSerializer;
+    this.serializer = serializer;
   }
 
   @RequestMapping(
@@ -80,14 +80,14 @@ public class Swagger2Controller {
       value = "${springfox.documentation.swagger.v2.path}",
       propertyKey = "springfox.documentation.swagger.v2.path")
   @ResponseBody
-  public ResponseEntity<Json> getDocumentation(
+  public ResponseEntity<DocOutput> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<DocOutput>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
@@ -95,7 +95,7 @@ public class Swagger2Controller {
     if (isNullOrEmpty(swagger.getHost())) {
       swagger.host(hostName(uriComponents));
     }
-    return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<DocOutput>(serializer.toJson(swagger), HttpStatus.OK);
   }
 
   private String hostName(UriComponents uriComponents) {

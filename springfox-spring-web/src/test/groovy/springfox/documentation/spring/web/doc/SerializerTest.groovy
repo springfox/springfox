@@ -17,15 +17,15 @@
  *
  */
 
-package springfox.documentation.spring.web.json
+package springfox.documentation.spring.web.doc
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
-class JsonSerializerTest extends Specification {
+class SerializerTest extends Specification {
   def "should serialize"() {
     given:
-      JsonSerializer sut = new JsonSerializer([])
+      Serializer sut = new Serializer([])
       def objectMapper = Mock(ObjectMapper)
       sut.objectMapper = objectMapper
       String object = 'a string'
@@ -41,7 +41,7 @@ class JsonSerializerTest extends Specification {
       def objectMapper = Mock(ObjectMapper)
       def object = 'a string'
     when:
-      JsonSerializer sut = new JsonSerializer([registrar])
+      Serializer sut = new Serializer([registrar])
       sut.objectMapper = objectMapper
     and:
       sut.toJson(object)

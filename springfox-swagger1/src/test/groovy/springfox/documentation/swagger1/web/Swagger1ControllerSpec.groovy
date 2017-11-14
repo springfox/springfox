@@ -32,7 +32,7 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.PropertySourcedMapping
 import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping
-import springfox.documentation.spring.web.json.JsonSerializer
+import springfox.documentation.spring.web.doc.Serializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
@@ -56,7 +56,7 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
   Swagger1Controller sut =  new Swagger1Controller(
           new DocumentationCache(),
           serviceMapper(),
-          new JsonSerializer([new SwaggerJacksonModule()]))
+          new Serializer([new SwaggerJacksonModule()]))
 
 
   ApiListingReferenceScanner listingReferenceScanner
