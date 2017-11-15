@@ -280,6 +280,157 @@
       "path": "/pets/echo"
     },
     {
+      "description": "findPetsByAge",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find Pet by age",
+          "notes": "Exclusive range with infinity",
+          "nickname": "findPetsByAgeUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "minimum": "0",
+              "description": "Age values that need to be considered for filter",
+              "name": "age",
+              "paramType": "query",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ],
+      "path": "/pets/findByAge"
+    },
+    {
+      "description": "findPetsByLegs",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find Pet by legs",
+          "notes": "Exclusive range should work",
+          "nickname": "findPetsByLegsUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "maximum": "10",
+              "minimum": "0",
+              "description": "Legs values that need to be considered for filter",
+              "name": "legs",
+              "paramType": "query",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ],
+      "path": "/pets/findByLegs"
+    },
+    {
+      "description": "findPetsByStamina",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "Find Pet by stamina",
+          "notes": "Exclusive range with -infinity",
+          "nickname": "findPetsByStaminaUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "maximum": "12",
+              "description": "Stamina values",
+              "name": "stamina",
+              "paramType": "query",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ],
+      "path": "/pets/findByStamina"
+    },
+    {
       "description": "findPetsByStatus",
       "operations": [
         {

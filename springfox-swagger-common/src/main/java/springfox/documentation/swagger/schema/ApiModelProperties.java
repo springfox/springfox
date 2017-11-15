@@ -36,11 +36,15 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.collect.Lists.*;
 import static org.springframework.util.StringUtils.*;
 
 public final class ApiModelProperties {
+
+  private static final Pattern IS_RANGE = Pattern.compile("^range([\\[(])(.*)([])])$");
 
   private ApiModelProperties() {
     throw new UnsupportedOperationException();
@@ -58,11 +62,9 @@ public final class ApiModelProperties {
   public static AllowableValues allowableValueFromString(String allowableValueString) {
     AllowableValues allowableValues = new AllowableListValues(Lists.<String>newArrayList(), "LIST");
     String trimmed = allowableValueString.trim();
-    if (trimmed.startsWith("range[")) {
-      trimmed = trimmed.replaceAll("range\\[", "").replaceAll("]", "");
-      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
-      List<String> ranges = newArrayList(split);
-      allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
+    Matcher rangeMatcher = IS_RANGE.matcher(trimmed);
+    if (rangeMatcher.matches()) {
+      allowableValues = extractAllowableRangeValues(rangeMatcher);
     } else if (trimmed.contains(",")) {
       Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
       allowableValues = new AllowableListValues(newArrayList(split), "LIST");
@@ -71,6 +73,28 @@ public final class ApiModelProperties {
       allowableValues = new AllowableListValues(singleVal, "LIST");
     }
     return allowableValues;
+  }
+
+  private static AllowableRangeValues extractAllowableRangeValues(Matcher rangeMatcher) {
+    String definedRanges = rangeMatcher.group(2);
+    Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings()
+            .split(definedRanges);
+    List<String> ranges = newArrayList(split);
+
+    String min = ranges.get(0).equals("-infinity") ? null : ranges.get(0);
+    String max = ranges.get(1).equals("infinity") ? null : ranges.get(1);
+
+    Boolean exclusiveMin = null;
+    if (min != null && rangeMatcher.group(1).equals("(")) {
+      exclusiveMin = true;
+    }
+
+    Boolean exclusiveMax = null;
+    if (max != null && rangeMatcher.group(3).equals(")")) {
+      exclusiveMax = true;
+    }
+
+    return new AllowableRangeValues(min, exclusiveMin, max, exclusiveMax);
   }
 
   static Function<ApiModelProperty, Boolean> toIsRequired() {

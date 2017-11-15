@@ -127,6 +127,39 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
       apiParamWithAllowableValues("range[2," + Integer.MAX_VALUE + "]") | 2   | Integer.MAX_VALUE
   }
 
+  @Unroll("Range: #min | #exclusiveMin | #max | #exclusiveMax")
+  def "Api annotation with exclusive ranges"() {
+    given:
+    def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext = new ParameterContext(
+            resolvedMethodParameter,
+            new ParameterBuilder(),
+            context(),
+            genericNamingStrategy,
+            Mock(OperationContext))
+
+    when:
+    ApiParamParameterBuilder operationCommand = stubbedParamBuilder();
+    operationCommand.apply(parameterContext)
+    AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
+    then:
+    allowableValues.getMin() == min as String
+    allowableValues.getExclusiveMin() == exclusiveMin as Boolean
+    allowableValues.getMax() == max as String
+    allowableValues.getExclusiveMax() == exclusiveMax as Boolean
+    where:
+    apiParamAnnotation                                                | min  | exclusiveMin | max | exclusiveMax
+    apiParamWithAllowableValues("range(1,5)")           | 1    | true  | 5     | true
+    apiParamWithAllowableValues("range(0,1]")           | 0    | true  | 1    | null
+    apiParamWithAllowableValues("range[0,10)")          | 0    | null  | 10   | true
+    apiParamWithAllowableValues("range[1,11)")          | 1    | null  | 11   | true
+    apiParamWithAllowableValues("range[0,infinity)")    | 0    | null  | null | null
+    apiParamWithAllowableValues("range(-infinity,1]")   | null | null  | 1    | null
+    apiParamWithAllowableValues("range[1,infinity]")    | 1    | null  | null | null
+    apiParamWithAllowableValues("range[-infinity,infinity]")   | null  | null | null | null
+  }
+
   def "supports all swagger types" () {
     given:
       ApiParamParameterBuilder sut = new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
