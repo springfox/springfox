@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMappi
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.util.List;
 import java.util.Map;
@@ -41,10 +42,14 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
   private final List<RequestMappingInfoHandlerMapping> handlerMappings;
+  private final HandlerMethodResolver methodResolver;
 
   @Autowired
-  public WebMvcRequestHandlerProvider(List<RequestMappingInfoHandlerMapping> handlerMappings) {
+  public WebMvcRequestHandlerProvider(
+      HandlerMethodResolver methodResolver,
+      List<RequestMappingInfoHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
+    this.methodResolver = methodResolver;
   }
 
   @Override
@@ -68,7 +73,10 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
     return new Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
       @Override
       public WebMvcRequestHandler apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
-        return new WebMvcRequestHandler(input.getKey(), input.getValue());
+        return new WebMvcRequestHandler(
+            methodResolver,
+            input.getKey(),
+            input.getValue());
       }
     };
   }

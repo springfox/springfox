@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web;
 
+import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,7 @@ import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.util.List;
 
@@ -88,4 +90,10 @@ public class SpringfoxWebMvcConfiguration {
   public DescriptionResolver descriptionResolver(Environment environment) {
     return new DescriptionResolver(environment);
   }
+
+  @Bean
+  public HandlerMethodResolver methodResolver(TypeResolver resolver) {
+    return new HandlerMethodResolver(resolver);
+  }
+
 }

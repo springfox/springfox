@@ -148,6 +148,11 @@ public class BugsController {
     throw new UnsupportedOperationException();
   }
 
+  @RequestMapping(value = "2081", method = GET)
+  public void bug2081(Bug2081 criteria) {
+      throw new UnsupportedOperationException();
+  }
+
   @ApiOperation(value = "Remove an apple from a user", notes = "Remove an apple from a user. You must specify the "
       + "user name and the apple name.", response = Void.class, consumes = "application/json, application/xml",
       produces = "application/json, application/xml")
@@ -468,6 +473,35 @@ public class BugsController {
 
     public void setExample(Example example) {
       this.example = example;
+    }
+  }
+
+  public static class Bug2081Filter {
+    String importantField;
+
+    public String getImportantField() {
+      return importantField;
+    }
+
+    public void setImportantField(String importantField) {
+      this.importantField = importantField;
+    }
+  }
+
+  public static class Bug2081 {
+    Bug2081Filter a;
+    Bug2081Filter b;
+    public Bug2081Filter getA() {
+      return a;
+    }
+    public void setA(Bug2081Filter a) {
+      this.a = a;
+    }
+    public Bug2081Filter getB() {
+      return b;
+    }
+    public void setB(Bug2081Filter b) {
+      this.b = b;
     }
   }
 }

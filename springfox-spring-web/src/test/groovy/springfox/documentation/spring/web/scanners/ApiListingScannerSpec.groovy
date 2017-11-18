@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.scanners
 
+import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.Multimap
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
@@ -37,6 +38,7 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import static com.google.common.collect.Lists.*
 import static com.google.common.collect.Maps.*
@@ -56,6 +58,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiModelReader apiModelReader
   ApiListingScanningContext listingContext
   ApiListingScanner scanner
+  def methodResolver = new HandlerMethodResolver(new TypeResolver())
 
   def setup() {
     SecurityContext securityContext = SecurityContext.builder()
@@ -81,7 +84,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def context = context()
     RequestMappingContext requestMappingContext = new RequestMappingContext(
         context,
-        new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
+        new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
 
     ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
@@ -109,7 +112,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def context = context()
     def requestMappingContext = new RequestMappingContext(
         context,
-        new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
+        new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")))
     def resourceGroupRequestMappings = newHashMap()
     resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 
@@ -130,7 +133,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def context = context()
     def requestMappingContext = new RequestMappingContext(
         context,
-        new WebMvcRequestHandler(requestMappingInfo, dummyControllerWithResourcePath("dummyMethod")))
+        new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyControllerWithResourcePath("dummyMethod")))
     def resourceGroupRequestMappings = newHashMap()
     resourceGroupRequestMappings.put(new ResourceGroup("resourcePath", DummyControllerWithResourcePath), [requestMappingContext])
 

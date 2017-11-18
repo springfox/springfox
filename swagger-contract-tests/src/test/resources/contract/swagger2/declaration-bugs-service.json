@@ -927,7 +927,36 @@
           }
         }
       }
-    }
+    },
+    "/bugs/2081{?a.importantField,b.importantField}": {
+       "get": {
+         "tags": [
+           "Bugs"
+         ],
+         "summary": "bug2081",
+         "operationId": "bug2081UsingGET_1",
+         "consumes":["application/json"],
+         "parameters": [
+           {
+            "name": "a.importantField",
+            "in": "query",
+            "required":false,
+            "type":"string"
+           },
+           {
+            "name":"b.importantField",
+            "in":"query",
+            "required":false,
+            "type":"string"
+           }
+          ],
+          "responses": {
+            "200": {
+             "description": "OK"
+            }
+          }
+        }
+      }
   },
   "securityDefinitions": {
     "api_key": {
