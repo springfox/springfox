@@ -127,7 +127,7 @@ public class TypeNameExtractor {
     TypeNameProviderPlugin selected =
         typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
     String modelName = selected.nameFor(((ResolvedType)context.getType()).getErasedType());
-    LOG.info("Generated unique model named: {}, with model id: {}", modelName, context.hashCode());
+    LOG.debug("Generated unique model named: {}, with model id: {}", modelName, context.hashCode());
     if (!isMapType(asResolved(context.getType()))) {
       String typePostfix = context.typePostfix();
       if (!typePostfix.equals("")) {

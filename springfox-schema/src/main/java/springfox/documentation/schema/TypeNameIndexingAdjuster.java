@@ -61,7 +61,7 @@ public class TypeNameIndexingAdjuster implements UniqueTypeNameAdjuster {
     if (type instanceof ResolvedPrimitiveType
         || isBaseType(type)
         || isMapType(type)) {
-      LOG.info("Skipping type {} with model id: {}, as a base or primitive type {}", 
+      LOG.debug("Skipping type {} with model id: {}, as a base or primitive type", 
           type, 
           modelId);
       return;
@@ -97,12 +97,12 @@ public class TypeNameIndexingAdjuster implements UniqueTypeNameAdjuster {
   }
   
   private void build(final ResolvedType type) {
-    LOG.info("Rebuilding models indexes for type {}", type);
+    LOG.debug("Rebuilding models indexes for type {}", type);
     Set<Integer> modelIds = similarTypes.get(type);
     int i = 1;
     for(Integer modelId: modelIds) {
       if (links.containsKey(modelId)) {
-        LOG.info("Skipping type with model id: {}, as link to another model {}", 
+        LOG.debug("Skipping type with model id: {}, as link to another model {}", 
             modelId, 
             links.get(modelId));
         continue;
@@ -113,7 +113,7 @@ public class TypeNameIndexingAdjuster implements UniqueTypeNameAdjuster {
 
     for(Integer modelId: modelIds) {
       if (links.containsKey(modelId)) {
-        LOG.info("Adjusting link for model with model id: {}, as link to another model {}", 
+        LOG.debug("Adjusting link for model with model id: {}, as link to another model {}", 
             modelId, 
             links.get(modelId));
         Integer link = links.get(modelId);

@@ -91,11 +91,11 @@ public class ModelContext {
     this.view = parentContext.getView();
     this.validationGroups = parentContext.getValidationGroups();
     this.documentationType = parentContext.getDocumentationType();
-    this.modelBuilder = new ModelBuilder(String.valueOf(hashCode()));
     this.uniqueTypeNameAdjuster = parentContext.uniqueTypeNameAdjuster;
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
+    this.modelBuilder = new ModelBuilder(String.valueOf(hashCode()));
     this.adjustTypeNames = parentContext.adjustTypeNames;
   }
   
@@ -107,11 +107,11 @@ public class ModelContext {
     this.view = parentContext.getView();
     this.validationGroups = parentContext.getValidationGroups();
     this.documentationType = parentContext.getDocumentationType();
-    this.modelBuilder = new ModelBuilder(String.valueOf(hashCode()));
     this.uniqueTypeNameAdjuster = parentContext.uniqueTypeNameAdjuster;
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
+    this.modelBuilder = new ModelBuilder(String.valueOf(hashCode()));
     this.adjustTypeNames = adjustTypeNames;
   }
 
