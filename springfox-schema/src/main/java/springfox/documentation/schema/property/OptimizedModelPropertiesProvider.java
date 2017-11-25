@@ -368,8 +368,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       if (context.getView().isPresent()) {
         return serializationConfig.withView(context.getView().get().getErasedType()).
             introspect(serializationConfig.constructType(type.getErasedType()));
-      }
-      else {
+      } else {
         return serializationConfig.
             introspect(serializationConfig.constructType(type.getErasedType()));
       }
@@ -378,8 +377,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       if (context.getView().isPresent()) {
         return serializationConfig.withView(context.getView().get().getErasedType()).
             introspect(serializationConfig.constructType(type.getErasedType()));
-      }
-      else {
+      } else {
         return serializationConfig.
             introspect(serializationConfig.constructType(type.getErasedType()));
       }
