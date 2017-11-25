@@ -22,10 +22,11 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
+import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.Set;

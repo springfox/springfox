@@ -27,10 +27,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import springfox.documentation.builders.ModelBuilder;
+import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
 
 import java.lang.reflect.Type;
 import java.util.Set;
