@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Objects;
 
 import java.util.List;
 import java.util.Map;
@@ -99,5 +100,26 @@ public class Model {
 
   public String getExample() {
     return example;
+  }
+    
+  public boolean equalsIgnoringName(Object o) {
+    if (this == o) {
+      return true;
+    }
+  
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+  
+    Model that = (Model) o;
+  
+    return Objects.equal(type, that.type) &&
+        Objects.equal(qualifiedType, that.qualifiedType) &&
+        Objects.equal(properties, that.properties) &&
+        Objects.equal(description, that.description) &&
+        Objects.equal(baseModel, that.baseModel) &&
+        Objects.equal(discriminator, that.discriminator) &&
+        Objects.equal(subTypes, that.subTypes) &&
+        Objects.equal(example, that.example);
   }
 }
