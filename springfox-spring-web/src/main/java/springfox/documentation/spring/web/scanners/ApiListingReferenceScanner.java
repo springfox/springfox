@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
@@ -42,6 +43,9 @@ public class ApiListingReferenceScanner {
 
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
+
+    UniqueTypeNameAdjuster typeNameAdfuster = new UniqueTypeNameAdjuster();
+
     ApiSelector selector = context.getApiSelector();
     Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
         .filter(selector.getRequestHandlerSelector());
@@ -50,7 +54,7 @@ public class ApiListingReferenceScanner {
           handler.declaringClass(), 0);
 
       RequestMappingContext requestMappingContext
-          = new RequestMappingContext(context, handler);
+          = new RequestMappingContext(context, handler, typeNameAdfuster);
 
       resourceGroupRequestMappings.put(resourceGroup, requestMappingContext);
     }
