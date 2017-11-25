@@ -21,6 +21,8 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
+
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
@@ -126,5 +128,38 @@ public class ModelProperty {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden, 
+                            readOnly, description, allowableValues, modelRef, example, pattern);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+   ModelProperty that = (ModelProperty) o;
+
+    return Objects.equal(name, that.name) &&
+        Objects.equal(type, that.type) &&
+        Objects.equal(qualifiedType, that.qualifiedType) &&
+        Objects.equal(position, that.position) &&
+        Objects.equal(required, that.required) &&
+        Objects.equal(isHidden, that.isHidden) &&
+        Objects.equal(readOnly, that.readOnly) &&
+        Objects.equal(description, that.description) &&
+        Objects.equal(allowableValues, that.allowableValues) &&
+        Objects.equal(modelRef, that.modelRef) &&
+        Objects.equal(example, that.example) &&
+        Objects.equal(pattern, that.pattern) &&
+        Objects.equal(vendorExtensions, that.vendorExtensions);
   }
 }
