@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -27,11 +28,14 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class TypeNameExtractorSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
   def "Response class for container types are inferred correctly"() {
     given:
       def context = returnValue("group",
           containerType,
+          Optional.absent(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -55,7 +59,9 @@ class TypeNameExtractorSpec extends SchemaSpecification {
     given:
       def context = returnValue("group",
           containerType,
+          Optional.absent(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
