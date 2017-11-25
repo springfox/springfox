@@ -36,7 +36,6 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
@@ -64,14 +63,10 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     if (canSkip(context, returnType)) {
       return;
     }
-    ModelContext modelContext = returnValue(
-        context.getGroupName(),
+
+    ModelContext modelContext = ModelContext.withAdjustedTypeName(context.operationModelsBuilder().addReturn(
         returnType,
-        Optional.<ResolvedType>absent(),
-        context.getDocumentationType(),
-        context.getAlternateTypeProvider(),
-        context.getGenericsNamingStrategy(),
-        context.getIgnorableParameterTypes());
+        Optional.<ResolvedType>absent()));
 
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting response class to:" + responseTypeName);

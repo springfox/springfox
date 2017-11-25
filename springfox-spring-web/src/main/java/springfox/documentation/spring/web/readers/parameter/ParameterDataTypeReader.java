@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -40,13 +41,11 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
-import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 import java.util.HashSet;
 
@@ -57,11 +56,11 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final TypeNameExtractor nameExtractor;
   private final TypeResolver resolver;
   private final EnumTypeDeterminer enumTypeDeterminer;
-  private final DocumentationPluginsManager pluginsManager;
+  private final SchemaPluginsManager pluginsManager;
 
   @Autowired
   public ParameterDataTypeReader(
-      DocumentationPluginsManager pluginsManager,
+      SchemaPluginsManager pluginsManager,
       TypeNameExtractor nameExtractor,
       TypeResolver resolver,
       EnumTypeDeterminer enumTypeDeterminer) {
@@ -102,16 +101,13 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     
     ViewProviderPlugin viewProvider = 
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
+   
+    ModelContext modelContext = ModelContext.withAdjustedTypeName
+        (context.getOperationContext().operationModelsBuilder().addInputParam(
+            parameterType,
+            viewProvider.viewFor(parameterType, methodParameter),
+            new HashSet<ResolvedType>()));
 
-    ModelContext modelContext = inputParam(
-        context.getGroupName(),
-        parameterType,
-        viewProvider.viewFor(parameterType, methodParameter),
-        new HashSet<ResolvedType>(),
-        context.getDocumentationType(),
-        context.getAlternateTypeProvider(),
-        context.getGenericNamingStrategy(),
-        context.getIgnorableParameterTypes());
     context.parameterBuilder()
         .type(parameterType)
         .modelRef(Optional.fromNullable(modelRef)

@@ -34,7 +34,6 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -83,9 +82,6 @@ public class OperationParameterReader implements OperationBuilderPlugin {
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
     List<Parameter> parameters = newArrayList();
-    
-    ViewProviderPlugin viewProvider = 
-        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
@@ -100,10 +96,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         if (shouldExpand(methodParameter, alternate)) {
           parameters.addAll(
               expander.expand(
-                  new ExpansionContext("",
-                      methodParameter.getParameterType(),
-                      viewProvider.viewFor(alternate, methodParameter),
-                      context.getDocumentationContext())));
+                  new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }

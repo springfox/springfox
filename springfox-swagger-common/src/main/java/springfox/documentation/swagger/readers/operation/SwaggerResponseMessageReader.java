@@ -48,7 +48,6 @@ import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 import static springfox.documentation.swagger.readers.operation.ResponseHeaders.*;
@@ -99,14 +98,9 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       for (ApiResponse apiResponse : apiResponseAnnotations) {
         if (!seenResponsesByCode.containsKey(apiResponse.code())) {
           seenResponsesByCode.put(apiResponse.code(), apiResponse);
-          ModelContext modelContext = returnValue(
-              context.getGroupName(),
-              apiResponse.response(),
-              Optional.<ResolvedType>absent(),
-              context.getDocumentationType(),
-              context.getAlternateTypeProvider(),
-              context.getGenericsNamingStrategy(),
-              context.getIgnorableParameterTypes());
+          ModelContext modelContext = ModelContext.withAdjustedTypeName(context.operationModelsBuilder().addReturn(
+              typeResolver.resolve(apiResponse.response()),
+              Optional.<ResolvedType>absent()));
           Optional<ModelReference> responseModel = Optional.absent();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
           if (isSuccessful(apiResponse.code())) {
@@ -130,14 +124,9 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
       }
     }
     if (operationResponse.isPresent()) {
-      ModelContext modelContext = returnValue(
-          context.getGroupName(),
+      ModelContext modelContext = ModelContext.withAdjustedTypeName(context.operationModelsBuilder().addReturn(
           operationResponse.get(),
-          Optional.<ResolvedType>absent(),
-          context.getDocumentationType(),
-          context.getAlternateTypeProvider(),
-          context.getGenericsNamingStrategy(),
-          context.getIgnorableParameterTypes());
+          Optional.<ResolvedType>absent()));
       ResolvedType resolvedType = context.alternateFor(operationResponse.get());
 
       ModelReference responseModel = modelRefFactory(modelContext, typeNameExtractor).apply(resolvedType);

@@ -28,12 +28,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 
@@ -42,10 +42,10 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
   private final TypeNameExtractor nameExtractor;
-  private final DocumentationPluginsManager pluginsManager;
+  private final SchemaPluginsManager pluginsManager;
 
   @Autowired
-  public OperationResponseClassReader(DocumentationPluginsManager pluginsManager, TypeNameExtractor nameExtractor) {
+  public OperationResponseClassReader(SchemaPluginsManager pluginsManager, TypeNameExtractor nameExtractor) {
     this.nameExtractor = nameExtractor;
     this.pluginsManager = pluginsManager;
   }
@@ -58,14 +58,10 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     ViewProviderPlugin viewProvider = 
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
-    ModelContext modelContext = ModelContext.returnValue(
-        context.getGroupName(),
+    ModelContext modelContext = ModelContext.withAdjustedTypeName(context.operationModelsBuilder().addReturn(
         returnType,
-        viewProvider.viewFor(returnType, context),
-        context.getDocumentationType(),
-        context.getAlternateTypeProvider(),
-        context.getGenericsNamingStrategy(),
-        context.getIgnorableParameterTypes());
+        viewProvider.viewFor(returnType, context)));
+
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to: {}", responseTypeName);
 

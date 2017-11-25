@@ -25,9 +25,9 @@ import com.google.common.collect.Sets;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
+import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.lang.reflect.Type;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
@@ -35,6 +35,7 @@ import static com.google.common.collect.Sets.*;
 public class OperationModelContextsBuilder {
   private final String group;
   private final DocumentationType documentationType;
+  private final UniqueTypeNameAdjuster uniqueTypeNameAdjuster;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
@@ -43,49 +44,53 @@ public class OperationModelContextsBuilder {
   public OperationModelContextsBuilder(
       String group,
       DocumentationType documentationType,
+      UniqueTypeNameAdjuster uniqueTypeNameAdjuster,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericsNamingStrategy,
       ImmutableSet<Class> ignorableParameterTypes) {
     this.group = group;
     this.documentationType = documentationType;
+    this.uniqueTypeNameAdjuster = uniqueTypeNameAdjuster;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericsNamingStrategy = genericsNamingStrategy;
     ignorableTypes = ignorableParameterTypes;
   }
   
-  public OperationModelContextsBuilder addReturn(Type type) {
+  public ModelContext addReturn(ResolvedType type) {
     return addReturn(type, Optional.<ResolvedType>absent());
   }
 
-  public OperationModelContextsBuilder addReturn(Type type, Optional<ResolvedType> view) {
+  public ModelContext addReturn(ResolvedType type, Optional<ResolvedType> view) {
     ModelContext returnValue = ModelContext.returnValue(
         group,
         type,
         view,
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider,
         genericsNamingStrategy,
         ignorableTypes);
     this.contexts.add(returnValue);
-    return this;
+    return returnValue;
   }
 
-  public OperationModelContextsBuilder addInputParam(Type type) {
+  public ModelContext addInputParam(ResolvedType type) {
     return addInputParam(type, Optional.<ResolvedType>absent(), Sets.<ResolvedType>newHashSet());
   }
   
-  public OperationModelContextsBuilder addInputParam(Type type, Optional<ResolvedType> view, Set<ResolvedType> validationGroups) {
+  public ModelContext addInputParam(ResolvedType type, Optional<ResolvedType> view, Set<ResolvedType> validationGroups) {
     ModelContext inputParam = ModelContext.inputParam(
         group,
         type,
         view,
         validationGroups,
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider,
         genericsNamingStrategy,
         ignorableTypes);
     this.contexts.add(inputParam);
-    return this;
+    return inputParam;
   }
 
   public Set<ModelContext> build() {

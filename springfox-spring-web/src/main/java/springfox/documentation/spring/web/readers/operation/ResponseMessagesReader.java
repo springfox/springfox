@@ -71,14 +71,10 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     String message = message(context);
     ModelReference modelRef = null;
     if (!isVoid(returnType)) {
-      ModelContext modelContext = ModelContext.returnValue(
-          context.getGroupName(),
-          returnType,
-          Optional.<ResolvedType>absent(),
-          context.getDocumentationType(),
-          context.getAlternateTypeProvider(),
-          context.getGenericsNamingStrategy(),
-          context.getIgnorableParameterTypes());
+      ModelContext modelContext = ModelContext.withAdjustedTypeName(
+          context.operationModelsBuilder().addReturn(
+              returnType,
+              Optional.<ResolvedType>absent()));
       modelRef = modelRefFactory(modelContext, typeNameExtractor).apply(returnType);
     }
     ResponseMessage built = new ResponseMessageBuilder()
