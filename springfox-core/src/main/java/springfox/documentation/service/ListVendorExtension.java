@@ -18,6 +18,7 @@
  */
 package springfox.documentation.service;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
@@ -42,5 +43,26 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
   @Override
   public List<T> getValue() {
     return ImmutableList.copyOf(values);
+  }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(values, name);
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ListVendorExtension<?> that = (ListVendorExtension<?>) o;
+
+    return Objects.equal(values, that.values) &&
+        Objects.equal(name, that.name);
   }
 }
