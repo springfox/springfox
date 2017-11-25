@@ -53,14 +53,14 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       return new ModelRef("__file");
     }
     String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-    return new ModelRef(typeName, allowableValues(type));
+    return new ModelRef(typeName, null, allowableValues(type), fromParent(parentContext, type).hashCode());
   }
 
   private Optional<ModelReference> mapReference(ResolvedType type) {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), true));
+      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, fromParent(parentContext, type).hashCode()));
     }
     return Optional.absent();
   }
@@ -73,7 +73,8 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
           new ModelRef(
               typeName,
               apply(collectionElementType),
-              allowableValues(collectionElementType)));
+              allowableValues(collectionElementType),
+              fromParent(parentContext, type).hashCode()));
     }
     return Optional.absent();
   }
