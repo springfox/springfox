@@ -21,8 +21,6 @@ package springfox.documentation.schema;
 
 import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
 
-import java.lang.annotation.Annotation;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +30,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
 
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -84,32 +80,5 @@ public class JacksonJsonViewProvider implements ViewProviderPlugin {
       LOG.debug("Found view {} for type {}", resolvedTypeSignature(view.get()).or("<null>"), resolvedTypeSignature(type).or("<null>"));
     }
     return view;
-  }
-
-  @Override
-  public boolean applyView(ResolvedType activeview, ResolvedField field) {
-    final Class<?> activeView = activeview.getErasedType();
-    if (activeView != null) {
-      Optional<? extends Annotation> annotation = FluentIterable.from(field.getAnnotations())
-          .filter(JsonView.class).first();
-      if (!annotation.isPresent()) {
-        return true;
-      }
-      final Class<?>[] typeviews =  ((JsonView)(annotation.get())).value();
-      int i = 0;
-      int len = typeviews.length;
-      for (; i < len; ++i) {
-        if (typeviews[i].isAssignableFrom(activeView)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  @Override
-  public boolean applyView(ResolvedType activeView, Class<?>[] typeViews) {
-    // TODO Auto-generated method stub
-    return false;
   }
 }

@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
-
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Operation;
@@ -40,7 +39,6 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
-import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
@@ -90,9 +88,6 @@ public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("pathDecoratorRegistry")
   private PluginRegistry<PathDecorator, DocumentationContext> pathDecorators;
-  @Autowired
-  @Qualifier("viewProviderRegistry")
-  private PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders;
   @Autowired
   @Qualifier("apiListingScannerPluginRegistry")
   private PluginRegistry<ApiListingScannerPlugin, DocumentationType> apiListingScanners;
@@ -182,10 +177,6 @@ public class DocumentationPluginsManager {
         return input.decorator(context);
       }
     };
-  }
-  
-  public ViewProviderPlugin viewProvider(DocumentationType documentationType) {
-    return viewProviders.getPluginFor(documentationType);
   }
 
   public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {

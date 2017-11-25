@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 
@@ -32,27 +31,23 @@ import static com.google.common.collect.Sets.newHashSet;
 public class ExpansionContext {
     private final String parentName;
     private final ResolvedType paramType;
-    private final Optional<ResolvedType> view;
     private final DocumentationContext documentationContext;
     private final Set<ResolvedType> seenTypes;
 
     public ExpansionContext(
             String parentName,
-            ResolvedType paramType, 
-            Optional<ResolvedType> view,
+            ResolvedType paramType,
             DocumentationContext documentationContext) {
-        this(parentName, paramType, view, documentationContext, Sets.<ResolvedType>newHashSet());
+        this(parentName, paramType, documentationContext, Sets.<ResolvedType>newHashSet());
     }
 
     private ExpansionContext(
             String parentName,
             ResolvedType paramType,
-            Optional<ResolvedType> view,
             DocumentationContext documentationContext,
             Set<ResolvedType> seenTypes) {
         this.parentName = parentName;
         this.paramType = paramType;
-        this.view = view;
         this.documentationContext = documentationContext;
         this.seenTypes = newHashSet(seenTypes);
     }
@@ -63,10 +58,6 @@ public class ExpansionContext {
 
     public ResolvedType getParamType() {
         return paramType;
-    }
-
-    public Optional<ResolvedType> getView() {
-        return view;
     }
 
     public DocumentationContext getDocumentationContext() {
@@ -83,6 +74,6 @@ public class ExpansionContext {
             ResolvedType paramType,
             DocumentationContext documentationContext) {
         seenTypes.add(paramType);
-        return new ExpansionContext(parentName, paramType, view, documentationContext, seenTypes);
+        return new ExpansionContext(parentName, paramType, documentationContext, seenTypes);
     }
 }

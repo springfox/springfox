@@ -30,12 +30,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -48,10 +48,10 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(OperationModelsProvider.class);
-  private final DocumentationPluginsManager pluginsManager;
+  private final SchemaPluginsManager pluginsManager;
 
   @Autowired
-  public OperationModelsProvider(DocumentationPluginsManager pluginsManager) {
+  public OperationModelsProvider(SchemaPluginsManager pluginsManager) {
     this.pluginsManager = pluginsManager;
   }
 

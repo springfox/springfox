@@ -54,7 +54,6 @@ import springfox.documentation.schema.property.field.FieldModelProperty;
 import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-import springfox.documentation.spi.service.ViewProviderPlugin;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -175,7 +174,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
         if (!givenContext.canIgnore(input.getType())) {
-          if (memberIsUnwrapped(jacksonProperty.getField()) && inView(input, givenContext)) {
+          if (memberIsUnwrapped(jacksonProperty.getField())) {
               return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
           }
           return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
@@ -214,9 +213,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext modelContext = ModelContext.fromParent(givenContext, type);
       properties.addAll(fromFactoryMethod(type, jacksonProperty, (AnnotatedParameter) member, modelContext));
     }
-    return from(properties)
-        .filter(hiddenProperties())
-        .toList();
+    return from(properties).filter(hiddenProperties()).toList();
+
   }
 
   private Predicate<? super ModelProperty> hiddenProperties() {
@@ -226,15 +224,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         return !input.isHidden();
       }
     };
-  }
-  
-  private boolean inView(final ResolvedField field, final ModelContext context) {
-    if (context.getView().isPresent()) {
-      ViewProviderPlugin viewProvider =
-          schemaPluginsManager.viewProvider(context.getDocumentationType());     
-      return viewProvider.applyView(context.getView().get(), field);
-    }
-    return true;
   }
 
   private Optional<ResolvedField> findField(
@@ -376,10 +365,24 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
     if (context.isReturnType()) {
       SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
-      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
+      if (context.getView().isPresent()) {
+        return serializationConfig.withView(context.getView().get().getErasedType()).
+            introspect(serializationConfig.constructType(type.getErasedType()));
+      }
+      else {
+        return serializationConfig.
+            introspect(serializationConfig.constructType(type.getErasedType()));
+      }
     } else {
       DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
-      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
+      if (context.getView().isPresent()) {
+        return serializationConfig.withView(context.getView().get().getErasedType()).
+            introspect(serializationConfig.constructType(type.getErasedType()));
+      }
+      else {
+        return serializationConfig.
+            introspect(serializationConfig.constructType(type.getErasedType()));
+      }
     }
   }
 }

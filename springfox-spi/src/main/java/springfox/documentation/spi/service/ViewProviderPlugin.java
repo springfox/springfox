@@ -22,7 +22,6 @@ package springfox.documentation.spi.service;
 import org.springframework.plugin.core.Plugin;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.members.ResolvedField;
 import com.google.common.base.Optional;
 
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -55,19 +54,4 @@ public interface ViewProviderPlugin extends Plugin<DocumentationType> {
    * @return resolved view name, if found
    */
   Optional<ResolvedType> viewFor(ResolvedType type, OperationContext context);
-
-  /**
-   * Defines if a type is in a active view
-   * @param activeView - resolved view type
-   * @param field - field that contains additional information
-   * @return true if active view in a type views, false otherwise
-   */
-  boolean applyView(ResolvedType activeView, ResolvedField field);
-
-  /**
-   * Defines if a type is in a active view
-   * @param typeViews - resolved type views
-   * @return true if active view in a type views, false otherwise
-   */
-  boolean applyView(ResolvedType activeView, Class<?>[] typeViews);
 }

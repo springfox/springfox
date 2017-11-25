@@ -38,7 +38,6 @@ import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -90,10 +89,6 @@ public class ModelAttributeParameterExpander {
     FluentIterable<ModelAttributeField> modelAttributes = from(fields)
         .transform(toModelAttributeField(alternateTypeProvider));
 
-    if (context.getView().isPresent()) {
-      modelAttributes = modelAttributes.filter(inView(context.getView().get(), context.getDocumentationContext()));
-    }
-    
     FluentIterable<ModelAttributeField> expendables = modelAttributes
         .filter(not(simpleType()))
         .filter(not(recursiveType(context)));
@@ -247,18 +242,6 @@ public class ModelAttributeParameterExpander {
       @Override
       public boolean apply(ResolvedField input) {
         return beanPropNames.contains(input.getName());
-      }
-    };
-  }
-  
-  private Predicate<ModelAttributeField> inView(final ResolvedType activeView,
-      final DocumentationContext documentationContext) {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean apply(ModelAttributeField input) {
-        ViewProviderPlugin viewProvider =
-            pluginsManager.viewProvider(documentationContext.getDocumentationType());
-        return viewProvider.applyView(activeView, input.getField());
       }
     };
   }
