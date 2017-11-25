@@ -104,6 +104,10 @@ public class OperationContext {
   public DocumentationContext getDocumentationContext() {
     return requestContext.getDocumentationContext();
   }
+  
+  public OperationModelContextsBuilder operationModelsBuilder() {
+    return requestContext.operationModelsBuilder();
+  }
 
   public DocumentationType getDocumentationType() {
     return getDocumentationContext().getDocumentationType();
