@@ -33,13 +33,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
   def "Type with bean properties in the constructor" () {
     given:
       def sut = defaultModelProvider()
-      def typeToTest = typeWithConstructorProperties()
+      def typeToTest = resolver.resolve(typeWithConstructorProperties())
       def reqContext = inputParam(
           "group",
           typeToTest,
           Optional.absent(),
           new HashSet<>(),
           documentationType,
+          new TypeNameIndexingAdjuster(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -48,6 +49,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           typeToTest,
           Optional.absent(),
           documentationType,
+          new TypeNameIndexingAdjuster(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -76,13 +78,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
   def "Type with delegated constructor (factory method)" () {
     given:
       def sut = defaultModelProvider()
-      def typeToTest = typeWithDelegatedConstructor()
+      def typeToTest = resolver.resolve(typeWithDelegatedConstructor())
       def reqContext = inputParam(
           "group",
           typeToTest,
           Optional.absent(),
           new HashSet<>(),
           documentationType,
+          new TypeNameIndexingAdjuster(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -91,6 +94,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           typeToTest,
           Optional.absent(),
           documentationType,
+          new TypeNameIndexingAdjuster(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -119,13 +123,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
   def "Type with @JsonCreator marked constructor" () {
     given:
       def sut = defaultModelProvider()
-      def typeToTest = typeWithDelegatedConstructor()
+      def typeToTest = resolver.resolve(typeWithDelegatedConstructor())
       def reqContext = inputParam(
           "group",
           typeToTest,
           Optional.absent(),
           new HashSet<>(),
           documentationType,
+          new TypeNameIndexingAdjuster(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -134,6 +139,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           typeToTest,
           Optional.absent(),
           documentationType,
+          new TypeNameIndexingAdjuster(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -27,14 +28,18 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelDependencyProviderSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
 
   @Unroll
   def "dependencies are inferred correctly"() {
     given:
     def context = inputParam(
         "group",
-        modelType,
+        resolver.resolve(modelType),
+        Optional.absent(),
+        new HashSet<>(),
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -44,7 +49,10 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
           inputParam(
               "group",
               it,
+              Optional.absent(),
+              new HashSet<>(),
               documentationType,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -79,8 +87,10 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     given:
     def context = returnValue(
         "group",
-        modelType,
+        resolver.resolve(modelType),
+        Optional.absent(),
         documentationType,
+        uniqueTypeNameAdjuster,,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -90,7 +100,9 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
           returnValue(
               "group",
               it,
+              Optional.absent(),
               documentationType,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))

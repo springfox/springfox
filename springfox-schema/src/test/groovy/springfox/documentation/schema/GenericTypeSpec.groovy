@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -29,6 +30,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class GenericTypeSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
 
   @Unroll
   def "Generic property on a generic types is inferred correctly for types"() {
@@ -36,13 +38,18 @@ class GenericTypeSpec extends SchemaSpecification {
     def inputContext = inputParam(
         "group",
         modelType,
+        Optional.absent(),
+        new HashSet<>(),
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
     def returnContext = returnValue("group",
         modelType,
+        Optional.absent(),
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -81,13 +88,18 @@ class GenericTypeSpec extends SchemaSpecification {
     def inputContext = inputParam(
         "group",
         modelType,
+        Optional.absent(),
+        new HashSet<>(),
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
     def returnContext = returnValue("group",
         modelType,
+        Optional.absent(),
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -115,7 +127,10 @@ class GenericTypeSpec extends SchemaSpecification {
     given:
     def inputContext = inputParam("group",
         modelType,
+        Optional.absent(),
+        new HashSet<>(),
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -123,7 +138,9 @@ class GenericTypeSpec extends SchemaSpecification {
 
     def returnContext = returnValue("group",
         modelType,
+        Optional.absent(),
         documentationType,
+        uniqueTypeNameAdjuster,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())

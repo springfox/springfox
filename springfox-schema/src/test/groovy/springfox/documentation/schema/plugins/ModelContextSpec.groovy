@@ -18,33 +18,48 @@
  */
 package springfox.documentation.schema.plugins
 
+import com.fasterxml.classmate.ResolvedType
+import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
+
+import groovy.lang.Mixin
 import spock.lang.Shared
 import spock.lang.Specification
+import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.ExampleWithEnums
+import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.mixins.TypesForTestingSupport
+import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.schema.contexts.ModelContext
 
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
+import java.util.Set
+
+@Mixin(TypesForTestingSupport)
 class ModelContextSpec extends Specification {
   @Shared
   AlternateTypeProvider provider = Mock(AlternateTypeProvider)
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared
+  def typeNameAdjuster = new TypeNameIndexingAdjuster()
 
   def "ModelContext equals works as expected"() {
     given:
       ModelContext context = inputParam(
           "group",
-          ExampleEnum,
+          resolver.resolve(ExampleEnum),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
@@ -52,29 +67,31 @@ class ModelContextSpec extends Specification {
       context.equals(test) == expectedEquality
       context.equals(context)
     where:
-      test                         | expectedEquality
-      inputParam(ExampleEnum)      | true
-      inputParam(ExampleWithEnums) | false
-      returnValue(ExampleEnum)     | false
-      ExampleEnum                  | false
+      test                                               | expectedEquality
+      inputParam(resolver.resolve(ExampleEnum))      | true
+      inputParam(resolver.resolve(ExampleWithEnums)) | false
+      returnValue(resolver.resolve(ExampleEnum))     | false
+      ExampleEnum                                        | false
   }
 
-  def inputParam(Class ofType) {
+  def inputParam(ResolvedType ofType) {
     inputParam("group",
         ofType,
         Optional.absent(),
         new HashSet<>(),
         SWAGGER_12,
+        typeNameAdjuster,
         provider,
         namingStrategy,
         ImmutableSet.builder().build())
   }
 
-  def returnValue(Class ofType) {
+  def returnValue(ResolvedType ofType) {
     returnValue("group",
         ofType,
         Optional.absent(),
         SWAGGER_12,
+        typeNameAdjuster,
         provider,
         namingStrategy,
         ImmutableSet.builder().build())
@@ -83,25 +100,28 @@ class ModelContextSpec extends Specification {
   def "ModelContext hashcode generated takes into account immutable values"() {
     given:
       ModelContext context = inputParam("group",
-          ExampleEnum,
+          resolver.resolve(ExampleEnum),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
       ModelContext other = inputParam("group",
-          ExampleEnum,
+          resolver.resolve(ExampleEnum),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
       ModelContext otherReturn = returnValue("group",
-          ExampleEnum,
+          resolver.resolve(ExampleEnum),
           Optional.absent(),
           SWAGGER_12,
+          typeNameAdjuster,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())

@@ -18,6 +18,9 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Function
+import com.google.common.base.Optional;
+import com.google.common.collect.Maps;
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.ImmutableSet
 import org.springframework.http.HttpHeaders
@@ -33,18 +36,28 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ModelProviderSpec extends Specification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+  def getNames = 
+      new Function<Model, String>() {
+        public String apply(Model model) {
+          return model.getName();
+        }}
   def "dependencies provider respects ignorables"() {
     given:
       ModelProvider sut = defaultModelProvider()
       def context = inputParam(
           "group",
           modelType,
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
       context.seen(new TypeResolver().resolve(HttpHeaders))
-      def dependentTypeNames = sut.dependencies(context).keySet().sort()
+      def dependentTypeNames = Maps.uniqueIndex(sut.dependencies(context).values(), getNames)
+          .keySet().sort()
 
     expect:
       dependencies == dependentTypeNames
@@ -58,14 +71,18 @@ class ModelProviderSpec extends Specification {
   def "dependencies are inferred correctly by the model provider"() {
     given:
       ModelProvider provider = defaultModelProvider()
-      def dependentTypeNames = provider.dependencies(
+      def dependentTypeNames = Maps.uniqueIndex(provider.dependencies(
         inputParam(
             "group",
-            modelType,
+            resolver.resolve(modelType),
+            Optional.absent(),
+            new HashSet<>(),
             SWAGGER_12,
+            uniqueTypeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).keySet().sort()
+            ImmutableSet.builder().build())).values(), getNames)
+        .keySet().sort()
 
     expect:
       dependencies == dependentTypeNames

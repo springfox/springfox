@@ -20,7 +20,6 @@ package springfox.documentation.schema
 
 import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
@@ -33,71 +32,75 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ComplexTypeSpec extends Specification {
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-
+  @Shared
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+  
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Map<String, Model> models = new HashMap<String, Model>();
-
       Model asInput = provider.modelFor(inputParam("group",
-          complexType(),
+          resolver.resolve(complexType()),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      models.put(asInput.getName(), asInput);
-
       Model asReturn = provider.modelFor(returnValue("group",
-          complexType(),
+          resolver.resolve(complexType()),
           Optional.absent(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      models.put(asReturn.getName(), asReturn);
 
     expect:
-      models.containsKey(modelName);
-      def model = models.get(modelName);
-      model.getProperties().containsKey(property)
-      def modelProperty = model.getProperties().get(property)
+      asInput.getName() == "ComplexType"
+      asInput.getProperties().containsKey(property)
+      def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getModelRef().type == typeName
       !modelProperty.getModelRef().collection
       modelProperty.getModelRef().itemType == null
 
+      asReturn.getName() == "ComplexType"
+      asReturn.getProperties().containsKey(property)
+      def retModelProperty = asReturn.getProperties().get(property)
+      retModelProperty.type.erasedType == type
+      retModelProperty.getQualifiedType() == qualifiedType
+      retModelProperty.getModelRef().type == typeName
+      !retModelProperty.getModelRef().collection
+      retModelProperty.getModelRef().itemType == null
+
     where:
-      modelName       | property     | type         | typeName     | qualifiedType
-      "ComplexType"   | "name"       | String       | "string"     | "java.lang.String"
-      "ComplexType"   | "age"        | Integer.TYPE | "int"        | "int"
-      "ComplexType"   | "category"   | Category     | "Category"   | "springfox.documentation.schema.Category"
-      "ComplexType"   | "customType" | BigDecimal   | "bigdecimal" | "java.math.BigDecimal"
-      "ComplexType_1" | "name"       | String       | "string"     | "java.lang.String"
-      "ComplexType_1" | "age"        | Integer.TYPE | "int"        | "int"
-      "ComplexType_1" | "category"   | Category     | "Category_1" | "springfox.documentation.schema.Category"
-      "ComplexType_1" | "customType" | BigDecimal   | "bigdecimal" | "java.math.BigDecimal"
+      property     | type         | typeName   | qualifiedType
+      "name"       | String       | "string"   | "java.lang.String"
+      "age"        | Integer.TYPE | "int"      | "int"
+      "category"   | Category     | "Category" | "springfox.documentation.schema.Category"
+      "customType" | BigDecimal   | "bigdecimal"   | "java.math.BigDecimal"
   }
 
   def "recursive type properties are inferred correctly"() {
     given:
-      def complexType = recursiveType()
+      def complexType = resolver.resolve(recursiveType())
       def provider = defaultModelProvider()
       Model asInput = provider.modelFor(inputParam("group",
           complexType,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-
       Model asReturn = provider.modelFor(returnValue("group",
           complexType,
           Optional.absent(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -112,12 +115,12 @@ class ComplexTypeSpec extends Specification {
       !modelProperty.getModelRef().collection
       modelProperty.getModelRef().itemType == null
 
-      asReturn.getName() == "RecursiveType_1"
+      asReturn.getName() == "RecursiveType"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type
       retModelProperty.getQualifiedType() == qualifiedType
-      retModelProperty.getModelRef().type == "RecursiveType_1"
+      retModelProperty.getModelRef().type == "RecursiveType"
       !retModelProperty.getModelRef().collection
       retModelProperty.getModelRef().itemType == null
 
@@ -128,50 +131,51 @@ class ComplexTypeSpec extends Specification {
 
   def "inherited type properties are inferred correctly"() {
     given:
-      def complexType = inheritedComplexType()
+      def complexType = resolver.resolve(inheritedComplexType())
       def provider = defaultModelProvider()
-      Map<String, Model> models = new HashMap<String, Model>();
-
       Model asInput = provider.modelFor(inputParam("group",
           complexType,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      models.put(asInput.getName(), asInput);
-
       Model asReturn = provider.modelFor(returnValue("group",
           complexType,
           Optional.absent(),
           SWAGGER_12,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      models.put(asReturn.getName(), asReturn);
 
     expect:
-      models.containsKey(modelName);
-      def model = models.get(modelName);
-      def modelProperty = model.getProperties().get(property)
+      asInput.getName() == "InheritedComplexType"
+      asInput.getProperties().containsKey(property)
+      def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
       modelProperty.getQualifiedType() == qualifiedType
       modelProperty.getModelRef().type == typeName
       !modelProperty.getModelRef().collection
       modelProperty.getModelRef().itemType == null
 
+      asReturn.getName() == "InheritedComplexType"
+      asReturn.getProperties().containsKey(property)
+      def retModelProperty = asReturn.getProperties().get(property)
+      retModelProperty.type.erasedType == type
+      retModelProperty.getQualifiedType() == qualifiedType
+      retModelProperty.getModelRef().type == typeName
+      !retModelProperty.getModelRef().collection
+      retModelProperty.getModelRef().itemType == null
+
     where:
-      modelName                | property            | type         | typeName     | typeProperty | qualifiedType
-      "InheritedComplexType"   | "name"              | String       | "string"     | 'type'       | "java.lang.String"
-      "InheritedComplexType"   | "age"               | Integer.TYPE | "int"        | 'type'       | "int"
-      "InheritedComplexType"   | "category"          | Category     | "Category"   | 'reference'  | "springfox.documentation.schema.Category"
-      "InheritedComplexType"   | "customType"        | BigDecimal   | "bigdecimal" | 'type'       | "java.math.BigDecimal"
-      "InheritedComplexType"   | "inheritedProperty" | String       | "string"     | 'type'       | "java.lang.String"
-      "InheritedComplexType_1" | "name"              | String       | "string"     | 'type'       | "java.lang.String"
-      "InheritedComplexType_1" | "age"               | Integer.TYPE | "int"        | 'type'       | "int"
-      "InheritedComplexType_1" | "category"          | Category     | "Category_1" | 'reference'  | "springfox.documentation.schema.Category"
-      "InheritedComplexType_1" | "customType"        | BigDecimal   | "bigdecimal" | 'type'       | "java.math.BigDecimal"
-      "InheritedComplexType_1" | "inheritedProperty" | String       | "string"     | 'type'       | "java.lang.String"
+      property            | type         | typeName   | typeProperty | qualifiedType
+      "name"              | String       | "string"   | 'type'       | "java.lang.String"
+      "age"               | Integer.TYPE | "int"      | 'type'       | "int"
+      "category"          | Category     | "Category" | 'reference'  | "springfox.documentation.schema.Category"
+      "customType"        | BigDecimal   | "bigdecimal"   | 'type'       | "java.math.BigDecimal"
+      "inheritedProperty" | String       | "string"   | 'type'       | "java.lang.String"
   }
 }

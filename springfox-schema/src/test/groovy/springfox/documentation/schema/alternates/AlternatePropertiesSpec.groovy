@@ -36,12 +36,14 @@ class AlternatePropertiesSpec extends Specification {
   def "Nested properties that have alternate types defined are rendered correctly" () {
     given:
       def provider = alternateTypeProvider()
+      def typeNameAdjuster = new TypeNameIndexingAdjuster()
       ModelProvider modelProvider = defaultModelProvider()
       Model model = modelProvider.modelFor(inputParam("group",
           typeWithAlternateProperty(),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -60,6 +62,7 @@ class AlternatePropertiesSpec extends Specification {
   def "ResponseEntity«Void» renders correctly when an alternate type is provided" () {
     given:
       def provider = alternateTypeProvider()
+      def typeNameAdjuster = new TypeNameIndexingAdjuster()
       provider.addRule(new AlternateTypeRule(resolver.resolve(ResponseEntity, Void), resolver.resolve(Void)))
       ModelProvider modelProvider = defaultModelProvider()
       Model model = modelProvider.modelFor(inputParam("group",
@@ -67,7 +70,8 @@ class AlternatePropertiesSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          alternateTypeProvider(),
+          typeNameAdjuster,
+          provider,
           namingStrategy,
           ImmutableSet.builder().build())).get()
     expect:

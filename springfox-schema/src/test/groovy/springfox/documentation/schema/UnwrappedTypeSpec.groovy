@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -54,19 +55,26 @@ class UnwrappedTypeSpec extends Specification {
     given:
       def provider = defaultModelProvider(objectMapperThatUsesFields())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+
     when:
       Model asInput = provider.modelFor(
           inputParam("group",
-              UnwrappedTypeForField,
+              resolver.resolve(UnwrappedTypeForField),
+              Optional.absent(),
+              new HashSet<>(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
           .get()
       Model asReturn = provider.modelFor(
           returnValue("group",
-              UnwrappedTypeForField,
+              resolver.resolve(UnwrappedTypeForField),
+              Optional.absent(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -102,20 +110,26 @@ class UnwrappedTypeSpec extends Specification {
     given:
     def provider = defaultModelProvider(objectMapperThatUsesFields())
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
 
     when:
     Model asInput = provider.modelFor(
         inputParam("group",
-            UnwrappedTypeForFieldWithGetter,
+            resolver.resolve(UnwrappedTypeForFieldWithGetter),
+            Optional.absent(),
+            new HashSet<>(),
             SWAGGER_12,
+            uniqueTypeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
         .get()
     Model asReturn = provider.modelFor(
         returnValue("group",
-            UnwrappedTypeForFieldWithGetter,
+            resolver.resolve(UnwrappedTypeForFieldWithGetter),
+            Optional.absent(),
             SWAGGER_12,
+            uniqueTypeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -152,18 +166,24 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(
         objectMapperThatUsesGetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
     when:
       Model asInput = provider.modelFor(
           inputParam("group",
-              UnwrappedTypeForGetter,
+              resolver.resolve(UnwrappedTypeForGetter),
+              Optional.absent(),
+              new HashSet<>(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
-              UnwrappedTypeForGetter,
+              resolver.resolve(UnwrappedTypeForGetter),
+              Optional.absent(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -199,18 +219,24 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(
         objectMapperThatUsesSetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
     when:
       Model asInput = provider.modelFor(
           inputParam("group",
-              UnwrappedTypeForSetter,
+              resolver.resolve(UnwrappedTypeForSetter),
+              Optional.absent(),
+              new HashSet<>(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
-              UnwrappedTypeForSetter,
+              resolver.resolve(UnwrappedTypeForSetter),
+              Optional.absent(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()

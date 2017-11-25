@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import spock.lang.Ignore
 import spock.lang.Unroll
@@ -29,21 +30,27 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class SimpleTypeSpec extends SchemaSpecification {
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
       Model asInput = modelProvider.modelFor(
           inputParam(
               "group",
-              simpleType(),
+              resolver.resolve(simpleType()),
+              Optional.absent(),
+              new HashSet<>(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue("group",
-              simpleType(),
+              resolver.resolve(simpleType()),
+              Optional.absent(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -98,16 +105,21 @@ class SimpleTypeSpec extends SchemaSpecification {
       Model asInput = modelProvider.modelFor(
           inputParam(
               "group",
-              typeWithConstructor(),
+              resolver.resolve(typeWithConstructor()),
+              Optional.absent(),
+              new HashSet<>(),
               documentationType,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
               "group",
-              typeWithConstructor(),
+              resolver.resolve(typeWithConstructor()),
+              Optional.absent(),
               documentationType,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -136,16 +148,21 @@ class SimpleTypeSpec extends SchemaSpecification {
       Model asInput = modelProvider.modelFor(
           inputParam(
               "group",
-              typeWithJsonPropertyAnnotation(),
+              resolver.resolve(typeWithJsonPropertyAnnotation()),
+              Optional.absent(),
+              new HashSet<>(),
               documentationType,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
               "group",
-              typeWithJsonPropertyAnnotation(),
+              resolver.resolve(typeWithJsonPropertyAnnotation()),
+              Optional.absent(),
               documentationType,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()

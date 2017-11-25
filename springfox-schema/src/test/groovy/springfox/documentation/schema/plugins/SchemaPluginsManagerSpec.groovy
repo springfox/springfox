@@ -26,6 +26,7 @@ import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.schema.*
+import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.ModelBuilderPlugin
@@ -39,7 +40,7 @@ import static com.google.common.collect.Lists.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(AlternateTypesSupport)
+@Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class SchemaPluginsManagerSpec extends Specification {
   SchemaPluginsManager sut
   TypeNameExtractor typeNames
@@ -84,12 +85,14 @@ class SchemaPluginsManagerSpec extends Specification {
   def "enriches model when plugins are found"() {
     given:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
       def context = inputParam(
           "group",
-          TypeForTestingPropertyNames,
+          resolver.resolve(TypeForTestingPropertyNames),
           Optional.absent(),
           new HashSet<>(),
           SPRING_WEB,
+          uniqueTypeNameAdjuster,
           new AlternateTypeProvider([]),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -103,12 +106,14 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model name when plugins are found"() {
     given:
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
       def context = inputParam(
           "group",
-          ExampleWithEnums,
+          resolver.resolve(ExampleWithEnums),
           Optional.absent(),
           new HashSet<>(),
           SPRING_WEB,
+          uniqueTypeNameAdjuster,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

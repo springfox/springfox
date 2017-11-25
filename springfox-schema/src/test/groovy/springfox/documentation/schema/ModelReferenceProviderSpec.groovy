@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional;
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -33,14 +34,17 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ModelReferenceProviderSpec extends Specification {
   def "Map of Maps is rendered correctly" () {
     given:
+      def resolver = new TypeResolver()
       def modelContext = inputParam(
           "group",
-          TypeWithMapOfMaps,
+          resolver.resolve(TypeWithMapOfMaps),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
+          new TypeNameIndexingAdjuster(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
-      def resolver = new TypeResolver()
       def typeNameExtractor = aTypeNameExtractor(resolver)
     when:
       def sut = modelRefFactory(modelContext, typeNameExtractor)

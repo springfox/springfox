@@ -35,20 +35,24 @@ class EnumTypeSpec extends Specification {
       def list = newArrayList("ONE", "TWO")
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+
       Model asInput = provider.modelFor(
           inputParam("group",
-              enumType(),
+              resolver.resolve(enumType()),
               Optional.absent(),
               new HashSet<>(),
               DocumentationType.SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
-              enumType(),
+              resolver.resolve(enumType()),
               Optional.absent(),
               DocumentationType.SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -67,7 +71,7 @@ class EnumTypeSpec extends Specification {
       modelProperty.getModelRef().itemType == null
       modelProperty.getAllowableValues().getValues() == list
 
-      asReturn.getName() == "ExampleWithEnums_1"
+      asReturn.getName() == "ExampleWithEnums"
       asReturn.getProperties().containsKey("exampleEnum")
       def retModelPropertyOption = asReturn.getProperties().get("exampleEnum")
       def retModelProperty = retModelPropertyOption
