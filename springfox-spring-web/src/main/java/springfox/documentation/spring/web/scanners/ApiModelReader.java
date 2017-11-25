@@ -164,8 +164,7 @@ public class ApiModelReader  {
       for (Model model: entry.getValue()) {
         if (modelTypeMap.containsKey(model.getType())) {
           modelTypeMap.get(model.getType()).add(model);
-        }
-        else {
+        } else {
           modelTypeMap.put(model.getType(), new ArrayList<Model>(Arrays.asList(new Model[] {model})));
         }
       }
