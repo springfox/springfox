@@ -80,6 +80,7 @@ public class Types {
       .put(Currency.class, "string")
       .put(UUID.class, "uuid")
       .put(MultipartFile.class, "__file")
+      .put(Void.class, "Void")
       .build();
 
   public static String typeNameFor(Type type) {

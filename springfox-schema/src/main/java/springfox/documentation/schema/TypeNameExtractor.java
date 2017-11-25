@@ -38,12 +38,12 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.google.common.base.Optional.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
+import static com.google.common.base.Optional.fromNullable;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Collections.containerType;
+import static springfox.documentation.schema.Types.typeNameFor;
+import static springfox.documentation.schema.Maps.isMapType;
 
 @Component
 public class TypeNameExtractor {
@@ -52,9 +52,6 @@ public class TypeNameExtractor {
   private final TypeResolver typeResolver;
   private final PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders;
   private final EnumTypeDeterminer enumTypeDeterminer;
-  
-  private final Map<String, Integer> generated = new HashMap<String, Integer>();
-  private final Map<Integer, String> modelNameCache = new HashMap<Integer, String>();
 
   @Autowired
   public TypeNameExtractor(
@@ -127,22 +124,17 @@ public class TypeNameExtractor {
   }
 
   private String modelName(ModelContext context) {
-    if (modelNameCache.containsKey(context.hashCode())) {
-      return modelNameCache.get(context.hashCode());
-    }
     TypeNameProviderPlugin selected =
         typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
     String modelName = selected.nameFor(((ResolvedType)context.getType()).getErasedType());
-    if (generated.containsKey(modelName)) {
-      generated.put(modelName, generated.get(modelName) + 1);
-      String nextUniqueModelName = String.format("%s_%s", modelName, generated.get(modelName));
-      LOG.info("Generating unique model named: {}", nextUniqueModelName);
-      modelNameCache.put(context.hashCode(), nextUniqueModelName);
-      return nextUniqueModelName;
-    } else {
-      generated.put(modelName, 0);
-      modelNameCache.put(context.hashCode(), modelName);
+    LOG.info("Generated unique model named: {}, with model id: {}", modelName, context.hashCode());
+    if (isMapType(asResolved(context.getType()))) {
       return modelName;
     }
+    String typePostfix = context.typePostfix();
+    if (!typePostfix.equals("")) {
+      return String.format("%s_%s", modelName, context.typePostfix());
+    }
+    return modelName;
   }
 }
