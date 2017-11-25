@@ -31,7 +31,7 @@ import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelBuilder {
-  private String id;
+  private final String id;
   private String name;
   private String qualifiedType;
   private String description;
@@ -44,14 +44,13 @@ public class ModelBuilder {
   private List<String> subTypes = newArrayList();
 
   /**
-   * Updates the Id of the model, usually the type name
+   * Constructor with the Id of the model
    *
    * @param id - identifier for the model
    * @return this
    */
-  public ModelBuilder id(String id) {
-    this.id = defaultIfAbsent(id, this.id);
-    return this;
+  public ModelBuilder(String id) {
+    this.id = id;
   }
 
   /**

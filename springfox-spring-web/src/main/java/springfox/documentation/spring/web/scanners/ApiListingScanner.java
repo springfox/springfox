@@ -19,10 +19,12 @@
 
 package springfox.documentation.spring.web.scanners;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,7 +43,6 @@ import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +70,8 @@ public class ApiListingScanner {
 
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
     Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
+    Map<ResourceGroup, List<Model>> models = apiModelReader.read(context);
+    
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
@@ -83,9 +86,7 @@ public class ApiListingScanner {
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = newHashSet();
 
-      Map<String, Model> models = new LinkedHashMap<String, Model>();
       for (RequestMappingContext each : sortedByMethods(requestMappingsByResourceGroup.get(resourceGroup))) {
-        models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
@@ -111,7 +112,7 @@ public class ApiListingScanner {
               .protocols(protocols)
               .securityReferences(securityReferences)
               .apis(sortedApis)
-              .models(models)
+              .models(toModelMap(models.get(resourceGroup)))
               .position(position++)
               .availableTags(documentationContext.getTags());
 
@@ -135,6 +136,15 @@ public class ApiListingScanner {
 
   private Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
     return from(resourceGroups).toSortedList(resourceGroupComparator());
+  }
+  
+  private Map<String, Model> toModelMap(List<Model> models) {
+    return Maps.uniqueIndex(models, new Function<Model, String>() {
+      @Override
+      public String apply(Model model) {
+          return model.getName();
+      }
+    });
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
