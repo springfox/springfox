@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import com.google.common.base.Function;
+import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
 
@@ -28,32 +29,34 @@ public class ModelRef implements ModelReference {
   private final boolean isMap;
   private final Optional<ModelReference> itemModel;
   private final Optional<AllowableValues> allowableValues;
+  private final Optional<Integer> modelId;
 
   public ModelRef(String type) {
-    this(type, null, null);
+    this(type, null, null, null);
   }
 
   public ModelRef(String type, ModelReference itemType) {
     this(type, itemType, false);
   }
 
-  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues) {
-    this(type, itemType, allowableValues, false);
+  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues, Integer modelId) {
+    this(type, itemType, allowableValues, false, modelId);
   }
 
   public ModelRef(String type, AllowableValues allowableValues) {
-    this(type, null, allowableValues);
+    this(type, null, allowableValues, null);
   }
 
   public ModelRef(String type, ModelReference itemType, boolean isMap) {
-    this(type, itemType, null, isMap);
+    this(type, itemType, null, isMap, null);
   }
 
-  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap) {
+  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap, Integer modelId) {
     this.type = type;
     this.isMap = isMap;
     this.allowableValues = Optional.fromNullable(allowableValues);
     this.itemModel = Optional.fromNullable(itemModel);
+    this.modelId = Optional.fromNullable(modelId);
   }
 
   @Override
@@ -85,6 +88,11 @@ public class ModelRef implements ModelReference {
   public Optional<ModelReference> itemModel() {
     return itemModel;
   }
+  
+  @Override
+  public Optional<Integer> getModelId() {
+    return modelId;
+  }
 
   private Function<? super ModelReference, String> toName() {
     return new Function<ModelReference, String>() {
@@ -94,4 +102,31 @@ public class ModelRef implements ModelReference {
       }
     };
   }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(type, isMap, itemModel, allowableValues, modelId);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ModelRef that = (ModelRef) o;
+    
+    if (modelId.isPresent() || that.modelId.isPresent()) {
+      return Objects.equal(modelId, that.modelId);
+    }
+
+    return Objects.equal(type, that.type) &&
+        Objects.equal(isMap, that.isMap) &&
+        Objects.equal(itemModel, that.itemModel) &&
+        Objects.equal(allowableValues, that.allowableValues);
+    }
 }
