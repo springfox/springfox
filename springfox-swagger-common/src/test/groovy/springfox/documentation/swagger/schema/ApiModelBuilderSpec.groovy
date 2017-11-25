@@ -18,12 +18,14 @@
  */
 package springfox.documentation.swagger.schema
 
+import com.google.common.base.Optional;
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.ImmutableSet
 import io.swagger.annotations.ApiModel
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.TypeNameIndexingAdjuster
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
@@ -45,8 +47,11 @@ class ApiModelBuilderSpec extends Specification {
       ApiModelBuilder sut = new ApiModelBuilder(resolver)
       ModelContext context = ModelContext.inputParam(
           "group",
-          type,
+          resolver.resolve(type),
+          Optional.absent(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_12,
+          new TypeNameIndexingAdjuster(),
           new AlternateTypeProvider([]),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

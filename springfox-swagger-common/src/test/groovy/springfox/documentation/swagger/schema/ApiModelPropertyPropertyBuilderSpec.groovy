@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.schema
 
+import com.google.common.base.Optional;
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -163,7 +164,10 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     ModelContext modelContext = inputParam(
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        Optional.absent(),
+        new HashSet<>(),
         SWAGGER_12,
+        new TypeNameIndexingAdjuster(),
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())
@@ -207,7 +211,10 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     ModelContext modelContext = inputParam(
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        Optional.absent(),
+        new HashSet<>(),
         SWAGGER_12,
+        new TypeNameIndexingAdjuster(),
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())
