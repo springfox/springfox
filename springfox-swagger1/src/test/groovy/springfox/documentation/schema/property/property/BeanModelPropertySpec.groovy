@@ -20,6 +20,7 @@ package springfox.documentation.schema.property.property
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import spock.lang.Ignore
 import spock.lang.Unroll
@@ -28,6 +29,7 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.SchemaSpecification
+import springfox.documentation.schema.TypeNameIndexingAdjuster
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
@@ -44,13 +46,17 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class BeanModelPropertySpec extends SchemaSpecification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  def typeNameAdjuster = new TypeNameIndexingAdjuster()
   @Unroll
   def "Extracting information from resolved properties #methodName"() {
     given:
       Class typeToTest = TypeWithGettersAndSetters
       def modelContext = inputParam("group",
-          typeToTest,
+          resolver.resolve(typeToTest),
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -91,8 +97,11 @@ class BeanModelPropertySpec extends SchemaSpecification {
     given:
       Class typeToTest = TypeWithAnnotatedGettersAndSetters
       def modelContext = inputParam("group",
-          typeToTest,
+          resolver.resolve(typeToTest),
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -137,8 +146,11 @@ class BeanModelPropertySpec extends SchemaSpecification {
     given:
       Class typeToTest = typeForTestingJsonGetterAnnotation()
       def modelContext = inputParam("group",
-          typeToTest,
+          resolver.resolve(typeToTest),
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())

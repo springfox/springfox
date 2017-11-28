@@ -19,10 +19,12 @@
 
 package springfox.documentation.schema.property.field
 
+import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
+import springfox.documentation.schema.TypeNameIndexingAdjuster
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -35,12 +37,17 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
 class FieldModelPropertySpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  def typeNameAdjuster = new TypeNameIndexingAdjuster()
+
   def "Extracting information from resolved fields" () {
     given:
       def modelContext = inputParam(
           "group",
-          TypeWithGettersAndSetters,
+          resolver.resolve(TypeWithGettersAndSetters),
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -81,8 +88,11 @@ class FieldModelPropertySpec extends SchemaSpecification {
       def typeToTest = TypeWithGettersAndSetters
       def modelContext = inputParam(
           "group",
-          typeToTest,
+          resolver.resolve(typeToTest),
+          Optional.absent(),
+          new HashSet<>(),
           SWAGGER_12,
+          typeNameAdjuster,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
