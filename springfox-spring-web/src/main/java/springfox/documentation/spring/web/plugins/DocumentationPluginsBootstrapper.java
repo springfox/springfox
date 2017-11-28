@@ -92,7 +92,11 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   }
 
   private void scanDocumentation(DocumentationContext context) {
-    scanned.addDocumentation(resourceListing.scan(context));
+    try {
+      scanned.addDocumentation(resourceListing.scan(context));
+    } catch (Exception e) {
+      log.error(String.format("Unable to scan documentation context %s", context.getGroupName()), e);
+    }
   }
 
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin plugin) {
