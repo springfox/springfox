@@ -47,7 +47,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
 
-    sut = new OperationResponseClassReader(typeNameExtractor)
+    sut = new OperationResponseClassReader(defaultSchemaPlugins(), typeNameExtractor)
   }
   
   def "Should support all documentation types"() {

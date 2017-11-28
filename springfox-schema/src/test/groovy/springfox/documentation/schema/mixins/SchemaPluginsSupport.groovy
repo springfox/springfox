@@ -20,6 +20,7 @@
 package springfox.documentation.schema.mixins
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
+import springfox.documentation.schema.JacksonJsonViewProvider
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
@@ -38,7 +39,7 @@ class SchemaPluginsSupport {
             OrderAwarePluginRegistry.create(newArrayList())
             
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
-            OrderAwarePluginRegistry.create(newArrayList())
+            OrderAwarePluginRegistry.create(newArrayList(new JacksonJsonViewProvider()))
             
 
     new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry)

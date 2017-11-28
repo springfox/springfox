@@ -29,6 +29,7 @@ import spock.lang.Specification
 import springfox.documentation.RequestHandler
 import springfox.documentation.RequestHandlerKey
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spi.schema.UniqueTypeNameAdjuster
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
@@ -57,10 +58,12 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     and:
       def first = new RequestMappingContext(
           documentationContext,
-          new WebMvcRequestHandler(firstMapping, anyMethod))
+          new WebMvcRequestHandler(firstMapping, anyMethod),
+          Mock(UniqueTypeNameAdjuster))
       def second = new RequestMappingContext(
           documentationContext,
-          new WebMvcRequestHandler(secondMapping, anyMethod))
+          new WebMvcRequestHandler(secondMapping, anyMethod),
+          Mock(UniqueTypeNameAdjuster))
     then:
       sut.doEquivalent(first, second)
   }
@@ -70,10 +73,12 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       OperationCachingEquivalence sut = new OperationCachingEquivalence()
       def first = new RequestMappingContext(
           Mock(DocumentationContext),
-          requestHandler(firstKey))
+          requestHandler(firstKey),
+          Mock(UniqueTypeNameAdjuster))
       def second = new RequestMappingContext(
           Mock(DocumentationContext),
-          requestHandler(secondKey))
+          requestHandler(secondKey),
+          Mock(UniqueTypeNameAdjuster))
     expect:
       sut.doEquivalent(first, second) == outcome
     where:
@@ -103,10 +108,12 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     and:
       def first = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(firstMapping, anyMethod))
+        new WebMvcRequestHandler(firstMapping, anyMethod),
+        Mock(UniqueTypeNameAdjuster))
       def second = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(secondMapping, anyMethod))
+        new WebMvcRequestHandler(secondMapping, anyMethod),
+        Mock(UniqueTypeNameAdjuster))
     then:
       !sut.doEquivalent(first, second)
   }

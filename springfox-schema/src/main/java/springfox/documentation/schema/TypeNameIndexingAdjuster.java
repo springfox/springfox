@@ -66,6 +66,12 @@ public class TypeNameIndexingAdjuster implements UniqueTypeNameAdjuster {
           modelId);
       return;
     }
+    if (modelIdCache.containsKey(modelId)) {
+      LOG.debug("Skipping type {} with model id: {}, as already registered", 
+          type, 
+          modelId);
+      return;
+    }
     if (similarTypes.containsKey(type)) {
       similarTypes.get(type).add(modelId);
       build(type);

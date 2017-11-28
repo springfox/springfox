@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Optional
 import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
@@ -63,12 +64,15 @@ class ReturnTypesSpec extends Specification {
   def "Get response class name from ResolvedType"(){
     expect:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster()
       def modelResponseClass = sut.typeName(
           returnValue("group",
               new TypeResolver().resolve(
                   GenericType.class,
                   clazz),
+              Optional.absent(),
               SWAGGER_12,
+              uniqueTypeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))

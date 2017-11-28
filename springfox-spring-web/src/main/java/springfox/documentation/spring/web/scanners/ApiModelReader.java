@@ -77,12 +77,12 @@ public class ApiModelReader  {
     Map<ResourceGroup, List<Model>> modelMap = newHashMap();
     Map<String, ModelContext> contextMap = newHashMap();
     for (ResourceGroup resourceGroup: requestMappingsByResourceGroup.keySet()) {
-      Map<String, Model> modelBranch = newHashMap();
       modelMap.put(resourceGroup, new ArrayList<Model>());
       for (RequestMappingContext context: requestMappingsByResourceGroup.get(resourceGroup)) {
         Set<Class> ignorableTypes = newHashSet(context.getIgnorableParameterTypes());
         Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
         for (ModelContext rootContext : modelContexts) {
+          Map<String, Model> modelBranch = newHashMap();
           markIgnorablesAsHasSeen(typeResolver, ignorableTypes, rootContext);
           Optional<Model> pModel = modelProvider.modelFor(rootContext);
           if (pModel.isPresent()) {
@@ -105,9 +105,7 @@ public class ApiModelReader  {
       }
     }
 
-    updateTypeNames(modelMap, contextMap);
-
-    return modelMap;
+    return updateTypeNames(modelMap, contextMap);
   }
 
   private List<Model> mergeModelBranch(Map<ResolvedType, List<Model>> modelTypeMap,
@@ -120,6 +118,9 @@ public class ApiModelReader  {
       while (it.hasNext()) {
         Map.Entry<String, Model> entry = it.next();
         Model model_for = entry.getValue();
+        if (!modelTypeMap.containsKey(model_for.getType())) {
+          continue;
+        }
         List<Model> models = modelTypeMap.get(model_for.getType());
         for (Model model_to : models) {
           if (model_for.equals(model_to)) {
@@ -132,6 +133,7 @@ public class ApiModelReader  {
       }
       newModels.addAll(modelsToCompare.values());
     }
+    newModels.addAll(modelBranch.values());
     return newModels;
   }
 
@@ -197,11 +199,12 @@ public class ApiModelReader  {
         for (String propertyName: model.getProperties().keySet()) {
           ModelProperty property = model.getProperties().get(propertyName);
           if (property.getModelRef().getModelId().isPresent()) {
+            String modelId = String.valueOf(property.getModelRef().getModelId().get());
+            if (contextMap.containsKey(modelId)) {
               property.updateModelRef(modelRefFactory(
                   ModelContext.withAdjustedTypeName(
-                      contextMap.get(
-                          String.valueOf(
-                              property.getModelRef().getModelId().get()))), typeNameExtractor));
+                      contextMap.get(modelId)), typeNameExtractor));
+              }
           }
         }
         updatedModels.add(new ModelBuilder(model.getId())

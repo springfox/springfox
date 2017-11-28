@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.LinkedListMultimap;
@@ -48,9 +49,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Maps.newHashMap;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
@@ -112,7 +114,7 @@ public class ApiListingScanner {
               .protocols(protocols)
               .securityReferences(securityReferences)
               .apis(sortedApis)
-              .models(toModelMap(models.get(resourceGroup)))
+              .models(toModelMap(Optional.fromNullable(models.get(resourceGroup))))
               .position(position++)
               .availableTags(documentationContext.getTags());
 
@@ -138,8 +140,11 @@ public class ApiListingScanner {
     return from(resourceGroups).toSortedList(resourceGroupComparator());
   }
   
-  private Map<String, Model> toModelMap(List<Model> models) {
-    return Maps.uniqueIndex(models, new Function<Model, String>() {
+  private Map<String, Model> toModelMap(Optional<List<Model>> models) {
+    if (!models.isPresent()) {
+      return newHashMap();
+    }
+    return Maps.uniqueIndex(models.get(), new Function<Model, String>() {
       @Override
       public String apply(Model model) {
           return model.getName();

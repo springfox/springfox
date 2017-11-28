@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.PathVariable
@@ -31,12 +32,16 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.TypeNameIndexingAdjuster
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Business
@@ -52,8 +57,16 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       new TypeResolver(),
       modelNameRegistry,
       new JacksonEnumTypeDeterminer())
+  def operationModelContextsBuilder  = new OperationModelContextsBuilder(
+      "group",
+      DocumentationType.SWAGGER_12,
+      new TypeNameIndexingAdjuster(),
+      Mock(AlternateTypeProvider),
+      Mock(GenericTypeNamingStrategy),
+      ImmutableSet.builder().build())
 
   ParameterDataTypeReader sut = new ParameterDataTypeReader(
+      defaultSchemaPlugins(),
       typeNameExtractor,
       new TypeResolver(),
       new JacksonEnumTypeDeterminer())
@@ -73,7 +86,8 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
-                  Mock(OperationContext))
+                  Stub(OperationContext){
+                      operationModelsBuilder() >> operationModelContextsBuilder})
 
     when:
       sut.apply(parameterContext)
@@ -128,9 +142,11 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       ResolvedMethodParameter resolvedMethodParameter =
           new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      
       ParameterContext parameterContext =
           new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
-              Mock(OperationContext))
+              Stub(OperationContext){
+                  operationModelsBuilder() >> operationModelContextsBuilder})
 
     when:
       sut.apply(parameterContext)
@@ -149,7 +165,8 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
-                  Mock(OperationContext))
+                  Stub(OperationContext){
+                      operationModelsBuilder() >> operationModelContextsBuilder})
 
     when:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
@@ -159,6 +176,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
           modelNameRegistry,
           new JacksonEnumTypeDeterminer())
       def sut = new ParameterDataTypeReader(
+          defaultSchemaPlugins(),
           typeNameExtractor,
           new TypeResolver(),
           new JacksonEnumTypeDeterminer())

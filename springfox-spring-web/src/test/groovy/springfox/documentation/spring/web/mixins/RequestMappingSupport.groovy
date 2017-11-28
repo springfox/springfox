@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.TypeNameIndexingAdjuster
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -176,7 +177,8 @@ class RequestMappingSupport {
             context,
             new WebMvcRequestHandler(
                 requestMapping,
-                handlerMethod)),
+                handlerMethod),
+            new TypeNameIndexingAdjuster()),
         operationIndex)
   }
 }
