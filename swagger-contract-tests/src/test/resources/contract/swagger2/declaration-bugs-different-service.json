@@ -1003,6 +1003,37 @@
           }
         }
       }
+    },
+    "/bugs/2118": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2118",
+        "operationId": "bug2118UsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "person",
+            "description": "person",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Example"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {

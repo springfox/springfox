@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -59,8 +59,8 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
     where:
       annotation            | type          | consumes                      | httpMethod      | expected
       [:] as PathVariable   | Integer       | []                            | HttpMethod.GET  |"path"
-      [:] as ModelAttribute | Integer       | []                            | HttpMethod.GET  |"query"
-      [:] as ModelAttribute | Example       | []                            | HttpMethod.GET  |"query"
+      [:] as ModelAttribute | Integer       | []                            | HttpMethod.GET  |"body"
+      [:] as ModelAttribute | Example       | []                            | HttpMethod.GET  |"body"
       [:] as RequestHeader  | Integer       | []                            | HttpMethod.GET  |"header"
       [:] as RequestParam   | Integer       | []                            | HttpMethod.GET  |"query"
       [:] as RequestParam   | Integer       | []                            | HttpMethod.POST |"query"
