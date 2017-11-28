@@ -279,6 +279,11 @@ public class BugsController {
     return null;
   }
 
+  @RequestMapping(value = "/2118", method = RequestMethod.GET)
+  public String bug2118(@RequestBody @ModelAttribute Example person) {
+    return "ok";
+  }
+
   public class Model1864 {
     @NotNull
     private String somename;

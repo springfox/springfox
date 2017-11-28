@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -41,7 +43,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterTypeReader implements ParameterBuilderPlugin {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParameterTypeReader.class);
   @Override
   public void apply(ParameterContext context) {
     context.parameterBuilder().parameterType(findParameterType(context));
@@ -63,16 +65,17 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     }
     if (resolvedMethodParameter.hasParameterAnnotation(PathVariable.class)) {
       return "path";
-    } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
-      return queryOrForm(parameterContext.getOperationContext());
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestBody.class)) {
       return "body";
-    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
+    }  else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
       return queryOrForm(parameterContext.getOperationContext());
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestHeader.class)) {
       return "header";
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
-        return "form";
+      return "form";
+    } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
+      LOGGER.warn("@ModelAttribute annotated parameters should have already been expanded via "
+          + "the ExpandedParameterBuilderPlugin");
     }
     if (!resolvedMethodParameter.hasParameterAnnotations()) {
       return queryOrForm(parameterContext.getOperationContext());
