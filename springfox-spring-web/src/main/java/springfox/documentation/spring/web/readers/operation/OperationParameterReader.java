@@ -26,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.Parameter;
@@ -149,6 +151,8 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private boolean shouldExpand(final ResolvedMethodParameter parameter, ResolvedType resolvedParamType) {
     return !parameter.hasParameterAnnotation(RequestBody.class)
         && !parameter.hasParameterAnnotation(RequestPart.class)
+        && !parameter.hasParameterAnnotation(RequestParam.class)
+        && !parameter.hasParameterAnnotation(PathVariable.class)
         && !isBaseType(typeNameFor(resolvedParamType.getErasedType()))
         && !enumTypeDeterminer.isEnum(resolvedParamType.getErasedType())
         && !isContainerType(resolvedParamType)
