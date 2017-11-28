@@ -23,11 +23,13 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.PluginRegistry
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.JacksonJsonViewProvider
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.service.DefaultsProviderPlugin
+import springfox.documentation.spi.service.ViewProviderPlugin
 import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
@@ -53,8 +55,11 @@ class SwaggerPluginsSupport {
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
         create(newArrayList(new ApiModelBuilder(new TypeResolver())))
+        
+    PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
+        create(newArrayList(new JacksonJsonViewProvider()))
 
-    new SchemaPluginsManager(propRegistry, modelRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry)
   }
 
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
@@ -74,7 +79,7 @@ class SwaggerPluginsSupport {
     plugins.resourceGroupingStrategies = create([new ClassOrApiAnnotationResourceGrouping()])
     plugins.apiListingScanners = create([])
     plugins.operationModelsProviders = create([
-        new OperationModelsProvider(resolver),
+        new OperationModelsProvider(swaggerSchemaPlugins()),
         new SwaggerOperationModelsProvider(resolver)])
     plugins.defaultsProviders = create(swaggerDefaultsPlugins)
     plugins.apiListingScanners = create([])
