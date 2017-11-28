@@ -33,6 +33,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,11 +50,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -263,6 +266,17 @@ public class BugsController {
 
   @GetMapping(value = "/1907", produces = MediaType.APPLICATION_XML_VALUE)
   public void xmlPayload(@RequestBody Model1907 xml) {
+  }
+
+  @RequestMapping(path = "/2114", method = RequestMethod.PUT)
+  ResponseEntity<Void> bug2114(
+      @PathVariable(value = "siteId") UUID siteId,
+      @RequestParam(value = "siteSecret") UUID siteSecret,
+      @RequestParam(value = "xmlUrl") URI xmlUrl,
+      @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags,
+      @RequestParam(value = "clearIndex", required = false, defaultValue = "false") Boolean clearIndex
+  ) {
+    return null;
   }
 
   public class Model1864 {

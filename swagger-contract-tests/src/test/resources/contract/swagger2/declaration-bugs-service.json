@@ -929,34 +929,92 @@
       }
     },
     "/bugs/2081{?a.importantField,b.importantField}": {
-       "get": {
-         "tags": [
-           "Bugs"
-         ],
-         "summary": "bug2081",
-         "operationId": "bug2081UsingGET_1",
-         "consumes":["application/json"],
-         "parameters": [
-           {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2081",
+        "operationId": "bug2081UsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
             "name": "a.importantField",
             "in": "query",
-            "required":false,
-            "type":"string"
-           },
-           {
-            "name":"b.importantField",
-            "in":"query",
-            "required":false,
-            "type":"string"
-           }
-          ],
-          "responses": {
-            "200": {
-             "description": "OK"
-            }
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "b.importantField",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
+    },
+    "/bugs/2114{?siteSecret,xmlUrl,stripHtmlTags,clearIndex}": {
+      "put": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2114",
+        "operationId": "bug2114UsingPUT_1",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "description": "siteId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "siteSecret",
+            "in": "query",
+            "description": "siteSecret",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "xmlUrl",
+            "in": "query",
+            "description": "xmlUrl",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "stripHtmlTags",
+            "in": "query",
+            "description": "stripHtmlTags",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "clearIndex",
+            "in": "query",
+            "description": "clearIndex",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
   },
   "securityDefinitions": {
     "api_key": {
