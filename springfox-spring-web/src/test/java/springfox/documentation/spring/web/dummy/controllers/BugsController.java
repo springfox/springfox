@@ -18,6 +18,8 @@
  */
 package springfox.documentation.spring.web.dummy.controllers;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -282,6 +284,31 @@ public class BugsController {
   @RequestMapping(value = "/2118", method = RequestMethod.GET)
   public String bug2118(@RequestBody @ModelAttribute Example person) {
     return "ok";
+  }
+
+  @RequestMapping(method = RequestMethod.GET, path = "{propertyKey}/{environmentKey}")
+  public ResponseEntity<String> getProperty(
+      @ApiParam(name = "propertyKey", value = "Key of the property", required = true)
+      @PathVariable("propertyKey") Key propertyKey,
+      @ApiParam(name = "environmentKey", value = "Key of the environment", required = false)
+      @PathVariable("environmentKey") Key environmentKey
+  ) {
+    return ResponseEntity.ok("");
+  }
+
+  public class Key {
+
+    @JsonCreator
+    public Key(@JsonProperty("key") String keyContent) {
+      key = keyContent;
+    }
+
+    // if enabled, name will be shown @ApiModelProperty(value = "my description")
+    private final String key;
+
+    public String getKey() {
+      return key;
+    }
   }
 
   public class Model1864 {

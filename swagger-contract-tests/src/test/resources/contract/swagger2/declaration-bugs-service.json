@@ -1045,6 +1045,42 @@
           }
         }
       }
+    },
+    "/bugs/{propertyKey}/{environmentKey}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "getProperty",
+        "operationId": "getPropertyUsingGET_1",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "propertyKey",
+            "in": "path",
+            "description": "Key of the property",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "environmentKey",
+            "in": "path",
+            "description": "Key of the environment",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
