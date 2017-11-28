@@ -948,6 +948,39 @@
         }
       }
     },
+    "/bugs/2107/{someId}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "2107",
+        "operationId": "getSomeByIdUsingGET_2",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "someId",
+            "in": "path",
+            "description": "This is the description",
+            "required": true,
+            "type": "string",
+            "default": "1f1f1f"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/2114{?siteSecret,xmlUrl,stripHtmlTags,clearIndex}": {
       "put": {
         "tags": [

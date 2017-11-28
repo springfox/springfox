@@ -296,6 +296,28 @@ public class BugsController {
     return ResponseEntity.ok("");
   }
 
+  @ApiOperation(value = "2107")
+  @GetMapping(value = "/2107/{someId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public String getSomeById(
+      @ApiParam(value = "This is the description", defaultValue = "1f1f1f", required = true, name = "someId", type =
+          "java.lang.String")
+      @PathVariable("someId") Id someId) {
+    return "";
+  }
+
+  public class Id {
+
+    private final Long id;
+
+    public Id(Long id) {
+      this.id = id;
+    }
+
+    public Long getId() {
+      return id;
+    }
+  }
+
   public class Key {
 
     @JsonCreator
