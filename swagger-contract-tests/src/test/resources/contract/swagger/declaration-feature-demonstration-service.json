@@ -11,9 +11,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -184,9 +182,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -290,9 +286,7 @@
             "application/vnd.com.fancy-pet+json",
             "application/vnd.com.pet+json"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -440,9 +434,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -477,6 +469,52 @@
         }
       ],
       "path": "/features/1490/entity/{itemId}"
+    },
+    {
+      "description": "serializablePet",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "serializablePet",
+          "nickname": "serializablePetUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "itemId",
+              "name": "itemId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
+        }
+      ],
+      "path": "/features/1490/{itemId}"
     },
     {
       "description": "updateSerializablePet",
@@ -533,54 +571,6 @@
           ],
           "deprecated": "false",
           "type": "void"
-        }
-      ],
-      "path": "/features/1490/{itemId}"
-    },
-    {
-      "description": "serializablePet",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "serializablePet",
-          "nickname": "serializablePetUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "itemId",
-              "name": "itemId",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "Pet"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "Pet"
         }
       ],
       "path": "/features/1490/{itemId}"
@@ -649,9 +639,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -817,9 +805,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1220,9 +1206,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1259,9 +1243,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1301,9 +1283,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1449,9 +1429,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1488,9 +1466,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1527,9 +1503,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1566,9 +1540,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -1823,9 +1795,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,

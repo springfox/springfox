@@ -216,9 +216,6 @@
         ],
         "summary": "issue1420",
         "operationId": "issue1420UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -236,9 +233,6 @@
         ],
         "summary": "issue1440",
         "operationId": "issue1440UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -256,9 +250,6 @@
         ],
         "summary": "mapOfLists",
         "operationId": "mapOfListsUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -282,9 +273,6 @@
         ],
         "summary": "mapOfListOfExample",
         "operationId": "mapOfListOfExampleUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -308,9 +296,6 @@
         ],
         "summary": "byteArrayResponse",
         "operationId": "byteArrayResponseUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -329,9 +314,6 @@
         ],
         "summary": "bug1627",
         "operationId": "bug1627UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -346,9 +328,6 @@
         ],
         "summary": "fileCustomType",
         "operationId": "fileCustomTypeUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -374,9 +353,6 @@
         ],
         "summary": "filesCustomType",
         "operationId": "filesCustomTypeUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -405,9 +381,6 @@
         ],
         "summary": "apiModelProperty",
         "operationId": "apiModelPropertyUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -433,9 +406,6 @@
         ],
         "summary": "payloadWithByteBuffer",
         "operationId": "payloadWithByteBufferUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -463,8 +433,8 @@
         "description": "Remove an apple from a user. You must specify the user name and the apple name.",
         "operationId": "bug1722UsingPOST_2",
         "consumes": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "produces": [
           "application/xml",
@@ -495,9 +465,6 @@
         ],
         "summary": "bug1734",
         "operationId": "bug1734UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "offset",
@@ -523,9 +490,6 @@
         ],
         "summary": "bug1740",
         "operationId": "bug1740UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -543,9 +507,6 @@
         ],
         "summary": "Retrieve all the companies",
         "operationId": "getAllPagedUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "pageNumber",
@@ -621,9 +582,6 @@
         ],
         "summary": "bug1750a",
         "operationId": "bug1750aUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "list of ids",
@@ -644,9 +602,6 @@
         ],
         "summary": "1750b",
         "operationId": "bug1750bUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "list of ids",
@@ -685,9 +640,6 @@
         ],
         "summary": "bug1777",
         "operationId": "bug1777UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -705,9 +657,6 @@
         ],
         "summary": "bug1778",
         "operationId": "bug1778UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "s",
@@ -801,9 +750,6 @@
         ],
         "summary": "method1",
         "operationId": "method1UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/atom+xml",
           "application/json;charset=UTF-8"
@@ -822,9 +768,6 @@
         ],
         "summary": "test",
         "operationId": "testUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "somename",
@@ -847,9 +790,6 @@
         ],
         "summary": "xmlPayload",
         "operationId": "xmlPayloadUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml"
         ],
@@ -878,9 +818,6 @@
         ],
         "summary": "authenticate a user using a given set of credentials, producing a JWT token that may be used for future API operations if successful",
         "operationId": "authenticateUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/jwt"
         ],
@@ -924,9 +861,6 @@
         ],
         "summary": "bug2081",
         "operationId": "bug2081UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "a.importantField",
@@ -955,9 +889,6 @@
         ],
         "summary": "2107",
         "operationId": "getSomeByIdUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -1044,9 +975,6 @@
         ],
         "summary": "bug2118",
         "operationId": "bug2118UsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -1075,9 +1003,6 @@
         ],
         "summary": "getProperty",
         "operationId": "getPropertyUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "propertyKey",

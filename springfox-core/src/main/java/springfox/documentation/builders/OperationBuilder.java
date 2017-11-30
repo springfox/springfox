@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,15 +33,19 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static org.springframework.http.MediaType.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
+  private static final Collection<String> REQUEST_BODY_MEDIA_TYPES
+      = newHashSet(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE);
   private final OperationNameGenerator nameGenerator;
   private HttpMethod method = HttpMethod.GET;
   private String summary;
@@ -263,6 +267,7 @@ public class OperationBuilder {
 
   public Operation build() {
     String uniqueOperationId = nameGenerator.startingWith(uniqueOperationIdStem());
+
     return new Operation(
         method,
         summary,
@@ -272,7 +277,7 @@ public class OperationBuilder {
         position,
         tags,
         produces,
-        consumes,
+        adjustConsumableMediaTypes(),
         protocol,
         securityReferences,
         parameters,
@@ -280,6 +285,14 @@ public class OperationBuilder {
         deprecated,
         isHidden,
         vendorExtensions);
+  }
+
+  private Set<String> adjustConsumableMediaTypes() {
+    Set<String> adjustedConsumes = newHashSet(consumes);
+    if (newHashSet(HttpMethod.GET, HttpMethod.DELETE).contains(method)) {
+      adjustedConsumes.removeAll(REQUEST_BODY_MEDIA_TYPES);
+    }
+    return adjustedConsumes;
   }
 
   private String uniqueOperationIdStem() {

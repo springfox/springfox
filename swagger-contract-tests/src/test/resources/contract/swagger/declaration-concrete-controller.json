@@ -62,9 +62,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -114,9 +112,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -201,13 +197,6 @@
       "description": "",
       "id": "Resource«Pet»",
       "properties": {
-        "links": {
-          "required": false,
-          "items": {
-            "type": "Link"
-          },
-          "type": "array"
-        },
         "age": {
           "required": false,
           "format": "int32",
@@ -216,6 +205,13 @@
         "id": {
           "required": false,
           "type": "string"
+        },
+        "links": {
+          "required": false,
+          "items": {
+            "type": "Link"
+          },
+          "type": "array"
         },
         "name": {
           "required": false,

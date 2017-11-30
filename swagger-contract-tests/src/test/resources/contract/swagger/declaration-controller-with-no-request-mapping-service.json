@@ -11,12 +11,8 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-
-          ],
+          "consumes": [],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -44,9 +40,7 @@
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
+  "consumes": [],
   "models": {
     "Example": {
       "description": "",
@@ -125,9 +119,7 @@
       }
     }
   },
-  "produces": [
-
-  ],
+  "produces": [],
   "resourcePath": "/no-request-mapping",
   "swaggerVersion": "1.2"
 }

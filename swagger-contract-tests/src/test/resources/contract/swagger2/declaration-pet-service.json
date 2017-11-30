@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -106,9 +105,6 @@
         "summary": "Find Pet by status",
         "description": "Multiple status values can be provided with comma-separated strings",
         "operationId": "findPetsByStatusUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "status",
@@ -145,9 +141,6 @@
         "summary": "Find Pet by tags",
         "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTagsUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "tags",
@@ -178,9 +171,6 @@
         ],
         "summary": "groomingFunctionThatReturnsVoid",
         "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_4",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -208,9 +198,6 @@
         ],
         "summary": "canGroom",
         "operationId": "canGroomUsingGET_3",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "type",
@@ -409,9 +396,6 @@
         ],
         "summary": "groomingFunctionThatReturnsVoid",
         "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_5",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -439,9 +423,6 @@
         ],
         "summary": "method",
         "operationId": "methodUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "a",
@@ -502,9 +483,6 @@
         "summary": "Find pet by ID",
         "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_4",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",
@@ -566,9 +544,6 @@
         ],
         "summary": "updatePic",
         "operationId": "updatePicUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",

@@ -76,7 +76,7 @@ class RequestMappingSupport {
 
   HandlerMethod dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
     def clazz = new DummyClass()
-    Class c = clazz.getClass();
+    Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 

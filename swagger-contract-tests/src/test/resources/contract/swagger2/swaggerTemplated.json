@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -21,8 +20,8 @@
     }
   ],
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "produces": [
     "application/xml",
@@ -36,9 +35,6 @@
         ],
         "summary": "getPetInCA",
         "operationId": "getPetInCAUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -71,9 +67,6 @@
         ],
         "summary": "getPetInTx",
         "operationId": "getPetInTxUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],

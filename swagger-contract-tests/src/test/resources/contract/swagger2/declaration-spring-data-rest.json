@@ -74,9 +74,6 @@
         ],
         "summary": "findOneAddress",
         "operationId": "findOneAddressUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -139,9 +136,6 @@
         ],
         "summary": "deleteAddress",
         "operationId": "deleteAddressUsingDELETE_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -203,9 +197,6 @@
         ],
         "summary": "addressPerson",
         "operationId": "addressPersonUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json"
         ],
@@ -376,9 +367,6 @@
         ],
         "summary": "findAllAddress",
         "operationId": "findAllAddressUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json",
           "application/json",
@@ -456,9 +444,6 @@
         ],
         "summary": "findOneCategory",
         "operationId": "findOneCategoryUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -521,9 +506,6 @@
         ],
         "summary": "deleteCategory",
         "operationId": "deleteCategoryUsingDELETE_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -585,9 +567,6 @@
         ],
         "summary": "categoryPeople",
         "operationId": "categoryPeopleUsingGET_5",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json"
         ],
@@ -837,9 +816,6 @@
         ],
         "summary": "findAllCategory",
         "operationId": "findAllCategoryUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json",
           "application/json",
@@ -917,9 +893,6 @@
         ],
         "summary": "findByFirstNamePerson",
         "operationId": "findByFirstNamePersonUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "firstName",
@@ -947,9 +920,6 @@
         "summary": "findByLastName",
         "description": "Finds persons by last name",
         "operationId": "findByLastNamePersonUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "name",
@@ -976,9 +946,6 @@
         ],
         "summary": "findOnePerson",
         "operationId": "findOnePersonUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1041,9 +1008,6 @@
         ],
         "summary": "deletePerson",
         "operationId": "deletePersonUsingDELETE_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1105,9 +1069,6 @@
         ],
         "summary": "personCategory",
         "operationId": "personCategoryUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json"
         ],
@@ -1278,9 +1239,6 @@
         ],
         "summary": "personAddress",
         "operationId": "personAddressUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json"
         ],
@@ -1451,9 +1409,6 @@
         ],
         "summary": "personTags",
         "operationId": "personTagsUsingGET_5",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json"
         ],
@@ -1703,9 +1658,6 @@
         ],
         "summary": "findAllPerson",
         "operationId": "findAllPersonUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json",
           "application/json",
@@ -1783,9 +1735,6 @@
         ],
         "summary": "findOneTag",
         "operationId": "findOneTagUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1848,9 +1797,6 @@
         ],
         "summary": "deleteTag",
         "operationId": "deleteTagUsingDELETE_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -1912,9 +1858,6 @@
         ],
         "summary": "tagPeople",
         "operationId": "tagPeopleUsingGET_5",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json"
         ],
@@ -2164,9 +2107,6 @@
         ],
         "summary": "findAllTag",
         "operationId": "findAllTagUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/hal+json",
           "application/json",

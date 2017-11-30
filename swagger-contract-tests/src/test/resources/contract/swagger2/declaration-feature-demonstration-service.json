@@ -31,9 +31,6 @@
         ],
         "summary": "findIdentityById",
         "operationId": "findIdentityByIdUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/vnd.com.fancy-pet+json",
           "application/vnd.com.pet+json"
@@ -120,9 +117,6 @@
         ],
         "summary": "serializablePetEntity",
         "operationId": "serializablePetEntityUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "itemId",
@@ -149,9 +143,6 @@
         ],
         "summary": "serializablePet",
         "operationId": "serializablePetUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "itemId",
@@ -241,9 +232,6 @@
         ],
         "summary": "allMethodAllowed",
         "operationId": "allMethodAllowedUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -301,9 +289,6 @@
         ],
         "summary": "allMethodAllowed",
         "operationId": "allMethodAllowedUsingDELETE_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -578,9 +563,6 @@
         ],
         "summary": "getEffective",
         "operationId": "getEffectiveUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -598,9 +580,6 @@
         ],
         "summary": "getEffectives",
         "operationId": "getEffectivesUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -621,9 +600,6 @@
         ],
         "summary": "getEnumAsObject",
         "operationId": "getEnumAsObjectUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -702,9 +678,6 @@
         ],
         "summary": "listOfMaps",
         "operationId": "listOfMapsUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -725,9 +698,6 @@
         ],
         "summary": "mapOfMapOfExample",
         "operationId": "mapOfMapOfExampleUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -751,9 +721,6 @@
         ],
         "summary": "modelWithMapProperty",
         "operationId": "modelWithMapPropertyUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -771,9 +738,6 @@
         ],
         "summary": "getModelAttribute",
         "operationId": "getModelAttributeUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "complexProp.name",
@@ -973,9 +937,6 @@
         "summary": "Find pet by ID",
         "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",

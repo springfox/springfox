@@ -27,7 +27,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
     and:
       def mappedPath = mappedListing.entrySet().first()
       def builtDescription = built.apis.first()
-      def mappedOperation = mappedPath.value.get
+      def mappedOperation = mappedPath.value.post
       def builtOperation = built.apis.first().operations.first()
     then:
       mappedPath.key == builtDescription.path
@@ -177,7 +177,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .consumes(newHashSet("application/json"))
         .produces(newHashSet("application/json"))
         .deprecated("true")
-        .method(HttpMethod.GET)
+        .method(HttpMethod.POST)
         .uniqueId("op1")
         .notes("operation 1 notes")
         .tags(newHashSet("sometag"))

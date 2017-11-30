@@ -144,9 +144,6 @@
         "summary": "Finds Pets by status",
         "description": "Multiple status values can be provided with comma-separated strings",
         "operationId": "findPetsByStatusUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -198,9 +195,6 @@
         "summary": "Finds Pets by tags",
         "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTagsUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -247,9 +241,6 @@
         "summary": "Find pet by ID",
         "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_5",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -390,9 +381,6 @@
         "summary": "Find purchase order by ID",
         "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
         "operationId": "getOrderByIdUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -429,9 +417,6 @@
         "summary": "Delete purchase order by ID",
         "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors",
         "operationId": "deleteOrderUsingDELETE",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -577,9 +562,6 @@
         ],
         "summary": "Logs user into the system",
         "operationId": "loginUserUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -619,9 +601,6 @@
         ],
         "summary": "Logs out current logged in user session",
         "operationId": "logoutUserUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -642,9 +621,6 @@
         ],
         "summary": "Get user by user name",
         "operationId": "getUserByNameUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -766,9 +742,6 @@
         "summary": "Delete user",
         "description": "This can only be done by the logged in user.",
         "operationId": "deleteUserUsingDELETE",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
