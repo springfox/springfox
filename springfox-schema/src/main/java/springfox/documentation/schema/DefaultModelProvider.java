@@ -19,32 +19,37 @@
 
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import springfox.documentation.schema.plugins.SchemaPluginsManager;
-import springfox.documentation.schema.property.ModelPropertiesProvider;
-import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spi.schema.contexts.ModelContext;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
+import static springfox.documentation.schema.ResolvedTypes.simpleQualifiedTypeName;
+import static springfox.documentation.schema.Types.isBaseType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.Maps.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
+import springfox.documentation.schema.property.ModelPropertiesProvider;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.util.Predicates;
 
 
 @Component
@@ -75,7 +80,7 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   @Override
-  public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
+  public Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
 
     if (isContainerType(propertiesHost)
@@ -84,16 +89,22 @@ public class DefaultModelProvider implements ModelProvider {
         || isBaseType(propertiesHost)
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
-          + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
-      return Optional.absent();
+          + "been handled", resolvedTypeSignature(propertiesHost).orElse("<null>"));
+      return Optional.empty();
     }
-    ImmutableMap<String, ModelProperty> propertiesIndex
-        = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
+    Map<String, ModelProperty> propertiesIndex = properties(modelContext, propertiesHost).stream()
+        .filter(distinctByKey(p -> p.getName()))
+        .collect(Collectors.toMap(byPropertyName(), Function.identity()));
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
-        Joiner.on(", ").join(propertiesIndex.keySet()));
-    Map<String, ModelProperty> properties = newTreeMap();
+    String.join(", ", propertiesIndex.keySet()));
+    Map<String, ModelProperty> properties = new TreeMap<>();
     properties.putAll(propertiesIndex);
     return Optional.of(modelBuilder(propertiesHost, properties, modelContext));
+  }
+
+  private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+    Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
   }
 
   private Model modelBuilder(ResolvedType propertiesHost,
@@ -115,10 +126,10 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Override
   public Map<String, Model> dependencies(ModelContext modelContext) {
-    Map<String, Model> models = newHashMap();
+    Map<String, Model> models = new HashMap<>();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
-      Optional<Model> model = modelFor(parentContext).or(mapModel(parentContext, resolvedType));
+      Optional<Model> model = Predicates.or(modelFor(parentContext),mapModel(parentContext, resolvedType));
       if (model.isPresent()) {
         models.put(model.get().getName(), model.get());
       }
@@ -141,7 +152,7 @@ public class DefaultModelProvider implements ModelProvider {
           .subTypes(new ArrayList<String>())
           .build());
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Function<ModelProperty, String> byPropertyName() {

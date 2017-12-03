@@ -6,6 +6,8 @@ target
 .settings
 .classpath
 .project
+.factorypath
+.apt_generated
 .DS_Store
 build/
 .gradle/
@@ -16,3 +18,4 @@ generated-src
 .env
 out/
 *.hprof
+bin/

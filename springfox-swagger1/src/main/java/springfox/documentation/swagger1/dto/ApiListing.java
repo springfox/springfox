@@ -19,17 +19,18 @@
 
 package springfox.documentation.swagger1.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyMap;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptySet;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static springfox.documentation.builders.BuilderDefaults.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({"apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
         "models"})
@@ -163,21 +164,21 @@ public class ApiListing {
     }
   }
 
-  public void appendProtocols(HashSet<String> protocols) {
+  public void appendProtocols(Set<String> protocols) {
     if (!nullToEmptySet(protocols).isEmpty()) {
       this.protocols = nullToEmptySet(this.protocols);
       this.protocols.addAll(protocols);
     }
   }
 
-  public void appendConsumes(HashSet<String> consumes) {
+  public void appendConsumes(Set<String> consumes) {
     if (!nullToEmptySet(consumes).isEmpty()) {
       this.consumes = nullToEmptySet(this.consumes);
       this.consumes.addAll(consumes);
     }
   }
 
-  public void appendProduces(HashSet<String> produces) {
+  public void appendProduces(Set<String> produces) {
     if (!nullToEmptySet(produces).isEmpty()) {
       this.produces = nullToEmptySet(this.produces);
       this.produces.addAll(produces);

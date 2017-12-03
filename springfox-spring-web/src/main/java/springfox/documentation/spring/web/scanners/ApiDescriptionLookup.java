@@ -18,15 +18,16 @@
  */
 package springfox.documentation.spring.web.scanners;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ApiDescription;
 
-import java.util.Map;
-
-import static com.google.common.collect.Maps.*;
 
 /**
  * Given a handler method this class serves to lookup the api description. The overall goal of this abstraction is to
@@ -35,7 +36,7 @@ import static com.google.common.collect.Maps.*;
 @Component
 @Incubating("2.2.0")
 public class ApiDescriptionLookup {
-  private Map<RequestHandlerKey, ApiDescription> cache = newHashMap();
+  private Map<RequestHandlerKey, ApiDescription> cache = new HashMap();
 
   public void add(RequestHandlerKey key, ApiDescription value) {
     cache.put(key, value);

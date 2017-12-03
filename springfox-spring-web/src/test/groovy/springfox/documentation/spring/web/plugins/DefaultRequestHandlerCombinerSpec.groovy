@@ -8,10 +8,9 @@ import spock.lang.Unroll
 import springfox.documentation.RequestHandler
 import springfox.documentation.service.ResolvedMethodParameter
 
-import static com.google.common.collect.Sets.newHashSet
 
 class DefaultRequestHandlerCombinerSpec extends Specification {
-  def equality = new PathAndParametersEquivalence()
+  //def equality = new PathAndParametersEquivalence()
 
   @Unroll
   def "Combines request handlers effectively" () {
@@ -38,7 +37,7 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
     then:
       combined.size() == expected.size()
       expected.eachWithIndex { handler, index ->
-          assert equality.equivalent(handler, combined.get(index))
+          assert new PathAndParametersEquivalence(handler).equals(combined.get(index))
        }
   }
 
@@ -55,7 +54,7 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
     then:
       combined.size() == expected.size()
       expected.eachWithIndex { handler, index ->
-        assert equality.equivalent(handler, combined.get(index))
+        assert new PathAndParametersEquivalence(handler).equals(combined.get(index))
       }
   }
 
@@ -91,7 +90,7 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
       ResolvedMethodParameter parameter) {
     def handler = Mock(RequestHandler)
     handler.patternsCondition >> new PatternsRequestCondition(path)
-    handler.produces() >> newHashSet(produces)
+    handler.produces() >> new HashSet(produces)
     handler.parameters >> [parameter]
     handler.supportedMethods() >> [RequestMethod.GET]
     handler.params() >> []

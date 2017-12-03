@@ -19,10 +19,10 @@
 
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
-
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.classmate.ResolvedType;
 
 public class Model {
 

@@ -44,7 +44,7 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = Config)
+@ContextConfiguration(classes = Config.class)
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared

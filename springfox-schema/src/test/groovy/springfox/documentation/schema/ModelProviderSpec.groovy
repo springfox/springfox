@@ -19,7 +19,6 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import org.springframework.http.HttpHeaders
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -42,7 +41,7 @@ class ModelProviderSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          new HashSet())
       context.seen(new TypeResolver().resolve(HttpHeaders))
       def dependentTypeNames = sut.dependencies(context).keySet().sort()
 
@@ -65,7 +64,7 @@ class ModelProviderSpec extends Specification {
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).keySet().sort()
+            new HashSet())).keySet().sort()
 
     expect:
       dependencies == dependentTypeNames

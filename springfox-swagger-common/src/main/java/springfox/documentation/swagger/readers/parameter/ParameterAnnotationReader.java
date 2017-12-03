@@ -19,23 +19,21 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import org.springframework.core.MethodParameter;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
+import org.springframework.core.MethodParameter;
+
 
 public class ParameterAnnotationReader {
 
   public static <A extends Annotation> Optional<A> fromHierarchy(
       MethodParameter methodParameter,
       Class<A> annotationType) {
-    return fromNullable(searchOnInterfaces(methodParameter.getMethod(),
+    return Optional.ofNullable(searchOnInterfaces(methodParameter.getMethod(),
         methodParameter.getParameterIndex(),
         annotationType,
         getParentInterfaces(methodParameter)));
@@ -44,7 +42,7 @@ public class ParameterAnnotationReader {
   private static <A extends Annotation> Predicate<? super Annotation> annotationOfType(final Class<A> annotationType) {
     return new Predicate<Annotation>() {
       @Override
-      public boolean apply(Annotation input) {
+      public boolean test(Annotation input) {
         return input.annotationType().equals(annotationType);
       }
     };
@@ -54,7 +52,7 @@ public class ParameterAnnotationReader {
     try {
       return Optional.of(iface.getMethod(method.getName(), method.getParameterTypes()));
     } catch (NoSuchMethodException ex) {
-      return Optional.absent();
+      return Optional.empty();
     }
   }
 
@@ -70,8 +68,11 @@ public class ParameterAnnotationReader {
       Optional<Method> interfaceMethod = interfaceMethod(interfaze, method);
       if (interfaceMethod.isPresent()) {
         Method superMethod = interfaceMethod.get();
-        Optional<Annotation> found = tryFind(
-                newArrayList(superMethod.getParameterAnnotations()[parameterIndex]), annotationOfType(annotationType));
+//        Optional<Annotation> found = tryFind(
+//                newArrayList(superMethod.getParameterAnnotations()[parameterIndex]), annotationOfType(annotationType));
+        Annotation[][] parameterAnnotations = superMethod.getParameterAnnotations();
+        Annotation[] ann = parameterAnnotations[parameterIndex];
+        Optional<Annotation> found = Arrays.stream(ann).filter(annotationOfType(annotationType)).findAny();
         if (found.isPresent()) {
           annotation = (A) found.get();
           break;

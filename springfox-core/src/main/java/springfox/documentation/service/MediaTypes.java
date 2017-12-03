@@ -18,14 +18,14 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-
-import java.util.Set;
 
 public class MediaTypes {
   private static final Logger LOGGER = LoggerFactory.getLogger(MediaTypes.class);
@@ -34,10 +34,10 @@ public class MediaTypes {
   }
 
   public static Set<MediaType> toMediaTypes(Set<String> consumes) {
-    return FluentIterable.from(consumes)
-        .transform(parsedMediaType())
-        .filter(Predicates.<MediaType>notNull())
-        .toSet();
+    return consumes.stream()
+        .map(parsedMediaType())
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
   }
 
   private static Function<String, MediaType> parsedMediaType() {

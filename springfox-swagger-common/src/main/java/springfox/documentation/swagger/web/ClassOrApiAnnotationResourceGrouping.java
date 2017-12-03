@@ -19,29 +19,29 @@
 
 package springfox.documentation.swagger.web;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
-import io.swagger.annotations.Api;
+import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+import static org.springframework.util.StringUtils.hasText;
+import static springfox.documentation.spring.web.paths.Paths.splitCamelCase;
+import static springfox.documentation.spring.web.paths.Paths.stripSlashes;
+
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+
+import io.swagger.annotations.Api;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
-
-import java.util.Set;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Sets.*;
-import static org.springframework.core.annotation.AnnotationUtils.*;
-import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.spring.web.paths.Paths.*;
+import springfox.documentation.util.Strings;
 
 @Component
 @Deprecated
@@ -53,11 +53,11 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     Class<?> controllerClass = handlerMethod.getBeanType();
     String className = splitCamelCase(controllerClass.getSimpleName(), " ");
 
-    return fromNullable(
-        emptyToNull(
+    return Optional.ofNullable(
+        Strings.emptyToNull(
           stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
-              .or(""))))
-        .or(className);
+              .orElse(""))))
+        .orElse(className);
   }
 
   @Override
@@ -72,15 +72,15 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
 
   @Override
   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-    return from(groups(handlerMethod)).transform(toResourceGroup(requestMappingInfo, handlerMethod)).toSet();
+    return groups(handlerMethod).stream().map(toResourceGroup(requestMappingInfo, handlerMethod)).collect(Collectors.toSet());
   }
 
   private Set<String> groups(HandlerMethod handlerMethod) {
     Class<?> controllerClass = handlerMethod.getBeanType();
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
-    String apiValue = fromNullable(findAnnotation(controllerClass, Api.class))
-        .transform(toApiValue()).or("");
-    return Strings.isNullOrEmpty(apiValue) ? newHashSet(normalize(group)) : newHashSet(normalize(apiValue));
+    String apiValue = Optional.ofNullable(findAnnotation(controllerClass, Api.class))
+        .map(toApiValue()).orElse("");
+    return Strings.isNullOrEmpty(apiValue) ? Collections.singleton(normalize(group)) : Collections.singleton(normalize(apiValue));
   }
 
   private String normalize(String tag) {
@@ -118,7 +118,8 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         //noinspection ConstantConditions
-        return descriptionExtractor().apply(input).or(valueExtractor().apply(input));
+        Optional<String> applied = descriptionExtractor().apply(input);
+        return applied.isPresent() ? applied : valueExtractor().apply(input);
       }
     };
   }
@@ -137,9 +138,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         if (null != input) {
-          return fromNullable(emptyToNull(input.description()));
+          return Optional.ofNullable(Strings.emptyToNull(input.description()));
         }
-        return Optional.absent();
+        return Optional.empty();
       }
     };
   }
@@ -149,9 +150,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         if (null != input) {
-          return fromNullable(emptyToNull(input.value()));
+          return Optional.ofNullable(Strings.emptyToNull(input.value()));
         }
-        return Optional.absent();
+        return Optional.empty();
       }
     };
   }

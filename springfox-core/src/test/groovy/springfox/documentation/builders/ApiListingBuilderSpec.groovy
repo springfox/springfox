@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.builders
-import com.google.common.collect.Ordering
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.Model
@@ -26,15 +25,22 @@ import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.Tag
 
+import java.util.stream.Collectors
+
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptySet
 
 class ApiListingBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
-      def orderingMock = Mock(Ordering)
+      //def orderingMock = Mock(Ordering)
+	def orderingMock = Comparator.naturalOrder()
       def sut = new ApiListingBuilder(orderingMock)
     and:
-      orderingMock.sortedCopy(value) >> value
+      if(value instanceof Collection) {
+		  value.stream().sorted(orderingMock).collect(Collectors.toList()) >> value
+      } 
+	  
+      //orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -61,10 +67,14 @@ class ApiListingBuilderSpec extends Specification {
 
   def "Setting properties on the builder with null values preserves existing values"() {
     given:
-      def orderingMock = Mock(Ordering)
+      //def orderingMock = Mock(Ordering)
+	def orderingMock = Comparator.naturalOrder()
       def sut = new ApiListingBuilder(orderingMock)
     and:
-      orderingMock.sortedCopy(value) >> value
+       if(value instanceof Collection) {
+		  value.stream().sorted(orderingMock).collect(Collectors.toList()) >> value
+      } 
+      //orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -93,10 +103,14 @@ class ApiListingBuilderSpec extends Specification {
   @Unroll
   def "Appending to properties on the builder"() {
     given:
-      def orderingMock = Mock(Ordering)
+      //def orderingMock = Mock(Ordering)
+	def orderingMock = Comparator.naturalOrder()
       def sut = new ApiListingBuilder(orderingMock)
     and:
-      orderingMock.sortedCopy(value) >> value
+      //orderingMock.sortedCopy(value) >> value
+       if(value instanceof Collection) {
+		  value.stream().sorted(orderingMock).collect(Collectors.toList()) >> value
+      } 
     when:
       sut."$builderMethod"(value)
     and:
@@ -122,7 +136,7 @@ class ApiListingBuilderSpec extends Specification {
   @Unroll
   def "Available tags only uses unique values"() {
     given:
-      def sut = new ApiListingBuilder(Mock(Ordering))
+      def sut = new ApiListingBuilder(Comparator.naturalOrder())
     when:
       sut.availableTags(tags)
           .tagNames(["test"] as Set)
@@ -156,10 +170,13 @@ class ApiListingBuilderSpec extends Specification {
   @Unroll
   def "Tag names are converted to tags"() {
     given:
-      def orderingMock = Mock(Ordering)
+      def orderingMock = Comparator.naturalOrder()
       def sut = new ApiListingBuilder(orderingMock).description("Some Description")
     and:
-      orderingMock.sortedCopy(value) >> value
+      //orderingMock.sortedCopy(value) >> value
+	if(value instanceof Collection) {
+		value.stream().sorted(orderingMock).collect(Collectors.toList()) >> value
+	}
     when:
       sut.tagNames(value as Set);
     and:

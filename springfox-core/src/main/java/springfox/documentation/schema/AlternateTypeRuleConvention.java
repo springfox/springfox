@@ -18,10 +18,11 @@
  */
 package springfox.documentation.schema;
 
-import org.springframework.core.Ordered;
-import springfox.documentation.annotations.Incubating;
-
 import java.util.List;
+
+import org.springframework.core.Ordered;
+
+import springfox.documentation.annotations.Incubating;
 
 @Incubating("2.7.0")
 public interface AlternateTypeRuleConvention extends Ordered {

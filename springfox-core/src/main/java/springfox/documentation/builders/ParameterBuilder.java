@@ -19,17 +19,20 @@
 
 package springfox.documentation.builders;
 
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.emptyToNull;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
+
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.VendorExtension;
-
-import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
   private String name;
@@ -44,7 +47,7 @@ public class ParameterBuilder {
   private ModelReference modelRef;
   private boolean hidden;
   private String pattern;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Copy builder
@@ -62,7 +65,7 @@ public class ParameterBuilder {
         .parameterAccess(other.getParamAccess())
         .parameterType(other.getParamType())
         .required(other.isRequired())
-        .type(other.getType().orNull())
+        .type(other.getType().orElse(null))
         .hidden(other.isHidden())
         .vendorExtensions(other.getVendorExtentions());
   }
@@ -209,7 +212,7 @@ public class ParameterBuilder {
         required,
         allowMultiple,
         modelRef,
-        Optional.fromNullable(type),
+        Optional.ofNullable(type),
         allowableValues,
         paramType,
         paramAccess,

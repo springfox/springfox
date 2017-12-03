@@ -19,16 +19,18 @@
 
 package springfox.documentation.swagger.schema;
 
-import io.swagger.annotations.ApiModel;
+import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+
+import java.util.Optional;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import io.swagger.annotations.ApiModel;
 import springfox.documentation.schema.DefaultTypeNameProvider;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.*;
-import static org.springframework.core.annotation.AnnotationUtils.*;
+import springfox.documentation.util.Strings;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -38,7 +40,7 @@ public class ApiModelTypeNameProvider extends DefaultTypeNameProvider {
     ApiModel annotation = findAnnotation(type, ApiModel.class);
     String defaultTypeName = super.nameFor(type);
     if (annotation != null) {
-      return fromNullable(emptyToNull(annotation.value())).or(defaultTypeName);
+      return Optional.ofNullable(Strings.emptyToNull(annotation.value())).orElse(defaultTypeName);
     }
     return defaultTypeName;
   }

@@ -19,13 +19,18 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
-import io.swagger.annotations.ApiImplicitParam;
+import static springfox.documentation.schema.Types.isBaseType;
+import static springfox.documentation.swagger.schema.ApiModelProperties.allowableValueFromString;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import io.swagger.annotations.ApiImplicitParam;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableValues;
@@ -35,12 +40,6 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
-
-import java.util.List;
-
-import static com.google.common.base.Strings.*;
-import static springfox.documentation.schema.Types.*;
-import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 
 @Component
@@ -79,7 +78,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
   }
 
   private static ModelRef maybeGetModelRef(ApiImplicitParam param) {
-    String dataType = MoreObjects.firstNonNull(emptyToNull(param.dataType()), "string");
+    String dataType = param.dataType() != null ? param.dataType() : "string";
     AllowableValues allowableValues = null;
     if (isBaseType(dataType)) {
       allowableValues = allowableValueFromString(param.allowableValues());
@@ -92,7 +91,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
 
   private List<Parameter> readParameters(OperationContext context) {
     Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
-    List<Parameter> parameters = Lists.newArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     if (annotation.isPresent()) {
       parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, annotation.get()));
     }

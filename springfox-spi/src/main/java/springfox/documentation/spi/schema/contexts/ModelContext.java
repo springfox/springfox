@@ -18,20 +18,20 @@
  */
 package springfox.documentation.spi.schema.contexts;
 
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.StringJoiner;
+
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
+
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
-import java.lang.reflect.Type;
-import java.util.Set;
-
-import static com.google.common.collect.Sets.*;
 
 public class ModelContext {
   private final Type type;
@@ -40,11 +40,11 @@ public class ModelContext {
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
-  private final Set<ResolvedType> seenTypes = newHashSet();
+  private final Set<ResolvedType> seenTypes = new HashSet<>();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
-  private final ImmutableSet<Class> ignorableTypes;
+  private final Set<Class> ignorableTypes;
 
   ModelContext(
       String groupName,
@@ -53,7 +53,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
     this.groupName = groupName;
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
@@ -138,7 +138,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
 
     return new ModelContext(
         group,
@@ -168,7 +168,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
 
     return new ModelContext(
         groupName,
@@ -247,11 +247,11 @@ public class ModelContext {
     ModelContext that = (ModelContext) o;
 
     return
-        Objects.equal(groupName, that.groupName) &&
-        Objects.equal(type, that.type) &&
-        Objects.equal(documentationType, that.documentationType) &&
-        Objects.equal(returnType, that.returnType) &&
-        Objects.equal(namingStrategy(), that.namingStrategy());
+        Objects.equals(groupName, that.groupName) &&
+        Objects.equals(type, that.type) &&
+        Objects.equals(documentationType, that.documentationType) &&
+        Objects.equals(returnType, that.returnType) &&
+        Objects.equals(namingStrategy(), that.namingStrategy());
 
   }
 
@@ -264,7 +264,7 @@ public class ModelContext {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(
+    return Objects.hash(
         groupName,
         type,
         documentationType,
@@ -273,11 +273,10 @@ public class ModelContext {
   }
 
   public String description() {
-    return MoreObjects.toStringHelper(ModelContext.class)
-        .add("groupName", this.getGroupName())
-        .add("type", this.getType())
-        .add("isReturnType", this.isReturnType())
-        .toString();
+    return new StringJoiner(", ", ModelContext.class.getSimpleName() + "[", "]")
+        .add("groupName=" + this.getGroupName())
+        .add("type=" + this.getType())
+        .add("isReturnType=" + this.isReturnType()).toString();
   }
 
   public boolean canIgnore(ResolvedType type) {

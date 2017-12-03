@@ -18,24 +18,25 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
+import java.lang.annotation.Annotation;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+
+import com.fasterxml.classmate.ResolvedType;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.Sets.*;
+import springfox.documentation.util.Predicates;
 
 public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
@@ -58,7 +59,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    SetView<String> patterns = Sets.union(
+    Set<String> patterns = union(
         first.getPatternsCondition().getPatterns(),
         second.getPatternsCondition().getPatterns());
     return new PatternsRequestCondition(patterns.toArray(new String[patterns.size()]));
@@ -76,22 +77,22 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return Sets.union(first.supportedMethods(), second.supportedMethods());
+    return union(first.supportedMethods(), second.supportedMethods());
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    return Sets.union(first.produces(), second.produces());
+    return union(first.produces(), second.produces());
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return Sets.union(first.consumes(), second.consumes());
+    return union(first.consumes(), second.consumes());
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return Sets.union(first.headers(), second.headers());
+    return union(first.headers(), second.headers());
   }
 
   @Override
@@ -101,7 +102,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return first.findAnnotation(annotation).or(second.findAnnotation(annotation));
+    return Predicates.or(first.findAnnotation(annotation), second.findAnnotation(annotation));
   }
 
   @Override
@@ -125,7 +126,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return first.findControllerAnnotation(annotation).or(second.findControllerAnnotation(annotation)) ;
+    return Predicates.or(first.findControllerAnnotation(annotation), second.findControllerAnnotation(annotation)) ;
   }
 
   @Override
@@ -141,5 +142,11 @@ public class CombinedRequestHandler implements RequestHandler {
   @Override
   public RequestHandler combine(RequestHandler other) {
     return new CombinedRequestHandler(this, other);
+  }
+  
+  private <T> Set<T> union(Set<? extends T> a, Set<? extends T> b) {
+    LinkedHashSet<T> u = new LinkedHashSet<>(a);
+    u.addAll(b);
+    return u;
   }
 }

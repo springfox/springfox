@@ -19,13 +19,18 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import io.swagger.annotations.ApiParam;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
+
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import io.swagger.annotations.ApiParam;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.service.AllowableValues;
@@ -36,9 +41,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
-
-import static com.google.common.base.Strings.*;
-import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
+import springfox.documentation.util.Strings;
 
 @Component("swaggerParameterDescriptionReader")
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -60,13 +63,13 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     context.parameterBuilder()
         .allowableValues(allowableValues(
             context.alternateFor(context.resolvedMethodParameter().getParameterType()),
-            apiParam.transform(toAllowableValue()).or("")));
+            apiParam.map(toAllowableValue()).orElse("")));
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
-      context.parameterBuilder().name(emptyToNull(annotation.name()));
-      context.parameterBuilder().description(emptyToNull(descriptions.resolve(annotation.value())));
-      context.parameterBuilder().parameterAccess(emptyToNull(annotation.access()));
-      context.parameterBuilder().defaultValue(emptyToNull(annotation.defaultValue()));
+      context.parameterBuilder().name(Strings.emptyToNull(annotation.name()));
+      context.parameterBuilder().description(Strings.emptyToNull(descriptions.resolve(annotation.value())));
+      context.parameterBuilder().parameterAccess(Strings.emptyToNull(annotation.access()));
+      context.parameterBuilder().defaultValue(Strings.emptyToNull(annotation.defaultValue()));
       context.parameterBuilder().allowMultiple(annotation.allowMultiple());
       context.parameterBuilder().required(annotation.required());
       context.parameterBuilder().hidden(annotation.hidden());
@@ -84,7 +87,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
 
   private AllowableValues allowableValues(ResolvedType parameterType, String allowableValueString) {
     AllowableValues allowableValues = null;
-    if (!isNullOrEmpty(allowableValueString)) {
+    if (!Strings.isNullOrEmpty(allowableValueString)) {
       allowableValues = ApiModelProperties.allowableValueFromString(allowableValueString);
     } else {
       if (enumTypeDeterminer.isEnum(parameterType.getErasedType())) {

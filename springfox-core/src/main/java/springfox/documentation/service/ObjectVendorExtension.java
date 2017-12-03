@@ -18,19 +18,17 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.collect.Lists.*;
 
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
-  private final List<VendorExtension> properties = newArrayList();
+  private final List<VendorExtension> properties = new ArrayList<>();
   private final String name;
 
   public ObjectVendorExtension(String name) {
@@ -43,7 +41,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
 
   @Override
   public List<VendorExtension> getValue() {
-    return ImmutableList.copyOf(properties);
+    return Collections.unmodifiableList(properties);
   }
 
 
@@ -52,7 +50,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   }
 
   public void replaceProperty(VendorExtension property) {
-    Optional<VendorExtension> vendorProperty = Iterables.tryFind(properties, withName(property.getName()));
+    Optional<VendorExtension> vendorProperty = properties.stream().filter(withName(property.getName())).findAny();
     if (vendorProperty.isPresent()) {
       properties.remove(vendorProperty.get());
     }
@@ -62,7 +60,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   private Predicate<VendorExtension> withName(final String name) {
     return new Predicate<VendorExtension>() {
       @Override
-      public boolean apply(VendorExtension input) {
+      public boolean test(VendorExtension input) {
         return input.getName().equals(name);
       }
     };
@@ -77,7 +75,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
       return false;
     }
     ObjectVendorExtension that = (ObjectVendorExtension) o;
-    return Objects.equal(properties, that.properties);
+    return Objects.equals(properties, that.properties);
   }
 
   @Override
@@ -87,9 +85,8 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("properties", properties)
-        .add("name", name)
-        .toString();
+    return "ObjectVendorExtension [properties=" + properties + ", name=" + name + "]";
   }
+
+
 }

@@ -10,8 +10,6 @@ import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
 
-import static com.google.common.base.Predicates.*
-import static com.google.common.collect.Lists.*
 import static springfox.documentation.builders.PathSelectors.*
 
 @Configuration
@@ -29,7 +27,7 @@ public class Swagger12TestConfig {
         .build()
 
     SecurityContext.builder()
-        .securityReferences(newArrayList(securityReference))
+        .securityReferences(Arrays.asList(securityReference))
         .forPaths(ant("/petgrooming/**"))
         .build()
   }
@@ -41,11 +39,10 @@ public class Swagger12TestConfig {
     return new Docket(DocumentationType.SWAGGER_12)
         .groupName("default")
         .select()
-          .paths(and(
-              regex("^((?!/api).)*\$"),//Not beginning with /api
-              not(regex("^\\/features\\/.*Arrays\$")) //Not operations that use 2d arrays
+          .paths(
+              regex("^((?!/api).)*\$") //Not beginning with /api
+              .and(regex("^\\/features\\/.*Arrays\$").negate()) //Not operations that use 2d arrays
             )
-          )
           .build()
         .securitySchemes(securitySchemes)
         .securityContexts(securityContexts)

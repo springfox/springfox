@@ -19,14 +19,15 @@
 
 package springfox.documentation.builders;
 
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.GrantType;
-import springfox.documentation.service.OAuth;
+import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static springfox.documentation.builders.BuilderDefaults.*;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.OAuth;
 
 public class OAuthBuilder {
 

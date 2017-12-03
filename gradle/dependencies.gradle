@@ -3,7 +3,6 @@ ext {
   cglib = "3.2.5"
   classmate = "1.3.3"
   groovy = "2.4.8"
-  guava = "20.0"
   jackson = '2.8.7'
   joda = "2.9.9"
   jsonPath = "2.3.0"
@@ -11,7 +10,6 @@ ext {
   mapstruct = "1.1.0.Final"
   mockito = "1.10.19"
   objenesis = "2.5.1"
-  reflections = "0.9.11"
   servlet = "3.1.0"
   slf4j = "1.7.24"
   snakeyaml = '1.18'
@@ -64,7 +62,6 @@ ext {
                   "joda-time:joda-time:$joda"
           ],
           core          : [
-                  "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
           ]

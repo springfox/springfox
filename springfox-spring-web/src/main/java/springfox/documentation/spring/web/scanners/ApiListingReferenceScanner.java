@@ -19,18 +19,22 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.collect.ArrayListMultimap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Multimaps.*;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -40,11 +44,11 @@ public class ApiListingReferenceScanner {
   public ApiListingReferenceScanResult scan(DocumentationContext context) {
     LOG.info("Scanning for api listing references");
 
-    ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
-        = ArrayListMultimap.create();
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings
+        = new LinkedHashMap<>();
     ApiSelector selector = context.getApiSelector();
-    Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
-        .filter(selector.getRequestHandlerSelector());
+    List<RequestHandler> matchingHandlers = context.getRequestHandlers().stream()
+        .filter(selector.getRequestHandlerSelector()).collect(Collectors.toList());
     for (RequestHandler handler : matchingHandlers) {
       ResourceGroup resourceGroup = new ResourceGroup(handler.groupName(),
           handler.declaringClass(), 0);
@@ -52,9 +56,9 @@ public class ApiListingReferenceScanner {
       RequestMappingContext requestMappingContext
           = new RequestMappingContext(context, handler);
 
-      resourceGroupRequestMappings.put(resourceGroup, requestMappingContext);
+      resourceGroupRequestMappings.computeIfAbsent(resourceGroup, k -> new ArrayList<>()).add(requestMappingContext);
     }
-    return new ApiListingReferenceScanResult(asMap(resourceGroupRequestMappings));
+    return new ApiListingReferenceScanResult(resourceGroupRequestMappings);
   }
 
 }

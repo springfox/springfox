@@ -29,12 +29,10 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.scanners.MediaTypeReader
 
-import static com.google.common.collect.Sets.*
 
 @Mixin([RequestMappingSupport])
 class MediaTypeReaderSpec extends DocumentationContextSpec {
   MediaTypeReader sut
-
 
   def setup() {
     sut = new MediaTypeReader()
@@ -60,8 +58,8 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     def operation = operationContext.operationBuilder().build()
 
     then:
-    operation.consumes == newHashSet(consumes)
-    operation.produces == newHashSet(produces)
+    operation.consumes == new HashSet(Arrays.asList(consumes))
+    operation.produces == new HashSet(Arrays.asList(produces))
 
     where:
     consumes                                            | produces                         | httpMethod            | handlerMethod
@@ -79,7 +77,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "should only set default 'application/json' consumes if no consumes is set and operation is not GET/DELETE"() {
     given:
-    contextBuilder.consumes(newHashSet(documentConsumes))
+    contextBuilder.consumes(new HashSet(Arrays.asList(documentConsumes)))
     RequestMappingInfo requestMappingInfo =
         requestMappingInfo('/somePath',
             [
@@ -100,7 +98,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     def operation = operationContext.operationBuilder().build()
 
     then:
-    operation.consumes == newHashSet(expectedOperationConsumes)
+    operation.consumes == new HashSet(Arrays.asList(expectedOperationConsumes))
 
     where:
     documentConsumes                | operationConsumes               | httpMethod      | expectedOperationConsumes
@@ -115,7 +113,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "should only set default '*/*' produces if no produces is set for the operation and document context"() {
     given:
-    contextBuilder.produces(newHashSet(documentProduces))
+    contextBuilder.produces(new HashSet(Arrays.asList(documentProduces)))
     RequestMappingInfo requestMappingInfo =
         requestMappingInfo('/somePath',
             [
@@ -130,7 +128,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     def operation = operationContext.operationBuilder().build()
 
     then:
-    operation.produces == newHashSet(expectedOperationProduces)
+    operation.produces == new HashSet(Arrays.asList(expectedOperationProduces))
 
     where:
     documentProduces                | operationProduces               | expectedOperationProduces

@@ -19,17 +19,17 @@
 
 package springfox.documentation.service;
 
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class SecurityReference {
   private final String reference;
   private final List<AuthorizationScope> scopes;
 
   public SecurityReference(String reference, AuthorizationScope[] scopes) {
-    this.scopes = newArrayList(scopes);
+    this.scopes = Arrays.asList(scopes);
     this.reference = reference;
   }
 

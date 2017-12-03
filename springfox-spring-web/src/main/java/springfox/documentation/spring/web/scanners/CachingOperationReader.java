@@ -18,42 +18,45 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Equivalence;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.OperationCachingEquivalence;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 @Component
 @Qualifier("cachedOperations")
 public class CachingOperationReader implements OperationReader {
 
-  private final LoadingCache<Equivalence.Wrapper<RequestMappingContext>, List<Operation>> cache;
+  // private final LoadingCache<Equivalence.Wrapper<RequestMappingContext>, List<Operation>> cache;
+  private final Map<OperationCachingEquivalence, List<Operation>> cache = new LinkedHashMap<OperationCachingEquivalence, List<Operation>>() {
+    protected boolean removeEldestEntry(Map.Entry<OperationCachingEquivalence, List<Operation>> eldest) {
+      return size() > 1000;
+    }
+  };
+  private OperationReader delegate;
 
   @Autowired
   public CachingOperationReader(@Qualifier("default") final OperationReader delegate) {
-    cache = CacheBuilder.newBuilder()
-        .maximumSize(1000)
-        .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(
-            new CacheLoader<Equivalence.Wrapper<RequestMappingContext>, List<Operation>>() {
-              public List<Operation> load(Equivalence.Wrapper<RequestMappingContext> key) {
-                return delegate.read(key.get());
-              }
-            });
+    this.delegate = delegate;
+    /*
+     * cache = CacheBuilder.newBuilder() .maximumSize(1000) .expireAfterWrite(24,
+     * TimeUnit.HOURS) .build( new
+     * CacheLoader<Equivalence.Wrapper<RequestMappingContext>, List<Operation>>() {
+     * public List<Operation> load(Equivalence.Wrapper<RequestMappingContext> key) {
+     * return delegate.read(key.get()); } });
+     */
   }
 
   @Override
   public List<Operation> read(RequestMappingContext outerContext) {
-    return cache.getUnchecked(new OperationCachingEquivalence().wrap(outerContext));
+    return cache.computeIfAbsent(new OperationCachingEquivalence(outerContext), key -> delegate.read(key.get()));
   }
 }

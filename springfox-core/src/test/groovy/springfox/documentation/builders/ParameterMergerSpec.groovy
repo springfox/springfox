@@ -2,15 +2,13 @@ package springfox.documentation.builders
 
 import spock.lang.Specification
 
-import static com.google.common.collect.Sets.newHashSet
-
 class ParameterMergerSpec extends Specification {
   def "Merges parameters by name" () {
     given:
       def merger = new ParameterMerger(destination, source)
     when:
       def merged = merger.merged()
-      def expected = newHashSet()
+      def expected = new HashSet()
       expected.addAll(destination.collect { it.name })
       expected.addAll(source.collect { it.name })
     then:

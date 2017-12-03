@@ -18,26 +18,27 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import static springfox.documentation.service.Tags.emptyTags;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
-
-import java.util.Set;
-
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.service.Tags.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -53,7 +54,8 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     Set<String> defaultTags = tagsProvider.tags(context);
-    SetView<String> tags = union(operationTags(context), controllerTags(context));
+    Set<String> tags = operationTags(context);
+    tags.addAll(controllerTags(context));
     if (tags.isEmpty()) {
       context.operationBuilder().tags(defaultTags);
     } else {
@@ -63,20 +65,20 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
 
   private Set<String> controllerTags(OperationContext context) {
     Optional<Api> controllerAnnotation = context.findControllerAnnotation(Api.class);
-    return controllerAnnotation.transform(tagsFromController()).or(Sets.<String>newHashSet());
+    return controllerAnnotation.map(tagsFromController()).orElse(new HashSet<>());
   }
 
   private Set<String> operationTags(OperationContext context) {
     Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
-    return annotation.transform(tagsFromOperation()).or(Sets.<String>newHashSet());
+    return annotation.map(tagsFromOperation()).orElse(new HashSet<>());
   }
 
   private Function<ApiOperation, Set<String>> tagsFromOperation() {
     return new Function<ApiOperation, Set<String>>() {
       @Override
       public Set<String> apply(ApiOperation input) {
-        Set<String> tags = newTreeSet();
-        tags.addAll(from(newArrayList(input.tags())).filter(emptyTags()).toSet());
+        Set<String> tags = new TreeSet<>();
+        tags.addAll(Arrays.stream(input.tags()).filter(emptyTags()).collect(Collectors.toSet()));
         return tags;
       }
     };
@@ -86,8 +88,8 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
     return new Function<Api, Set<String>>() {
       @Override
       public Set<String> apply(Api input) {
-        Set<String> tags = newTreeSet();
-        tags.addAll(from(newArrayList(input.tags())).filter(emptyTags()).toSet());
+        Set<String> tags = new TreeSet<>();
+        tags.addAll(Arrays.stream(input.tags()).filter(emptyTags()).collect(Collectors.toSet()));
         return tags;
       }
     };

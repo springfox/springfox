@@ -19,26 +19,30 @@
 
 package springfox.documentation.spring.web.plugins;
 
+import static springfox.documentation.schema.AlternateTypeRules.newRule;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.Ordered;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.http.ResponseEntity;
+
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
-import org.springframework.http.ResponseEntity;
+
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
-
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**
  * Class to automatically detect type substitutions given the jackson serialize/deserialize annotations
@@ -57,11 +61,8 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   @Override
   public List<AlternateTypeRule> rules() {
-    List<AlternateTypeRule> rules = newArrayList();
-    Reflections reflections = new Reflections(packagePrefix);
-    Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
-    Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);
-    for (Class<?> type : Sets.union(serialized, deserialized)) {
+    List<AlternateTypeRule> rules = new ArrayList<>();
+    for (Class<?> type : findJacksonSerializeDeserializeAnnotatedClasses()) {
       Optional<Type> found = findAlternate(type);
       if (found.isPresent()) {
         rules.add(newRule(
@@ -76,22 +77,22 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
   }
 
   private Optional<Type> findAlternate(Class<?> type) {
-    Class serializer = Optional.fromNullable(type.getAnnotation(JsonSerialize.class))
-        .transform(new Function<JsonSerialize, Class>() {
+    Class<?> serializer = Optional.ofNullable(type.getAnnotation(JsonSerialize.class))
+        .map(new Function<JsonSerialize, Class>() {
           @Override
           public Class apply(JsonSerialize input) {
             return input.as();
           }
         })
-        .or(Void.class);
-    Class deserializer = Optional.fromNullable(type.getAnnotation(JsonDeserialize.class))
-        .transform(new Function<JsonDeserialize, Class>() {
+        .orElse(Void.class);
+    Class deserializer = Optional.ofNullable(type.getAnnotation(JsonDeserialize.class))
+        .map(new Function<JsonDeserialize, Class>() {
           @Override
           public Class apply(JsonDeserialize input) {
             return input.as();
           }
         })
-        .or(Void.class);
+        .orElse(Void.class);
     Type toUse;
     if (serializer != deserializer) {
       LOGGER.warn("The serializer {} and deserializer {} . Picking the serializer by default",
@@ -105,11 +106,37 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
     } else {
       toUse = deserializer;
     }
-    return Optional.fromNullable(toUse);
+    return Optional.ofNullable(toUse);
   }
 
   @Override
   public int getOrder() {
     return IMMUTABLES_CONVENTION_ORDER;
+  }
+  
+  public Set<Class<?>> findJacksonSerializeDeserializeAnnotatedClasses() {
+    Set<Class<?>> annotatedClasses = new HashSet<>();
+      ClassPathScanningCandidateComponentProvider provider = createComponentScanner();
+      for (BeanDefinition beanDef : provider.findCandidateComponents(packagePrefix)) {
+        annotatedClasses.add(asClass(beanDef.getBeanClassName()));
+      }
+      return annotatedClasses;
+  }
+
+  private ClassPathScanningCandidateComponentProvider createComponentScanner() {
+      ClassPathScanningCandidateComponentProvider provider
+              = new ClassPathScanningCandidateComponentProvider(false);
+      provider.addIncludeFilter(new AnnotationTypeFilter(JsonSerialize.class));
+      provider.addIncludeFilter(new AnnotationTypeFilter(JsonDeserialize.class));
+      return provider;
+  }
+
+  private Class<?> asClass(String className) {
+    try {
+      return Class.forName(className);
+    } catch (ClassNotFoundException ex) {
+      LOGGER.error("Failed to load class", ex);
+    }
+    return null;
   }
 }

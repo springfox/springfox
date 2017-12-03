@@ -19,14 +19,15 @@
 
 package springfox.documentation.schema;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
+
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.List;
-
-import static com.google.common.collect.Lists.*;
 
 public class ModelProperty {
   private final String name;
@@ -74,7 +75,7 @@ public class ModelProperty {
     this.pattern = pattern;
     this.defaultValue = defaultValue;
     this.xml = xml;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public String getName() {

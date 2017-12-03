@@ -21,14 +21,16 @@ package springfox.documentation.schema.property.bean;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.base.Optional;
+
+import springfox.documentation.util.Strings;
+
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Strings.*;
 
 public class Accessors {
   private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");
@@ -60,11 +62,11 @@ public class Accessors {
 
   public static String propertyName(Method method) {
     Optional<JsonGetter> jsonGetterAnnotation = getterAnnotation(method);
-    if (jsonGetterAnnotation.isPresent() && !isNullOrEmpty(jsonGetterAnnotation.get().value())) {
+    if (jsonGetterAnnotation.isPresent() && !Strings.isNullOrEmpty(jsonGetterAnnotation.get().value())) {
       return jsonGetterAnnotation.get().value();
     }
     Optional<JsonSetter> jsonSetterAnnotation = setterAnnotation(method);
-    if (jsonSetterAnnotation.isPresent() && !isNullOrEmpty(jsonSetterAnnotation.get().value())) {
+    if (jsonSetterAnnotation.isPresent() && !Strings.isNullOrEmpty(jsonSetterAnnotation.get().value())) {
       return jsonSetterAnnotation.get().value();
     }
     Matcher matcher = getter.matcher(method.getName());
@@ -83,11 +85,11 @@ public class Accessors {
   }
 
   private static Optional<JsonGetter> getterAnnotation(Method method) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
+    return Optional.ofNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
   }
 
   private static Optional<JsonSetter> setterAnnotation(Method method) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
+    return Optional.ofNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
   }
 
   private static boolean isSetterMethod(Method method) {

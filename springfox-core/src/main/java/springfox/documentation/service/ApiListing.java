@@ -19,11 +19,11 @@
 
 package springfox.documentation.service;
 
-import springfox.documentation.schema.Model;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import springfox.documentation.schema.Model;
 
 public class ApiListing {
   private final String apiVersion;

@@ -40,7 +40,6 @@ import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger1.mixins.MapperSupport
 
-import static com.google.common.collect.Sets.*
 
 class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSupport {
   def "Maps the api description correctly"() {
@@ -60,8 +59,8 @@ class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSup
                           .reference("basic")
                           .scopes(scope)
                           .build()])
-                        .consumes(newHashSet("application/json"))
-                        .produces(newHashSet("application/json"))
+                        .consumes(Collections.singleton("application/json"))
+                        .produces(Collections.singleton("application/json"))
                         .deprecated("deprecated")
                         .method(HttpMethod.POST)
                         .uniqueId("op1")
@@ -79,9 +78,9 @@ class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSup
                           .build()])
                         .position(1)
                         .codegenMethodNameStem("")
-                        .protocols(newHashSet("https"))
+                        .protocols(Collections.singleton("https"))
                         .responseModel(new ModelRef("string"))
-                        .responseMessages(newHashSet(response))
+                        .responseMessages(Collections.singleton(response))
                       .build()
       def description = new ApiDescriptionBuilder(defaults.operationOrdering())
         .description("test")

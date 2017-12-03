@@ -18,14 +18,23 @@
  */
 package springfox.documentation.spring.web.readers.operation;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.schema.Types.isVoid;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import com.fasterxml.classmate.ResolvedType;
+
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -34,12 +43,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
-
-import java.util.List;
-
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -55,7 +58,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
-    context.operationBuilder().responseMessages(newHashSet(responseMessages));
+    context.operationBuilder().responseMessages(new HashSet<>(responseMessages));
     applyReturnTypeOverride(context);
   }
 
@@ -85,7 +88,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
         .message(message)
         .responseModel(modelRef)
         .build();
-    context.operationBuilder().responseMessages(newHashSet(built));
+    context.operationBuilder().responseMessages(new HashSet<>(Arrays.asList(built)));
   }
 
 

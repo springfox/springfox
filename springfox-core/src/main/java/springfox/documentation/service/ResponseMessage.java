@@ -19,10 +19,10 @@
 
 package springfox.documentation.service;
 
-import springfox.documentation.schema.ModelReference;
-
 import java.util.List;
 import java.util.Map;
+
+import springfox.documentation.schema.ModelReference;
 
 public class ResponseMessage {
   private final int code;

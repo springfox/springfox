@@ -19,27 +19,28 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
-import io.swagger.annotations.AuthorizationScope;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import springfox.documentation.builders.AuthorizationScopeBuilder;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
+import springfox.documentation.util.Strings;
 
-import java.util.List;
-
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -52,7 +53,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
     Optional<SecurityContext> securityContext = context.securityContext();
 
     String requestMappingPattern = context.requestMappingPattern();
-    List<SecurityReference> securityReferences = newArrayList();
+    List<SecurityReference> securityReferences = new ArrayList<>();
 
     if (securityContext.isPresent()) {
       securityReferences = securityContext.get().securityForPath(requestMappingPattern);
@@ -66,17 +67,17 @@ public class OperationAuthReader implements OperationBuilderPlugin {
               && authorizationAnnotations.length > 0
               && StringUtils.hasText(authorizationAnnotations[0].value())) {
 
-        securityReferences = newArrayList();
+        securityReferences = new ArrayList<>();
         for (Authorization authorization : authorizationAnnotations) {
           String value = authorization.value();
           AuthorizationScope[] scopes = authorization.scopes();
-          List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = newArrayList();
+          List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = new ArrayList<>();
           for (AuthorizationScope authorizationScope : scopes) {
             String description = authorizationScope.description();
             String scope = authorizationScope.scope();
             // @Authorization has a default blank authorization scope, which we need to
             // ignore in the case of api keys.
-            if (!isNullOrEmpty(scope)) {
+            if (!Strings.isNullOrEmpty(scope)) {
               authorizationScopeList.add(
                       new AuthorizationScopeBuilder()
                               .scope(scope)

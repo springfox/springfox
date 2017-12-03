@@ -37,7 +37,6 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 
-import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
@@ -58,11 +57,10 @@ class Swagger2TestConfig {
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-        .paths(or(
-        and(
-            regex("/api/.*"),
-            not(regex("/api/store/search.*"))),
-        regex("/generic/.*")))
+        .paths(  regex("/api/.*")
+                .and(regex("/api/store/search.*").negate())
+                .or(regex("/generic/.*"))
+         )
         .build()
         .host("petstore.swagger.io")
         .protocols(['http', 'https'] as Set)
@@ -313,10 +311,10 @@ class Swagger2TestConfig {
         .forCodeGeneration(true)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-        .paths(or(
-          regex("/people.*"),
-          regex("/tags.*"),
-          regex("/categories.*"),
+        .paths(
+          regex("/people.*").or(
+          regex("/tags.*")).or(
+          regex("/categories.*")).or(
           regex("/addresses.*")))
         .build()
   }

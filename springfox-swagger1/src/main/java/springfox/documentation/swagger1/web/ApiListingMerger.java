@@ -18,17 +18,16 @@
  */
 package springfox.documentation.swagger1.web;
 
-import com.google.common.base.Optional;
-import springfox.documentation.swagger1.dto.ApiListing;
-
-import java.util.Collection;
-
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
+import springfox.documentation.swagger1.dto.ApiListing;
+
 public class ApiListingMerger {
-  public static Optional<ApiListing> mergedApiListing(Collection<ApiListing> apiListings) {
+  public static Optional<ApiListing> mergedApiListing(List<ApiListing> apiListings) {
     if (nullToEmptyList(apiListings).size() > 1) {
       ApiListing merged = new ApiListing();
       merged.setSwaggerVersion("1.2");
@@ -40,13 +39,13 @@ public class ApiListingMerger {
         merged.setDescription(each.getDescription());
         merged.appendAuthorizations(each.getAuthorizations());
         merged.appendApis(each.getApis());
-        merged.appendProtocols(newHashSet(each.getProtocols()));
-        merged.appendConsumes(newHashSet(each.getConsumes()));
+        merged.appendProtocols(new HashSet<>(each.getProtocols()));
+        merged.appendConsumes(new HashSet<>(each.getConsumes()));
         merged.appendModels(each.getModels());
-        merged.appendProduces(newHashSet(each.getProduces()));
+        merged.appendProduces(new HashSet<>(each.getProduces()));
       }
       return Optional.of(merged);
     }
-    return from(nullToEmptyList(apiListings)).first();
+    return apiListings != null && !apiListings.isEmpty() ? Optional.of(apiListings.get(0)) : Optional.empty();
   }
 }

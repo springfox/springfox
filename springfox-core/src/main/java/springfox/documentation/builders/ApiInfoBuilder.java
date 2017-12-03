@@ -19,14 +19,14 @@
 
 package springfox.documentation.builders;
 
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.VendorExtension;
-
-import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
 /**
  * Builds the api information
@@ -39,7 +39,7 @@ public class ApiInfoBuilder {
   private String license;
   private String licenseUrl;
   private String version;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Updates the api title

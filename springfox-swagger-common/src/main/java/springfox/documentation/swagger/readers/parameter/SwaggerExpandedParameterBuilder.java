@@ -19,13 +19,22 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
+import static springfox.documentation.swagger.annotations.Annotations.findApiParamAnnotation;
+import static springfox.documentation.swagger.schema.ApiModelProperties.findApiModePropertyAnnotation;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -35,16 +44,7 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
-
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-
-import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.swagger.annotations.Annotations.*;
-import static springfox.documentation.swagger.schema.ApiModelProperties.*;
+import springfox.documentation.util.Strings;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -79,8 +79,8 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
-    String allowableProperty = emptyToNull(apiParam.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
+    String allowableProperty = Strings.emptyToNull(apiParam.allowableValues());
+    AllowableValues allowable = allowableValues(Optional.ofNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
         .description(descriptions.resolve(apiParam.value()))
         .defaultValue(apiParam.defaultValue())
@@ -93,8 +93,8 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
-    String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
+    String allowableProperty = Strings.emptyToNull(apiModelProperty.allowableValues());
+    AllowableValues allowable = allowableValues(Optional.ofNullable(allowableProperty), context.getField().getRawMember());
     context.getParameterBuilder()
         .description(descriptions.resolve(apiModelProperty.value()))
         .required(apiModelProperty.required())
@@ -116,11 +116,11 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
+    return Arrays.stream(subject.getEnumConstants()).map(new Function<Object, String>() {
       @Override
       public String apply(final Object input) {
         return input.toString();
       }
-    });
+    }).collect(Collectors.toList());
   }
 }
