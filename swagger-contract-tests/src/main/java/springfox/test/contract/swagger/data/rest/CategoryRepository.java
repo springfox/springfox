@@ -21,6 +21,6 @@ package springfox.test.contract.swagger.data.rest;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@RepositoryRestResource(path = "categories")
+@RepositoryRestResource(path = "categories", exported = false)
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 }

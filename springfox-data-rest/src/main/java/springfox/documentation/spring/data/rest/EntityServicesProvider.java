@@ -81,19 +81,22 @@ class EntityServicesProvider implements RequestHandlerProvider {
       RepositoryInformation repositoryInfo = repositories.getRepositoryInformationFor(each);
       Object repositoryInstance = repositories.getRepositoryFor(each);
       ResourceMetadata resource = mappings.getMetadataFor(each);
-      contexts.add(new EntityContext(
-          typeResolver, configuration,
-          repositoryInfo,
-          repositoryInstance,
-          resource,
-          mappings,
-          entities,
-          associations, extractorConfiguration));
+      if (resource.isExported()) {
+        contexts.add(new EntityContext(
+            typeResolver,
+            configuration,
+            repositoryInfo,
+            repositoryInstance,
+            resource,
+            mappings,
+            entities,
+            associations, extractorConfiguration));
+      }
 
     }
-    
+
     List<RequestHandler> handlers = new ArrayList<RequestHandler>();
-    for (EntityContext each: contexts) {
+    for (EntityContext each : contexts) {
       handlers.addAll(FluentIterable.from(extractorConfiguration.getEntityExtractors())
           .transformAndConcat(extractFromContext(each))
           .toList());
