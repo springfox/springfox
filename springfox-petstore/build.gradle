@@ -16,5 +16,8 @@ dependencies {
   compile libs.spring
   compile libs.springProvided
   compile libs.swagger2Core
-  compile "com.google.guava:guava:${guava}"
+  compile libs.core
+  compile project(':springfox-spi')
+  compile project(':springfox-core')
+  compile project(':springfox-spring-web')
 }

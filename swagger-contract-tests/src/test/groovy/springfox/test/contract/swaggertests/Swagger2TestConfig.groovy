@@ -33,6 +33,7 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+import springfox.petstore.PetStoreConfiguration
 import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
@@ -44,29 +45,11 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 @Configuration
 @EnableSwagger2
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
-@Import(SpringDataRestConfiguration)
+@Import([SpringDataRestConfiguration, PetStoreConfiguration])
 class Swagger2TestConfig {
 
   @Autowired
   private TypeResolver resolver
-
-  @Bean
-  Docket petstore(List<SecurityScheme> authorizationTypes) {
-    return new Docket(DocumentationType.SWAGGER_2)
-        .groupName("petstore")
-        .useDefaultResponseMessages(false)
-        .securitySchemes(authorizationTypes)
-        .produces(['application/xml', 'application/json'] as Set)
-        .select()
-        .paths(or(
-        and(
-            regex("/api/.*"),
-            not(regex("/api/store/search.*"))),
-        regex("/generic/.*")))
-        .build()
-        .host("petstore.swagger.io")
-        .protocols(['http', 'https'] as Set)
-  }
 
   @Bean
   Docket petstoreWithUriTemplating(List<SecurityScheme> authorizationTypes) {
