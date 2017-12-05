@@ -305,6 +305,16 @@ public class BugsController {
     return "";
   }
 
+  @RequestMapping(value = "/1894", method = RequestMethod.POST)
+  public void cacheEvict1() {
+
+  }
+
+  @RequestMapping(value = "/1894", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  public void cacheEvict2() {
+
+  }
+
   public class Id {
 
     private final Long id;
