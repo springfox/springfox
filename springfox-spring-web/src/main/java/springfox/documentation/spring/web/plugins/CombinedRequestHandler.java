@@ -142,4 +142,14 @@ public class CombinedRequestHandler implements RequestHandler {
   public RequestHandler combine(RequestHandler other) {
     return new CombinedRequestHandler(this, other);
   }
+
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("CombinedRequestHandler{");
+    sb.append("first key=").append(first.key());
+    sb.append("second key=").append(second.key());
+    sb.append("combined key=").append(key());
+    sb.append('}');
+    return sb.toString();
+  }
 }

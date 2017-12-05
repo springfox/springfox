@@ -783,6 +783,23 @@
         }
       }
     },
+    "/bugs/1894": {
+      "post": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "cacheEvict1",
+        "operationId": "cacheEvict1UsingPOST_2",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/bugs/1907": {
       "get": {
         "tags": [

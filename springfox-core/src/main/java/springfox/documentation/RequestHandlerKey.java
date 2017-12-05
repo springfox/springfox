@@ -79,4 +79,15 @@ public class RequestHandlerKey {
   public int hashCode() {
     return Objects.hashCode(pathMappings, supportedMethods, supportedMediaTypes, producibleMediaTypes);
   }
+
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("RequestHandlerKey{");
+    sb.append("pathMappings=").append(pathMappings);
+    sb.append(", supportedMethods=").append(supportedMethods);
+    sb.append(", supportedMediaTypes=").append(supportedMediaTypes);
+    sb.append(", producibleMediaTypes=").append(producibleMediaTypes);
+    sb.append('}');
+    return sb.toString();
+  }
 }

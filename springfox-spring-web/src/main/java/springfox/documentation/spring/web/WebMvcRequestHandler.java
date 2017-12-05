@@ -143,4 +143,12 @@ public class WebMvcRequestHandler implements RequestHandler {
   public RequestMappingInfo getRequestMapping() {
     return requestMapping;
   }
+
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("WebMvcRequestHandler{");
+    sb.append("key=").append(key());
+    sb.append('}');
+    return sb.toString();
+  }
 }
