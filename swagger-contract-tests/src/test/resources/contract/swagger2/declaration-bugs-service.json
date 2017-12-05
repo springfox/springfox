@@ -794,6 +794,57 @@
         }
       }
     },
+    "/bugs/1887/{env}/{list-id}/emails": {
+      "post": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "1887 example",
+        "operationId": "addEmailsToListUsingPOST_1",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "env",
+            "in": "path",
+            "description": "env",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "list-id",
+            "in": "path",
+            "description": "list-id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "emails",
+            "description": "emails",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Example"
+            }
+          }
+        }
+      }
+    },
     "/bugs/1894": {
       "post": {
         "tags": [

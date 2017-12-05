@@ -35,6 +35,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -312,6 +313,17 @@ public class BugsController {
   @RequestMapping(value = "/1894", method = POST, consumes = APPLICATION_FORM_URLENCODED_VALUE)
   public void cacheEvict2() {
 
+  }
+
+  @PostMapping(value = "/1887/{env}/{list-id}/emails",
+      produces = APPLICATION_JSON_UTF8_VALUE,
+      consumes = APPLICATION_JSON_UTF8_VALUE)
+  @ApiOperation(value = "1887 example", response = Example.class)
+  public ResponseEntity<Map<String, List<Example>>> addEmailsToList(
+      @PathVariable String env,
+      @PathVariable("list-id") String listId,
+      @RequestBody List<String> emails) {
+    return ResponseEntity.ok(null);
   }
 
   public class Id {
