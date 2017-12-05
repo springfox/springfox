@@ -31,14 +31,12 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
@@ -60,13 +58,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Api(tags = "Bugs")
 @RestController
 @RequestMapping("/bugs")
 public class BugsController {
-  @RequestMapping(value = "1306", method = RequestMethod.POST)
+  @RequestMapping(value = "1306", method = POST)
   public ResponseEntity<Map<String, String>> bug1306(@RequestParam Map<String, String> paramMap) {
     return ResponseEntity.ok(null);
   }
@@ -74,31 +73,31 @@ public class BugsController {
   @ApiImplicitParams(
       @ApiImplicitParam(dataType = "string", allowMultiple = true, paramType = "header")
   )
-  @RequestMapping(value = "1209", method = RequestMethod.POST)
+  @RequestMapping(value = "1209", method = POST)
   public ResponseEntity<String> bug1209() {
     return ResponseEntity.ok("");
   }
 
-  @RequestMapping(value = "1162", method = RequestMethod.POST)
+  @RequestMapping(value = "1162", method = POST)
   public ResponseEntity<Date> bug1162() {
     return ResponseEntity.ok(new Date(new java.util.Date().getTime()));
   }
 
-  @RequestMapping(value = "1376-bare", method = RequestMethod.POST)
+  @RequestMapping(value = "1376-bare", method = POST)
   public URL issue1376Bare() throws MalformedURLException {
     return new URL("http://example.org");
   }
 
-  @RequestMapping(value = "1376-property", method = RequestMethod.POST)
+  @RequestMapping(value = "1376-property", method = POST)
   public Bug1376 issue1376Property() throws MalformedURLException {
     return new Bug1376(new URL("http://example.org"));
   }
 
-  @RequestMapping(value = "1376-input-bare", method = RequestMethod.POST)
+  @RequestMapping(value = "1376-input-bare", method = POST)
   public void issue1376Input(URL url) throws MalformedURLException {
   }
 
-  @RequestMapping(value = "1376-input-property", method = RequestMethod.POST)
+  @RequestMapping(value = "1376-input-property", method = POST)
   public void issue1376Input(Bug1376 bug) throws MalformedURLException {
   }
 
@@ -155,14 +154,14 @@ public class BugsController {
 
   @RequestMapping(value = "2081", method = GET)
   public void bug2081(Bug2081 criteria) {
-      throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException();
   }
 
   @ApiOperation(value = "Remove an apple from a user", notes = "Remove an apple from a user. You must specify the "
       + "user name and the apple name.", response = Void.class, consumes = "application/json, application/xml",
       produces = "application/json, application/xml")
   @ApiResponses({ @ApiResponse(code = 200, message = "The apple is removed") })
-  @RequestMapping(value = "1722", method = RequestMethod.POST)
+  @RequestMapping(value = "1722", method = POST)
   public void bug1722(@RequestBody String test) {
   }
 
@@ -241,23 +240,23 @@ public class BugsController {
 
   }
 
-  @GetMapping(value = "/1841", produces = MediaType.APPLICATION_ATOM_XML_VALUE)
+  @GetMapping(value = "/1841", produces = APPLICATION_ATOM_XML_VALUE)
   public void method1() {
   }
 
-  @GetMapping(value = "/1841", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @GetMapping(value = "/1841", produces = APPLICATION_JSON_UTF8_VALUE)
   public void method2() {
   }
 
   @RequestMapping(value = "/1939",
-      method = RequestMethod.GET,
+      method = GET,
       produces = "application/jwt")
   @ApiOperation(value = "authenticate a user using a given set of "
       + "credentials, producing a JWT token that may be "
       + "used for future API operations if successful")
   @Valid
   public ResponseEntity<String>
-    authenticate(@RequestParam("username")
+  authenticate(@RequestParam("username")
                    String username,
                @RequestParam("password")
                    String password,
@@ -266,11 +265,11 @@ public class BugsController {
     return ResponseEntity.ok("Success!");
   }
 
-  @GetMapping(value = "/1907", produces = MediaType.APPLICATION_XML_VALUE)
+  @GetMapping(value = "/1907", produces = APPLICATION_XML_VALUE)
   public void xmlPayload(@RequestBody Model1907 xml) {
   }
 
-  @RequestMapping(path = "/2114", method = RequestMethod.PUT)
+  @RequestMapping(path = "/2114", method = PUT)
   ResponseEntity<Void> bug2114(
       @PathVariable(value = "siteId") UUID siteId,
       @RequestParam(value = "siteSecret") UUID siteSecret,
@@ -281,12 +280,12 @@ public class BugsController {
     return null;
   }
 
-  @RequestMapping(value = "/2118", method = RequestMethod.GET)
+  @RequestMapping(value = "/2118", method = GET)
   public String bug2118(@RequestBody @ModelAttribute Example person) {
     return "ok";
   }
 
-  @RequestMapping(method = RequestMethod.GET, path = "{propertyKey}/{environmentKey}")
+  @RequestMapping(method = GET, path = "{propertyKey}/{environmentKey}")
   public ResponseEntity<String> getProperty(
       @ApiParam(name = "propertyKey", value = "Key of the property", required = true)
       @PathVariable("propertyKey") Key propertyKey,
@@ -297,7 +296,7 @@ public class BugsController {
   }
 
   @ApiOperation(value = "2107")
-  @GetMapping(value = "/2107/{someId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/2107/{someId}", produces = APPLICATION_JSON_VALUE)
   public String getSomeById(
       @ApiParam(value = "This is the description", defaultValue = "1f1f1f", required = true, name = "someId", type =
           "java.lang.String")
@@ -305,12 +304,12 @@ public class BugsController {
     return "";
   }
 
-  @RequestMapping(value = "/1894", method = RequestMethod.POST)
+  @RequestMapping(value = "/1894", method = POST)
   public void cacheEvict1() {
 
   }
 
-  @RequestMapping(value = "/1894", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  @RequestMapping(value = "/1894", method = POST, consumes = APPLICATION_FORM_URLENCODED_VALUE)
   public void cacheEvict2() {
 
   }
@@ -569,15 +568,19 @@ public class BugsController {
   public static class Bug2081 {
     Bug2081Filter a;
     Bug2081Filter b;
+
     public Bug2081Filter getA() {
       return a;
     }
+
     public void setA(Bug2081Filter a) {
       this.a = a;
     }
+
     public Bug2081Filter getB() {
       return b;
     }
+
     public void setB(Bug2081Filter b) {
       this.b = b;
     }
