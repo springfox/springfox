@@ -39,7 +39,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
@@ -323,6 +325,15 @@ public class BugsController {
       @PathVariable String env,
       @PathVariable("list-id") String listId,
       @RequestBody List<String> emails) {
+    return ResponseEntity.ok(null);
+  }
+
+  @PostMapping(path = "/1965", consumes = "multipart/form-data")
+  public ResponseEntity<Example> bug1965(
+      @Valid @RequestPart(name = "sfParamMap") @RequestParam Map<String, String> paramMap,
+      @Valid @RequestPart(name = "sfId") @RequestParam Integer sfId,
+      @Valid @RequestPart(name = "sfData") Example sfData,
+      @RequestParam(name = "file", required = false) MultipartFile supportFile) {
     return ResponseEntity.ok(null);
   }
 
