@@ -46,6 +46,7 @@ import static springfox.documentation.schema.Collections.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterTypeReader implements ParameterBuilderPlugin {
   private static final Logger LOGGER = LoggerFactory.getLogger(ParameterTypeReader.class);
+
   @Override
   public void apply(ParameterContext context) {
     context.parameterBuilder().parameterType(findParameterType(context));
@@ -69,12 +70,12 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
       return "path";
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestBody.class)) {
       return "body";
-    }  else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
+    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
+      return "formData";
+    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
       return queryOrForm(parameterContext.getOperationContext());
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestHeader.class)) {
       return "header";
-    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
-      return "formData";
     } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
       LOGGER.warn("@ModelAttribute annotated parameters should have already been expanded via "
           + "the ExpandedParameterBuilderPlugin");

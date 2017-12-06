@@ -933,7 +933,7 @@
         }
       }
     },
-    "/bugs/1965{?sfId}": {
+    "/bugs/1965": {
       "post": {
         "tags": [
           "Bugs"
@@ -945,12 +945,26 @@
         ],
         "parameters": [
           {
+            "in": "formData",
+            "name": "paramMap",
+            "description": "paramMap",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "in": "formData",
             "name": "sfId",
-            "in": "query",
             "description": "sfId",
             "required": true,
-            "type": "integer",
-            "format": "int32"
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           },
           {
             "in": "formData",

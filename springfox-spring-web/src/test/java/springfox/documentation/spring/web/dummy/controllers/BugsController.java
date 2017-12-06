@@ -330,7 +330,8 @@ public class BugsController {
 
   @PostMapping(path = "/1965", consumes = "multipart/form-data")
   public ResponseEntity<Example> bug1965(
-      @Valid @RequestPart(name = "sfData") @RequestParam Integer sfId,
+      @Valid @RequestPart(name = "sfParamMap") @RequestParam Map<String, String> paramMap,
+      @Valid @RequestPart(name = "sfId") @RequestParam Integer sfId,
       @Valid @RequestPart(name = "sfData") Example sfData,
       @RequestParam(name = "file", required = false) MultipartFile supportFile) {
     return ResponseEntity.ok(null);
