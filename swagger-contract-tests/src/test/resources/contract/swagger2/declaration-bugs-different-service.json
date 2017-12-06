@@ -922,6 +922,52 @@
         }
       }
     },
+    "/bugs/1965{?sfId}": {
+      "post": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug1965",
+        "operationId": "bug1965UsingPOST_2",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "sfId",
+            "in": "query",
+            "description": "sfId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "formData",
+            "name": "sfData",
+            "description": "sfData",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Example"
+            }
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Example"
+            }
+          }
+        }
+      }
+    },
     "/bugs/2081{?a.importantField,b.importantField}": {
       "get": {
         "tags": [

@@ -40,6 +40,8 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
+import static springfox.documentation.schema.Collections.*;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterTypeReader implements ParameterBuilderPlugin {
@@ -60,7 +62,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     parameterType = parameterContext.alternateFor(parameterType);
 
     //Multi-part file trumps any other annotations
-    if (MultipartFile.class.isAssignableFrom(parameterType.getErasedType())) {
+    if (isFileType(parameterType) || isListOfFiles(parameterType)) {
       return "form";
     }
     if (resolvedMethodParameter.hasParameterAnnotation(PathVariable.class)) {
@@ -72,7 +74,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestHeader.class)) {
       return "header";
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
-      return "form";
+      return "formData";
     } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
       LOGGER.warn("@ModelAttribute annotated parameters should have already been expanded via "
           + "the ExpandedParameterBuilderPlugin");
@@ -81,6 +83,14 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
       return queryOrForm(parameterContext.getOperationContext());
     }
     return "body";
+  }
+
+  private static boolean isListOfFiles(ResolvedType parameterType) {
+    return isContainerType(parameterType) && isFileType(collectionElementType(parameterType));
+  }
+
+  private static boolean isFileType(ResolvedType parameterType) {
+    return MultipartFile.class.isAssignableFrom(parameterType.getErasedType());
   }
 
   private static String queryOrForm(OperationContext context) {

@@ -25,6 +25,7 @@ import io.swagger.models.ModelImpl;
 import io.swagger.models.RefModel;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelReference;
@@ -46,6 +47,7 @@ public class ParameterMapper {
         .description(source.getDescription())
         .name(source.getName())
         .schema(fromModelRef(source.getModelRef()));
+    parameter.setIn(source.getParamType());
     parameter.setAccess(source.getParamAccess());
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
@@ -61,6 +63,10 @@ public class ParameterMapper {
         baseModel.setType("string");
         baseModel.setFormat("byte");
         return maybeAddAllowableValuesToParameter(baseModel, modelRef.getAllowableValues());
+      } else if (modelRef.getItemType().equals("file")) {
+        ArrayModel files = new ArrayModel();
+        files.items(new FileProperty());
+        return files;
       }
       ModelReference itemModel = modelRef.itemModel().get();
       return new ArrayModel()
