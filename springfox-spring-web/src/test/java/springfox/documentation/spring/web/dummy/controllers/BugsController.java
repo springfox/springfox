@@ -52,6 +52,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.beans.ConstructorProperties;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -335,6 +336,45 @@ public class BugsController {
       @Valid @RequestPart(name = "sfData") Example sfData,
       @RequestParam(name = "file", required = false) MultipartFile supportFile) {
     return ResponseEntity.ok(null);
+  }
+
+  @GetMapping("/1926/filtered")
+  public Lang filtered(@RequestBody LangNotFilteredWrapper wrapper) {
+    return null;
+  }
+
+  @GetMapping("/1926/not-filtered")
+  public Lang notFiltered(@RequestBody LangFilteredWrapper wrapper) {
+    return null;
+  }
+
+  public enum Lang {
+    zh, en
+  }
+
+  public class LangNotFilteredWrapper {
+    private Lang lang;
+
+    public LangNotFilteredWrapper(Lang lang) {
+      this.lang = lang;
+    }
+
+    public Lang getLang() {
+      return lang;
+    }
+  }
+
+  public class LangFilteredWrapper {
+    private Lang lang;
+
+    @ConstructorProperties({ "lang" })
+    public LangFilteredWrapper(Lang lang) {
+      this.lang = lang;
+    }
+
+    public Lang getLang() {
+      return lang;
+    }
   }
 
   public class Id {

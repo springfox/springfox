@@ -187,7 +187,7 @@ class Swagger2TestConfig {
             resolver.resolve(List.class, Link.class),
             resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .directModelSubstitute(ByteBuffer.class, String.class)
-        .ignoredParameterTypes(BugsController.Bug1627)
+        .ignoredParameterTypes(BugsController.Bug1627, BugsController.Lang)
         .select()
         .paths(regex("/bugs/.*"))
         .build()

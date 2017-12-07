@@ -890,6 +890,70 @@
         }
       }
     },
+    "/bugs/1926/filtered": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "filtered",
+        "operationId": "filteredUsingGET_1",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "wrapper",
+            "description": "wrapper",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LangNotFilteredWrapper"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "zh",
+                "en"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1926/not-filtered": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "notFiltered",
+        "operationId": "notFilteredUsingGET_1",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "wrapper",
+            "description": "wrapper",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LangFilteredWrapper"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "zh",
+                "en"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/bugs/1939{?username,password,credential-source-id}": {
       "get": {
         "tags": [
@@ -1311,6 +1375,30 @@
       "properties": {
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "LangFilteredWrapper": {
+      "type": "object",
+      "properties": {
+        "lang": {
+          "type": "string",
+          "enum": [
+            "zh",
+            "en"
+          ]
+        }
+      }
+    },
+    "LangNotFilteredWrapper": {
+      "type": "object",
+      "properties": {
+        "lang": {
+          "type": "string",
+          "enum": [
+            "zh",
+            "en"
+          ]
         }
       }
     },
