@@ -879,6 +879,70 @@
         }
       }
     },
+    "/bugs/1926/filtered": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "filtered",
+        "operationId": "filteredUsingGET_2",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "wrapper",
+            "description": "wrapper",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LangNotFilteredWrapper"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "zh",
+                "en"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1926/not-filtered": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "notFiltered",
+        "operationId": "notFilteredUsingGET_2",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "wrapper",
+            "description": "wrapper",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LangFilteredWrapper"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "zh",
+                "en"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/bugs/1939{?username,password,credential-source-id}": {
       "get": {
         "tags": [
@@ -1294,6 +1358,12 @@
           "type": "string"
         }
       }
+    },
+    "LangFilteredWrapper": {
+      "type": "object"
+    },
+    "LangNotFilteredWrapper": {
+      "type": "object"
     },
     "LinkAlternate": {
       "type": "object",
