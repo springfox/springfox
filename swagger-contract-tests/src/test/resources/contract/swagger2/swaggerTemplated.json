@@ -120,7 +120,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Category"
     },
     "Pet": {
       "type": "object",
@@ -160,7 +161,8 @@
             "$ref": "#/definitions/Tag"
           }
         }
-      }
+      },
+      "title": "Pet"
     },
     "Tag": {
       "type": "object",
@@ -172,7 +174,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Tag"
     }
   }
 }

@@ -110,7 +110,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Pet"
     }
   }
 }

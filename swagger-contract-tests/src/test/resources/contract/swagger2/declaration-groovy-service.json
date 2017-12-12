@@ -91,7 +91,8 @@
         "stringProp": {
           "type": "string"
         }
-      }
+      },
+      "title": "GroovyModel"
     }
   }
 }

@@ -989,7 +989,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "EnumObjectType"
     },
     "Example": {
       "type": "object",
@@ -1043,16 +1044,19 @@
           "description": "A read only string",
           "readOnly": true
         }
-      }
+      },
+      "title": "Example"
     },
     "Map«string,Example»": {
       "type": "object",
+      "title": "Map«string,Example»",
       "additionalProperties": {
         "$ref": "#/definitions/Example"
       }
     },
     "Map«string,string»": {
       "type": "object",
+      "title": "Map«string,string»",
       "additionalProperties": {
         "type": "string"
       }
@@ -1070,7 +1074,8 @@
             }
           }
         }
-      }
+      },
+      "title": "ModelWithArrayOfArrays"
     },
     "ModelWithMapProperty": {
       "type": "object",
@@ -1083,6 +1088,7 @@
           }
         }
       },
+      "title": "ModelWithMapProperty",
       "description": "Describes model with map property"
     },
     "ModelWithObjectNode": {
@@ -1091,7 +1097,8 @@
         "anyObject": {
           "$ref": "#/definitions/ObjectNode"
         }
-      }
+      },
+      "title": "ModelWithObjectNode"
     },
     "NestedType": {
       "type": "object",
@@ -1099,10 +1106,12 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "NestedType"
     },
     "ObjectNode": {
-      "type": "object"
+      "type": "object",
+      "title": "ObjectNode"
     },
     "Pet": {
       "type": "object",
@@ -1117,7 +1126,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Pet"
     }
   }
 }

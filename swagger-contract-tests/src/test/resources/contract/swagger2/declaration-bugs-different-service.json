@@ -1245,7 +1245,8 @@
         "url": {
           "type": "string"
         }
-      }
+      },
+      "title": "Bug1376"
     },
     "Bug1676": {
       "type": "object",
@@ -1262,7 +1263,8 @@
           "example": 500.0,
           "description": "Vertical position"
         }
-      }
+      },
+      "title": "Bug1676"
     },
     "Bug1697": {
       "type": "object",
@@ -1270,7 +1272,8 @@
         "bar": {
           "type": "string"
         }
-      }
+      },
+      "title": "Bug1697"
     },
     "Bug1740": {
       "type": "object",
@@ -1281,7 +1284,8 @@
         "value": {
           "type": "string"
         }
-      }
+      },
+      "title": "Bug1740"
     },
     "Bug1777": {
       "type": "object",
@@ -1295,6 +1299,7 @@
           "description": "经度"
         }
       },
+      "title": "Bug1777",
       "description": "Test 1777"
     },
     "Example": {
@@ -1349,7 +1354,8 @@
           "description": "A read only string",
           "readOnly": true
         }
-      }
+      },
+      "title": "Example"
     },
     "File": {
       "type": "object",
@@ -1357,13 +1363,16 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "File"
     },
     "LangFilteredWrapper": {
-      "type": "object"
+      "type": "object",
+      "title": "LangFilteredWrapper"
     },
     "LangNotFilteredWrapper": {
-      "type": "object"
+      "type": "object",
+      "title": "LangNotFilteredWrapper"
     },
     "LinkAlternate": {
       "type": "object",
@@ -1371,7 +1380,8 @@
         "href": {
           "type": "string"
         }
-      }
+      },
+      "title": "LinkAlternate"
     },
     "Model1819": {
       "type": "object",
@@ -1386,7 +1396,8 @@
             ]
           }
         }
-      }
+      },
+      "title": "Model1819"
     },
     "Model1907": {
       "type": "object",
@@ -1412,6 +1423,7 @@
           }
         }
       },
+      "title": "Model1907",
       "xml": {
         "name": "model1907",
         "namespace": "urn:bugs",
@@ -1425,7 +1437,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "NestedType"
     },
     "Resource«string»": {
       "type": "object",
@@ -1442,7 +1455,8 @@
             "$ref": "#/definitions/LinkAlternate"
           }
         }
-      }
+      },
+      "title": "Resource«string»"
     }
   }
 }

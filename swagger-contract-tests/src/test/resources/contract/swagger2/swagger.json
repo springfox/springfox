@@ -821,7 +821,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Category"
     },
     "Order": {
       "type": "object",
@@ -858,7 +859,8 @@
             "delivered"
           ]
         }
-      }
+      },
+      "title": "Order"
     },
     "Pet": {
       "type": "object",
@@ -898,7 +900,8 @@
             "$ref": "#/definitions/Tag"
           }
         }
-      }
+      },
+      "title": "Pet"
     },
     "Tag": {
       "type": "object",
@@ -910,7 +913,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Tag"
     },
     "User": {
       "type": "object",
@@ -945,7 +949,8 @@
         "username": {
           "type": "string"
         }
-      }
+      },
+      "title": "User"
     }
   }
 }

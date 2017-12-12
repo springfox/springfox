@@ -306,7 +306,8 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "title": "Biz"
     }
   }
 }

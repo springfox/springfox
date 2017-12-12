@@ -134,7 +134,8 @@
         "body": {
           "$ref": "#/definitions/Resource«Pet»"
         }
-      }
+      },
+      "title": "HttpEntity«Resource«Pet»»"
     },
     "Link": {
       "type": "object",
@@ -158,7 +159,8 @@
         "templated": {
           "type": "boolean"
         }
-      }
+      },
+      "title": "Link"
     },
     "Pet": {
       "type": "object",
@@ -173,7 +175,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Pet"
     },
     "Resource«Pet»": {
       "type": "object",
@@ -194,7 +197,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Resource«Pet»"
     }
   }
 }

@@ -1550,7 +1550,8 @@
         "zip": {
           "type": "string"
         }
-      }
+      },
+      "title": "Address"
     },
     "Category": {
       "type": "object",
@@ -1568,7 +1569,8 @@
             "$ref": "#/definitions/Person"
           }
         }
-      }
+      },
+      "title": "Category"
     },
     "Link": {
       "type": "object",
@@ -1592,7 +1594,8 @@
         "templated": {
           "type": "boolean"
         }
-      }
+      },
+      "title": "Link"
     },
     "Person": {
       "type": "object",
@@ -1619,7 +1622,8 @@
             "$ref": "#/definitions/Tag"
           }
         }
-      }
+      },
+      "title": "Person"
     },
     "ResourceOfAddress": {
       "type": "object",
@@ -1658,7 +1662,8 @@
         "zip": {
           "type": "string"
         }
-      }
+      },
+      "title": "ResourceOfAddress"
     },
     "ResourceOfPerson": {
       "type": "object",
@@ -1697,7 +1702,8 @@
             "$ref": "#/definitions/Tag"
           }
         }
-      }
+      },
+      "title": "ResourceOfPerson"
     },
     "ResourceOfTag": {
       "type": "object",
@@ -1727,7 +1733,8 @@
             "$ref": "#/definitions/Person"
           }
         }
-      }
+      },
+      "title": "ResourceOfTag"
     },
     "ResourcesOfAddress": {
       "type": "object",
@@ -1750,7 +1757,8 @@
             "$ref": "#/definitions/Link"
           }
         }
-      }
+      },
+      "title": "ResourcesOfAddress"
     },
     "ResourcesOfListOfPerson": {
       "type": "object",
@@ -1776,7 +1784,8 @@
             "$ref": "#/definitions/Link"
           }
         }
-      }
+      },
+      "title": "ResourcesOfListOfPerson"
     },
     "ResourcesOfPerson": {
       "type": "object",
@@ -1799,7 +1808,8 @@
             "$ref": "#/definitions/Link"
           }
         }
-      }
+      },
+      "title": "ResourcesOfPerson"
     },
     "ResourcesOfTag": {
       "type": "object",
@@ -1822,7 +1832,8 @@
             "$ref": "#/definitions/Link"
           }
         }
-      }
+      },
+      "title": "ResourcesOfTag"
     },
     "Tag": {
       "type": "object",
@@ -1840,7 +1851,8 @@
             "$ref": "#/definitions/Person"
           }
         }
-      }
+      },
+      "title": "Tag"
     }
   }
 }

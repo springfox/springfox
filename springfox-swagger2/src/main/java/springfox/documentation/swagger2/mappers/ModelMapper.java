@@ -89,6 +89,7 @@ public abstract class ModelMapper {
     model.setRequired(requiredFields.toList());
     model.setSimple(false);
     model.setType(ModelImpl.OBJECT);
+    model.setTitle(source.getName());
     if (isMapType(source.getType())) {
       Optional<Class> clazz = typeOfValue(source);
       if (clazz.isPresent()) {
