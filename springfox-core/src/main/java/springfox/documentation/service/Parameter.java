@@ -38,6 +38,7 @@ public class Parameter {
   private final String paramAccess;
   private final Boolean hidden;
   private final String pattern;
+  private final String collectionFormat;
   private final List<VendorExtension> vendorExtensions;
 
   public Parameter(
@@ -53,6 +54,7 @@ public class Parameter {
       String paramAccess,
       boolean hidden,
       String pattern,
+      String collectionFormat,
       List<VendorExtension> vendorExtensions) {
 
     this.description = description;
@@ -67,6 +69,7 @@ public class Parameter {
     this.name = name;
     this.hidden = hidden;
     this.pattern = pattern;
+    this.collectionFormat = collectionFormat;
     this.vendorExtensions = vendorExtensions;
   }
 
@@ -120,5 +123,9 @@ public class Parameter {
 
   public List<VendorExtension> getVendorExtentions() {
     return vendorExtensions;
+  }
+
+  public String getCollectionFormat() {
+    return collectionFormat;
   }
 }

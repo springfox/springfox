@@ -63,13 +63,14 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
             apiParam.transform(toAllowableValue()).or("")));
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
-      context.parameterBuilder().name(emptyToNull(annotation.name()));
-      context.parameterBuilder().description(emptyToNull(descriptions.resolve(annotation.value())));
-      context.parameterBuilder().parameterAccess(emptyToNull(annotation.access()));
-      context.parameterBuilder().defaultValue(emptyToNull(annotation.defaultValue()));
-      context.parameterBuilder().allowMultiple(annotation.allowMultiple());
-      context.parameterBuilder().required(annotation.required());
-      context.parameterBuilder().hidden(annotation.hidden());
+      context.parameterBuilder().name(emptyToNull(annotation.name()))
+          .description(emptyToNull(descriptions.resolve(annotation.value())))
+          .parameterAccess(emptyToNull(annotation.access()))
+          .defaultValue(emptyToNull(annotation.defaultValue()))
+          .allowMultiple(annotation.allowMultiple())
+          .required(annotation.required())
+          .hidden(annotation.hidden())
+          .collectionFormat(annotation.collectionFormat());
     }
   }
 
