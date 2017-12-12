@@ -348,6 +348,19 @@ public class BugsController {
     return null;
   }
 
+  @ApiOperation(value = "测试RequesetParam", notes = "测试RequesetParam")
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "date", value = "日期：2017-09-01", required = true, dataType = "String", paramType =
+          "path"),
+      @ApiImplicitParam(name = "name", value = "名称", required = false, dataType = "string")
+  })
+  @GetMapping("/2029")
+  public String bug2020(@RequestParam(required = true, value = "date") String date,
+                        @RequestParam(required = false, value = "name") String name) {
+    return date + name;
+  }
+
+
   public enum Lang {
     zh, en
   }

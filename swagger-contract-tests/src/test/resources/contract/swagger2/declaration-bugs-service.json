@@ -1057,6 +1057,40 @@
         }
       }
     },
+    "/bugs/2029{?name}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "测试RequesetParam",
+        "description": "测试RequesetParam",
+        "operationId": "bug2020UsingGET_1",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "日期：2017-09-01",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "名称",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/2081{?a.importantField,b.importantField}": {
       "get": {
         "tags": [

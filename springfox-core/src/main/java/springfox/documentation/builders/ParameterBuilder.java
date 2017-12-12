@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
@@ -142,7 +143,7 @@ public class ParameterBuilder {
    * @return this
    */
   public ParameterBuilder parameterType(String paramType) {
-    this.paramType = defaultIfAbsent(paramType, this.paramType);
+    this.paramType = defaultIfAbsent(Strings.emptyToNull(paramType), this.paramType);
     return this;
   }
 
