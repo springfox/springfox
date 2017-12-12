@@ -112,6 +112,16 @@ public Original getOriginal() { ... }
 public Original getAnotherOriginal() { ... }
 ```
 
+NOTE: In the case of ```ApiImplicitParam#dataType```, since the type itself is usually a scalar type (string, int)
+use one of the base types specified in the Types class =>
+```springfox-schema/src/main/java/springfox/documentation/schema/Types.java```
+
+[source,groovy,linenums]
+----
+include::../../springfox-schema/src/main/java/springfox/documentation/schema/Types.java[lines=42..55]
+----
+
+
 === Docket XML Configuration
 
 To use the plugin you must create a spring java configuration class which uses spring's `@Configuration`.
