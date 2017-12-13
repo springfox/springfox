@@ -140,8 +140,9 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     Documentation scanned = docScanner.scan(context())
 
     then:
-    scanned.resourceListing.apis.get(0).path == "/groupName/test"
-    scanned.resourceListing.apis.get(0).description == """Operation with path /a and position 2
+    def firstResouceListingApi = scanned.resourceListing.apis.get(0)
+    firstResouceListingApi.path == "/groupName/test"
+    firstResouceListingApi.description.normalize() == """Operation with path /a and position 2
                                                              |Operation with path /b and position 1
                                                              |Operation with path /c and position 2""".stripMargin()
 
