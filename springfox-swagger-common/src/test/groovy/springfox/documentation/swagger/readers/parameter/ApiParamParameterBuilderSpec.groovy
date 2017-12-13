@@ -128,15 +128,17 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     allowableValues.getExclusiveMin() == exclusiveMin
 
     where:
-    apiParamAnnotation                                                | min         | max               | exclusiveMin | exclusiveMax
-    apiParamWithAllowableValues("range[1,5]")                         | 1           | 5                 | false        | false
-    apiParamWithAllowableValues("range[1,1]")                         | 1           | 1                 | false        | false
-    apiParamWithAllowableValues("range(1,2)")                         | 1           | 2                 | true         | true
-    apiParamWithAllowableValues("range[1,2)")                         | 1           | 2                 | false        | true
-    apiParamWithAllowableValues("range(1,2]")                         | 1           | 2                 | true         | false
-    apiParamWithAllowableValues("range(-infinity,infinity)")          | "-infinity" | "infinity"        | true         | true
-    apiParamWithAllowableValues("range[-infinity,infinity]")          | "-infinity" | "infinity"        | false        | false
-    apiParamWithAllowableValues("range[2," + Integer.MAX_VALUE + "]") | 2           | Integer.MAX_VALUE | false        | false
+    apiParamAnnotation                                                | min  | max               | exclusiveMin | exclusiveMax
+    apiParamWithAllowableValues("range[1,5]")                         | 1    | 5                 | false        | false
+    apiParamWithAllowableValues("range[1,1]")                         | 1    | 1                 | false        | false
+    apiParamWithAllowableValues("range(1,2)")                         | 1    | 2                 | true         | true
+    apiParamWithAllowableValues("range[1,2)")                         | 1    | 2                 | false        | true
+    apiParamWithAllowableValues("range(1,2]")                         | 1    | 2                 | true         | false
+    apiParamWithAllowableValues("range(-infinity,infinity)")          | null | null              | true         | true
+    apiParamWithAllowableValues("range[-infinity,infinity]")          | null | null              | false        | false
+    apiParamWithAllowableValues("range(infinity,-infinity)")          | null | null              | true         | true
+    apiParamWithAllowableValues("range[infinity,-infinity]")          | null | null              | false        | false
+    apiParamWithAllowableValues("range[2," + Integer.MAX_VALUE + "]") | 2    | Integer.MAX_VALUE | false        | false
   }
 
   def "supports all swagger types"() {

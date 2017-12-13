@@ -945,7 +945,9 @@
             "required": true,
             "type": "string",
             "maximum": 5,
-            "minimum": 1
+            "exclusiveMaximum": false,
+            "minimum": 1,
+            "exclusiveMinimum": false
           }
         ],
         "responses": {

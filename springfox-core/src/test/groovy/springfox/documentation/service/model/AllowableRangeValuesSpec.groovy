@@ -28,6 +28,19 @@ class AllowableRangeValuesSpec extends Specification {
       def sut = new AllowableRangeValues("0", "2")
     expect:
       sut.min == "0"
+      sut.exclusiveMin == null
       sut.max == "2"
+      sut.exclusiveMax == null
   }
+
+  def "Bean properties with exclusive test" () {
+    given:
+    def sut = new AllowableRangeValues("0", true, "2", false)
+    expect:
+    sut.min == "0"
+    sut.exclusiveMin
+    sut.max == "2"
+    !sut.exclusiveMax
+  }
+
 }

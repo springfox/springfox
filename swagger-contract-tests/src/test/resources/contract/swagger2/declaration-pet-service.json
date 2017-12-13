@@ -97,6 +97,97 @@
         }
       }
     },
+    "/pets/findByAge{?age}": {
+      "get": {
+        "tags": [
+          "pet-service"
+        ],
+        "summary": "Find Pet by age",
+        "description": "Exclusive range with infinity",
+        "operationId": "findPetsByAgeUsingGET_1",
+        "parameters": [
+          {
+            "name": "age",
+            "in": "query",
+            "description": "Age values that need to be considered for filter",
+            "required": true,
+            "type": "string",
+            "exclusiveMaximum": true,
+            "minimum": 0,
+            "exclusiveMinimum": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      }
+    },
+    "/pets/findByLegs{?legs}": {
+      "get": {
+        "tags": [
+          "pet-service"
+        ],
+        "summary": "Find Pet by legs",
+        "description": "Exclusive range should work",
+        "operationId": "findPetsByLegsUsingGET_1",
+        "parameters": [
+          {
+            "name": "legs",
+            "in": "query",
+            "description": "Legs values that need to be considered for filter",
+            "required": true,
+            "type": "string",
+            "maximum": 10,
+            "exclusiveMaximum": true,
+            "minimum": 0,
+            "exclusiveMinimum": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      }
+    },
+    "/pets/findByStamina{?stamina}": {
+      "get": {
+        "tags": [
+          "pet-service"
+        ],
+        "summary": "Find Pet by stamina",
+        "description": "Exclusive range with -infinity",
+        "operationId": "findPetsByStaminaUsingGET_1",
+        "parameters": [
+          {
+            "name": "stamina",
+            "in": "query",
+            "description": "Stamina values",
+            "required": true,
+            "type": "string",
+            "maximum": 12,
+            "exclusiveMaximum": true,
+            "exclusiveMinimum": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        }
+      }
+    },
     "/pets/findByStatus{?status}": {
       "get": {
         "tags": [
@@ -491,7 +582,9 @@
             "required": true,
             "type": "string",
             "maximum": 5,
-            "minimum": 1
+            "exclusiveMaximum": false,
+            "minimum": 1,
+            "exclusiveMinimum": false
           }
         ],
         "responses": {

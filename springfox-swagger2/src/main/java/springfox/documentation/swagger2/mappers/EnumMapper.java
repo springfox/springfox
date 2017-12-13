@@ -58,7 +58,9 @@ public class EnumMapper {
     if (allowableValues instanceof AllowableRangeValues) {
       AllowableRangeValues range = (AllowableRangeValues) allowableValues;
       toReturn.setMinimum(safeBigDecimal(range.getMin()));
+      toReturn.setExclusiveMinimum(range.getExclusiveMin());
       toReturn.setMaximum(safeBigDecimal(range.getMax()));
+      toReturn.setExclusiveMaximum(range.getExclusiveMax());
     }
     return toReturn;
   }
@@ -103,7 +105,9 @@ public class EnumMapper {
         AbstractNumericProperty numeric = (AbstractNumericProperty) property;
         AllowableRangeValues range = (AllowableRangeValues) allowableValues;
         numeric.setMaximum(safeBigDecimal(range.getMax()));
+        numeric.exclusiveMaximum(range.getExclusiveMax());
         numeric.setMinimum(safeBigDecimal(range.getMin()));
+        numeric.exclusiveMinimum(range.getExclusiveMin());
       }
     }
     return property;

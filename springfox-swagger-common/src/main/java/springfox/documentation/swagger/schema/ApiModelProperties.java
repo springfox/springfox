@@ -46,7 +46,8 @@ import static org.springframework.util.StringUtils.*;
 
 public final class ApiModelProperties {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiModelProperties.class);
-  private static final Pattern RANGE_PATTERN = Pattern.compile("range([\\[(])(.*),(.*)([])])");
+  private static final Pattern RANGE_PATTERN = Pattern.compile("range([\\[(])(.*),(.*)([])])$");
+  
   private ApiModelProperties() {
     throw new UnsupportedOperationException();
   }
@@ -69,9 +70,9 @@ public final class ApiModelProperties {
         LOGGER.warn("Unable to parse range specified {} correctly", trimmed);
       } else {
         allowableValues = new AllowableRangeValues(
-            matcher.group(2),
+            matcher.group(2).contains("infinity") ? null : matcher.group(2),
             matcher.group(1).equals("("),
-            matcher.group(3),
+            matcher.group(3).contains("infinity") ? null : matcher.group(3),
             matcher.group(4).equals(")"));
       }
     } else if (trimmed.contains(",")) {

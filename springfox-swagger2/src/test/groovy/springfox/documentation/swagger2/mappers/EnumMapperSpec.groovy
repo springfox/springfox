@@ -40,7 +40,9 @@ class EnumMapperSpec extends Specification {
         assert property.enum.size() == expectedSize
       } else if (allowableValues instanceof AllowableRangeValues) {
         assert property.minimum == 1D
+        assert property.exclusiveMinimum == null
         assert property.maximum == 2D
+        assert property.exclusiveMaximum == null
       } else {
         assert property.enum == null
       }
@@ -64,6 +66,23 @@ class EnumMapperSpec extends Specification {
       new FloatProperty()   | 0            | null
   }
 
+  @Unroll("Exclusive #property.class.simpleName")
+  def "adds enum values with exclusive for numeric properties" () {
+    when:
+    maybeAddAllowableValues(property, allowableValues)
+    then:
+    property.minimum == expMin
+    property.exclusiveMinimum == expExlMin
+    property.maximum == expMax
+    property.exclusiveMaximum == expExlMax
+    where:
+    property              | expMin | expMax | expExlMin | expExlMax | allowableValues
+    new IntegerProperty() | 1      | 7      | true      | true      | new AllowableRangeValues("1", true, "7", true)
+    new LongProperty()    | 2      | 8      | false     | false     | new AllowableRangeValues("2", false,  "8", false)
+    new DoubleProperty()  | 3      | 9      | false     | true      | new AllowableRangeValues("3", false, "9", true)
+    new FloatProperty()   | 4      | 10     | true      | false     | new AllowableRangeValues("4", true, "10", false)
+  }
+
   @Unroll("#allowableValues?.class.simpleName")
   def "adds enum values for parameters" () {
     when:
@@ -73,7 +92,9 @@ class EnumMapperSpec extends Specification {
       assert parameter.enum.size() == expectedSize
     } else if (allowableValues instanceof AllowableRangeValues) {
       assert parameter.minimum == safeBigDecimal(allowableValues.min)
+      assert parameter.exclusiveMinimum == allowableValues.exclusiveMin
       assert parameter.maximum == safeBigDecimal(allowableValues.max)
+      assert parameter.exclusiveMaximum == allowableValues.exclusiveMax
     } else {
       assert parameter.enum == null
     }
@@ -83,6 +104,7 @@ class EnumMapperSpec extends Specification {
     new QueryParameter()  | 3            | new AllowableListValues(["1", "2", "3"], "List")
     new QueryParameter()  | 0            | new AllowableRangeValues("1", "2")
     new QueryParameter()  | 0            | new AllowableRangeValues("A", "B")
+    new QueryParameter()  | 0            | new AllowableRangeValues("1", true, "B", false)
     new QueryParameter()  | 0            | null
   }
 

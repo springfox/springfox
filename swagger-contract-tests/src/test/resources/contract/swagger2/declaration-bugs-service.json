@@ -525,6 +525,7 @@
             "required": true,
             "type": "integer",
             "minimum": 1.0,
+            "exclusiveMinimum": false,
             "format": "int32"
           },
           {
@@ -533,6 +534,7 @@
             "required": true,
             "type": "integer",
             "maximum": 50.0,
+            "exclusiveMaximum": false,
             "format": "int32"
           },
           {
