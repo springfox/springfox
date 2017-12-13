@@ -42,55 +42,54 @@ import static com.google.common.collect.Ordering.*;
 @Component
 public class ApiDescriptionReader {
 
-    private static Logger log = LoggerFactory.getLogger(ApiDescriptionReader.class);
-    private final OperationReader operationReader;
-    private final DocumentationPluginsManager pluginsManager;
-    private final ApiDescriptionLookup lookup;
+  private static Logger log = LoggerFactory.getLogger(ApiDescriptionReader.class);
+  private final OperationReader operationReader;
+  private final DocumentationPluginsManager pluginsManager;
+  private final ApiDescriptionLookup lookup;
 
-    @Autowired
-    public ApiDescriptionReader(
-            @Qualifier("cachedOperations") OperationReader operationReader,
-            DocumentationPluginsManager pluginsManager,
-            ApiDescriptionLookup lookup) {
-        this.operationReader = operationReader;
-        this.pluginsManager = pluginsManager;
-        this.lookup = lookup;
-    }
+  @Autowired
+  public ApiDescriptionReader(
+      @Qualifier("cachedOperations") OperationReader operationReader,
+      DocumentationPluginsManager pluginsManager,
+      ApiDescriptionLookup lookup) {
+    this.operationReader = operationReader;
+    this.pluginsManager = pluginsManager;
+    this.lookup = lookup;
+  }
 
-    public List<ApiDescription> read(RequestMappingContext outerContext) {
-        PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
-        ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
+  public List<ApiDescription> read(RequestMappingContext outerContext) {
+    PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
+    ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
 
-        List<ApiDescription> apiDescriptionList = newArrayList();
-        for (String path : matchingPaths(selector, patternsCondition)) {
-            String methodName = outerContext.getName();
-            try {
-                RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
+    List<ApiDescription> apiDescriptionList = newArrayList();
+    for (String path : matchingPaths(selector, patternsCondition)) {
+      String methodName = outerContext.getName();
+      try {
+        RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
 
-                List<Operation> operations = operationReader.read(operationContext);
-                if (operations.size() > 0) {
-                    operationContext.apiDescriptionBuilder()
-                            .operations(operations)
-                            .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
-                            .path(path)
-                            .description(methodName)
-                            .hidden(false);
-                    ApiDescription apiDescription = operationContext.apiDescriptionBuilder().build();
-                    lookup.add(outerContext.key(), apiDescription);
-                    apiDescriptionList.add(apiDescription);
-                }
-            } catch (Error e) {
-                String contentMsg = "Process path[" + path + "],method[" + methodName + "] error";
-                log.error(contentMsg, e);
-                throw new AssertionError(contentMsg, e);
-            }
+        List<Operation> operations = operationReader.read(operationContext);
+        if (operations.size() > 0) {
+          operationContext.apiDescriptionBuilder()
+              .operations(operations)
+              .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
+              .path(path)
+              .description(methodName)
+              .hidden(false);
+          ApiDescription apiDescription = operationContext.apiDescriptionBuilder().build();
+          lookup.add(outerContext.key(), apiDescription);
+          apiDescriptionList.add(apiDescription);
         }
-        return apiDescriptionList;
+      } catch (Error e) {
+        String contentMsg = "Skipping process path[" + path + "], method[" + methodName + "] as it has an error.";
+        log.error(contentMsg, e);
+      }
     }
+    return apiDescriptionList;
+  }
 
-    private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
-        return natural().sortedCopy(from(patternsCondition.getPatterns())
-                .filter(selector.getPathSelector()));
-    }
+  private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
+    return natural().sortedCopy(from(patternsCondition.getPatterns())
+        .filter(selector.getPathSelector()));
+  }
 
 }
