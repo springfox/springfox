@@ -21,6 +21,7 @@ package springfox.documentation.swagger1.web
 
 import com.google.common.collect.LinkedListMultimap
 import com.google.common.collect.Multimap
+import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.web.util.WebUtils
 import spock.lang.Unroll
@@ -29,6 +30,8 @@ import springfox.documentation.service.ApiListing
 import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
+import springfox.documentation.spring.web.PropertySourcedMapping
+import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping
 import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -80,6 +83,19 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
       null      | HttpStatus.OK
       "default" | HttpStatus.OK
       "unknown" | HttpStatus.NOT_FOUND
+  }
+
+  def "should properly replace url"() {
+    given:
+      def env = Mock(Environment)
+      env.getProperty("springfox.documentation.swagger.v1.path") >> "shoes"
+      def handler = new PropertySourcedRequestMappingHandlerMapping(env, null)
+      def method = Swagger1Controller.getMethod("getApiListing", String, String)
+      def annotation = method.getAnnotation(PropertySourcedMapping)
+    when:
+      def path = handler.mappingPath(annotation)
+    then:
+      "shoes/{swaggerGroup}/{apiDeclaration}" == path
   }
 
   def "should respond with api listing for a given resource group"() {
