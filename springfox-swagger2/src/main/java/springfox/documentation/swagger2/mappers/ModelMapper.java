@@ -183,6 +183,7 @@ public abstract class ModelMapper {
       property.setName(source.getName());
       property.setRequired(source.isRequired());
       property.setReadOnly(source.isReadOnly());
+      property.setAllowEmptyValue(source.isAllowEmptyValue());
       property.setExample(source.getExample());
       property.getVendorExtensions().putAll(extensions);
       property.setXml(mapXml(source.getXml()));

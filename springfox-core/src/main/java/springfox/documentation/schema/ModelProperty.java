@@ -36,6 +36,7 @@ public class ModelProperty {
   private final Boolean required;
   private final boolean isHidden;
   private final Boolean readOnly;
+  private final Boolean allowEmptyValue;
   private final String description;
   private final AllowableValues allowableValues;
   private ModelReference modelRef;
@@ -53,6 +54,7 @@ public class ModelProperty {
       boolean required,
       boolean isHidden,
       boolean readOnly,
+      Boolean allowEmptyValue,
       String description,
       AllowableValues allowableValues,
       String example,
@@ -68,6 +70,7 @@ public class ModelProperty {
     this.required = required;
     this.isHidden = isHidden;
     this.readOnly = readOnly;
+    this.allowEmptyValue = allowEmptyValue;
     this.description = description;
     this.allowableValues = allowableValues;
     this.example = example;
@@ -140,5 +143,14 @@ public class ModelProperty {
   
   public Xml getXml() {
     return xml;
+  }
+
+  /***
+   * Support for isAllowEmpty value
+   * @return true if supported
+   * @since 2.8.0
+   */
+  public Boolean isAllowEmptyValue() {
+    return allowEmptyValue;
   }
 }

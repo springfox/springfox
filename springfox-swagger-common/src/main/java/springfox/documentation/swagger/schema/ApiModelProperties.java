@@ -100,6 +100,15 @@ public final class ApiModelProperties {
     };
   }
 
+  static Function<ApiModelProperty, Boolean> toAllowEmptyValue() {
+    return new Function<ApiModelProperty, Boolean>() {
+      @Override
+      public Boolean apply(ApiModelProperty annotation) {
+        return annotation.allowEmptyValue();
+      }
+    };
+  }
+
   static Function<ApiModelProperty, String> toDescription(
       final DescriptionResolver descriptions) {
     
