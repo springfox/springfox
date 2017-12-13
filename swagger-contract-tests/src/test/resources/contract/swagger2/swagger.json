@@ -853,6 +853,7 @@
         "status": {
           "type": "string",
           "description": "Order Status",
+          "allowEmptyValue": false,
           "enum": [
             "placed",
             "approved",
@@ -888,6 +889,7 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
+          "allowEmptyValue": false,
           "enum": [
             "available",
             "pending",
@@ -944,7 +946,8 @@
         "userStatus": {
           "type": "integer",
           "format": "int32",
-          "description": "User Status"
+          "description": "User Status",
+          "allowEmptyValue": false
         },
         "username": {
           "type": "string"

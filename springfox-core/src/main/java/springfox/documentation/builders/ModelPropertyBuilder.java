@@ -45,6 +45,7 @@ public class ModelPropertyBuilder {
   private String pattern;
   private String defaultValue;
   private Xml xml;
+  private Boolean allowEmptyValue;
   private List<VendorExtension> vendorExtensions = newArrayList();
 
   public ModelPropertyBuilder name(String name) {
@@ -111,6 +112,16 @@ public class ModelPropertyBuilder {
     this.defaultValue = defaultIfAbsent(defaultValue, this.defaultValue);
     return this;
   }
+  
+  /***
+   * Support for isAllowEmpty value
+   * @return true if supported
+   * @since 2.8.0
+   */
+  public ModelPropertyBuilder allowEmptyValue(Boolean allowEmptyValue) {
+    this.allowEmptyValue = allowEmptyValue;
+    return this;
+  }
 
   public ModelPropertyBuilder xml(Xml xml) {
     this.xml = defaultIfAbsent(xml, this.xml);
@@ -129,6 +140,7 @@ public class ModelPropertyBuilder {
         required == null ? false : required,
         isHidden,
         readOnly == null ? false : readOnly,
+        allowEmptyValue,
         description,
         allowableValues,
         example,

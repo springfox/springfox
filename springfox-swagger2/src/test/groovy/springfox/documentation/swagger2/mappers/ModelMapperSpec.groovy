@@ -441,6 +441,7 @@ class ModelMapperSpec extends SchemaSpecification {
         false,
         false,
         false,
+        false,
         '',
         null,
         '',

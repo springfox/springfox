@@ -1289,13 +1289,15 @@
           "type": "number",
           "format": "float",
           "example": 200.0,
-          "description": "Horizontal position"
+          "description": "Horizontal position",
+          "allowEmptyValue": false
         },
         "yAxis": {
           "type": "number",
           "format": "float",
           "example": 500.0,
-          "description": "Vertical position"
+          "description": "Vertical position",
+          "allowEmptyValue": false
         }
       },
       "title": "Bug1676"
@@ -1330,7 +1332,8 @@
         "longitude": {
           "type": "number",
           "format": "double",
-          "description": "经度"
+          "description": "经度",
+          "allowEmptyValue": false
         }
       },
       "title": "Bug1777",
@@ -1355,7 +1358,8 @@
         "bar": {
           "type": "integer",
           "format": "int32",
-          "description": "description of bar"
+          "description": "description of bar",
+          "allowEmptyValue": false
         },
         "enumType": {
           "type": "string",
@@ -1386,7 +1390,8 @@
         "readOnlyString": {
           "type": "string",
           "description": "A read only string",
-          "readOnly": true
+          "readOnly": true,
+          "allowEmptyValue": false
         }
       },
       "title": "Example"
