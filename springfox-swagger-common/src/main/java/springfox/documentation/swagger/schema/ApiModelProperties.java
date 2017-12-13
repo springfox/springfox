@@ -36,6 +36,7 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -123,7 +124,7 @@ public final class ApiModelProperties {
 
   static Function<ApiModelProperty, String> toDescription(
       final DescriptionResolver descriptions) {
-    
+
     return new Function<ApiModelProperty, String>() {
       @Override
       public String apply(ApiModelProperty annotation) {
@@ -152,7 +153,14 @@ public final class ApiModelProperties {
   }
 
   public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class));
+    Optional<ApiModelProperty> annotation = Optional.absent();
+
+    if (annotated instanceof Method) {
+      // If the annotated element is a method we can use this information to check superclasses as well
+      annotation = Optional.fromNullable(AnnotationUtils.findAnnotation(((Method) annotated), ApiModelProperty.class));
+    }
+
+    return annotation.or(Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class)));
   }
 
   static Function<ApiModelProperty, Boolean> toHidden() {
