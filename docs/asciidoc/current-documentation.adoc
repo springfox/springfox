@@ -96,11 +96,12 @@ allows the properties to be  overridden
 
 === Overriding property datatypes
 
-Using the ```ApiModelProperty#dataType``` we can override the inferred data types. However it is restricted
+Using the `ApiModelProperty#dataType` we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
  definition
 
-```java
+[source,java,linenums]
+----
 
 // if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)
 // Original will be replaced with the new class
@@ -110,11 +111,12 @@ public Original getOriginal() { ... }
 // if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved
 @ApiModelProperty(dataType = "ReplaceWith")
 public Original getAnotherOriginal() { ... }
-```
 
-NOTE: In the case of ```ApiImplicitParam#dataType```, since the type itself is usually a scalar type (string, int)
+----
+
+NOTE: In the case of `ApiImplicitParam#dataType`, since the type itself is usually a scalar type (string, int)
 use one of the base types specified in the Types class =>
-```springfox-schema/src/main/java/springfox/documentation/schema/Types.java```
+`springfox-schema/src/main/java/springfox/documentation/schema/Types.java`
 
 [source,groovy,linenums]
 ----
