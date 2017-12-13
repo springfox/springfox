@@ -27,6 +27,8 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModelProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableRangeValues;
@@ -36,12 +38,15 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.google.common.collect.Lists.*;
 import static org.springframework.util.StringUtils.*;
 
 public final class ApiModelProperties {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(ApiModelProperties.class);
+  private static final Pattern RANGE_PATTERN = Pattern.compile("range([\\[(])(.*),(.*)([])])");
   private ApiModelProperties() {
     throw new UnsupportedOperationException();
   }
@@ -57,12 +62,18 @@ public final class ApiModelProperties {
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
     AllowableValues allowableValues = new AllowableListValues(Lists.<String>newArrayList(), "LIST");
-    String trimmed = allowableValueString.trim();
-    if (trimmed.startsWith("range[")) {
-      trimmed = trimmed.replaceAll("range\\[", "").replaceAll("]", "");
-      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
-      List<String> ranges = newArrayList(split);
-      allowableValues = new AllowableRangeValues(ranges.get(0), ranges.get(1));
+    String trimmed = allowableValueString.trim().replaceAll(" ", "");
+    Matcher matcher = RANGE_PATTERN.matcher(trimmed);
+    if (matcher.matches()) {
+      if (matcher.groupCount() != 4) {
+        LOGGER.warn("Unable to parse range specified {} correctly", trimmed);
+      } else {
+        allowableValues = new AllowableRangeValues(
+            matcher.group(2),
+            matcher.group(1).equals("("),
+            matcher.group(3),
+            matcher.group(4).equals(")"));
+      }
     } else if (trimmed.contains(",")) {
       Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
       allowableValues = new AllowableListValues(newArrayList(split), "LIST");
