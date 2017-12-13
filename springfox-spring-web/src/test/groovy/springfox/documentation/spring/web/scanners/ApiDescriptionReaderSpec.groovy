@@ -25,12 +25,12 @@ import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
-import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.spring.web.paths.Paths
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
-import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import javax.servlet.ServletContext
@@ -38,62 +38,91 @@ import javax.servlet.ServletContext
 @Mixin([RequestMappingSupport, ServicePluginsSupport])
 class ApiDescriptionReaderSpec extends DocumentationContextSpec {
 
-   def "should generate an api description for each request mapping pattern"() {
-      given:
-        def operationReader = Mock(ApiOperationReader)
-        ApiDescriptionReader sut =
-            new ApiDescriptionReader(operationReader, defaultWebPlugins(), new ApiDescriptionLookup())
-      and:
-        plugin.pathProvider(pathProvider)
-        RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
-                [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
-        )
-        RequestMappingContext mappingContext = new RequestMappingContext(
-            context(),
-            new WebMvcRequestHandler(
-                new HandlerMethodResolver(new TypeResolver()),
-                requestMappingInfo,
-                dummyHandlerMethod()))
-        operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
-      when:
-        def descriptionList = sut.read(mappingContext)
+  def "should generate an api description for each request mapping pattern"() {
+    given:
+    def operationReader = Mock(ApiOperationReader)
+    ApiDescriptionReader sut =
+        new ApiDescriptionReader(operationReader, defaultWebPlugins(), new ApiDescriptionLookup())
 
-      then:
-        descriptionList.size() == 2
+    and:
+    plugin.pathProvider(pathProvider)
+    RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
+        [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
+    )
+    RequestMappingContext mappingContext = new RequestMappingContext(
+        context(),
+        new WebMvcRequestHandler(
+            new HandlerMethodResolver(new TypeResolver()),
+            requestMappingInfo,
+            dummyHandlerMethod()))
+    operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
 
-        ApiDescription apiDescription = descriptionList[0]
-        ApiDescription secondApiDescription = descriptionList[1]
+    when:
+    def descriptionList = sut.read(mappingContext)
 
-        apiDescription.getPath() == prefix + '/somePath/{businessId}'
-        apiDescription.getDescription() == dummyHandlerMethod().method.name
-        !apiDescription.isHidden()
+    then:
+    descriptionList.size() == 2
 
-        secondApiDescription.getPath() == prefix + '/somePath/{businessId}'
-        secondApiDescription.getDescription() == dummyHandlerMethod().method.name
-        !secondApiDescription.isHidden()
+    ApiDescription apiDescription = descriptionList[0]
+    ApiDescription secondApiDescription = descriptionList[1]
 
-      where:
-        pathProvider                                    | prefix
-        new RelativePathProvider(Mock(ServletContext))  | ""
-   }
+    apiDescription.getPath() == prefix + '/somePath/{businessId}'
+    apiDescription.getDescription() == dummyHandlerMethod().method.name
+    !apiDescription.isHidden()
 
-   def "should sanitize request mapping endpoints"() {
-      expect:
-        Paths.sanitizeRequestMappingPattern(mappingPattern) == expected
+    secondApiDescription.getPath() == prefix + '/somePath/{businessId}'
+    secondApiDescription.getDescription() == dummyHandlerMethod().method.name
+    !secondApiDescription.isHidden()
 
-      where:
-        mappingPattern                                  | expected
-        ""                                              | "/"
-        "/"                                             | "/"
-        "/businesses"                                   | "/businesses"
-        "/{businessId:\\w+}"                            | "/{businessId}"
-        "/{businessId:\\d{3}}"                          | "/{businessId}"
-        "/{businessId:\\d{3}}/{productId:\\D{3}\\d{3}}" | "/{businessId}/{productId}"
-        "/businesses/{businessId}"                      | "/businesses/{businessId}"
-        "/businesses/{businessId}/add"                  | "/businesses/{businessId}/add"
-        "/foo/bar:{baz}"                                | "/foo/bar:{baz}"
-        "/foo:{foo}/bar:{baz}"                          | "/foo:{foo}/bar:{baz}"
-        "/foo/bar:{baz:\\w+}"                           | "/foo/bar:{baz}"
+    where:
+    pathProvider                                   | prefix
+    new RelativePathProvider(Mock(ServletContext)) | ""
+  }
 
-   }
+  def "should handle exceptions gracefully"() {
+    given:
+    def operationReader = Mock(ApiOperationReader)
+    ApiDescriptionReader sut =
+        new ApiDescriptionReader(
+            operationReader,
+            defaultWebPlugins(),
+            new ApiDescriptionLookup())
+
+    and:
+    RequestMappingInfo requestMappingInfo = requestMappingInfo(
+        "/doesNotMatterForThisTest",
+        [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}')])
+    RequestMappingContext mappingContext = new RequestMappingContext(
+        context(),
+        new WebMvcRequestHandler(
+            new HandlerMethodResolver(new TypeResolver()),
+            requestMappingInfo,
+            dummyHandlerMethod()))
+    operationReader.read(_) >> { throw new StackOverflowError("ouch") }
+
+    when:
+    def descriptionList = sut.read(mappingContext)
+
+    then:
+    descriptionList.size() == 0
+  }
+
+  def "should sanitize request mapping endpoints"() {
+    expect:
+    Paths.sanitizeRequestMappingPattern(mappingPattern) == expected
+
+    where:
+    mappingPattern                                  | expected
+    ""                                              | "/"
+    "/"                                             | "/"
+    "/businesses"                                   | "/businesses"
+    "/{businessId:\\w+}"                            | "/{businessId}"
+    "/{businessId:\\d{3}}"                          | "/{businessId}"
+    "/{businessId:\\d{3}}/{productId:\\D{3}\\d{3}}" | "/{businessId}/{productId}"
+    "/businesses/{businessId}"                      | "/businesses/{businessId}"
+    "/businesses/{businessId}/add"                  | "/businesses/{businessId}/add"
+    "/foo/bar:{baz}"                                | "/foo/bar:{baz}"
+    "/foo:{foo}/bar:{baz}"                          | "/foo:{foo}/bar:{baz}"
+    "/foo/bar:{baz:\\w+}"                           | "/foo/bar:{baz}"
+  }
 }
