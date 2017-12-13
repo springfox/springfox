@@ -90,7 +90,7 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
       def env = Mock(Environment)
       env.getProperty("springfox.documentation.swagger.v1.path") >> "shoes"
       def handler = new PropertySourcedRequestMappingHandlerMapping(env, null)
-      def method = Swagger1Controller.getMethod("getApiListing", String, String)
+      def method = Swagger1Controller.getMethod("getApiListing", String, String, HttpServletRequest)
       def annotation = method.getAnnotation(PropertySourcedMapping)
     when:
       def path = handler.mappingPath(annotation)

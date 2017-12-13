@@ -79,6 +79,34 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
     new RelativePathProvider(Mock(ServletContext)) | ""
   }
 
+  def "should handle exceptions gracefully"() {
+    given:
+    def operationReader = Mock(ApiOperationReader)
+    ApiDescriptionReader sut =
+        new ApiDescriptionReader(
+            operationReader,
+            defaultWebPlugins(),
+            new ApiDescriptionLookup())
+
+    and:
+    RequestMappingInfo requestMappingInfo = requestMappingInfo(
+        "/doesNotMatterForThisTest",
+        [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}')])
+    RequestMappingContext mappingContext = new RequestMappingContext(
+        context(),
+        new WebMvcRequestHandler(
+            new HandlerMethodResolver(new TypeResolver()),
+            requestMappingInfo,
+            dummyHandlerMethod()))
+    operationReader.read(_) >> { throw new StackOverflowError("ouch") }
+
+    when:
+    def descriptionList = sut.read(mappingContext)
+
+    then:
+    descriptionList.size() == 0
+  }
+
   def "should sanitize request mapping endpoints"() {
     expect:
     Paths.sanitizeRequestMappingPattern(mappingPattern) == expected
