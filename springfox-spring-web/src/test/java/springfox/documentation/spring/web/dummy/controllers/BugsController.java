@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.dummy.controllers;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.google.common.base.Optional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
@@ -360,6 +362,14 @@ public class BugsController {
     return date + name;
   }
 
+  @GetMapping(path = "/{bar}/2148")
+  @ApiImplicitParam(name = "bar", dataType = "long", value = "example")
+  ResponseEntity<Example> bug2148(
+      @ApiIgnore @PathVariable("bar") Example example,
+      @RequestParam("year") Optional<Integer> year) {
+
+    return ResponseEntity.notFound().build();
+  }
 
   public enum Lang {
     zh, en
