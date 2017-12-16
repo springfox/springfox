@@ -1224,6 +1224,42 @@
         }
       }
     },
+    "/bugs/{bar}/2148{?year}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2148",
+        "operationId": "bug2148UsingGET_2",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "bar",
+            "description": "example",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Example"
+            }
+          }
+        }
+      }
+    },
     "/bugs/{propertyKey}/{environmentKey}": {
       "get": {
         "tags": [
