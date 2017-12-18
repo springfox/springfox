@@ -3629,6 +3629,30 @@ up getting treated just as if it were a <code>file</code> data type, even if tha
 </tr>
 </table>
 </div>
+<div id="q24" class="paragraph">
+<p>*24. How to configure springfox for Vavr/Javaslang Jackson module support?</p>
+</div>
+<div class="paragraph">
+<p>We need to first create an alternate type rules convention that tells springfox to treat the vavr persistent
+collections just like the native java collections. The following example only configurers Set, List and Map types.</p>
+</div>
+<script src="https://gist.github.com/dilipkrish/2bf80a0285a04b4037c8994fd8cb8b80.js"></script>
+<div class="paragraph">
+<p>Optionally, to use jackson effectively, for non-collection types we can register an application listener that
+registers the vavr module with the objectmapper that is being used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Component</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">SwaggerJacksonModuleWithVavr</span> <span class="directive">implements</span> ApplicationListener&lt;ObjectMapperConfigured&gt; {
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> onApplicationEvent(ObjectMapperConfigured event) {
+    event.getObjectMapper().registerModule(<span class="keyword">new</span> VavrModule());
+  }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3650,7 +3674,7 @@ up getting treated just as if it were a <code>file</code> data type, even if tha
 <div id="footer">
 <div id="footer-text">
 Version 2.7.1-SNAPSHOT<br>
-Last updated 2017-12-16 22:38:43 UTC
+Last updated 2017-12-18 12:27:32 UTC
 </div>
 </div>
 </body>
