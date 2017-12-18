@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -39,7 +39,18 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.spring.web.dummy.models.*;
+import springfox.documentation.spring.web.dummy.models.Business;
+import springfox.documentation.spring.web.dummy.models.EnumObjectType;
+import springfox.documentation.spring.web.dummy.models.EnumType;
+import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.FancyPet;
+import springfox.documentation.spring.web.dummy.models.ModelAttributeExample;
+import springfox.documentation.spring.web.dummy.models.ModelWithArrayOfArrays;
+import springfox.documentation.spring.web.dummy.models.ModelWithMapProperty;
+import springfox.documentation.spring.web.dummy.models.ModelWithObjectNode;
+import springfox.documentation.spring.web.dummy.models.NestedType;
+import springfox.documentation.spring.web.dummy.models.Pet;
+import springfox.documentation.spring.web.dummy.models.PetWithSerializer;
 
 import java.math.BigDecimal;
 import java.util.List;

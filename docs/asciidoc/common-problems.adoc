@@ -414,3 +414,26 @@ If you change the datatype to "__file" once 2.7.0 is released, it will fix your 
 NOTE: The reason we use "__file" is because if a consuming library defines a custom type `File` then that type ends
 up getting treated just as if it were a `file` data type, even if that wasn't the intent. To distinguish the usage of
  the custom type from the natively understood `file` primitive we introduced this convention.
+
+[[q24]]
+*24. How to configure springfox for Vavr/Javaslang Jackson module support?
+
+We need to first create an alternate type rules convention that tells springfox to treat the vavr persistent
+collections just like the native java collections. The following example only configurers Set, List and Map types.
+++++
+<script src="https://gist.github.com/dilipkrish/2bf80a0285a04b4037c8994fd8cb8b80.js"></script>
+++++
+
+Optionally, to use jackson effectively, for non-collection types we can register an application listener that
+registers the vavr module with the objectmapper that is being used.
+[source,java]
+----
+@Component
+public class SwaggerJacksonModuleWithVavr implements ApplicationListener<ObjectMapperConfigured> {
+
+  @Override
+  public void onApplicationEvent(ObjectMapperConfigured event) {
+    event.getObjectMapper().registerModule(new VavrModule());
+  }
+}
+----
