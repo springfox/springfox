@@ -22,11 +22,11 @@ buildscript {
 }
 
 plugins {
-  id "de.undercouch.download" version "3.2.0"
+  id "de.undercouch.download" version "3.3.0"
 }
 
 ext {
-  swaggerUiVersion = '2.2.10'
+  swaggerUiVersion = '3.7.0'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -60,6 +60,10 @@ task unzip(type: Copy) {
 task customizeSwaggerUi << {
   copy {
     from("${projectDir}/src/web/js/springfox.js")
+    into("${buildDir}/${swaggerUiExplodedDir}")
+  }
+  copy {
+    from("${projectDir}/src/web/css/springfox.css")
     into("${buildDir}/${swaggerUiExplodedDir}")
   }
   copy {
