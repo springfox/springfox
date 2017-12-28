@@ -1,148 +1,108 @@
-$(function() {
-  var baseUrl;
-  var springfox = {
-    "getBaseUrl": function() {
-      if (baseUrl === undefined) {
-        var urlMatches = /(.*)\/swagger-ui.html.*/.exec(window.location.href);
-        baseUrl = urlMatches[1];
-      }
-      return baseUrl;
-    },
-    "setBaseUrl": function(override) {
-      baseUrl = override;
-    },
-    "securityConfig": function(onSuccess, onError) {
-      $.ajax({
-        url: this.getBaseUrl() + "/swagger-resources/configuration/security",
-        dataType: 'json',
-        success: onSuccess,
-        error: onError
-      });
-    },
-    "uiConfig": function(onSuccess, onError) {
-      $.ajax({
-        url: this.getBaseUrl() + "/swagger-resources/configuration/ui",
-        dataType: 'json',
-        success: onSuccess,
-        error: onError
-      });
-    }
+window.onload = () => {
+
+  const getBaseURL = () => {
+    const urlMatches = /(.*)\/swagger-ui.html.*/.exec(window.location.href);
+    return urlMatches[1];
   };
-  window.springfox = springfox;
-  window.oAuthRedirectUrl = springfox.getBaseUrl() + '/webjars/springfox-swagger-ui/o2c.html';
 
-  window.springfox.uiConfig(onSuccess, onError);
+  const buildSystemAsync = async (baseUrl) => {
+    try {
+      const configUIResponse = await fetch(baseUrl + "/swagger-resources/configuration/ui");
+      const configUI = await configUIResponse.json();
 
-  $('#select_baseUrl').change(function() {
-    window.swaggerUi.headerView.trigger('update-swagger-ui', {
-      url: $('#select_baseUrl').val()
-    });
-  });
+      const configSecurityResponse = await fetch(baseUrl + "/swagger-resources/configuration/security");
+      const configSecurity = await configSecurityResponse.json();
 
-  function maybePrefix(location, withRelativePath) {
-    var pat = /^https?:\/\//i;
-    if (pat.test(location)) {
-      return location;
-    }
-    return withRelativePath + location;
-  }
-
-  function initializeBaseUrl() {
-    var relativeLocation = springfox.getBaseUrl();
-
-    $('#input_baseUrl').hide();
-
-    $.getJSON(relativeLocation + "/swagger-resources", function(data) {
-
-      var $urlDropdown = $('#select_baseUrl');
-      $urlDropdown.empty();
-      $.each(data, function(i, resource) {
-        var option = $('<option></option>')
-            .attr("value", maybePrefix(resource.location, relativeLocation))
-            .text(resource.name + " (" + resource.location + ")");
-        $urlDropdown.append(option);
+      const resourcesResponse = await fetch(baseUrl + "/swagger-resources");
+      const resources = await resourcesResponse.json();
+      resources.forEach(resource => {
+        resource.url = baseUrl + resource.location;
       });
-      $urlDropdown.change();
-    });
-  }
 
-  function onSuccess(data) {
-    window.swaggerUi = new SwaggerUi({
-      dom_id: "swagger-ui-container",
-      validatorUrl: data.validatorUrl,
-      supportedSubmitMethods: data.supportedSubmitMethods || ['get', 'post', 'put', 'delete', 'patch'],
-      docExpansion: data.docExpansion || 'none',
-      jsonEditor: JSON.parse(data.jsonEditor) || false,
-      apisSorter: data.apisSorter || 'alpha',
-      defaultModelRendering: data.defaultModelRendering || 'schema',
-      showRequestHeaders: data.showRequestHeaders || true,
-      timeout: data.requestTimeout,
-      onComplete: function(swaggerApi, swaggerUi) {
-
-        initializeSpringfox();
-
-        if (window.SwaggerTranslator) {
-          window.SwaggerTranslator.translate();
-        }
-
-        $('pre code').each(function(i, e) {
-          hljs.highlightBlock(e)
-        });
-
-        //Use the API info title as the web page title as when it is set
-         document.title = $('.info_title').html() || document.title;
-      },
-      onFailure: function(data) {
-        log("Unable to Load SwaggerUI");
-      },
-    });
-
-    initializeBaseUrl();
-
-    function addApiKeyAuthorization(security) {
-      var apiKeyVehicle = security.apiKeyVehicle || 'query';
-      var apiKeyName = security.apiKeyName || 'api_key';
-      var apiKey = security.apiKey || '';
-      if (apiKey && apiKey.trim() != "") {
-        var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(apiKeyName, apiKey, apiKeyVehicle);
-        window.swaggerUi.api.clientAuthorizations.add(apiKeyName, apiKeyAuth);
-        log("added key " + apiKey);
-      }
-    }
-
-    function log() {
-      if ('console' in window) {
-        console.log.apply(console, arguments);
-      }
-    }
-
-    function oAuthIsDefined(security) {
-      return security.clientId
-          && security.appName
-          && security.realm;
-    }
-
-    function initializeSpringfox() {
-      var security = {};
-      window.springfox.securityConfig(function(data) {
-        security = data;
-        addApiKeyAuthorization(security);
-        if (typeof initOAuth == "function" && oAuthIsDefined(security)) {
-          initOAuth(security);
-        }
-      });
-    }
-  }
-
-  function onError() {
-    baseUrl = prompt(
+      window.ui = getUI(baseUrl, resources, configUI, configSecurity);
+    } catch (e) {
+      const retryURL = await prompt(
         "Unable to infer base url. This is common when using dynamic servlet registration or when" +
         " the API is behind an API Gateway. The base url is the root of where" +
         " all the swagger resources are served. For e.g. if the api is available at http://example.org/api/v2/api-docs" +
         " then the base url is http://example.org/api/. Please enter the location manually: ",
         window.location.href);
-    window.springfox.uiConfig(onSuccess, onError);
-  }
 
-});
+      return buildSystemAsync(retryURL);
+    }
+  };
 
+  const getUI = (baseUrl, resources, configUI, configSecurity) => {
+    const ui = SwaggerUIBundle({
+      /*--------------------------------------------*\
+       * Core
+      \*--------------------------------------------*/
+      configUrl: null,
+      dom_id: "#swagger-ui",
+      dom_node: null,
+      spec: {},
+      url: "",
+      urls: resources,
+      /*--------------------------------------------*\
+       * Plugin system
+      \*--------------------------------------------*/
+      layout: "StandaloneLayout",
+      plugins: [
+        SwaggerUIBundle.plugins.DownloadUrl
+      ],
+      presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIStandalonePreset
+      ],
+      /*--------------------------------------------*\
+       * Display
+      \*--------------------------------------------*/
+      deepLinking: true,
+      displayOperationId: false,
+      defaultModelsExpandDepth: 1,
+      defaultModelExpandDepth: 1,
+      defaultModelRendering: resources.defaultModelRendering,
+      displayRequestDuration: false,
+      docExpansion: resources.docExpansion,
+      filter: false,
+      maxDisplayedTags: null,
+      operationsSorter: configUI.apisSorter || "alpha",
+      showExtensions: false,
+      tagSorter: configUI.apisSorter || "alpha",
+      /*--------------------------------------------*\
+       * Network
+      \*--------------------------------------------*/
+      oauth2RedirectUrl: baseUrl + "/webjars/springfox-swagger-ui/oauth2-redirect.html",
+      requestInterceptor: (a => a),
+      responseInterceptor: (a => a),
+      showMutatedRequest: true,
+      validatorUrl: null,
+      /*--------------------------------------------*\
+       * Macros
+      \*--------------------------------------------*/
+      modelPropertyMacro: null,
+      parameterMacro: null,
+    });
+
+    ui.initOAuth({
+      /*--------------------------------------------*\
+       * OAuth
+      \*--------------------------------------------*/
+      clientId: configSecurity.clientId,
+      clientSecret: configSecurity.clientSecret,
+      realm: configSecurity.realm,
+      appName: configSecurity.appName,
+      scopeSeparator: configSecurity.scopeSeparator,
+      additionalQueryStringParams: {},
+      useBasicAuthenticationWithAccessCodeGrant: false,
+    });
+
+    return ui;
+  };
+
+  /* Entry Point */
+  (async () => {
+    await buildSystemAsync(getBaseURL());
+  })();
+
+};
