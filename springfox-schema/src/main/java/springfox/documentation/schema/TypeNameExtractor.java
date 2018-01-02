@@ -38,6 +38,9 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.base.Optional.fromNullable;
 import static springfox.documentation.schema.Collections.isContainerType;
@@ -80,7 +83,9 @@ public class TypeNameExtractor {
   private String genericTypeName(ResolvedType resolvedType, ModelContext context) {
     Class<?> erasedType = resolvedType.getErasedType();
     GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
-    String simpleName = fromNullable(typeNameFor(erasedType)).or(modelName(ModelContext.fromParent(context, resolvedType)));
+    String simpleName = fromNullable(isContainerType(resolvedType)?
+        containerType(resolvedType):typeNameFor(erasedType))
+            .or(modelName(ModelContext.fromParent(context, resolvedType)));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
@@ -124,16 +129,46 @@ public class TypeNameExtractor {
   }
 
   private String modelName(ModelContext context) {
+    if (context.isFullTypeNameRequired() &&
+        context.getTypeName().isPresent() &&
+        !isMapType(asResolved(context.getType()))) {
+      return adjustedName(context);
+    }
     TypeNameProviderPlugin selected =
         typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
     String modelName = selected.nameFor(((ResolvedType)context.getType()).getErasedType());
     LOG.debug("Generated unique model named: {}, with model id: {}", modelName, context.hashCode());
-    if (!isMapType(asResolved(context.getType()))) {
-      String typePostfix = context.typePostfix();
-      if (!typePostfix.equals("")) {
-        return String.format("%s_%s", modelName, context.typePostfix());
-      }
-    }
+    context.registerTypeName(modelName);
     return modelName;
+  }
+
+  private String adjustedName(ModelContext context) {
+    LOG.debug("Building models indexes for type {}", context.getTypeName().get());
+    Set<Integer> modelIds = new TreeSet<Integer>(context.getSimilarTypes());
+    Map<Integer, Integer> links = context.getTypeEquality();
+    modelIds.removeAll(links.keySet());
+    String rawTypeName = context.getTypeName().get();
+    if (modelIds.size() == 1) {
+      return rawTypeName;
+    }
+
+    Integer currentModelId = context.hashCode();
+    int i = 1;
+
+    while (links.containsKey(currentModelId)) {
+      Integer nextModelId = links.get(currentModelId);
+      if (nextModelId.equals(currentModelId)) {
+        break;
+      }
+      currentModelId = nextModelId;
+    }
+
+    for(Integer modelId: modelIds) {
+      if (modelId.equals(currentModelId)) {
+        return String.format("%s_%s", rawTypeName, i);
+      }
+      ++i;
+    }
+    return rawTypeName;
   }
 }

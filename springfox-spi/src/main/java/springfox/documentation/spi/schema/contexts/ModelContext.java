@@ -27,12 +27,12 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import springfox.documentation.builders.ModelBuilder;
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
-import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -50,7 +50,7 @@ public class ModelContext {
   private final ModelContext parentContext;
   private final Set<ResolvedType> seenTypes = newHashSet();
   private final ModelBuilder modelBuilder;
-  private final UniqueTypeNameAdjuster uniqueTypeNameAdjuster;
+  private final UniqueTypeNameAdapter uniqueTypeNameAdapter;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
@@ -64,13 +64,13 @@ public class ModelContext {
       Optional<ResolvedType> view,
       Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
-      UniqueTypeNameAdjuster uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
       ImmutableSet<Class> ignorableTypes) {
     this.groupName = groupName;
     this.documentationType = documentationType;
-    this.uniqueTypeNameAdjuster = uniqueTypeNameAdjuster;
+    this.uniqueTypeNameAdapter = uniqueTypeNameAdjuster;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericNamingStrategy = genericNamingStrategy;
     this.ignorableTypes = ignorableTypes;
@@ -91,7 +91,7 @@ public class ModelContext {
     this.view = parentContext.getView();
     this.validationGroups = parentContext.getValidationGroups();
     this.documentationType = parentContext.getDocumentationType();
-    this.uniqueTypeNameAdjuster = parentContext.uniqueTypeNameAdjuster;
+    this.uniqueTypeNameAdapter = parentContext.uniqueTypeNameAdapter;
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
@@ -107,7 +107,7 @@ public class ModelContext {
     this.view = parentContext.getView();
     this.validationGroups = parentContext.getValidationGroups();
     this.documentationType = parentContext.getDocumentationType();
-    this.uniqueTypeNameAdjuster = parentContext.uniqueTypeNameAdjuster;
+    this.uniqueTypeNameAdapter = parentContext.uniqueTypeNameAdapter;
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
@@ -119,7 +119,7 @@ public class ModelContext {
   /**
    * @return type behind this context
    */
-  public Type getType() {
+  public ResolvedType getType() {
     return type;
   }
 
@@ -134,8 +134,8 @@ public class ModelContext {
   /**
    * @return resolved type postfix
    */
-  public String typePostfix() {
-    return adjustTypeNames ? uniqueTypeNameAdjuster.get(hashCode()) : "";
+  public Optional<String> getTypeName() {
+    return adjustTypeNames ? uniqueTypeNameAdapter.getTypeName(hashCode()) : Optional.<String>absent();
   }
   
   /**
@@ -180,6 +180,13 @@ public class ModelContext {
   public String getGroupName() {
     return groupName;
   }
+  
+  /**
+   * @return mode for generating type name
+   */
+  public Boolean isFullTypeNameRequired() {
+    return adjustTypeNames;
+  }
 
   /**
    * Convenience method to provide an new context for an input parameter
@@ -198,12 +205,12 @@ public class ModelContext {
       Optional<ResolvedType> view,
       Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
-      UniqueTypeNameAdjuster uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
       ImmutableSet<Class> ignorableTypes) {
 
-    ModelContext context = new ModelContext(
+    return new ModelContext(
         group,
         type,
         false,
@@ -214,9 +221,6 @@ public class ModelContext {
         alternateTypeProvider,
         genericNamingStrategy,
         ignorableTypes);
-
-    uniqueTypeNameAdjuster.registerType(type, context.hashCode());
-    return context;
   }
 
   /**
@@ -236,12 +240,12 @@ public class ModelContext {
       ResolvedType type,
       Optional<ResolvedType> view,
       DocumentationType documentationType,
-      UniqueTypeNameAdjuster uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
       ImmutableSet<Class> ignorableTypes) {
 
-    ModelContext context = new ModelContext(
+    return new ModelContext(
         groupName,
         type,
         true,
@@ -252,9 +256,6 @@ public class ModelContext {
         alternateTypeProvider,
         genericNamingStrategy,
         ignorableTypes);
-    
-    uniqueTypeNameAdjuster.registerType(type, context.hashCode());
-    return context;
   }
 
   /**
@@ -264,10 +265,7 @@ public class ModelContext {
    * @return new context based on parent context for a given input
    */
   public static ModelContext fromParent(ModelContext context, ResolvedType input) {
-    ModelContext newContext = new ModelContext(context, input);
-    context.uniqueTypeNameAdjuster.registerType(input, newContext.hashCode());
-
-    return newContext;
+    return new ModelContext(context, input);
   }
   
   /**
@@ -324,10 +322,22 @@ public class ModelContext {
     seenTypes.add(resolvedType);
   }
 
+  public void registerTypeName(String typeName) {
+    uniqueTypeNameAdapter.registerType(typeName, hashCode());
+  }
+
+  public Set<Integer> getSimilarTypes() {
+    return uniqueTypeNameAdapter.getSimilarTypes(hashCode());
+  }
+
   public void assumeEqualsTo(ModelContext other) {
     if (other.type.equals(type)) {
-      uniqueTypeNameAdjuster.setEqualityFor(type, hashCode(), other.hashCode());
+      uniqueTypeNameAdapter.setEqualityFor(hashCode(), other.hashCode());
     }
+  }
+
+  public Map<Integer, Integer> getTypeEquality() {
+    return uniqueTypeNameAdapter.getLinks();
   }
 
   @Override

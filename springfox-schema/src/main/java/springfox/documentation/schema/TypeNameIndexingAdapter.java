@@ -24,116 +24,66 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import com.google.common.base.Optional;
 
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 
-import static springfox.documentation.schema.Maps.isMapType;
-import static springfox.documentation.schema.Types.isBaseType;
+public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
 
-public class TypeNameIndexingAdjuster implements UniqueTypeNameAdjuster {
-  
-  private static final Logger LOG = LoggerFactory.getLogger(TypeNameIndexingAdjuster.class);
-  
-  private final Map<ResolvedType, Set<Integer>> similarTypes = new HashMap<ResolvedType, Set<Integer>>();
-  private final Map<Integer, Integer> modelIdCache = new HashMap<Integer, Integer>();
+  private static final Logger LOG = LoggerFactory.getLogger(TypeNameIndexingAdapter.class);
+
+  private final Map<String, Set<Integer>> similarTypes = new HashMap<String, Set<Integer>>();
+  private final Map<Integer, String> modelIdCache = new HashMap<Integer, String>();
   private final Map<Integer, Integer> links = new HashMap<Integer, Integer>();
 
   @Override
-  public String get(final int modelId) {
-    if (modelIdCache.containsKey(modelId)) {
-      Integer index = modelIdCache.get(modelId);
-      if (index.equals(0)) {
-        return "";
-      }
-      return String.valueOf(index);
-    }
-    return "";
+  public Map<Integer, Integer> getLinks() {
+    return Collections.unmodifiableMap(links);
   }
 
   @Override
-  public void registerType(final ResolvedType type, final int modelId) {
-    if (type instanceof ResolvedPrimitiveType
-        || isBaseType(type)
-        || isMapType(type)) {
-      LOG.debug("Skipping type {} with model id: {}, as a base or primitive type", 
-          type, 
-          modelId);
-      return;
-    }
+  public Set<Integer> getSimilarTypes(final int modelId) {
     if (modelIdCache.containsKey(modelId)) {
-      LOG.debug("Skipping type {} with model id: {}, as already registered", 
-          type, 
-          modelId);
-      return;
+      return Collections.unmodifiableSet(similarTypes.get(modelIdCache.get(modelId)));
     }
-    if (similarTypes.containsKey(type)) {
-      similarTypes.get(type).add(modelId);
-      build(type);
+    return new TreeSet<Integer>();
+  }
+
+  @Override
+  public Optional<String> getTypeName(final int modelId) {
+    return Optional.fromNullable(modelIdCache.get(modelId));
+  }
+
+  @Override
+  public void registerType(final String typeName, final int modelId) {
+    if (modelIdCache.containsKey(modelId)) {
+      LOG.debug("Rewriting type {} with model id: {}, because it is already registered", 
+          typeName, 
+          modelId);
+      similarTypes.get(modelIdCache.get(modelId)).remove(modelId);
+    }
+    if (similarTypes.containsKey(typeName)) {
+      similarTypes.get(typeName).add(modelId);
     } else {
-      similarTypes.put(type, new TreeSet<Integer>(Arrays.asList(modelId)));
-      modelIdCache.put(modelId, 0);
+      similarTypes.put(typeName, new TreeSet<Integer>(Arrays.asList(modelId)));
     }
+    modelIdCache.put(modelId, typeName);
   }
 
   @Override
-  public void setEqualityFor(final ResolvedType type, final int modelIdOf, final int modelIdTo) {
-    if (!similarTypes.containsKey(type)) {
+  public void setEqualityFor(final int modelIdOf, final int modelIdTo) {
+    if (!modelIdCache.containsKey(modelIdOf) ||
+        !modelIdCache.containsKey(modelIdTo) ||
+        modelIdOf == modelIdTo) {
       return;
     }
 
-    Set<Integer> modelIds = similarTypes.get(type);
-    if (!modelIds.contains(modelIdOf) || !modelIds.contains(modelIdTo)) {
-      return;
-    }
-
-    Integer idOf = getOriginal(modelIdOf);
-    Integer idTo = getOriginal(modelIdTo);
-    if (idOf.equals(idTo)) {
-      return;
-    }
-
-    links.put(idOf < idTo ? idOf : idTo, idOf < idTo ? idTo : idOf);
-    build(type);
-  }
-  
-  private void build(final ResolvedType type) {
-    LOG.debug("Rebuilding models indexes for type {}", type);
-    Set<Integer> modelIds = similarTypes.get(type);
-    int i = 1;
-    for(Integer modelId: modelIds) {
-      if (links.containsKey(modelId)) {
-        LOG.debug("Skipping type with model id: {}, as link to another model {}", 
-            modelId, 
-            links.get(modelId));
-        continue;
-      }
-      modelIdCache.put(modelId, i);
-      ++i;
-    }
-
-    for(Integer modelId: modelIds) {
-      if (links.containsKey(modelId)) {
-        LOG.debug("Adjusting link for model with model id: {}, as link to another model {}", 
-            modelId, 
-            links.get(modelId));
-        Integer link = links.get(modelId);
-        link = getOriginal(link);
-        modelIdCache.put(modelId, modelIdCache.get(link));
-      }
-    }
-  }
-  
-  private Integer getOriginal(final int link) {
-    int key = link;
-    while (links.containsKey(key)) {
-      key = links.get(key);
-    }
-    return key;
+    links.put(modelIdOf < modelIdTo ?
+        modelIdOf : modelIdTo, modelIdOf < modelIdTo ? modelIdTo : modelIdOf);
   }
 }

@@ -19,14 +19,45 @@
 
 package springfox.documentation.spi.schema;
 
-import com.fasterxml.classmate.ResolvedType;
+import java.util.Map;
+import java.util.Set;
 
-public interface UniqueTypeNameAdjuster {
+import com.google.common.base.Optional;
 
-  String get(int modelId);
+public interface UniqueTypeNameAdapter {
 
-  void registerType(ResolvedType type, int modelId);
+  /**
+   * Provides information about models equality
+   * @return a map with Models id
+   */
+  Map<Integer, Integer> getLinks();
 
-  void setEqualityFor(ResolvedType type, int modelIdOf, int modelIdTo);
+  /**
+   * Provides information about models with same types name
+   * @param modelId - id of model
+   * @return a set with Models id
+   */
+  Set<Integer> getSimilarTypes(final int modelId);
+
+  /**
+   * Returns type for the model
+   * @param modelId - id of model
+   * @return a set with Models id
+   */
+  Optional<String> getTypeName(int modelId);
+
+  /**
+   * Register model name to keep it unique
+   * @param typeName - string representation of the models name
+   * @param modelId - id of model
+   */
+  void registerType(String typeName, int modelId);
+
+  /**
+   * Sets equality of two models to make sure, that models will be treated as one
+   * @param modelIdOf - id of the first model
+   * @param modelIdTo - id of the second model
+   */
+  void setEqualityFor(int modelIdOf, int modelIdTo);
 
 }
