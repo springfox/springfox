@@ -45,8 +45,10 @@ import springfox.documentation.spring.web.dummy.DummyModels.Ignorable;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.FoobarDto;
+import springfox.documentation.spring.web.dummy.models.MapFancyPet;
 import springfox.documentation.spring.web.dummy.models.Pirate;
 import springfox.documentation.spring.web.dummy.models.Treeish;
+import springfox.documentation.spring.web.dummy.models.SameFancyPet;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -417,6 +419,11 @@ public class DummyClass {
 
   @ResponseBody
   public void methodToTestBidrectionalRecursiveTypes(@RequestBody Pirate model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public MapFancyPet methodToTestSameClassesWithDifferentProperties(@RequestBody SameFancyPet fancyPet) {
     throw new UnsupportedOperationException();
   }
 
