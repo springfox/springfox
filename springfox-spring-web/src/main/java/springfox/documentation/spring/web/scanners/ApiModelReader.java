@@ -72,7 +72,7 @@ public class ApiModelReader  {
 
   public Map<ResourceGroup, List<Model>> read(ApiListingScanningContext apiListingScanningContext) {
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
-    = apiListingScanningContext.getRequestMappingsByResourceGroup();
+            = apiListingScanningContext.getRequestMappingsByResourceGroup();
 
     Map<ResourceGroup, List<Model>> modelMap = newHashMap();
     Map<String, ModelContext> contextMap = newHashMap();
@@ -115,19 +115,24 @@ public class ApiModelReader  {
     List<Model> newModels = new ArrayList<Model>();
     while((modelsToCompare = modelsWithoutRefs(modelBranch)).size() > 0) {
       Iterator<Map.Entry<String, Model>> it = modelsToCompare.entrySet().iterator();
-      while (it.hasNext()) {
+      outer: while (it.hasNext()) {
         Map.Entry<String, Model> entry = it.next();
         Model model_for = entry.getValue();
         if (!modelTypeMap.containsKey(model_for.getType())) {
-          continue;
+          continue outer;
         }
         List<Model> models = modelTypeMap.get(model_for.getType());
         for (Model model_to : models) {
-          if (model_for.equals(model_to)) {
+          if (model_for.equalsIgnoringName(model_to)) {
             it.remove();
+            //Putting back "correct" model to be present in the listing.
+            //Needs for Swagger 1.2 because it show listings separately,
+            //and doesn't merge all models in to one single map.
+            newModels.add(model_to);
             ModelContext context_to = contextMap.get(model_to.getId());
             context_to.assumeEqualsTo(contextMap.get(model_for.getId()));
             adjustLinksFor(modelBranch, model_for.getId(), model_to.getId(), contextMap.get(model_to.getId()));
+            continue outer;
           }
         }
       }

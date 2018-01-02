@@ -33,7 +33,7 @@ import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -46,6 +46,7 @@ import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.Pirate
+import springfox.documentation.spring.web.dummy.models.SameFancyPet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -114,7 +115,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     def requestMappingContext = new RequestMappingContext(
         context(),
         new WebMvcRequestHandler(requestMappingInfo(path), handlerMethod),
-        new TypeNameIndexingAdjuster())
+        new TypeNameIndexingAdapter())
 
     def resourceGroupRequestMappings = newHashMap()
     resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
@@ -327,24 +328,24 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
           }});
 
       models.size() == 2
-      
+
       String baseModelName = FoobarDto.simpleName
-      
+
       models.containsKey(baseModelName + '_1')
       models.containsKey(baseModelName + '_2')
-      
+
       Model model_1 = models[baseModelName + '_1']
-      
+
       Map modelProperties_1 = model_1.getProperties()
       
       modelProperties_1.size() == 2
       modelProperties_1.containsKey('visibleForSerialize')
       modelProperties_1.containsKey('foobar')
-            
+
       Model model_2 = models[baseModelName + '_2']
-      
+
       Map modelProperties_2 = model_2.getProperties()
-      
+
       modelProperties_2.size() == 1
       modelProperties_2.containsKey('foobar')
 
@@ -378,6 +379,67 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     and:
       pirate.getProperties().containsKey('monkey')
       monkey.getProperties().containsKey('pirate')
+
+  }
+
+  def "Test to verify issue #182, #807, #895, #1356"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSameClassesWithDifferentProperties', SameFancyPet)
+      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+
+    when:
+      def modelsMap = sut.read(listingContext)
+
+    then:
+      modelsMap.containsKey(resourceGroup)
+      List<Model> modelsList = modelsMap.get(resourceGroup)
+      modelsList.size() == 5
+    and:
+      def models = newHashMap();
+      for (Model model: modelsList) {System.out.println(model.getName());
+        models.put(model.getName(), model);
+      }
+
+      Model category_1 = models["SameCategory_1"]
+      Model category_2 = models["SameCategory_2"]
+
+      Model mapFancyPet = models["MapFancyPet"]
+
+      Model fancyPet_1 = models["SameFancyPet_1"]
+      Model fancyPet_2 = models["SameFancyPet_2"]
+
+      models.size() == 5
+    and:
+      category_1 != null
+      category_2 != null
+
+      fancyPet_1 != null
+      fancyPet_2 != null
+
+      mapFancyPet != null
+
+    and:
+      category_1.getProperties().size() == 1
+      category_1.getProperties().containsKey('name')
+    and:
+      category_2.getProperties().size() == 2
+      category_2.getProperties().containsKey('id')
+      category_2.getProperties().containsKey('name')
+    and:
+      fancyPet_1.getProperties().size() == 5
+      fancyPet_1.getProperties().containsKey('id')
+      fancyPet_1.getProperties().containsKey('age')
+      fancyPet_1.getProperties().containsKey('name')
+      fancyPet_1.getProperties().containsKey('color')
+      fancyPet_1.getProperties().containsKey('extendedCategory')
+    and:
+      fancyPet_2.getProperties().size() == 6
+      fancyPet_2.getProperties().containsKey('id')
+      fancyPet_2.getProperties().containsKey('age')
+      fancyPet_2.getProperties().containsKey('name')
+      fancyPet_2.getProperties().containsKey('color')
+      fancyPet_2.getProperties().containsKey('pet_weight')
+      fancyPet_2.getProperties().containsKey('extendedCategory')
 
   }
 }
