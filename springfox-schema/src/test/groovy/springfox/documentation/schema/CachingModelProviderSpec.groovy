@@ -36,7 +36,7 @@ class CachingModelProviderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -57,7 +57,7 @@ class CachingModelProviderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

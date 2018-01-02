@@ -41,7 +41,7 @@ class ModelReferenceProviderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

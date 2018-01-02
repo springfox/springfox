@@ -33,7 +33,7 @@ class ComplexTypeSpec extends Specification {
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
   @Shared
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
   
   def "complex type properties are inferred correctly"() {
     given:

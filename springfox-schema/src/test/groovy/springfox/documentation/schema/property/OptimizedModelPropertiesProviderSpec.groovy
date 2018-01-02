@@ -73,7 +73,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             Optional.absent(),
             new HashSet<>(),
             SPRING_WEB,
-            new TypeNameIndexingAdjuster(),
+            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
@@ -83,7 +83,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             type,
             Optional.absent(),
             SPRING_WEB,
-            new TypeNameIndexingAdjuster(),
+            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
@@ -126,7 +126,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
               Optional.absent(),
               new HashSet<>(),
               SPRING_WEB,
-              new TypeNameIndexingAdjuster(),
+              new TypeNameIndexingAdapter(),
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
               ImmutableSet.builder().build()))
@@ -136,7 +136,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
               type,
               Optional.absent(),
               SPRING_WEB,
-              new TypeNameIndexingAdjuster(),
+              new TypeNameIndexingAdapter(),
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
               ImmutableSet.builder().build()))
@@ -179,7 +179,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SPRING_WEB,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider(newArrayList()),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -187,7 +187,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           type,
           Optional.absent(),
           SPRING_WEB,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider(newArrayList()),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -236,7 +236,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
               Optional.absent(),
               new HashSet<>(),
               SPRING_WEB,
-              new TypeNameIndexingAdjuster(),
+              new TypeNameIndexingAdapter(),
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
               ImmutableSet.builder().build()))
@@ -246,7 +246,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
               type,
               Optional.absent(),
               SPRING_WEB,
-              new TypeNameIndexingAdjuster(),
+              new TypeNameIndexingAdapter(),
               new AlternateTypeProvider(newArrayList()),
               new DefaultGenericTypeNamingStrategy(),
               ImmutableSet.builder().build()))

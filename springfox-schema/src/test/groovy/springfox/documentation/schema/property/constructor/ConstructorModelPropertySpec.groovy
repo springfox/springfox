@@ -25,7 +25,7 @@ import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -42,7 +42,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
   def "Extracting information from resolved constructor params" () {
     given:
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
       def typeToTest = typeWithConstructorProperty()
       def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
       def modelContext = inputParam("group",

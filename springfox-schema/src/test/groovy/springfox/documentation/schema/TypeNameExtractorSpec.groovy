@@ -28,7 +28,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class TypeNameExtractorSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
   def "Response class for container types are inferred correctly"() {
     given:
       def context = returnValue("group",

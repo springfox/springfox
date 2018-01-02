@@ -28,7 +28,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelDependencyProviderSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
 
   @Unroll
   def "dependencies are inferred correctly"() {

@@ -22,6 +22,7 @@ package springfox.documentation.swagger1.web
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -53,7 +54,8 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
             context(),
             new WebMvcRequestHandler(
                 requestMappingInfo,
-                dummyHandlerMethod()))
+                dummyHandlerMethod()),
+            Mock(UniqueTypeNameAdapter))
         operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
       when:
         def descriptionList = sut.read(mappingContext)

@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModel
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
@@ -51,7 +51,7 @@ class ApiModelBuilderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_12,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

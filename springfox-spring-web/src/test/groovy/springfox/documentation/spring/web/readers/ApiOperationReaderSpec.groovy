@@ -23,7 +23,7 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.service.Operation
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -67,7 +67,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
               new WebMvcRequestHandler(
                   requestMappingInfo,
                   handlerMethod),
-                  Mock(UniqueTypeNameAdjuster))
+                  Mock(UniqueTypeNameAdapter))
     when:
       def operations = sut.read(context)
 

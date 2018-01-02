@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.scanners
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.Operation
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -40,7 +40,7 @@ class CachingOperationReaderSpec extends DocumentationContextSpec {
           new WebMvcRequestHandler(
               requestMappingInfo,
               dummyHandlerMethod("methodWithConcreteResponseBody")),
-              Mock(UniqueTypeNameAdjuster))
+              Mock(UniqueTypeNameAdapter))
       def mock = Mock(OperationReader) {
         read(requestMappingContext) >> [anOperation()]
       }

@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spring.web.dummy.models.Example
@@ -32,7 +32,7 @@ class OperationModelsBuilderSpec extends Specification {
   OperationModelContextsBuilder sut =
       new OperationModelContextsBuilder("group",
           DocumentationType.SWAGGER_12,
-          Mock(UniqueTypeNameAdjuster),
+          Mock(UniqueTypeNameAdapter),
           Mock(AlternateTypeProvider),
           Mock(GenericTypeNamingStrategy),
           ImmutableSet.builder().build())

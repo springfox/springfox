@@ -55,7 +55,7 @@ class UnwrappedTypeSpec extends Specification {
     given:
       def provider = defaultModelProvider(objectMapperThatUsesFields())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
 
     when:
       Model asInput = provider.modelFor(
@@ -110,7 +110,7 @@ class UnwrappedTypeSpec extends Specification {
     given:
     def provider = defaultModelProvider(objectMapperThatUsesFields())
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
-    def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+    def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
 
     when:
     Model asInput = provider.modelFor(
@@ -166,7 +166,7 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(
         objectMapperThatUsesGetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
     when:
       Model asInput = provider.modelFor(
           inputParam("group",
@@ -219,7 +219,7 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(
         objectMapperThatUsesSetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
     when:
       Model asInput = provider.modelFor(
           inputParam("group",

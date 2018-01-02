@@ -30,7 +30,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class SimpleTypeSpec extends SchemaSpecification {
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:

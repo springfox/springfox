@@ -24,7 +24,7 @@ import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -40,7 +40,7 @@ class CachingModelPropertiesProviderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -61,7 +61,7 @@ class CachingModelPropertiesProviderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

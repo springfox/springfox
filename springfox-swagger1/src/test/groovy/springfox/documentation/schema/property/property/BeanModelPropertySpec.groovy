@@ -29,7 +29,7 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.SchemaSpecification
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
@@ -46,7 +46,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class BeanModelPropertySpec extends SchemaSpecification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def typeNameAdjuster = new TypeNameIndexingAdjuster()
+  def typeNameAdjuster = new TypeNameIndexingAdapter()
   @Unroll
   def "Extracting information from resolved properties #methodName"() {
     given:

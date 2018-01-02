@@ -23,7 +23,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -36,7 +36,7 @@ import static com.google.common.collect.Sets.*;
 public class OperationModelContextsBuilder {
   private final String group;
   private final DocumentationType documentationType;
-  private final UniqueTypeNameAdjuster uniqueTypeNameAdjuster;
+  private final UniqueTypeNameAdapter uniqueTypeNameAdjuster;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
@@ -45,7 +45,7 @@ public class OperationModelContextsBuilder {
   public OperationModelContextsBuilder(
       String group,
       DocumentationType documentationType,
-      UniqueTypeNameAdjuster uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericsNamingStrategy,
       ImmutableSet<Class> ignorableParameterTypes) {

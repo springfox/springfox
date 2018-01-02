@@ -64,7 +64,7 @@ class ReturnTypesSpec extends Specification {
   def "Get response class name from ResolvedType"(){
     expect:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster()
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter()
       def modelResponseClass = sut.typeName(
           returnValue("group",
               new TypeResolver().resolve(

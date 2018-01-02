@@ -32,7 +32,7 @@ import springfox.documentation.builders.ApiDescriptionBuilder;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster;
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -49,7 +49,7 @@ public class RequestMappingContext {
 
   public RequestMappingContext(DocumentationContext context,
       RequestHandler handler,
-      UniqueTypeNameAdjuster uniqueTypeNameAdjuster) {
+      UniqueTypeNameAdapter uniqueTypeNameAdjuster) {
 
     this.documentationContext = context;
     this.handler = handler;

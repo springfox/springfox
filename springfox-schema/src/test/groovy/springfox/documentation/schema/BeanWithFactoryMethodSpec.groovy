@@ -40,7 +40,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           documentationType,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -49,7 +49,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           typeToTest,
           Optional.absent(),
           documentationType,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -85,7 +85,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           documentationType,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -94,7 +94,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           typeToTest,
           Optional.absent(),
           documentationType,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -130,7 +130,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           documentationType,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -139,7 +139,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           typeToTest,
           Optional.absent(),
           documentationType,
-          new TypeNameIndexingAdjuster(),
+          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

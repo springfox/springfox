@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.scanners
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.paths.RelativePathProvider
@@ -52,7 +52,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
             new WebMvcRequestHandler(
                 requestMappingInfo,
                 dummyHandlerMethod()),
-                Mock(UniqueTypeNameAdjuster))
+                Mock(UniqueTypeNameAdapter))
         operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
       when:
         def descriptionList = sut.read(mappingContext)

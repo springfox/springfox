@@ -32,7 +32,7 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
@@ -60,7 +60,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   def operationModelContextsBuilder  = new OperationModelContextsBuilder(
       "group",
       DocumentationType.SWAGGER_12,
-      new TypeNameIndexingAdjuster(),
+      new TypeNameIndexingAdapter(),
       Mock(AlternateTypeProvider),
       Mock(GenericTypeNamingStrategy),
       ImmutableSet.builder().build())

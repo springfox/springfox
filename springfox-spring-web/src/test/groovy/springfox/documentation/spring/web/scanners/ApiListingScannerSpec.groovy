@@ -25,7 +25,7 @@ import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spi.schema.UniqueTypeNameAdjuster
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.SpringGroupingStrategy
@@ -78,7 +78,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       RequestMappingContext requestMappingContext = new RequestMappingContext(
           context,
           new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")),
-          Mock(UniqueTypeNameAdjuster))
+          Mock(UniqueTypeNameAdapter))
       ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
       Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
@@ -104,7 +104,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       def requestMappingContext = new RequestMappingContext(
           context,
           new WebMvcRequestHandler(requestMappingInfo, dummyHandlerMethod("methodWithConcreteResponseBody")),
-          Mock(UniqueTypeNameAdjuster))
+          Mock(UniqueTypeNameAdapter))
       def resourceGroupRequestMappings = newHashMap()
       resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
 

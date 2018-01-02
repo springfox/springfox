@@ -35,7 +35,7 @@ class EnumTypeSpec extends Specification {
       def list = newArrayList("ONE", "TWO")
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
 
       Model asInput = provider.modelFor(
           inputParam("group",

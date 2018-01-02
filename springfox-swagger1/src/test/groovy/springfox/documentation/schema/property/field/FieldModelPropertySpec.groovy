@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -37,7 +37,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
 class FieldModelPropertySpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def typeNameAdjuster = new TypeNameIndexingAdjuster()
+  def typeNameAdjuster = new TypeNameIndexingAdapter()
 
   def "Extracting information from resolved fields" () {
     given:

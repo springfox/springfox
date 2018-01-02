@@ -36,7 +36,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ModelProviderSpec extends Specification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
   def getNames = 
       new Function<Model, String>() {
         public String apply(Model model) {

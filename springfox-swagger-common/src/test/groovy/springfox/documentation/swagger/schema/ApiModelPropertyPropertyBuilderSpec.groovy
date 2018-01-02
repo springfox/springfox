@@ -167,7 +167,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         Optional.absent(),
         new HashSet<>(),
         SWAGGER_12,
-        new TypeNameIndexingAdjuster(),
+        new TypeNameIndexingAdapter(),
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())
@@ -214,7 +214,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         Optional.absent(),
         new HashSet<>(),
         SWAGGER_12,
-        new TypeNameIndexingAdjuster(),
+        new TypeNameIndexingAdapter(),
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())

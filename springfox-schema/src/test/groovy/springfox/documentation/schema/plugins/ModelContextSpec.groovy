@@ -30,7 +30,7 @@ import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.ExampleWithEnums
-import springfox.documentation.schema.TypeNameIndexingAdjuster
+import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -49,7 +49,7 @@ class ModelContextSpec extends Specification {
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
   @Shared
-  def typeNameAdjuster = new TypeNameIndexingAdjuster()
+  def typeNameAdjuster = new TypeNameIndexingAdapter()
 
   def "ModelContext equals works as expected"() {
     given:
