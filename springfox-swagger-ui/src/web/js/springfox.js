@@ -1,10 +1,5 @@
 window.onload = () => {
 
-  const getBaseURL = () => {
-    const urlMatches = /(.*)\/swagger-ui.html.*/.exec(window.location.href);
-    return urlMatches[1];
-  };
-
   const buildSystemAsync = async (baseUrl) => {
     try {
       const configUIResponse = await fetch(baseUrl + "/swagger-resources/configuration/ui");
@@ -16,7 +11,7 @@ window.onload = () => {
       const resourcesResponse = await fetch(baseUrl + "/swagger-resources");
       const resources = await resourcesResponse.json();
       resources.forEach(resource => {
-        resource.url = baseUrl + resource.location;
+        resource.url = baseUrl + resource.url;
       });
 
       window.ui = getUI(baseUrl, resources, configUI, configSecurity);
@@ -57,18 +52,18 @@ window.onload = () => {
       /*--------------------------------------------*\
        * Display
       \*--------------------------------------------*/
-      deepLinking: true,
-      displayOperationId: false,
-      defaultModelsExpandDepth: 1,
-      defaultModelExpandDepth: 1,
-      defaultModelRendering: resources.defaultModelRendering,
-      displayRequestDuration: false,
-      docExpansion: resources.docExpansion,
-      filter: false,
-      maxDisplayedTags: null,
-      operationsSorter: configUI.apisSorter || "alpha",
-      showExtensions: false,
-      tagSorter: configUI.apisSorter || "alpha",
+      deepLinking: configUI.deepLinking,
+      displayOperationId: configUI.displayOperationId,
+      defaultModelsExpandDepth: configUI.defaultModelsExpandDepth,
+      defaultModelExpandDepth: configUI.defaultModelExpandDepth,
+      defaultModelRendering: configUI.defaultModelRendering,
+      displayRequestDuration: configUI.displayRequestDuration,
+      docExpansion: configUI.docExpansion,
+      filter: configUI.filter,
+      maxDisplayedTags: configUI.maxDisplayedTags,
+      operationsSorter: configUI.operationsSorter,
+      showExtensions: configUI.showExtensions,
+      tagSorter: configUI.tagSorter,
       /*--------------------------------------------*\
        * Network
       \*--------------------------------------------*/
@@ -76,7 +71,7 @@ window.onload = () => {
       requestInterceptor: (a => a),
       responseInterceptor: (a => a),
       showMutatedRequest: true,
-      validatorUrl: null,
+      validatorUrl: configUI.validatorUrl,
       /*--------------------------------------------*\
        * Macros
       \*--------------------------------------------*/
@@ -93,11 +88,16 @@ window.onload = () => {
       realm: configSecurity.realm,
       appName: configSecurity.appName,
       scopeSeparator: configSecurity.scopeSeparator,
-      additionalQueryStringParams: {},
-      useBasicAuthenticationWithAccessCodeGrant: false,
+      additionalQueryStringParams: configSecurity.additionalQueryStringParams,
+      useBasicAuthenticationWithAccessCodeGrant: configSecurity.useBasicAuthenticationWithAccessCodeGrant,
     });
 
     return ui;
+  };
+
+  const getBaseURL = () => {
+    const urlMatches = /(.*)\/swagger-ui.html.*/.exec(window.location.href);
+    return urlMatches[1];
   };
 
   /* Entry Point */

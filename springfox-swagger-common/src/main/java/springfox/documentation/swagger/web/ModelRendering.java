@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,16 +18,19 @@
  */
 package springfox.documentation.swagger.web;
 
-public enum ApiKeyVehicle {
-  HEADER("header"),
-  QUERY_PARAM("query");
+import com.fasterxml.jackson.annotation.JsonValue;
+
+public enum ModelRendering {
+  EXAMPLE("example"),
+  MODEL("model");
 
   private final String value;
 
-  ApiKeyVehicle(String value) {
+  ModelRendering(String value) {
     this.value = value;
   }
 
+  @JsonValue
   public String getValue() {
     return value;
   }
