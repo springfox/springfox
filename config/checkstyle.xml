@@ -64,7 +64,7 @@
             <property name="classMaximum" value="500"/>
         </module>
         <module name="CyclomaticComplexity">
-            <property name="max" value="15"/>
+            <property name="max" value="16"/>
         </module>
         <!--<module name="NPathComplexity">-->
         <!--<property name="max" value="50"/>-->
