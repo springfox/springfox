@@ -18,6 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
@@ -42,14 +43,18 @@ import static springfox.documentation.swagger2.mappers.ModelMapper.safeInteger
 class ModelMapperSpec extends SchemaSpecification {
 
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
+  def typeNameAdjuster = new TypeNameIndexingAdapter()
 
   def "models are serialized correctly" (){
     given:
       Model model = modelProvider.modelFor(
         inputParam(
             "group",
-            typeToTest,
+            resolver.resolve(typeToTest),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -72,8 +77,11 @@ class ModelMapperSpec extends SchemaSpecification {
       Model model = modelProvider.modelFor(
           inputParam(
               "group",
-              typeWithVoidLists(),
+              resolver.resolve(typeWithVoidLists()),
+              Optional.absent(),
+              new HashSet<>(),
               DocumentationType.SWAGGER_2,
+              typeNameAdjuster,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -94,17 +102,21 @@ class ModelMapperSpec extends SchemaSpecification {
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
-            listOfMapOfStringToString(),
+            resolver.resolve(listOfMapOfStringToString()),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      mapped.containsKey("MapOfstringAndstring")
+      mapped.containsKey("1484189964")
     and:
-      def mappedModel = mapped.get("MapOfstringAndstring")
+      def mappedModel = mapped.get("1484189964")
+      mappedModel.name.equals("MapOfstringAndstring")
       mappedModel.additionalProperties instanceof StringProperty
   }
 
@@ -113,17 +125,21 @@ class ModelMapperSpec extends SchemaSpecification {
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
-            listOfModelMap(),
+            resolver.resolve(listOfModelMap()),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      mapped.containsKey("ModelMap")
+      mapped.containsKey("1038962798")
     and:
-      def mappedModel = mapped.get("ModelMap")
+      def mappedModel = mapped.get("1038962798")
+      mappedModel.name.equals("ModelMap")
       mappedModel.additionalProperties instanceof ObjectProperty
   }
 
@@ -132,18 +148,22 @@ class ModelMapperSpec extends SchemaSpecification {
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
-            listOfMapOfStringToSimpleType(),
+            resolver.resolve(listOfMapOfStringToSimpleType()),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
     when:
       def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
     then:
-      mapped.containsKey("MapOfstringAndSimpleType")
-      mapped.containsKey("SimpleType")
+      mapped.containsKey("-1575815720")
+      mapped.containsKey("1620190715")
     and:
-      def mappedModel = mapped.get("MapOfstringAndSimpleType")
+      def mappedModel = mapped.get("-1575815720")
+      mappedModel.name.equals("MapOfstringAndSimpleType")
       mappedModel.additionalProperties instanceof RefProperty
   }
 
@@ -152,8 +172,11 @@ class ModelMapperSpec extends SchemaSpecification {
       Map<String, Model> modelMap = modelProvider.dependencies(
         inputParam(
             "group",
-            listOfErasedMap(),
+            resolver.resolve(listOfErasedMap()),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -168,8 +191,11 @@ class ModelMapperSpec extends SchemaSpecification {
       Model model = modelProvider.modelFor(
         inputParam(
             "group",
-            genericClassOfType(Void),
+            resolver.resolve(genericClassOfType(Void)),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -200,8 +226,11 @@ class ModelMapperSpec extends SchemaSpecification {
       Model model = modelProvider.modelFor(
         inputParam(
             "group",
-            simpleType(),
+            resolver.resolve(simpleType()),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -299,8 +328,11 @@ class ModelMapperSpec extends SchemaSpecification {
       Model model = modelProvider.modelFor(
         inputParam(
             "group",
-            simpleType(),
+            resolver.resolve(simpleType()),
+            Optional.absent(),
+            new HashSet<>(),
             DocumentationType.SWAGGER_2,
+            typeNameAdjuster,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
