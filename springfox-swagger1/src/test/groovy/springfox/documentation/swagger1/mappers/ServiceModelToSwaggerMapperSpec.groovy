@@ -98,9 +98,8 @@ class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSup
                   .consumes([] as Set)
                   .produces([] as Set)
                   .models([
-                    "m1" : new ModelBuilder()
+                    "m1" : new ModelBuilder("test")
                             .description("test")
-                            .id("test")
                             .name("test")
                             .qualifiedType("qualified.name")
                             .subTypes(null)
