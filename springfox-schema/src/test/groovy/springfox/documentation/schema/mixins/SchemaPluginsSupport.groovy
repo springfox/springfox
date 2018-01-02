@@ -25,7 +25,7 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
-import springfox.documentation.spi.service.ViewProviderPlugin
+import springfox.documentation.spi.schema.ViewProviderPlugin
 
 import static com.google.common.collect.Lists.*
 

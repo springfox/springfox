@@ -32,8 +32,9 @@ import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.schema.ViewProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
-import springfox.documentation.spi.service.ViewProviderPlugin
+
 import java.lang.reflect.AnnotatedElement
 
 import static com.google.common.collect.Lists.*
@@ -85,7 +86,7 @@ class SchemaPluginsManagerSpec extends Specification {
   def "enriches model when plugins are found"() {
     given:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
       def context = inputParam(
           "group",
           resolver.resolve(TypeForTestingPropertyNames),
@@ -106,7 +107,7 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model name when plugins are found"() {
     given:
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdjuster();
+      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
       def context = inputParam(
           "group",
           resolver.resolve(ExampleWithEnums),

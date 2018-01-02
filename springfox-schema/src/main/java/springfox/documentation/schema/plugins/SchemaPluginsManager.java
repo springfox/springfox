@@ -28,9 +28,9 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-import springfox.documentation.spi.service.ViewProviderPlugin;
 
 @Component
 public class SchemaPluginsManager {
@@ -44,7 +44,7 @@ public class SchemaPluginsManager {
       PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers,
       @Qualifier("modelBuilderPluginRegistry")
       PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers,
-      @Qualifier("viewProviderRegistry")
+      @Qualifier("viewProviderPluginRegistry")
       PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders) {
     this.propertyEnrichers = propertyEnrichers;
     this.modelEnrichers = modelEnrichers;

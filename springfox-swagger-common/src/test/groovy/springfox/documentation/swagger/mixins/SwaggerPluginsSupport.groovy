@@ -28,8 +28,8 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
+import springfox.documentation.spi.schema.ViewProviderPlugin
 import springfox.documentation.spi.service.DefaultsProviderPlugin
-import springfox.documentation.spi.service.ViewProviderPlugin
 import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider

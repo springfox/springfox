@@ -27,7 +27,7 @@ import org.springframework.plugin.core.config.EnablePluginRegistries;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
-import springfox.documentation.spi.service.ViewProviderPlugin;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 
 @Configuration
 @ComponentScan(basePackages = {

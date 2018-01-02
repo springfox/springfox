@@ -33,8 +33,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
-import springfox.documentation.spi.service.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import java.util.HashSet;

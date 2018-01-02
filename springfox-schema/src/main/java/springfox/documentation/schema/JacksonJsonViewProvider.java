@@ -35,7 +35,7 @@ import com.google.common.base.Optional;
 
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.ViewProviderPlugin;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
