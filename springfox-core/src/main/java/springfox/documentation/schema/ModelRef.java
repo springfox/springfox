@@ -119,14 +119,11 @@ public class ModelRef implements ModelReference {
     }
 
     ModelRef that = (ModelRef) o;
-    
-    if (modelId.isPresent() || that.modelId.isPresent()) {
-      return Objects.equal(modelId, that.modelId);
-    }
 
     return Objects.equal(type, that.type) &&
         Objects.equal(isMap, that.isMap) &&
         Objects.equal(itemModel, that.itemModel) &&
-        Objects.equal(allowableValues, that.allowableValues);
+        Objects.equal(allowableValues, that.allowableValues) &&
+        Objects.equal(modelId, that.modelId);
     }
 }

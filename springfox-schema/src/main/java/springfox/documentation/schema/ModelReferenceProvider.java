@@ -19,6 +19,7 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.allowableValues;
+import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
 
 class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
@@ -53,14 +55,14 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       return new ModelRef("__file");
     }
     String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-    return new ModelRef(typeName, null, allowableValues(type), fromParent(parentContext, type).hashCode());
+    return new ModelRef(typeName, null, allowableValues(type), modelId(fromParent(parentContext, type)));
   }
 
   private Optional<ModelReference> mapReference(ResolvedType type) {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, fromParent(parentContext, type).hashCode()));
+      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, modelId(fromParent(parentContext, mapValueType))));
     }
     return Optional.absent();
   }
@@ -74,8 +76,16 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
               typeName,
               apply(collectionElementType),
               allowableValues(collectionElementType),
-              fromParent(parentContext, type).hashCode()));
+              modelId(fromParent(parentContext, collectionElementType))));
     }
     return Optional.absent();
+  }
+  
+  private static Integer modelId(ModelContext context) {
+    ResolvedType type = context.getType();
+    if (type instanceof ResolvedPrimitiveType || isBaseType(type) || isVoid(type)) {
+      return type.hashCode();
+    }
+    return context.hashCode();
   }
 }
