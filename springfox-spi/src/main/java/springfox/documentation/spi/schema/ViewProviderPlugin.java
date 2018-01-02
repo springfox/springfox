@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spi.service;
+package springfox.documentation.spi.schema;
 
 import org.springframework.plugin.core.Plugin;
 
