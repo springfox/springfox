@@ -41,7 +41,7 @@
             "description": "toCreate",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Resource«Pet»"
+              "$ref": "#/definitions/Resource_2«Pet»"
             }
           }
         ],
@@ -75,7 +75,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/HttpEntity«Resource«Pet»»"
+              "$ref": "#/definitions/HttpEntity«Resource_1«Pet»»"
             }
           },
           "405": {
@@ -107,7 +107,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Resource«Pet»"
+              "$ref": "#/definitions/Resource_1«Pet»"
             }
           },
           "405": {
@@ -134,15 +134,15 @@
     }
   },
   "definitions": {
-    "HttpEntity«Resource«Pet»»": {
+    "HttpEntity«Resource_1«Pet»»": {
       "type": "object",
       "properties": {
         "body": {
-          "$ref": "#/definitions/Resource«Pet»"
+          "$ref": "#/definitions/Resource_1«Pet»"
         }
       }
     },
-    "Link": {
+    "Link_1": {
       "type": "object",
       "properties": {
         "href": {
@@ -153,6 +153,17 @@
         },
         "templated": {
           "type": "boolean"
+        }
+      }
+    },
+    "Link_2": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "rel": {
+          "type": "string"
         }
       }
     },
@@ -171,21 +182,42 @@
         }
       }
     },
-    "Resource«Pet»": {
+    "Resource_1«Pet»": {
       "type": "object",
       "properties": {
-        "links": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Link"
-          }
-        },
         "age": {
           "type": "integer",
           "format": "int32"
         },
         "id": {
           "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link_1"
+          }
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Resource_2«Pet»": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link_2"
+          }
         },
         "name": {
           "type": "string"

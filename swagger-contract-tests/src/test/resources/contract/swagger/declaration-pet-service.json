@@ -246,7 +246,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry«string,Pet»]",
+              "type": "List[Entry_2«string,Pet»]",
               "required": true
             }
           ],
@@ -274,7 +274,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry«string,Pet»]"
+          "type": "List[Entry_2«string,Pet»]"
         }
       ],
       "path": "/pets/echo"
@@ -429,7 +429,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry«string,List«string»»]"
+          "type": "List[Entry_5«string,List«string»»]"
         }
       ],
       "path": "/pets/nameToNickNamesMap"
@@ -522,7 +522,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry«string,Pet»]",
+              "type": "List[Entry_2«string,Pet»]",
               "required": true
             }
           ],
@@ -574,7 +574,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry«string,Pet»]",
+              "type": "List[Entry_2«string,Pet»]",
               "required": true
             }
           ],
@@ -626,7 +626,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry«string,Pet»]",
+              "type": "List[Entry_2«string,Pet»]",
               "required": true
             }
           ],
@@ -933,11 +933,21 @@
     }
   ],
   "basePath": "/",
-  "consumes": [],
+  "consumes": [ ],
   "models": {
-    "Entry«string,List«string»»": {
+    "Entry_2«string,Pet»": {
       "description": "",
-      "id": "Entry«string,List«string»»",
+      "id": "Entry_2«string,Pet»",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "Pet"
+        }
+      }
+    },
+    "Entry_5«string,List«string»»": {
+      "description": "",
+      "id": "Entry_5«string,List«string»»",
       "properties": {
         "key": {
           "required": false,
@@ -945,16 +955,6 @@
             "type": "string"
           },
           "type": "array"
-        }
-      }
-    },
-    "Entry«string,Pet»": {
-      "description": "",
-      "id": "Entry«string,Pet»",
-      "properties": {
-        "key": {
-          "required": false,
-          "type": "Pet"
         }
       }
     },
