@@ -19,13 +19,11 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -141,15 +139,14 @@ public class ApiListingScanner {
   }
   
   private Map<String, Model> toModelMap(Optional<List<Model>> models) {
+    Map<String, Model> modelMap = newHashMap();
     if (!models.isPresent()) {
-      return newHashMap();
+      return modelMap;
     }
-    return Maps.uniqueIndex(models.get(), new Function<Model, String>() {
-      @Override
-      public String apply(Model model) {
-          return model.getName();
-      }
-    });
+    for (Model model : models.get()) {
+      modelMap.put(model.getName(), model);
+    }
+    return modelMap;
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
