@@ -25,6 +25,10 @@
     {
       "name": "Tag Entity",
       "description": "Simple Jpa Repository"
+    },
+    {
+      "name": "person-controller",
+      "description": "Person Controller"
     }
   ],
   "produces": [
@@ -32,7 +36,7 @@
     "application/json"
   ],
   "paths": {
-    "/addresses": {
+    "/rest/addresses": {
       "post": {
         "tags": [
           "Address Entity"
@@ -63,7 +67,7 @@
         }
       }
     },
-    "/addresses/{id}": {
+    "/rest/addresses/{id}": {
       "get": {
         "tags": [
           "Address Entity"
@@ -186,7 +190,7 @@
         }
       }
     },
-    "/addresses/{id}/person": {
+    "/rest/addresses/{id}/person": {
       "get": {
         "tags": [
           "Address Entity"
@@ -356,7 +360,7 @@
         }
       }
     },
-    "/addresses{?page,size,sort}": {
+    "/rest/addresses{?page,size,sort}": {
       "get": {
         "tags": [
           "Address Entity"
@@ -402,7 +406,7 @@
         }
       }
     },
-    "/people": {
+    "/rest/people": {
       "post": {
         "tags": [
           "Person Entity"
@@ -433,7 +437,7 @@
         }
       }
     },
-    "/people/search/findByFirstName{?firstName}": {
+    "/rest/people/search/findByFirstName{?firstName}": {
       "get": {
         "tags": [
           "Person Entity"
@@ -459,7 +463,7 @@
         }
       }
     },
-    "/people/search/findByLastName{?name}": {
+    "/rest/people/search/findByLastName{?name}": {
       "get": {
         "tags": [
           "Person Entity"
@@ -486,7 +490,7 @@
         }
       }
     },
-    "/people/{id}": {
+    "/rest/people/{id}": {
       "get": {
         "tags": [
           "Person Entity"
@@ -609,7 +613,7 @@
         }
       }
     },
-    "/people/{id}/personAddress": {
+    "/rest/people/{id}/personAddress": {
       "get": {
         "tags": [
           "Person Entity"
@@ -779,7 +783,7 @@
         }
       }
     },
-    "/people/{id}/tags": {
+    "/rest/people/{id}/tags": {
       "get": {
         "tags": [
           "Person Entity"
@@ -958,7 +962,7 @@
         }
       }
     },
-    "/people/{id}/tags/{tagId}": {
+    "/rest/people/{id}/tags/{tagId}": {
       "get": {
         "tags": [
           "Person Entity"
@@ -1028,7 +1032,34 @@
         }
       }
     },
-    "/people{?page,size,sort}": {
+    "/rest/people/{id}{?lastName}": {
+      "patch": {
+        "tags": [
+          "person-controller"
+        ],
+        "summary": "updateLastName",
+        "description": "Updates the persons last name",
+        "operationId": "updateLastNameUsingPATCH_2",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "lastName",
+            "in": "query",
+            "description": "lastName parameter",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/rest/people{?page,size,sort}": {
       "get": {
         "tags": [
           "Person Entity"
@@ -1074,7 +1105,7 @@
         }
       }
     },
-    "/tags": {
+    "/rest/tags": {
       "post": {
         "tags": [
           "Tag Entity"
@@ -1105,7 +1136,7 @@
         }
       }
     },
-    "/tags/{id}": {
+    "/rest/tags/{id}": {
       "get": {
         "tags": [
           "Tag Entity"
@@ -1228,7 +1259,7 @@
         }
       }
     },
-    "/tags/{id}/people": {
+    "/rest/tags/{id}/people": {
       "get": {
         "tags": [
           "Tag Entity"
@@ -1407,7 +1438,7 @@
         }
       }
     },
-    "/tags/{id}/people/{personId}": {
+    "/rest/tags/{id}/people/{personId}": {
       "get": {
         "tags": [
           "Tag Entity"
@@ -1477,7 +1508,7 @@
         }
       }
     },
-    "/tags{?page,size,sort}": {
+    "/rest/tags{?page,size,sort}": {
       "get": {
         "tags": [
           "Tag Entity"

@@ -297,10 +297,10 @@ class Swagger2TestConfig {
         .produces(['application/xml', 'application/json'] as Set)
         .select()
         .paths(or(
-          regex("/people.*"),
-          regex("/tags.*"),
-          regex("/categories.*"),
-          regex("/addresses.*")))
+          regex("/rest/people.*"),
+          regex("/rest/tags.*"),
+          regex("/rest/categories.*"),
+          regex("/rest/addresses.*")))
         .build()
   }
 }

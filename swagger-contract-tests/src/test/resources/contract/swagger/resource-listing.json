@@ -77,6 +77,11 @@
       "position": 0
     },
     {
+      "description": "Person Controller",
+      "path": "/default/person-controller",
+      "position": 0
+    },
+    {
       "description": "Grooming operations for pets",
       "path": "/default/pet-grooming-service",
       "position": 0
