@@ -1512,7 +1512,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry_4«string,Map«string,Example»»]"
+          "type": "List[Entry_6«string,Map«string,Example»»]"
         }
       ],
       "path": "/features/mapOfMapOfExample"
@@ -1971,19 +1971,19 @@
       "id": "ObjectNode",
       "properties": {}
     },
-    "Entry_4«string,Map«string,Example»»": {
+    "Entry_6«string,Map«string,Example»»": {
       "description": "",
-      "id": "Entry_4«string,Map«string,Example»»",
+      "id": "Entry_6«string,Map«string,Example»»",
       "properties": {
         "key": {
           "required": false,
-          "type": "List[Entry_3«string,Example»]"
+          "type": "List[Entry_5«string,Example»]"
         }
       }
     },
-    "Entry_3«string,Example»": {
+    "Entry_5«string,Example»": {
       "description": "",
-      "id": "Entry_3«string,Example»",
+      "id": "Entry_5«string,Example»",
       "properties": {
         "key": {
           "required": false,

@@ -100,6 +100,11 @@
       "description": "Root Controller",
       "path": "/default/root-controller",
       "position": 0
+    },
+    {
+      "description": "Same Controller",
+      "path": "/default/same-controller",
+      "position": 0
     }
   ],
   "authorizations": {

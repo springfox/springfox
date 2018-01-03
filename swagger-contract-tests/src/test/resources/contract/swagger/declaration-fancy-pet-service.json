@@ -20,7 +20,7 @@
               "description": "object",
               "name": "body",
               "paramType": "body",
-              "type": "FancyPet",
+              "type": "FancyPet_2",
               "required": true
             }
           ],
@@ -124,7 +124,7 @@
               "description": "object",
               "name": "body",
               "paramType": "body",
-              "type": "FancyPet",
+              "type": "FancyPet_2",
               "required": true
             },
             {
@@ -183,9 +183,9 @@
         }
       }
     },
-    "FancyPet": {
+    "FancyPet_2": {
       "description": "",
-      "id": "FancyPet",
+      "id": "FancyPet_2",
       "properties": {
         "age": {
           "required": false,

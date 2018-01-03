@@ -91,6 +91,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     'declaration-spring-data-rest.json'                           | 'spring-data-rest'
     'declaration-consumes-produces-not-on-document-context.json'  | 'consumesProducesNotOnDocumentContext'
     'declaration-consumes-produces-on-document-context.json'      | 'consumesProducesOnDocumentContext'
+    'declaration-same-controller.json'                            | 'same'
   }
 
   def "should list swagger resources for swagger 2.0"() {

@@ -22,10 +22,14 @@ package springfox.documentation.spring.web.dummy.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class SameCategory extends Category {
 
+  @ApiModelProperty(value = "Id field", required = true)
   private Integer id;
 
+  @ApiModelProperty(value = "Type field", readOnly = true)
   private String type;
 
   public SameCategory(String name, Integer id, String type) {

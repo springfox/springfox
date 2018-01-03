@@ -320,4 +320,17 @@ class Swagger2TestConfig {
           regex("/addresses.*")))
         .build()
   }
+
+  @Bean
+  public Docket same(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("same")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .produces(['application/xml', 'application/json'] as Set)
+        .select()
+        .paths(regex("/same/.*"))
+        .build()
+
+  }
 }
