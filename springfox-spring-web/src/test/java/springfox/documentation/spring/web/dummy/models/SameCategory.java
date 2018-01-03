@@ -19,15 +19,36 @@
 
 package springfox.documentation.spring.web.dummy.models;
 
-public class SameCategory extends Category {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-  public SameCategory(String name) {
-    super(name);
-  }
+public class SameCategory extends Category {
 
   private Integer id;
 
+  private String type;
+
+  public SameCategory(String name, Integer id, String type) {
+    super(name);
+    this.id = id;
+    this.type = type;
+  }
+
+  @JsonProperty(value = "_id", access = Access.WRITE_ONLY)
+  public Integer getId() {
+    return id;
+  }
+
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  @JsonProperty(value = "_type", access = Access.READ_ONLY)
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
   }
 }

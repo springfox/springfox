@@ -131,7 +131,7 @@ public class ApiModelReader  {
             newModels.add(model_to);
             ModelContext context_to = contextMap.get(model_to.getId());
             context_to.assumeEqualsTo(contextMap.get(model_for.getId()));
-            adjustLinksFor(modelBranch, model_for.getId(), model_to.getId(), contextMap.get(model_to.getId()));
+            adjustLinksFor(modelBranch, model_for.getId(), contextMap.get(model_to.getId()));
             continue outer;
           }
         }
@@ -181,7 +181,6 @@ public class ApiModelReader  {
 
   private void adjustLinksFor(Map<String, Model> branch,
           String id_for,
-          String  id_to,
           ModelContext modelContext) {
     for(Map.Entry<String, Model> entry : branch.entrySet()) {
       Model model = entry.getValue();

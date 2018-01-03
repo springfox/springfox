@@ -396,7 +396,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelsList.size() == 5
     and:
       def models = newHashMap();
-      for (Model model: modelsList) {System.out.println(model.getName());
+      for (Model model: modelsList) {
         models.put(model.getName(), model);
       }
 
@@ -419,8 +419,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       mapFancyPet != null
 
     and:
-      category_1.getProperties().size() == 1
+      category_1.getProperties().size() == 2
       category_1.getProperties().containsKey('name')
+      category_1.getProperties().containsKey('_type')
     and:
       category_2.getProperties().size() == 2
       category_2.getProperties().containsKey('id')
