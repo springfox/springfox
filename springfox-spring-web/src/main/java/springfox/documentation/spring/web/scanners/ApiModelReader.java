@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
@@ -108,7 +107,7 @@ public class ApiModelReader  {
     return updateTypeNames(modelMap, contextMap);
   }
 
-  private List<Model> mergeModelBranch(Map<ResolvedType, List<Model>> modelTypeMap,
+  private List<Model> mergeModelBranch(Map<String, List<Model>> modelTypeMap,
           Map<String, Model> modelBranch,
           Map<String, ModelContext> contextMap) {
     Map<String, Model> modelsToCompare;
@@ -118,10 +117,11 @@ public class ApiModelReader  {
       outer: while (it.hasNext()) {
         Map.Entry<String, Model> entry = it.next();
         Model model_for = entry.getValue();
-        if (!modelTypeMap.containsKey(model_for.getType())) {
+        String modelForTypeName = model_for.getType().getErasedType().getName();
+        if (!modelTypeMap.containsKey(modelForTypeName)) {
           continue outer;
         }
-        List<Model> models = modelTypeMap.get(model_for.getType());
+        List<Model> models = modelTypeMap.get(modelForTypeName);
         for (Model model_to : models) {
           if (model_for.equalsIgnoringName(model_to)) {
             it.remove();
@@ -165,14 +165,15 @@ public class ApiModelReader  {
     return modelsWithoutRefs;
   }
 
-  private Map<ResolvedType, List<Model>> toModelTypeMap(Map<ResourceGroup, List<Model>> modelMap) {
-    Map<ResolvedType, List<Model>> modelTypeMap = newHashMap();
+  private Map<String, List<Model>> toModelTypeMap(Map<ResourceGroup, List<Model>> modelMap) {
+    Map<String, List<Model>> modelTypeMap = newHashMap();
     for(Map.Entry<ResourceGroup, List<Model>> entry : modelMap.entrySet()) {
       for (Model model: entry.getValue()) {
-        if (modelTypeMap.containsKey(model.getType())) {
-          modelTypeMap.get(model.getType()).add(model);
+        String typeName = model.getType().getErasedType().getName();
+        if (modelTypeMap.containsKey(typeName)) {
+          modelTypeMap.get(typeName).add(model);
         } else {
-          modelTypeMap.put(model.getType(), new ArrayList<Model>(Arrays.asList(new Model[] {model})));
+          modelTypeMap.put(typeName, new ArrayList<Model>(Arrays.asList(new Model[] {model})));
         }
       }
     }
