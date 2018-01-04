@@ -1224,6 +1224,34 @@
         }
       }
     },
+    "/bugs/2161": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2161",
+        "operationId": "bug2161UsingGET_2",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "status",
+            "description": "status",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/{bar}/2148{?year}": {
       "get": {
         "tags": [
@@ -1534,6 +1562,17 @@
         }
       },
       "title": "Resource«string»"
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Status"
     }
   }
 }

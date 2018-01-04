@@ -19,6 +19,7 @@
 package springfox.documentation.spring.web.dummy.controllers;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.Optional;
@@ -370,6 +371,29 @@ public class BugsController {
 
     return ResponseEntity.notFound().build();
   }
+
+  @GetMapping(path = "/2161")
+  ResponseEntity<String> bug2161(@RequestBody Status status) {
+    return ResponseEntity.ok("");
+  }
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  public class Status {
+    @ApiModelProperty(example = "false")
+    private final Boolean enabled;
+
+    @JsonCreator
+    Status(
+        @JsonProperty("enabled") final Boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    @JsonProperty("enabled")
+    public Boolean isEnabled() {
+      return enabled;
+    }
+  }
+
 
   public enum Lang {
     zh, en
