@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,9 @@ import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.dummy.AlternateTypeContainer
 import springfox.documentation.spring.web.dummy.DummyModels
+import springfox.documentation.spring.web.dummy.ToReplaceWithString
 import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Treeish
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -67,13 +69,6 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     sut.pluginsManager = pluginsManager
   }
 
-  def "Should support all documentation types"() {
-    sut.supports(DocumentationType.SPRING_WEB)
-    sut.supports(DocumentationType.SWAGGER_12)
-    sut.supports(DocumentationType.SWAGGER_2)
-  }
-
-
   @Unroll
   def "Should ignore ignorables"() {
     given:
@@ -86,6 +81,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     when:
     sut.apply(operationContext)
     def operation = operationContext.operationBuilder().build()
+
     then:
     operation.parameters.size() == expectedSize
 
@@ -95,6 +91,29 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     dummyHandlerMethod('methodWithBindingResult', BindingResult.class)   | 0
     dummyHandlerMethod('methodWithInteger', Integer.class)               | 1
     dummyHandlerMethod('methodWithAnnotatedInteger', Integer.class)      | 0
+  }
+
+  def "Should consider alternate types"() {
+    given:
+    contextBuilder.rules([newRule(ToReplaceWithString, String)])
+    OperationContext operationContext = operationContext(
+        context(),
+        handlerMethod,
+        0,
+        requestMappingInfo("/somePath"))
+
+    when:
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
+
+    then:
+    operation.parameters.size() == expectedSize
+    operation.parameters[0].name == "stringValue"
+    operation.parameters[0].modelRef.type == "string"
+
+    where:
+    handlerMethod                                                               | expectedSize
+    dummyHandlerMethod('methodWithAlternateType', AlternateTypeContainer.class) | 1
   }
 
   def "Should expand ModelAttribute request params"() {
@@ -162,6 +181,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     when:
     sut.apply(operationContext)
     def operation = operationContext.operationBuilder().build()
+
     then:
     operation.parameters.size() == 1
 
@@ -178,6 +198,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     when:
     sut.apply(operationContext)
     def operation = operationContext.operationBuilder().build()
+
     then:
     operation.parameters.size() == expectedSize
 
@@ -194,6 +215,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     when:
     sut.apply(operationContext)
     def operation = operationContext.operationBuilder().build()
+
     then:
     operation.parameters.size() == expectedSize
 

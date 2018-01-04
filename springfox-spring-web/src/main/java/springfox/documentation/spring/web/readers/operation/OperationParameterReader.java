@@ -98,7 +98,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         if (shouldExpand(methodParameter, alternate)) {
           parameters.addAll(
               expander.expand(
-                  new ExpansionContext("", methodParameter.getParameterType(), context.getDocumentationContext())));
+                  new ExpansionContext("", alternate, context.getDocumentationContext())));
         } else {
           parameters.add(pluginsManager.parameter(parameterContext));
         }
