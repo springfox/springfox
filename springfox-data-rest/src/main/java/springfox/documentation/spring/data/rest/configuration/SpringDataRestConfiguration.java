@@ -19,7 +19,6 @@
 package springfox.documentation.spring.data.rest.configuration;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,8 +34,8 @@ import springfox.documentation.schema.AlternateTypeRuleConvention;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static springfox.documentation.schema.AlternateTypeRules.newRule;
+import static com.google.common.collect.Lists.*;
+import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @Configuration
 @ComponentScan(basePackages = "springfox.documentation.spring.data.rest")
