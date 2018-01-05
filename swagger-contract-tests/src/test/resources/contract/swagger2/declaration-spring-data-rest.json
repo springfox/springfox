@@ -437,6 +437,51 @@
         }
       }
     },
+    "/rest/people/pageable{?page,size,sort}": {
+      "patch": {
+        "tags": [
+          "person-controller"
+        ],
+        "summary": "pageableResults",
+        "operationId": "pageableResultsUsingPATCH_2",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/Person"
+              }
+            }
+          }
+        }
+      }
+    },
     "/rest/people/search/findByFirstName{?firstName}": {
       "get": {
         "tags": [
