@@ -2488,7 +2488,7 @@
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/definitions/Person"
+              "$ref": "#/definitions/Person_1"
             }
           }
         },

@@ -164,7 +164,7 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet"
+                  "$ref": "#/definitions/FancyPet_1"
                 }
               }
             }
@@ -192,7 +192,7 @@
             "items": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/SameFancyPet"
+                "$ref": "#/definitions/SameFancyPet_1"
               }
             }
           }
@@ -209,7 +209,7 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/SameFancyPet"
+                  "$ref": "#/definitions/SameFancyPet_1"
                 }
               }
             }
@@ -229,7 +229,7 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet"
+                  "$ref": "#/definitions/FancyPet_2"
                 }
               }
             }
@@ -257,7 +257,7 @@
             "items": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/SameFancyPet"
+                "$ref": "#/definitions/SameFancyPet_2"
               }
             }
           }
@@ -274,7 +274,7 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/SameFancyPet"
+                  "$ref": "#/definitions/SameFancyPet_2"
                 }
               }
             }

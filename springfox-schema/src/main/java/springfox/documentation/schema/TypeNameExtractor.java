@@ -130,15 +130,16 @@ public class TypeNameExtractor {
 
   private String modelName(ModelContext context) {
     if (context.isFullTypeNameRequired() &&
-        context.getTypeName().isPresent() &&
-        !isMapType(asResolved(context.getType()))) {
+        context.getTypeName().isPresent() ) {
       return adjustedName(context);
     }
     TypeNameProviderPlugin selected =
         typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
     String modelName = selected.nameFor(((ResolvedType)context.getType()).getErasedType());
     LOG.debug("Generated unique model named: {}, with model id: {}", modelName, context.hashCode());
-    context.registerTypeName(modelName);
+    if (!isMapType(asResolved(context.getType()))) {
+      context.registerTypeName(modelName);
+    }
     return modelName;
   }
 

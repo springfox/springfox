@@ -33,6 +33,7 @@ import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelProvider;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -144,24 +145,22 @@ public class ApiModelReader  {
 
   private Map<String, Model> modelsWithoutRefs(Map<String, Model> modelBranch) {
     Map<String, Model> modelsWithoutRefs = newHashMap();
-    Iterator<Map.Entry<String, Model>> it = modelBranch.entrySet().iterator();
-    first: while (it.hasNext()) {
-      Map.Entry<String, Model> entry = it.next();
-      Model model = entry.getValue();
+    first: for (Map.Entry<String, Model> entry_model : modelBranch.entrySet()) {
+      Model model = entry_model.getValue();
       for (Map.Entry<String, ModelProperty> entry_property : 
         model.getProperties().entrySet()) {
           ModelProperty property = entry_property.getValue();
           if (property.getModelRef().getModelId().isPresent()) {
-            String id = String.valueOf(
-              property.getModelRef().getModelId().get());
+            String id = String.valueOf(property.getModelRef().getModelId().get());
             if (modelBranch.containsKey(id)) {
               continue first;
             }
           }
+          
         }
       modelsWithoutRefs.put(model.getId(), model);
-      it.remove();
     }
+    modelBranch.keySet().removeAll(modelsWithoutRefs.keySet());
     return modelsWithoutRefs;
   }
 
@@ -203,13 +202,21 @@ public class ApiModelReader  {
       for (Model model: modelMap.get(resourceGroup)) {
         for (String propertyName: model.getProperties().keySet()) {
           ModelProperty property = model.getProperties().get(propertyName);
-          if (property.getModelRef().getModelId().isPresent()) {
-            String modelId = String.valueOf(property.getModelRef().getModelId().get());
-            if (contextMap.containsKey(modelId)) {
+          ModelReference ref = property.getModelRef();
+
+          while (true) {
+            if (ref.getModelId().isPresent() && 
+                    contextMap.containsKey(String.valueOf(ref.getModelId().get()))) {
               property.updateModelRef(modelRefFactory(
                   ModelContext.withAdjustedTypeName(
-                      contextMap.get(modelId)), typeNameExtractor));
-              }
+                      contextMap.get(String.valueOf(ref.getModelId().get()))), typeNameExtractor));
+              break;
+            }
+            if (ref.itemModel().isPresent()) {
+              ref = ref.itemModel().get();
+            } else {
+              break;
+            }
           }
         }
         updatedModels.add(new ModelBuilder(model.getId())

@@ -28,7 +28,8 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.allowableValues;
-import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.schema.Types.isVoid;
+import static springfox.documentation.schema.Types.isBaseType;
 import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
 
 class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
@@ -62,7 +63,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, modelId(fromParent(parentContext, mapValueType))));
+      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, modelId(fromParent(parentContext, type))));
     }
     return Optional.absent();
   }
@@ -76,16 +77,16 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
               typeName,
               apply(collectionElementType),
               allowableValues(collectionElementType),
-              modelId(fromParent(parentContext, collectionElementType))));
+              modelId(fromParent(parentContext, type))));
     }
     return Optional.absent();
   }
   
-  private static Integer modelId(ModelContext context) {
+  private static Optional<Integer> modelId(ModelContext context) {
     ResolvedType type = context.getType();
     if (type instanceof ResolvedPrimitiveType || isBaseType(type) || isVoid(type)) {
-      return type.hashCode();
+      return Optional.absent();
     }
-    return context.hashCode();
+    return Optional.of(context.hashCode());
   }
 }

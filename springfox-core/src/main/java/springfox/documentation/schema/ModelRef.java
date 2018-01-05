@@ -39,7 +39,7 @@ public class ModelRef implements ModelReference {
     this(type, itemType, false);
   }
 
-  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues, Integer modelId) {
+  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues, Optional<Integer> modelId) {
     this(type, itemType, allowableValues, false, modelId);
   }
 
@@ -51,12 +51,12 @@ public class ModelRef implements ModelReference {
     this(type, itemType, null, isMap, null);
   }
 
-  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap, Integer modelId) {
+  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap, Optional<Integer> modelId) {
     this.type = type;
     this.isMap = isMap;
     this.allowableValues = Optional.fromNullable(allowableValues);
     this.itemModel = Optional.fromNullable(itemModel);
-    this.modelId = Optional.fromNullable(modelId);
+    this.modelId = modelId;
   }
 
   @Override
