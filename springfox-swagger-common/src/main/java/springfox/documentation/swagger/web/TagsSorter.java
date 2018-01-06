@@ -33,4 +33,13 @@ public enum TagsSorter {
   public String getValue() {
     return value;
   }
+
+  public static TagsSorter of(String name) {
+    for (TagsSorter tagsSorter : TagsSorter.values()) {
+      if (tagsSorter.value.equals(name)) {
+        return tagsSorter;
+      }
+    }
+    return null;
+  }
 }

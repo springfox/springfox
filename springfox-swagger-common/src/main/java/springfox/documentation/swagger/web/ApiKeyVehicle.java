@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2018 the original author or authors.
+ *  Copyright 2015 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,29 +18,17 @@
  */
 package springfox.documentation.swagger.web;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
-public enum OperationsSorter {
-  ALPHA("alpha"),
-  METHOD("method");
+public enum ApiKeyVehicle {
+  HEADER("header"),
+  QUERY_PARAM("query");
 
   private final String value;
 
-  OperationsSorter(String value) {
+  ApiKeyVehicle(String value) {
     this.value = value;
   }
 
-  @JsonValue
   public String getValue() {
     return value;
-  }
-
-  public static OperationsSorter of(String name) {
-    for (OperationsSorter operationsSorter : OperationsSorter.values()) {
-      if (operationsSorter.value.equals(name)) {
-        return operationsSorter;
-      }
-    }
-    return null;
   }
 }

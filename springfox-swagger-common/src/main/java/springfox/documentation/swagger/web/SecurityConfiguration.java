@@ -18,6 +18,7 @@
  */
 package springfox.documentation.swagger.web;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,6 +26,25 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SecurityConfiguration {
+  /**
+   * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
+   */
+  static final SecurityConfiguration DEFAULT = new SecurityConfiguration();
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  private String apiKey;
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  private ApiKeyVehicle apiKeyVehicle;
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  private String apiKeyName;
 
   /*--------------------------------------------*\
    * OAuth2
@@ -36,6 +56,39 @@ public class SecurityConfiguration {
   private final String scopeSeparator;
   private final Map<String, Object> additionalQueryStringParams;
   private final Boolean useBasicAuthenticationWithAccessCodeGrant;
+
+  /**
+   * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
+   */
+  private SecurityConfiguration() {
+    this(null, null, null, null, null, ApiKeyVehicle.HEADER, "api_key", ",");
+  }
+
+  /**
+   * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
+   */
+  @Deprecated
+  public SecurityConfiguration(
+      String clientId,
+      String clientSecret,
+      String realm,
+      String appName,
+      String apiKey,
+      ApiKeyVehicle apiKeyVehicle,
+      String apiKeyName,
+      String scopeSeparator) {
+    this.clientId = clientId;
+    this.clientSecret = clientSecret;
+    this.realm = realm;
+    this.appName = appName;
+    this.apiKey = apiKey;
+    this.apiKeyVehicle = apiKeyVehicle;
+    this.apiKeyName = apiKeyName;
+    this.scopeSeparator = scopeSeparator;
+
+    this.additionalQueryStringParams = null;
+    this.useBasicAuthenticationWithAccessCodeGrant = null;
+  }
 
   /**
    * Default constructor
@@ -70,6 +123,33 @@ public class SecurityConfiguration {
     this.scopeSeparator = scopeSeparator;
     this.additionalQueryStringParams = additionalQueryStringParams;
     this.useBasicAuthenticationWithAccessCodeGrant = useBasicAuthenticationWithAccessCodeGrant;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public String getApiKey() {
+    return apiKey;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public String getApiKeyName() {
+    return apiKeyName;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public String getApiKeyVehicle() {
+    return apiKeyVehicle.getValue();
   }
 
   @JsonProperty("clientId")

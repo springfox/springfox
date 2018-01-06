@@ -24,10 +24,20 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
 
-class SecurityConfigurationSpec extends Specification {
-  def securityConfig = SecurityConfiguration.DEFAULT
+class UiConfigurationBuilderSpec extends Specification {
+  def uiConfig = UiConfigurationBuilder.builder().build()
   def expected = "{\n" +
-      "    \"scopeSeparator\": \",\"\n" +
+      "    \"deepLinking\": true,\n" +
+      "    \"displayOperationId\": false,\n" +
+      "    \"defaultModelsExpandDepth\": 1,\n" +
+      "    \"defaultModelExpandDepth\": 1,\n" +
+      "    \"defaultModelRendering\": \"example\",\n" +
+      "    \"displayRequestDuration\": false,\n" +
+      "    \"docExpansion\": \"none\",\n" +
+      "    \"filter\": false,\n" +
+      "    \"operationsSorter\": \"alpha\",\n" +
+      "    \"showExtensions\": false,\n" +
+      "    \"tagsSorter\": \"alpha\"\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {
@@ -35,7 +45,7 @@ class SecurityConfigurationSpec extends Specification {
     ObjectMapper mapper = new ObjectMapper()
 
     when:
-    def actual = mapper.writer().writeValueAsString(securityConfig)
+    def actual = mapper.writer().writeValueAsString(uiConfig)
 
     then:
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE)
@@ -47,7 +57,7 @@ class SecurityConfigurationSpec extends Specification {
     mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
 
     when:
-    def actual = mapper.writer().writeValueAsString(securityConfig)
+    def actual = mapper.writer().writeValueAsString(uiConfig)
 
     then:
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE)

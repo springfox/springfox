@@ -34,4 +34,13 @@ public enum ModelRendering {
   public String getValue() {
     return value;
   }
+
+  public static ModelRendering of(String name) {
+    for (ModelRendering modelRendering : ModelRendering.values()) {
+      if (modelRendering.value.equals(name)) {
+        return modelRendering;
+      }
+    }
+    return null;
+  }
 }

@@ -24,10 +24,9 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
 
-class SecurityConfigurationSpec extends Specification {
-  def securityConfig = SecurityConfiguration.DEFAULT
+class SecurityConfigurationBuilderSpec extends Specification {
+  def securityConfig = SecurityConfigurationBuilder.builder().build()
   def expected = "{\n" +
-      "    \"scopeSeparator\": \",\"\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

@@ -25,19 +25,19 @@ import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
 
 class UiConfigurationSpec extends Specification {
-  def uiConfig = UiConfigurationBuilder.builder().build()
+  def uiConfig = new UiConfiguration("validator:urn", UiConfiguration.Constants.NO_SUBMIT_METHODS)
   def expected = "{\n" +
       "    \"deepLinking\": true,\n" +
       "    \"displayOperationId\": false,\n" +
       "    \"defaultModelsExpandDepth\": 1,\n" +
       "    \"defaultModelExpandDepth\": 1,\n" +
-      "    \"defaultModelRendering\": \"example\",\n" +
       "    \"displayRequestDuration\": false,\n" +
       "    \"docExpansion\": \"none\",\n" +
       "    \"filter\": false,\n" +
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
-      "    \"tagsSorter\": \"alpha\"\n" +
+      "    \"tagsSorter\": \"alpha\",\n" +
+      "    \"validatorUrl\": \"validator:urn\"\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

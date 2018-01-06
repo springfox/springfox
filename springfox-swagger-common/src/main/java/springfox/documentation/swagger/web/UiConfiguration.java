@@ -18,11 +18,47 @@
  */
 package springfox.documentation.swagger.web;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UiConfiguration {
+  /**
+   * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   */
+  @Deprecated
+  static final UiConfiguration DEFAULT = new UiConfiguration(null);
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private String apisSorter;
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private Long requestTimeout;
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private String[] supportedSubmitMethods;
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private boolean jsonEditor;
+
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private boolean showRequestHeaders;
 
   /*--------------------------------------------*\
    * Display
@@ -44,6 +80,120 @@ public class UiConfiguration {
    * Network
   \*--------------------------------------------*/
   private final String validatorUrl;
+
+  /**
+   * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   */
+  public UiConfiguration(String validatorUrl) {
+    this(validatorUrl, "none", "alpha", "schema", Constants.DEFAULT_SUBMIT_METHODS, false, true, null);
+  }
+
+  /**
+   * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   */
+  public UiConfiguration(String validatorUrl, String[] supportedSubmitMethods) {
+    this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true, null);
+  }
+
+  /** * Use the default constructor instead (with requestTimeout)
+   * {@link UiConfiguration#UiConfiguration(String, String, String, String, String[], boolean, boolean, Long)} )}
+   *
+   * @param validatorUrl           By default, Swagger-UI attempts to validate specs against swagger.io's online
+   *                               validator. You can use this parameter to set a different validator URL, for example
+   *                               for locally deployed validators (Validator Badge). Setting it to null will disable
+   *                               validation. This parameter is relevant for Swagger 2.0 specs only.
+   * @param docExpansion           Controls how the API listing is displayed. It can be set to 'none' (default),
+   *                               'list' (shows operations for each resource), or 'full' (fully expanded: shows
+   *                               operations and their details).
+   * @param apisSorter             Apply a sort to the API/tags list. It can be 'alpha' (sort by name) or a function
+   *                               (see Array.prototype.sort() to know how sort function works). Default is the order
+   *                               returned by the server unchanged.
+   * @param defaultModelRendering  Controls how models are shown when the API is first rendered. (The user can
+   *                               always switch the rendering for a given model by clicking the 'Model' and 'Model
+   *                               Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.
+   * @param supportedSubmitMethods An array of of the HTTP operations that will have the 'Try it out!' option. An
+   *                               empty array disables all operations. This does not filter the operations from the
+   *                               display.
+   * @param jsonEditor             Enables a graphical view for editing complex bodies. Defaults to false.
+   * @param showRequestHeaders     Whether or not to show the headers that were sent when making a request via the
+   *                               'Try it out!' option. Defaults to false.
+   * @deprecated @since 2.6.1. Use the {@link UiConfigurationBuilder} instead
+   */
+  @Deprecated
+  public UiConfiguration(
+      String validatorUrl,
+      String docExpansion,
+      String apisSorter,
+      String defaultModelRendering,
+      String[] supportedSubmitMethods,
+      boolean jsonEditor,
+      boolean showRequestHeaders) {
+    this(
+        validatorUrl,
+        docExpansion,
+        apisSorter,
+        defaultModelRendering,
+        supportedSubmitMethods,
+        jsonEditor,
+        showRequestHeaders,
+        null);
+  }
+
+  /**
+   * Default constructor
+   *
+   * @param validatorUrl           By default, Swagger-UI attempts to validate specs against swagger.io's online
+   *                               validator. You can use this parameter to set a different validator URL, for example
+   *                               for locally deployed validators (Validator Badge). Setting it to null will disable
+   *                               validation. This parameter is relevant for Swagger 2.0 specs only.
+   * @param docExpansion           Controls how the API listing is displayed. It can be set to 'none' (default),
+   *                               'list' (shows operations for each resource), or 'full' (fully expanded: shows
+   *                               operations and their details).
+   * @param apisSorter             Apply a sort to the API/tags list. It can be 'alpha' (sort by name) or a function
+   *                               (see Array.prototype.sort() to know how sort function works). Default is the order
+   *                               returned by the server unchanged.
+   * @param defaultModelRendering  Controls how models are shown when the API is first rendered. (The user can
+   *                               always switch the rendering for a given model by clicking the 'Model' and 'Model
+   *                               Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.
+   * @param supportedSubmitMethods An array of of the HTTP operations that will have the 'Try it out!' option. An
+   *                               empty array disables all operations. This does not filter the operations from the
+   *                               display.
+   * @param jsonEditor             Enables a graphical view for editing complex bodies. Defaults to false.
+   * @param showRequestHeaders     Whether or not to show the headers that were sent when making a request via the
+   *                               'Try it out!' option. Defaults to false.
+   * @param requestTimeout         - XHR timeout
+   * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   */
+  @Deprecated
+  public UiConfiguration(
+      String validatorUrl,
+      String docExpansion,
+      String apisSorter,
+      String defaultModelRendering,
+      String[] supportedSubmitMethods,
+      boolean jsonEditor,
+      boolean showRequestHeaders,
+      Long requestTimeout) {
+    this.validatorUrl = validatorUrl;
+    this.docExpansion = DocExpansion.of(docExpansion);
+    this.apisSorter = apisSorter;
+    this.defaultModelRendering = ModelRendering.of(defaultModelRendering);
+    this.requestTimeout = requestTimeout;
+    this.jsonEditor = jsonEditor;
+    this.showRequestHeaders = showRequestHeaders;
+    this.supportedSubmitMethods = supportedSubmitMethods;
+
+    this.deepLinking = true;
+    this.displayOperationId = false;
+    this.defaultModelsExpandDepth = 1;
+    this.defaultModelExpandDepth = 1;
+    this.displayRequestDuration = false;
+    this.filter = false;
+    this.maxDisplayedTags = null;
+    this.operationsSorter = OperationsSorter.of(apisSorter);
+    this.showExtensions = false;
+    this.tagsSorter = TagsSorter.of(apisSorter);
+  }
 
   /**
    * Default constructor
@@ -112,6 +262,51 @@ public class UiConfiguration {
     this.validatorUrl = validatorUrl;
   }
 
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public String getApisSorter() {
+    return apisSorter;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public String[] getSupportedSubmitMethods() {
+    return supportedSubmitMethods;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public boolean isJsonEditor() {
+    return jsonEditor;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public boolean isShowRequestHeaders() {
+    return showRequestHeaders;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  @JsonIgnore
+  public Long getRequestTimeout() {
+    return requestTimeout;
+  }
+
   @JsonProperty("deepLinking")
   public Boolean getDeepLinking() {
     return deepLinking;
@@ -175,5 +370,21 @@ public class UiConfiguration {
   @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
     return validatorUrl;
+  }
+
+  /**
+   * @deprecated @since 2.8.0
+   */
+  @Deprecated
+  public static class Constants {
+    /**
+     * @deprecated @since 2.8.0
+     */
+    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] { "get", "post", "put", "delete", "patch" };
+
+    /**
+     * @deprecated @since 2.8.0
+     */
+    public static final String[] NO_SUBMIT_METHODS = new String[] {};
   }
 }

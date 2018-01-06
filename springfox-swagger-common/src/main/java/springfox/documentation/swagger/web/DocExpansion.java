@@ -35,4 +35,13 @@ public enum DocExpansion {
   public String getValue() {
     return value;
   }
+
+  public static DocExpansion of(String name) {
+    for (DocExpansion docExpansion : DocExpansion.values()) {
+      if (docExpansion.value.equals(name)) {
+        return docExpansion;
+      }
+    }
+    return null;
+  }
 }
