@@ -40,14 +40,21 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.DummyModels.Ignorable;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.FancyPet;
 import springfox.documentation.spring.web.dummy.models.FoobarDto;
 import springfox.documentation.spring.web.dummy.models.MapFancyPet;
+import springfox.documentation.spring.web.dummy.models.Pet;
+import springfox.documentation.spring.web.dummy.models.PetWithJsonView;
 import springfox.documentation.spring.web.dummy.models.Pirate;
 import springfox.documentation.spring.web.dummy.models.Treeish;
+import springfox.documentation.spring.web.dummy.models.views.Views;
 import springfox.documentation.spring.web.dummy.models.SameFancyPet;
 
 import javax.servlet.ServletRequest;
@@ -423,7 +430,23 @@ public class DummyClass {
   }
 
   @ResponseBody
+  public Pet methodToTestIssue182(@RequestBody springfox.documentation.spring.web.dummy.models.same.Pet pet) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public Map<String, List<FancyPet>> methodToTestSerializationAndDeserialization(@RequestBody Map<String, FancyPet> pet) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
   public MapFancyPet methodToTestSameClassesWithDifferentProperties(@RequestBody SameFancyPet fancyPet) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  @JsonView(Views.SecondView.class)
+  public PetWithJsonView methodToTestJsonView(@RequestBody @JsonView(Views.FirstView.class) PetWithJsonView pet) {
     throw new UnsupportedOperationException();
   }
 

@@ -63,7 +63,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, modelId(fromParent(parentContext, type))));
+      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, Optional.<Integer>absent()));
     }
     return Optional.absent();
   }
@@ -77,7 +77,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
               typeName,
               apply(collectionElementType),
               allowableValues(collectionElementType),
-              modelId(fromParent(parentContext, type))));
+              Optional.<Integer>absent()));
     }
     return Optional.absent();
   }

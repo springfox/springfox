@@ -51,9 +51,9 @@ class ModelProviderForServiceSupport {
   ModelProvider modelProvider(
       SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
       TypeResolver typeResolver = new TypeResolver(),
-      EnumTypeDeterminer enumTypeDeterminer= new JacksonEnumTypeDeterminer()) {
+      EnumTypeDeterminer enumTypeDeterminer= new JacksonEnumTypeDeterminer(),
+      ObjectMapper objectMapper = new ObjectMapper()) {
 
-    def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
 

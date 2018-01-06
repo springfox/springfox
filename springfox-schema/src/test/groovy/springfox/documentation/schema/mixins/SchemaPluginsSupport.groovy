@@ -29,6 +29,8 @@ import springfox.documentation.spi.schema.ViewProviderPlugin
 
 import static com.google.common.collect.Lists.*
 
+import com.fasterxml.classmate.TypeResolver
+
 class SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {
@@ -39,7 +41,7 @@ class SchemaPluginsSupport {
             OrderAwarePluginRegistry.create(newArrayList())
             
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(new JacksonJsonViewProvider()))
+            OrderAwarePluginRegistry.create(newArrayList(new JacksonJsonViewProvider(new TypeResolver())))
             
 
     new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry)

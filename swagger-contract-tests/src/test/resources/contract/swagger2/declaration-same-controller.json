@@ -110,28 +110,7 @@
         }
       }
     },
-    "FancyPet_1": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "categories": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Category"
-          }
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "FancyPet_2": {
+    "FancyPet": {
       "type": "object",
       "properties": {
         "age": {
@@ -164,19 +143,19 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet_1"
+                  "$ref": "#/definitions/FancyPet"
                 }
               }
             }
           }
         },
         "fancyPet": {
-          "$ref": "#/definitions/FancyPet_1"
+          "$ref": "#/definitions/FancyPet"
         },
         "fancyPets": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FancyPet_1"
+            "$ref": "#/definitions/FancyPet"
           }
         },
         "fancyPetsMap": {
@@ -229,19 +208,19 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet_2"
+                  "$ref": "#/definitions/FancyPet"
                 }
               }
             }
           }
         },
         "fancyPet": {
-          "$ref": "#/definitions/FancyPet_2"
+          "$ref": "#/definitions/FancyPet"
         },
         "fancyPets": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FancyPet_2"
+            "$ref": "#/definitions/FancyPet"
           }
         },
         "fancyPetsMap": {

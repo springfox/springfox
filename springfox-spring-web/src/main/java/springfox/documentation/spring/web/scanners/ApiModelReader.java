@@ -149,15 +149,21 @@ public class ApiModelReader  {
       Model model = entry_model.getValue();
       for (Map.Entry<String, ModelProperty> entry_property : 
         model.getProperties().entrySet()) {
-          ModelProperty property = entry_property.getValue();
-          if (property.getModelRef().getModelId().isPresent()) {
-            String id = String.valueOf(property.getModelRef().getModelId().get());
-            if (modelBranch.containsKey(id)) {
-              continue first;
-            }
+
+        ModelProperty property = entry_property.getValue();
+        ModelReference ref = property.getModelRef();
+        while (true) {
+          if (ref.getModelId().isPresent() && 
+                  modelBranch.containsKey(String.valueOf(ref.getModelId().get()))) {
+            continue first;
           }
-          
+          if (ref.itemModel().isPresent()) {
+            ref = ref.itemModel().get();
+          } else {
+            break;
+          }
         }
+      }
       modelsWithoutRefs.put(model.getId(), model);
     }
     modelBranch.keySet().removeAll(modelsWithoutRefs.keySet());
@@ -186,9 +192,18 @@ public class ApiModelReader  {
       Model model = entry.getValue();
       for (Map.Entry<String, ModelProperty> property_entry : model.getProperties().entrySet()) {
         ModelProperty property = property_entry.getValue();
-        if (property.getModelRef().getModelId().isPresent() &&
-            String.valueOf(property.getModelRef().getModelId().get()).equals(id_for)) {
-          property.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+        ModelReference ref = property.getModelRef();
+        while (true) {
+          if (ref.getModelId().isPresent() && 
+                  String.valueOf(ref.getModelId().get()).equals(id_for)) {
+            property.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+            break;
+          }
+          if (ref.itemModel().isPresent()) {
+            ref = ref.itemModel().get();
+          } else {
+            break;
+          }
         }
       }
     }

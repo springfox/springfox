@@ -57,7 +57,7 @@ class SwaggerPluginsSupport {
         create(newArrayList(new ApiModelBuilder(new TypeResolver())))
         
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
-        create(newArrayList(new JacksonJsonViewProvider()))
+        create(newArrayList(new JacksonJsonViewProvider(new TypeResolver())))
 
     new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry)
   }

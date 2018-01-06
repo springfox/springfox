@@ -25,6 +25,7 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -55,7 +57,6 @@ import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -83,6 +84,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private final TypeResolver typeResolver;
   private final BeanPropertyNamingStrategy namingStrategy;
   private final SchemaPluginsManager schemaPluginsManager;
+  private final JacksonAnnotationIntrospector annotationIntrospector;
   private final TypeNameExtractor typeNameExtractor;
   private ObjectMapper objectMapper;
 
@@ -102,6 +104,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     this.typeResolver = typeResolver;
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
+    this.annotationIntrospector = new JacksonAnnotationIntrospector();
     this.typeNameExtractor = typeNameExtractor;
   }
 
@@ -165,7 +168,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     };
   }
 
-
   private Function<ResolvedField, List<ModelProperty>> propertyFromField(
       final ModelContext givenContext,
       final BeanPropertyDefinition jacksonProperty) {
@@ -184,15 +186,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     };
   }
 
-  private Predicate<? super Annotation> ofType(final Class<?> annotationType) {
-    return new Predicate<Annotation>() {
-      @Override
-      public boolean apply(Annotation input) {
-        return annotationType.isAssignableFrom(input.getClass());
-      }
-    };
-  }
-
   @VisibleForTesting
   List<ModelProperty> candidateProperties(
       ResolvedType type,
@@ -201,6 +194,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext givenContext) {
 
     List<ModelProperty> properties = newArrayList();
+    
+    if (!isInActiveView(member, givenContext)) {
+      return properties;
+    }
     if (member instanceof AnnotatedMethod) {
       properties.addAll(findAccessorMethod(type, member)
           .transform(propertyFromBean(givenContext, jacksonProperty))
@@ -224,6 +221,28 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         return !input.isHidden();
       }
     };
+  }
+
+  private boolean isInActiveView(AnnotatedMember member,
+      ModelContext givenContext) {
+    if (givenContext.getView().isPresent()) {
+      Class<?>[] typeviews = annotationIntrospector.findViews(member);
+      if (typeviews == null) {
+        typeviews = new Class<?>[0];
+      }
+      if (typeviews.length == 0 && objectMapper.isEnabled(MapperFeature.DEFAULT_VIEW_INCLUSION)) {
+        return true;
+      }
+      Class<?> activeView = givenContext.getView().get().getErasedType();
+      int i = 0, len = typeviews.length;
+      for (; i < len; ++i) {
+        if (typeviews[i].isAssignableFrom(activeView)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
   }
 
   private Optional<ResolvedField> findField(
@@ -365,22 +384,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
     if (context.isReturnType()) {
       SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
-      if (context.getView().isPresent()) {
-        return serializationConfig.withView(context.getView().get().getErasedType()).
-            introspect(serializationConfig.constructType(type.getErasedType()));
-      } else {
-        return serializationConfig.
-            introspect(serializationConfig.constructType(type.getErasedType()));
-      }
+      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
     } else {
       DeserializationConfig serializationConfig = objectMapper.getDeserializationConfig();
-      if (context.getView().isPresent()) {
-        return serializationConfig.withView(context.getView().get().getErasedType()).
-            introspect(serializationConfig.constructType(type.getErasedType()));
-      } else {
-        return serializationConfig.
-            introspect(serializationConfig.constructType(type.getErasedType()));
-      }
+      return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));
     }
   }
 }

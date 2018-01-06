@@ -20,6 +20,8 @@
 package springfox.documentation.spring.web.readers
 
 import com.fasterxml.classmate.TypeResolver
+import com.fasterxml.jackson.databind.MapperFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.base.Function
 import com.google.common.collect.Maps
 import org.springframework.http.HttpEntity
@@ -34,8 +36,10 @@ import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeNameIndexingAdapter
+import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -47,6 +51,8 @@ import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.Pirate
 import springfox.documentation.spring.web.dummy.models.SameFancyPet
+import springfox.documentation.spring.web.dummy.models.PetWithJsonView
+import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -63,6 +69,7 @@ import static com.google.common.collect.Maps.newHashMap;
 class ApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
+  ApiModelReader sutSpecial
   DocumentationPluginsManager pluginsManager
   ResourceGroup resourceGroup;
   TypeNameExtractor typeNameExtractor
@@ -77,6 +84,13 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
     pluginsManager = defaultWebPlugins()
     sut = new ApiModelReader(modelProvider(), new TypeResolver(), pluginsManager, typeNameExtractor)
+    ObjectMapper mapper = new ObjectMapper()
+    mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION)
+    sutSpecial = new ApiModelReader(
+            modelProvider(defaultSchemaPlugins(), new TypeResolver(), new JacksonEnumTypeDeterminer(), mapper),
+            new TypeResolver(),
+            pluginsManager,
+            typeNameExtractor)
     resourceGroup = new ResourceGroup("businesses", DummyClass)
   }
 
@@ -382,7 +396,88 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   }
 
-  def "Test to verify issue #182, #807, #895, #1356"() {
+  def "Test to verify that duplicate class names in different packages will be prodused as different models (#182)"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestIssue182', Pet)
+      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+
+    when:
+      def modelsMap = sut.read(listingContext)
+
+    then:
+      modelsMap.containsKey(resourceGroup)
+      List<Model> modelsList = modelsMap.get(resourceGroup)
+      modelsList.size() == 2
+    and:
+      def models = newHashMap();
+      for (Model model: modelsList) {
+        models.put(model.getName(), model);
+      }
+
+      Model pet_1 = models["Pet_1"]
+      Model pet_2 = models["Pet_2"]
+
+      models.size() == 2
+    and:
+      pet_1 != null
+      pet_1.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.Pet");
+
+      pet_2 != null
+      pet_2.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.same.Pet");
+    and:
+      pet_1.getProperties().size() == 3
+      pet_1.getProperties().containsKey('id')
+      pet_1.getProperties().containsKey('name')
+      pet_1.getProperties().containsKey('age')
+    and:
+      pet_2.getProperties().size() == 3
+      pet_2.getProperties().containsKey('id')
+      pet_2.getProperties().containsKey('name')
+      pet_2.getProperties().containsKey('age')
+  }
+
+  def "Test to verify that same class for serialization and deserialization will be produced as one model"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSerializationAndDeserialization', 
+              Map)
+      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+
+    when:
+      def modelsMap = sut.read(listingContext)
+
+    then:
+      modelsMap.containsKey(resourceGroup)
+      List<Model> modelsList = modelsMap.get(resourceGroup)
+      modelsList.size() == 4
+    and:
+      def models = newHashMap();
+      for (Model model: modelsList) {
+        models.put(model.getName(), model);
+      }
+
+      Model fancyPet = models["FancyPet"]
+      Model category = models["Category"]
+
+      models.size() == 2
+    and:
+      fancyPet != null
+      fancyPet.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.FancyPet");
+
+      category != null
+      category.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.Category");
+    and:
+      fancyPet.getProperties().size() == 4
+      fancyPet.getProperties().containsKey('id')
+      fancyPet.getProperties().containsKey('name')
+      fancyPet.getProperties().containsKey('age')
+      fancyPet.getProperties().containsKey('categories')
+    and:
+      category.getProperties().size() == 1
+      category.getProperties().containsKey('name')
+
+  }
+
+  def "Test to verify that different class for serialization and deserialization will be produced as two models"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSameClassesWithDifferentProperties', SameFancyPet)
       ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
@@ -441,6 +536,78 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       fancyPet_2.getProperties().containsKey('color')
       fancyPet_2.getProperties().containsKey('pet_weight')
       fancyPet_2.getProperties().containsKey('extendedCategory')
+
+  }
+
+  def "Test to verify that @JsonView works correctly with DEFAULT_VIEW_INCLUSION (issues #563, #807, #895"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestJsonView', PetWithJsonView)
+      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+
+    when:
+      def modelsMap = sut.read(listingContext)
+
+    then:
+      modelsMap.containsKey(resourceGroup)
+      List<Model> modelsList = modelsMap.get(resourceGroup)
+      modelsList.size() == 2
+    and:
+      def models = newHashMap();
+      for (Model model: modelsList) {
+        models.put(model.getName(), model);
+      }
+
+      Model pet_1 = models["PetWithJsonView_1"]
+      Model pet_2 = models["PetWithJsonView_2"]
+
+      models.size() == 2
+    and:
+      pet_1 != null
+      pet_2 != null
+    and:
+      pet_1.getProperties().size() == 3
+      pet_1.getProperties().containsKey('id')
+      pet_1.getProperties().containsKey('name')
+      pet_1.getProperties().containsKey('age')
+    and:
+      pet_2.getProperties().size() == 2
+      pet_2.getProperties().containsKey('age')
+      pet_2.getProperties().containsKey('color')
+
+  }
+
+  def "Test to verify that @JsonView works correctly without DEFAULT_VIEW_INCLUSION (issues #563, #807, #895"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestJsonView', PetWithJsonView)
+      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+
+    when:
+      def modelsMap = sutSpecial.read(listingContext)
+
+    then:
+      modelsMap.containsKey(resourceGroup)
+      List<Model> modelsList = modelsMap.get(resourceGroup)
+      modelsList.size() == 2
+    and:
+      def models = newHashMap();
+      for (Model model: modelsList) {
+        models.put(model.getName(), model);
+      }
+
+      Model pet_1 = models["PetWithJsonView_1"]
+      Model pet_2 = models["PetWithJsonView_2"]
+
+      models.size() == 2
+    and:
+      pet_1 != null
+      pet_2 != null
+    and:
+      pet_1.getProperties().size() == 2
+      pet_1.getProperties().containsKey('id')
+      pet_1.getProperties().containsKey('name')
+    and:
+      pet_2.getProperties().size() == 1
+      pet_2.getProperties().containsKey('color')
 
   }
 }
