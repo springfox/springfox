@@ -11,8 +11,7 @@ The swagger ui version is specified in ./build.gradle where `swaggerUiVersion` i
 (https://github.com/swagger-api/swagger-ui).
  
 - All content is served from a webjar convention, relative url taking the following form: 
-`webjars/${project.name}/${project.version}` e.g: `/webjars/springfox-swagger-ui/<YOUR-SPRINGFOX-VERSION>/swagger-ui
-.html`
+`webjars/${project.name}/${project.version}` e.g: `/webjars/springfox-swagger-ui/<YOUR-SPRINGFOX-VERSION>/swagger-ui.html`
 
 By default Spring Boot has sensible defaults for serving content from webjars. To configure vanilla spring web mvc apps to serve
  webjar content see the [webjar documentation] (http://www.webjars.org/documentation#springmvc) 
