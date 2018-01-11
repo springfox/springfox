@@ -103,9 +103,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 1
-      Model model = modelsList.get(0)
+      Map<String, Model> models = modelsMap.get(resourceGroup)
+      models.size() == 1
+      Model model = models.get('BusinessModel')
       model.id == '-229259865'
       model.getName() == 'BusinessModel'
       model.getQualifiedType() == 'springfox.documentation.spring.web.dummy.DummyModels$BusinessModel'
@@ -124,7 +124,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       !item.collection
       item.itemType == null
   }
-  
+
   def apiListingContext(HandlerMethod handlerMethod, String path) {
     def requestMappingContext = new RequestMappingContext(
         context(),
@@ -150,9 +150,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 1 // instead of 3
-      Model model = modelsList.get(0)
+      Map<String, Model> models = modelsMap.get(resourceGroup)
+      models.size() == 1 // instead of 3
+      Model model = models.get("BusinessModel")
       model.getName().equals("BusinessModel")
 
   }
@@ -170,9 +170,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 1 // instead of 3
-      Model model = modelsList.get(0)
+      Map<String, Model> models = modelsMap.get(resourceGroup)
+      models.size() == 1 // instead of 3
+      Model model = models.get("BusinessModel")
       model.getName().equals("BusinessModel")
 
   }
@@ -190,8 +190,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 0 // instead of 3
+      Map<String, Model> models = modelsMap.get(resourceGroup)
+      models.size() == 0 // instead of 3
 
   }
 
@@ -228,8 +228,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 0
+      def models = modelsMap.get(resourceGroup)
+      models.size() == 0
 
   }
 
@@ -245,14 +245,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-          public String apply(Model model) {
-              return model.getName();
-          }});
-        
+      def models = modelsMap.get(resourceGroup)
       models.size() == 2
 
       String baseModelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
@@ -291,13 +284,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:    
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-          public String apply(Model model) {
-              return model.getName();
-          }});
+      def models = modelsMap.get(resourceGroup)
 
       models.size() == 2
 
@@ -333,13 +320,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-          public String apply(Model model) {
-              return model.getName();
-          }});
+      def models = modelsMap.get(resourceGroup)
 
       models.size() == 2
 
@@ -375,14 +356,8 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-    and:
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-          public String apply(Model model) {
-              return model.getName();
-          }});
-      
+      def models = modelsMap.get(resourceGroup)
+    and:  
       Model pirate = models[Pirate.simpleName]
       Model monkey = models[Monkey.simpleName]
     and:
@@ -406,13 +381,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-    and:
-      def models = newHashMap();
-      for (Model model: modelsList) {
-        models.put(model.getName(), model);
-      }
+      def models = modelsMap.get(resourceGroup)
 
       Model pet_1 = models["Pet_1"]
       Model pet_2 = models["Pet_2"]
@@ -447,13 +416,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 4
-    and:
-      def models = newHashMap();
-      for (Model model: modelsList) {
-        models.put(model.getName(), model);
-      }
+      def models = modelsMap.get(resourceGroup)
 
       Model fancyPet = models["FancyPet"]
       Model category = models["Category"]
@@ -487,13 +450,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 5
-    and:
-      def models = newHashMap();
-      for (Model model: modelsList) {
-        models.put(model.getName(), model);
-      }
+      def models = modelsMap.get(resourceGroup)
 
       Model category_1 = models["SameCategory_1"]
       Model category_2 = models["SameCategory_2"]
@@ -549,13 +506,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-    and:
-      def models = newHashMap();
-      for (Model model: modelsList) {
-        models.put(model.getName(), model);
-      }
+      def models = modelsMap.get(resourceGroup)
 
       Model pet_1 = models["PetWithJsonView_1"]
       Model pet_2 = models["PetWithJsonView_2"]
@@ -586,13 +537,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-    and:
-      def models = newHashMap();
-      for (Model model: modelsList) {
-        models.put(model.getName(), model);
-      }
+      def models = modelsMap.get(resourceGroup)
 
       Model pet_1 = models["PetWithJsonView_1"]
       Model pet_2 = models["PetWithJsonView_2"]

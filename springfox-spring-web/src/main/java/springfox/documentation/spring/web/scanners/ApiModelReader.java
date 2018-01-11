@@ -70,7 +70,7 @@ public class ApiModelReader  {
     this.typeNameExtractor = typeNameExtractor;
   }
 
-  public Map<ResourceGroup, List<Model>> read(ApiListingScanningContext apiListingScanningContext) {
+  public Map<ResourceGroup, Map<String, Model>> read(ApiListingScanningContext apiListingScanningContext) {
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
             = apiListingScanningContext.getRequestMappingsByResourceGroup();
 
@@ -124,7 +124,8 @@ public class ApiModelReader  {
         }
         List<Model> models = modelTypeMap.get(modelForTypeName);
         for (Model model_to : models) {
-          if (model_for.equalsIgnoringName(model_to)) {
+          if (!model_for.getId().equals(model_to.getId())
+              && model_for.equalsIgnoringName(model_to)) {
             it.remove();
             //Putting back "correct" model to be present in the listing.
             //Needs for Swagger 1.2 because it show listings separately,
@@ -149,19 +150,11 @@ public class ApiModelReader  {
       Model model = entry_model.getValue();
       for (Map.Entry<String, ModelProperty> entry_property : 
         model.getProperties().entrySet()) {
-
         ModelProperty property = entry_property.getValue();
-        ModelReference ref = property.getModelRef();
-        while (true) {
-          if (ref.getModelId().isPresent() && 
-                  modelBranch.containsKey(String.valueOf(ref.getModelId().get()))) {
-            continue first;
-          }
-          if (ref.itemModel().isPresent()) {
-            ref = ref.itemModel().get();
-          } else {
-            break;
-          }
+        Optional<Integer> modelId = getModelId(property.getModelRef());
+        if (modelId.isPresent() && 
+            modelBranch.containsKey(String.valueOf(modelId.get()))) {
+          continue first;
         }
       }
       modelsWithoutRefs.put(model.getId(), model);
@@ -192,65 +185,62 @@ public class ApiModelReader  {
       Model model = entry.getValue();
       for (Map.Entry<String, ModelProperty> property_entry : model.getProperties().entrySet()) {
         ModelProperty property = property_entry.getValue();
-        ModelReference ref = property.getModelRef();
-        while (true) {
-          if (ref.getModelId().isPresent() && 
-                  String.valueOf(ref.getModelId().get()).equals(id_for)) {
-            property.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
-            break;
-          }
-          if (ref.itemModel().isPresent()) {
-            ref = ref.itemModel().get();
-          } else {
-            break;
-          }
+        Optional<Integer> modelId = getModelId(property.getModelRef());
+        if (modelId.isPresent() && 
+            String.valueOf(modelId.get()).equals(id_for)) {
+          property.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+          break;
         }
       }
     }
   }
   
-  private Map<ResourceGroup, List<Model>> updateTypeNames(Map<ResourceGroup, List<Model>> modelMap,
+  private Map<ResourceGroup, Map<String, Model>> updateTypeNames(Map<ResourceGroup, List<Model>> modelMap,
           Map<String, ModelContext> contextMap) {
-    Map<ResourceGroup, List<Model>> updatedModelMap = newHashMap();
+    Map<ResourceGroup, Map<String, Model>> updatedModelMap = newHashMap();
     for (ResourceGroup resourceGroup: modelMap.keySet()) {
-      List<Model> updatedModels = new ArrayList<Model>();
+      Map<String, Model> updatedModels = newHashMap();
       for (Model model: modelMap.get(resourceGroup)) {
         for (String propertyName: model.getProperties().keySet()) {
           ModelProperty property = model.getProperties().get(propertyName);
-          ModelReference ref = property.getModelRef();
-
-          while (true) {
-            if (ref.getModelId().isPresent() && 
-                    contextMap.containsKey(String.valueOf(ref.getModelId().get()))) {
-              property.updateModelRef(modelRefFactory(
-                  ModelContext.withAdjustedTypeName(
-                      contextMap.get(String.valueOf(ref.getModelId().get()))), typeNameExtractor));
-              break;
-            }
-            if (ref.itemModel().isPresent()) {
-              ref = ref.itemModel().get();
-            } else {
-              break;
-            }
+          Optional<Integer> modelId = getModelId(property.getModelRef());
+          if (modelId.isPresent() && 
+              contextMap.containsKey(String.valueOf(modelId.get()))) {
+            property.updateModelRef(modelRefFactory(
+                ModelContext.withAdjustedTypeName(
+                    contextMap.get(String.valueOf(modelId.get()))), typeNameExtractor));
           }
         }
-        updatedModels.add(new ModelBuilder(model.getId())
-            .name(typeNameExtractor.typeName(
-                ModelContext.withAdjustedTypeName(contextMap.get(model.getId()))))
-            .type(model.getType())
-            .qualifiedType(model.getQualifiedType())
-            .properties(model.getProperties())
-            .description(model.getDescription())
-            .baseModel(model.getBaseModel())
-            .discriminator(model.getDiscriminator())
-            .subTypes(model.getSubTypes())
-            .example(model.getExample())
-            .build());
-
+        String name = typeNameExtractor.typeName(
+            ModelContext.withAdjustedTypeName(contextMap.get(model.getId())));
+        updatedModels.put(name, new ModelBuilder(model.getId())
+                                    .name(name)
+                                    .type(model.getType())
+                                    .qualifiedType(model.getQualifiedType())
+                                    .properties(model.getProperties())
+                                    .description(model.getDescription())
+                                    .baseModel(model.getBaseModel())
+                                    .discriminator(model.getDiscriminator())
+                                    .subTypes(model.getSubTypes())
+                                    .example(model.getExample())
+                                    .build());
       }
       updatedModelMap.put(resourceGroup, updatedModels);
     }
     return updatedModelMap;
+  }
+
+  private Optional<Integer> getModelId(ModelReference ref) {
+    while (true) {
+      if (ref.getModelId().isPresent()) {
+        return ref.getModelId();
+      }
+      if (ref.itemModel().isPresent()) {
+        ref = ref.itemModel().get();
+      } else {
+        return Optional.absent();
+      }
+    }
   }
 
   private void markIgnorablesAsHasSeen(TypeResolver typeResolver,

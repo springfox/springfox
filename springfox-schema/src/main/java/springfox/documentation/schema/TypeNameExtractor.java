@@ -38,6 +38,7 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -152,24 +153,10 @@ public class TypeNameExtractor {
     if (modelIds.size() == 1) {
       return rawTypeName;
     }
-
     Integer currentModelId = context.hashCode();
-    int i = 1;
-
     while (links.containsKey(currentModelId)) {
-      Integer nextModelId = links.get(currentModelId);
-      if (nextModelId.equals(currentModelId)) {
-        break;
-      }
-      currentModelId = nextModelId;
+      currentModelId = links.get(currentModelId);
     }
-
-    for(Integer modelId: modelIds) {
-      if (modelId.equals(currentModelId)) {
-        return String.format("%s_%s", rawTypeName, i);
-      }
-      ++i;
-    }
-    return rawTypeName;
+    return String.format("%s_%s", rawTypeName, new ArrayList<Integer>(modelIds).indexOf(currentModelId) + 1);
   }
 }

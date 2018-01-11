@@ -78,12 +78,22 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
   @Override
   public void setEqualityFor(final int modelIdOf, final int modelIdTo) {
     if (!modelIdCache.containsKey(modelIdOf) ||
-        !modelIdCache.containsKey(modelIdTo) ||
-        modelIdOf == modelIdTo) {
+        !modelIdCache.containsKey(modelIdTo)) {
       return;
     }
+    int id1 = getOriginal(modelIdOf);
+    int id2 = getOriginal(modelIdTo);
+    if (id1 == id2) {
+      return;
+    }
+    links.put(id1 < id2 ? id1 : id2, id1 < id2 ? id2 : id1);
+  }
 
-    links.put(modelIdOf < modelIdTo ?
-        modelIdOf : modelIdTo, modelIdOf < modelIdTo ? modelIdTo : modelIdOf);
+  private int getOriginal(final int modelId) {
+    int originalId = modelId;
+    while (links.containsKey(originalId)) {
+      originalId = links.get(modelId);
+    }
+    return originalId;
   }
 }

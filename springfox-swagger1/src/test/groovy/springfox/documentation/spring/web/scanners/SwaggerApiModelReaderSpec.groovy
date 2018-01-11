@@ -83,14 +83,9 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-        public String apply(Model model) {
-            return model.getName();
-        }});
-
+      def models = modelsMap.get(resourceGroup)
+      models.size() == 2
+     
       models.containsKey('AnnotatedBusinessModel')
       Model model = models.get('AnnotatedBusinessModel')
       model.id == '-1161799015'
@@ -115,13 +110,8 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
-
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-        public String apply(Model model) {
-            return model.getName();
-        }});
+      def models = modelsMap.get(resourceGroup)
+      models.size() == 2
 
       models['FunkyBusiness'].getQualifiedType() == 'springfox.documentation.spring.web.dummy.DummyModels$FunkyBusiness'
   }
@@ -133,13 +123,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       def modelsMap = sut.read(listingContext)
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 1
-
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-        public String apply(Model model) {
-            return model.getName();
-        }});
+      def models = modelsMap.get(resourceGroup)
 
       models.size() == 1
       models['RestError'].getQualifiedType() == 'springfox.documentation.spring.web.dummy.RestError'
@@ -170,14 +154,8 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 2
+      def models = modelsMap.get(resourceGroup)
 
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-        public String apply(Model model) {
-            return model.getName();
-        }});
-    
       models.size() == 2 // instead of 3
       models.containsKey("BusinessModel")
       models.containsKey("RestError") // from class-level annotation.
@@ -200,14 +178,8 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 0
+      def models = modelsMap.get(resourceGroup)
 
-      def models = Maps.uniqueIndex(modelsList, new Function<Model,String>() {
-        public String apply(Model model) {
-            return model.getName();
-        }});
-    
       models.size() == 0
 
   }
@@ -224,13 +196,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
     then:
       modelsMap.containsKey(resourceGroup)
-      List<Model> modelsList = modelsMap.get(resourceGroup)
-      modelsList.size() == 3
-
-      def models = newHashMap();
-      for (Model model: modelsList) {
-        models.put(model.getName(), model);
-      }
+      def models = modelsMap.get(resourceGroup)
 
       models.size() == 2
       models.containsKey('RestError') // from class-level annotation.

@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.LinkedListMultimap;
@@ -50,7 +49,6 @@ import java.util.Set;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
-import static com.google.common.collect.Maps.newHashMap;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
@@ -70,7 +68,7 @@ public class ApiListingScanner {
 
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
     Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
-    Map<ResourceGroup, List<Model>> models = apiModelReader.read(context);
+    Map<ResourceGroup, Map<String, Model>> models = apiModelReader.read(context);
     
     int position = 0;
 
@@ -112,7 +110,7 @@ public class ApiListingScanner {
               .protocols(protocols)
               .securityReferences(securityReferences)
               .apis(sortedApis)
-              .models(toModelMap(Optional.fromNullable(models.get(resourceGroup))))
+              .models(models.get(resourceGroup))
               .position(position++)
               .availableTags(documentationContext.getTags());
 
@@ -136,17 +134,6 @@ public class ApiListingScanner {
 
   private Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
     return from(resourceGroups).toSortedList(resourceGroupComparator());
-  }
-  
-  private Map<String, Model> toModelMap(Optional<List<Model>> models) {
-    Map<String, Model> modelMap = newHashMap();
-    if (!models.isPresent()) {
-      return modelMap;
-    }
-    for (Model model : models.get()) {
-      modelMap.put(model.getName(), model);
-    }
-    return modelMap;
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {

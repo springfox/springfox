@@ -331,7 +331,7 @@ public class ModelContext {
   }
 
   public void assumeEqualsTo(ModelContext other) {
-    if (other.type.equals(type)) {
+    if (other.type.getErasedType().getName().equals(type.getErasedType().getName())) {
       uniqueTypeNameAdapter.setEqualityFor(hashCode(), other.hashCode());
     }
   }
