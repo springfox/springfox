@@ -234,7 +234,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         return true;
       }
       Class<?> activeView = givenContext.getView().get().getErasedType();
-      int i = 0, len = typeviews.length;
+      int i = 0;
+      int len = typeviews.length;
       for (; i < len; ++i) {
         if (typeviews[i].isAssignableFrom(activeView)) {
           return true;

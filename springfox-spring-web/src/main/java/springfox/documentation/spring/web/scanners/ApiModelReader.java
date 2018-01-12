@@ -231,12 +231,13 @@ public class ApiModelReader  {
   }
 
   private Optional<Integer> getModelId(ModelReference ref) {
+    ModelReference refT = ref;
     while (true) {
-      if (ref.getModelId().isPresent()) {
-        return ref.getModelId();
+      if (refT.getModelId().isPresent()) {
+        return refT.getModelId();
       }
-      if (ref.itemModel().isPresent()) {
-        ref = ref.itemModel().get();
+      if (refT.itemModel().isPresent()) {
+        refT = refT.itemModel().get();
       } else {
         return Optional.absent();
       }
