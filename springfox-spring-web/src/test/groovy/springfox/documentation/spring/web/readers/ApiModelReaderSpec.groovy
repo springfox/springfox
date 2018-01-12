@@ -516,14 +516,14 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       pet_1 != null
       pet_2 != null
     and:
-      pet_1.getProperties().size() == 3
-      pet_1.getProperties().containsKey('id')
-      pet_1.getProperties().containsKey('name')
+      pet_1.getProperties().size() == 2
       pet_1.getProperties().containsKey('age')
+      pet_1.getProperties().containsKey('color')
     and:
-      pet_2.getProperties().size() == 2
+      pet_2.getProperties().size() == 3
+      pet_2.getProperties().containsKey('id')
+      pet_2.getProperties().containsKey('name')
       pet_2.getProperties().containsKey('age')
-      pet_2.getProperties().containsKey('color')
 
   }
 
@@ -547,12 +547,13 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       pet_1 != null
       pet_2 != null
     and:
-      pet_1.getProperties().size() == 2
-      pet_1.getProperties().containsKey('id')
-      pet_1.getProperties().containsKey('name')
+      pet_1.getProperties().size() == 1
+      pet_1.getProperties().containsKey('color')
+    
     and:
-      pet_2.getProperties().size() == 1
-      pet_2.getProperties().containsKey('color')
+      pet_2.getProperties().size() == 2
+      pet_2.getProperties().containsKey('id')
+      pet_2.getProperties().containsKey('name')
 
   }
 }

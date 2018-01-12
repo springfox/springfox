@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.dummy.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import springfox.documentation.spring.web.dummy.models.views.Views;
+import springfox.documentation.schema.Views;
 
 public class PetWithJsonView {
 

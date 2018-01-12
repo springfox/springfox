@@ -21,6 +21,7 @@ package springfox.documentation.schema.property
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.MapperFeature
 import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -62,7 +63,9 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
       ResolvedType type = typeResolver.resolve(TypeWithSetterButNoGetter)
 
     and:
-      def objectMapperConfigured = new ObjectMapperConfigured(this, new ObjectMapper())
+      ObjectMapper mapper = new ObjectMapper()
+      mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION)
+      def objectMapperConfigured = new ObjectMapperConfigured(this, mapper)
       namingStrategy.onApplicationEvent(objectMapperConfigured)
       sut.onApplicationEvent(objectMapperConfigured)
     when:
@@ -257,5 +260,64 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
       def returnProp = returnValue.find( { it.name == "localDate" })
       returnProp.type.erasedType.equals(String.class)
       returnProp.example.equals("MM-dd-yyyy")
+  }
+
+  def "model with @JsonView are detected correctly"() {
+    given:
+      TypeResolver typeResolver = new TypeResolver()
+      BeanPropertyNamingStrategy namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+          OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+      TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
+          typeResolver,
+          modelNameRegistry,
+          new JacksonEnumTypeDeterminer())
+      OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
+          new AccessorsProvider(typeResolver),
+          new FieldProvider(typeResolver),
+          new FactoryMethodProvider(typeResolver),
+          typeResolver,
+          namingStrategy,
+          defaultSchemaPlugins(),
+          typeNameExtractor)
+      ResolvedType type = typeResolver.resolve(TypeWithJsonView)
+
+    and:
+      def objectMapperConfigured = new ObjectMapperConfigured(
+          this,
+          new ObjectMapper())
+      namingStrategy.onApplicationEvent(objectMapperConfigured)
+      sut.onApplicationEvent(objectMapperConfigured)
+    when:
+      def inputValue = sut.propertiesFor(
+          type,
+          inputParam("group",
+              type,
+              Optional.of(typeResolver.resolve(Views.FirstView.class)),
+              new HashSet<>(),
+              SPRING_WEB,
+              new TypeNameIndexingAdapter(),
+              new AlternateTypeProvider(newArrayList()),
+              new DefaultGenericTypeNamingStrategy(),
+              ImmutableSet.builder().build()))
+      def returnValue = sut.propertiesFor(
+          type,
+          returnValue("group",
+              type,
+              Optional.of(typeResolver.resolve(Views.FirstView.class)),
+              SPRING_WEB,
+              new TypeNameIndexingAdapter(),
+              new AlternateTypeProvider(newArrayList()),
+              new DefaultGenericTypeNamingStrategy(),
+              ImmutableSet.builder().build()))
+    then:
+      def inputProp = inputValue.find( { it.name == "foo" })
+      inputProp.type.erasedType.equals(String.class)
+      def inputPropWithOutView = inputValue.find( { it.name == "propertyWithoutView" })
+      inputProp.type.erasedType.equals(String.class)
+      def returnProp = returnValue.find( { it.name == "foo" })
+      returnProp.type.erasedType.equals(String.class)
+      def returnPropWithOutView = inputValue.find( { it.name == "propertyWithoutView" })
+      inputProp.type.erasedType.equals(String.class)
   }
 }

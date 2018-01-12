@@ -23,11 +23,34 @@ import spock.lang.Specification
 import springfox.documentation.service.AllowableRangeValues
 
 class AllowableRangeValuesSpec extends Specification {
-  def "Bean properties test" () {
+   def "Bean properties test" () {
     given:
-      def sut = new AllowableRangeValues("0", "2")
+      def sut = new AllowableRangeValues("0",true ,"2", false)
     expect:
       sut.min == "0"
       sut.max == "2"
+      sut.exclusiveMin == true
+      sut.exclusiveMax == false
   }
+  
+  def "Class .equals() and .hashCode() test" () {
+    given:
+      def sut = new AllowableRangeValues("0", true, "2", false)
+      def sutTest = new AllowableRangeValues(min, exclusiveMin, max, exclusiveMax)
+    expect:
+      sut.equals(sutTest) == expectedEquality
+      sut.equals(sut)
+      !sut.equals(null)
+      !sut.equals(new Object())
+    and:
+      (sut.hashCode() == sutTest.hashCode()) == expectedEquality
+      sut.hashCode() == sut.hashCode()
+    where:
+      min | exclusiveMin | max | exclusiveMax | expectedEquality
+      "0" | true         | "2" | false        | true
+      "1" | null         | "2" | null         | false
+      "0" | true         | "3" | false        | false
+      "0" | false        | "2" | false        | false
+      "0" | true         | "2" | true         | false
+    }
 }

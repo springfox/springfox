@@ -131,6 +131,15 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
+      def contextInputWithView = inputParam("group",
+        hashMap(String, SimpleType),
+        Optional.of(resolver.resolve(Views.FirstView.class)),
+        new HashSet<>(),
+        SWAGGER_12,
+        uniqueTypeNameAdjuster,
+        alternateTypeProvider(),
+        namingStrategy,
+        ImmutableSet.builder().build())
       def contextReturn = returnValue("group",
         hashMap(String, SimpleType),
         Optional.absent(),
@@ -148,8 +157,21 @@ class TypeNameExtractorSpec extends SchemaSpecification {
 
       fromParent(contextInput, resolver.resolve(SimpleType))
           .assumeEqualsTo(fromParent(contextReturn, resolver.resolve(SimpleType)))
+      fromParent(contextInput, resolver.resolve(SimpleType))
+          .assumeEqualsTo(fromParent(contextInputWithView, resolver.resolve(SimpleType)))
+
+      def nameInputWithView = typeNameExtractor.typeName(contextInputWithView)
+      nameInput == "Map«string,SimpleType»"
+
+      fromParent(contextInput, resolver.resolve(SimpleType))
+          .assumeEqualsTo(fromParent(contextInputWithView, resolver.resolve(SimpleType)))
+      fromParent(contextReturn, resolver.resolve(SimpleType))
+          .assumeEqualsTo(fromParent(contextInputWithView, resolver.resolve(SimpleType)))
     and:
       def nameInputAdjusted = typeNameExtractor.typeName(ModelContext.withAdjustedTypeName(contextInput))
+      nameInputAdjusted == "Map«string,SimpleType»"
+
+      def nameInputWithViewAdjusted = typeNameExtractor.typeName(ModelContext.withAdjustedTypeName(contextInputWithView))
       nameInputAdjusted == "Map«string,SimpleType»"
 
       def nameReturnAdjusted = typeNameExtractor.typeName(ModelContext.withAdjustedTypeName(contextReturn))

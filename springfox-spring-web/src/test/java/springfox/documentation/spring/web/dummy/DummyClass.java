@@ -44,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import springfox.documentation.annotations.ApiIgnore;
+import springfox.documentation.schema.Views;
 import springfox.documentation.spring.web.dummy.DummyModels.Ignorable;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
@@ -54,7 +55,6 @@ import springfox.documentation.spring.web.dummy.models.Pet;
 import springfox.documentation.spring.web.dummy.models.PetWithJsonView;
 import springfox.documentation.spring.web.dummy.models.Pirate;
 import springfox.documentation.spring.web.dummy.models.Treeish;
-import springfox.documentation.spring.web.dummy.models.views.Views;
 import springfox.documentation.spring.web.dummy.models.SameFancyPet;
 
 import javax.servlet.ServletRequest;

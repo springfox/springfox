@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.web.dummy.models.views;
+package springfox.documentation.schema;
 
 public interface Views {
 
