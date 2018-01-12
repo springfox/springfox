@@ -25,6 +25,7 @@ import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
@@ -72,9 +73,10 @@ public class ResolvedTypes {
 
   public static Function<ResolvedType, ModelReference> modelRefFactory(
       final ModelContext parentContext,
+      final EnumTypeDeterminer enumTypeDeterminer,
       final TypeNameExtractor typeNameExtractor) {
 
-    return new ModelReferenceProvider(typeNameExtractor, parentContext);
+    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext);
   }
 
 }

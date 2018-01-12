@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
@@ -41,11 +42,15 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor nameExtractor;
   private final SchemaPluginsManager pluginsManager;
 
   @Autowired
-  public OperationResponseClassReader(SchemaPluginsManager pluginsManager, TypeNameExtractor nameExtractor) {
+  public OperationResponseClassReader(SchemaPluginsManager pluginsManager,
+          EnumTypeDeterminer enumTypeDeterminer,
+          TypeNameExtractor nameExtractor) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.nameExtractor = nameExtractor;
     this.pluginsManager = pluginsManager;
   }
@@ -65,7 +70,7 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to: {}", responseTypeName);
 
-    context.operationBuilder().responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
+    context.operationBuilder().responseModel(modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor).apply(returnType));
   }
 
   @Override

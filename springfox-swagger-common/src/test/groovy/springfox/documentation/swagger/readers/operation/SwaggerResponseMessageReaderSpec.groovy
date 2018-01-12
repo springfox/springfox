@@ -51,7 +51,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -82,7 +86,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -114,7 +122,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -178,7 +189,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    def sut = new SwaggerResponseMessageReader(typeNameExtractor, resolver)
+    def sut = new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
 
     then:
     !sut.supports(DocumentationType.SPRING_WEB)

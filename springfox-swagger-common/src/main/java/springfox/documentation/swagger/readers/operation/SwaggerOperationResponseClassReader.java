@@ -30,6 +30,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -43,12 +44,15 @@ import static springfox.documentation.swagger.annotations.Annotations.*;
 public class SwaggerOperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(SwaggerOperationResponseClassReader.class);
   private final TypeResolver typeResolver;
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor nameExtractor;
 
   @Autowired
   public SwaggerOperationResponseClassReader(
       TypeResolver typeResolver,
+      EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor nameExtractor) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeResolver = typeResolver;
     this.nameExtractor = nameExtractor;
   }
@@ -72,7 +76,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
     log.debug("Setting response class to:" + responseTypeName);
 
     context.operationBuilder()
-            .responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
+            .responseModel(modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor).apply(returnType));
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {

@@ -31,6 +31,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -45,10 +46,12 @@ import static springfox.documentation.schema.Types.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ResponseMessagesReader implements OperationBuilderPlugin {
 
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ResponseMessagesReader(TypeNameExtractor typeNameExtractor) {
+  public ResponseMessagesReader(EnumTypeDeterminer enumTypeDeterminer, TypeNameExtractor typeNameExtractor) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
@@ -75,7 +78,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
           context.operationModelsBuilder().addReturn(
               returnType,
               Optional.<ResolvedType>absent()));
-      modelRef = modelRefFactory(modelContext, typeNameExtractor).apply(returnType);
+      modelRef = modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor).apply(returnType);
     }
     ResponseMessage built = new ResponseMessageBuilder()
         .code(httpStatusCode)

@@ -111,7 +111,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     context.parameterBuilder()
         .type(parameterType)
         .modelRef(Optional.fromNullable(modelRef)
-            .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
+            .or(modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor).apply(parameterType)));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {

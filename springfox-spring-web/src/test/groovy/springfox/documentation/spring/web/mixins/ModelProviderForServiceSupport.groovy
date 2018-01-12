@@ -62,7 +62,7 @@ class ModelProviderForServiceSupport {
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, typeNameExtractor)
+        pluginsManager, enumTypeDeterminer, typeNameExtractor)
 
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider =
@@ -95,7 +95,7 @@ class ModelProviderForServiceSupport {
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, typeNameExtractor)
+        pluginsManager, new JacksonEnumTypeDeterminer(), typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider =
         new DefaultModelDependencyProvider(

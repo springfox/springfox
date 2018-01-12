@@ -47,7 +47,7 @@ class ModelReferenceProviderSpec extends Specification {
           ImmutableSet.builder().build())
       def typeNameExtractor = aTypeNameExtractor(resolver)
     when:
-      def sut = modelRefFactory(modelContext, typeNameExtractor)
+      def sut = modelRefFactory(modelContext, new JacksonEnumTypeDeterminer(), typeNameExtractor)
           .apply(resolver.resolve(
             Map,
             resolver.resolve(String),

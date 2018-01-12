@@ -71,7 +71,12 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
         new TypeResolver(),
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
-    sut = new ApiModelReader(modelProvider(swaggerSchemaPlugins()), new TypeResolver(), pluginsManager, typeNameExtractor)
+    sut = new ApiModelReader(
+        modelProvider(swaggerSchemaPlugins()),
+        new TypeResolver(),
+        pluginsManager,
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor)
     resourceGroup = new ResourceGroup("businesses", DummyClass)
   }
 

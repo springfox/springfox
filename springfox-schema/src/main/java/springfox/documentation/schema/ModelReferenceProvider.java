@@ -23,6 +23,8 @@ import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.springframework.web.multipart.MultipartFile;
+
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import static springfox.documentation.schema.Collections.*;
@@ -34,10 +36,14 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.fromParen
 
 class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final ModelContext parentContext;
 
-  public ModelReferenceProvider(TypeNameExtractor typeNameExtractor, ModelContext parentContext) {
+  public ModelReferenceProvider(TypeNameExtractor typeNameExtractor,
+          EnumTypeDeterminer enumTypeDeterminer,
+          ModelContext parentContext) {
     this.typeNameExtractor = typeNameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.parentContext = parentContext;
   }
 
@@ -81,10 +87,13 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     }
     return Optional.absent();
   }
-  
-  private static Optional<Integer> modelId(ModelContext context) {
+
+  private Optional<Integer> modelId(ModelContext context) {
     ResolvedType type = context.getType();
-    if (type instanceof ResolvedPrimitiveType || isBaseType(type) || isVoid(type)) {
+    if (type instanceof ResolvedPrimitiveType
+        || isBaseType(type)
+        || isVoid(type)
+        || enumTypeDeterminer.isEnum(type.getErasedType())) {
       return Optional.absent();
     }
     return Optional.of(context.hashCode());

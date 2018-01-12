@@ -35,6 +35,7 @@ import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -56,12 +57,15 @@ import static springfox.documentation.swagger.readers.operation.ResponseHeaders.
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
-
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
   private final TypeResolver typeResolver;
 
   @Autowired
-  public SwaggerResponseMessageReader(TypeNameExtractor typeNameExtractor, TypeResolver typeResolver) {
+  public SwaggerResponseMessageReader(EnumTypeDeterminer enumTypeDeterminer,
+          TypeNameExtractor typeNameExtractor,
+          TypeResolver typeResolver) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
     this.typeResolver = typeResolver;
   }
@@ -108,7 +112,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           }
           if (type.isPresent()) {
             responseModel = Optional.of(
-                modelRefFactory(modelContext, typeNameExtractor)
+                modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
           Map<String, Header> headers = newHashMap(defaultHeaders);
@@ -129,7 +133,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           Optional.<ResolvedType>absent()));
       ResolvedType resolvedType = context.alternateFor(operationResponse.get());
 
-      ModelReference responseModel = modelRefFactory(modelContext, typeNameExtractor).apply(resolvedType);
+      ModelReference responseModel = modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor)
+          .apply(resolvedType);
       context.operationBuilder().responseModel(responseModel);
       ResponseMessage defaultMessage = new ResponseMessageBuilder()
           .code(httpStatusCode(context))

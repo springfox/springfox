@@ -59,6 +59,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           typeResolver,
           namingStrategy,
           defaultSchemaPlugins(),
+          new JacksonEnumTypeDeterminer(),
           typeNameExtractor)
       ResolvedType type = typeResolver.resolve(TypeWithSetterButNoGetter)
 
@@ -112,6 +113,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           typeResolver,
           namingStrategy,
           defaultSchemaPlugins(),
+          new JacksonEnumTypeDeterminer(),
           typeNameExtractor)
       ResolvedType type = typeResolver.resolve(UnwrappedType)
 
@@ -166,6 +168,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           typeResolver,
           namingStrategy,
           defaultSchemaPlugins(),
+          new JacksonEnumTypeDeterminer(),
           typeNameExtractor)
       ResolvedType type = typeResolver.resolve(UnwrappedType)
 
@@ -222,6 +225,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           typeResolver,
           namingStrategy,
           defaultSchemaPlugins(),
+          new JacksonEnumTypeDeterminer(),
           typeNameExtractor)
       ResolvedType type = typeResolver.resolve(TypeWithJsonFormat)
 
@@ -279,6 +283,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
           typeResolver,
           namingStrategy,
           defaultSchemaPlugins(),
+          new JacksonEnumTypeDeterminer(),
           typeNameExtractor)
       ResolvedType type = typeResolver.resolve(TypeWithJsonView)
 

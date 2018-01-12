@@ -83,13 +83,19 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
     pluginsManager = defaultWebPlugins()
-    sut = new ApiModelReader(modelProvider(), new TypeResolver(), pluginsManager, typeNameExtractor)
+    sut = new ApiModelReader(
+        modelProvider(),
+        new TypeResolver(),
+        pluginsManager,
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor)
     ObjectMapper mapper = new ObjectMapper()
     mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION)
     sutSpecial = new ApiModelReader(
             modelProvider(defaultSchemaPlugins(), new TypeResolver(), new JacksonEnumTypeDeterminer(), mapper),
             new TypeResolver(),
             pluginsManager,
+            new JacksonEnumTypeDeterminer(),
             typeNameExtractor)
     resourceGroup = new ResourceGroup("businesses", DummyClass)
   }
@@ -278,7 +284,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
     and:
       def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(),
-              new TypeResolver(), defaultWebPlugins(), typeNameExtractor)
+              new TypeResolver(), defaultWebPlugins(), new JacksonEnumTypeDeterminer(), typeNameExtractor)
     when:
       def modelsMap = snakeCaseReader.read(listingContext)
 

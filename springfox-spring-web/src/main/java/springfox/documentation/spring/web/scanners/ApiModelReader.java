@@ -36,6 +36,7 @@ import springfox.documentation.schema.ModelProvider;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
@@ -57,16 +58,19 @@ public class ApiModelReader  {
   private final ModelProvider modelProvider;
   private final TypeResolver typeResolver;
   private final DocumentationPluginsManager pluginsManager;
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
   public ApiModelReader(@Qualifier("cachedModels") ModelProvider modelProvider,
           TypeResolver typeResolver,
           DocumentationPluginsManager pluginsManager,
+          EnumTypeDeterminer enumTypeDeterminer,
           TypeNameExtractor typeNameExtractor) {
     this.modelProvider = modelProvider;
     this.typeResolver = typeResolver;
     this.pluginsManager = pluginsManager;
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
@@ -188,7 +192,7 @@ public class ApiModelReader  {
         Optional<Integer> modelId = getModelId(property.getModelRef());
         if (modelId.isPresent() && 
             String.valueOf(modelId.get()).equals(id_for)) {
-          property.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+          property.updateModelRef(modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor));
           break;
         }
       }
@@ -208,7 +212,7 @@ public class ApiModelReader  {
               contextMap.containsKey(String.valueOf(modelId.get()))) {
             property.updateModelRef(modelRefFactory(
                 ModelContext.withAdjustedTypeName(
-                    contextMap.get(String.valueOf(modelId.get()))), typeNameExtractor));
+                    contextMap.get(String.valueOf(modelId.get()))), enumTypeDeterminer, typeNameExtractor));
           }
         }
         String name = typeNameExtractor.typeName(

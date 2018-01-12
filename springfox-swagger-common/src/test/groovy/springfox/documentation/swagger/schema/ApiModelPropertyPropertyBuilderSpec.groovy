@@ -186,7 +186,8 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     and:
     def enriched = context.getBuilder().build()
-    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    enriched.updateModelRef(
+        modelRefFactory(modelContext, new JacksonEnumTypeDeterminer(), typeNameExtractor))
 
     then:
     enriched.allowableValues?.values == null
@@ -236,7 +237,8 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     and:
     def enriched = context.getBuilder().build()
-    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    enriched.updateModelRef(
+        modelRefFactory(modelContext, new JacksonEnumTypeDeterminer(), typeNameExtractor))
 
     then:
     enriched.allowableValues?.values == null

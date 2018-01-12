@@ -54,6 +54,7 @@ import springfox.documentation.schema.property.bean.BeanModelProperty;
 import springfox.documentation.schema.property.bean.ParameterModelProperty;
 import springfox.documentation.schema.property.field.FieldModelProperty;
 import springfox.documentation.schema.property.field.FieldProvider;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
@@ -85,6 +86,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private final BeanPropertyNamingStrategy namingStrategy;
   private final SchemaPluginsManager schemaPluginsManager;
   private final JacksonAnnotationIntrospector annotationIntrospector;
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
   private ObjectMapper objectMapper;
 
@@ -96,6 +98,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       TypeResolver typeResolver,
       BeanPropertyNamingStrategy namingStrategy,
       SchemaPluginsManager schemaPluginsManager,
+      EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor) {
 
     this.accessors = accessors;
@@ -105,6 +108,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
     this.annotationIntrospector = new JacksonAnnotationIntrospector();
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
@@ -283,7 +287,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             childField.getRawMember(),
             typeResolver,
             modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+        .updateModelRef(modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor));
   }
 
   private ModelProperty beanModelProperty(
@@ -316,7 +320,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             jacksonProperty,
             typeResolver,
             modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+        .updateModelRef(modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor));
   }
 
   private ModelProperty paramModelProperty(
@@ -351,7 +355,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             jacksonProperty,
             typeResolver,
             modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+        .updateModelRef(modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor));
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
