@@ -132,7 +132,9 @@ NOTE: 1. This has a shortcoming currently in that, currently the response still 
 representations. This is a limitation of the OAI Spec 2.0.
 
 === Examples of alternate type rule convention
-1. Here is how we configure the `JacksonSerializerConvention`.
+==== JacksonSerializerConvention
+
+Here is how we configure the `JacksonSerializerConvention`.
 
 https://github.com/springfox/springfox/blob/c48a8bb019371cb1e3c79d24c3db3791ac5025cc/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy#L201-L204[FunctionContractSpec.java]
 [[jackson-convention-example]]
@@ -141,7 +143,9 @@ https://github.com/springfox/springfox/blob/c48a8bb019371cb1e3c79d24c3db3791ac50
 include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy[tags=alternate-type-rule-convention,indent=0]
 ----
 
-2. Below is an example for creating a rule that automatically provides a convention for configuring `Pageable` type.
+==== Creating a convention
+
+Below is an example for creating a rule that automatically provides a convention for configuring `Pageable` type.
 
 https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L46-L64[SpringDataRestConfiguration.java]
 [[jackson-convention-example]]
