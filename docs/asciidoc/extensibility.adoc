@@ -126,6 +126,10 @@ because there are just too many, or even in some cases where it involves creatin
 OpenAPI documentation. https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-spring-web/src/main/java/springfox/documentation/spring/web/plugins/JacksonSerializerConvention.java[`JacksonSerializerConvention`]
  is an example of how we apply rules to types annotated with `JsonSerialize`/`JsonDeserialize`.  
 | 2.7.0
+| `SwaggerResourcesProvider`
+| Extensibility which allows overriding how the swagger resources are served. By default we serve APIs hosted on the
+same application. This can be used to aggregate APIs as well.
+| 2.7.0
 |====
 
 NOTE: 1. This has a shortcoming currently in that, currently the response still hides one of the response
@@ -164,6 +168,37 @@ https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e0
 include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java[tags=alternate-type-builder,indent=0]
 ----
 
+=== Aggregating multiple swagger specifications in the same swagger-ui
+
+You need to create a bean that implements the https://github
+.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26[`SwaggerResourcesProvider`]
+interface. Typically you'd have to make a composite bean that uses multiple https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/InMemorySwaggerResourcesProvider.java#L38[InMemorySwaggerResourcesProvider]
+and adds your own json file to it as well.
+
+NOTE: You need to make this new bean a @Primary bean. otherwise the you'd get an exception about ambiguous beans.
+
+[[multiple-swagger-aggregate]]
+[source,java,linenums]
+----
+@Configuration
+public class SwaggerWsEndpointsConfig {
+
+    @Primary
+    @Bean
+    public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
+        return () -> {
+            SwaggerResource wsResource = new SwaggerResource();
+            wsResource.setName("ws endpoints");
+            wsResource.setSwaggerVersion("2.0");
+            wsResource.setLocation("/v2/websockets.json");
+
+            List<SwaggerResource> resources = new ArrayList<>(defaultResourcesProvider.get());
+            resources.add(wsResource);
+            return resources;
+        };
+    }
+}
+----
 
 == Spring Data Rest extensibility
 
