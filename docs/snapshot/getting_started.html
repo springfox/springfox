@@ -817,10 +817,22 @@ dependencies {
 153
 154
 155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
  *  you may not use this file except in compliance with the License.
@@ -850,10 +862,10 @@ dependencies {
 <span class="keyword">import</span> <span class="include">org.springframework.http.ResponseEntity</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.web.bind.annotation.RequestMethod</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.web.context.request.async.DeferredResult</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ParameterBuilder</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.PathSelectors</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.RequestHandlerSelectors</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.builders.ResponseMessageBuilder</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.builders.ParameterBuilder</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.schema.ModelRef</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.schema.WildcardType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.service.ApiKey</span>;
@@ -863,9 +875,14 @@ dependencies {
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.DocumentationType</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spi.service.contexts.SecurityContext</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.spring.web.plugins.Docket</span>;
-<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.ApiKeyVehicle</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.DocExpansion</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.ModelRendering</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.OperationsSorter</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.SecurityConfiguration</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.SecurityConfigurationBuilder</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.TagsSorter</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfiguration</span>;
+<span class="keyword">import</span> <span class="include">springfox.documentation.swagger.web.UiConfigurationBuilder</span>;
 <span class="keyword">import</span> <span class="include">springfox.documentation.swagger2.annotations.EnableSwagger2</span>;
 <span class="keyword">import</span> <span class="include">springfox.petstore.controller.PetController</span>;
 
@@ -899,7 +916,7 @@ dependencies {
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
-                    typeResolver.resolve(ResponseEntity.class, <span class="predefined-type">WildcardType</span>.class)),
+                typeResolver.resolve(ResponseEntity.class, <span class="predefined-type">WildcardType</span>.class)),
                 typeResolver.resolve(<span class="predefined-type">WildcardType</span>.class)))<i class="conum" data-value="10"></i><b>(10)</b>
         .useDefaultResponseMessages(<span class="predefined-constant">false</span>)<i class="conum" data-value="11"></i><b>(11)</b>
         .globalResponseMessage(RequestMethod.GET,<i class="conum" data-value="12"></i><b>(12)</b>
@@ -949,29 +966,36 @@ dependencies {
 
   <span class="annotation">@Bean</span>
   SecurityConfiguration security() {
-    <span class="keyword">return</span> <span class="keyword">new</span> SecurityConfiguration(<i class="conum" data-value="19"></i><b>(19)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-id</span><span class="delimiter">&quot;</span></span>,
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-secret</span><span class="delimiter">&quot;</span></span>,
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-realm</span><span class="delimiter">&quot;</span></span>,
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">test-app</span><span class="delimiter">&quot;</span></span>,
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">apiKey</span><span class="delimiter">&quot;</span></span>,
-        ApiKeyVehicle.HEADER, <i class="conum" data-value="23"></i><b>(23)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">api_key</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="24"></i><b>(24)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span> <span class="comment">/*scope separator*/</span>);
+    <span class="keyword">return</span> SecurityConfigurationBuilder.builder()<i class="conum" data-value="19"></i><b>(19)</b>
+        .clientId(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-id</span><span class="delimiter">&quot;</span></span>)
+        .clientSecret(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-client-secret</span><span class="delimiter">&quot;</span></span>)
+        .realm(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app-realm</span><span class="delimiter">&quot;</span></span>)
+        .appName(<span class="string"><span class="delimiter">&quot;</span><span class="content">test-app</span><span class="delimiter">&quot;</span></span>)
+        .scopeSeparator(<span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span>)
+        .additionalQueryStringParams(<span class="predefined-constant">null</span>)
+        .useBasicAuthenticationWithAccessCodeGrant(<span class="predefined-constant">false</span>)
+        .build();
   }
 
   <span class="annotation">@Bean</span>
   UiConfiguration uiConfig() {
-    <span class="keyword">return</span> <span class="keyword">new</span> UiConfiguration(<i class="conum" data-value="20"></i><b>(20)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">validatorUrl</span><span class="delimiter">&quot;</span></span>,<span class="comment">// url</span>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">none</span><span class="delimiter">&quot;</span></span>,       <span class="comment">// docExpansion          =&gt; none | list</span>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">alpha</span><span class="delimiter">&quot;</span></span>,      <span class="comment">// apiSorter             =&gt; alpha</span>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">schema</span><span class="delimiter">&quot;</span></span>,     <span class="comment">// defaultModelRendering =&gt; schema</span>
-        UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
-        <span class="predefined-constant">false</span>,        <span class="comment">// enableJsonEditor      =&gt; true | false</span>
-        <span class="predefined-constant">true</span>,         <span class="comment">// showRequestHeaders    =&gt; true | false</span>
-        <span class="integer">60000L</span>);      <span class="comment">// requestTimeout =&gt; in milliseconds, defaults to null (uses jquery xh timeout)</span>
+    <span class="keyword">return</span> UiConfigurationBuilder.builder()<i class="conum" data-value="20"></i><b>(20)</b>
+        .deepLinking(<span class="predefined-constant">true</span>)
+        .displayOperationId(<span class="predefined-constant">false</span>)
+        .defaultModelsExpandDepth(<span class="integer">1</span>)
+        .defaultModelExpandDepth(<span class="integer">1</span>)
+        .defaultModelRendering(ModelRendering.EXAMPLE)
+        .displayRequestDuration(<span class="predefined-constant">false</span>)
+        .docExpansion(DocExpansion.NONE)
+        .filter(<span class="predefined-constant">false</span>)
+        .maxDisplayedTags(<span class="predefined-constant">null</span>)
+        .operationsSorter(OperationsSorter.ALPHA)
+        .showExtensions(<span class="predefined-constant">false</span>)
+        .tagsSorter(TagsSorter.ALPHA)
+        .validatorUrl(<span class="predefined-constant">null</span>)
+        .build();
   }
+
 }</pre></td>
 </tr></table></code></pre>
 </div>
@@ -1425,7 +1449,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-01-13 13:06:49 UTC
+Last updated 2018-01-13 17:06:27 UTC
 </div>
 </div>
 </body>
