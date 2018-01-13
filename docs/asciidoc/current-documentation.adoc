@@ -382,4 +382,9 @@ IMPORTANT: Support for this module has been deprecated in 2.7.0. Since swagger2m
 difficult for build to co-exist with the newer version of swagger2markup. Please use the
 _latest_ instructions provided in the awesome https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup Library].
 
+== Security
+
+Thanks to https://github.com/mojaiq[Javed Mohammed] we now have an example https://github.com/springfox/springfox-oath2-demo[oauth demo].
+
+NOTE: this is based on swagger-ui pre 3.x
 
