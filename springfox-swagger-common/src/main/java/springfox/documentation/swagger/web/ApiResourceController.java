@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -51,14 +51,14 @@ public class ApiResourceController {
   @ResponseBody
   public ResponseEntity<SecurityConfiguration> securityConfiguration() {
     return new ResponseEntity<SecurityConfiguration>(
-        Optional.fromNullable(securityConfiguration).or(SecurityConfiguration.DEFAULT), HttpStatus.OK);
+        Optional.fromNullable(securityConfiguration).or(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/configuration/ui")
   @ResponseBody
   public ResponseEntity<UiConfiguration> uiConfiguration() {
     return new ResponseEntity<UiConfiguration>(
-        Optional.fromNullable(uiConfiguration).or(UiConfiguration.DEFAULT), HttpStatus.OK);
+        Optional.fromNullable(uiConfiguration).or(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping
@@ -66,5 +66,4 @@ public class ApiResourceController {
   public ResponseEntity<List<SwaggerResource>> swaggerResources() {
     return new ResponseEntity<List<SwaggerResource>>(swaggerResources.get(), HttpStatus.OK);
   }
-
 }

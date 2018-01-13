@@ -82,7 +82,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   private SwaggerResource resource(String swaggerGroup, String baseUrl) {
     SwaggerResource swaggerResource = new SwaggerResource();
     swaggerResource.setName(swaggerGroup);
-    swaggerResource.setLocation(swaggerLocation(baseUrl, swaggerGroup));
+    swaggerResource.setUrl(swaggerLocation(baseUrl, swaggerGroup));
     return swaggerResource;
   }
 

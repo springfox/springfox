@@ -25,7 +25,7 @@ import com.google.common.collect.ComparisonChain;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SwaggerResource implements Comparable<SwaggerResource> {
   private String name;
-  private String location;
+  private String url;
   private String swaggerVersion;
 
   @JsonProperty("name")
@@ -37,13 +37,13 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
     this.name = name;
   }
 
-  @JsonProperty("location")
-  public String getLocation() {
-    return location;
+  @JsonProperty("url")
+  public String getUrl() {
+    return url;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   @JsonProperty("swaggerVersion")
