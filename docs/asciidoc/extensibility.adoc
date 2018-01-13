@@ -116,14 +116,50 @@ responsibility of the service author to ensure.
 |====
 |Name| Description | Since
 
-| `RequestHandlerCombiner`
+| `RequestHandlerCombiner`^1^
 | for combining apis that react to the same API endpoint given the same input criteria but produces different output.
  We provide a `DefaultRequestHandlerCombiner` but this is an extensibility point added to customize it.
 | 2.7.0
+| `AlternateTypeRuleConvention`
+| To provide a convention based type rules. Ideally we use these when its cumbersome to define individual types either
+because there are just too many, or even in some cases where it involves creating mixin types just for the sake of
+OpenAPI documentation. https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-spring-web/src/main/java/springfox/documentation/spring/web/plugins/JacksonSerializerConvention.java[`JacksonSerializerConvention`]
+ is an example of how we apply rules to types annotated with `JsonSerialize`/`JsonDeserialize`.  
+| 2.7.0
 |====
 
-NOTE: This has a shortcoming currently in that, currently the response still hides one of the response
-representations. This is a limitation of the OAI Spec 2.0
+NOTE: 1. This has a shortcoming currently in that, currently the response still hides one of the response
+representations. This is a limitation of the OAI Spec 2.0.
+
+=== Examples of alternate type rule convention
+1. Here is how we configure the `JacksonSerializerConvention`.
+
+https://github.com/springfox/springfox/blob/c48a8bb019371cb1e3c79d24c3db3791ac5025cc/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy#L201-L204[FunctionContractSpec.java]
+[[jackson-convention-example]]
+[source,java,linenums]
+----
+include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy[tags=alternate-type-rule-convention,indent=0]
+----
+
+2. Below is an example for creating a rule that automatically provides a convention for configuring `Pageable` type.
+
+https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L46-L64[SpringDataRestConfiguration.java]
+[[jackson-convention-example]]
+[source,java,linenums]
+----
+include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java[tags=alternate-type-rule-convention,indent=0]
+----
+
+It involves creating a generated in-memory type that allows the springfox inference engine to use the new type
+instead of `Pageable`.
+
+https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L68-L88[SpringDataRestConfiguration.java]
+[[in-memory-alternate-type]]
+[source,java,linenums]
+----
+include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java[tags=alternate-type-builder,indent=0]
+----
+
 
 == Spring Data Rest extensibility
 

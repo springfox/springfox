@@ -437,3 +437,18 @@ public class SwaggerJacksonModuleWithVavr implements ApplicationListener<ObjectM
   }
 }
 ----
+
+
+[[q25]]
+*25. Why are properties missing from certain models/types?
+
+A good example of when this might happen is when using Immutables (the library) that are not particularly obvious.
+Immutables are great, except that, unless u craft your model correctly it might lead to confusing results, as you've
+seen. Also how springfox infers the model is opposite to how the service consumes it. By that I mean that, take for e.g. Model has properties a (read/write), b (write only), c (readonly) we read the writable properties for requests and readable properties for responses.
+
+So if your model is only used for requests, it will have a and b
+And if your model is only used of responses it will have a and c
+and if it is present in both request and response it will have a, b and c.
+
+We're working to make this better thanks to https://github.com/springfox/springfox/pull/2056[model enhancements work]
+ by https://github.com/MaksimOrlov[Maksim]

@@ -42,6 +42,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 @Incubating("2.5.0")
 public class SpringDataRestConfiguration {
 
+  // tag::alternate-type-rule-convention[]
   @Bean
   public AlternateTypeRuleConvention pageableConvention(
       final TypeResolver resolver,
@@ -61,7 +62,9 @@ public class SpringDataRestConfiguration {
       }
     };
   }
+  // tag::alternate-type-rule-convention[]
 
+  // tag::alternate-type-builder[]
   private Type pageableMixin(RepositoryRestConfiguration restConfiguration) {
     return new AlternateTypeBuilder()
         .fullyQualifiedClassName(
@@ -83,4 +86,5 @@ public class SpringDataRestConfiguration {
         .withCanRead(true)
         .withCanWrite(true);
   }
+  // tag::alternate-type-builder[]
 }
