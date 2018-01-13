@@ -47,7 +47,6 @@ class ApiResourceControllerSpec extends Specification {
 }"""
   def ui = """{
     "apisSorter":"alpha",
-    "supportedSubmitMethods":[],
     "jsonEditor":false,
     "showRequestHeaders":false, 
     "deepLinking": true,
