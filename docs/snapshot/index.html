@@ -612,30 +612,31 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </li>
 <li><a href="#configuring-springfox-staticdocs">7. Configuring springfox-staticdocs</a></li>
-<li><a href="#plugins">8. Plugins</a>
+<li><a href="#security">8. Security</a></li>
+<li><a href="#plugins">9. Plugins</a>
 <ul class="sectlevel2">
-<li><a href="#introduction-2">8.1. Introduction</a></li>
-<li><a href="#plugins-available-for-extensibility">8.2. Plugins Available For Extensibility</a></li>
-<li><a href="#steps-to-create-a-plugin">8.3. Steps To Create A Plugin</a>
+<li><a href="#introduction-2">9.1. Introduction</a></li>
+<li><a href="#plugins-available-for-extensibility">9.2. Plugins Available For Extensibility</a></li>
+<li><a href="#steps-to-create-a-plugin">9.3. Steps To Create A Plugin</a>
 <ul class="sectlevel3">
-<li><a href="#example-parameterbuilderplugin">8.3.1. Example ParameterBuilderPlugin</a></li>
-<li><a href="#example-apilistingscannerplugin">8.3.2. Example ApiListingScannerPlugin</a></li>
+<li><a href="#example-parameterbuilderplugin">9.3.1. Example ParameterBuilderPlugin</a></li>
+<li><a href="#example-apilistingscannerplugin">9.3.2. Example ApiListingScannerPlugin</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#additional-extensibility-options">9. Additional extensibility options</a>
+<li><a href="#additional-extensibility-options">10. Additional extensibility options</a>
 <ul class="sectlevel2">
-<li><a href="#examples-of-alternate-type-rule-convention">9.1. Examples of alternate type rule convention</a>
+<li><a href="#examples-of-alternate-type-rule-convention">10.1. Examples of alternate type rule convention</a>
 <ul class="sectlevel3">
-<li><a href="#jacksonserializerconvention">9.1.1. JacksonSerializerConvention</a></li>
-<li><a href="#creating-a-convention">9.1.2. Creating a convention</a></li>
+<li><a href="#jacksonserializerconvention">10.1.1. JacksonSerializerConvention</a></li>
+<li><a href="#creating-a-convention">10.1.2. Creating a convention</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#spring-data-rest-extensibility">10. Spring Data Rest extensibility</a></li>
-<li><a href="#answers-to-common-questions-and-problems">11. Answers to common questions and problems</a></li>
+<li><a href="#spring-data-rest-extensibility">11. Spring Data Rest extensibility</a></li>
+<li><a href="#answers-to-common-questions-and-problems">12. Answers to common questions and problems</a></li>
 </ul>
 </div>
 </div>
@@ -2475,10 +2476,30 @@ difficult for build to co-exist with the newer version of swagger2markup. Please
 </div>
 </div>
 <div class="sect1">
-<h2 id="plugins">8. Plugins</h2>
+<h2 id="security">8. Security</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Thanks to <a href="https://github.com/mojaiq">Javed Mohammed</a> we now have an example <a href="https://github.com/springfox/springfox-oath2-demo">oauth demo</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+this is based on swagger-ui pre 3.x
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="plugins">9. Plugins</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="introduction-2">8.1. Introduction</h3>
+<h3 id="introduction-2">9.1. Introduction</h3>
 <div class="paragraph">
 <p>Any plugin or extensibility hook that is available <a href="https://github.com/springfox/springfox/tree/master/springfox-spi/src/main/java/springfox/documentation/spi">is available in the SPI
 module</a>. In the <code>spi</code> module, anything that ends in <code>*Plugin</code> is generally an extensibility point that is meant for
@@ -2491,7 +2512,7 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="plugins-available-for-extensibility">8.2. Plugins Available For Extensibility</h3>
+<h3 id="plugins-available-for-extensibility">9.2. Plugins Available For Extensibility</h3>
 <div class="paragraph">
 <p>To explicitly state the extensibility points that are available:
 * At the schema level
@@ -2572,7 +2593,7 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="steps-to-create-a-plugin">8.3. Steps To Create A Plugin</h3>
+<h3 id="steps-to-create-a-plugin">9.3. Steps To Create A Plugin</h3>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -2619,7 +2640,7 @@ order specified in the bean. In general spring plugins get the highest priority,
 <p>That is it!</p>
 </div>
 <div class="sect3">
-<h4 id="example-parameterbuilderplugin">8.3.1. Example ParameterBuilderPlugin</h4>
+<h4 id="example-parameterbuilderplugin">9.3.1. Example ParameterBuilderPlugin</h4>
 <div class="paragraph">
 <p>Here is an example of how to add parameters by hand.</p>
 </div>
@@ -2740,7 +2761,7 @@ is applied to the parameter.</td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="example-apilistingscannerplugin">8.3.2. Example ApiListingScannerPlugin</h4>
+<h4 id="example-apilistingscannerplugin">9.3.2. Example ApiListingScannerPlugin</h4>
 <div class="paragraph">
 <p>Here is an example of how to add Api Descriptions by hand.</p>
 </div>
@@ -2850,7 +2871,7 @@ responsibility of the service author to ensure.</td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="additional-extensibility-options">9. Additional extensibility options</h2>
+<h2 id="additional-extensibility-options">10. Additional extensibility options</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 2. Other Extensibility</caption>
@@ -2897,9 +2918,9 @@ representations. This is a limitation of the OAI Spec 2.0.
 </table>
 </div>
 <div class="sect2">
-<h3 id="examples-of-alternate-type-rule-convention">9.1. Examples of alternate type rule convention</h3>
+<h3 id="examples-of-alternate-type-rule-convention">10.1. Examples of alternate type rule convention</h3>
 <div class="sect3">
-<h4 id="jacksonserializerconvention">9.1.1. JacksonSerializerConvention</h4>
+<h4 id="jacksonserializerconvention">10.1.1. JacksonSerializerConvention</h4>
 <div class="paragraph">
 <p>Here is how we configure the <code>JacksonSerializerConvention</code>.</p>
 </div>
@@ -2927,7 +2948,7 @@ representations. This is a limitation of the OAI Spec 2.0.
 </div>
 </div>
 <div class="sect3">
-<h4 id="creating-a-convention">9.1.2. Creating a convention</h4>
+<h4 id="creating-a-convention">10.1.2. Creating a convention</h4>
 <div class="paragraph">
 <p>Below is an example for creating a rule that automatically provides a convention for configuring <code>Pageable</code> type.</p>
 </div>
@@ -3088,7 +3109,7 @@ instead of <code>Pageable</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="spring-data-rest-extensibility">10. Spring Data Rest extensibility</h2>
+<h2 id="spring-data-rest-extensibility">11. Spring Data Rest extensibility</h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
 <table>
@@ -3141,7 +3162,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="answers-to-common-questions-and-problems">11. Answers to common questions and problems</h2>
+<h2 id="answers-to-common-questions-and-problems">12. Answers to common questions and problems</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a id="q1"></a><strong>Q. Why does springfox ignore the http status code in the return value of a controller method?</strong></p>
@@ -3897,7 +3918,7 @@ and if it is present in both request and response it will have a, b and c.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.7.1-SNAPSHOT<br>
-Last updated 2018-01-13 12:13:54 UTC
+Last updated 2018-01-13 12:21:43 UTC
 </div>
 </div>
 </body>
