@@ -452,3 +452,68 @@ and if it is present in both request and response it will have a, b and c.
 
 We're working to make this better thanks to https://github.com/springfox/springfox/pull/2056[model enhancements work]
  by https://github.com/MaksimOrlov[Maksim]
+
+[[q26]]
+*26. Why is `http://host:port/swagger-ui.html` blank? Or why do I get a 404 when I navigate to
+`http://host:port/swagger-ui.html`?
+
+In non-spring boot application ensure that the resource handlers are added for the springfox-swagger-ui <<q13,webjars>>
+
+If its a spring boot application:
+
+- check to see if the `spring.resources.add-mappings` property is set to true.
+- check to see if spring security is applied that the appropriate resources are permitted.
+
+[source,java]
+----
+  @Configuration
+  public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+      http
+        .csrf().disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(unauthorizedHandler)
+        .accessDeniedHandler(accessDeniedHandler)
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+        //.antMatchers("/actuator/**").permitAll()
+        .antMatchers("/actuator/**").hasAuthority("ADMIN")
+        .antMatchers(
+          HttpMethod.GET,
+          "/v2/api-docs",
+          "/swagger-resources/**",
+          "/swagger-ui.html**",
+          "/webjars/**",
+          "favicon.ico"
+        ).permitAll()
+        .antMatchers("/auth/**").permitAll()
+        .anyRequest().authenticated();
+
+      http
+        .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
+        .headers()
+        .cacheControl();
+    }
+  }
+----
+
+Or we could simply ignore these resources altogether
+
+[source,java]
+----
+@Configuration
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring()
+      .antMatchers(
+        "/v2/api-docs",
+        "/swagger-resources/**",
+        "/swagger-ui.html**",
+        "/webjars/**");
+  }
+}
+----
