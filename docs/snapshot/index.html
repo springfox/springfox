@@ -3968,6 +3968,81 @@ and if it is present in both request and response it will have a, b and c.</p>
 <p>We&#8217;re working to make this better thanks to <a href="https://github.com/springfox/springfox/pull/2056">model enhancements work</a>
  by <a href="https://github.com/MaksimOrlov">Maksim</a></p>
 </div>
+<div id="q26" class="paragraph">
+<p>*26. Why is <code><a href="http://host:port/swagger-ui.html" class="bare">http://host:port/swagger-ui.html</a></code> blank? Or why do I get a 404 when I navigate to
+<code><a href="http://host:port/swagger-ui.html" class="bare">http://host:port/swagger-ui.html</a></code>?</p>
+</div>
+<div class="paragraph">
+<p>In non-spring boot application ensure that the resource handlers are added for the springfox-swagger-ui <a href="#q13">webjars</a></p>
+</div>
+<div class="paragraph">
+<p>If its a spring boot application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>check to see if the <code>spring.resources.add-mappings</code> property is set to true.</p>
+</li>
+<li>
+<p>check to see if spring security is applied that the appropriate resources are permitted.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">  <span class="annotation">@Configuration</span>
+  <span class="directive">public</span> <span class="type">class</span> <span class="class">WebSecurityConfiguration</span> <span class="directive">extends</span> WebSecurityConfigurerAdapter {
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> configure(WebSecurity web) <span class="directive">throws</span> <span class="exception">Exception</span> {
+      http
+        .csrf().disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(unauthorizedHandler)
+        .accessDeniedHandler(accessDeniedHandler)
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+        <span class="comment">//.antMatchers(&quot;/actuator/**&quot;).permitAll()</span>
+        .antMatchers(<span class="string"><span class="delimiter">&quot;</span><span class="content">/actuator/**</span><span class="delimiter">&quot;</span></span>).hasAuthority(<span class="string"><span class="delimiter">&quot;</span><span class="content">ADMIN</span><span class="delimiter">&quot;</span></span>)
+        .antMatchers(
+          HttpMethod.GET,
+          <span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>,
+          <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-resources/**</span><span class="delimiter">&quot;</span></span>,
+          <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-ui.html**</span><span class="delimiter">&quot;</span></span>,
+          <span class="string"><span class="delimiter">&quot;</span><span class="content">/webjars/**</span><span class="delimiter">&quot;</span></span>,
+          <span class="string"><span class="delimiter">&quot;</span><span class="content">favicon.ico</span><span class="delimiter">&quot;</span></span>
+        ).permitAll()
+        .antMatchers(<span class="string"><span class="delimiter">&quot;</span><span class="content">/auth/**</span><span class="delimiter">&quot;</span></span>).permitAll()
+        .anyRequest().authenticated();
+
+      http
+        .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
+        .headers()
+        .cacheControl();
+    }
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or we could simply ignore these resources altogether</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">WebSecurityConfiguration</span> <span class="directive">extends</span> WebSecurityConfigurerAdapter {
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="type">void</span> configure(WebSecurity web) <span class="directive">throws</span> <span class="exception">Exception</span> {
+    web.ignoring()
+      .antMatchers(
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-resources/**</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">/swagger-ui.html**</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">/webjars/**</span><span class="delimiter">&quot;</span></span>);
+  }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3989,7 +4064,7 @@ and if it is present in both request and response it will have a, b and c.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.7.1-SNAPSHOT<br>
-Last updated 2018-01-13 12:32:13 UTC
+Last updated 2018-01-13 13:00:41 UTC
 </div>
 </div>
 </body>
