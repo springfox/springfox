@@ -524,6 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#additional-extensibility-options">Additional extensibility options</a>
 <ul class="sectlevel2">
 <li><a href="#examples-of-alternate-type-rule-convention">Examples of alternate type rule convention</a></li>
+<li><a href="#aggregating-multiple-swagger-specifications-in-the-same-swagger-ui">Aggregating multiple swagger specifications in the same swagger-ui</a></li>
 </ul>
 </li>
 <li><a href="#spring-data-rest-extensibility">Spring Data Rest extensibility</a></li>
@@ -938,6 +939,12 @@ OpenAPI documentation. <a href="https://github.com/springfox/springfox/blob/ef17
  is an example of how we apply rules to types annotated with <code>JsonSerialize</code>/<code>JsonDeserialize</code>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SwaggerResourcesProvider</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Extensibility which allows overriding how the swagger resources are served. By default we serve APIs hosted on the
+same application. This can be used to aggregate APIs as well.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
+</tr>
 </tbody>
 </table>
 <div class="admonitionblock note">
@@ -1142,6 +1149,70 @@ instead of <code>Pageable</code>.</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="aggregating-multiple-swagger-specifications-in-the-same-swagger-ui">Aggregating multiple swagger specifications in the same swagger-ui</h3>
+<div class="paragraph">
+<p>You need to create a bean that implements the <a href="https://github" class="bare">https://github</a>
+.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26[<code>SwaggerResourcesProvider</code>]
+interface. Typically you&#8217;d have to make a composite bean that uses multiple <a href="https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/InMemorySwaggerResourcesProvider.java#L38">InMemorySwaggerResourcesProvider</a>
+and adds your own json file to it as well.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You need to make this new bean a @Primary bean. otherwise the you&#8217;d get an exception about ambiguous beans.
+</td>
+</tr>
+</table>
+</div>
+<div id="multiple-swagger-aggregate" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td>
+  <td class="code"><pre><span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">SwaggerWsEndpointsConfig</span> {
+
+    <span class="annotation">@Primary</span>
+    <span class="annotation">@Bean</span>
+    <span class="directive">public</span> SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
+        <span class="keyword">return</span> () -&gt; {
+            SwaggerResource wsResource = <span class="keyword">new</span> SwaggerResource();
+            wsResource.setName(<span class="string"><span class="delimiter">&quot;</span><span class="content">ws endpoints</span><span class="delimiter">&quot;</span></span>);
+            wsResource.setSwaggerVersion(<span class="string"><span class="delimiter">&quot;</span><span class="content">2.0</span><span class="delimiter">&quot;</span></span>);
+            wsResource.setLocation(<span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/websockets.json</span><span class="delimiter">&quot;</span></span>);
+
+            <span class="predefined-type">List</span>&lt;SwaggerResource&gt; resources = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;(defaultResourcesProvider.get());
+            resources.add(wsResource);
+            <span class="keyword">return</span> resources;
+        };
+    }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1200,7 +1271,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-01-13 12:21:43 UTC
+Last updated 2018-01-13 12:32:13 UTC
 </div>
 </div>
 </body>
