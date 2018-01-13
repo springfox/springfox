@@ -28,7 +28,7 @@ plugins {
 }
 
 ext {
-  swaggerUiVersion = '3.9.0'
+  swaggerUiVersion = '3.9.1'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
