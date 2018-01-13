@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,24 +24,23 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
 
-class UiConfigurationSpec extends Specification {
-  def uiConfig = new UiConfiguration("validator:urn", UiConfiguration.Constants.NO_SUBMIT_METHODS)
+class UiConfigurationBuilderSpec extends Specification {
+  def uiConfig = UiConfigurationBuilder.builder().build()
   def expected = "{\n" +
       "    \"apisSorter\":\"alpha\"," +
-      "    \"supportedSubmitMethods\":[]," +
       "    \"jsonEditor\":false," +
-      "    \"showRequestHeaders\":true," +
+      "    \"showRequestHeaders\":false," +
       "    \"deepLinking\": true,\n" +
       "    \"displayOperationId\": false,\n" +
       "    \"defaultModelsExpandDepth\": 1,\n" +
       "    \"defaultModelExpandDepth\": 1,\n" +
+      "    \"defaultModelRendering\": \"example\",\n" +
       "    \"displayRequestDuration\": false,\n" +
       "    \"docExpansion\": \"none\",\n" +
       "    \"filter\": false,\n" +
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
-      "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"validatorUrl\": \"validator:urn\"\n" +
+      "    \"tagsSorter\": \"alpha\"\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

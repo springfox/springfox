@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,24 +24,9 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import spock.lang.Specification
 
-class UiConfigurationSpec extends Specification {
-  def uiConfig = new UiConfiguration("validator:urn", UiConfiguration.Constants.NO_SUBMIT_METHODS)
+class SecurityConfigurationBuilderSpec extends Specification {
+  def securityConfig = SecurityConfigurationBuilder.builder().build()
   def expected = "{\n" +
-      "    \"apisSorter\":\"alpha\"," +
-      "    \"supportedSubmitMethods\":[]," +
-      "    \"jsonEditor\":false," +
-      "    \"showRequestHeaders\":true," +
-      "    \"deepLinking\": true,\n" +
-      "    \"displayOperationId\": false,\n" +
-      "    \"defaultModelsExpandDepth\": 1,\n" +
-      "    \"defaultModelExpandDepth\": 1,\n" +
-      "    \"displayRequestDuration\": false,\n" +
-      "    \"docExpansion\": \"none\",\n" +
-      "    \"filter\": false,\n" +
-      "    \"operationsSorter\": \"alpha\",\n" +
-      "    \"showExtensions\": false,\n" +
-      "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"validatorUrl\": \"validator:urn\"\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {
@@ -49,7 +34,7 @@ class UiConfigurationSpec extends Specification {
     ObjectMapper mapper = new ObjectMapper()
 
     when:
-    def actual = mapper.writer().writeValueAsString(uiConfig)
+    def actual = mapper.writer().writeValueAsString(securityConfig)
 
     then:
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE)
@@ -61,7 +46,7 @@ class UiConfigurationSpec extends Specification {
     mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
 
     when:
-    def actual = mapper.writer().writeValueAsString(uiConfig)
+    def actual = mapper.writer().writeValueAsString(securityConfig)
 
     then:
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE)

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,10 +30,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.async.DeferredResult;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiKey;
@@ -43,9 +43,14 @@ import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger.web.ApiKeyVehicle;
+import springfox.documentation.swagger.web.DocExpansion;
+import springfox.documentation.swagger.web.ModelRendering;
+import springfox.documentation.swagger.web.OperationsSorter;
 import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
+import springfox.documentation.swagger.web.TagsSorter;
 import springfox.documentation.swagger.web.UiConfiguration;
+import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import springfox.petstore.controller.PetController;
 
@@ -79,7 +84,7 @@ public class Swagger2SpringBoot {
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
-                    typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
+                typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
                 typeResolver.resolve(WildcardType.class)))//<10>
         .useDefaultResponseMessages(false)//<11>
         .globalResponseMessage(RequestMethod.GET,//<12>
@@ -92,7 +97,7 @@ public class Swagger2SpringBoot {
         .securityContexts(newArrayList(securityContext()))//<15>
         .enableUrlTemplating(true)//<21>
         .globalOperationParameters(//<22>
-            newArrayList(new ParameterBuilder() 
+            newArrayList(new ParameterBuilder()
                 .name("someGlobalParameter")
                 .description("Description of someGlobalParameter")
                 .modelRef(new ModelRef("string"))
@@ -129,27 +134,34 @@ public class Swagger2SpringBoot {
 
   @Bean
   SecurityConfiguration security() {
-    return new SecurityConfiguration(//<19>
-        "test-app-client-id",
-        "test-app-client-secret",
-        "test-app-realm",
-        "test-app",
-        "apiKey",
-        ApiKeyVehicle.HEADER, //<23>
-        "api_key", //<24>
-        "," /*scope separator*/);
+    return SecurityConfigurationBuilder.builder()//<19>
+        .clientId("test-app-client-id")
+        .clientSecret("test-app-client-secret")
+        .realm("test-app-realm")
+        .appName("test-app")
+        .scopeSeparator(",")
+        .additionalQueryStringParams(null)
+        .useBasicAuthenticationWithAccessCodeGrant(false)
+        .build();
   }
 
   @Bean
   UiConfiguration uiConfig() {
-    return new UiConfiguration(//<20>
-        "validatorUrl",// url
-        "none",       // docExpansion          => none | list
-        "alpha",      // apiSorter             => alpha
-        "schema",     // defaultModelRendering => schema
-        UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
-        false,        // enableJsonEditor      => true | false
-        true,         // showRequestHeaders    => true | false
-        60000L);      // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
+    return UiConfigurationBuilder.builder()//<20>
+        .deepLinking(true)
+        .displayOperationId(false)
+        .defaultModelsExpandDepth(1)
+        .defaultModelExpandDepth(1)
+        .defaultModelRendering(ModelRendering.EXAMPLE)
+        .displayRequestDuration(false)
+        .docExpansion(DocExpansion.NONE)
+        .filter(false)
+        .maxDisplayedTags(null)
+        .operationsSorter(OperationsSorter.ALPHA)
+        .showExtensions(false)
+        .tagsSorter(TagsSorter.ALPHA)
+        .validatorUrl(null)
+        .build();
   }
+
 }
