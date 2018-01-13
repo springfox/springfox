@@ -521,7 +521,11 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#steps-to-create-a-plugin">Steps To Create A Plugin</a></li>
 </ul>
 </li>
-<li><a href="#additional-extensibility-options">Additional extensibility options</a></li>
+<li><a href="#additional-extensibility-options">Additional extensibility options</a>
+<ul class="sectlevel2">
+<li><a href="#examples-of-alternate-type-rule-convention">Examples of alternate type rule convention</a></li>
+</ul>
+</li>
 <li><a href="#spring-data-rest-extensibility">Spring Data Rest extensibility</a></li>
 </ul>
 </div>
@@ -921,9 +925,17 @@ responsibility of the service author to ensure.</td>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RequestHandlerCombiner</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RequestHandlerCombiner</code><sup>1</sup></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">for combining apis that react to the same API endpoint given the same input criteria but produces different output.
  We provide a <code>DefaultRequestHandlerCombiner</code> but this is an extensibility point added to customize it.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AlternateTypeRuleConvention</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To provide a convention based type rules. Ideally we use these when its cumbersome to define individual types either
+because there are just too many, or even in some cases where it involves creating mixin types just for the sake of
+OpenAPI documentation. <a href="https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-spring-web/src/main/java/springfox/documentation/spring/web/plugins/JacksonSerializerConvention.java"><code>JacksonSerializerConvention</code></a>
+ is an example of how we apply rules to types annotated with <code>JsonSerialize</code>/<code>JsonDeserialize</code>.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2.7.0</p></td>
 </tr>
 </tbody>
@@ -935,11 +947,202 @@ responsibility of the service author to ensure.</td>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-This has a shortcoming currently in that, currently the response still hides one of the response
-representations. This is a limitation of the OAI Spec 2.0
+1. This has a shortcoming currently in that, currently the response still hides one of the response
+representations. This is a limitation of the OAI Spec 2.0.
 </td>
 </tr>
 </table>
+</div>
+<div class="sect2">
+<h3 id="examples-of-alternate-type-rule-convention">Examples of alternate type rule convention</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Here is how we configure the <code>JacksonSerializerConvention</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/springfox/springfox/blob/c48a8bb019371cb1e3c79d24c3db3791ac5025cc/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy#L201-L204">FunctionContractSpec.java</a></p>
+</div>
+<div id="jackson-convention-example" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+</pre></td>
+  <td class="code"><pre>    <span class="annotation">@Bean</span>
+    AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
+      <span class="keyword">new</span> JacksonSerializerConvention(resolver, <span class="string"><span class="delimiter">&quot;</span><span class="content">springfox.documentation.spring.web.dummy.models</span><span class="delimiter">&quot;</span></span>)
+    }
+  }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Below is an example for creating a rule that automatically provides a convention for configuring <code>Pageable</code> type.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L46-L64">SpringDataRestConfiguration.java</a></p>
+</div>
+<div id="jackson-convention-example" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+</pre></td>
+  <td class="code"><pre>  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> AlternateTypeRuleConvention pageableConvention(
+      <span class="directive">final</span> TypeResolver resolver,
+      <span class="directive">final</span> RepositoryRestConfiguration restConfiguration) {
+    <span class="keyword">return</span> <span class="keyword">new</span> AlternateTypeRuleConvention() {
+
+      <span class="annotation">@Override</span>
+      <span class="directive">public</span> <span class="type">int</span> getOrder() {
+        <span class="keyword">return</span> Ordered.HIGHEST_PRECEDENCE;
+      }
+
+      <span class="annotation">@Override</span>
+      <span class="directive">public</span> <span class="predefined-type">List</span>&lt;AlternateTypeRule&gt; rules() {
+        <span class="keyword">return</span> newArrayList(
+            newRule(resolver.resolve(<span class="predefined-type">Pageable</span>.class), resolver.resolve(pageableMixin(restConfiguration)))
+        );
+      }
+    };
+  }
+
+  <span class="directive">private</span> <span class="predefined-type">Type</span> pageableMixin(RepositoryRestConfiguration restConfiguration) {
+    <span class="keyword">return</span> <span class="keyword">new</span> AlternateTypeBuilder()
+        .fullyQualifiedClassName(
+            <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s.generated.%s</span><span class="delimiter">&quot;</span></span>,
+                <span class="predefined-type">Pageable</span>.class.getPackage().getName(),
+                <span class="predefined-type">Pageable</span>.class.getSimpleName()))
+        .withProperties(newArrayList(
+            property(<span class="predefined-type">Integer</span>.class, restConfiguration.getPageParamName()),
+            property(<span class="predefined-type">Integer</span>.class, restConfiguration.getLimitParamName()),
+            property(<span class="predefined-type">String</span>.class, restConfiguration.getSortParamName())
+        ))
+        .build();
+  }
+
+  <span class="directive">private</span> AlternateTypePropertyBuilder property(<span class="predefined-type">Class</span>&lt;?&gt; type, <span class="predefined-type">String</span> name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> AlternateTypePropertyBuilder()
+        .withName(name)
+        .withType(type)
+        .withCanRead(<span class="predefined-constant">true</span>)
+        .withCanWrite(<span class="predefined-constant">true</span>);
+  }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It involves creating a generated in-memory type that allows the springfox inference engine to use the new type
+instead of <code>Pageable</code>.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L68-L88">SpringDataRestConfiguration.java</a></p>
+</div>
+<div id="in-memory-alternate-type" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td>
+  <td class="code"><pre>  <span class="directive">private</span> <span class="predefined-type">Type</span> pageableMixin(RepositoryRestConfiguration restConfiguration) {
+    <span class="keyword">return</span> <span class="keyword">new</span> AlternateTypeBuilder()
+        .fullyQualifiedClassName(
+            <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s.generated.%s</span><span class="delimiter">&quot;</span></span>,
+                <span class="predefined-type">Pageable</span>.class.getPackage().getName(),
+                <span class="predefined-type">Pageable</span>.class.getSimpleName()))
+        .withProperties(newArrayList(
+            property(<span class="predefined-type">Integer</span>.class, restConfiguration.getPageParamName()),
+            property(<span class="predefined-type">Integer</span>.class, restConfiguration.getLimitParamName()),
+            property(<span class="predefined-type">String</span>.class, restConfiguration.getSortParamName())
+        ))
+        .build();
+  }
+
+  <span class="directive">private</span> AlternateTypePropertyBuilder property(<span class="predefined-type">Class</span>&lt;?&gt; type, <span class="predefined-type">String</span> name) {
+    <span class="keyword">return</span> <span class="keyword">new</span> AlternateTypePropertyBuilder()
+        .withName(name)
+        .withType(type)
+        .withCanRead(<span class="predefined-constant">true</span>)
+        .withCanWrite(<span class="predefined-constant">true</span>);
+  }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -999,7 +1202,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-01-09 03:17:52 UTC
+Last updated 2018-01-13 11:57:19 UTC
 </div>
 </div>
 </body>

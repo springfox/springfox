@@ -1238,6 +1238,23 @@ registers the vavr module with the objectmapper that is being used.</p>
 }</code></pre>
 </div>
 </div>
+<div id="q25" class="paragraph">
+<p>*25. Why are properties missing from certain models/types?</p>
+</div>
+<div class="paragraph">
+<p>A good example of when this might happen is when using Immutables (the library) that are not particularly obvious.
+Immutables are great, except that, unless u craft your model correctly it might lead to confusing results, as you&#8217;ve
+seen. Also how springfox infers the model is opposite to how the service consumes it. By that I mean that, take for e.g. Model has properties a (read/write), b (write only), c (readonly) we read the writable properties for requests and readable properties for responses.</p>
+</div>
+<div class="paragraph">
+<p>So if your model is only used for requests, it will have a and b
+And if your model is only used of responses it will have a and c
+and if it is present in both request and response it will have a, b and c.</p>
+</div>
+<div class="paragraph">
+<p>We&#8217;re working to make this better thanks to <a href="https://github.com/springfox/springfox/pull/2056">model enhancements work</a>
+ by <a href="https://github.com/MaksimOrlov">Maksim</a></p>
+</div>
 </div>
 </div>
 </div>
@@ -1258,7 +1275,7 @@ registers the vavr module with the objectmapper that is being used.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-01-09 03:17:52 UTC
+Last updated 2018-01-13 11:57:19 UTC
 </div>
 </div>
 </body>
