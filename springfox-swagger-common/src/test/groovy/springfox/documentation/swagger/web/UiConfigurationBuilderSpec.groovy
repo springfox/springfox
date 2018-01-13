@@ -27,6 +27,9 @@ import spock.lang.Specification
 class UiConfigurationBuilderSpec extends Specification {
   def uiConfig = UiConfigurationBuilder.builder().build()
   def expected = "{\n" +
+      "    \"apisSorter\":\"alpha\"," +
+      "    \"jsonEditor\":false," +
+      "    \"showRequestHeaders\":false," +
       "    \"deepLinking\": true,\n" +
       "    \"displayOperationId\": false,\n" +
       "    \"defaultModelsExpandDepth\": 1,\n" +

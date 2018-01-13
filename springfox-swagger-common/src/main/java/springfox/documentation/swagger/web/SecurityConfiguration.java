@@ -18,7 +18,6 @@
  */
 package springfox.documentation.swagger.web;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -29,21 +28,25 @@ public class SecurityConfiguration {
   /**
    * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
    */
+  @Deprecated
   static final SecurityConfiguration DEFAULT = new SecurityConfiguration();
 
   /**
    * @deprecated @since 2.8.0. This field is unused
    */
+  @Deprecated
   private String apiKey;
 
   /**
    * @deprecated @since 2.8.0. This field is unused
    */
+  @Deprecated
   private ApiKeyVehicle apiKeyVehicle;
 
   /**
    * @deprecated @since 2.8.0. This field is unused
    */
+  @Deprecated
   private String apiKeyName;
 
   /*--------------------------------------------*\
@@ -129,7 +132,7 @@ public class SecurityConfiguration {
    * @deprecated @since 2.8.0
    */
   @Deprecated
-  @JsonIgnore
+  @JsonProperty("apiKey")
   public String getApiKey() {
     return apiKey;
   }
@@ -138,7 +141,7 @@ public class SecurityConfiguration {
    * @deprecated @since 2.8.0
    */
   @Deprecated
-  @JsonIgnore
+  @JsonProperty("apiKeyName")
   public String getApiKeyName() {
     return apiKeyName;
   }
@@ -147,9 +150,12 @@ public class SecurityConfiguration {
    * @deprecated @since 2.8.0
    */
   @Deprecated
-  @JsonIgnore
+  @JsonProperty("apiKeyVehicle")
   public String getApiKeyVehicle() {
-    return apiKeyVehicle.getValue();
+    if (apiKeyVehicle != null) {
+      return apiKeyVehicle.getValue();
+    }
+    return null;
   }
 
   @JsonProperty("clientId")

@@ -27,7 +27,9 @@ import spock.lang.Specification
 class SecurityConfigurationSpec extends Specification {
   def securityConfig = SecurityConfiguration.DEFAULT
   def expected = "{\n" +
-      "    \"scopeSeparator\": \",\"\n" +
+      "    \"apiKeyVehicle\":\"header\"," +
+      "    \"apiKeyName\":\"api_key\"," +
+      "    \"scopeSeparator\": \",\"" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

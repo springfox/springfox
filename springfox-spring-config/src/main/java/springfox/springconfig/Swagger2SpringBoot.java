@@ -56,8 +56,8 @@ import springfox.petstore.controller.PetController;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static springfox.documentation.schema.AlternateTypeRules.newRule;
+import static com.google.common.collect.Lists.*;
+import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @SpringBootApplication
 @EnableSwagger2//<1>
@@ -84,7 +84,7 @@ public class Swagger2SpringBoot {
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
-                    typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
+                typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
                 typeResolver.resolve(WildcardType.class)))//<10>
         .useDefaultResponseMessages(false)//<11>
         .globalResponseMessage(RequestMethod.GET,//<12>

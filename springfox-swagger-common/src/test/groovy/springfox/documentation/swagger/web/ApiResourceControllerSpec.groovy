@@ -46,6 +46,10 @@ class ApiResourceControllerSpec extends Specification {
     "useBasicAuthenticationWithAccessCodeGrant": false
 }"""
   def ui = """{
+    "apisSorter":"alpha",
+    "supportedSubmitMethods":[],
+    "jsonEditor":false,
+    "showRequestHeaders":false, 
     "deepLinking": true,
     "displayOperationId": false,
     "defaultModelsExpandDepth": 1,
@@ -64,11 +68,13 @@ class ApiResourceControllerSpec extends Specification {
         {
             "name": "test",
             "url": "/v1?group=test",
+            "location": "/v1?group=test",
             "swaggerVersion": "1.2"
         },
         {
             "name": "test",
             "url": "/v2?group=test",
+            "location": "/v2?group=test",
             "swaggerVersion": "2.0"
         }
     ]"""

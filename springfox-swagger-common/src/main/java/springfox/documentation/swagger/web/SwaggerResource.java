@@ -36,7 +36,10 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
   public void setName(String name) {
     this.name = name;
   }
-
+  /**
+   * Use url going forward rather than location
+   * @since 2.8.0
+   */
   @JsonProperty("url")
   public String getUrl() {
     return url;
@@ -44,6 +47,19 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  /**
+   * @deprecated @since 2.8.0 - Use url going forward
+   */
+  @Deprecated
+  @JsonProperty("location")
+  public String getLocation() {
+    return url;
+  }
+
+  public void setLocation(String location) {
+    this.url = location;
   }
 
   @JsonProperty("swaggerVersion")

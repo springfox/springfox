@@ -247,6 +247,7 @@ public class UiConfiguration {
       Boolean showExtensions,
       TagsSorter tagsSorter,
       String validatorUrl) {
+    this.apisSorter = "alpha";
     this.deepLinking = deepLinking;
     this.displayOperationId = displayOperationId;
     this.defaultModelsExpandDepth = defaultModelsExpandDepth;
@@ -266,7 +267,7 @@ public class UiConfiguration {
    * @deprecated @since 2.8.0
    */
   @Deprecated
-  @JsonIgnore
+  @JsonProperty("apisSorter")
   public String getApisSorter() {
     return apisSorter;
   }
@@ -275,7 +276,7 @@ public class UiConfiguration {
    * @deprecated @since 2.8.0
    */
   @Deprecated
-  @JsonIgnore
+  @JsonProperty("supportedSubmitMethods")
   public String[] getSupportedSubmitMethods() {
     return supportedSubmitMethods;
   }
@@ -284,7 +285,7 @@ public class UiConfiguration {
    * @deprecated @since 2.8.0
    */
   @Deprecated
-  @JsonIgnore
+  @JsonProperty("jsonEditor")
   public boolean isJsonEditor() {
     return jsonEditor;
   }
@@ -293,7 +294,7 @@ public class UiConfiguration {
    * @deprecated @since 2.8.0
    */
   @Deprecated
-  @JsonIgnore
+  @JsonProperty("showRequestHeaders")
   public boolean isShowRequestHeaders() {
     return showRequestHeaders;
   }
