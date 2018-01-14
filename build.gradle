@@ -13,7 +13,7 @@ buildscript {
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
-    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.7"
+    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
     classpath "org.ajoberstar:gradle-git:1.7.2"
   }
 }
