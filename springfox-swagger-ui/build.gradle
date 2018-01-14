@@ -108,6 +108,6 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-compileJava.dependsOn(customizeSwaggerUi)
+build.dependsOn(customizeSwaggerUi)
 customizeSwaggerUi.dependsOn(unzip)
 unzip.dependsOn(swaggerUiDownload)
