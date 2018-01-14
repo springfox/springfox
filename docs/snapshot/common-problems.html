@@ -1330,6 +1330,111 @@ and if it is present in both request and response it will have a, b and c.</p>
 }</code></pre>
 </div>
 </div>
+<div id="q27" class="paragraph">
+<p>*27. Controller receives parameter as a String but we are expecting a json Type. How can we model this?</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java#L243-267">FeatureDemonstrationService.class</a></p>
+</div>
+<div id="q27-controller" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td>
+  <td class="code"><pre><span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/2031</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.POST)
+<span class="annotation">@ResponseBody</span>
+<span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/2031</span><span class="delimiter">&quot;</span></span>)
+<span class="annotation">@ApiImplicitParams</span>({
+    <span class="annotation">@ApiImplicitParam</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">contents</span><span class="delimiter">&quot;</span></span>, dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">CustomTypeFor2031</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+})
+<span class="directive">public</span> <span class="type">void</span> save(<span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyId</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> keyId,
+                  <span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> id,
+                  <span class="annotation">@RequestBody</span> <span class="predefined-type">String</span> contents <i class="conum" data-value="2"></i><b>(2)</b>
+                ) {
+}
+
+<span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">CustomTypeFor2031</span> { <i class="conum" data-value="3"></i><b>(3)</b>
+  <span class="directive">private</span> <span class="predefined-type">String</span> property;
+
+  <span class="directive">public</span> <span class="predefined-type">String</span> getProperty() {
+    <span class="keyword">return</span> property;
+  }
+
+  <span class="directive">public</span> <span class="type">void</span> setProperty(<span class="predefined-type">String</span> property) {
+    <span class="local-variable">this</span>.property = property;
+  }
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Assume we have a controller action that has a <code>String</code> parameter (contents). This is how we can override the
+on-the-wire type (CustomTypeFor2031).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The method parameter that comes in as a <code>String</code> that is actually interpreted as <code>CustomTypeFor2031</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>CustomTypeFor2031</code> complex type that we read from json String.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Once we do this we need to configure this change so that we can add the model to the definitions section.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/springfox/springfox/blob/eedbfb1b2dcf0344e21aefd0731515aa63fc9070/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/Swagger2TestConfig.groovy#L118">Swagger2TestConfig</a></p>
+</div>
+<div id="q27-config" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+</pre></td>
+  <td class="code"><pre><span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)
+    .groupName(<span class="string"><span class="delimiter">&quot;</span><span class="content">featureService</span><span class="delimiter">&quot;</span></span>)
+    .useDefaultResponseMessages(<span class="predefined-constant">false</span>)
+    .additionalModels(resolver.resolve(FeatureDemonstrationService.CustomTypeFor2031.class)) <i class="conum" data-value="1"></i><b>(1)</b></pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Add <code>CustomTypeFor2031</code> as a additional model.</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -1350,7 +1455,7 @@ and if it is present in both request and response it will have a, b and c.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-01-14 00:57:08 UTC
+Last updated 2018-01-14 02:32:45 UTC
 </div>
 </div>
 </body>
