@@ -517,3 +517,27 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 }
 ----
+
+[[q27]]
+*27. Controller receives parameter as a String but we are expecting a json Type. How can we model this?
+
+https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java#L243-267[FeatureDemonstrationService.class]
+[[q27-controller]]
+[source,java,linenums]
+----
+include::../../springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java[tags=question-27,indent=0]
+----
+<1> Assume we have a controller action that has a `String` parameter (contents). This is how we can override the
+on-the-wire type (CustomTypeFor2031).
+<2> The method parameter that comes in as a `String` that is actually interpreted as `CustomTypeFor2031`
+<3> `CustomTypeFor2031` complex type that we read from json String.
+
+Once we do this we need to configure this change so that we can add the model to the definitions section.
+
+https://github.com/springfox/springfox/blob/eedbfb1b2dcf0344e21aefd0731515aa63fc9070/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/Swagger2TestConfig.groovy#L118[Swagger2TestConfig]
+[[q27-config]]
+[source,java,linenums]
+----
+include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/Swagger2TestConfig.groovy[tags=question-27-config,indent=0]
+----
+<1> Add `CustomTypeFor2031` as a additional model.

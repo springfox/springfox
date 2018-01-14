@@ -195,6 +195,47 @@
         }
       }
     },
+    "/features/2031": {
+      "post": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "/2031",
+        "operationId": "saveUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "keyId",
+            "in": "path",
+            "description": "keyId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "contents",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CustomTypeFor2031"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/features/addFiles": {
       "post": {
         "tags": [
@@ -982,6 +1023,15 @@
     }
   },
   "definitions": {
+    "CustomTypeFor2031": {
+      "type": "object",
+      "properties": {
+        "property": {
+          "type": "string"
+        }
+      },
+      "title": "CustomTypeFor2031"
+    },
     "EnumObjectType": {
       "type": "object",
       "properties": {

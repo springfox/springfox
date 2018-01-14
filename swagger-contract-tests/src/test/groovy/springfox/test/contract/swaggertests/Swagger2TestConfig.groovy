@@ -31,6 +31,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration
 import springfox.documentation.spring.web.dummy.controllers.BugsController
+import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import springfox.petstore.PetStoreConfiguration
@@ -116,9 +117,12 @@ class Swagger2TestConfig {
 
   @Bean
   Docket featureService(List<SecurityScheme> authorizationTypes) {
+    // tag::question-27-config[]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("featureService")
         .useDefaultResponseMessages(false)
+        .additionalModels(resolver.resolve(FeatureDemonstrationService.CustomTypeFor2031.class)) // <1>
+    // end::question-27-config[]
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
         .alternateTypeRules(newRule(org.joda.time.LocalDate.class, String.class))
@@ -248,6 +252,7 @@ class Swagger2TestConfig {
   Docket featureServiceForCodeGen(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("featureService-codeGen")
+        .additionalModels(resolver.resolve(FeatureDemonstrationService.CustomTypeFor2031.class))
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
         .forCodeGeneration(true)

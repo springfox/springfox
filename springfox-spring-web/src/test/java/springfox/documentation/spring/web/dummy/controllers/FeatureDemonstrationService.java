@@ -20,6 +20,8 @@
 package springfox.documentation.spring.web.dummy.controllers;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.Extension;
@@ -237,4 +239,30 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "/1490/{itemId}", method = RequestMethod.PUT)
   public void updateSerializablePet(@PathVariable String itemId, @RequestBody PetWithSerializer pet) {
   }
+
+  // tag::question-27[]
+  @RequestMapping(value = "/2031", method = RequestMethod.POST)
+  @ResponseBody
+  @ApiOperation(value = "/2031")
+  @ApiImplicitParams({
+      @ApiImplicitParam(name="contents", dataType = "CustomTypeFor2031") //<1>
+  })
+  public void save(@PathVariable("keyId") String keyId,
+                    @PathVariable("id") String id,
+                    @RequestBody String contents //<2>
+                  ) {
+  }
+
+  public static class CustomTypeFor2031 { //<3>
+    private String property;
+
+    public String getProperty() {
+      return property;
+    }
+
+    public void setProperty(String property) {
+      this.property = property;
+    }
+  }
+  // end::question-27[]
 }
