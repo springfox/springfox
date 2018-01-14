@@ -124,5 +124,6 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
     "/foo/bar:{baz}"                                | "/foo/bar:{baz}"
     "/foo:{foo}/bar:{baz}"                          | "/foo:{foo}/bar:{baz}"
     "/foo/bar:{baz:\\w+}"                           | "/foo/bar:{baz}"
+    "/{businessId:\\d{3}}:{productId:\\D{3}\\d{3}}" | "/{businessId}:{productId}"
   }
 }
