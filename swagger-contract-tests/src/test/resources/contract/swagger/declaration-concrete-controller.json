@@ -179,7 +179,19 @@
       "description": "",
       "id": "Link",
       "properties": {
+        "deprecation": {
+          "required": false,
+          "type": "string"
+        },
         "href": {
+          "required": false,
+          "type": "string"
+        },
+        "hreflang": {
+          "required": false,
+          "type": "string"
+        },
+        "media": {
           "required": false,
           "type": "string"
         },
@@ -190,6 +202,14 @@
         "templated": {
           "required": false,
           "type": "boolean"
+        },
+        "title": {
+          "required": false,
+          "type": "string"
+        },
+        "type": {
+          "required": false,
+          "type": "string"
         }
       }
     },
