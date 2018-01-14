@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import spock.lang.Unroll
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
@@ -107,6 +108,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
     descriptionList.size() == 0
   }
 
+  @Unroll("Sanitization works for #mappingPattern")
   def "should sanitize request mapping endpoints"() {
     expect:
     Paths.sanitizeRequestMappingPattern(mappingPattern) == expected
@@ -124,5 +126,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
     "/foo/bar:{baz}"                                | "/foo/bar:{baz}"
     "/foo:{foo}/bar:{baz}"                          | "/foo:{foo}/bar:{baz}"
     "/foo/bar:{baz:\\w+}"                           | "/foo/bar:{baz}"
+    "/{businessId:\\d{3}}:{productId:\\D{3}\\d{3}}" | "/{businessId}:{productId}"
+    "/{businessId:\\d{3}}:{productId:\\D{3}\\d{3}[(abcd){9,3}?(?!abc)?]+}" | "/{businessId}:{productId}"
   }
 }
