@@ -59,6 +59,11 @@ ext {
                   "org.springframework:spring-webmvc:$spring",
                   "org.springframework:spring-context:$spring",
           ],
+          springProvidedNew: [
+                  "org.springframework:spring-core:$spring",
+                  "org.springframework:spring-web:$spring",
+                  "org.springframework:spring-context:$spring",
+          ],
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",

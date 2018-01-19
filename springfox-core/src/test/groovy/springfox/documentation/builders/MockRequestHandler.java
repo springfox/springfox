@@ -24,12 +24,13 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.wrapper.PatternsRequestConditionWrapper;
+import springfox.documentation.springWrapper.NameValueExpression;
+import springfox.documentation.springWrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -67,7 +68,7 @@ public class MockRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return requestMapping.getPatternsCondition();
+    return new PatternsRequestConditionWrapper(requestMapping.getPatternsCondition());
   }
 
   @Override
@@ -130,8 +131,4 @@ public class MockRequestHandler implements RequestHandler {
     return null;
   }
 
-  @Override
-  public RequestMappingInfo getRequestMapping() {
-    return null;
-  }
 }

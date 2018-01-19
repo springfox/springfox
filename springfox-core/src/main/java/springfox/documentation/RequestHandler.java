@@ -24,11 +24,12 @@ import com.google.common.base.Optional;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ResolvedMethodParameter;
+
+import springfox.documentation.springWrapper.NameValueExpression;
+import springfox.documentation.springWrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -70,13 +71,6 @@ public interface RequestHandler {
   ResolvedType getReturnType();
 
   <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation);
-
-  /**
-   * @deprecated This is introduced to preserve backwards compat
-   * @return
-   */
-  @Deprecated
-  RequestMappingInfo getRequestMapping();
 
   /**
    * @deprecated This is introduced to preserve backwards compat
