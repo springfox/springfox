@@ -18,10 +18,11 @@
  */
 
 package springfox.documentation.swagger.web
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.springWrapper.RequestMappingInfo
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
 @Mixin(RequestMappingSupport)
@@ -30,7 +31,7 @@ class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
   @Unroll
   def "group paths and descriptions"() {
     given:
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/anything')
+      RequestMappingInfo requestMappingInfo = new RequestMappingInfo() {}
       ClassOrApiAnnotationResourceGrouping strategy = new ClassOrApiAnnotationResourceGrouping()
       def group = strategy.getResourceGroups(requestMappingInfo, handlerMethod).first()
 

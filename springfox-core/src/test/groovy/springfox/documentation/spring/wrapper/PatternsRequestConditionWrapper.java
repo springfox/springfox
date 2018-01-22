@@ -13,8 +13,11 @@ public class PatternsRequestConditionWrapper implements PatternsRequestCondition
     }
 
     @Override
-    public PatternsRequestCondition combine(org.springframework.web.servlet.mvc.condition.PatternsRequestCondition other) {
-        return new PatternsRequestConditionWrapper(this.condition.combine(other));
+    public PatternsRequestCondition combine(PatternsRequestCondition<org.springframework.web.servlet.mvc.condition.PatternsRequestCondition> other) {
+        if (other instanceof PatternsRequestConditionWrapper) {
+            return new PatternsRequestConditionWrapper(this.condition.combine(((PatternsRequestConditionWrapper) other).condition));
+        }
+        return this;
     }
 
     @Override

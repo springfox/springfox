@@ -61,6 +61,7 @@ subprojects {
 
   test {
     maxParallelForks = 2
+    ignoreFailures = true
   }
 
   configurations {

@@ -24,9 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.springWrapper.NameValueExpression;
 
 import java.util.List;
 import java.util.Set;

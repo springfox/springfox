@@ -21,9 +21,9 @@ package springfox.documentation.spi.service;
 
 import org.springframework.plugin.core.Plugin;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.springWrapper.RequestMappingInfo;
 
 import java.util.Set;
 

@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.ApiSelector;
@@ -32,6 +31,7 @@ import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
+import springfox.documentation.springWrapper.PatternsRequestCondition;
 
 import java.util.List;
 

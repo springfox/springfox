@@ -28,7 +28,6 @@ import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
 import org.springframework.web.servlet.mvc.condition.NameValueExpression
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
@@ -42,6 +41,7 @@ import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
+import springfox.documentation.springWrapper.PatternsRequestCondition
 
 import java.lang.annotation.Annotation
 
@@ -137,7 +137,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
   def requestMapping(paths, consumes, produces, methods) {
     RequestCondition custom = null
     new RequestMappingInfo("someName",
-        new PatternsRequestCondition(paths),
+        new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(paths),
         new RequestMethodsRequestCondition(methods),
         new ParamsRequestCondition(),
         new HeadersRequestCondition(),
@@ -224,7 +224,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       }
 
       @Override
-      RequestMappingInfo getRequestMapping() {
+      springfox.documentation.springWrapper.RequestMappingInfo getRequestMapping() {
         return null
       }
 

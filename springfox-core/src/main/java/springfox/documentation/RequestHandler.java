@@ -30,6 +30,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 
 import springfox.documentation.springWrapper.NameValueExpression;
 import springfox.documentation.springWrapper.PatternsRequestCondition;
+import springfox.documentation.springWrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -71,6 +72,13 @@ public interface RequestHandler {
   ResolvedType getReturnType();
 
   <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation);
+
+  /**
+   * @deprecated This is introduced to preserve backwards compat
+   * @return
+   */
+  @Deprecated
+  RequestMappingInfo getRequestMapping();
 
   /**
    * @deprecated This is introduced to preserve backwards compat

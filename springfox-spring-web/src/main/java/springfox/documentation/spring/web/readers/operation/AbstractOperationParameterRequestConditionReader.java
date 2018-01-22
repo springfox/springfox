@@ -20,13 +20,13 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
+import springfox.documentation.springWrapper.NameValueExpression;
 
 import java.util.List;
 import java.util.Set;

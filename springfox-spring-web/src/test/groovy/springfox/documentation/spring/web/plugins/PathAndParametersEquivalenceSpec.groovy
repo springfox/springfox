@@ -9,6 +9,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.RequestHandler
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spring.web.PatternsRequestConditionWrapper
 
 import static com.google.common.collect.Sets.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
@@ -43,7 +44,7 @@ class PathAndParametersEquivalenceSpec extends Specification {
       ResolvedMethodParameter parameter,
       Set<NameValueExpression<String>> params) {
     def handler = Mock(RequestHandler)
-    handler.patternsCondition >> new PatternsRequestCondition(path)
+    handler.patternsCondition >> new PatternsRequestConditionWrapper(new PatternsRequestCondition(path))
     handler.produces() >> newHashSet(produces)
     handler.parameters >> [parameter]
     handler.supportedMethods() >> methods

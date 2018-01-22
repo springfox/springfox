@@ -110,38 +110,38 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   }
 
 
-    def "should only generate models for request parameters that are annotated with Springs RequestPart"() {
-        given:
-        HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotation',
-                DummyModels.BusinessModel,
-                HttpServletResponse.class,
-                DummyModels.AnnotatedBusinessModel.class
-        )
-        RequestMappingContext context = requestMappingContext(handlerMethod)
-        when:
-        def models = sut.read(context)
+  def "should only generate models for request parameters that are annotated with Springs RequestPart"() {
+      given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotation',
+              DummyModels.BusinessModel,
+              HttpServletResponse.class,
+              DummyModels.AnnotatedBusinessModel.class
+      )
+      RequestMappingContext context = requestMappingContext(handlerMethod)
+      when:
+      def models = sut.read(context)
 
-        then:
-        models.size() == 1 // instead of 3
-        models.containsKey("BusinessModel")
+      then:
+      models.size() == 1 // instead of 3
+      models.containsKey("BusinessModel")
 
-    }
+  }
 
-    def "should not generate models for simple type request parameters that are annotated with Springs RequestPart"() {
-        given:
-        HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotationOnSimpleType',
-                String.class,
-                HttpServletResponse.class,
-                DummyModels.AnnotatedBusinessModel.class
-        )
-        RequestMappingContext context = requestMappingContext(handlerMethod)
-        when:
-        def models = sut.read(context)
+  def "should not generate models for simple type request parameters that are annotated with Springs RequestPart"() {
+      given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestPartAnnotationOnSimpleType',
+              String.class,
+              HttpServletResponse.class,
+              DummyModels.AnnotatedBusinessModel.class
+      )
+      RequestMappingContext context = requestMappingContext(handlerMethod)
+      when:
+      def models = sut.read(context)
 
-        then:
-        models.size() == 0 // instead of 3
+      then:
+      models.size() == 0 // instead of 3
 
-    }
+  }
 
   @Ignore("This needs to move to a swagger 1.2 test")
   def "Generates the correct models when there is a Map object in the input parameter"() {

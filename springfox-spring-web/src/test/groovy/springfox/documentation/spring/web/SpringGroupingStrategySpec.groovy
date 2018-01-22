@@ -19,18 +19,18 @@
 
 package springfox.documentation.spring.web
 
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ResourceGroupingStrategy
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.springWrapper.RequestMappingInfo
 
 @Mixin(RequestMappingSupport)
 class SpringGroupingStrategySpec extends Specification {
 
   def "group paths and descriptions"() {
     given:
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/anything')
+      RequestMappingInfo requestMappingInfo = new RequestMappingInfoWrapper(requestMappingInfo('/anything'))
       ResourceGroupingStrategy strategy = new SpringGroupingStrategy()
 
       def groups = strategy.getResourceGroups(requestMappingInfo, handlerMethod)

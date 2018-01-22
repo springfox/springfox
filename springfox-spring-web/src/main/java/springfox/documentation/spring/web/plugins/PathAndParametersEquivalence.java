@@ -25,6 +25,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.web.PatternsRequestConditionWrapper;
 
 import java.util.List;
 import java.util.Set;

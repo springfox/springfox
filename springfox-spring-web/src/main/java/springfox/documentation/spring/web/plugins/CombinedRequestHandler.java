@@ -24,18 +24,16 @@ import com.google.common.collect.Sets;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.springWrapper.NameValueExpression;
+import springfox.documentation.springWrapper.PatternsRequestCondition;
+import springfox.documentation.springWrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Set;
-
-import static com.google.common.collect.Sets.*;
 
 public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
@@ -58,10 +56,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    SetView<String> patterns = Sets.union(
-        first.getPatternsCondition().getPatterns(),
-        second.getPatternsCondition().getPatterns());
-    return new PatternsRequestCondition(patterns.toArray(new String[patterns.size()]));
+    return first.getPatternsCondition().combine(second.getPatternsCondition());
   }
 
   @Override

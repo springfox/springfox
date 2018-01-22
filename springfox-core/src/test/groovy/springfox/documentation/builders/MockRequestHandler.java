@@ -131,4 +131,8 @@ public class MockRequestHandler implements RequestHandler {
     return null;
   }
 
+  @Override
+  public springfox.documentation.springWrapper.RequestMappingInfo getRequestMapping() {
+    return null;
+  }
 }

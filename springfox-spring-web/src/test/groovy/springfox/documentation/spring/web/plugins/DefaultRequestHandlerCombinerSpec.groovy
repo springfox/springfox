@@ -7,6 +7,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.RequestHandler
 import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.spring.web.PatternsRequestConditionWrapper
 
 import static com.google.common.collect.Sets.newHashSet
 
@@ -90,7 +91,7 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
       List<String> produces,
       ResolvedMethodParameter parameter) {
     def handler = Mock(RequestHandler)
-    handler.patternsCondition >> new PatternsRequestCondition(path)
+    handler.patternsCondition >> new PatternsRequestConditionWrapper(new PatternsRequestCondition(path))
     handler.produces() >> newHashSet(produces)
     handler.parameters >> [parameter]
     handler.supportedMethods() >> [RequestMethod.GET]
