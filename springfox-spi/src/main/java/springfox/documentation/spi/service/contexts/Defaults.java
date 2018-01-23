@@ -170,19 +170,32 @@ public class Defaults {
 
   private void initIgnorableTypes() {
     ignored = newHashSet();
-    ignored.add(ServletRequest.class);
     ignored.add(Class.class);
     ignored.add(Void.class);
     ignored.add(Void.TYPE);
     ignored.add(HttpHeaders.class);
-    ignored.add(ServletResponse.class);
-    ignored.add(HttpServletRequest.class);
-    ignored.add(HttpServletResponse.class);
     ignored.add(HttpHeaders.class);
     ignored.add(BindingResult.class);
-    ignored.add(ServletContext.class);
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class); //Used to ignore parameters
+
+    boolean exists = true;
+
+    try {
+      Class.forName("javax.servlet.ServletContext", false, this.getClass().getClassLoader());
+    } catch (ClassNotFoundException e) {
+      exists = false;
+    }
+
+    if (exists) {
+      ignored.add(ServletRequest.class);
+      ignored.add(ServletResponse.class);
+      ignored.add(HttpServletRequest.class);
+      ignored.add(HttpServletResponse.class);
+      ignored.add(ServletContext.class);
+    }
+
+
   }
 
   private void initResponseMessages() {

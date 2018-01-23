@@ -18,7 +18,7 @@ ext {
   slf4j = "1.7.24"
   snakeyaml = '1.19'
   spock = "1.1-groovy-2.4"
-  spring = "4.3.9.RELEASE"
+  spring = "5.0.2.RELEASE"
   springHateoas = "0.24.0.RELEASE"
   springDataRest = "2.6.9.RELEASE"
   springPluginVersion = "1.2.0.RELEASE"
@@ -56,7 +56,18 @@ ext {
           springProvided: [
                   "org.springframework:spring-core:$spring",
                   "org.springframework:spring-web:$spring",
+                  "org.springframework:spring-context:$spring",
+          ],
+          springProvidedWithMvc: [
+                  "org.springframework:spring-core:$spring",
+                  "org.springframework:spring-web:$spring",
                   "org.springframework:spring-webmvc:$spring",
+                  "org.springframework:spring-context:$spring",
+          ],
+          springProvidedWithFlux: [
+                  "org.springframework:spring-core:$spring",
+                  "org.springframework:spring-web:$spring",
+                  "org.springframework:spring-webflux:$spring",
                   "org.springframework:spring-context:$spring",
           ],
           springProvidedNew: [
@@ -65,10 +76,15 @@ ext {
                   "org.springframework:spring-context:$spring",
           ],
           clientProvided: [
-                  "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
                   "com.fasterxml.jackson.core:jackson-databind:${jackson}",
                   "joda-time:joda-time:$joda"
+          ],
+          clientProvidedServlet: [
+                  "com.fasterxml.jackson.core:jackson-core:${jackson}",
+                  "com.fasterxml.jackson.core:jackson-databind:${jackson}",
+                  "joda-time:joda-time:$joda",
+                  "javax.servlet:javax.servlet-api:$servlet",
           ],
           core          : [
                   "com.google.guava:guava:${guava}",

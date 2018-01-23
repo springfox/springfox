@@ -33,7 +33,7 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
 import springfox.documentation.spring.web.plugins.Docket
-import springfox.documentation.swagger2.annotations.EnableSwagger2
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc
 import springfox.petstore.PetStoreConfiguration
 import springfox.test.contract.swagger.Bug1767ListingScanner
 
@@ -44,7 +44,7 @@ import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Configuration
-@EnableSwagger2
+@EnableSwagger2WebMvc
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @Import([SpringDataRestConfiguration, PetStoreConfiguration])
 class Swagger2TestConfig {

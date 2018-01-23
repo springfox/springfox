@@ -53,7 +53,8 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
     swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
     swagger2Url = environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs");
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
-    swagger2Available = classByName("springfox.documentation.swagger2.web.Swagger2Controller").isPresent();
+    swagger2Available = classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
+                      || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent() ;
     this.documentationCache = documentationCache;
   }
 

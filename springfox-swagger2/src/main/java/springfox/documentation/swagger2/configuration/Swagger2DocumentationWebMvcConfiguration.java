@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger2.configuration;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,15 +33,16 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping;
-import springfox.documentation.swagger2.web.Swagger2Controller;
+import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 
 @Configuration
+@ConditionalOnClass(name = "springfox.documentation.spring.web.SpringfoxWebMvcConfiguration")
 @Import({ SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.readers.parameter",
     "springfox.documentation.swagger2.mappers"
 })
-public class Swagger2DocumentationConfiguration {
+public class Swagger2DocumentationWebMvcConfiguration {
   @Bean
   public JacksonModuleRegistrar swagger2Module() {
     return new Swagger2JacksonModule();
@@ -54,6 +56,6 @@ public class Swagger2DocumentationConfiguration {
       JsonSerializer jsonSerializer) {
     return new PropertySourcedRequestMappingHandlerMapping(
         environment,
-        new Swagger2Controller(environment, documentationCache, mapper, jsonSerializer));
+        new Swagger2ControllerWebMvc(environment, documentationCache, mapper, jsonSerializer));
   }
 }

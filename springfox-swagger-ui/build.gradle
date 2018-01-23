@@ -82,10 +82,14 @@ task customizeSwaggerUi << {
 }
 
 jar {
+  println "building jar file"
+  println "${buildDir}/swagger-ui-${swaggerUiVersion}/swagger-ui.html to META-INF/resources"
   from("${buildDir}/swagger-ui-${swaggerUiVersion}/swagger-ui.html") {
     into "META-INF/resources"
   }
 
+
+  println "${buildDir}/${swaggerUiExplodedDir} to META-INF/resources/webjars/${project.name}"
   from("${buildDir}/${swaggerUiExplodedDir}") {
     into "META-INF/resources/webjars/${project.name}"
   }

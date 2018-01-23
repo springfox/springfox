@@ -34,7 +34,7 @@ import static springfox.documentation.spi.service.contexts.Orderings.nickNameCom
 class Swagger2ControllerSpec extends DocumentationContextSpec
     implements MapperSupport, JsonSupport{
 
-  Swagger2Controller controller = new Swagger2Controller(
+  Swagger2ControllerWebMvc controller = new Swagger2ControllerWebMvc(
       mockEnvironment(),
       new DocumentationCache(),
       swagger2Mapper(),
