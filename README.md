@@ -17,7 +17,7 @@ You must start to build project :
     ./gradlew clean build publishToMavenLocal -i -x test -x checkstyleMain -x checkstyleTest
     
 To use it on you spring project you must add 4 dependencies : 
-- io.springfox:springfox-swagger-ui:2.9.0-SNAPSHOT
+- io.springfox:springfox-swagger2:2.9.0-SNAPSHOT
 - io.springfox:springfox-spring-webflux:2.9.0-SNAPSHOT
 - io.springfox:springfox-swagger-ui:2.9.0-SNAPSHOT
 - org.webjars:webjars-locator:0.32
