@@ -35,7 +35,7 @@ public class PatternsRequestConditionWrapper implements springfox.documentation.
     public springfox.documentation.springWrapper.PatternsRequestCondition combine(
             springfox.documentation.springWrapper.PatternsRequestCondition<PatternsRequestCondition> other
     ) {
-        if (other instanceof PatternsRequestConditionWrapper) {
+        if (other instanceof PatternsRequestConditionWrapper && !this.equals(other)) {
             return new PatternsRequestConditionWrapper(this.condition.combine(((PatternsRequestConditionWrapper) other).condition));
         }
         return this;
@@ -60,7 +60,9 @@ public class PatternsRequestConditionWrapper implements springfox.documentation.
         return this.condition.hashCode();
     }
 
-
-
+    @Override
+    public String toString() {
+        return this.condition.toString();
+    }
 }
 
