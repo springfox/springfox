@@ -92,8 +92,7 @@ public class Swagger2ControllerWebFlux {
     //UriComponents uriComponents = componentsFrom(request, swagger.getBasePath());
     swagger.basePath("/");//Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
     if (isNullOrEmpty(swagger.getHost())) {
-      //swagger.host(hostName(uriComponents));
-      swagger.host("localhost:8080");
+      swagger.host(request.getURI().getAuthority());
     }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
   }
