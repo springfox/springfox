@@ -14,7 +14,7 @@
 
 You must start to build project : 
 
-    ./gradlew clean build publishToMavenLocal -i -x test -x checkstyleMain -x checkstyleTest
+    ./gradlew clean build publishToMavenLocal -i -x test
     
 To use it on you spring project you must add 4 dependencies : 
 - io.springfox:springfox-swagger2:2.9.0-SNAPSHOT
