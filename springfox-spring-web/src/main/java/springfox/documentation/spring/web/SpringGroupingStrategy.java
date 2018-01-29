@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;

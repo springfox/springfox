@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.annotations;
 
 import org.springframework.context.annotation.Import;
 import springfox.documentation.swagger2.configuration.Swagger2DocumentationWebFluxConfiguration;
-import springfox.documentation.swagger2.configuration.Swagger2DocumentationWebMvcConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
