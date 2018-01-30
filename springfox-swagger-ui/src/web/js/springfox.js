@@ -2,13 +2,13 @@ window.onload = () => {
 
   const buildSystemAsync = async (baseUrl) => {
     try {
-      const configUIResponse = await fetch(baseUrl + "/swagger-resources/configuration/ui");
+      const configUIResponse = await fetch(baseUrl + "/swagger-resources/configuration/ui", {credentials: 'same-origin'});
       const configUI = await configUIResponse.json();
 
-      const configSecurityResponse = await fetch(baseUrl + "/swagger-resources/configuration/security");
+      const configSecurityResponse = await fetch(baseUrl + "/swagger-resources/configuration/security", {credentials: 'same-origin'});
       const configSecurity = await configSecurityResponse.json();
 
-      const resourcesResponse = await fetch(baseUrl + "/swagger-resources");
+      const resourcesResponse = await fetch(baseUrl + "/swagger-resources", {credentials: 'same-origin'});
       const resources = await resourcesResponse.json();
       resources.forEach(resource => {
         resource.url = baseUrl + resource.url;
