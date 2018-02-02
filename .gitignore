@@ -16,3 +16,4 @@ generated-src
 .env
 out/
 *.hprof
+node_modules/
