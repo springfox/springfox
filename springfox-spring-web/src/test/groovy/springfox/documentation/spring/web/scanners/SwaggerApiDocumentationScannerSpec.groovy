@@ -189,9 +189,10 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
       def resourceLinkApi = scanned.resourceListing.apis.get(0)
       resourceLinkApi.path == "/groupName/test"
-      resourceLinkApi.description.normalize() == """Operation with path /a and position 2
-                                                           |Operation with path /b and position 1
-                                                           |Operation with path /c and position 2""".stripMargin()
+      resourceLinkApi.description.normalize() ==
+          """Operation with path /a and position 2
+          |Operation with path /b and position 1
+          |Operation with path /c and position 2""".stripMargin()
 
     where:
     index | path | position

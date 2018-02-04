@@ -37,10 +37,11 @@ class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
       )
       RequestMappingContext requestContext = new RequestMappingContext(
           context(),
-          new WebMvcRequestHandler(methodResolver,
+          new WebMvcRequestHandler(
+              methodResolver,
               requestMappingInfo,
               dummyHandlerMethod(operationName)),
-              Mock(UniqueTypeNameAdapter))
+          Mock(UniqueTypeNameAdapter))
       SwaggerOperationModelsProvider sut = new SwaggerOperationModelsProvider(new TypeResolver())
     when:
       sut.apply(requestContext)

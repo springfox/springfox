@@ -39,7 +39,8 @@ class CachingOperationReaderSpec extends DocumentationContextSpec {
     def context = context()
     def requestMappingContext = new RequestMappingContext(
         context,
-        new WebMvcRequestHandler(methodResolver,
+        new WebMvcRequestHandler(
+            methodResolver,
             requestMappingInfo,
             dummyHandlerMethod("methodWithConcreteResponseBody")),
         Mock(UniqueTypeNameAdapter))

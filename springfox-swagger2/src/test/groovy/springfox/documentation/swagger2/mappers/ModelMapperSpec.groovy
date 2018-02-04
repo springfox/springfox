@@ -47,6 +47,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 import static springfox.documentation.swagger2.mappers.ModelMapper.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
+//TODO: Rewrite this test PR#2056. Should not have ids that are hashcode values
 class ModelMapperSpec extends SchemaSpecification {
 
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()

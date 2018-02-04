@@ -119,11 +119,17 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     and:
       def first = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(methodResolver, firstMapping, anyMethod),
+        new WebMvcRequestHandler(
+            methodResolver,
+            firstMapping,
+            anyMethod),
         Mock(UniqueTypeNameAdapter))
       def second = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod),
+        new WebMvcRequestHandler(
+            methodResolver,
+            secondMapping,
+            anyMethod),
         Mock(UniqueTypeNameAdapter))
     then:
       !sut.doEquivalent(first, second)

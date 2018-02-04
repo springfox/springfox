@@ -47,9 +47,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.FluentIterable.*;
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Sets.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
@@ -70,11 +70,11 @@ public class ApiListingScanner {
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
     Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
     Map<ResourceGroup, Map<String, Model>> models = apiModelReader.read(context);
-    
+
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
-            = context.getRequestMappingsByResourceGroup();
+        = context.getRequestMappingsByResourceGroup();
     List<SecurityReference> securityReferences = newArrayList();
     for (ResourceGroup resourceGroup : sortedByName(requestMappingsByResourceGroup.keySet())) {
 
@@ -105,18 +105,18 @@ public class ApiListingScanner {
       String basePath = pathProvider.getApplicationBasePath();
       PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
-              .apiVersion(documentationContext.getApiInfo().getVersion())
-              .basePath(adjuster.adjustedPath(basePath))
-              .resourcePath(resourcePath)
-              .produces(produces)
-              .consumes(consumes)
-              .host(host)
-              .protocols(protocols)
-              .securityReferences(securityReferences)
-              .apis(sortedApis)
-              .models(models.get(resourceGroup))
-              .position(position++)
-              .availableTags(documentationContext.getTags());
+          .apiVersion(documentationContext.getApiInfo().getVersion())
+          .basePath(adjuster.adjustedPath(basePath))
+          .resourcePath(resourcePath)
+          .produces(produces)
+          .consumes(consumes)
+          .host(host)
+          .protocols(protocols)
+          .securityReferences(securityReferences)
+          .apis(sortedApis)
+          .models(models.get(resourceGroup))
+          .position(position++)
+          .availableTags(documentationContext.getTags());
 
       ApiListingContext apiListingContext = new ApiListingContext(
           context.getDocumentationType(),
@@ -171,9 +171,9 @@ public class ApiListingScanner {
 
   static List<String> urlParts(ApiDescription apiDescription) {
     return Splitter.on('/')
-            .omitEmptyStrings()
-            .trimResults()
-            .splitToList(apiDescription.getPath());
+        .omitEmptyStrings()
+        .trimResults()
+        .splitToList(apiDescription.getPath());
   }
 
 }

@@ -179,7 +179,8 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
         new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET,
         new RequestMappingContext(context(),
-            new WebMvcRequestHandler(methodResolver,
+            new WebMvcRequestHandler(
+                methodResolver,
                 requestMappingInfo("/somePath"),
                 dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class)),
             Mock(UniqueTypeNameAdapter)),

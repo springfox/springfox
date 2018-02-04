@@ -63,6 +63,7 @@ import javax.servlet.http.HttpServletResponse
 import static com.google.common.collect.Maps.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
+//TODO: Rewrite this test PR#2056. Should not have ids that are hashcode values
 class ApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
