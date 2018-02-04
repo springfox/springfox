@@ -46,6 +46,7 @@ import io.swagger.models.properties.UUIDProperty;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Map;
 
@@ -149,9 +150,11 @@ class Properties {
     return new Function<String, Property>() {
       @Override
       public Property apply(String input) {
-        StringProperty byteArray = new StringProperty();
-        byteArray.setFormat("byte");
-        return byteArray;
+        final IntegerProperty integerProperty = new IntegerProperty();
+        integerProperty.setFormat("int32");
+        integerProperty.setMaximum(BigDecimal.valueOf(Byte.MAX_VALUE));
+        integerProperty.setMinimum(BigDecimal.valueOf(Byte.MIN_VALUE));
+        return integerProperty;
       }
     };
   }

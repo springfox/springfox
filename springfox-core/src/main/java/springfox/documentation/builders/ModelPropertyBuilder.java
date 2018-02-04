@@ -21,11 +21,13 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.Xml;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.List;
 
+import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -41,6 +43,9 @@ public class ModelPropertyBuilder {
   private boolean isHidden;
   private String example;
   private String pattern;
+  private String defaultValue;
+  private Xml xml;
+  private Boolean allowEmptyValue;
   private List<VendorExtension> vendorExtensions = newArrayList();
 
   public ModelPropertyBuilder name(String name) {
@@ -84,7 +89,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelPropertyBuilder allowableValues(AllowableValues allowableValues) {
-    this.allowableValues = emptyToNull(allowableValues, this.allowableValues);
+    this.allowableValues = BuilderDefaults.emptyToNull(allowableValues, this.allowableValues);
     return this;
   }
 
@@ -103,7 +108,30 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  public ModelPropertyBuilder defaultValue(String defaultValue) {
+    this.defaultValue = defaultIfAbsent(defaultValue, this.defaultValue);
+    return this;
+  }
+  
+  /***
+   * Support for isAllowEmpty value
+   * @return true if supported
+   * @since 2.8.0
+   */
+  public ModelPropertyBuilder allowEmptyValue(Boolean allowEmptyValue) {
+    this.allowEmptyValue = allowEmptyValue;
+    return this;
+  }
+
+  public ModelPropertyBuilder xml(Xml xml) {
+    this.xml = defaultIfAbsent(xml, this.xml);
+    return this;
+  }
+
   public ModelProperty build() {
+    if (xml != null && isNullOrEmpty(xml.getName())) {
+      xml.setName(name);
+    }
     return new ModelProperty(
         name,
         type,
@@ -112,10 +140,14 @@ public class ModelPropertyBuilder {
         required == null ? false : required,
         isHidden,
         readOnly == null ? false : readOnly,
+        allowEmptyValue,
         description,
         allowableValues,
         example,
         pattern,
-        vendorExtensions);
+        defaultValue,
+        xml,
+        vendorExtensions
+    );
   }
 }

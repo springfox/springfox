@@ -11,6 +11,7 @@ trait ApiParamAnnotationSupport {
       defaultValue: { -> ""},
       allowMultiple: { -> true},
       required: { -> true},
+      collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
   }
 
@@ -22,6 +23,7 @@ trait ApiParamAnnotationSupport {
       defaultValue: { -> ""},
       allowMultiple: { -> allowableMultiple},
       required: { -> true},
+      collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
   }
 
@@ -33,6 +35,7 @@ trait ApiParamAnnotationSupport {
       defaultValue: { -> ""},
       allowMultiple: { -> false},
       required: { -> required},
+      collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
   }
 
@@ -44,6 +47,7 @@ trait ApiParamAnnotationSupport {
       defaultValue: { -> ""},
       allowMultiple: { -> false},
       required: { -> false},
+      collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
   }
 
@@ -55,6 +59,7 @@ trait ApiParamAnnotationSupport {
       defaultValue: { -> defaultValue},
       allowMultiple: { -> false},
       required: { -> false},
+      collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
   }
 
@@ -66,6 +71,7 @@ trait ApiParamAnnotationSupport {
       defaultValue: { -> ""},
       allowMultiple: { -> false},
       required: { -> false},
+      collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
   }
 
@@ -77,6 +83,7 @@ trait ApiParamAnnotationSupport {
       defaultValue: { -> ""},
       allowMultiple: { -> false},
       required: { -> false},
+      collectionFormat: { -> ""},
       hidden: { -> hidden}] as ApiParam
   }
 

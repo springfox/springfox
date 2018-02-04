@@ -89,6 +89,39 @@ public class PetService {
     throw new RuntimeException("NotImplementedException");
   }
 
+  @RequestMapping(value = "/findByAge", method = RequestMethod.GET, params = {"age"})
+  @ApiOperation(value = "Find Pet by age",
+          notes = "Exclusive range with infinity",
+          response = Pet.class)
+  public Pet findPetsByAge(
+          @ApiParam(value = "Age values that need to be considered for filter",
+                  allowableValues = "range(0,infinity)")
+          @RequestParam("age") int age) {
+    throw new RuntimeException("NotImplementedException");
+  }
+
+  @RequestMapping(value = "/findByLegs", method = RequestMethod.GET, params = {"legs"})
+  @ApiOperation(value = "Find Pet by legs",
+          notes = "Exclusive range should work",
+          response = Pet.class)
+  public Pet findPetsByLegs(
+          @ApiParam(value = "Legs values that need to be considered for filter",
+                  allowableValues = "range(0,10)")
+          @RequestParam("legs") int legs) {
+    throw new RuntimeException("NotImplementedException");
+  }
+
+  @RequestMapping(value = "/findByStamina", method = RequestMethod.GET, params = {"stamina"})
+  @ApiOperation(value = "Find Pet by stamina",
+          notes = "Exclusive range with -infinity",
+          response = Pet.class)
+  public Pet findPetsByStamina(
+          @ApiParam(value = "Stamina values",
+                  allowableValues = "range[-infinity,12)")
+          @RequestParam("stamina") long stamina) {
+    throw new RuntimeException("NotImplementedException");
+  }
+
   @RequestMapping(value = "/findByTags", method = RequestMethod.GET)
   @ApiOperation(value = "Find Pet by tags",
       notes = "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",

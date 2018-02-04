@@ -11,9 +11,7 @@
           "produces": [
             "application/json"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -28,7 +26,7 @@
             {
               "code": 200,
               "message": "kkj",
-              "responseModel": "Pet"
+              "responseModel": "Pet_1"
             },
             {
               "code": 401,
@@ -44,7 +42,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet"
+          "type": "Pet_1"
         }
       ],
       "path": "/child/1575"
@@ -59,9 +57,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -101,9 +97,9 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Pet": {
+    "Pet_1": {
       "description": "",
-      "id": "Pet",
+      "id": "Pet_1",
       "properties": {
         "age": {
           "required": false,

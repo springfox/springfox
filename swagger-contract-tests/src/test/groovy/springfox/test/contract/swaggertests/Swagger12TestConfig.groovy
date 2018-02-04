@@ -43,7 +43,8 @@ public class Swagger12TestConfig {
         .select()
           .paths(and(
               regex("^((?!/api).)*\$"),//Not beginning with /api
-              not(regex("^\\/features\\/.*Arrays\$")) //Not operations that use 2d arrays
+              not(regex("^\\/features\\/.*Arrays\$")), //Not operations that use 2d arrays
+              not(regex("^\\/features\\/2031\$")) //Not operations that use ApiImplicitParams datatype
             )
           )
           .build()

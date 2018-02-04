@@ -216,9 +216,6 @@
         ],
         "summary": "issue1420",
         "operationId": "issue1420UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -236,9 +233,6 @@
         ],
         "summary": "issue1440",
         "operationId": "issue1440UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -256,9 +250,6 @@
         ],
         "summary": "mapOfLists",
         "operationId": "mapOfListsUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -282,9 +273,6 @@
         ],
         "summary": "mapOfListOfExample",
         "operationId": "mapOfListOfExampleUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -293,7 +281,7 @@
               "additionalProperties": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/Example"
+                  "$ref": "#/definitions/Example_1"
                 }
               }
             }
@@ -308,9 +296,6 @@
         ],
         "summary": "byteArrayResponse",
         "operationId": "byteArrayResponseUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -329,9 +314,6 @@
         ],
         "summary": "bug1627",
         "operationId": "bug1627UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -357,9 +339,6 @@
         ],
         "summary": "fileCustomType",
         "operationId": "fileCustomTypeUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -385,9 +364,6 @@
         ],
         "summary": "filesCustomType",
         "operationId": "filesCustomTypeUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -416,9 +392,6 @@
         ],
         "summary": "apiModelProperty",
         "operationId": "apiModelPropertyUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -444,9 +417,6 @@
         ],
         "summary": "payloadWithByteBuffer",
         "operationId": "payloadWithByteBufferUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "in": "body",
@@ -474,8 +444,8 @@
         "description": "Remove an apple from a user. You must specify the user name and the apple name.",
         "operationId": "bug1722UsingPOST_1",
         "consumes": [
-          "application/json",
-          "application/xml"
+          "application/xml",
+          "application/json"
         ],
         "produces": [
           "application/xml",
@@ -506,9 +476,6 @@
         ],
         "summary": "bug1734",
         "operationId": "bug1734UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "offset",
@@ -534,9 +501,6 @@
         ],
         "summary": "bug1740",
         "operationId": "bug1740UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -554,9 +518,6 @@
         ],
         "summary": "Retrieve all the companies",
         "operationId": "getAllPagedUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "pageNumber",
@@ -564,6 +525,7 @@
             "required": true,
             "type": "integer",
             "minimum": 1.0,
+            "exclusiveMinimum": false,
             "format": "int32"
           },
           {
@@ -572,6 +534,7 @@
             "required": true,
             "type": "integer",
             "maximum": 50.0,
+            "exclusiveMaximum": false,
             "format": "int32"
           },
           {
@@ -632,9 +595,6 @@
         ],
         "summary": "bug1750a",
         "operationId": "bug1750aUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "list of ids",
@@ -655,9 +615,6 @@
         ],
         "summary": "1750b",
         "operationId": "bug1750bUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "list of ids",
@@ -696,9 +653,6 @@
         ],
         "summary": "bug1777",
         "operationId": "bug1777UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -716,9 +670,6 @@
         ],
         "summary": "bug1778",
         "operationId": "bug1778UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "s",
@@ -812,9 +763,6 @@
         ],
         "summary": "method1",
         "operationId": "method1UsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/atom+xml",
           "application/json;charset=UTF-8"
@@ -833,9 +781,6 @@
         ],
         "summary": "test",
         "operationId": "testUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "somename",
@@ -851,6 +796,166 @@
         }
       }
     },
+    "/bugs/1887/{env}/{list-id}/emails": {
+      "post": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "1887 example",
+        "operationId": "addEmailsToListUsingPOST_1",
+        "consumes": [
+          "application/json;charset=UTF-8"
+        ],
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "env",
+            "in": "path",
+            "description": "env",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "list-id",
+            "in": "path",
+            "description": "list-id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "emails",
+            "description": "emails",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Example_1"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1894": {
+      "post": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "cacheEvict1",
+        "operationId": "cacheEvict1UsingPOST_1",
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1907": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "xmlPayload",
+        "operationId": "xmlPayloadUsingGET_1",
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "xml",
+            "description": "xml",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Model1907"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1926/filtered": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "filtered",
+        "operationId": "filteredUsingGET_1",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "wrapper",
+            "description": "wrapper",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LangNotFilteredWrapper"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "zh",
+                "en"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1926/not-filtered": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "notFiltered",
+        "operationId": "notFilteredUsingGET_1",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "wrapper",
+            "description": "wrapper",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LangFilteredWrapper"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "zh",
+                "en"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/bugs/1939{?username,password,credential-source-id}": {
       "get": {
         "tags": [
@@ -858,9 +963,6 @@
         ],
         "summary": "authenticate a user using a given set of credentials, producing a JWT token that may be used for future API operations if successful",
         "operationId": "authenticateUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/jwt"
         ],
@@ -883,6 +985,341 @@
             "name": "credential-source-id",
             "in": "query",
             "description": "credential-source-id",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/1965": {
+      "post": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug1965",
+        "operationId": "bug1965UsingPOST_1",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "paramMap",
+            "description": "paramMap",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "in": "formData",
+            "name": "sfId",
+            "description": "sfId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "in": "formData",
+            "name": "sfData",
+            "description": "sfData",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Example_2"
+            }
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": false,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Example_1"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/2029{?name}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "测试RequesetParam",
+        "description": "测试RequesetParam",
+        "operationId": "bug2020UsingGET_1",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "日期：2017-09-01",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "名称",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/2081{?a.importantField,b.importantField}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2081",
+        "operationId": "bug2081UsingGET_1",
+        "parameters": [
+          {
+            "name": "a.importantField",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "b.importantField",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/2107/{someId}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "2107",
+        "operationId": "getSomeByIdUsingGET_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "someId",
+            "in": "path",
+            "description": "This is the description",
+            "required": true,
+            "type": "string",
+            "default": "1f1f1f"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/2114{?siteSecret,xmlUrl,stripHtmlTags,clearIndex}": {
+      "put": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2114",
+        "operationId": "bug2114UsingPUT_1",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "path",
+            "description": "siteId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "siteSecret",
+            "in": "query",
+            "description": "siteSecret",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "xmlUrl",
+            "in": "query",
+            "description": "xmlUrl",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "stripHtmlTags",
+            "in": "query",
+            "description": "stripHtmlTags",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          },
+          {
+            "name": "clearIndex",
+            "in": "query",
+            "description": "clearIndex",
+            "required": false,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/2118": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2118",
+        "operationId": "bug2118UsingGET_1",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "person",
+            "description": "person",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Example_2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/2161": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2161",
+        "operationId": "bug2161UsingGET_1",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "status",
+            "description": "status",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/{bar}/2148{?year}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2148",
+        "operationId": "bug2148UsingGET_1",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "bar",
+            "description": "example",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Example_1"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/{propertyKey}/{environmentKey}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "getProperty",
+        "operationId": "getPropertyUsingGET_1",
+        "parameters": [
+          {
+            "name": "propertyKey",
+            "in": "path",
+            "description": "Key of the property",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "environmentKey",
+            "in": "path",
+            "description": "Key of the environment",
             "required": false,
             "type": "string"
           }
@@ -921,7 +1358,8 @@
         "url": {
           "type": "string"
         }
-      }
+      },
+      "title": "Bug1376"
     },
     "Bug1627": {
       "type": "object",
@@ -929,7 +1367,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Bug1627"
     },
     "Bug1676": {
       "type": "object",
@@ -938,15 +1377,18 @@
           "type": "number",
           "format": "float",
           "example": 200.0,
-          "description": "Horizontal position"
+          "description": "Horizontal position",
+          "allowEmptyValue": false
         },
         "yAxis": {
           "type": "number",
           "format": "float",
           "example": 500.0,
-          "description": "Vertical position"
+          "description": "Vertical position",
+          "allowEmptyValue": false
         }
-      }
+      },
+      "title": "Bug1676"
     },
     "Bug1697": {
       "type": "object",
@@ -954,7 +1396,8 @@
         "bar": {
           "type": "string"
         }
-      }
+      },
+      "title": "Bug1697"
     },
     "Bug1740": {
       "type": "object",
@@ -965,7 +1408,8 @@
         "value": {
           "type": "string"
         }
-      }
+      },
+      "title": "Bug1740"
     },
     "Bug1777": {
       "type": "object",
@@ -976,12 +1420,14 @@
         "longitude": {
           "type": "number",
           "format": "double",
-          "description": "经度"
+          "description": "经度",
+          "allowEmptyValue": false
         }
       },
+      "title": "Bug1777",
       "description": "Test 1777"
     },
-    "Example": {
+    "Example_1": {
       "type": "object",
       "properties": {
         "allCapsSet": {
@@ -1000,7 +1446,8 @@
         "bar": {
           "type": "integer",
           "format": "int32",
-          "description": "description of bar"
+          "description": "description of bar",
+          "allowEmptyValue": false
         },
         "enumType": {
           "type": "string",
@@ -1017,7 +1464,7 @@
           "format": "date-time"
         },
         "nestedType": {
-          "$ref": "#/definitions/NestedType"
+          "$ref": "#/definitions/NestedType_1"
         },
         "parentBeanProperty": {
           "type": "string"
@@ -1031,9 +1478,68 @@
         "readOnlyString": {
           "type": "string",
           "description": "A read only string",
-          "readOnly": true
+          "readOnly": true,
+          "allowEmptyValue": false
         }
-      }
+      },
+      "title": "Example_1"
+    },
+    "Example_2": {
+      "type": "object",
+      "properties": {
+        "allCapsSet": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotatedEnumType": {
+          "type": "string",
+          "enum": [
+            "ONE",
+            "TWO"
+          ]
+        },
+        "bar": {
+          "type": "integer",
+          "format": "int32",
+          "description": "description of bar",
+          "allowEmptyValue": false
+        },
+        "enumType": {
+          "type": "string",
+          "enum": [
+            "ONE",
+            "TWO"
+          ]
+        },
+        "foo": {
+          "type": "string"
+        },
+        "localDateTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "nestedType": {
+          "$ref": "#/definitions/NestedType_2"
+        },
+        "parentBeanProperty": {
+          "type": "string"
+        },
+        "propertyWithNoGetterMethod": {
+          "type": "string"
+        },
+        "propertyWithNoSetterMethod": {
+          "type": "string"
+        },
+        "readOnlyString": {
+          "type": "string",
+          "description": "A read only string",
+          "readOnly": true,
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Example_2"
     },
     "File": {
       "type": "object",
@@ -1041,7 +1547,34 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "File"
+    },
+    "LangFilteredWrapper": {
+      "type": "object",
+      "properties": {
+        "lang": {
+          "type": "string",
+          "enum": [
+            "zh",
+            "en"
+          ]
+        }
+      },
+      "title": "LangFilteredWrapper"
+    },
+    "LangNotFilteredWrapper": {
+      "type": "object",
+      "properties": {
+        "lang": {
+          "type": "string",
+          "enum": [
+            "zh",
+            "en"
+          ]
+        }
+      },
+      "title": "LangNotFilteredWrapper"
     },
     "LinkAlternate": {
       "type": "object",
@@ -1049,7 +1582,8 @@
         "href": {
           "type": "string"
         }
-      }
+      },
+      "title": "LinkAlternate"
     },
     "Model1819": {
       "type": "object",
@@ -1064,26 +1598,81 @@
             ]
           }
         }
-      }
+      },
+      "title": "Model1819"
     },
-    "NestedType": {
+    "Model1907": {
+      "type": "object",
+      "required": [
+        "example",
+        "somename"
+      ],
+      "properties": {
+        "example": {
+          "xml": {
+            "name": "example",
+            "attribute": false,
+            "wrapped": false
+          },
+          "$ref": "#/definitions/Example_2"
+        },
+        "somename": {
+          "type": "string",
+          "xml": {
+            "name": "somename",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "Model1907"
+    },
+    "NestedType_1": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "NestedType_1"
+    },
+    "NestedType_2": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "NestedType_2"
     },
     "Resource«string»": {
       "type": "object",
       "properties": {
         "links": {
           "type": "object",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "additionalProperties": {
             "$ref": "#/definitions/LinkAlternate"
           }
         }
-      }
+      },
+      "title": "Resource«string»"
+    },
+    "Status": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "example": false,
+          "allowEmptyValue": false
+        }
+      },
+      "title": "Status"
     }
   }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,16 +23,14 @@ import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.springframework.web.multipart.MultipartFile;
-
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.schema.ResolvedTypes.allowableValues;
-import static springfox.documentation.schema.Types.isVoid;
-import static springfox.documentation.schema.Types.isBaseType;
-import static springfox.documentation.spi.schema.contexts.ModelContext.fromParent;
+import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private final TypeNameExtractor typeNameExtractor;
@@ -40,8 +38,8 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private final ModelContext parentContext;
 
   public ModelReferenceProvider(TypeNameExtractor typeNameExtractor,
-          EnumTypeDeterminer enumTypeDeterminer,
-          ModelContext parentContext) {
+                                EnumTypeDeterminer enumTypeDeterminer,
+                                ModelContext parentContext) {
     this.typeNameExtractor = typeNameExtractor;
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.parentContext = parentContext;
@@ -69,7 +67,8 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, Optional.<Integer>absent()));
+      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), null, true, Optional
+          .<Integer>absent()));
     }
     return Optional.absent();
   }

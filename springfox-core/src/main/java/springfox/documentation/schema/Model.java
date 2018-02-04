@@ -37,6 +37,7 @@ public class Model {
   private final String discriminator;
   private final List<String> subTypes;
   private final String example;
+  private final Xml xml;
 
   public Model(
       String id,
@@ -48,7 +49,8 @@ public class Model {
       String baseModel,
       String discriminator,
       List<String> subTypes,
-      String example) {
+      String example,
+      Xml xml) {
 
     this.id = id;
     this.name = name;
@@ -60,6 +62,7 @@ public class Model {
     this.discriminator = discriminator;
     this.subTypes = subTypes;
     this.example = example;
+    this.xml = xml;
   }
 
   public String getId() {
@@ -101,18 +104,22 @@ public class Model {
   public String getExample() {
     return example;
   }
-    
+
+  public Xml getXml() {
+    return xml;
+  }
+
   public boolean equalsIgnoringName(Object o) {
     if (this == o) {
       return true;
     }
-  
+
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-  
+
     Model that = (Model) o;
-  
+
     return Objects.equal(type, that.type) &&
         Objects.equal(qualifiedType, that.qualifiedType) &&
         Objects.equal(properties, that.properties) &&
@@ -120,6 +127,7 @@ public class Model {
         Objects.equal(baseModel, that.baseModel) &&
         Objects.equal(discriminator, that.discriminator) &&
         Objects.equal(subTypes, that.subTypes) &&
-        Objects.equal(example, that.example);
+        Objects.equal(example, that.example) &&
+        Objects.equal(xml, that.xml);
   }
 }

@@ -37,38 +37,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ApiResourceControllerSpec extends Specification {
   def mockMvc
   def security = """{
-    "apiKey": "key",
-    "apiKeyName": "api_key",
-    "apiKeyVehicle": "header",
-    "appName": "test",
     "clientId": "client",
     "clientSecret": "client-secret",
     "realm": "real",
-    "scopeSeparator": ","
+    "appName": "test",
+    "scopeSeparator": ",",
+    "additionalQueryStringParams": {"string":"value","boolean":true,"int":1},
+    "useBasicAuthenticationWithAccessCodeGrant": false
 }"""
   def ui = """{
-    "apisSorter": "alpha",
-    "defaultModelRendering": "schema",
+    "apisSorter":"alpha",
+    "jsonEditor":false,
+    "showRequestHeaders":false, 
+    "deepLinking": true,
+    "displayOperationId": false,
+    "defaultModelsExpandDepth": 1,
+    "defaultModelExpandDepth": 1,
+    "defaultModelRendering": "example",
+    "displayRequestDuration": false,
     "docExpansion": "none",
-    "jsonEditor": false,
-    "showRequestHeaders": true,
-    "supportedSubmitMethods": [
-        "get",
-        "post",
-        "put",
-        "delete",
-        "patch"
-    ],
+    "filter": false,
+    "maxDisplayedTags": 1000,
+    "operationsSorter": "alpha",
+    "showExtensions": false,
+    "tagsSorter": "alpha",
     "validatorUrl": "/validate"
 }"""
   def resources = """[
         {
             "name": "test",
+            "url": "/v1?group=test",
             "location": "/v1?group=test",
             "swaggerVersion": "1.2"
         },
         {
             "name": "test",
+            "url": "/v2?group=test",
             "location": "/v2?group=test",
             "swaggerVersion": "2.0"
         }
@@ -79,16 +83,30 @@ class ApiResourceControllerSpec extends Specification {
   def setup() {
     sut = new ApiResourceController(inMemorySwaggerResources())
     sut.with {
-      securityConfiguration = new SecurityConfiguration(
-          "client",
-          "client-secret",
-          "real",
-          "test",
-          "key",
-          ApiKeyVehicle.HEADER,
-          "api_key",
-          ",")
-      uiConfiguration = new UiConfiguration("/validate", UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+      securityConfiguration = SecurityConfigurationBuilder.builder()
+          .clientId("client")
+          .clientSecret("client-secret")
+          .realm("real")
+          .appName("test")
+          .scopeSeparator(",")
+          .additionalQueryStringParams(['string': 'value', 'boolean': true, 'int': 1])
+          .useBasicAuthenticationWithAccessCodeGrant(false)
+          .build()
+      uiConfiguration = UiConfigurationBuilder.builder()
+          .deepLinking(true)
+          .displayOperationId(false)
+          .defaultModelsExpandDepth(1)
+          .defaultModelExpandDepth(1)
+          .defaultModelRendering(ModelRendering.EXAMPLE)
+          .displayRequestDuration(false)
+          .docExpansion(DocExpansion.NONE)
+          .filter(false)
+          .maxDisplayedTags(1000)
+          .operationsSorter(OperationsSorter.ALPHA)
+          .showExtensions(false)
+          .tagsSorter(TagsSorter.ALPHA)
+          .validatorUrl("/validate")
+          .build()
     }
     mockMvc = MockMvcBuilders.standaloneSetup(sut).build()
   }

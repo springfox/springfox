@@ -8,11 +8,11 @@ buildscript {
 
   dependencies {
     classpath "com.github.adrianbk:gradle-jvmsrc-plugin:0.6.1"
-    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.1"
+    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3"
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
     classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
     classpath "org.ajoberstar:gradle-git:1.7.2"
   }
@@ -94,6 +94,10 @@ subprojects {
   }
   task allDeps(type: DependencyReportTask) {}
 
+  jacoco {
+    toolVersion = "$jacocoVersion"
+  }
+  
   jacocoTestReport {
     reports {
       xml.enabled true
@@ -109,7 +113,7 @@ subprojects {
 apply from: "$rootDir/gradle/documentation.gradle"
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.1'
+  gradleVersion = '4.4.1'
 }
 
 task codeCoverageReport(type: JacocoReport) {

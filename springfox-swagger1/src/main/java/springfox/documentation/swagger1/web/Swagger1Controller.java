@@ -42,6 +42,7 @@ import springfox.documentation.swagger1.dto.ApiListing;
 import springfox.documentation.swagger1.dto.ResourceListing;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Map;
 
@@ -86,12 +87,17 @@ public class Swagger1Controller {
   @ResponseBody
   public ResponseEntity<Json> getApiListing(
       @PathVariable String swaggerGroup,
-      @PathVariable String apiDeclaration) {
+      @PathVariable String apiDeclaration,
+      HttpServletRequest servletRequest) {
 
-    return getSwaggerApiListing(swaggerGroup, apiDeclaration);
+    return getSwaggerApiListing(swaggerGroup, apiDeclaration, servletRequest);
   }
 
-  private ResponseEntity<Json> getSwaggerApiListing(String swaggerGroup, String apiDeclaration) {
+  private ResponseEntity<Json> getSwaggerApiListing(
+      String swaggerGroup,
+      String apiDeclaration,
+      HttpServletRequest servletRequest) {
+
     String groupName = Optional.fromNullable(swaggerGroup).or("default");
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
@@ -99,7 +105,7 @@ public class Swagger1Controller {
     }
     Multimap<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
     Map<String, Collection<ApiListing>> dtoApiListings
-        = transformEntries(apiListingMap, toApiListingDto(mapper)).asMap();
+        = transformEntries(apiListingMap, toApiListingDto(servletRequest, documentation.getHost(), mapper)).asMap();
 
     Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);
     return mergedApiListing(apiListings)

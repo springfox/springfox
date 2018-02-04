@@ -28,6 +28,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
+import io.swagger.models.Xml;
 import io.swagger.models.properties.AbstractNumericProperty;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
@@ -75,7 +76,8 @@ public abstract class ModelMapper {
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
         .example(source.getExample())
-        .name(source.getName());
+        .name(source.getName())
+        .xml(mapXml(source.getXml()));
 
     SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
     Map<String, Property> modelProperties = mapProperties(sortedProperties);
@@ -87,6 +89,7 @@ public abstract class ModelMapper {
     model.setRequired(requiredFields.toList());
     model.setSimple(false);
     model.setType(ModelImpl.OBJECT);
+    model.setTitle(source.getName());
     if (isMapType(source.getType())) {
       Optional<Class> clazz = typeOfValue(source);
       if (clazz.isPresent()) {
@@ -170,22 +173,37 @@ public abstract class ModelMapper {
       if (source.getPattern() != null) {
         stringProperty.setPattern(source.getPattern());
       }
+      stringProperty.setDefault(source.getDefaultValue());
     }
+
+    Map<String, Object> extensions = new VendorExtensionsMapper().mapExtensions(source.getVendorExtensions());
 
     if (property != null) {
       property.setDescription(source.getDescription());
       property.setName(source.getName());
       property.setRequired(source.isRequired());
       property.setReadOnly(source.isReadOnly());
+      property.setAllowEmptyValue(source.isAllowEmptyValue());
       property.setExample(source.getExample());
+      property.getVendorExtensions().putAll(extensions);
+      property.setXml(mapXml(source.getXml()));
     }
-
-    Map<String, Object> extensions = new VendorExtensionsMapper()
-        .mapExtensions(source.getVendorExtensions());
-    property.getVendorExtensions().putAll(extensions);
 
     return property;
   }
+
+  private Xml mapXml(springfox.documentation.schema.Xml xml) {
+    if (xml == null) {
+      return null;
+    }
+    return new Xml()
+        .name(xml.getName())
+        .attribute(xml.getAttribute())
+        .namespace(xml.getNamespace())
+        .prefix(xml.getPrefix())
+        .wrapped(xml.getWrapped());
+  }
+
 
   static Integer safeInteger(String doubleString) {
     try {

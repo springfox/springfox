@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ package springfox.documentation.spring.web.readers
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.base.Function
-import com.google.common.collect.Maps
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -36,10 +34,8 @@ import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeNameIndexingAdapter
-import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -49,21 +45,22 @@ import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Monkey
+import springfox.documentation.spring.web.dummy.models.PetWithJsonView
 import springfox.documentation.spring.web.dummy.models.Pirate
 import springfox.documentation.spring.web.dummy.models.SameFancyPet
-import springfox.documentation.spring.web.dummy.models.PetWithJsonView
 import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.scanners.ApiListingScanningContext
 import springfox.documentation.spring.web.scanners.ApiModelReader
 
 import javax.servlet.http.HttpServletResponse
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
 class ApiModelReaderSpec extends DocumentationContextSpec {
@@ -73,6 +70,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   DocumentationPluginsManager pluginsManager
   ResourceGroup resourceGroup;
   TypeNameExtractor typeNameExtractor
+  def methodResolver = new HandlerMethodResolver(new TypeResolver())
 
   def setup() {
     TypeResolver typeResolver = new TypeResolver()
@@ -134,7 +132,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def apiListingContext(HandlerMethod handlerMethod, String path) {
     def requestMappingContext = new RequestMappingContext(
         context(),
-        new WebMvcRequestHandler(requestMappingInfo(path), handlerMethod),
+        new WebMvcRequestHandler(
+            methodResolver,
+            requestMappingInfo(path), handlerMethod),
         new TypeNameIndexingAdapter())
 
     def resourceGroupRequestMappings = newHashMap()
@@ -223,8 +223,6 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               .genericModelSubstitutes(ResponseEntity, HttpEntity)
               .configure(contextBuilder)
 
-    and:
-      def pluginContext =  contextBuilder.build()
     and:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
       ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
@@ -411,6 +409,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       pet_2.getProperties().containsKey('age')
   }
 
+  @Ignore("Rewrite this test PR #2056")
   def "Test to verify that same class for serialization and deserialization will be produced as one model"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSerializationAndDeserialization', 

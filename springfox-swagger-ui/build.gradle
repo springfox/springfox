@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 /*
  * Copyright 2015 the original author or authors.
  *
@@ -22,11 +24,11 @@ buildscript {
 }
 
 plugins {
-  id "de.undercouch.download" version "3.2.0"
+  id "de.undercouch.download" version "3.3.0"
 }
 
 ext {
-  swaggerUiVersion = '2.2.10'
+  swaggerUiVersion = '3.9.1'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -63,28 +65,37 @@ task customizeSwaggerUi << {
     into("${buildDir}/${swaggerUiExplodedDir}")
   }
   copy {
-    from("${projectDir}/src/web/fonts")
-    into("${buildDir}/${swaggerUiExplodedDir}/fonts")
+    from("${projectDir}/src/web/css/springfox.css")
+    into("${buildDir}/${swaggerUiExplodedDir}")
+  }
+  copy {
+    from "${projectDir}/src/web/fonts"
+    into "${buildDir}/${swaggerUiExplodedDir}/fonts"
+  }
+  copy {
+    from "${projectDir}/src/web/swagger-ui.html"
+    into "${buildDir}/swagger-ui-${swaggerUiVersion}"
+    filter(ReplaceTokens, tokens: [VERSION: "${project.version}".toString()])
   }
   delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
   delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
 }
 
 jar {
-  from("${projectDir}/src/web/swagger-ui.html") {
+  from("${buildDir}/swagger-ui-${swaggerUiVersion}/swagger-ui.html") {
     into "META-INF/resources"
   }
 
   from("${buildDir}/${swaggerUiExplodedDir}") {
     into "META-INF/resources/webjars/${project.name}"
+  }
 
-    manifest {
-      attributes(
-              "Implementation-Title": project.name,
-              "Implementation-Version": project.version,
-              "SwaggerUi-Version": swaggerUiVersion,
-      )
-    }
+  manifest {
+    attributes(
+        "Implementation-Title": project.name,
+        "Implementation-Version": project.version,
+        "SwaggerUi-Version": swaggerUiVersion,
+    )
   }
 }
 
@@ -97,6 +108,6 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-compileJava.dependsOn(customizeSwaggerUi)
+build.dependsOn(customizeSwaggerUi)
 customizeSwaggerUi.dependsOn(unzip)
 unzip.dependsOn(swaggerUiDownload)

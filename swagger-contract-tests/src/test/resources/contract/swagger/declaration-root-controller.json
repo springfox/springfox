@@ -11,12 +11,8 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-
-          ],
+          "consumes": [],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -47,12 +43,8 @@
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
-  "produces": [
-
-  ],
+  "consumes": [],
+  "produces": [],
   "resourcePath": "/",
   "swaggerVersion": "1.2"
 }

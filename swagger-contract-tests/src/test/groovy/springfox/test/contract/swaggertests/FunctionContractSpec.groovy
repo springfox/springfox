@@ -109,17 +109,17 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     result.find {
       it.name == 'petstore' &&
-          it.location == '/v2/api-docs?group=petstore' &&
+          it.url == '/v2/api-docs?group=petstore' &&
           it.swaggerVersion == '2.0'
     }
     result.find {
       it.name == 'businessService' &&
-          it.location == '/v2/api-docs?group=businessService' &&
+          it.url == '/v2/api-docs?group=businessService' &&
           it.swaggerVersion == '2.0'
     }
     result.find {
       it.name == 'concrete' &&
-          it.location == '/v2/api-docs?group=concrete' &&
+          it.url == '/v2/api-docs?group=concrete' &&
           it.swaggerVersion == '2.0'
     }
   }
@@ -188,7 +188,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     result.find {
       it.name == 'default' &&
-          it.location == '/api-docs' &&
+          it.url == '/api-docs' &&
           it.swaggerVersion == '1.2'
     }
   }
@@ -207,9 +207,11 @@ class FunctionContractSpec extends Specification implements FileAccess {
       BeanValidatorPluginsConfiguration])
   static class Config {
 
+    // tag::alternate-type-rule-convention[]
     @Bean
     AlternateTypeRuleConvention jacksonSerializerConvention(TypeResolver resolver) {
       new JacksonSerializerConvention(resolver, "springfox.documentation.spring.web.dummy.models")
     }
+    // tag::alternate-type-rule-convention[]
   }
 }

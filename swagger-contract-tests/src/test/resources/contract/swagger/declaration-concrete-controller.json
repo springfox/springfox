@@ -20,7 +20,7 @@
               "description": "toCreate",
               "name": "body",
               "paramType": "body",
-              "type": "Resource_4«Pet»",
+              "type": "Resource_3«Pet_2»",
               "required": true
             }
           ],
@@ -62,9 +62,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -79,7 +77,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "HttpEntity«Resource_3«Pet»»"
+              "responseModel": "HttpEntity«Resource_2«Pet_1»»"
             },
             {
               "code": 204,
@@ -99,7 +97,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "HttpEntity«Resource_3«Pet»»"
+          "type": "HttpEntity«Resource_2«Pet_1»»"
         }
       ],
       "path": "/foo/delete-t/{id}"
@@ -114,9 +112,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -131,7 +127,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Resource_3«Pet»"
+              "responseModel": "Resource_2«Pet_1»"
             },
             {
               "code": 401,
@@ -151,7 +147,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Resource_3«Pet»"
+          "type": "Resource_2«Pet_1»"
         }
       ],
       "path": "/foo/get-t/{id}"
@@ -160,13 +156,22 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "HttpEntity«Resource_3«Pet»»": {
+    "Pet_2": {
       "description": "",
-      "id": "HttpEntity«Resource_3«Pet»»",
+      "id": "Pet_2",
       "properties": {
-        "body": {
+        "age": {
           "required": false,
-          "type": "Resource_3«Pet»"
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
         }
       }
     },
@@ -174,11 +179,50 @@
       "description": "",
       "id": "Link_2",
       "properties": {
+        "deprecation": {
+          "required": false,
+          "type": "string"
+        },
         "href": {
           "required": false,
           "type": "string"
         },
+        "hreflang": {
+          "required": false,
+          "type": "string"
+        },
+        "media": {
+          "required": false,
+          "type": "string"
+        },
         "rel": {
+          "required": false,
+          "type": "string"
+        },
+        "title": {
+          "required": false,
+          "type": "string"
+        },
+        "type": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "Pet_1": {
+      "description": "",
+      "id": "Pet_1",
+      "properties": {
+        "age": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
           "required": false,
           "type": "string"
         }
@@ -188,7 +232,19 @@
       "description": "",
       "id": "Link_1",
       "properties": {
+        "deprecation": {
+          "required": false,
+          "type": "string"
+        },
         "href": {
+          "required": false,
+          "type": "string"
+        },
+        "hreflang": {
+          "required": false,
+          "type": "string"
+        },
+        "media": {
           "required": false,
           "type": "string"
         },
@@ -199,12 +255,30 @@
         "templated": {
           "required": false,
           "type": "boolean"
+        },
+        "title": {
+          "required": false,
+          "type": "string"
+        },
+        "type": {
+          "required": false,
+          "type": "string"
         }
       }
     },
-    "Resource_4«Pet»": {
+    "HttpEntity«Resource_2«Pet_1»»": {
       "description": "",
-      "id": "Resource_4«Pet»",
+      "id": "HttpEntity«Resource_2«Pet_1»»",
+      "properties": {
+        "body": {
+          "required": false,
+          "type": "Resource_2«Pet_1»"
+        }
+      }
+    },
+    "Resource_3«Pet_2»": {
+      "description": "",
+      "id": "Resource_3«Pet_2»",
       "properties": {
         "age": {
           "required": false,
@@ -228,9 +302,9 @@
         }
       }
     },
-    "Resource_3«Pet»": {
+    "Resource_2«Pet_1»": {
       "description": "",
-      "id": "Resource_3«Pet»",
+      "id": "Resource_2«Pet_1»",
       "properties": {
         "age": {
           "required": false,
@@ -247,25 +321,6 @@
             "type": "Link_1"
           },
           "type": "array"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Pet": {
-      "description": "",
-      "id": "Pet",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
         },
         "name": {
           "required": false,

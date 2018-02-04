@@ -20,17 +20,43 @@
 package springfox.documentation.swagger1.mappers;
 
 import com.google.common.collect.Maps;
+import org.springframework.web.util.UriComponents;
 import springfox.documentation.swagger1.dto.ApiListing;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static springfox.documentation.swagger1.web.HostNameProvider.componentsFrom;
 
 public class Mappers {
   public static Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>
-    toApiListingDto(final ServiceModelToSwaggerMapper mapper) {
+    toApiListingDto(
+        final HttpServletRequest servletRequest,
+        final String host,
+        final ServiceModelToSwaggerMapper mapper) {
 
     return new Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>() {
       @Override
       public ApiListing transformEntry(String key, springfox.documentation.service.ApiListing value) {
-        return mapper.toSwaggerApiListing(value);
+        ApiListing apiListing = mapper.toSwaggerApiListing(value);
+        UriComponents uriComponents = componentsFrom(servletRequest, apiListing.getBasePath());
+        apiListing.setBasePath(adjustedBasePath(uriComponents, host, apiListing.getBasePath()));
+        return apiListing;
       }
     };
+  }
+
+  private static String adjustedBasePath(
+      UriComponents uriComponents,
+      String hostNameOverride,
+      String basePath) {
+    if (!isNullOrEmpty(hostNameOverride)) {
+      int port = uriComponents.getPort();
+      if (port > -1) {
+        return String.format("%s://%s:%d%s", uriComponents.getScheme(), hostNameOverride, port, basePath);
+      }
+      return String.format("%s://%s%s", uriComponents.getScheme(), hostNameOverride, basePath);
+    }
+    return basePath;
   }
 }

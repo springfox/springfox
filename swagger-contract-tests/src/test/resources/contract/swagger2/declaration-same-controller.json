@@ -59,9 +59,6 @@
         ],
         "summary": "get",
         "operationId": "getUsingGET_5",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -102,15 +99,25 @@
     }
   },
   "definitions": {
-    "Category": {
+    "Category_1": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Category_1"
     },
-    "FancyPet": {
+    "Category_2": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Category_2"
+    },
+    "FancyPet_1": {
       "type": "object",
       "properties": {
         "age": {
@@ -120,7 +127,7 @@
         "categories": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Category"
+            "$ref": "#/definitions/Category_1"
           }
         },
         "id": {
@@ -129,7 +136,30 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "FancyPet_1"
+    },
+    "FancyPet_2": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category_2"
+          }
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "FancyPet_2"
     },
     "ModelWithSameNameClasses_1": {
       "type": "object",
@@ -143,19 +173,19 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet"
+                  "$ref": "#/definitions/FancyPet_1"
                 }
               }
             }
           }
         },
         "fancyPet": {
-          "$ref": "#/definitions/FancyPet"
+          "$ref": "#/definitions/FancyPet_1"
         },
         "fancyPets": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FancyPet"
+            "$ref": "#/definitions/FancyPet_1"
           }
         },
         "fancyPetsMap": {
@@ -194,7 +224,8 @@
             }
           }
         }
-      }
+      },
+      "title": "ModelWithSameNameClasses_1"
     },
     "ModelWithSameNameClasses_2": {
       "type": "object",
@@ -208,19 +239,19 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet"
+                  "$ref": "#/definitions/FancyPet_2"
                 }
               }
             }
           }
         },
         "fancyPet": {
-          "$ref": "#/definitions/FancyPet"
+          "$ref": "#/definitions/FancyPet_2"
         },
         "fancyPets": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FancyPet"
+            "$ref": "#/definitions/FancyPet_2"
           }
         },
         "fancyPetsMap": {
@@ -259,7 +290,8 @@
             }
           }
         }
-      }
+      },
+      "title": "ModelWithSameNameClasses_2"
     },
     "SameCategory_1": {
       "type": "object",
@@ -267,12 +299,14 @@
         "_type": {
           "type": "string",
           "description": "Type field",
-          "readOnly": true
+          "readOnly": true,
+          "allowEmptyValue": false
         },
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "SameCategory_1"
     },
     "SameCategory_2": {
       "type": "object",
@@ -283,12 +317,14 @@
         "id": {
           "type": "integer",
           "format": "int32",
-          "description": "Id field"
+          "description": "Id field",
+          "allowEmptyValue": false
         },
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "SameCategory_2"
     },
     "SameFancyPet_1": {
       "type": "object",
@@ -309,7 +345,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "SameFancyPet_1"
     },
     "SameFancyPet_2": {
       "type": "object",
@@ -334,7 +371,8 @@
           "type": "number",
           "format": "double"
         }
-      }
+      },
+      "title": "SameFancyPet_2"
     }
   }
 }

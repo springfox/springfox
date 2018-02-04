@@ -28,7 +28,7 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
@@ -45,6 +45,7 @@ public class ParameterBuilder {
   private boolean hidden;
   private String pattern;
   private List<VendorExtension> vendorExtensions = newArrayList();
+  private String collectionFormat = null;
 
   /**
    * Copy builder
@@ -201,6 +202,18 @@ public class ParameterBuilder {
     return this;
   }
 
+  /**
+   * Updates the parameter extensions
+   *
+   * @param collectionFormat - parameter collection format
+   * @return this
+   * @since 2.8.0
+   */
+  public ParameterBuilder collectionFormat(String collectionFormat) {
+    this.collectionFormat = defaultIfAbsent(collectionFormat, this.collectionFormat);
+    return this;
+  }
+
   public Parameter build() {
     return new Parameter(
         name,
@@ -215,6 +228,7 @@ public class ParameterBuilder {
         paramAccess,
         hidden,
         pattern,
+        collectionFormat,
         vendorExtensions);
   }
 

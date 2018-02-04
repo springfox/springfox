@@ -148,4 +148,11 @@ class SpringDataRestRequestHandler implements RequestHandler {
     return new CombinedRequestHandler(this, other);
   }
 
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("SpringDataRestRequestHandler{");
+    sb.append("key=").append(key());
+    sb.append('}');
+    return sb.toString();
+  }
 }

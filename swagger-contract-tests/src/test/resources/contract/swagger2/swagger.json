@@ -32,8 +32,8 @@
     }
   ],
   "schemes": [
-    "https",
-    "http"
+    "http",
+    "https"
   ],
   "produces": [
     "application/xml",
@@ -144,9 +144,6 @@
         "summary": "Finds Pets by status",
         "description": "Multiple status values can be provided with comma-separated strings",
         "operationId": "findPetsByStatusUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -198,9 +195,6 @@
         "summary": "Finds Pets by tags",
         "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTagsUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -247,9 +241,6 @@
         "summary": "Find pet by ID",
         "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_5",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml",
           "application/json"
@@ -262,7 +253,9 @@
             "required": true,
             "type": "string",
             "maximum": 5,
-            "minimum": 1
+            "exclusiveMaximum": false,
+            "minimum": 1,
+            "exclusiveMinimum": false
           }
         ],
         "responses": {
@@ -390,9 +383,6 @@
         "summary": "Find purchase order by ID",
         "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
         "operationId": "getOrderByIdUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -404,7 +394,9 @@
             "required": true,
             "type": "string",
             "maximum": 5,
-            "minimum": 1
+            "exclusiveMaximum": false,
+            "minimum": 1,
+            "exclusiveMinimum": false
           }
         ],
         "responses": {
@@ -429,9 +421,6 @@
         "summary": "Delete purchase order by ID",
         "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors",
         "operationId": "deleteOrderUsingDELETE",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -442,7 +431,9 @@
             "description": "ID of the order that needs to be deleted",
             "required": true,
             "type": "string",
-            "minimum": 1
+            "exclusiveMaximum": false,
+            "minimum": 1,
+            "exclusiveMinimum": false
           }
         ],
         "responses": {
@@ -577,9 +568,6 @@
         ],
         "summary": "Logs user into the system",
         "operationId": "loginUserUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -619,9 +607,6 @@
         ],
         "summary": "Logs out current logged in user session",
         "operationId": "logoutUserUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -642,9 +627,6 @@
         ],
         "summary": "Get user by user name",
         "operationId": "getUserByNameUsingGET",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -766,9 +748,6 @@
         "summary": "Delete user",
         "description": "This can only be done by the logged in user.",
         "operationId": "deleteUserUsingDELETE",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -845,7 +824,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Category_1"
     },
     "Category_2": {
       "type": "object",
@@ -860,7 +840,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Category_2"
     },
     "Order": {
       "type": "object",
@@ -891,13 +872,15 @@
         "status": {
           "type": "string",
           "description": "Order Status",
+          "allowEmptyValue": false,
           "enum": [
             "placed",
             "approved",
             "delivered"
           ]
         }
-      }
+      },
+      "title": "Order"
     },
     "Pet_1": {
       "type": "object",
@@ -925,6 +908,7 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
+          "allowEmptyValue": false,
           "enum": [
             "available",
             "pending",
@@ -934,10 +918,11 @@
         "tags": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Tag"
+            "$ref": "#/definitions/Tag_1"
           }
         }
-      }
+      },
+      "title": "Pet_1"
     },
     "Pet_2": {
       "type": "object",
@@ -961,6 +946,7 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
+          "allowEmptyValue": false,
           "enum": [
             "available",
             "pending",
@@ -970,10 +956,11 @@
         "tags": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Tag"
+            "$ref": "#/definitions/Tag_2"
           }
         }
-      }
+      },
+      "title": "Pet_2"
     },
     "Pet_3": {
       "type": "object",
@@ -988,9 +975,10 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Pet_3"
     },
-    "Tag": {
+    "Tag_1": {
       "type": "object",
       "properties": {
         "id": {
@@ -1000,7 +988,21 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Tag_1"
+    },
+    "Tag_2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Tag_2"
     },
     "User_1": {
       "type": "object",
@@ -1030,12 +1032,14 @@
         "userStatus": {
           "type": "integer",
           "format": "int32",
-          "description": "User Status"
+          "description": "User Status",
+          "allowEmptyValue": false
         },
         "username": {
           "type": "string"
         }
-      }
+      },
+      "title": "User_1"
     },
     "User_2": {
       "type": "object",
@@ -1062,12 +1066,14 @@
         "userStatus": {
           "type": "integer",
           "format": "int32",
-          "description": "User Status"
+          "description": "User Status",
+          "allowEmptyValue": false
         },
         "username": {
           "type": "string"
         }
-      }
+      },
+      "title": "User_2"
     }
   }
 }

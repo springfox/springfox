@@ -29,6 +29,7 @@ class TagSpec extends Specification {
       tag.with {
         getName()
         getDescription()
+        getOrder()
       }
   }
 

@@ -116,14 +116,89 @@ responsibility of the service author to ensure.
 |====
 |Name| Description | Since
 
-| `RequestHandlerCombiner`
+| `RequestHandlerCombiner`^1^
 | for combining apis that react to the same API endpoint given the same input criteria but produces different output.
  We provide a `DefaultRequestHandlerCombiner` but this is an extensibility point added to customize it.
 | 2.7.0
+| `AlternateTypeRuleConvention`
+| To provide a convention based type rules. Ideally we use these when its cumbersome to define individual types either
+because there are just too many, or even in some cases where it involves creating mixin types just for the sake of
+OpenAPI documentation. https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-spring-web/src/main/java/springfox/documentation/spring/web/plugins/JacksonSerializerConvention.java[`JacksonSerializerConvention`]
+ is an example of how we apply rules to types annotated with `JsonSerialize`/`JsonDeserialize`.  
+| 2.7.0
+| `SwaggerResourcesProvider`
+| Extensibility which allows overriding how the swagger resources are served. By default we serve APIs hosted on the
+same application. This can be used to aggregate APIs as well.
+| 2.7.0
 |====
 
-NOTE: This has a shortcoming currently in that, currently the response still hides one of the response
-representations. This is a limitation of the OAI Spec 2.0
+NOTE: 1. This has a shortcoming currently in that, currently the response still hides one of the response
+representations. This is a limitation of the OAI Spec 2.0.
+
+=== Examples of alternate type rule convention
+==== JacksonSerializerConvention
+
+Here is how we configure the `JacksonSerializerConvention`.
+
+https://github.com/springfox/springfox/blob/c48a8bb019371cb1e3c79d24c3db3791ac5025cc/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy#L201-L204[FunctionContractSpec.java]
+[[jackson-convention-example]]
+[source,java,linenums]
+----
+include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy[tags=alternate-type-rule-convention,indent=0]
+----
+
+==== Creating a convention
+
+Below is an example for creating a rule that automatically provides a convention for configuring `Pageable` type.
+
+https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L46-L64[SpringDataRestConfiguration.java]
+[[jackson-convention-example]]
+[source,java,linenums]
+----
+include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java[tags=alternate-type-rule-convention,indent=0]
+----
+
+It involves creating a generated in-memory type that allows the springfox inference engine to use the new type
+instead of `Pageable`.
+
+https://github.com/springfox/springfox/blob/ef1721afc4c910675d9032bee59aea8e75e06d27/springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java#L68-L88[SpringDataRestConfiguration.java]
+[[in-memory-alternate-type]]
+[source,java,linenums]
+----
+include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/data/rest/configuration/SpringDataRestConfiguration.java[tags=alternate-type-builder,indent=0]
+----
+
+=== Aggregating multiple swagger specifications in the same swagger-ui
+
+You need to create a bean that implements the https://github
+.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26[`SwaggerResourcesProvider`]
+interface. Typically you'd have to make a composite bean that uses multiple https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/InMemorySwaggerResourcesProvider.java#L38[InMemorySwaggerResourcesProvider]
+and adds your own json file to it as well.
+
+NOTE: You need to make this new bean a @Primary bean. otherwise the you'd get an exception about ambiguous beans.
+
+[[multiple-swagger-aggregate]]
+[source,java,linenums]
+----
+@Configuration
+public class SwaggerWsEndpointsConfig {
+
+    @Primary
+    @Bean
+    public SwaggerResourcesProvider swaggerResourcesProvider(InMemorySwaggerResourcesProvider defaultResourcesProvider) {
+        return () -> {
+            SwaggerResource wsResource = new SwaggerResource();
+            wsResource.setName("ws endpoints");
+            wsResource.setSwaggerVersion("2.0");
+            wsResource.setLocation("/v2/websockets.json");
+
+            List<SwaggerResource> resources = new ArrayList<>(defaultResourcesProvider.get());
+            resources.add(wsResource);
+            return resources;
+        };
+    }
+}
+----
 
 == Spring Data Rest extensibility
 

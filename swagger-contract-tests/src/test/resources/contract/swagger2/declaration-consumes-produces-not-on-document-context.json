@@ -89,9 +89,6 @@
         ],
         "summary": "Does have operation produces defined",
         "operationId": "withOperationProducesUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/xml"
         ],
@@ -143,9 +140,6 @@
         ],
         "summary": "Does not have operation produces defined",
         "operationId": "withoutOperationProducesUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "*/*"
         ],

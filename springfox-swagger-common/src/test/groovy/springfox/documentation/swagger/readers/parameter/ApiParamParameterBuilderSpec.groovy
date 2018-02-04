@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.DescriptionResolver
@@ -47,93 +46,110 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
 
   def "enum types"() {
     given:
-      MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 0)
-      def resolvedMethodParameter = new ResolvedMethodParameter("default", methodParameter,
-          new TypeResolver().resolve(handlerMethod.methodParameters[0].getParameterType()))
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(
-          resolvedMethodParameter,
-          new ParameterBuilder(),
-          context(),
-          genericNamingStrategy,
-          Mock(OperationContext))
+    MethodParameter methodParameter = new MethodParameter(handlerMethod.getMethod(), 0)
+    def resolvedMethodParameter = new ResolvedMethodParameter("default", methodParameter,
+        new TypeResolver().resolve(handlerMethod.methodParameters[0].getParameterType()))
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter,
+        new ParameterBuilder(),
+        context(),
+        genericNamingStrategy,
+        Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand =
-          new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
-      operationCommand.apply(parameterContext)
-      AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
+    ApiParamParameterBuilder operationCommand =
+        new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    operationCommand.apply(parameterContext)
+    AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
+
     then:
-      allowableValues != null
-      allowableValues.getValueType() == "LIST"
-      allowableValues.getValues() == ["PRODUCT", "SERVICE"]
+    allowableValues != null
+    allowableValues.getValueType() == "LIST"
+    allowableValues.getValues() == ["PRODUCT", "SERVICE"]
+
     where:
-      handlerMethod                                                                    | expected
-      dummyHandlerMethod('methodWithSingleEnum', DummyClass.BusinessType.class)        | AllowableListValues
-      dummyHandlerMethod('methodWithSingleEnumArray', DummyClass.BusinessType[].class) | AllowableListValues
+    handlerMethod                                                                    | expected
+    dummyHandlerMethod('methodWithSingleEnum', DummyClass.BusinessType.class)        | AllowableListValues
+    dummyHandlerMethod('methodWithSingleEnumArray', DummyClass.BusinessType[].class) | AllowableListValues
   }
 
   @Unroll
   def "Api annotation with list type"() {
     given:
-      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext =
-          new ParameterContext(
-              resolvedMethodParameter,
-              new ParameterBuilder(),
-              context(),
-              genericNamingStrategy,
-              Mock(OperationContext))
+    def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext =
+        new ParameterContext(
+            resolvedMethodParameter,
+            new ParameterBuilder(),
+            context(),
+            genericNamingStrategy,
+            Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
-      operationCommand.apply(parameterContext)
-      AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
+    ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
+    operationCommand.apply(parameterContext)
+    AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
+
     then:
-      allowableValues.getValueType() == "LIST"
-      allowableValues.getValues() == expected
+    allowableValues.getValueType() == "LIST"
+    allowableValues.getValues() == expected
+
     where:
-      apiParamAnnotation                        | expected
-      apiParamWithAllowableValues("1, 2")       | ['1', '2']
-      apiParamWithAllowableValues("1,2,3,4")    | ['1', '2', '3', '4']
-      apiParamWithAllowableValues("1,2,   ,4")  | ['1', '2', '4']
-      apiParamWithAllowableValues("1")          | ['1']
+    apiParamAnnotation                       | expected
+    apiParamWithAllowableValues("1, 2")      | ['1', '2']
+    apiParamWithAllowableValues("1,2,3,4")   | ['1', '2', '3', '4']
+    apiParamWithAllowableValues("1,2,   ,4") | ['1', '2', '4']
+    apiParamWithAllowableValues("1")         | ['1']
   }
 
   @Unroll("Range: #min | #max")
   def "Api annotation with ranges"() {
     given:
-      def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext = new ParameterContext(
-          resolvedMethodParameter,
-          new ParameterBuilder(),
-          context(),
-          genericNamingStrategy,
-          Mock(OperationContext))
+    def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter,
+        new ParameterBuilder(),
+        context(),
+        genericNamingStrategy,
+        Mock(OperationContext))
 
     when:
-      ApiParamParameterBuilder operationCommand = stubbedParamBuilder();
-      operationCommand.apply(parameterContext)
-      AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
+    ApiParamParameterBuilder operationCommand = stubbedParamBuilder()
+    operationCommand.apply(parameterContext)
+    AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
+
     then:
-      allowableValues.getMin() == min as String
-      allowableValues.getMax() == max as String
+    allowableValues.getMin() == min as String
+    allowableValues.getMax() == max as String
+    allowableValues.getExclusiveMax() == exclusiveMax
+    allowableValues.getExclusiveMin() == exclusiveMin
+
     where:
-      apiParamAnnotation                                                | min | max
-      apiParamWithAllowableValues("range[1,5]")                         | 1   | 5
-      apiParamWithAllowableValues("range[1,1]")                         | 1   | 1
-      apiParamWithAllowableValues("range[2," + Integer.MAX_VALUE + "]") | 2   | Integer.MAX_VALUE
+    apiParamAnnotation                                                | min  | max               | exclusiveMin | exclusiveMax
+    apiParamWithAllowableValues("range[1,5]")                         | 1    | 5                 | false        | false
+    apiParamWithAllowableValues("range[1,1]")                         | 1    | 1                 | false        | false
+    apiParamWithAllowableValues("range(1,2)")                         | 1    | 2                 | true         | true
+    apiParamWithAllowableValues("range[1,2)")                         | 1    | 2                 | false        | true
+    apiParamWithAllowableValues("range(1,2]")                         | 1    | 2                 | true         | false
+    apiParamWithAllowableValues("range(-infinity,infinity)")          | null | null              | true         | true
+    apiParamWithAllowableValues("range[-infinity,infinity]")          | null | null              | false        | false
+    apiParamWithAllowableValues("range(infinity,-infinity)")          | null | null              | true         | true
+    apiParamWithAllowableValues("range[infinity,-infinity]")          | null | null              | false        | false
+    apiParamWithAllowableValues("range[2," + Integer.MAX_VALUE + "]") | 2    | Integer.MAX_VALUE | false        | false
   }
 
-  def "supports all swagger types" () {
+  def "supports all swagger types"() {
     given:
-      ApiParamParameterBuilder sut = new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    ApiParamParameterBuilder sut = new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+
     expect:
-      sut.supports(documentationType)
+    sut.supports(documentationType)
+
     where:
-      documentationType << [DocumentationType.SWAGGER_12, DocumentationType.SWAGGER_2]
+    documentationType << [DocumentationType.SWAGGER_12, DocumentationType.SWAGGER_2]
   }
 
   def stubbedParamBuilder() {

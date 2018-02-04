@@ -23,6 +23,8 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import springfox.documentation.annotations.Incubating;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -31,6 +33,7 @@ import static com.google.common.collect.Lists.*;
 public class AlternateTypeBuilder {
   private String fullyQualifiedClassName;
   private List<AlternateTypePropertyBuilder> properties = newArrayList();
+  private List<Annotation> annotations = new ArrayList<Annotation>();
 
   public AlternateTypeBuilder fullyQualifiedClassName(String fullyQualifiedClassName) {
     this.fullyQualifiedClassName = fullyQualifiedClassName;
@@ -47,10 +50,16 @@ public class AlternateTypeBuilder {
     return this;
   }
 
+  public AlternateTypeBuilder withAnnotations(List<Annotation> annotations) {
+    this.annotations.addAll(annotations);
+    return this;
+  }
+
   public Class<?> build() {
     DynamicType.Builder<Object> builder = new ByteBuddy()
         .subclass(Object.class)
-        .name(fullyQualifiedClassName);
+        .name(fullyQualifiedClassName)
+        .annotateType(annotations);
     for (AlternateTypePropertyBuilder each : properties) {
       builder = each.apply(builder);
     }

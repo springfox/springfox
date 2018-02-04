@@ -19,9 +19,10 @@
 
 package springfox.documentation.spring.web.readers
 
+import org.springframework.http.HttpMethod
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -34,8 +35,6 @@ import static com.google.common.collect.Sets.*
 class MediaTypeReaderSpec extends DocumentationContextSpec {
   MediaTypeReader sut
 
-  @Shared
-  Set<String> emptySet = newHashSet()
 
   def setup() {
     sut = new MediaTypeReader()
@@ -53,7 +52,8 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
             ]
         )
     OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo)
+        operationContext(context(), handlerMethod, 0, requestMappingInfo, httpMethod)
+    operationContext.operationBuilder().method(HttpMethod.valueOf(httpMethod.toString()))
 
     when:
     sut.apply(operationContext)
@@ -64,15 +64,20 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     operation.produces == newHashSet(produces)
 
     where:
-    consumes                                            | produces                         | handlerMethod
-    ['application/json'] as String[]                    | ['application/json'] as String[] | dummyHandlerMethod()
-    ['application/json'] as String[]                    | ['application/xml'] as String[]  | dummyHandlerMethod()
-    ['multipart/form-data'] as String[]                 | ['application/json'] as String[] | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
-    ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | dummyHandlerMethod()
+    consumes                                            | produces                         | httpMethod            | handlerMethod
+    [] as String[]                                      | ['application/json'] as String[] | RequestMethod.GET     | dummyHandlerMethod()
+    [] as String[]                                      | ['application/json'] as String[] | RequestMethod.DELETE  | dummyHandlerMethod()
+    ['application/json'] as String[]                    | ['application/xml'] as String[]  | RequestMethod.POST    | dummyHandlerMethod()
+    ['application/json'] as String[]                    | ['application/xml'] as String[]  | RequestMethod.PUT     | dummyHandlerMethod()
+    ['application/json'] as String[]                    | ['application/xml'] as String[]  | RequestMethod.PATCH   | dummyHandlerMethod()
+    ['application/json'] as String[]                    | ['application/xml'] as String[]  | RequestMethod.OPTIONS | dummyHandlerMethod()
+    ['application/json'] as String[]                    | ['application/xml'] as String[]  | RequestMethod.HEAD    | dummyHandlerMethod()
+    ['multipart/form-data'] as String[]                 | ['application/json'] as String[] | RequestMethod.GET     | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
+    ['application/json', 'application/xml'] as String[] | ['application/xml'] as String[]  | RequestMethod.POST    | dummyHandlerMethod()
   }
 
   @Unroll
-  def "should only set default 'application/json' consumes if no consumes is set for the operation and document context"() {
+  def "should only set default 'application/json' consumes if no consumes is set and operation is not GET/DELETE"() {
     given:
     contextBuilder.consumes(newHashSet(documentConsumes))
     RequestMappingInfo requestMappingInfo =
@@ -82,7 +87,13 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
             ]
         )
     OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
+        operationContext(
+            context(),
+            dummyHandlerMethod(),
+            0,
+            requestMappingInfo,
+            RequestMethod.valueOf(httpMethod.toString()))
+    operationContext.operationBuilder().method(httpMethod)
 
     when:
     sut.apply(operationContext)
@@ -92,10 +103,13 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
     operation.consumes == newHashSet(expectedOperationConsumes)
 
     where:
-    documentConsumes                | operationConsumes               | expectedOperationConsumes
-    [] as String[]                  | [] as String[]                  | ['application/json'] as String[]
-    ['application/xml'] as String[] | [] as String[]                  | [] as String[]
-    [] as String[]                  | ['application/xml'] as String[] | ['application/xml'] as String[]
+    documentConsumes                | operationConsumes               | httpMethod      | expectedOperationConsumes
+    [] as String[]                  | [] as String[]                  | HttpMethod.POST | ['application/json'] as String[]
+    ['application/xml'] as String[] | [] as String[]                  | HttpMethod.POST | [] as String[]
+    [] as String[]                  | ['application/xml'] as String[] | HttpMethod.POST | ['application/xml'] as String[]
+    [] as String[]                  | [] as String[]                  | HttpMethod.GET  | [] as String[]
+    ['application/xml'] as String[] | [] as String[]                  | HttpMethod.GET  | [] as String[]
+    [] as String[]                  | ['application/xml'] as String[] | HttpMethod.GET  | [] as String[]
   }
 
   @Unroll

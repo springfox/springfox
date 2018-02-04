@@ -20,7 +20,7 @@
               "description": "object",
               "name": "body",
               "paramType": "body",
-              "type": "FancyPet",
+              "type": "FancyPet_2",
               "required": true
             }
           ],
@@ -73,7 +73,7 @@
               "description": "pet",
               "name": "body",
               "paramType": "body",
-              "type": "Pet",
+              "type": "Pet_2",
               "required": true
             }
           ],
@@ -124,7 +124,7 @@
               "description": "object",
               "name": "body",
               "paramType": "body",
-              "type": "FancyPet",
+              "type": "FancyPet_2",
               "required": true
             },
             {
@@ -169,23 +169,30 @@
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
+  "consumes": [],
   "models": {
-    "Category_3": {
+    "Pet_2": {
       "description": "",
-      "id": "Category_3",
+      "id": "Pet_2",
       "properties": {
+        "age": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
         "name": {
           "required": false,
           "type": "string"
         }
       }
     },
-    "FancyPet": {
+    "FancyPet_2": {
       "description": "",
-      "id": "FancyPet",
+      "id": "FancyPet_2",
       "properties": {
         "age": {
           "required": false,
@@ -195,7 +202,7 @@
         "categories": {
           "required": false,
           "items": {
-            "type": "Category_3"
+            "type": "Category_4"
           },
           "type": "array"
         },
@@ -209,19 +216,10 @@
         }
       }
     },
-    "Pet": {
+    "Category_4": {
       "description": "",
-      "id": "Pet",
+      "id": "Category_4",
       "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
         "name": {
           "required": false,
           "type": "string"
@@ -229,9 +227,7 @@
       }
     }
   },
-  "produces": [
-
-  ],
+  "produces": [],
   "resourcePath": "/fancypets",
   "swaggerVersion": "1.2"
 }

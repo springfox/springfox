@@ -25,7 +25,7 @@ import org.joda.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public class TypeWithAnnotatedGettersAndSetters {
+public class TypeWithAnnotatedGettersAndSetters implements TypeWithAnnotatedGettersAndSettersInterface {
   @ApiModelProperty(notes = "int Property Field", required = true)
   private int intProp;
   private boolean boolProp;
@@ -38,6 +38,7 @@ public class TypeWithAnnotatedGettersAndSetters {
   @ApiModelProperty(value = "Some description")
   private List<String> listOfStrings;
   private Map<String, Map<String, Foo>> mapOfMaps;
+  private int interfaceProp;
 
   public int getIntProp() {
     return intProp;
@@ -117,6 +118,14 @@ public class TypeWithAnnotatedGettersAndSetters {
 
   public void setListOfStrings(List<String> listOfStrings) {
     this.listOfStrings = listOfStrings;
+  }
+
+  public int getInterfaceProp() {
+    return interfaceProp;
+  }
+
+  public void setInterfaceProp(int interfaceProp) {
+    this.interfaceProp = interfaceProp;
   }
 
   class Foo {

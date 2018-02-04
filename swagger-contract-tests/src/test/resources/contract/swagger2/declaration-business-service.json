@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -32,12 +31,9 @@
         ],
         "summary": "Find a business by its id",
         "operationId": "findBusinessById_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
-          "application/json",
-          "*/*"
+          "*/*",
+          "application/json"
         ],
         "parameters": [
           {
@@ -65,9 +61,6 @@
         ],
         "summary": "businessesByCategories",
         "operationId": "businessesByCategoriesUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -135,12 +128,9 @@
         ],
         "summary": "Find a business by its id",
         "operationId": "findBusinessById_3",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
-          "application/json",
-          "*/*"
+          "*/*",
+          "application/json"
         ],
         "parameters": [
           {
@@ -175,12 +165,9 @@
         ],
         "summary": "getResponseEntity",
         "operationId": "getResponseEntityUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
-          "application/json",
-          "*/*"
+          "*/*",
+          "application/json"
         ],
         "parameters": [
           {
@@ -250,12 +237,9 @@
         ],
         "summary": "getVanillaPathVariable",
         "operationId": "getVanillaPathVariableUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
-          "application/json",
-          "*/*"
+          "*/*",
+          "application/json"
         ],
         "parameters": [
           {
@@ -322,7 +306,8 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "title": "Biz"
     }
   }
 }

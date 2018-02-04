@@ -20,10 +20,13 @@ package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Equivalence;
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerCombiner;
 
@@ -36,7 +39,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRequestHandlerCombiner.class);
   private static final PathAndParametersEquivalence EQUIVALENCE = new PathAndParametersEquivalence();
 
   public List<RequestHandler> combine(List<RequestHandler> source) {
@@ -56,8 +59,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;
     }
-    ListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> groupByEquality
-        = Multimaps.index(source, equivalenceAsKey());
+    ListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> groupByEquality = safeGroupBy(source);
     List<RequestHandler> combined = newArrayList();
     for (Equivalence.Wrapper<RequestHandler> path : groupByEquality.keySet()) {
       List<RequestHandler> handlers = groupByEquality.get(path);
@@ -74,6 +76,30 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
       combined.add(toCombine);
     }
     return combined;
+  }
+
+  private ImmutableListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> safeGroupBy(
+      List<RequestHandler> source) {
+    try {
+      return Multimaps.index(source, equivalenceAsKey());
+    } catch (Exception e) {
+      LOGGER.error("Unable to index request handlers {}. Request handlers with issues{}",
+          e.getMessage(),
+          keys(source));
+      return ImmutableListMultimap.<Equivalence.Wrapper<RequestHandler>, RequestHandler>builder().build();
+    }
+  }
+
+  private String keys(List<RequestHandler> source) {
+    final StringBuffer sb = new StringBuffer("Request Handlers with duplicate keys {");
+    for (int i = 0; i < source.size(); i++) {
+      sb.append('\t')
+          .append(i)
+          .append(". ")
+          .append(source.get(i).key());
+    }
+    sb.append('}');
+    return sb.toString();
   }
 
   private Function<RequestHandler, Equivalence.Wrapper<RequestHandler>> equivalenceAsKey() {

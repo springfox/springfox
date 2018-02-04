@@ -21,11 +21,13 @@ package springfox.documentation.swagger.readers.parameter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -81,7 +83,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
-    context.getParameterBuilder()
+    maybeSetParameterName(context, apiParam.name())
         .description(descriptions.resolve(apiParam.value()))
         .defaultValue(apiParam.defaultValue())
         .required(apiParam.required())
@@ -95,13 +97,20 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
-    context.getParameterBuilder()
+    maybeSetParameterName(context, apiModelProperty.name())
         .description(descriptions.resolve(apiModelProperty.value()))
         .required(apiModelProperty.required())
         .allowableValues(allowable)
         .parameterAccess(apiModelProperty.access())
         .hidden(apiModelProperty.hidden())
         .build();
+  }
+
+  private ParameterBuilder maybeSetParameterName(ParameterExpansionContext context, String parameterName) {
+    if (!Strings.isNullOrEmpty(parameterName)) {
+      context.getParameterBuilder().name(parameterName);
+    }
+    return context.getParameterBuilder();
   }
 
   private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {

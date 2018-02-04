@@ -21,13 +21,17 @@ package springfox.documentation.swagger1.web
 
 import com.google.common.collect.LinkedListMultimap
 import com.google.common.collect.Multimap
+import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
+import org.springframework.web.util.WebUtils
 import spock.lang.Unroll
 import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
+import springfox.documentation.spring.web.PropertySourcedMapping
+import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping
 import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -39,6 +43,9 @@ import springfox.documentation.spring.web.scanners.ApiListingReferenceScanner
 import springfox.documentation.spring.web.scanners.ApiListingScanner
 import springfox.documentation.swagger1.configuration.SwaggerJacksonModule
 import springfox.documentation.swagger1.mixins.MapperSupport
+
+import javax.servlet.ServletContext
+import javax.servlet.http.HttpServletRequest
 
 import static com.google.common.collect.Maps.*
 
@@ -78,6 +85,19 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
       "unknown" | HttpStatus.NOT_FOUND
   }
 
+  def "should properly replace url"() {
+    given:
+      def env = Mock(Environment)
+      env.getProperty("springfox.documentation.swagger.v1.path") >> "shoes"
+      def handler = new PropertySourcedRequestMappingHandlerMapping(env, null)
+      def method = Swagger1Controller.getMethod("getApiListing", String, String, HttpServletRequest)
+      def annotation = method.getAnnotation(PropertySourcedMapping)
+    when:
+      def path = handler.mappingPath(annotation)
+    then:
+      "shoes/{swaggerGroup}/{apiDeclaration}" == path
+  }
+
   def "should respond with api listing for a given resource group"() {
     given:
       Multimap<String, ApiListing> listings = LinkedListMultimap.<String, ApiListing>create()
@@ -89,7 +109,7 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
               .build()
       sut.documentationCache.addDocumentation(group)
     when:
-      def result = sut.getApiListing("groupName", "businesses")
+      def result = sut.getApiListing("groupName", "businesses", servletRequest())
     then:
       result.getStatusCode() == HttpStatus.OK 
   }
@@ -109,5 +129,26 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
     then:
       result.getStatusCode() == HttpStatus.OK
       assertDefaultAuth(jsonBodyResponse(result.getBody().value()))
+  }
+
+  def servletRequest() {
+    def contextPath = "/contextPath"
+
+    HttpServletRequest request = Mock(HttpServletRequest)
+    request.contextPath >> contextPath
+    request.servletPath >> "/servletPath"
+    request.getAttribute(WebUtils.INCLUDE_REQUEST_URI_ATTRIBUTE) >> "http://localhost:8080/api-docs"
+    request.requestURL >> new StringBuffer("http://localhost/api-docs")
+    request.headerNames >> Collections.enumeration([])
+    request.servletContext >> servletContext(contextPath)
+
+    request
+  }
+
+  def servletContext(String contextPath) {
+    ServletContext servletContext = Mock(ServletContext)
+    servletContext.contextPath >> contextPath
+
+    servletContext
   }
 }

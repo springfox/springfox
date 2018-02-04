@@ -414,3 +414,130 @@ If you change the datatype to "__file" once 2.7.0 is released, it will fix your 
 NOTE: The reason we use "__file" is because if a consuming library defines a custom type `File` then that type ends
 up getting treated just as if it were a `file` data type, even if that wasn't the intent. To distinguish the usage of
  the custom type from the natively understood `file` primitive we introduced this convention.
+
+[[q24]]
+*24. How to configure springfox for Vavr/Javaslang Jackson module support?
+
+We need to first create an alternate type rules convention that tells springfox to treat the vavr persistent
+collections just like the native java collections. The following example only configurers Set, List and Map types.
+++++
+<script src="https://gist.github.com/dilipkrish/2bf80a0285a04b4037c8994fd8cb8b80.js"></script>
+++++
+
+Optionally, to use jackson effectively, for non-collection types we can register an application listener that
+registers the vavr module with the objectmapper that is being used.
+[source,java]
+----
+@Component
+public class SwaggerJacksonModuleWithVavr implements ApplicationListener<ObjectMapperConfigured> {
+
+  @Override
+  public void onApplicationEvent(ObjectMapperConfigured event) {
+    event.getObjectMapper().registerModule(new VavrModule());
+  }
+}
+----
+
+
+[[q25]]
+*25. Why are properties missing from certain models/types?
+
+A good example of when this might happen is when using Immutables (the library) that are not particularly obvious.
+Immutables are great, except that, unless u craft your model correctly it might lead to confusing results, as you've
+seen. Also how springfox infers the model is opposite to how the service consumes it. By that I mean that, take for e.g. Model has properties a (read/write), b (write only), c (readonly) we read the writable properties for requests and readable properties for responses.
+
+So if your model is only used for requests, it will have a and b
+And if your model is only used of responses it will have a and c
+and if it is present in both request and response it will have a, b and c.
+
+We're working to make this better thanks to https://github.com/springfox/springfox/pull/2056[model enhancements work]
+ by https://github.com/MaksimOrlov[Maksim]
+
+[[q26]]
+*26. Why is `http://host:port/swagger-ui.html` blank? Or why do I get a 404 when I navigate to
+`http://host:port/swagger-ui.html`?
+
+In non-spring boot application ensure that the resource handlers are added for the springfox-swagger-ui <<q13,webjars>>
+
+If its a spring boot application:
+
+- check to see if the `spring.resources.add-mappings` property is set to true.
+- check to see if spring security is applied that the appropriate resources are permitted.
+
+[source,java]
+----
+  @Configuration
+  public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+      http
+        .csrf().disable()
+        .exceptionHandling()
+        .authenticationEntryPoint(unauthorizedHandler)
+        .accessDeniedHandler(accessDeniedHandler)
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+        //.antMatchers("/actuator/**").permitAll()
+        .antMatchers("/actuator/**").hasAuthority("ADMIN")
+        .antMatchers(
+          HttpMethod.GET,
+          "/v2/api-docs",
+          "/swagger-resources/**",
+          "/swagger-ui.html**",
+          "/webjars/**",
+          "favicon.ico"
+        ).permitAll()
+        .antMatchers("/auth/**").permitAll()
+        .anyRequest().authenticated();
+
+      http
+        .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class)
+        .headers()
+        .cacheControl();
+    }
+  }
+----
+
+Or we could simply ignore these resources altogether
+
+[source,java]
+----
+@Configuration
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring()
+      .antMatchers(
+        "/v2/api-docs",
+        "/swagger-resources/**",
+        "/swagger-ui.html**",
+        "/webjars/**");
+  }
+}
+----
+
+[[q27]]
+*27. Controller receives parameter as a String but we are expecting a json Type. How can we model this?
+
+https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java#L243-267[FeatureDemonstrationService.class]
+[[q27-controller]]
+[source,java,linenums]
+----
+include::../../springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java[tags=question-27,indent=0]
+----
+<1> Assume we have a controller action that has a `String` parameter (contents). This is how we can override the
+on-the-wire type (CustomTypeFor2031).
+<2> The method parameter that comes in as a `String` that is actually interpreted as `CustomTypeFor2031`
+<3> `CustomTypeFor2031` complex type that we read from json String.
+
+Once we do this we need to configure this change so that we can add the model to the definitions section.
+
+https://github.com/springfox/springfox/blob/eedbfb1b2dcf0344e21aefd0731515aa63fc9070/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/Swagger2TestConfig.groovy#L118[Swagger2TestConfig]
+[[q27-config]]
+[source,java,linenums]
+----
+include::../../swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/Swagger2TestConfig.groovy[tags=question-27-config,indent=0]
+----
+<1> Add `CustomTypeFor2031` as a additional model.

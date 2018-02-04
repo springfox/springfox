@@ -11,9 +11,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -184,9 +182,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -287,12 +283,10 @@
           "summary": "findIdentityById",
           "nickname": "findIdentityByIdUsingGET",
           "produces": [
-            "application/vnd.com.fancy-pet+json",
-            "application/vnd.com.pet+json"
+            "application/vnd.com.pet+json",
+            "application/vnd.com.fancy-pet+json"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -307,7 +301,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet"
+              "responseModel": "Pet_1"
             },
             {
               "code": 401,
@@ -323,7 +317,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet"
+          "type": "Pet_1"
         }
       ],
       "path": "/features/1367/{itemId}"
@@ -440,9 +434,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -457,7 +449,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet"
+              "responseModel": "Pet_1"
             },
             {
               "code": 401,
@@ -473,10 +465,56 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet"
+          "type": "Pet_1"
         }
       ],
       "path": "/features/1490/entity/{itemId}"
+    },
+    {
+      "description": "serializablePet",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "serializablePet",
+          "nickname": "serializablePetUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "itemId",
+              "name": "itemId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet_1"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet_1"
+        }
+      ],
+      "path": "/features/1490/{itemId}"
     },
     {
       "description": "updateSerializablePet",
@@ -505,7 +543,7 @@
               "description": "pet",
               "name": "body",
               "paramType": "body",
-              "type": "Pet",
+              "type": "Pet_2",
               "required": true
             }
           ],
@@ -533,54 +571,6 @@
           ],
           "deprecated": "false",
           "type": "void"
-        }
-      ],
-      "path": "/features/1490/{itemId}"
-    },
-    {
-      "description": "serializablePet",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "serializablePet",
-          "nickname": "serializablePetUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "itemId",
-              "name": "itemId",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "Pet"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "Pet"
         }
       ],
       "path": "/features/1490/{itemId}"
@@ -649,9 +639,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -817,9 +805,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1220,15 +1206,13 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Example"
+              "responseModel": "Example_1"
             },
             {
               "code": 401,
@@ -1244,7 +1228,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Example"
+          "type": "Example_1"
         }
       ],
       "path": "/features/effective"
@@ -1259,9 +1243,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1284,7 +1266,7 @@
           ],
           "deprecated": "false",
           "items": {
-            "type": "Example"
+            "type": "Example_1"
           },
           "type": "array"
         }
@@ -1301,9 +1283,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1350,7 +1330,7 @@
               "name": "examples",
               "paramType": "query",
               "items": {
-                "type": "Example"
+                "type": "Example_2"
               },
               "type": "array",
               "required": false
@@ -1449,9 +1429,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1488,9 +1466,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1512,7 +1488,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry_6«string,Map«string,Example»»]"
+          "type": "List[Entry_7«string,Map«string,Example_1»»]"
         }
       ],
       "path": "/features/mapOfMapOfExample"
@@ -1527,9 +1503,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [],
           "responseMessages": [
             {
@@ -1566,9 +1540,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -1823,9 +1795,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -1842,7 +1812,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet"
+              "responseModel": "Pet_1"
             },
             {
               "code": 401,
@@ -1858,7 +1828,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet"
+          "type": "Pet_1"
         }
       ],
       "path": "/features/{petId}"
@@ -1867,42 +1837,30 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "EnumObjectType": {
-      "description": "",
-      "id": "EnumObjectType",
+    "ModelWithMapProperty": {
+      "description": "Describes model with map property",
+      "id": "ModelWithMapProperty",
       "properties": {
-        "description": {
+        "params": {
+          "description": "Map of params to be sent",
           "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
+          "type": "object"
         }
       }
     },
-    "Pet": {
+    "ModelWithObjectNode": {
       "description": "",
-      "id": "Pet",
+      "id": "ModelWithObjectNode",
       "properties": {
-        "age": {
+        "anyObject": {
           "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
+          "type": "ObjectNode"
         }
       }
     },
-    "Example": {
+    "Example_1": {
       "description": "",
-      "id": "Example",
+      "id": "Example_1",
       "properties": {
         "allCapsSet": {
           "required": false,
@@ -1945,7 +1903,7 @@
         },
         "nestedType": {
           "required": false,
-          "type": "NestedType"
+          "type": "NestedType_1"
         },
         "parentBeanProperty": {
           "required": false,
@@ -1971,29 +1929,47 @@
       "id": "ObjectNode",
       "properties": {}
     },
-    "Entry_6«string,Map«string,Example»»": {
+    "Pet_2": {
       "description": "",
-      "id": "Entry_6«string,Map«string,Example»»",
+      "id": "Pet_2",
       "properties": {
-        "key": {
+        "age": {
           "required": false,
-          "type": "List[Entry_5«string,Example»]"
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
         }
       }
     },
-    "Entry_5«string,Example»": {
+    "Pet_1": {
       "description": "",
-      "id": "Entry_5«string,Example»",
+      "id": "Pet_1",
       "properties": {
-        "key": {
+        "age": {
           "required": false,
-          "type": "Example"
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
         }
       }
     },
-    "NestedType": {
+    "NestedType_1": {
       "description": "",
-      "id": "NestedType",
+      "id": "NestedType_1",
       "properties": {
         "name": {
           "required": false,
@@ -2001,24 +1977,37 @@
         }
       }
     },
-    "ModelWithMapProperty": {
-      "description": "Describes model with map property",
-      "id": "ModelWithMapProperty",
+    "EnumObjectType": {
+      "description": "",
+      "id": "EnumObjectType",
       "properties": {
-        "params": {
-          "description": "Map of params to be sent",
+        "description": {
           "required": false,
-          "type": "object"
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
         }
       }
     },
-    "ModelWithObjectNode": {
+    "Entry_7«string,Map«string,Example_1»»": {
       "description": "",
-      "id": "ModelWithObjectNode",
+      "id": "Entry_7«string,Map«string,Example_1»»",
       "properties": {
-        "anyObject": {
+        "key": {
           "required": false,
-          "type": "ObjectNode"
+          "type": "List[Entry_6«string,Example_1»]"
+        }
+      }
+    },
+    "Entry_6«string,Example_1»": {
+      "description": "",
+      "id": "Entry_6«string,Example_1»",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "Example_1"
         }
       }
     }

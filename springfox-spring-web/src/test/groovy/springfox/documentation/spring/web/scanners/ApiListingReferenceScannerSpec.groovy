@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
  */
 
 package springfox.documentation.spring.web.scanners
+
+import com.fasterxml.classmate.TypeResolver
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
 import springfox.documentation.service.ResourceGroup
@@ -29,6 +31,7 @@ import springfox.documentation.spring.web.mixins.AccessorAssertions
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
@@ -39,6 +42,8 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
   ApiListingReferenceScanner sut = new ApiListingReferenceScanner()
   List<RequestHandler> requestHandlers
+  def methodResolver = new HandlerMethodResolver(new TypeResolver())
+
 
   def setup() {
     requestHandlers = [Mock(RequestHandler)]
@@ -73,13 +78,16 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
   def "grouping of listing references using Spring grouping strategy"() {
     given:
 
-      requestHandlers = [
-          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-          new WebMvcRequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+    requestHandlers = [
+          new WebMvcRequestHandler(
+              methodResolver,
+              requestMappingInfo("/public/{businessId}"),
+              dummyControllerHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:
@@ -99,12 +107,12 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     given:
 
       requestHandlers = [
-        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-        new WebMvcRequestHandler(requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-        new WebMvcRequestHandler(requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:

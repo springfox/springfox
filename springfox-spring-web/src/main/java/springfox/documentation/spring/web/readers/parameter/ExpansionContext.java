@@ -73,7 +73,8 @@ public class ExpansionContext {
             String parentName,
             ResolvedType paramType,
             DocumentationContext documentationContext) {
-        seenTypes.add(paramType);
-        return new ExpansionContext(parentName, paramType, documentationContext, seenTypes);
+        Set<ResolvedType> childSeenTypes = newHashSet(seenTypes);
+        childSeenTypes.add(paramType);
+        return new ExpansionContext(parentName, paramType, documentationContext, childSeenTypes);
     }
 }

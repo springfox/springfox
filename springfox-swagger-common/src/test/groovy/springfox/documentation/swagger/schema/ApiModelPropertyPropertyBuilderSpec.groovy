@@ -93,6 +93,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     "enumProp"      | true     | "enum Prop Getter value"   | ["ONE"]         | false
     "readOnlyProp"  | false    | "readOnly property getter" | null            | true
     "listOfStrings" | false    | "Some description"         | null            | false
+    "interfaceProp" | true     | "interface Property Field" | null            | false
   }
 
   def "ApiModelProperty annotated models get enriched with additional info given an annotated element"() {
@@ -125,7 +126,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     "enumProp"      | true     | "enum Prop Getter value"   | ["ONE"]         | false
     "readOnlyProp"  | false    | "readOnly property getter" | null            | true
     "listOfStrings" | false    | "Some description"         | null            | false
-
+    "interfaceProp" | true     | "interface Property Field" | null            | false
   }
 
   def "ApiModelProperties marked as hidden properties are respected"() {

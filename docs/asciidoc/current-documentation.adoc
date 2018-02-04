@@ -96,11 +96,12 @@ allows the properties to be  overridden
 
 === Overriding property datatypes
 
-Using the ```ApiModelProperty#dataType``` we can override the inferred data types. However it is restricted
+Using the `ApiModelProperty#dataType` we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
  definition
 
-```java
+[source,java,linenums]
+----
 
 // if com.qualified.ReplaceWith is not a Class that can be created using Class.forName(...)
 // Original will be replaced with the new class
@@ -110,7 +111,18 @@ public Original getOriginal() { ... }
 // if ReplaceWith is not a Class that can be created using Class.forName(...) Original will be preserved
 @ApiModelProperty(dataType = "ReplaceWith")
 public Original getAnotherOriginal() { ... }
-```
+
+----
+
+NOTE: In the case of `ApiImplicitParam#dataType`, since the type itself is usually a scalar type (string, int)
+use one of the base types specified in the Types class =>
+`springfox-schema/src/main/java/springfox/documentation/schema/Types.java`
+
+[source,groovy,linenums]
+----
+include::../../springfox-schema/src/main/java/springfox/documentation/schema/Types.java[lines=42..55]
+----
+
 
 === Docket XML Configuration
 
@@ -370,4 +382,9 @@ IMPORTANT: Support for this module has been deprecated in 2.7.0. Since swagger2m
 difficult for build to co-exist with the newer version of swagger2markup. Please use the
 _latest_ instructions provided in the awesome https://github.com/Swagger2Markup/swagger2markup[Swagger2Markup Library].
 
+== Security
+
+Thanks to https://github.com/mojaiq[Javed Mohammed] we now have an example https://github.com/springfox/springfox-oath2-demo[oauth demo].
+
+NOTE: this is based on swagger-ui pre 3.x
 

@@ -31,12 +31,9 @@
         ],
         "summary": "findIdentityById",
         "operationId": "findIdentityByIdUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
-          "application/vnd.com.fancy-pet+json",
-          "application/vnd.com.pet+json"
+          "application/vnd.com.pet+json",
+          "application/vnd.com.fancy-pet+json"
         ],
         "parameters": [
           {
@@ -51,7 +48,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "$ref": "#/definitions/Pet_1"
             }
           }
         }
@@ -120,9 +117,6 @@
         ],
         "summary": "serializablePetEntity",
         "operationId": "serializablePetEntityUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "itemId",
@@ -136,7 +130,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "$ref": "#/definitions/Pet_1"
             }
           }
         }
@@ -149,9 +143,6 @@
         ],
         "summary": "serializablePet",
         "operationId": "serializablePetUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "itemId",
@@ -165,7 +156,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "$ref": "#/definitions/Pet_1"
             }
           }
         }
@@ -193,7 +184,48 @@
             "description": "pet",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "$ref": "#/definitions/Pet_2"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/features/2031": {
+      "post": {
+        "tags": [
+          "feature-demonstration-service"
+        ],
+        "summary": "/2031",
+        "operationId": "saveUsingPOST_1",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "keyId",
+            "in": "path",
+            "description": "keyId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "contents",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/CustomTypeFor2031"
             }
           }
         ],
@@ -241,9 +273,6 @@
         ],
         "summary": "allMethodAllowed",
         "operationId": "allMethodAllowedUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -301,9 +330,6 @@
         ],
         "summary": "allMethodAllowed",
         "operationId": "allMethodAllowedUsingDELETE_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -578,9 +604,6 @@
         ],
         "summary": "getEffective",
         "operationId": "getEffectiveUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -598,9 +621,6 @@
         ],
         "summary": "getEffectives",
         "operationId": "getEffectivesUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -621,9 +641,6 @@
         ],
         "summary": "getEnumAsObject",
         "operationId": "getEnumAsObjectUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -702,9 +719,6 @@
         ],
         "summary": "listOfMaps",
         "operationId": "listOfMapsUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -725,9 +739,6 @@
         ],
         "summary": "mapOfMapOfExample",
         "operationId": "mapOfMapOfExampleUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -751,9 +762,6 @@
         ],
         "summary": "modelWithMapProperty",
         "operationId": "modelWithMapPropertyUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -771,9 +779,6 @@
         ],
         "summary": "getModelAttribute",
         "operationId": "getModelAttributeUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "complexProp.name",
@@ -973,9 +978,6 @@
         "summary": "Find pet by ID",
         "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
         "operationId": "getPetByIdUsingGET_3",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "petId",
@@ -984,14 +986,16 @@
             "required": true,
             "type": "string",
             "maximum": 5,
-            "minimum": 1
+            "exclusiveMaximum": false,
+            "minimum": 1,
+            "exclusiveMinimum": false
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet"
+              "$ref": "#/definitions/Pet_1"
             }
           }
         },
@@ -1019,6 +1023,24 @@
     }
   },
   "definitions": {
+    "CustomTypeFor2031_1": {
+      "type": "object",
+      "properties": {
+        "property": {
+          "type": "string"
+        }
+      },
+      "title": "CustomTypeFor2031_1"
+    },
+    "CustomTypeFor2031_2": {
+      "type": "object",
+      "properties": {
+        "property": {
+          "type": "string"
+        }
+      },
+      "title": "CustomTypeFor2031_2"
+    },
     "EnumObjectType": {
       "type": "object",
       "properties": {
@@ -1028,7 +1050,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "EnumObjectType"
     },
     "Example": {
       "type": "object",
@@ -1049,7 +1072,8 @@
         "bar": {
           "type": "integer",
           "format": "int32",
-          "description": "description of bar"
+          "description": "description of bar",
+          "allowEmptyValue": false
         },
         "enumType": {
           "type": "string",
@@ -1080,18 +1104,22 @@
         "readOnlyString": {
           "type": "string",
           "description": "A read only string",
-          "readOnly": true
+          "readOnly": true,
+          "allowEmptyValue": false
         }
-      }
+      },
+      "title": "Example"
     },
     "MapOfstringAndExample": {
       "type": "object",
+      "title": "MapOfstringAndExample",
       "additionalProperties": {
         "$ref": "#/definitions/Example"
       }
     },
     "MapOfstringAndstring": {
       "type": "object",
+      "title": "MapOfstringAndstring",
       "additionalProperties": {
         "type": "string"
       }
@@ -1109,7 +1137,8 @@
             }
           }
         }
-      }
+      },
+      "title": "ModelWithArrayOfArrays"
     },
     "ModelWithMapProperty": {
       "type": "object",
@@ -1117,11 +1146,13 @@
         "params": {
           "type": "object",
           "description": "Map of params to be sent",
+          "allowEmptyValue": false,
           "additionalProperties": {
             "type": "string"
           }
         }
       },
+      "title": "ModelWithMapProperty",
       "description": "Describes model with map property"
     },
     "ModelWithObjectNode": {
@@ -1130,7 +1161,8 @@
         "anyObject": {
           "$ref": "#/definitions/ObjectNode"
         }
-      }
+      },
+      "title": "ModelWithObjectNode"
     },
     "NestedType": {
       "type": "object",
@@ -1138,12 +1170,14 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "NestedType"
     },
     "ObjectNode": {
-      "type": "object"
+      "type": "object",
+      "title": "ObjectNode"
     },
-    "Pet": {
+    "Pet_1": {
       "type": "object",
       "properties": {
         "age": {
@@ -1156,7 +1190,24 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Pet_1"
+    },
+    "Pet_2": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Pet_2"
     }
   }
 }

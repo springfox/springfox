@@ -7,11 +7,6 @@
       "position": 0
     },
     {
-      "description": "Category Entity\nSimple Jpa Repository",
-      "path": "/default/Category Entity",
-      "position": 0
-    },
-    {
       "description": "Person Entity\nSimple Jpa Repository",
       "path": "/default/Person Entity",
       "position": 0
@@ -79,6 +74,11 @@
     {
       "description": "Interface API",
       "path": "/default/inherited-service-impl",
+      "position": 0
+    },
+    {
+      "description": "Person Controller",
+      "path": "/default/person-controller",
       "position": 0
     },
     {

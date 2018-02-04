@@ -41,7 +41,7 @@
             "description": "toCreate",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Resource_2«Pet»"
+              "$ref": "#/definitions/Resource_2«Pet_2»"
             }
           }
         ],
@@ -59,9 +59,6 @@
         ],
         "summary": "delete",
         "operationId": "deleteUsingDELETE_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -75,7 +72,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/HttpEntity«Resource_1«Pet»»"
+              "$ref": "#/definitions/HttpEntity«Resource_1«Pet_1»»"
             }
           },
           "405": {
@@ -91,9 +88,6 @@
         ],
         "summary": "get",
         "operationId": "getUsingGET_2",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "id",
@@ -107,7 +101,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Resource_1«Pet»"
+              "$ref": "#/definitions/Resource_1«Pet_1»"
             }
           },
           "405": {
@@ -134,40 +128,143 @@
     }
   },
   "definitions": {
-    "HttpEntity«Resource_1«Pet»»": {
+    "HttpEntity«Resource_1«Pet_1»»": {
       "type": "object",
       "properties": {
         "body": {
-          "$ref": "#/definitions/Resource_1«Pet»"
+          "$ref": "#/definitions/Resource_1«Pet_1»"
         }
-      }
+      },
+      "title": "HttpEntity«Resource_1«Pet_1»»"
     },
     "Link_1": {
       "type": "object",
       "properties": {
+        "deprecation": {
+          "type": "string",
+          "xml": {
+            "name": "deprecation",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
         "href": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "href",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "hreflang": {
+          "type": "string",
+          "xml": {
+            "name": "hreflang",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "media": {
+          "type": "string",
+          "xml": {
+            "name": "media",
+            "attribute": true,
+            "wrapped": false
+          }
         },
         "rel": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "rel",
+            "attribute": true,
+            "wrapped": false
+          }
         },
         "templated": {
           "type": "boolean"
+        },
+        "title": {
+          "type": "string",
+          "xml": {
+            "name": "title",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "name": "type",
+            "attribute": true,
+            "wrapped": false
+          }
         }
-      }
+      },
+      "title": "Link_1"
     },
     "Link_2": {
       "type": "object",
       "properties": {
+        "deprecation": {
+          "type": "string",
+          "xml": {
+            "name": "deprecation",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
         "href": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "href",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "hreflang": {
+          "type": "string",
+          "xml": {
+            "name": "hreflang",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "media": {
+          "type": "string",
+          "xml": {
+            "name": "media",
+            "attribute": true,
+            "wrapped": false
+          }
         },
         "rel": {
-          "type": "string"
+          "type": "string",
+          "xml": {
+            "name": "rel",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "title": {
+          "type": "string",
+          "xml": {
+            "name": "title",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "type": {
+          "type": "string",
+          "xml": {
+            "name": "type",
+            "attribute": true,
+            "wrapped": false
+          }
         }
-      }
+      },
+      "title": "Link_2"
     },
-    "Pet": {
+    "Pet_1": {
       "type": "object",
       "properties": {
         "age": {
@@ -180,9 +277,26 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Pet_1"
     },
-    "Resource_1«Pet»": {
+    "Pet_2": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Pet_2"
+    },
+    "Resource_1«Pet_1»": {
       "type": "object",
       "properties": {
         "age": {
@@ -194,6 +308,12 @@
         },
         "links": {
           "type": "array",
+          "xml": {
+            "name": "link",
+            "namespace": "http://www.w3.org/2005/Atom",
+            "attribute": false,
+            "wrapped": false
+          },
           "items": {
             "$ref": "#/definitions/Link_1"
           }
@@ -201,9 +321,10 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Resource_1«Pet_1»"
     },
-    "Resource_2«Pet»": {
+    "Resource_2«Pet_2»": {
       "type": "object",
       "properties": {
         "age": {
@@ -222,7 +343,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Resource_2«Pet_2»"
     }
   }
 }

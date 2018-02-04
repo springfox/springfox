@@ -44,7 +44,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
@@ -55,6 +57,7 @@ public class HandlerMethodResolver {
   private static final String SPRING4_DISCOVERER = "org.springframework.core.DefaultParameterNameDiscoverer";
   private final ParameterNameDiscoverer parameterNameDiscover = parameterNameDiscoverer();
   private final TypeResolver typeResolver;
+  private Map<Class, List<ResolvedMethod>> methodsResolvedForHostClasses = new HashMap<Class, List<ResolvedMethod>>();
 
   public HandlerMethodResolver(TypeResolver typeResolver) {
     this.typeResolver = typeResolver;
@@ -141,13 +144,21 @@ public class HandlerMethodResolver {
     }
     Class hostClass = useType(handlerMethod.getBeanType())
         .or(handlerMethod.getMethod().getDeclaringClass());
-    ResolvedType beanType = typeResolver.resolve(hostClass);
-    MemberResolver resolver = new MemberResolver(typeResolver);
-    resolver.setIncludeLangObject(false);
-    ResolvedTypeWithMembers typeWithMembers = resolver.resolve(beanType, null, null);
-    Iterable<ResolvedMethod> filtered = filter(newArrayList(typeWithMembers.getMemberMethods()),
+    Iterable<ResolvedMethod> filtered = filter(getMemberMethods(hostClass),
         methodNamesAreSame(handlerMethod.getMethod()));
     return resolveToMethodWithMaxResolvedTypes(filtered, handlerMethod.getMethod());
+  }
+
+  private List<ResolvedMethod> getMemberMethods(
+          Class hostClass) {
+    if(!methodsResolvedForHostClasses.containsKey(hostClass)) {
+      ResolvedType beanType = typeResolver.resolve(hostClass);
+      MemberResolver resolver = new MemberResolver(typeResolver);
+      resolver.setIncludeLangObject(false);
+      ResolvedTypeWithMembers typeWithMembers = resolver.resolve(beanType, null, null);
+      methodsResolvedForHostClasses.put(hostClass, newArrayList(typeWithMembers.getMemberMethods()));
+    }
+    return methodsResolvedForHostClasses.get(hostClass);
   }
 
   private static Function<ResolvedMethod, ResolvedType> toReturnType(final TypeResolver resolver) {

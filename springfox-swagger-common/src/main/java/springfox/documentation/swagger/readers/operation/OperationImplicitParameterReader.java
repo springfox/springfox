@@ -73,7 +73,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .allowMultiple(param.allowMultiple())
         .modelRef(modelRef)
         .allowableValues(allowableValueFromString(param.allowableValues()))
-        .parameterType(param.paramType())
+        .parameterType(emptyToNull(param.paramType()))
         .parameterAccess(param.access())
         .build();
   }

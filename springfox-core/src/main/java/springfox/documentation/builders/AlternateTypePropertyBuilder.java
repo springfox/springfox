@@ -23,6 +23,10 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
 import springfox.documentation.annotations.Incubating;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.util.StringUtils.*;
 
 @Incubating("2.7.0")
@@ -31,6 +35,7 @@ public class AlternateTypePropertyBuilder {
   private String name;
   private boolean canRead;
   private boolean canWrite;
+  private List<Annotation> annotations;
 
   public AlternateTypePropertyBuilder withType(Class<?> clazz) {
     this.clazz = clazz;
@@ -52,8 +57,17 @@ public class AlternateTypePropertyBuilder {
     return this;
   }
 
+  public AlternateTypePropertyBuilder withAnnotations(List<Annotation> annotations) {
+    this.annotations = annotations;
+    return this;
+  }
+
   public DynamicType.Builder<Object> apply(DynamicType.Builder<Object> builder) {
-    DynamicType.Builder<Object> augmented = builder.defineField(name, clazz, Visibility.PRIVATE);
+    if (annotations == null) {
+      annotations = new ArrayList<Annotation>();
+    }
+    DynamicType.Builder<Object> augmented = builder.defineField(name, clazz, Visibility.PRIVATE)
+        .annotateField(annotations);
     if (canRead) {
       augmented = getter(augmented);
     }

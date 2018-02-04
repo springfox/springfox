@@ -88,7 +88,7 @@ public class Paths {
   public static String sanitizeRequestMappingPattern(String requestMappingPattern) {
     String result = requestMappingPattern;
     //remove regex portion '/{businessId:\\w+}'
-    result = result.replaceAll("\\{([^}]+?):[^/]+\\}", "{$1}");
+    result = result.replaceAll("\\{([^}]+?):([^/{}]|\\{[\\d,]+})+}", "{$1}");
     return result.isEmpty() ? "/" : result;
   }
 

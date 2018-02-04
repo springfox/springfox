@@ -36,6 +36,7 @@ import springfox.documentation.service.Parameter;
 import java.util.Map;
 
 import static com.google.common.base.Functions.*;
+import static com.google.common.base.Strings.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
@@ -56,7 +57,7 @@ public class SerializableParameterFactories {
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
     SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory,
         new NullSerializableParameterFactory())
-        .apply(source.getParamType().toLowerCase());
+        .apply(nullToEmpty(source.getParamType()).toLowerCase());
 
     SerializableParameter toReturn = factory.create(source);
     if (toReturn == null) {
@@ -74,7 +75,7 @@ public class SerializableParameterFactories {
         toReturn.setType("string");
         toReturn.setFormat("byte");
       } else {
-        toReturn.setCollectionFormat("multi");
+        toReturn.setCollectionFormat(collectionFormat(source));
         toReturn.setType("array");
         ModelReference paramItemModelRef = paramModel.itemModel().get();
         Property itemProperty
@@ -98,6 +99,9 @@ public class SerializableParameterFactories {
     return Optional.of((io.swagger.models.parameters.Parameter) toReturn);
   }
 
+  private static String collectionFormat(Parameter source) {
+    return isNullOrEmpty(source.getCollectionFormat()) ? "multi" : source.getCollectionFormat();
+  }
 
   static class CookieSerializableParameterFactory implements SerializableParameterFactory {
     @Override

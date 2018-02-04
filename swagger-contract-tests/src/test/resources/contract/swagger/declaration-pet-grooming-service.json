@@ -11,9 +11,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -68,9 +66,7 @@
             "application/xml",
             "application/json"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -123,9 +119,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -171,9 +165,7 @@
           "produces": [
             "*/*"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -220,9 +212,7 @@
             "application/xml",
             "application/json"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -268,9 +258,7 @@
             "application/xml",
             "application/json"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -307,12 +295,8 @@
     }
   ],
   "basePath": "/",
-  "consumes": [
-
-  ],
-  "produces": [
-
-  ],
-  "resourcePath": "/",
+  "consumes": [],
+  "produces": [],
+  "resourcePath": "/petgrooming",
   "swaggerVersion": "1.2"
 }

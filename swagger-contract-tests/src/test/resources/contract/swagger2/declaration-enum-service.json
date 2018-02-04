@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -32,9 +31,6 @@
         ],
         "summary": "Example with response entity collection",
         "operationId": "getResponseEntityCollectionUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -59,9 +55,6 @@
         ],
         "summary": "Example with response entity single value",
         "operationId": "getResponseEntityValueUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -83,9 +76,6 @@
         ],
         "summary": "Example with wrapped enum collection",
         "operationId": "getCollectionValueUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -127,7 +117,8 @@
             ]
           }
         }
-      }
+      },
+      "title": "EnumCollection"
     }
   }
 }

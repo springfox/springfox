@@ -9,12 +9,10 @@
           "summary": "Find a business by its id",
           "nickname": "findBusinessById",
           "produces": [
-            "application/json",
-            "*/*"
-          ],
-          "consumes": [
+            "*/*",
             "application/json"
           ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -60,9 +58,7 @@
           "produces": [
             "application/json"
           ],
-          "consumes": [
-            "application/json"
-          ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": true,
@@ -121,8 +117,7 @@
           "consumes": [
             "application/json"
           ],
-          "parameters": [
-          ],
+          "parameters": [],
           "responseMessages": [
             {
               "code": 200,
@@ -160,12 +155,10 @@
           "summary": "Find a business by its id",
           "nickname": "findBusinessById_1",
           "produces": [
-            "application/json",
-            "*/*"
-          ],
-          "consumes": [
+            "*/*",
             "application/json"
           ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -217,12 +210,10 @@
           "summary": "getResponseEntity",
           "nickname": "getResponseEntityUsingGET",
           "produces": [
-            "application/json",
-            "*/*"
-          ],
-          "consumes": [
+            "*/*",
             "application/json"
           ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -322,12 +313,10 @@
           "summary": "getVanillaPathVariable",
           "nickname": "getVanillaPathVariableUsingGET",
           "produces": [
-            "application/json",
-            "*/*"
-          ],
-          "consumes": [
+            "*/*",
             "application/json"
           ],
+          "consumes": [],
           "parameters": [
             {
               "allowMultiple": false,
@@ -408,8 +397,8 @@
     }
   },
   "produces": [
-    "application/json",
-    "*/*"
+    "*/*",
+    "application/json"
   ],
   "resourcePath": "/businesses",
   "swaggerVersion": "1.2"

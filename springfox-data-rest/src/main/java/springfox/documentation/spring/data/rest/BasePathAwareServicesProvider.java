@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,14 @@ import static com.google.common.collect.Lists.*;
 @Component
 public class BasePathAwareServicesProvider implements RequestHandlerProvider {
   private final BasePathAwareHandlerMapping basePathAwareMappings;
+  private final HandlerMethodResolver methodResolver;
 
   public BasePathAwareServicesProvider(
       RepositoryRestConfiguration repositoryConfiguration,
-      ApplicationContext applicationContext) {
+      ApplicationContext applicationContext,
+      HandlerMethodResolver methodResolver) {
     basePathAwareMappings = new BasePathAwareHandlerMapping(repositoryConfiguration);
+    this.methodResolver = methodResolver;
     basePathAwareMappings.setApplicationContext(applicationContext);
     basePathAwareMappings.afterPropertiesSet();
   }
@@ -52,7 +56,7 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
     for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
       if (!isEntitySchemaService(each.getValue())
           && !isAlpsProfileServices(each.getValue())) {
-        requestHandlers.add(new WebMvcRequestHandler(each.getKey(), each.getValue()));
+        requestHandlers.add(new WebMvcRequestHandler(methodResolver, each.getKey(), each.getValue()));
       }
     }
     return requestHandlers;

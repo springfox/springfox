@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -32,14 +31,11 @@
         ],
         "summary": "groovyModel",
         "operationId": "groovyModelUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/GroovyModel"
+              "$ref": "#/definitions/GroovyModel_1"
             }
           }
         }
@@ -60,7 +56,7 @@
             "description": "model",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroovyModel"
+              "$ref": "#/definitions/GroovyModel_2"
             }
           }
         ],
@@ -89,13 +85,23 @@
     }
   },
   "definitions": {
-    "GroovyModel": {
+    "GroovyModel_1": {
       "type": "object",
       "properties": {
         "stringProp": {
           "type": "string"
         }
-      }
+      },
+      "title": "GroovyModel_1"
+    },
+    "GroovyModel_2": {
+      "type": "object",
+      "properties": {
+        "stringProp": {
+          "type": "string"
+        }
+      },
+      "title": "GroovyModel_2"
     }
   }
 }

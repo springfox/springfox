@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
@@ -38,12 +37,15 @@ import java.util.List;
 import java.util.Set;
 
 public class WebMvcRequestHandler implements RequestHandler {
+  private final HandlerMethodResolver methodResolver;
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
 
   public WebMvcRequestHandler(
+      HandlerMethodResolver methodResolver,
       RequestMappingInfo requestMapping,
       HandlerMethod handlerMethod) {
+    this.methodResolver = methodResolver;
     this.requestMapping = requestMapping;
     this.handlerMethod = handlerMethod;
   }
@@ -123,15 +125,13 @@ public class WebMvcRequestHandler implements RequestHandler {
   }
 
   @Override
-  public List<ResolvedMethodParameter> getParameters() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodParameters(handlerMethod);
+  public List<ResolvedMethodParameter> getParameters(){
+    return methodResolver.methodParameters(handlerMethod);
   }
 
   @Override
   public ResolvedType getReturnType() {
-    HandlerMethodResolver handlerMethodResolver = new HandlerMethodResolver(new TypeResolver());
-    return handlerMethodResolver.methodReturnType(handlerMethod);
+    return methodResolver.methodReturnType(handlerMethod);
   }
 
   @Override
@@ -142,5 +142,13 @@ public class WebMvcRequestHandler implements RequestHandler {
   @Override
   public RequestMappingInfo getRequestMapping() {
     return requestMapping;
+  }
+
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("WebMvcRequestHandler{");
+    sb.append("key=").append(key());
+    sb.append('}');
+    return sb.toString();
   }
 }

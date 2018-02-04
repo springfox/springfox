@@ -5,8 +5,7 @@
     "version": "1.0",
     "title": "Api Documentation",
     "termsOfService": "urn:tos",
-    "contact": {
-    },
+    "contact": {},
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -32,9 +31,6 @@
         ],
         "summary": "demonstrateInheritanceWithAnnotations",
         "operationId": "demonstrateInheritanceWithAnnotationsUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -64,9 +60,6 @@
         ],
         "summary": "getSomething",
         "operationId": "getSomethingUsingGET_1",
-        "consumes": [
-          "application/json"
-        ],
         "parameters": [
           {
             "name": "parameter",
@@ -117,7 +110,8 @@
         "name": {
           "type": "string"
         }
-      }
+      },
+      "title": "Pet"
     }
   }
 }

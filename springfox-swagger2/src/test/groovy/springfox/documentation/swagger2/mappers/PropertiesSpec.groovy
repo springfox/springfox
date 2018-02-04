@@ -38,12 +38,14 @@ class PropertiesSpec extends Specification {
       property("void") == null
   }
 
-  def "byte is represented as a string with a format" () {
+  def "byte is represented as an integer with a format and minimum, maximum" () {
     when:
       def byteProp = property("byte")
     then:
-      byteProp instanceof StringProperty
-      byteProp.format == "byte"
+      byteProp instanceof IntegerProperty
+      byteProp.format == "int32"
+      byteProp.maximum == Byte.MAX_VALUE
+      byteProp.minimum == Byte.MIN_VALUE
   }
 
   def "List is represented as a string with a format" () {
@@ -96,7 +98,7 @@ class PropertiesSpec extends Specification {
       "biginteger"| BaseIntegerProperty
       "uuid"      | UUIDProperty
       "object"    | ObjectProperty
-      "byte"      | StringProperty
+      "byte"      | IntegerProperty
       "INT"       | IntegerProperty
       "LONG"      | LongProperty
       "FLOAT"     | FloatProperty
@@ -109,7 +111,7 @@ class PropertiesSpec extends Specification {
       "BIGINTEGER"| BaseIntegerProperty
       "UUID"      | UUIDProperty
       "OBJECT"    | ObjectProperty
-      "BYTE"      | StringProperty
+      "BYTE"      | IntegerProperty
       "Anything"  | RefProperty
   }
 

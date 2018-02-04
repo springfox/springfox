@@ -22,7 +22,6 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
-
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
@@ -30,6 +29,8 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 
+
+//CHECKSTYLE:OFF CyclomaticComplexityCheck
 public class ModelProperty {
   private final String name;
   private final ResolvedType type;
@@ -38,11 +39,14 @@ public class ModelProperty {
   private final Boolean required;
   private final boolean isHidden;
   private final Boolean readOnly;
+  private final Boolean allowEmptyValue;
   private final String description;
   private final AllowableValues allowableValues;
   private ModelReference modelRef;
   private final String example;
   private final String pattern;
+  private final String defaultValue;
+  private final Xml xml;
   private final List<VendorExtension> vendorExtensions;
 
   public ModelProperty(
@@ -53,10 +57,13 @@ public class ModelProperty {
       boolean required,
       boolean isHidden,
       boolean readOnly,
+      Boolean allowEmptyValue,
       String description,
       AllowableValues allowableValues,
       String example,
       String pattern,
+      String defaultValue,
+      Xml xml,
       List<VendorExtension> vendorExtensions) {
 
     this.name = name;
@@ -66,10 +73,13 @@ public class ModelProperty {
     this.required = required;
     this.isHidden = isHidden;
     this.readOnly = readOnly;
+    this.allowEmptyValue = allowEmptyValue;
     this.description = description;
     this.allowableValues = allowableValues;
     this.example = example;
     this.pattern = pattern;
+    this.defaultValue = defaultValue;
+    this.xml = xml;
     this.vendorExtensions = newArrayList(vendorExtensions);
   }
 
@@ -130,10 +140,27 @@ public class ModelProperty {
     return vendorExtensions;
   }
 
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
+  public Xml getXml() {
+    return xml;
+  }
+
+  /***
+   * Support for isAllowEmpty value
+   * @return true if supported
+   * @since 2.8.0
+   */
+  public Boolean isAllowEmptyValue() {
+    return allowEmptyValue;
+  }
+
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden, 
-                            readOnly, description, allowableValues, modelRef, example, pattern);
+    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden,
+        readOnly, description, allowableValues, modelRef, example, pattern);
   }
 
   @Override
@@ -146,7 +173,7 @@ public class ModelProperty {
       return false;
     }
 
-   ModelProperty that = (ModelProperty) o;
+    ModelProperty that = (ModelProperty) o;
 
     return Objects.equal(name, that.name) &&
         Objects.equal(type, that.type) &&
@@ -160,6 +187,9 @@ public class ModelProperty {
         Objects.equal(modelRef, that.modelRef) &&
         Objects.equal(example, that.example) &&
         Objects.equal(pattern, that.pattern) &&
+        Objects.equal(xml, that.vendorExtensions) &&
+        Objects.equal(allowEmptyValue, that.allowEmptyValue) &&
         Objects.equal(vendorExtensions, that.vendorExtensions);
   }
 }
+//CHECKSTYLE:ON

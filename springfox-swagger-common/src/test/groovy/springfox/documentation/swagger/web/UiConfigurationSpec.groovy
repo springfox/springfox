@@ -27,12 +27,20 @@ import spock.lang.Specification
 class UiConfigurationSpec extends Specification {
   def uiConfig = new UiConfiguration("validator:urn", UiConfiguration.Constants.NO_SUBMIT_METHODS)
   def expected = "{\n" +
-      "    \"apisSorter\": \"alpha\",\n" +
-      "    \"defaultModelRendering\": \"schema\",\n" +
+      "    \"apisSorter\":\"alpha\"," +
+      "    \"supportedSubmitMethods\":[]," +
+      "    \"jsonEditor\":false," +
+      "    \"showRequestHeaders\":true," +
+      "    \"deepLinking\": true,\n" +
+      "    \"displayOperationId\": false,\n" +
+      "    \"defaultModelsExpandDepth\": 1,\n" +
+      "    \"defaultModelExpandDepth\": 1,\n" +
+      "    \"displayRequestDuration\": false,\n" +
       "    \"docExpansion\": \"none\",\n" +
-      "    \"jsonEditor\": false,\n" +
-      "    \"showRequestHeaders\": true,\n" +
-      "    \"supportedSubmitMethods\": [],\n" +
+      "    \"filter\": false,\n" +
+      "    \"operationsSorter\": \"alpha\",\n" +
+      "    \"showExtensions\": false,\n" +
+      "    \"tagsSorter\": \"alpha\",\n" +
       "    \"validatorUrl\": \"validator:urn\"\n" +
       "}"
 
