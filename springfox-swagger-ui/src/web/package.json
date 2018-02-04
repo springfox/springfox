@@ -1,9 +1,10 @@
 {
   "name": "sprinngfox-swagger-ui",
   "version": "1.0.0",
-  "description": "-",
+  "description": "Automated JSON API documentation for API's built with Spring",
   "scripts": {
-    "build": "webpack --config webpack.config.js --progress"
+    "build": "webpack --config webpack.config.js --progress",
+    "browserslist": "browserslist 'last 2 versions'"
   },
   "keywords": [],
   "author": "dilipkrish",
