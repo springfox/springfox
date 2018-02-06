@@ -1,0 +1,23 @@
+{
+  "name": "sprinngfox-swagger-ui",
+  "version": "1.0.0",
+  "description": "Automated JSON API documentation for API's built with Spring",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --progress",
+    "browserslist": "browserslist 'last 2 versions'"
+  },
+  "keywords": [],
+  "author": "dilipkrish",
+  "license": "SEE LICENSE IN https://github.com/springfox/springfox/blob/master/LICENSE",
+  "bugs": "https://github.com/springfox/springfox/issues",
+  "homepage": "https://springfox.github.io/springfox/docs/current/",
+  "repository": "https://github.com/springfox/springfox.git",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "webpack": "^3.10.0"
+  }
+}
