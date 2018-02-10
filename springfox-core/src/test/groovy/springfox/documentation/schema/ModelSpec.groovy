@@ -1,57 +1,77 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import org.junit.Ignore
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.service.VendorExtension
 
-//TODO: Rewrite this test
-@Ignore("Rewrite this test PR #2056")
 class ModelSpec extends Specification {
-  static args = ["Ts",
-                 new TypeResolver().resolve(String),
-                 "qType1",
-                 0,
-                 true,
-                 true,
-                 true,
-                 "desc",
-                 new AllowableRangeValues("1", "5"),
-                 "example",
-                 "pattern",
-                 new ArrayList<>()]
-
+  @Unroll
   def "Model .equalsIgnoringName works as expected"() {
     given:
-    ModelProperty property = Spy(ModelProperty, constructorArgs: args)
+    def resolver = new TypeResolver()
 
-    def TypeResolver resolver = new TypeResolver()
+    Model model = new Model(
+        "Test",
+        "Test",
+        resolver.resolve(String),
+        "qType",
+        ["Ts": prop("Ts")],
+        "desc",
+        "bModel",
+        "discr",
+        ["subType1", "subType2"],
+        "exmpl",
+        new Xml())
 
-    Model model = new Model("Test", "Test", resolver.resolve(String), "qType", ["Ts": property],
-        "desc", "bModel", "discr", ["subType1", "subType2"], "exmpl")
+    Model testModel = new Model(
+        "Test",
+        "Test",
+        resolver.resolve(type),
+        qualifiedType,
+        props,
+        description,
+        baseModel,
+        discriminator,
+        subTypes,
+        example,
+        new Xml())
 
-    Model testModel = new Model("Test", "Test", resolver.resolve(type), qualifiedType, props,
-        description, baseModel, discriminator, subTypes, example)
-    and:
-    property.getModelRef() >> new ModelRef("string", null, true)
     expect:
     model.equalsIgnoringName(testModel) == expectedEquality
     model.equalsIgnoringName(model)
     !model.equalsIgnoringName(null)
     !model.equalsIgnoringName(new Object())
+
     where:
-    type << [String, Integer, String, String, String, String, String, String, String]
-    qualifiedType << ["qType", "qType", "qType1", "qType", "qType", "qType", "qType", "qType", "qType"]
-    props << {
-      ModelProperty pr = Spy(ModelProperty, constructorArgs: args)
-      pr.getModelRef() >> new ModelRef("string", null, true)
-      [["Ts": pr], ["T": pr], ["T": pr], ["T": pr], ["Ts": pr], ["Ts": pr], ["Ts": pr], ["Ts": pr], ["Ts": pr]]
-    }()
-    description << ["desc", "desc", "desc", "desc", "desc1", "desc", "desc", "desc", "desc"]
-    baseModel << ["bModel", "bModel", "bModel", "bModel", "bModel", "bModel1", "bModel", "bModel", "bModel"]
-    discriminator << ["discr", "discr", "discr", "discr", "discr", "discr", "discr1", "discr", "discr"]
-    subTypes << [["subType1", "subType2"], [], [], [], [], [], [], [], ["subType1", "subType2"]]
-    example << ["exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl", "exmpl1"]
-    expectedEquality << [true, false, false, false, false, false, false, false, false]
+    type    | qualifiedType | description | baseModel | discriminator | example  | subTypes                 | props          | expectedEquality
+    String  | "qType"       | "desc"      | "bModel"  | "discr"       | "exmpl"  | ["subType1", "subType2"] | ["Ts": prop("Ts")] | true
+    Integer | "qType1"      | "desc"      | "bModel"  | "discr"       | "exmpl"  | []                       | ["T": prop("T")]  | false
+    String  | "qType"       | "desc"      | "bModel"  | "discr"       | "exmpl"  | []                       | ["T": prop("T")]  | false
+    String  | "qType"       | "desc"      | "bModel"  | "discr"       | "exmpl"  | []                       | ["T": prop("T")]  | false
+    String  | "qType"       | "desc1"     | "bModel"  | "discr"       | "exmpl"  | []                       | ["Ts": prop("Ts")] | false
+    String  | "qType"       | "desc"      | "bModel1" | "discr"       | "exmpl"  | []                       | ["Ts": prop("Ts")] | false
+    String  | "qType"       | "desc"      | "bModel"  | "discr1"      | "exmpl"  | []                       | ["Ts": prop("Ts")] | false
+    String  | "qType"       | "desc"      | "bModel"  | "discr"       | "exmpl"  | []                       | ["Ts": prop("Ts")] | false
+    String  | "qType"       | "desc"      | "bModel"  | "discr"       | "exmpl1" | ["subType1", "subType2"] | ["Ts": prop("Ts")] | false
+  }
+
+  def prop(String name) {
+    new ModelProperty(name,
+        new TypeResolver().resolve(String),
+        "qType1",
+        0,
+        true,
+        true,
+        true,
+        false,
+        "desc",
+        new AllowableRangeValues("1", "5"),
+        "example",
+        "pattern",
+        "default",
+        new Xml(),
+        new ArrayList<VendorExtension>())
   }
 }

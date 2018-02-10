@@ -17,7 +17,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Example_1"
+              "responseModel": "Example"
             },
             {
               "code": 401,
@@ -33,7 +33,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Example_1"
+          "type": "Example"
         }
       ],
       "path": "/no-request-mapping"
@@ -42,9 +42,9 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Example_1": {
+    "Example": {
       "description": "",
-      "id": "Example_1",
+      "id": "Example",
       "properties": {
         "allCapsSet": {
           "required": false,
@@ -87,7 +87,7 @@
         },
         "nestedType": {
           "required": false,
-          "type": "NestedType_1"
+          "type": "NestedType"
         },
         "parentBeanProperty": {
           "required": false,
@@ -108,9 +108,9 @@
         }
       }
     },
-    "NestedType_1": {
+    "NestedType": {
       "description": "",
-      "id": "NestedType_1",
+      "id": "NestedType",
       "properties": {
         "name": {
           "required": false,

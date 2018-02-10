@@ -2,6 +2,46 @@
   "apiVersion": "1.0",
   "apis": [
     {
+      "description": "listPets",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "List all pets",
+          "nickname": "listPetsUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [],
+          "parameters": [],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "array"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "items": {
+            "type": "Pet"
+          },
+          "type": "array"
+        }
+      ],
+      "path": "/pets"
+    },
+    {
       "description": "updatePet",
       "operations": [
         {
@@ -20,7 +60,7 @@
               "description": "Pet object that needs to be added to the store",
               "name": "body",
               "paramType": "body",
-              "type": "Pet_2",
+              "type": "Pet",
               "required": true
             }
           ],
@@ -131,46 +171,6 @@
       "path": "/pets"
     },
     {
-      "description": "listPets",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "List all pets",
-          "nickname": "listPetsUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "array"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "items": {
-            "type": "Pet_1"
-          },
-          "type": "array"
-        }
-      ],
-      "path": "/pets"
-    },
-    {
       "description": "petEntities",
       "operations": [
         {
@@ -218,7 +218,7 @@
           ],
           "deprecated": "false",
           "items": {
-            "type": "Pet_1"
+            "type": "Pet"
           },
           "type": "array"
         }
@@ -244,7 +244,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry_5«string,Pet_2»]",
+              "type": "List[Entry_4«string,Pet»]",
               "required": true
             }
           ],
@@ -272,7 +272,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry_4«string,Pet_1»]"
+          "type": "List[Entry_4«string,Pet»]"
         }
       ],
       "path": "/pets/echo"
@@ -304,7 +304,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -320,7 +320,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/pets/findByAge"
@@ -353,7 +353,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -369,7 +369,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/pets/findByLegs"
@@ -401,7 +401,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -417,7 +417,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/pets/findByStamina"
@@ -454,7 +454,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 400,
@@ -474,7 +474,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/pets/findByStatus"
@@ -505,7 +505,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 400,
@@ -525,7 +525,7 @@
             }
           ],
           "deprecated": "true",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/pets/findByTags"
@@ -568,7 +568,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry_11«string,List«string»»]"
+          "type": "List[Entry_10«string,List«string»»]"
         }
       ],
       "path": "/pets/nameToNickNamesMap"
@@ -635,7 +635,7 @@
           ],
           "deprecated": "false",
           "items": {
-            "type": "Pet_1"
+            "type": "Pet"
           },
           "type": "array"
         }
@@ -661,7 +661,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry_5«string,Pet_2»]",
+              "type": "List[Entry_4«string,Pet»]",
               "required": true
             }
           ],
@@ -713,7 +713,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry_5«string,Pet_2»]",
+              "type": "List[Entry_4«string,Pet»]",
               "required": true
             }
           ],
@@ -765,7 +765,7 @@
               "description": "someInput",
               "name": "body",
               "paramType": "body",
-              "type": "List[Entry_5«string,Pet_2»]",
+              "type": "List[Entry_4«string,Pet»]",
               "required": true
             }
           ],
@@ -878,7 +878,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 201,
@@ -898,7 +898,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/pets/{name}"
@@ -931,7 +931,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -947,7 +947,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/pets/{petId}"
@@ -1068,9 +1068,9 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Entry_11«string,List«string»»": {
+    "Entry_10«string,List«string»»": {
       "description": "",
-      "id": "Entry_11«string,List«string»»",
+      "id": "Entry_10«string,List«string»»",
       "properties": {
         "key": {
           "required": false,
@@ -1081,9 +1081,9 @@
         }
       }
     },
-    "Pet_2": {
+    "Pet": {
       "description": "",
-      "id": "Pet_2",
+      "id": "Pet",
       "properties": {
         "age": {
           "required": false,
@@ -1100,42 +1100,13 @@
         }
       }
     },
-    "Pet_1": {
+    "Entry_4«string,Pet»": {
       "description": "",
-      "id": "Pet_1",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Entry_5«string,Pet_2»": {
-      "description": "",
-      "id": "Entry_5«string,Pet_2»",
+      "id": "Entry_4«string,Pet»",
       "properties": {
         "key": {
           "required": false,
-          "type": "Pet_2"
-        }
-      }
-    },
-    "Entry_4«string,Pet_1»": {
-      "description": "",
-      "id": "Entry_4«string,Pet_1»",
-      "properties": {
-        "key": {
-          "required": false,
-          "type": "Pet_1"
+          "type": "Pet"
         }
       }
     }

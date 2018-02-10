@@ -35,7 +35,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/GroovyModel_1"
+              "$ref": "#/definitions/GroovyModel"
             }
           }
         }
@@ -56,7 +56,7 @@
             "description": "model",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroovyModel_2"
+              "$ref": "#/definitions/GroovyModel"
             }
           }
         ],
@@ -85,23 +85,14 @@
     }
   },
   "definitions": {
-    "GroovyModel_1": {
+    "GroovyModel": {
       "type": "object",
       "properties": {
         "stringProp": {
           "type": "string"
         }
       },
-      "title": "GroovyModel_1"
-    },
-    "GroovyModel_2": {
-      "type": "object",
-      "properties": {
-        "stringProp": {
-          "type": "string"
-        }
-      },
-      "title": "GroovyModel_2"
+      "title": "GroovyModel"
     }
   }
 }

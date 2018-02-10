@@ -301,7 +301,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -317,7 +317,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/features/1367/{itemId}"
@@ -449,7 +449,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -465,56 +465,10 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/features/1490/entity/{itemId}"
-    },
-    {
-      "description": "serializablePet",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "serializablePet",
-          "nickname": "serializablePetUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "itemId",
-              "name": "itemId",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "Pet_1"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "Pet_1"
-        }
-      ],
-      "path": "/features/1490/{itemId}"
     },
     {
       "description": "updateSerializablePet",
@@ -543,7 +497,7 @@
               "description": "pet",
               "name": "body",
               "paramType": "body",
-              "type": "Pet_2",
+              "type": "Pet",
               "required": true
             }
           ],
@@ -571,6 +525,52 @@
           ],
           "deprecated": "false",
           "type": "void"
+        }
+      ],
+      "path": "/features/1490/{itemId}"
+    },
+    {
+      "description": "serializablePet",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "serializablePet",
+          "nickname": "serializablePetUsingGET",
+          "produces": [
+            "*/*"
+          ],
+          "consumes": [],
+          "parameters": [
+            {
+              "allowMultiple": false,
+              "description": "itemId",
+              "name": "itemId",
+              "paramType": "path",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "OK",
+              "responseModel": "Pet"
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized"
+            },
+            {
+              "code": 403,
+              "message": "Forbidden"
+            },
+            {
+              "code": 404,
+              "message": "Not Found"
+            }
+          ],
+          "deprecated": "false",
+          "type": "Pet"
         }
       ],
       "path": "/features/1490/{itemId}"
@@ -1212,7 +1212,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Example_1"
+              "responseModel": "Example"
             },
             {
               "code": 401,
@@ -1228,7 +1228,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Example_1"
+          "type": "Example"
         }
       ],
       "path": "/features/effective"
@@ -1266,7 +1266,7 @@
           ],
           "deprecated": "false",
           "items": {
-            "type": "Example_1"
+            "type": "Example"
           },
           "type": "array"
         }
@@ -1330,7 +1330,7 @@
               "name": "examples",
               "paramType": "query",
               "items": {
-                "type": "Example_2"
+                "type": "Example"
               },
               "type": "array",
               "required": false
@@ -1488,7 +1488,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry_7«string,Map«string,Example_1»»]"
+          "type": "List[Entry_6«string,Map«string,Example»»]"
         }
       ],
       "path": "/features/mapOfMapOfExample"
@@ -1812,7 +1812,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -1828,7 +1828,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/features/{petId}"
@@ -1858,9 +1858,34 @@
         }
       }
     },
-    "Example_1": {
+    "ObjectNode": {
       "description": "",
-      "id": "Example_1",
+      "id": "ObjectNode",
+      "properties": {}
+    },
+    "Entry_5«string,Example»": {
+      "description": "",
+      "id": "Entry_5«string,Example»",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "Example"
+        }
+      }
+    },
+    "Entry_6«string,Map«string,Example»»": {
+      "description": "",
+      "id": "Entry_6«string,Map«string,Example»»",
+      "properties": {
+        "key": {
+          "required": false,
+          "type": "List[Entry_5«string,Example»]"
+        }
+      }
+    },
+    "Example": {
+      "description": "",
+      "id": "Example",
       "properties": {
         "allCapsSet": {
           "required": false,
@@ -1903,7 +1928,7 @@
         },
         "nestedType": {
           "required": false,
-          "type": "NestedType_1"
+          "type": "NestedType"
         },
         "parentBeanProperty": {
           "required": false,
@@ -1924,59 +1949,6 @@
         }
       }
     },
-    "ObjectNode": {
-      "description": "",
-      "id": "ObjectNode",
-      "properties": {}
-    },
-    "Pet_2": {
-      "description": "",
-      "id": "Pet_2",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Pet_1": {
-      "description": "",
-      "id": "Pet_1",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "NestedType_1": {
-      "description": "",
-      "id": "NestedType_1",
-      "properties": {
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
     "EnumObjectType": {
       "description": "",
       "id": "EnumObjectType",
@@ -1991,23 +1963,32 @@
         }
       }
     },
-    "Entry_7«string,Map«string,Example_1»»": {
+    "NestedType": {
       "description": "",
-      "id": "Entry_7«string,Map«string,Example_1»»",
+      "id": "NestedType",
       "properties": {
-        "key": {
+        "name": {
           "required": false,
-          "type": "List[Entry_6«string,Example_1»]"
+          "type": "string"
         }
       }
     },
-    "Entry_6«string,Example_1»": {
+    "Pet": {
       "description": "",
-      "id": "Entry_6«string,Example_1»",
+      "id": "Pet",
       "properties": {
-        "key": {
+        "age": {
           "required": false,
-          "type": "Example_1"
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
+        "name": {
+          "required": false,
+          "type": "string"
         }
       }
     }

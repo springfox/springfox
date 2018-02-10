@@ -20,67 +20,90 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import org.junit.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.service.AllowableRangeValues
 
-//TODO: Rewrite this test
-@Ignore("Rewrite this test PR #2056")
 class ModelPropertySpec extends Specification {
   @Shared
-  def TypeResolver resolver = new TypeResolver()
+  def resolver = new TypeResolver()
 
+  @Unroll
   def "ModelProperty .equals and .hashCode works as expected"() {
     given:
-      def args = [
-          "Test",
-          resolver.resolve(String),
-          "qT1",
-          0,
-          true,
-          true,
-          true,
-          "desc",
-          new AllowableRangeValues("1","5"),
-          "exmp",
-          "pttn",
-          new ArrayList<>()]
+    def property = property("Test")
 
-      ModelProperty property = Spy(ModelProperty, constructorArgs: args);
-      
-      def testArgs = [name, resolver.resolve(type), qualifiedType, position, required, 
-                     isHidden, readOnly, description, new AllowableRangeValues(allowableMin,allowableMax), 
-                     example,  pattern, new ArrayList<>()]
-      
-      ModelProperty testProperty = Spy(ModelProperty, constructorArgs: testArgs);
-    and:
-      property.modelRef >> new ModelRef("string", null, true)
-      testProperty.modelRef >> new ModelRef(refType, refModel, refIsMap)
+    def testProperty = new ModelProperty(
+        name,
+        resolver.resolve(type),
+        qualifiedType,
+        position,
+        required,
+        isHidden,
+        readOnly,
+        allowEmptyValue,
+        description,
+        allowable,
+        example,
+        pattern,
+        defaultValue,
+        new Xml(),
+        new ArrayList<>())
+
     expect:
-      property.equals(testProperty) == expectedEquality
-      property.equals(property)
-      !property.equals(null)
-      !property.equals(new Object())
+    property.equals(testProperty) == expectedEquality
+    property.equals(property)
+    !property.equals(null)
+    !property.equals(new Object())
+
     and:
-      (property.hashCode() == testProperty.hashCode()) == expectedEquality
-      property.hashCode() == property.hashCode()
+    (property.hashCode() == testProperty.hashCode()) == expectedEquality
+    property.hashCode() == property.hashCode()
+
     where:
-      name << ["Test", "Test1", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test", "Test"]
-      type << [String, String, Integer, String, String, String, String, String, String, String, String, String, String]
-      qualifiedType << ["qT1", "qT1", "qT1", "qT2", "qT1", "qT1", "qT1", "qT1", "qT1", "qT1", "qT1", "qT1", "qT1"]
-      position << [0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0]
-      required << [true, true, true, true, true, false, true, true, true, true, true, true, true]
-      isHidden << [true, true, true, true, true, true, false, true, true, true, true, true, true]
-      readOnly << [true, true, true, true, true, true, true, false, true, true, true, true, true]
-      description << ["desc", "desc", "desc", "desc", "desc", "desc", "desc", "desc", "desc1", "desc", "desc", "desc", "desc"]
-      allowableMin << ["1", "1", "1", "1", "1", "1", "1", "1", "1", "5", "1", "1", "1"]
-      allowableMax << ["5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5"]
-      refType << ["string", "T", "T", "T", "T", "T", "T", "T", "T", "T", "T", "string", "string"]
-      refModel << [null, null, null, null, null, null, null, null, null, null, null, null, null]
-      refIsMap << [true, true, true, true, true, true, true, true, true, true, false, true, true]
-      example << ["exmp", "exmp", "exmp", "exmp", "exmp", "exmp", "exmp", "exmp", "exmp", "exmp", "exmp", "exmp1", "exmp"]
-      pattern << ["pttn", "pttn", "pttn", "pttn1", "pttn", "pttn", "pttn", "pttn", "pttn", "pttn", "pttn", "pttn", "pttn1"]
-      expectedEquality << [true, false, false, false, false, false, false, false, false, false, true, false, false]
+    name    | type    | qualifiedType | position | required | isHidden | readOnly | allowEmptyValue | description | allowable  | modelRef | example    | pattern    | defaultValue | expectedEquality
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | "default"           | true
+    "Test1" | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | Integer | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT2"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 5        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | false    | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | false    | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | false    | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | false           | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc1"     | allow("3") | ref()    | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref("T") | "example"  | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example1" | "pattern"  | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern1" | ""           | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | "def"        | false
+    "Test"  | String  | "qT1"         | 0        | true     | true     | true     | true            | "desc"      | allow()    | ref()    | "example"  | "pattern"  | ""           | false
+  }
+
+  def allow(min = "1", max = "5") {
+    new AllowableRangeValues(min, max)
+  }
+
+  def ref(type = "string", model = null, isMap = true) {
+    new ModelRef(type, model, isMap)
+  }
+
+  def property(String name) {
+    new ModelProperty(
+        name,
+        resolver.resolve(String),
+        "qT1",
+        0,
+        true,
+        true,
+        true,
+        true,
+        "desc",
+        new AllowableRangeValues("1", "5"),
+        "example",
+        "pattern",
+        "default",
+        new Xml(),
+        new ArrayList<>())
   }
 }

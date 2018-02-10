@@ -20,7 +20,7 @@
               "description": "toCreate",
               "name": "body",
               "paramType": "body",
-              "type": "Resource_3«Pet_2»",
+              "type": "Resource_3«Pet»",
               "required": true
             }
           ],
@@ -77,7 +77,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "HttpEntity«Resource_2«Pet_1»»"
+              "responseModel": "HttpEntity«Resource_2«Pet»»"
             },
             {
               "code": 204,
@@ -97,7 +97,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "HttpEntity«Resource_2«Pet_1»»"
+          "type": "HttpEntity«Resource_2«Pet»»"
         }
       ],
       "path": "/foo/delete-t/{id}"
@@ -127,7 +127,7 @@
             {
               "code": 200,
               "message": "OK",
-              "responseModel": "Resource_2«Pet_1»"
+              "responseModel": "Resource_2«Pet»"
             },
             {
               "code": 401,
@@ -147,7 +147,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Resource_2«Pet_1»"
+          "type": "Resource_2«Pet»"
         }
       ],
       "path": "/foo/get-t/{id}"
@@ -156,9 +156,9 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Pet_2": {
+    "Resource_2«Pet»": {
       "description": "",
-      "id": "Pet_2",
+      "id": "Resource_2«Pet»",
       "properties": {
         "age": {
           "required": false,
@@ -169,9 +169,26 @@
           "required": false,
           "type": "string"
         },
+        "links": {
+          "required": false,
+          "items": {
+            "type": "Link_1"
+          },
+          "type": "array"
+        },
         "name": {
           "required": false,
           "type": "string"
+        }
+      }
+    },
+    "HttpEntity«Resource_2«Pet»»": {
+      "description": "",
+      "id": "HttpEntity«Resource_2«Pet»»",
+      "properties": {
+        "body": {
+          "required": false,
+          "type": "Resource_2«Pet»"
         }
       }
     },
@@ -204,25 +221,6 @@
           "type": "string"
         },
         "type": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Pet_1": {
-      "description": "",
-      "id": "Pet_1",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
           "required": false,
           "type": "string"
         }
@@ -266,19 +264,9 @@
         }
       }
     },
-    "HttpEntity«Resource_2«Pet_1»»": {
+    "Resource_3«Pet»": {
       "description": "",
-      "id": "HttpEntity«Resource_2«Pet_1»»",
-      "properties": {
-        "body": {
-          "required": false,
-          "type": "Resource_2«Pet_1»"
-        }
-      }
-    },
-    "Resource_3«Pet_2»": {
-      "description": "",
-      "id": "Resource_3«Pet_2»",
+      "id": "Resource_3«Pet»",
       "properties": {
         "age": {
           "required": false,
@@ -302,9 +290,9 @@
         }
       }
     },
-    "Resource_2«Pet_1»": {
+    "Pet": {
       "description": "",
-      "id": "Resource_2«Pet_1»",
+      "id": "Pet",
       "properties": {
         "age": {
           "required": false,
@@ -314,13 +302,6 @@
         "id": {
           "required": false,
           "type": "string"
-        },
-        "links": {
-          "required": false,
-          "items": {
-            "type": "Link_1"
-          },
-          "type": "array"
         },
         "name": {
           "required": false,

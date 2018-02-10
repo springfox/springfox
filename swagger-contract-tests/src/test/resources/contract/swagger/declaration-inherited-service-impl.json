@@ -26,7 +26,7 @@
             {
               "code": 200,
               "message": "kkj",
-              "responseModel": "Pet_1"
+              "responseModel": "Pet"
             },
             {
               "code": 401,
@@ -42,7 +42,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "Pet_1"
+          "type": "Pet"
         }
       ],
       "path": "/child/1575"
@@ -97,9 +97,9 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Pet_1": {
+    "Pet": {
       "description": "",
-      "id": "Pet_1",
+      "id": "Pet",
       "properties": {
         "age": {
           "required": false,

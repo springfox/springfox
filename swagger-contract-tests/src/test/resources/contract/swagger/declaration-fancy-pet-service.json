@@ -20,7 +20,7 @@
               "description": "object",
               "name": "body",
               "paramType": "body",
-              "type": "FancyPet_2",
+              "type": "FancyPet",
               "required": true
             }
           ],
@@ -73,7 +73,7 @@
               "description": "pet",
               "name": "body",
               "paramType": "body",
-              "type": "Pet_2",
+              "type": "Pet",
               "required": true
             }
           ],
@@ -124,7 +124,7 @@
               "description": "object",
               "name": "body",
               "paramType": "body",
-              "type": "FancyPet_2",
+              "type": "FancyPet",
               "required": true
             },
             {
@@ -171,28 +171,9 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Pet_2": {
+    "FancyPet": {
       "description": "",
-      "id": "Pet_2",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "FancyPet_2": {
-      "description": "",
-      "id": "FancyPet_2",
+      "id": "FancyPet",
       "properties": {
         "age": {
           "required": false,
@@ -202,7 +183,7 @@
         "categories": {
           "required": false,
           "items": {
-            "type": "Category_4"
+            "type": "Category_3"
           },
           "type": "array"
         },
@@ -216,10 +197,29 @@
         }
       }
     },
-    "Category_4": {
+    "Category_3": {
       "description": "",
-      "id": "Category_4",
+      "id": "Category_3",
       "properties": {
+        "name": {
+          "required": false,
+          "type": "string"
+        }
+      }
+    },
+    "Pet": {
+      "description": "",
+      "id": "Pet",
+      "properties": {
+        "age": {
+          "required": false,
+          "format": "int32",
+          "type": "integer"
+        },
+        "id": {
+          "required": false,
+          "type": "string"
+        },
         "name": {
           "required": false,
           "type": "string"

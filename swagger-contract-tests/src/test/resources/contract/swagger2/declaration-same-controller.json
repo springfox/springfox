@@ -99,25 +99,16 @@
     }
   },
   "definitions": {
-    "Category_1": {
+    "Category": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         }
       },
-      "title": "Category_1"
+      "title": "Category"
     },
-    "Category_2": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Category_2"
-    },
-    "FancyPet_1": {
+    "FancyPet": {
       "type": "object",
       "properties": {
         "age": {
@@ -127,7 +118,7 @@
         "categories": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Category_1"
+            "$ref": "#/definitions/Category"
           }
         },
         "id": {
@@ -137,29 +128,7 @@
           "type": "string"
         }
       },
-      "title": "FancyPet_1"
-    },
-    "FancyPet_2": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "categories": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Category_2"
-          }
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "FancyPet_2"
+      "title": "FancyPet"
     },
     "ModelWithSameNameClasses_1": {
       "type": "object",
@@ -173,19 +142,19 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet_1"
+                  "$ref": "#/definitions/FancyPet"
                 }
               }
             }
           }
         },
         "fancyPet": {
-          "$ref": "#/definitions/FancyPet_1"
+          "$ref": "#/definitions/FancyPet"
         },
         "fancyPets": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FancyPet_1"
+            "$ref": "#/definitions/FancyPet"
           }
         },
         "fancyPetsMap": {
@@ -239,19 +208,19 @@
               "items": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/FancyPet_2"
+                  "$ref": "#/definitions/FancyPet"
                 }
               }
             }
           }
         },
         "fancyPet": {
-          "$ref": "#/definitions/FancyPet_2"
+          "$ref": "#/definitions/FancyPet"
         },
         "fancyPets": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/FancyPet_2"
+            "$ref": "#/definitions/FancyPet"
           }
         },
         "fancyPetsMap": {

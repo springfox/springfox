@@ -53,7 +53,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Pet_1"
+                "$ref": "#/definitions/Pet"
               }
             }
           }
@@ -79,7 +79,7 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/Pet_2"
+                "$ref": "#/definitions/Pet"
               }
             }
           }
@@ -90,7 +90,7 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/Pet_1"
+                "$ref": "#/definitions/Pet"
               }
             }
           }
@@ -121,7 +121,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet_1"
+              "$ref": "#/definitions/Pet"
             }
           }
         }
@@ -152,7 +152,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet_1"
+              "$ref": "#/definitions/Pet"
             }
           }
         }
@@ -182,7 +182,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet_1"
+              "$ref": "#/definitions/Pet"
             }
           }
         }
@@ -215,7 +215,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet_1"
+              "$ref": "#/definitions/Pet"
             }
           },
           "400": {
@@ -245,7 +245,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet_1"
+              "$ref": "#/definitions/Pet"
             }
           },
           "400": {
@@ -371,7 +371,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Pet_1"
+                "$ref": "#/definitions/Pet"
               }
             }
           }
@@ -397,7 +397,7 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/Pet_2"
+                "$ref": "#/definitions/Pet"
               }
             }
           }
@@ -431,7 +431,7 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/Pet_2"
+                "$ref": "#/definitions/Pet"
               }
             }
           }
@@ -465,7 +465,7 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/Pet_2"
+                "$ref": "#/definitions/Pet"
               }
             }
           }
@@ -560,7 +560,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet_1"
+              "$ref": "#/definitions/Pet"
             }
           }
         }
@@ -591,7 +591,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Pet_1"
+              "$ref": "#/definitions/Pet"
             }
           }
         }
@@ -678,7 +678,7 @@
     }
   },
   "definitions": {
-    "Pet_1": {
+    "Pet": {
       "type": "object",
       "properties": {
         "age": {
@@ -692,23 +692,7 @@
           "type": "string"
         }
       },
-      "title": "Pet_1"
-    },
-    "Pet_2": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Pet_2"
+      "title": "Pet"
     }
   }
 }

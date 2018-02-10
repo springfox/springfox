@@ -918,7 +918,7 @@
         "tags": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Tag_1"
+            "$ref": "#/definitions/Tag"
           }
         }
       },
@@ -956,7 +956,7 @@
         "tags": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Tag_2"
+            "$ref": "#/definitions/Tag"
           }
         }
       },
@@ -978,7 +978,7 @@
       },
       "title": "Pet_3"
     },
-    "Tag_1": {
+    "Tag": {
       "type": "object",
       "properties": {
         "id": {
@@ -989,20 +989,7 @@
           "type": "string"
         }
       },
-      "title": "Tag_1"
-    },
-    "Tag_2": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Tag_2"
+      "title": "Tag"
     },
     "User_1": {
       "type": "object",

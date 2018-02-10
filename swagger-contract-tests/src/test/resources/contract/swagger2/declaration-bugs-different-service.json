@@ -281,7 +281,7 @@
               "additionalProperties": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/Example_1"
+                  "$ref": "#/definitions/Example"
                 }
               }
             }
@@ -830,7 +830,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Example_1"
+              "$ref": "#/definitions/Example"
             }
           }
         }
@@ -1027,7 +1027,7 @@
             "description": "sfData",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Example_2"
+              "$ref": "#/definitions/Example"
             }
           },
           {
@@ -1042,7 +1042,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Example_1"
+              "$ref": "#/definitions/Example"
             }
           }
         }
@@ -1212,7 +1212,7 @@
             "description": "person",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Example_2"
+              "$ref": "#/definitions/Example"
             }
           }
         ],
@@ -1284,7 +1284,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Example_1"
+              "$ref": "#/definitions/Example"
             }
           }
         }
@@ -1407,7 +1407,7 @@
       "title": "Bug1777",
       "description": "Test 1777"
     },
-    "Example_1": {
+    "Example": {
       "type": "object",
       "properties": {
         "allCapsSet": {
@@ -1444,7 +1444,7 @@
           "format": "date-time"
         },
         "nestedType": {
-          "$ref": "#/definitions/NestedType_1"
+          "$ref": "#/definitions/NestedType"
         },
         "parentBeanProperty": {
           "type": "string"
@@ -1462,64 +1462,7 @@
           "allowEmptyValue": false
         }
       },
-      "title": "Example_1"
-    },
-    "Example_2": {
-      "type": "object",
-      "properties": {
-        "allCapsSet": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "annotatedEnumType": {
-          "type": "string",
-          "enum": [
-            "ONE",
-            "TWO"
-          ]
-        },
-        "bar": {
-          "type": "integer",
-          "format": "int32",
-          "description": "description of bar",
-          "allowEmptyValue": false
-        },
-        "enumType": {
-          "type": "string",
-          "enum": [
-            "ONE",
-            "TWO"
-          ]
-        },
-        "foo": {
-          "type": "string"
-        },
-        "localDateTime": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "nestedType": {
-          "$ref": "#/definitions/NestedType_2"
-        },
-        "parentBeanProperty": {
-          "type": "string"
-        },
-        "propertyWithNoGetterMethod": {
-          "type": "string"
-        },
-        "propertyWithNoSetterMethod": {
-          "type": "string"
-        },
-        "readOnlyString": {
-          "type": "string",
-          "description": "A read only string",
-          "readOnly": true,
-          "allowEmptyValue": false
-        }
-      },
-      "title": "Example_2"
+      "title": "Example"
     },
     "File": {
       "type": "object",
@@ -1576,7 +1519,7 @@
             "attribute": false,
             "wrapped": false
           },
-          "$ref": "#/definitions/Example_2"
+          "$ref": "#/definitions/Example"
         },
         "somename": {
           "type": "string",
@@ -1589,23 +1532,14 @@
       },
       "title": "Model1907"
     },
-    "NestedType_1": {
+    "NestedType": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         }
       },
-      "title": "NestedType_1"
-    },
-    "NestedType_2": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "NestedType_2"
+      "title": "NestedType"
     },
     "Resource«string»": {
       "type": "object",

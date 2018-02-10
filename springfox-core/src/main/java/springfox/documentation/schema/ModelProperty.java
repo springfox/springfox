@@ -159,8 +159,23 @@ public class ModelProperty {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, type, qualifiedType, position, required, isHidden,
-        readOnly, description, allowableValues, modelRef, example, pattern);
+    return Objects.hashCode(
+        name,
+        type,
+        qualifiedType,
+        position,
+        required,
+        isHidden,
+        readOnly,
+        allowableValues,
+        description,
+        allowableValues,
+        modelRef,
+        example,
+        pattern,
+        defaultValue,
+        xml,
+        vendorExtensions);
   }
 
   @Override
@@ -187,8 +202,9 @@ public class ModelProperty {
         Objects.equal(modelRef, that.modelRef) &&
         Objects.equal(example, that.example) &&
         Objects.equal(pattern, that.pattern) &&
-        Objects.equal(xml, that.vendorExtensions) &&
+        Objects.equal(xml, that.xml) &&
         Objects.equal(allowEmptyValue, that.allowEmptyValue) &&
+        Objects.equal(defaultValue, that.defaultValue) &&
         Objects.equal(vendorExtensions, that.vendorExtensions);
   }
 }
