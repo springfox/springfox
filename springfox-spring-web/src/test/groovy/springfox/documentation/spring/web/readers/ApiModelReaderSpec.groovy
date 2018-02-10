@@ -63,7 +63,6 @@ import javax.servlet.http.HttpServletResponse
 import static com.google.common.collect.Maps.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
-//TODO: Rewrite this test PR#2056. Should not have ids that are hashcode values
 class ApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
@@ -410,7 +409,6 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       pet_2.getProperties().containsKey('age')
   }
 
-  @Ignore("Rewrite this test PR #2056")
   def "Test to verify that same class for serialization and deserialization will be produced as one model"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSerializationAndDeserialization', 

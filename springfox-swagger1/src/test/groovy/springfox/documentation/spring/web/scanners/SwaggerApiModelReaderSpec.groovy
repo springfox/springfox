@@ -25,7 +25,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.method.HandlerMethod
-import spock.lang.Ignore
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
@@ -192,7 +191,6 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   }
 
-  @Ignore("Rewrite this test PR #2056")
   def "property description should be populated when type is used in response and request body"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
@@ -207,7 +205,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       modelsMap.containsKey(resourceGroup)
       def models = modelsMap.get(resourceGroup)
 
-      models.size() == 3
+      models.size() == 2
       models.containsKey('RestError') // from class-level annotation.
 
       String modelName = DummyModels.AnnotatedBusinessModel.class.simpleName
