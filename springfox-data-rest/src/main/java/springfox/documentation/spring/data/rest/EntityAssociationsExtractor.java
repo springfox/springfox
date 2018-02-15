@@ -30,6 +30,7 @@ import springfox.documentation.RequestHandler;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import java.util.Optional;
 
 public class EntityAssociationsExtractor implements EntityOperationsExtractor {
 
@@ -37,7 +38,11 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(final EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
+    final Optional<PersistentEntity<?, ?>> potentialEntity = context.entity();
+    if(!potentialEntity.isPresent()){
+      return handlers;
+    }
+    final PersistentEntity<?, ?> entity = potentialEntity.get();
     final Associations associations = context.getAssociations();
 
     entity.doWithAssociations(new SimpleAssociationHandler() {

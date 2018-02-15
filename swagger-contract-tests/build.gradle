@@ -32,6 +32,12 @@ dependencies {
   compile("org.springframework.boot:spring-boot-starter-data-rest")
   compile("org.springframework.boot:spring-boot-starter-data-jpa")
   compile("com.h2database:h2")
+  compile "com.fasterxml.jackson.core:jackson-databind:2.9.3"
+  compile "com.fasterxml.jackson.core:jackson-annotations:2.9.3"
+  compile "org.springframework.data:spring-data-rest-webmvc:3.0.2.RELEASE"
+  compile "org.springframework.data:spring-data-rest-core:3.0.2.RELEASE"
+  compile "org.springframework.data:spring-data-jpa:2.0.2.RELEASE"
+  compile "org.springframework.data:spring-data-commons:2.0.2.RELEASE"
 
   testCompile libs.test
   testCompile "org.skyscreamer:jsonassert:${jsonAssert}"

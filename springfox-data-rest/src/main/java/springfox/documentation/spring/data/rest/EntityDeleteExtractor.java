@@ -33,22 +33,28 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import java.util.Optional;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityDeleteExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
+    final Optional<PersistentEntity<?, ?>> potentialEntity = context.entity();
+    if(!potentialEntity.isPresent()){
+      return handlers;
+    }
+    final PersistentEntity<?, ?> entity = potentialEntity.get();
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
-    if (crudMethods.hasDelete()) {
-      HandlerMethod handler = new HandlerMethod(
+    crudMethods.getDeleteMethod()
+            .ifPresent(method -> {
+      final HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getDeleteMethod());
+          method);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getDeleteMethod()),
+          actionName(entity, method),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
@@ -63,7 +69,7 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
               resolver.resolve(repository.getIdType()))),
           resolver.resolve(Void.TYPE));
       handlers.add(new SpringDataRestRequestHandler(context, spec));
-    }
+    });
     return handlers;
   }
 }

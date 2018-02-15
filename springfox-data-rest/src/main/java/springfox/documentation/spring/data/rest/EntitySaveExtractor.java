@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
@@ -35,6 +34,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import java.util.Optional;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
@@ -42,12 +42,14 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
-    CrudMethods crudMethods = context.crudMethods();
-    if (crudMethods.hasSaveMethod()) {
-      HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(),
-          crudMethods.getSaveMethod());
+    final Optional<PersistentEntity<?, ?>> potentialEntity = context.entity();
+    if(!potentialEntity.isPresent()){
+      return handlers;
+    }
+    final PersistentEntity<?, ?> entity = potentialEntity.get();
+    context.crudMethods().getSaveMethod()
+            .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+            .ifPresent(handler -> {
       RepositoryMetadata resource = context.getRepositoryMetadata();
       ActionSpecification put = saveActionSpecification(
           entity,
@@ -80,8 +82,8 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
                   "body",
                   bodyAnnotations(handler),
                   context.getTypeResolver().resolve(resource.getDomainType()))));
-      handlers.add(new SpringDataRestRequestHandler(context, post));
-    }
+      handlers.add(new SpringDataRestRequestHandler(context, post));                
+            });
     return handlers;
   }
 

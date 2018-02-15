@@ -38,6 +38,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import java.util.Optional;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.http.MediaType.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
@@ -46,16 +47,21 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
+    final Optional<PersistentEntity<?, ?>> potentialEntity = context.entity();
+    if(!potentialEntity.isPresent()){
+      return handlers;
+    }
+    final PersistentEntity<?, ?> entity = potentialEntity.get();
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
-    if (crudMethods.hasFindAllMethod()) {
-      HandlerMethod handler = new HandlerMethod(
+    crudMethods.getFindAllMethod()
+            .ifPresent(method -> {
+      final HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getFindAllMethod());
+          method);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getFindAllMethod()),
+          actionName(entity, method),
           String.format("%s%s",
               context.basePath(),
               context.resourcePath()),
@@ -70,7 +76,7 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
           findAllParameters(context.getConfiguration(), context.getTypeResolver()),
           resolver.resolve(Resources.class, repository.getReturnedDomainClass(handler.getMethod())));
       handlers.add(new SpringDataRestRequestHandler(context, spec));
-    }
+    });
     return handlers;
   }
 

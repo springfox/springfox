@@ -21,7 +21,6 @@ package springfox.documentation.spring.data.rest;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
-import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.mapping.MethodResourceMapping;
 import org.springframework.data.rest.core.mapping.SearchResourceMappings;
@@ -48,27 +47,27 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
-    HandlerMethodResolver methodResolver = new HandlerMethodResolver(context.getTypeResolver());
-    SearchResourceMappings searchMappings = context.searchMappings();
-    for (MethodResourceMapping mapping : searchMappings.getExportedMappings()) {
-      HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(),
-          mapping.getMethod());
-      ActionSpecification spec = new ActionSpecification(
-          actionName(entity, mapping.getMethod()),
-          String.format("%s%s/search%s",
-              context.basePath(),
-              context.resourcePath(),
-              mapping.getPath()),
-          newHashSet(RequestMethod.GET),
-          new HashSet<MediaType>(),
-          new HashSet<MediaType>(),
-          handler,
-          transferResolvedMethodParameterList(methodResolver.methodParameters(handler)),
-          inferReturnType(methodResolver, handler, context.getTypeResolver()));
-      handlers.add(new SpringDataRestRequestHandler(context, spec));
-    }
+    context.entity().ifPresent(entity -> {
+      HandlerMethodResolver methodResolver = new HandlerMethodResolver(context.getTypeResolver());
+      SearchResourceMappings searchMappings = context.searchMappings();
+      for (MethodResourceMapping mapping : searchMappings.getExportedMappings()) {
+        HandlerMethod handler = new HandlerMethod(
+            context.getRepositoryInstance(),
+            mapping.getMethod());
+        ActionSpecification spec = new ActionSpecification(
+            actionName(entity, mapping.getMethod()),
+            String.format("%s%s/search%s",
+                context.basePath(),
+                context.resourcePath(),
+                mapping.getPath()),
+            newHashSet(RequestMethod.GET),
+            new HashSet<MediaType>(),
+            new HashSet<MediaType>(),
+            handler,
+            transferResolvedMethodParameterList(methodResolver.methodParameters(handler)),
+            inferReturnType(methodResolver, handler, context.getTypeResolver()));
+        handlers.add(new SpringDataRestRequestHandler(context, spec));
+    }});
     return handlers;
   }
 

@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
@@ -34,22 +33,25 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import java.util.Optional;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityFindOneExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
     final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
-    CrudMethods crudMethods = context.crudMethods();
-    TypeResolver resolver = context.getTypeResolver();
-    RepositoryMetadata repository = context.getRepositoryMetadata();
-    if (crudMethods.hasFindOneMethod()) {
-      HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(),
-          crudMethods.getFindOneMethod());
+    final Optional<PersistentEntity<?, ?>> potentialEntity = context.entity();
+    if(!potentialEntity.isPresent()){
+        return handlers;
+    }
+    final PersistentEntity<?, ?> entity = context.entity().get();
+    final TypeResolver resolver = context.getTypeResolver();
+    final RepositoryMetadata repository = context.getRepositoryMetadata();
+    context.crudMethods().getFindOneMethod().ifPresent(method -> {
+      final HandlerMethod handler = new HandlerMethod(
+          context.getRepositoryInstance(), method);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getFindOneMethod()),
+          actionName(entity, method),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
@@ -64,7 +66,7 @@ class EntityFindOneExtractor implements EntityOperationsExtractor {
               resolver.resolve(repository.getIdType()))),
           resolver.resolve(Resource.class, repository.getReturnedDomainClass(handler.getMethod())));
       handlers.add(new SpringDataRestRequestHandler(context, spec));
-    }
+    });
     return handlers;
   }
 }

@@ -23,7 +23,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
-import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
@@ -78,20 +77,21 @@ class EntityServicesProvider implements RequestHandlerProvider {
   public List<RequestHandler> requestHandlers() {
     List<EntityContext> contexts = newArrayList();
     for (Class each : repositories) {
-      RepositoryInformation repositoryInfo = repositories.getRepositoryInformationFor(each);
-      Object repositoryInstance = repositories.getRepositoryFor(each);
-      ResourceMetadata resource = mappings.getMetadataFor(each);
-      if (resource.isExported()) {
-        contexts.add(new EntityContext(
-            typeResolver,
-            configuration,
-            repositoryInfo,
-            repositoryInstance,
-            resource,
-            mappings,
-            entities,
-            associations, extractorConfiguration));
-      }
+      repositories.getRepositoryInformationFor(each).ifPresent(repositoryInfo -> {
+        Object repositoryInstance = repositories.getRepositoryFor(each);
+        ResourceMetadata resource = mappings.getMetadataFor(each);
+        if (resource.isExported()) {
+          contexts.add(new EntityContext(
+              typeResolver,
+              configuration,
+              repositoryInfo,
+              repositoryInstance,
+              resource,
+              mappings,
+              entities,
+              associations, extractorConfiguration));
+        }
+      });
 
     }
 

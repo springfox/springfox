@@ -24,7 +24,6 @@ import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
-import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.webmvc.RestMediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,18 +36,24 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import java.util.Optional;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 public class EntityAssociationSaveExtractor implements EntityAssociationOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
     List<RequestHandler> handlers = new ArrayList<RequestHandler>();
-    ResourceMetadata metadata = context.associationMetadata();
     Association<? extends PersistentProperty<?>> association = context.getAssociation();
     PersistentProperty<?> property = association.getInverse();
-    ResourceMapping mapping = metadata.getMappingFor(property);
+    final Optional<ResourceMapping> potentialMapping = context.associationMetadata()
+            .map(metadata -> metadata.getMappingFor(property));
     EntityContext entityContext = context.getEntityContext();
-    PersistentEntity entity = entityContext.entity();
+    final Optional<PersistentEntity<?, ?>> potentialEntity = entityContext.entity();
+    if(!potentialEntity.isPresent() || !potentialMapping.isPresent()){
+      return handlers;
+    }
+    final PersistentEntity<?, ?> entity = potentialEntity.get();
+    final ResourceMapping mapping = potentialMapping.get();
     TypeResolver resolver = entityContext.getTypeResolver();
     RepositoryMetadata repository = entityContext.getRepositoryMetadata();
     if (property.isWritable() && property.getOwner().equals(entity)) {
