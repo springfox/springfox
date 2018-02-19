@@ -72,8 +72,8 @@
         "tags": [
           "Address Entity"
         ],
-        "summary": "findOneAddress",
-        "operationId": "findOneAddressUsingGET_2",
+        "summary": "findByIdAddress",
+        "operationId": "findByIdAddressUsingGET_2",
         "parameters": [
           {
             "name": "id",
@@ -540,8 +540,8 @@
         "tags": [
           "Person Entity"
         ],
-        "summary": "findOnePerson",
-        "operationId": "findOnePersonUsingGET_2",
+        "summary": "findByIdPerson",
+        "operationId": "findByIdPersonUsingGET_2",
         "parameters": [
           {
             "name": "id",
@@ -1186,8 +1186,8 @@
         "tags": [
           "Tag Entity"
         ],
-        "summary": "findOneTag",
-        "operationId": "findOneTagUsingGET_2",
+        "summary": "findByIdTag",
+        "operationId": "findByIdTagUsingGET_2",
         "parameters": [
           {
             "name": "id",
