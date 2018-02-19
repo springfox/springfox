@@ -30,8 +30,6 @@ ext {
   jdkVersion = 1.8
 }
 
-ext['spring.version'] = '5.0.2.RELEASE'
-
 allprojects {
   apply plugin: 'jacoco'
 }

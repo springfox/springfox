@@ -1,15 +1,26 @@
-plugins {
-  id 'org.springframework.boot' version '1.5.9.RELEASE'
+buildscript {
+    ext {
+        springBootVersion = '2.0.0.RC1'
+    }
+    repositories {
+        jcenter()
+        maven { url 'https://repo.spring.io/libs-milestone' }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
 }
 
 repositories {
   jcenter()
+  maven { url 'https://repo.spring.io/libs-milestone' }
 }
 
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'war'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 configurations {
   //Logback causing spring boot errors
@@ -32,12 +43,6 @@ dependencies {
   compile("org.springframework.boot:spring-boot-starter-data-rest")
   compile("org.springframework.boot:spring-boot-starter-data-jpa")
   compile("com.h2database:h2")
-  compile "com.fasterxml.jackson.core:jackson-databind:2.9.3"
-  compile "com.fasterxml.jackson.core:jackson-annotations:2.9.3"
-  compile "org.springframework.data:spring-data-rest-webmvc:3.0.2.RELEASE"
-  compile "org.springframework.data:spring-data-rest-core:3.0.2.RELEASE"
-  compile "org.springframework.data:spring-data-jpa:2.0.2.RELEASE"
-  compile "org.springframework.data:spring-data-commons:2.0.2.RELEASE"
 
   testCompile libs.test
   testCompile "org.skyscreamer:jsonassert:${jsonAssert}"

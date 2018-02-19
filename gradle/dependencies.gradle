@@ -18,7 +18,7 @@ ext {
   slf4j = "1.7.24"
   snakeyaml = '1.19'
   spock = "1.1-groovy-2.4"
-  spring = "5.0.2.RELEASE"
+  spring = "5.0.3.RELEASE"
   springHateoas = "0.24.0.RELEASE"
   springDataRest = "3.0.2.RELEASE"
   springPluginVersion = "1.2.0.RELEASE"
