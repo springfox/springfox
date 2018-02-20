@@ -32,7 +32,7 @@ test:
       timeout: 900
   - bash <(curl -s https://codecov.io/bash)
   - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-  - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+  - find . -type f -regex ".*/build/test-results/test/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
 
 
 deployment:
