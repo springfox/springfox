@@ -24,6 +24,6 @@ import org.codehaus.groovy.runtime.ResourceGroovyMethods
 trait FileAccess {
   String fileContents(String fileName) {
     def resource = this.getClass().getResource("$fileName")
-    return ResourceGroovyMethods.getText(resource)
+    return ResourceGroovyMethods.getText(resource, 'UTF-8')
   }
 }
