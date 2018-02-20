@@ -192,6 +192,17 @@ class FunctionContractSpec extends Specification implements FileAccess {
     }
   }
 
+  def "dummy test that should fail"() {
+    given:
+    def number = 3
+
+    when:
+    def twice = number * 2
+
+    then:
+    twice == 5
+  }
+
   @Configuration
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
