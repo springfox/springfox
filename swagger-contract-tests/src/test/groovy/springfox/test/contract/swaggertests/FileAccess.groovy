@@ -19,8 +19,11 @@
 
 package springfox.test.contract.swaggertests
 
+import org.codehaus.groovy.runtime.ResourceGroovyMethods
+
 trait FileAccess {
   String fileContents(String fileName) {
-    this.getClass().getResource("$fileName").text
+    def resource = this.getClass().getResource("$fileName")
+    return ResourceGroovyMethods.getText(resource)
   }
 }
