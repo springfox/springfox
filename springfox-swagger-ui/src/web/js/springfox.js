@@ -71,6 +71,7 @@ window.onload = () => {
       requestInterceptor: (a => a),
       responseInterceptor: (a => a),
       showMutatedRequest: true,
+      supportedSubmitMethods: configUI.supportedSubmitMethods,
       validatorUrl: configUI.validatorUrl,
       /*--------------------------------------------*\
        * Macros

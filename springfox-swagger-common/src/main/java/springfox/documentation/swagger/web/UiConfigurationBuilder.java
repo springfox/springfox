@@ -41,6 +41,7 @@ public class UiConfigurationBuilder {
   /*--------------------------------------------*\
    * Network
   \*--------------------------------------------*/
+  private String[] supportedSubmitMethods;
   private String validatorUrl;
 
   private UiConfigurationBuilder() {
@@ -64,6 +65,7 @@ public class UiConfigurationBuilder {
         defaultIfAbsent(operationsSorter, OperationsSorter.ALPHA),
         defaultIfAbsent(showExtensions, false),
         defaultIfAbsent(tagsSorter, TagsSorter.ALPHA),
+        defaultIfAbsent(supportedSubmitMethods, UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS),
         defaultIfAbsent(validatorUrl, null)
     );
   }
@@ -175,6 +177,16 @@ public class UiConfigurationBuilder {
    */
   public UiConfigurationBuilder tagsSorter(TagsSorter tagsSorter) {
     this.tagsSorter = tagsSorter;
+    return this;
+  }
+
+  /**
+   * @param supportedSubmitMethods List of HTTP methods that have the Try it out feature enabled. An empty array
+   *                               disables Try it out for all operations. This does not filter the operations from the
+   *                               display.
+   */
+  public UiConfigurationBuilder supportedSubmitMethods(String[] supportedSubmitMethods) {
+    this.supportedSubmitMethods = supportedSubmitMethods;
     return this;
   }
 
