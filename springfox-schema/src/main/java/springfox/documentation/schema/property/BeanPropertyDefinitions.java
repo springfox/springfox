@@ -21,9 +21,11 @@ package springfox.documentation.schema.property;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder;
 import com.google.common.base.Function;
+import springfox.documentation.schema.Annotations;
 
 public class BeanPropertyDefinitions {
   private BeanPropertyDefinitions() {
@@ -41,11 +43,18 @@ public class BeanPropertyDefinitions {
 
   public static String name(
       BeanPropertyDefinition beanPropertyDefinition,
-      boolean forSerialization, BeanPropertyNamingStrategy namingStrategy) {
+      boolean forSerialization, BeanPropertyNamingStrategy namingStrategy, AnnotatedMember previousMember) {
 
-    return forSerialization
-           ? namingStrategy.nameForSerialization(beanPropertyDefinition)
-           : namingStrategy.nameForDeserialization(beanPropertyDefinition);
+    String name = forSerialization
+        ? namingStrategy.nameForSerialization(beanPropertyDefinition)
+        : namingStrategy.nameForDeserialization(beanPropertyDefinition);
+
+    String prefix = Annotations.getUnwrappedPrefix(previousMember);
+    if (prefix != null) {
+      name = prefix + name;
+    }
+
+    return name;
   }
 
   public static Function<PropertyNamingStrategy, String> overTheWireName(
