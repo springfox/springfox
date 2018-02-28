@@ -160,6 +160,7 @@ public class Swagger2SpringBoot {
         .operationsSorter(OperationsSorter.ALPHA)
         .showExtensions(false)
         .tagsSorter(TagsSorter.ALPHA)
+        .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
         .validatorUrl(null)
         .build();
   }
