@@ -90,7 +90,8 @@ public class UiConfiguration {
     this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true, null);
   }
 
-  /** * Use the default constructor instead (with requestTimeout)
+  /**
+   * Use the default constructor instead (with requestTimeout)
    * {@link UiConfiguration#UiConfiguration(String, String, String, String, String[], boolean, boolean, Long)} )}
    *
    * @param validatorUrl           By default, Swagger-UI attempts to validate specs against swagger.io's online
@@ -255,7 +256,7 @@ public class UiConfiguration {
         operationsSorter,
         showExtensions,
         tagsSorter,
-            Constants.DEFAULT_SUBMIT_METHODS,
+        Constants.DEFAULT_SUBMIT_METHODS,
         validatorUrl);
   }
 
@@ -293,7 +294,8 @@ public class UiConfiguration {
    *                                 sort function). Two tag name strings are passed to the sorter for each pass.
    *                                 Default is the order determined by Swagger-UI.
    * @param supportedSubmitMethods   List of HTTP methods that have the Try it out feature enabled. An empty array
-   *                                 disables Try it out for all operations. This does not filter the operations from the
+   *                                 disables Try it out for all operations. This does not filter the operations from
+   *                                 the
    *                                 display.
    * @param validatorUrl             By default, Swagger-UI attempts to validate specs against swagger.io's online
    *                                 validator. You can use this parameter to set a different validator URL, for example
@@ -439,7 +441,11 @@ public class UiConfiguration {
   }
 
   public static class Constants {
-    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] { "get", "put", "post", "delete", "options", "head", "patch", "trace" };
+    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] {
+        "get", "put", "post",
+        "delete", "options", "head",
+        "patch", "trace" };
+    
     public static final String[] NO_SUBMIT_METHODS = new String[] {};
   }
 }
