@@ -1,10 +1,9 @@
 buildscript {
     ext {
-        springBootVersion = '2.0.0.RC2'
+        springBootVersion = '2.0.0.RELEASE'
     }
     repositories {
         jcenter()
-        maven { url 'https://repo.spring.io/libs-milestone' }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
@@ -13,7 +12,6 @@ buildscript {
 
 repositories {
   jcenter()
-  maven { url 'https://repo.spring.io/libs-milestone' }
 }
 
 apply plugin: 'groovy'

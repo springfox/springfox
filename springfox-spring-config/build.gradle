@@ -3,12 +3,10 @@ apply plugin: 'idea'
 
 buildscript {
   repositories {
-    maven { url 'https://repo.spring.io/libs-milestone' }
     jcenter()
   }
 }
 repositories {
-  maven { url 'https://repo.spring.io/libs-milestone' }
   jcenter()
 }
 
