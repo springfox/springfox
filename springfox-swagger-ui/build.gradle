@@ -29,7 +29,7 @@ plugins {
 }
 
 ext {
-  swaggerUiVersion = '3.9.1'
+  swaggerUiVersion = '3.11.0'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -44,8 +44,8 @@ dependencies {
 }
 
 node {
-  version = '9.5.0'
-  npmVersion = '5.6.0'
+  version = '9.6.1'
+  npmVersion = '5.7.1'
   distBaseUrl = 'https://nodejs.org/dist'
   download = true
   workDir = file("${project.buildDir}/nodejs")

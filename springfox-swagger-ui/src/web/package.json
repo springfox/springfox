@@ -18,6 +18,7 @@
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "webpack": "^3.10.0"
+    "babel-minify-webpack-plugin": "^0.2.0",
+    "webpack": "^3.11.0"
   }
 }

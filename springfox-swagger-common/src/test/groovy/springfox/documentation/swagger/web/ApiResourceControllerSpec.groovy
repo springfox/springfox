@@ -61,6 +61,7 @@ class ApiResourceControllerSpec extends Specification {
     "operationsSorter": "alpha",
     "showExtensions": false,
     "tagsSorter": "alpha",
+    "supportedSubmitMethods":["get","put","post","delete","options","head","patch","trace"],
     "validatorUrl": "/validate"
 }"""
   def resources = """[
@@ -105,6 +106,7 @@ class ApiResourceControllerSpec extends Specification {
           .operationsSorter(OperationsSorter.ALPHA)
           .showExtensions(false)
           .tagsSorter(TagsSorter.ALPHA)
+          .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
           .validatorUrl("/validate")
           .build()
     }
