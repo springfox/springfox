@@ -68,7 +68,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
       [[required: { -> true }] as ApiParam]                                 | false
       [[required: { -> false }] as ApiParam]                                | false
       [requestParam(true, "", ValueConstants.DEFAULT_NONE)]                 | true
-      [requestParam(true, "", "")]                                          | true
+      [requestParam(true, "", "")]                                          | false
       [requestParam(true, "", null)]                                        | true
       [requestParam(true, "", "default value")]                             | false
       [requestParam(false, "", ValueConstants.DEFAULT_NONE)]                | false

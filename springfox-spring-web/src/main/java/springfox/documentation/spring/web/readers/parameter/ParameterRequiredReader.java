@@ -40,8 +40,6 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
-
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
@@ -105,8 +103,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   private boolean isRequired(RequestParam annotation) {
     String defaultValue = descriptions.resolve(annotation.defaultValue());
-    boolean missingDefaultValue = ValueConstants.DEFAULT_NONE.equals(defaultValue) ||
-        isNullOrEmpty(defaultValue);
+    boolean missingDefaultValue = ValueConstants.DEFAULT_NONE.equals(defaultValue) || defaultValue == null;
     return annotation.required() && missingDefaultValue;
   }
 }
