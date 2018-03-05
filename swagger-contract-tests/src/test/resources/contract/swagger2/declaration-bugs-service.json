@@ -1291,6 +1291,48 @@
         }
       }
     },
+    "/bugs/2268{?$filter}": {
+      "get": {
+        "tags": [
+          "example",
+          "Bugs"
+        ],
+        "summary": "Get all examples",
+        "description": "Get all examples ",
+        "operationId": "bug2268_1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter the list",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Example"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "user_auth": [
+              "ADMIN",
+              "USER"
+            ]
+          }
+        ]
+      }
+    },
     "/bugs/{bar}/2148{?year}": {
       "get": {
         "tags": [
