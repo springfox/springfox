@@ -32,6 +32,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +42,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -380,6 +383,26 @@ public class BugsController {
   @GetMapping(path = "/1881")
   ResponseEntity<String> bug1881(@RequestBody Bug1881 container) {
     return ResponseEntity.ok("");
+  }
+
+  @ApiOperation(value = "Get all examples", nickname = "bug2268", notes = "Get all examples ", response = Example.class,
+      responseContainer = "List", authorizations = {
+      @Authorization(value = "user_auth", scopes = {
+          @AuthorizationScope(scope = "ADMIN", description = "Manage users"),
+          @AuthorizationScope(scope = "USER", description = "Maintain own user")
+      })
+  }, tags = { "example" })
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Success", response = Example.class, responseContainer = "List"),
+  })
+  @RequestMapping(value = "/2268",
+      produces = { "application/json" },
+      method = RequestMethod.GET)
+  ResponseEntity<List<Example>> bug2268(
+      @ApiParam(value = "Filter the list")
+      @Valid
+      @RequestParam(value = "$filter", required = false) String filter) {
+    return null;
   }
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
