@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.google.common.annotations.VisibleForTesting;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.Info;
@@ -101,7 +102,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
       @SuppressWarnings("unused")
       public PropertyExampleSerializer() {
-        this(null);
+        this(Object.class);
       }
 
       PropertyExampleSerializer(Class<Object> t) {
@@ -110,19 +111,52 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
       @Override
       public void serialize(Object value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        String stringValue = (value instanceof String) ? ((String) value).trim() : value.toString().trim();
-        if (isNotJsonString(stringValue)) {
-          gen.writeRawValue(stringValue);
+        if (canConvertToString(value)) {
+          String stringValue = (value instanceof String) ? ((String) value).trim() : value.toString().trim();
+          if (isStringLiteral(stringValue)) {
+            String cleanedUp = stringValue.replaceAll("^\"", "")
+                .replaceAll("\"$", "")
+                .replaceAll("^'", "")
+                .replaceAll("'$", "");
+            gen.writeString(cleanedUp);
+          } else if (isNotJsonString(stringValue)) {
+            gen.writeRawValue(stringValue);
+          } else {
+            gen.writeString(stringValue);
+          }
         } else {
-          gen.writeString(stringValue);
+          gen.writeObject(value);
         }
       }
 
-      private boolean isNotJsonString(final String value) throws IOException {
+      private boolean canConvertToString(Object value) {
+        if (value instanceof java.lang.Boolean
+            || value instanceof java.lang.Character
+            || value instanceof java.lang.String
+            || value instanceof java.lang.Byte
+            || value instanceof java.lang.Short
+            || value instanceof java.lang.Integer
+            || value instanceof java.lang.Long
+            || value instanceof java.lang.Float
+            || value instanceof java.lang.Double
+            || value instanceof java.lang.Void) {
+          return true;
+        }
+        return false;
+      }
+
+      @VisibleForTesting
+      boolean isStringLiteral(String value) {
+        return (value.startsWith("\"") && value.endsWith("\""))
+            || (value.startsWith("'") && value.endsWith("'"));
+      }
+
+      @VisibleForTesting
+      boolean isNotJsonString(final String value) {
         // strictly speaking, should also test for equals("null") since {"example": null} would be valid JSON
         // but swagger2 does not support null values
         // and an example value of "null" probably does not make much sense anyway
-        return value.startsWith("{")                              // object
+        return value.startsWith("{")                          // object
             || value.startsWith("[")                          // array
             || "true".equals(value)                           // true
             || "false".equals(value)                          // false
