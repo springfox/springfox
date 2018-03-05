@@ -377,6 +377,11 @@ public class BugsController {
     return ResponseEntity.ok("");
   }
 
+  @GetMapping(path = "/1881")
+  ResponseEntity<String> bug1881(@RequestBody Bug1881 container) {
+    return ResponseEntity.ok("");
+  }
+
   @JsonInclude(JsonInclude.Include.NON_NULL)
   public class Status {
     @ApiModelProperty(example = "false")
@@ -703,6 +708,27 @@ public class BugsController {
 
     public void setB(Bug2081Filter b) {
       this.b = b;
+    }
+  }
+
+  public static class Bug1881 {
+    private Map<String, List> data1;
+    private Map<String, List<Example>> data2;
+
+    public Map<String, List> getData1() {
+      return data1;
+    }
+
+    public void setData1(Map<String, List> data1) {
+      this.data1 = data1;
+    }
+
+    public Map<String, List<Example>> getData2() {
+      return data2;
+    }
+
+    public void setData2(Map<String, List<Example>> data2) {
+      this.data2 = data2;
     }
   }
 }

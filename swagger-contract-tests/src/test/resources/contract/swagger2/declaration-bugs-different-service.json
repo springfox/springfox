@@ -785,6 +785,34 @@
         }
       }
     },
+    "/bugs/1881": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug1881",
+        "operationId": "bug1881UsingGET_2",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "container",
+            "description": "container",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bug1881"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/1887/{env}/{list-id}/emails": {
       "post": {
         "tags": [
@@ -1404,6 +1432,30 @@
       },
       "title": "Bug1777",
       "description": "Test 1777"
+    },
+    "Bug1881": {
+      "type": "object",
+      "properties": {
+        "data1": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "data2": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Example"
+            }
+          }
+        }
+      },
+      "title": "Bug1881"
     },
     "Example": {
       "type": "object",
