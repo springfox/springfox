@@ -373,7 +373,7 @@ public class BugsController {
   }
 
   @GetMapping(path = "/2161")
-  ResponseEntity<String> bug2161(@RequestBody Status status) {
+  ResponseEntity<String> bug2161And2249(@RequestBody Status status) {
     return ResponseEntity.ok("");
   }
 
@@ -382,15 +382,25 @@ public class BugsController {
     @ApiModelProperty(example = "false")
     private final Boolean enabled;
 
+    @ApiModelProperty(example = "'1235'")
+    private final String integerString;
+
     @JsonCreator
     Status(
-        @JsonProperty("enabled") final Boolean enabled) {
+        @JsonProperty("enabled") Boolean enabled,
+        @JsonProperty("integerString") String integerString) {
       this.enabled = enabled;
+      this.integerString = integerString;
     }
 
     @JsonProperty("enabled")
     public Boolean isEnabled() {
       return enabled;
+    }
+
+    @JsonProperty("integerString")
+    public String getIntegerString() {
+      return integerString;
     }
   }
 

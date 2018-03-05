@@ -1240,8 +1240,8 @@
         "tags": [
           "Bugs"
         ],
-        "summary": "bug2161",
-        "operationId": "bug2161UsingGET_1",
+        "summary": "bug2161And2249",
+        "operationId": "bug2161And2249UsingGET_1",
         "parameters": [
           {
             "in": "body",
@@ -1607,6 +1607,11 @@
         "enabled": {
           "type": "boolean",
           "example": false,
+          "allowEmptyValue": false
+        },
+        "integerString": {
+          "type": "string",
+          "example": "1235",
           "allowEmptyValue": false
         }
       },
