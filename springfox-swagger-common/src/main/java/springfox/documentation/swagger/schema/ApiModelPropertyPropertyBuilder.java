@@ -60,7 +60,6 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
           .allowableValues(annotation.transform(toAllowableValues()).orNull())
           .required(annotation.transform(toIsRequired()).or(false))
           .readOnly(annotation.transform(toIsReadOnly()).or(false))
-          .allowEmptyValue(annotation.transform(toAllowEmptyValue()).or(false))
           .description(annotation.transform(toDescription(descriptions)).orNull())
           .isHidden(annotation.transform(toHidden()).or(false))
           .type(annotation.transform(toType(context.getResolver())).orNull())

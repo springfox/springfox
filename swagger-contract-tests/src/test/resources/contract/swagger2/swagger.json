@@ -156,6 +156,7 @@
             "required": true,
             "type": "string",
             "default": "available",
+            "allowEmptyValue": false,
             "enum": [
               "available",
               "pending",
@@ -205,7 +206,8 @@
             "in": "query",
             "description": "Tags to filter by",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -255,7 +257,8 @@
             "maximum": 5,
             "exclusiveMaximum": false,
             "minimum": 1,
-            "exclusiveMinimum": false
+            "exclusiveMinimum": false,
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -396,7 +399,8 @@
             "maximum": 5,
             "exclusiveMaximum": false,
             "minimum": 1,
-            "exclusiveMinimum": false
+            "exclusiveMinimum": false,
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -433,7 +437,8 @@
             "type": "string",
             "exclusiveMaximum": false,
             "minimum": 1,
-            "exclusiveMinimum": false
+            "exclusiveMinimum": false,
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -577,14 +582,16 @@
             "in": "query",
             "description": "The user name for login",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           },
           {
             "name": "password",
             "in": "query",
             "description": "The password for login in clear text",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -636,7 +643,8 @@
             "in": "path",
             "description": "The name that needs to be fetched. Use user1 for testing. ",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -673,7 +681,8 @@
             "in": "path",
             "description": "name that need to be deleted",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           },
           {
             "name": "id",
@@ -757,7 +766,8 @@
             "in": "path",
             "description": "The name that needs to be deleted",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -859,7 +869,6 @@
         "status": {
           "type": "string",
           "description": "Order Status",
-          "allowEmptyValue": false,
           "enum": [
             "placed",
             "approved",
@@ -895,7 +904,6 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
-          "allowEmptyValue": false,
           "enum": [
             "available",
             "pending",
@@ -952,8 +960,7 @@
         "userStatus": {
           "type": "integer",
           "format": "int32",
-          "description": "User Status",
-          "allowEmptyValue": false
+          "description": "User Status"
         },
         "username": {
           "type": "string"
