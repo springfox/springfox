@@ -522,7 +522,8 @@
             "in": "query",
             "description": "name parameter",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -1094,7 +1095,8 @@
             "in": "query",
             "description": "lastName parameter",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {

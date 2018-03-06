@@ -40,6 +40,7 @@ public class Parameter {
   private final String pattern;
   private final String collectionFormat;
   private final List<VendorExtension> vendorExtensions;
+  private final Boolean allowEmptyValue;
 
   public Parameter(
       String name,
@@ -47,6 +48,7 @@ public class Parameter {
       String defaultValue,
       boolean required,
       boolean allowMultiple,
+      Boolean allowEmptyValue,
       ModelReference modelRef,
       Optional<ResolvedType> type,
       AllowableValues allowableValues,
@@ -61,6 +63,7 @@ public class Parameter {
     this.defaultValue = defaultValue;
     this.required = required;
     this.allowMultiple = allowMultiple;
+    this.allowEmptyValue = allowEmptyValue;
     this.modelRef = modelRef;
     this.type = type;
     this.allowableValues = allowableValues;
@@ -127,5 +130,9 @@ public class Parameter {
 
   public String getCollectionFormat() {
     return collectionFormat;
+  }
+
+  public Boolean isAllowEmptyValue() {
+    return allowEmptyValue;
   }
 }

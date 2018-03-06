@@ -473,6 +473,7 @@
             "required": false,
             "type": "integer",
             "default": 0,
+            "allowEmptyValue": false,
             "format": "int32"
           }
         ],
@@ -1155,7 +1156,8 @@
             "description": "This is the description",
             "required": true,
             "type": "string",
-            "default": "1f1f1f"
+            "default": "1f1f1f",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -1298,7 +1300,8 @@
             "in": "query",
             "description": "Filter the list",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -1371,14 +1374,16 @@
             "in": "path",
             "description": "Key of the property",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           },
           {
             "name": "environmentKey",
             "in": "path",
             "description": "Key of the environment",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -1425,15 +1430,13 @@
           "type": "number",
           "format": "float",
           "example": 200.0,
-          "description": "Horizontal position",
-          "allowEmptyValue": false
+          "description": "Horizontal position"
         },
         "yAxis": {
           "type": "number",
           "format": "float",
           "example": 500.0,
-          "description": "Vertical position",
-          "allowEmptyValue": false
+          "description": "Vertical position"
         }
       },
       "title": "Bug1676"
@@ -1468,8 +1471,7 @@
         "longitude": {
           "type": "number",
           "format": "double",
-          "description": "经度",
-          "allowEmptyValue": false
+          "description": "经度"
         }
       },
       "title": "Bug1777",
@@ -1518,8 +1520,7 @@
         "bar": {
           "type": "integer",
           "format": "int32",
-          "description": "description of bar",
-          "allowEmptyValue": false
+          "description": "description of bar"
         },
         "enumType": {
           "type": "string",
@@ -1550,8 +1551,7 @@
         "readOnlyString": {
           "type": "string",
           "description": "A read only string",
-          "readOnly": true,
-          "allowEmptyValue": false
+          "readOnly": true
         }
       },
       "title": "Example"
@@ -1662,13 +1662,11 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "example": false,
-          "allowEmptyValue": false
+          "example": false
         },
         "integerString": {
           "type": "string",
-          "example": "1235",
-          "allowEmptyValue": false
+          "example": "1235"
         }
       },
       "title": "Status"
