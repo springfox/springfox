@@ -32,7 +32,9 @@ import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
@@ -106,8 +108,17 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     }
     List<ResolvedType> dependencies = newArrayList(resolvedTypeParameters(modelContext, resolvedType));
     dependencies.addAll(resolvedArrayElementType(modelContext, resolvedType));
+    dependencies.addAll(resolvedMapType(modelContext, resolvedType));
     dependencies.addAll(resolvedPropertiesAndFields(modelContext, resolvedType));
     return dependencies;
+  }
+
+  private Collection<? extends ResolvedType> resolvedMapType(ModelContext modelContext, ResolvedType resolvedType) {
+    ResolvedType mapType = resolvedType.findSupertype(Map.class);
+    if (mapType == null) {
+      return newArrayList();
+    }
+    return resolvedTypeParameters(modelContext, mapType);
   }
 
   private List<? extends ResolvedType> resolvedArrayElementType(ModelContext modelContext, ResolvedType resolvedType) {
