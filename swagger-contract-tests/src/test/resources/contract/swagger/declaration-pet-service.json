@@ -568,7 +568,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry_10«string,List«string»»]"
+          "type": "List[Entry_11«string,List«string»»]"
         }
       ],
       "path": "/pets/nameToNickNamesMap"
@@ -1068,9 +1068,9 @@
   "basePath": "/",
   "consumes": [],
   "models": {
-    "Entry_10«string,List«string»»": {
+    "Entry_11«string,List«string»»": {
       "description": "",
-      "id": "Entry_10«string,List«string»»",
+      "id": "Entry_11«string,List«string»»",
       "properties": {
         "key": {
           "required": false,

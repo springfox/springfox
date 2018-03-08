@@ -1488,7 +1488,7 @@
             }
           ],
           "deprecated": "false",
-          "type": "List[Entry_6«string,Map«string,Example»»]"
+          "type": "List[Entry_7«string,Map«string,Example»»]"
         }
       ],
       "path": "/features/mapOfMapOfExample"
@@ -1873,9 +1873,9 @@
         }
       }
     },
-    "Entry_6«string,Map«string,Example»»": {
+    "Entry_7«string,Map«string,Example»»": {
       "description": "",
-      "id": "Entry_6«string,Map«string,Example»»",
+      "id": "Entry_7«string,Map«string,Example»»",
       "properties": {
         "key": {
           "required": false,

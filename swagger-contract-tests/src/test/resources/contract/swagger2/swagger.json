@@ -954,7 +954,6 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
-          "allowEmptyValue": false,
           "enum": [
             "available",
             "pending",
@@ -1060,8 +1059,7 @@
         "userStatus": {
           "type": "integer",
           "format": "int32",
-          "description": "User Status",
-          "allowEmptyValue": false
+          "description": "User Status"
         },
         "username": {
           "type": "string"

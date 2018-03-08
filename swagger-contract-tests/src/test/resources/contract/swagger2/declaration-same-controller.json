@@ -268,8 +268,7 @@
         "_type": {
           "type": "string",
           "description": "Type field",
-          "readOnly": true,
-          "allowEmptyValue": false
+          "readOnly": true
         },
         "name": {
           "type": "string"
@@ -286,8 +285,7 @@
         "id": {
           "type": "integer",
           "format": "int32",
-          "description": "Id field",
-          "allowEmptyValue": false
+          "description": "Id field"
         },
         "name": {
           "type": "string"
