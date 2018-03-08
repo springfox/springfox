@@ -417,11 +417,95 @@ public class BugsController {
   public enum Lang {
     zh, en
   }
+
+  @XmlType(name = "model1907", namespace = "urn:bugs")
+  public static class Model1907 {
+
+    @NotNull
+    @XmlAttribute
+    private String somename;
+    @NotNull
+    @XmlElement
+    private Example example;
+
+    public Model1907() {
+    }
+
+    public String getSomename() {
+      return somename;
+    }
+
+    public void setSomename(String somename) {
+      this.somename = somename;
+    }
+
+    public Example getExample() {
+      return example;
+    }
+
+    public void setExample(Example example) {
+      this.example = example;
+    }
+  }
+
+  public static class Bug2081Filter {
+    String importantField;
+
+    public String getImportantField() {
+      return importantField;
+    }
+
+    public void setImportantField(String importantField) {
+      this.importantField = importantField;
+    }
+  }
+
+  public static class Bug2081 {
+    Bug2081Filter a;
+    Bug2081Filter b;
+
+    public Bug2081Filter getA() {
+      return a;
+    }
+
+    public void setA(Bug2081Filter a) {
+      this.a = a;
+    }
+
+    public Bug2081Filter getB() {
+      return b;
+    }
+
+    public void setB(Bug2081Filter b) {
+      this.b = b;
+    }
+  }
+
+  public static class Bug1881 {
+    private Map<String, List> data1;
+    private Map<String, List<Example>> data2;
+
+    public Map<String, List> getData1() {
+      return data1;
+    }
+
+    public void setData1(Map<String, List> data1) {
+      this.data1 = data1;
+    }
+
+    public Map<String, List<Example>> getData2() {
+      return data2;
+    }
+
+    public void setData2(Map<String, List<Example>> data2) {
+      this.data2 = data2;
+    }
+  }
+
   @JsonInclude(JsonInclude.Include.NON_NULL)
   public class Status {
     @ApiModelProperty(example = "false")
     private final Boolean enabled;
-
     @ApiModelProperty(example = "'1235'")
     private final String integerString;
 
@@ -494,13 +578,13 @@ public class BugsController {
 
   public class Key {
 
+    // if enabled, name will be shown @ApiModelProperty(value = "my description")
+    private final String key;
+
     @JsonCreator
     public Key(@JsonProperty("key") String keyContent) {
       key = keyContent;
     }
-
-    // if enabled, name will be shown @ApiModelProperty(value = "my description")
-    private final String key;
 
     public String getKey() {
       return key;
@@ -586,6 +670,8 @@ public class BugsController {
   }
 
   class Bug1697 {
+    private ByteBuffer bar;
+
     public ByteBuffer getBar() {
       return bar;
     }
@@ -593,10 +679,7 @@ public class BugsController {
     public void setBar(ByteBuffer bar) {
       this.bar = bar;
     }
-
-    private ByteBuffer bar;
   }
-
 
   class File {
     private String name;
@@ -683,92 +766,6 @@ public class BugsController {
       public String getInnerValue() {
         return innerValue;
       }
-    }
-  }
-
-
-  @XmlType(name = "model1907", namespace = "urn:bugs")
-  public static class Model1907 {
-
-    public Model1907() {
-    }
-
-    @NotNull
-    @XmlAttribute
-    private String somename;
-
-    @NotNull
-    @XmlElement
-    private Example example;
-
-    public String getSomename() {
-      return somename;
-    }
-
-    public void setSomename(String somename) {
-      this.somename = somename;
-    }
-
-    public Example getExample() {
-      return example;
-    }
-
-    public void setExample(Example example) {
-      this.example = example;
-    }
-  }
-
-  public static class Bug2081Filter {
-    String importantField;
-
-    public String getImportantField() {
-      return importantField;
-    }
-
-    public void setImportantField(String importantField) {
-      this.importantField = importantField;
-    }
-  }
-
-  public static class Bug2081 {
-    Bug2081Filter a;
-    Bug2081Filter b;
-
-    public Bug2081Filter getA() {
-      return a;
-    }
-
-    public void setA(Bug2081Filter a) {
-      this.a = a;
-    }
-
-    public Bug2081Filter getB() {
-      return b;
-    }
-
-    public void setB(Bug2081Filter b) {
-      this.b = b;
-    }
-  }
-
-  public static class Bug1881 {
-    private Map<String, List> data1;
-    private Map<String, List<Example>> data2;
-
-    public Map<String, List> getData1() {
-      return data1;
-    }
-
-    public void setData1(Map<String, List> data1) {
-      this.data1 = data1;
-    }
-
-    public Map<String, List<Example>> getData2() {
-      return data2;
-    }
-
-    public void setData2(Map<String, List<Example>> data2) {
-      this.data2 = data2;
     }
   }
 }
