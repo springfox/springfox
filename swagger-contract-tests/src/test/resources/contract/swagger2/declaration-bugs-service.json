@@ -1774,6 +1774,9 @@
     },
     "Status": {
       "type": "object",
+      "required": [
+        "bug_1964"
+      ],
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -1782,6 +1785,9 @@
         "integerString": {
           "type": "string",
           "example": "1235"
+        },
+        "bug_1964": {
+          "type": "boolean"
         }
       },
       "title": "Status"

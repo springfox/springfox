@@ -414,6 +414,9 @@ public class BugsController {
     return ResponseEntity.ok(null);
   }
 
+  public enum Lang {
+    zh, en
+  }
   @JsonInclude(JsonInclude.Include.NON_NULL)
   public class Status {
     @ApiModelProperty(example = "false")
@@ -421,6 +424,10 @@ public class BugsController {
 
     @ApiModelProperty(example = "'1235'")
     private final String integerString;
+
+    @JsonProperty("bug_1964")
+    @ApiModelProperty(required = true)
+    private boolean bug1964;
 
     @JsonCreator
     Status(
@@ -439,11 +446,12 @@ public class BugsController {
     public String getIntegerString() {
       return integerString;
     }
-  }
 
-
-  public enum Lang {
-    zh, en
+    @JsonProperty("bug_1964")
+    @ApiModelProperty(required = true)
+    public boolean isBug1964() {
+      return bug1964;
+    }
   }
 
   public class LangNotFilteredWrapper {
