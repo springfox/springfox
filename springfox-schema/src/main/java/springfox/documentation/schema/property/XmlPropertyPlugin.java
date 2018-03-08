@@ -61,7 +61,7 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
           XmlAttribute.class));
     }
 
-    if (elementAnnotation.isPresent()) {
+    if (elementAnnotation.isPresent() && context.getBeanPropertyDefinition().isPresent()) {
       Optional<XmlElementWrapper> wrapper = findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           XmlElementWrapper.class);
