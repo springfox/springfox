@@ -35,6 +35,7 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -51,6 +52,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.LanguageResponse;
+import springfox.documentation.spring.web.dummy.models.Response;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -403,6 +406,12 @@ public class BugsController {
       @Valid
       @RequestParam(value = "$filter", required = false) String filter) {
     return null;
+  }
+
+  @RequestMapping(value = "/bug2203", method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public ResponseEntity<Response<LanguageResponse>> bug2203() {
+    return ResponseEntity.ok(null);
   }
 
   @JsonInclude(JsonInclude.Include.NON_NULL)

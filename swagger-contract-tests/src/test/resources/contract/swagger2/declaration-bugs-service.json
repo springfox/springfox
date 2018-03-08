@@ -1336,6 +1336,26 @@
         ]
       }
     },
+    "/bugs/bug2203": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2203",
+        "operationId": "bug2203UsingGET_1",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response«LanguageResponse»"
+            }
+          }
+        }
+      }
+    },
     "/bugs/{bar}/2148{?year}": {
       "get": {
         "tags": [
@@ -1425,6 +1445,13 @@
     }
   },
   "definitions": {
+    "ApplicationLang": {
+      "type": "object",
+      "title": "ApplicationLang",
+      "additionalProperties": {
+        "$ref": "#/definitions/Language"
+      }
+    },
     "Bug1376": {
       "type": "object",
       "properties": {
@@ -1611,6 +1638,29 @@
       },
       "title": "LangNotFilteredWrapper"
     },
+    "Language": {
+      "type": "object",
+      "title": "Language",
+      "additionalProperties": {
+        "$ref": "#/definitions/LanguageText"
+      }
+    },
+    "LanguageResponse": {
+      "type": "object",
+      "title": "LanguageResponse",
+      "additionalProperties": {
+        "$ref": "#/definitions/ApplicationLang"
+      }
+    },
+    "LanguageText": {
+      "type": "object",
+      "properties": {
+        "TEXT": {
+          "type": "string"
+        }
+      },
+      "title": "LanguageText"
+    },
     "LinkAlternate": {
       "type": "object",
       "properties": {
@@ -1694,6 +1744,33 @@
         }
       },
       "title": "Resource«string»"
+    },
+    "Response«LanguageResponse»": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/LanguageText"
+              }
+            }
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "title": "Response«LanguageResponse»"
     },
     "Status": {
       "type": "object",
