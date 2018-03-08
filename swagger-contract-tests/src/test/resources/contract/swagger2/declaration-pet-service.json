@@ -114,7 +114,8 @@
             "type": "string",
             "exclusiveMaximum": true,
             "minimum": 0,
-            "exclusiveMinimum": true
+            "exclusiveMinimum": true,
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -145,7 +146,8 @@
             "maximum": 10,
             "exclusiveMaximum": true,
             "minimum": 0,
-            "exclusiveMinimum": true
+            "exclusiveMinimum": true,
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -175,7 +177,8 @@
             "type": "string",
             "maximum": 12,
             "exclusiveMaximum": true,
-            "exclusiveMinimum": false
+            "exclusiveMinimum": false,
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -204,6 +207,7 @@
             "required": true,
             "type": "string",
             "default": "available",
+            "allowEmptyValue": false,
             "enum": [
               "available",
               "pending",
@@ -238,7 +242,8 @@
             "in": "query",
             "description": "Tags to filter by",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -584,7 +589,8 @@
             "maximum": 5,
             "exclusiveMaximum": false,
             "minimum": 1,
-            "exclusiveMinimum": false
+            "exclusiveMinimum": false,
+            "allowEmptyValue": false
           }
         ],
         "responses": {

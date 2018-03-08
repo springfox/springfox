@@ -473,6 +473,7 @@
             "required": false,
             "type": "integer",
             "default": 0,
+            "allowEmptyValue": false,
             "format": "int32"
           }
         ],
@@ -781,6 +782,34 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/bugs/1881": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug1881",
+        "operationId": "bug1881UsingGET_2",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "container",
+            "description": "container",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bug1881"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
           }
         }
       }
@@ -1127,7 +1156,8 @@
             "description": "This is the description",
             "required": true,
             "type": "string",
-            "default": "1f1f1f"
+            "default": "1f1f1f",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -1229,8 +1259,8 @@
         "tags": [
           "Bugs"
         ],
-        "summary": "bug2161",
-        "operationId": "bug2161UsingGET_2",
+        "summary": "bug2161And2249",
+        "operationId": "bug2161And2249UsingGET_2",
         "parameters": [
           {
             "in": "body",
@@ -1247,6 +1277,69 @@
             "description": "OK",
             "schema": {
               "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/2268{?$filter}": {
+      "get": {
+        "tags": [
+          "example",
+          "Bugs"
+        ],
+        "summary": "Get all examples",
+        "description": "Get all examples ",
+        "operationId": "bug2268_2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Filter the list",
+            "required": false,
+            "type": "string",
+            "allowEmptyValue": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Example"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "user_auth": [
+              "ADMIN",
+              "USER"
+            ]
+          }
+        ]
+      }
+    },
+    "/bugs/bug2203": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "bug2203",
+        "operationId": "bug2203UsingGET_2",
+        "produces": [
+          "application/json;charset=UTF-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response«LanguageResponse»"
             }
           }
         }
@@ -1301,14 +1394,16 @@
             "in": "path",
             "description": "Key of the property",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           },
           {
             "name": "environmentKey",
             "in": "path",
             "description": "Key of the environment",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -1339,6 +1434,13 @@
     }
   },
   "definitions": {
+    "ApplicationLang": {
+      "type": "object",
+      "title": "ApplicationLang",
+      "additionalProperties": {
+        "$ref": "#/definitions/Language"
+      }
+    },
     "Bug1376": {
       "type": "object",
       "properties": {
@@ -1355,15 +1457,13 @@
           "type": "number",
           "format": "float",
           "example": 200.0,
-          "description": "Horizontal position",
-          "allowEmptyValue": false
+          "description": "Horizontal position"
         },
         "yAxis": {
           "type": "number",
           "format": "float",
           "example": 500.0,
-          "description": "Vertical position",
-          "allowEmptyValue": false
+          "description": "Vertical position"
         }
       },
       "title": "Bug1676"
@@ -1398,12 +1498,35 @@
         "longitude": {
           "type": "number",
           "format": "double",
-          "description": "经度",
-          "allowEmptyValue": false
+          "description": "经度"
         }
       },
       "title": "Bug1777",
       "description": "Test 1777"
+    },
+    "Bug1881": {
+      "type": "object",
+      "properties": {
+        "data1": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "data2": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Example"
+            }
+          }
+        }
+      },
+      "title": "Bug1881"
     },
     "Example": {
       "type": "object",
@@ -1424,8 +1547,7 @@
         "bar": {
           "type": "integer",
           "format": "int32",
-          "description": "description of bar",
-          "allowEmptyValue": false
+          "description": "description of bar"
         },
         "enumType": {
           "type": "string",
@@ -1456,8 +1578,7 @@
         "readOnlyString": {
           "type": "string",
           "description": "A read only string",
-          "readOnly": true,
-          "allowEmptyValue": false
+          "readOnly": true
         }
       },
       "title": "Example"
@@ -1478,6 +1599,29 @@
     "LangNotFilteredWrapper": {
       "type": "object",
       "title": "LangNotFilteredWrapper"
+    },
+    "Language": {
+      "type": "object",
+      "title": "Language",
+      "additionalProperties": {
+        "$ref": "#/definitions/LanguageText"
+      }
+    },
+    "LanguageResponse": {
+      "type": "object",
+      "title": "LanguageResponse",
+      "additionalProperties": {
+        "$ref": "#/definitions/ApplicationLang"
+      }
+    },
+    "LanguageText": {
+      "type": "object",
+      "properties": {
+        "TEXT": {
+          "type": "string"
+        }
+      },
+      "title": "LanguageText"
     },
     "LinkAlternate": {
       "type": "object",
@@ -1563,13 +1707,49 @@
       },
       "title": "Resource«string»"
     },
+    "Response«LanguageResponse»": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/LanguageText"
+              }
+            }
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uuid": {
+          "type": "string"
+        }
+      },
+      "title": "Response«LanguageResponse»"
+    },
     "Status": {
       "type": "object",
+      "required": [
+        "bug_1964"
+      ],
       "properties": {
         "enabled": {
           "type": "boolean",
-          "example": false,
-          "allowEmptyValue": false
+          "example": false
+        },
+        "integerString": {
+          "type": "string",
+          "example": "1235"
+        },
+        "bug_1964": {
+          "type": "boolean"
         }
       },
       "title": "Status"

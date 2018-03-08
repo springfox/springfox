@@ -149,7 +149,6 @@
         "status": {
           "type": "string",
           "description": "pet status in the store",
-          "allowEmptyValue": false,
           "enum": [
             "available",
             "pending",

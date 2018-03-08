@@ -32,7 +32,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,6 +43,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,6 +52,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.LanguageResponse;
+import springfox.documentation.spring.web.dummy.models.Response;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -373,30 +379,163 @@ public class BugsController {
   }
 
   @GetMapping(path = "/2161")
-  ResponseEntity<String> bug2161(@RequestBody Status status) {
+  ResponseEntity<String> bug2161And2249(@RequestBody Status status) {
     return ResponseEntity.ok("");
+  }
+
+  @GetMapping(path = "/1881")
+  ResponseEntity<String> bug1881(@RequestBody Bug1881 container) {
+    return ResponseEntity.ok("");
+  }
+
+  @ApiOperation(value = "Get all examples", nickname = "bug2268", notes = "Get all examples ", response = Example.class,
+      responseContainer = "List", authorizations = {
+      @Authorization(value = "user_auth", scopes = {
+          @AuthorizationScope(scope = "ADMIN", description = "Manage users"),
+          @AuthorizationScope(scope = "USER", description = "Maintain own user")
+      })
+  }, tags = { "example" })
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Success", response = Example.class, responseContainer = "List"),
+  })
+  @RequestMapping(value = "/2268",
+      produces = { "application/json" },
+      method = RequestMethod.GET)
+  ResponseEntity<List<Example>> bug2268(
+      @ApiParam(value = "Filter the list")
+      @Valid
+      @RequestParam(value = "$filter", required = false) String filter) {
+    return null;
+  }
+
+  @RequestMapping(value = "/bug2203", method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public ResponseEntity<Response<LanguageResponse>> bug2203() {
+    return ResponseEntity.ok(null);
+  }
+
+  public enum Lang {
+    zh, en
+  }
+
+  @XmlType(name = "model1907", namespace = "urn:bugs")
+  public static class Model1907 {
+
+    @NotNull
+    @XmlAttribute
+    private String somename;
+    @NotNull
+    @XmlElement
+    private Example example;
+
+    public Model1907() {
+    }
+
+    public String getSomename() {
+      return somename;
+    }
+
+    public void setSomename(String somename) {
+      this.somename = somename;
+    }
+
+    public Example getExample() {
+      return example;
+    }
+
+    public void setExample(Example example) {
+      this.example = example;
+    }
+  }
+
+  public static class Bug2081Filter {
+    String importantField;
+
+    public String getImportantField() {
+      return importantField;
+    }
+
+    public void setImportantField(String importantField) {
+      this.importantField = importantField;
+    }
+  }
+
+  public static class Bug2081 {
+    Bug2081Filter a;
+    Bug2081Filter b;
+
+    public Bug2081Filter getA() {
+      return a;
+    }
+
+    public void setA(Bug2081Filter a) {
+      this.a = a;
+    }
+
+    public Bug2081Filter getB() {
+      return b;
+    }
+
+    public void setB(Bug2081Filter b) {
+      this.b = b;
+    }
+  }
+
+  public static class Bug1881 {
+    private Map<String, List> data1;
+    private Map<String, List<Example>> data2;
+
+    public Map<String, List> getData1() {
+      return data1;
+    }
+
+    public void setData1(Map<String, List> data1) {
+      this.data1 = data1;
+    }
+
+    public Map<String, List<Example>> getData2() {
+      return data2;
+    }
+
+    public void setData2(Map<String, List<Example>> data2) {
+      this.data2 = data2;
+    }
   }
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   public class Status {
     @ApiModelProperty(example = "false")
     private final Boolean enabled;
+    @ApiModelProperty(example = "'1235'")
+    private final String integerString;
+
+    @JsonProperty("bug_1964")
+    @ApiModelProperty(required = true)
+    private boolean bug1964;
 
     @JsonCreator
     Status(
-        @JsonProperty("enabled") final Boolean enabled) {
+        @JsonProperty("enabled") Boolean enabled,
+        @JsonProperty("integerString") String integerString) {
       this.enabled = enabled;
+      this.integerString = integerString;
     }
 
     @JsonProperty("enabled")
     public Boolean isEnabled() {
       return enabled;
     }
-  }
 
+    @JsonProperty("integerString")
+    public String getIntegerString() {
+      return integerString;
+    }
 
-  public enum Lang {
-    zh, en
+    @JsonProperty("bug_1964")
+    @ApiModelProperty(required = true)
+    public boolean isBug1964() {
+      return bug1964;
+    }
   }
 
   public class LangNotFilteredWrapper {
@@ -439,13 +578,13 @@ public class BugsController {
 
   public class Key {
 
+    // if enabled, name will be shown @ApiModelProperty(value = "my description")
+    private final String key;
+
     @JsonCreator
     public Key(@JsonProperty("key") String keyContent) {
       key = keyContent;
     }
-
-    // if enabled, name will be shown @ApiModelProperty(value = "my description")
-    private final String key;
 
     public String getKey() {
       return key;
@@ -531,6 +670,8 @@ public class BugsController {
   }
 
   class Bug1697 {
+    private ByteBuffer bar;
+
     public ByteBuffer getBar() {
       return bar;
     }
@@ -538,10 +679,7 @@ public class BugsController {
     public void setBar(ByteBuffer bar) {
       this.bar = bar;
     }
-
-    private ByteBuffer bar;
   }
-
 
   class File {
     private String name;
@@ -628,71 +766,6 @@ public class BugsController {
       public String getInnerValue() {
         return innerValue;
       }
-    }
-  }
-
-
-  @XmlType(name = "model1907", namespace = "urn:bugs")
-  public static class Model1907 {
-
-    public Model1907() {
-    }
-
-    @NotNull
-    @XmlAttribute
-    private String somename;
-
-    @NotNull
-    @XmlElement
-    private Example example;
-
-    public String getSomename() {
-      return somename;
-    }
-
-    public void setSomename(String somename) {
-      this.somename = somename;
-    }
-
-    public Example getExample() {
-      return example;
-    }
-
-    public void setExample(Example example) {
-      this.example = example;
-    }
-  }
-
-  public static class Bug2081Filter {
-    String importantField;
-
-    public String getImportantField() {
-      return importantField;
-    }
-
-    public void setImportantField(String importantField) {
-      this.importantField = importantField;
-    }
-  }
-
-  public static class Bug2081 {
-    Bug2081Filter a;
-    Bug2081Filter b;
-
-    public Bug2081Filter getA() {
-      return a;
-    }
-
-    public void setA(Bug2081Filter a) {
-      this.a = a;
-    }
-
-    public Bug2081Filter getB() {
-      return b;
-    }
-
-    public void setB(Bug2081Filter b) {
-      this.b = b;
     }
   }
 }

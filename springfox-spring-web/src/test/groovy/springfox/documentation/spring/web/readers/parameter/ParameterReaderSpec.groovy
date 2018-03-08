@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -88,6 +89,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       new ParameterNameReader() | 'name'         | "method4"  | 'header'
       new ParameterNameReader() | 'name'         | "method5"  | 'modelAttr'
       new ParameterNameReader() | 'name'         | "method6"  | 'pathVar'
+      new ParameterNameReader() | 'name'         | "method7"  | 'partName'
   }
 
   class ParamNameClazzSpecimen {
@@ -102,6 +104,8 @@ class ParameterReaderSpec extends DocumentationContextSpec {
     void method5(@ModelAttribute(value = "modelAttr") String someName) {
     }
     void method6(@PathVariable(value = "pathVar") String someName) {
+    }
+    void method7(@RequestPart(value = "partName") String someName) {
     }
   }
 

@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModelProperty
 import io.swagger.annotations.ApiParam
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
@@ -33,24 +34,43 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 import springfox.documentation.spring.web.DescriptionResolver
 
 class SwaggerExpandedParameterBuilderSpec extends Specification {
-  def "Swagger parameter expander expands as expected" () {
+  @Unroll
+  def "Swagger parameter expander reads field #field.name as #expectedName "() {
     given:
-      def env = new DescriptionResolver(new MockEnvironment())
-      SwaggerExpandedParameterBuilder sut = new SwaggerExpandedParameterBuilder(env, new JacksonEnumTypeDeterminer())
+    def env = new DescriptionResolver(new MockEnvironment())
+    SwaggerExpandedParameterBuilder sut = new SwaggerExpandedParameterBuilder(env, new JacksonEnumTypeDeterminer())
+
     and:
-      ParameterExpansionContext context = new ParameterExpansionContext("Test", "", field,
-          DocumentationType.SWAGGER_12, new ParameterBuilder())
+    def builderWithDefaultName = new ParameterBuilder().name(field.name)
+
+    and:
+    ParameterExpansionContext context = new ParameterExpansionContext(
+        "Test",
+        "",
+        field,
+        DocumentationType.SWAGGER_12,
+        builderWithDefaultName)
+
     when:
-      sut.apply(context)
-      def param = context.parameterBuilder.build()
+    sut.apply(context)
+    def param = context.parameterBuilder.build()
+
     then:
-      param != null //TODO: add more fidelity to this test
+    param != null
+    param.name == expectedName
+
     and:
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
-      !sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(DocumentationType.SPRING_WEB)
+
     where:
-      field << [named("a"), named("b"), named("c"), named("d"), named("f") ]
+    field      | expectedName
+    named("a") | "a"
+    named("b") | "b1"
+    named("c") | "c2"
+    named("d") | "d3"
+    named("f") | "f4"
   }
 
   def named(String name) {
@@ -66,16 +86,16 @@ class SwaggerExpandedParameterBuilderSpec extends Specification {
   class A {
     public String a;
 
-    @ApiModelProperty(name = "b")
+    @ApiModelProperty(name = "b1")
     public String b;
 
-    @ApiParam(name = "c", allowableValues = "a, b, c")
+    @ApiParam(name = "c2", allowableValues = "a, b, c")
     public String c;
 
-    @ApiModelProperty(name = "d")
+    @ApiModelProperty(name = "d3")
     public D d;
 
-    @ApiModelProperty(name = "f")
+    @ApiModelProperty(name = "f4")
     public ExampleEnum f;
   }
 

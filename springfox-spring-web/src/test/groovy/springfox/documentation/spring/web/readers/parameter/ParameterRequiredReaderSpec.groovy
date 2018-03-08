@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
   @Shared description = new DescriptionResolver(new MockEnvironment())
 
   @Unroll
-  def "parameters required #paramAnnotations using default reader"() {
+  def "parameters required paramAnnotations using default reader"() {
     given:
       MethodParameter methodParameter = Mock(MethodParameter)
       methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
@@ -68,10 +68,11 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
       [[required: { -> true }] as ApiParam]                                 | false
       [[required: { -> false }] as ApiParam]                                | false
       [requestParam(true, "", ValueConstants.DEFAULT_NONE)]                 | true
-      [requestParam(true, "", "")]                                          | true
-      [requestParam(true, "", null)]                                        | true
+      [requestParam(true, "", "")]                                          | false
+      [requestParam(true, "", null)]                                        | false
       [requestParam(true, "", "default value")]                             | false
       [requestParam(false, "", ValueConstants.DEFAULT_NONE)]                | false
+      [requestParam(false, "", "")]                | false
       [requestBody(false)]                                                  | false
       [requestBody(true)]                                                   | true
       [requestPart(false, "")]                                              | false

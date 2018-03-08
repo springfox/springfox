@@ -103,6 +103,10 @@ class TypesForTestingSupport {
     resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, SimpleType))
   }
 
+  static ResolvedType nestedMapOfMaps() {
+    resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, SimpleType))
+  }
+
   static ResolvedType genericClassWithDeepGenerics() {
     resolver.resolve(GenericType, resolver.resolve(ResponseEntityAlternative, resolver.resolve(List, SimpleType)))
   }
@@ -207,5 +211,9 @@ class TypesForTestingSupport {
   }
   def ResolvedType genericResource() {
     resolver.resolve(Resource, SubclassOfResourceSupport.class)
+  }
+
+  static def nestedMaps() {
+    resolver.resolve(Response, LanguageResponse)
   }
 }

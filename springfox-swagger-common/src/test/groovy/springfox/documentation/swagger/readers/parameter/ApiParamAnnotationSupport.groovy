@@ -10,6 +10,7 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> true},
+      allowEmptyValue: { -> false},
       required: { -> true},
       collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
@@ -22,6 +23,7 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> allowableMultiple},
+      allowEmptyValue: { -> false},
       required: { -> true},
       collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
@@ -34,6 +36,7 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> false},
+      allowEmptyValue: { -> false},
       required: { -> required},
       collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
@@ -46,6 +49,7 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> false},
+      allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
@@ -58,6 +62,7 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> defaultValue},
       allowMultiple: { -> false},
+      allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
@@ -70,6 +75,7 @@ trait ApiParamAnnotationSupport {
       access: { -> access},
       defaultValue: { -> ""},
       allowMultiple: { -> false},
+      allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
       hidden: { -> false}] as ApiParam
@@ -82,6 +88,7 @@ trait ApiParamAnnotationSupport {
       access: { -> ""},
       defaultValue: { -> ""},
       allowMultiple: { -> false},
+      allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
       hidden: { -> hidden}] as ApiParam

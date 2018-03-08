@@ -46,6 +46,7 @@ public class ParameterBuilder {
   private String pattern;
   private List<VendorExtension> vendorExtensions = newArrayList();
   private String collectionFormat = null;
+  private Boolean allowEmptyValue;
 
   /**
    * Copy builder
@@ -65,6 +66,7 @@ public class ParameterBuilder {
         .required(other.isRequired())
         .type(other.getType().orNull())
         .hidden(other.isHidden())
+        .allowEmptyValue(other.isAllowEmptyValue())
         .vendorExtensions(other.getVendorExtentions());
   }
 
@@ -179,7 +181,7 @@ public class ParameterBuilder {
     this.modelRef = defaultIfAbsent(modelRef, this.modelRef);
     return this;
   }
-  
+
   /**
    * Updates if the parameter is hidden
    *
@@ -214,6 +216,17 @@ public class ParameterBuilder {
     return this;
   }
 
+  /**
+   * Updates the flag that allows sending empty values for this parameter
+   * @param allowEmptyValue - true/false
+   * @return this
+   * @since 2.8.1
+   */
+  public ParameterBuilder allowEmptyValue(Boolean allowEmptyValue) {
+    this.allowEmptyValue = defaultIfAbsent(allowEmptyValue, this.allowEmptyValue);
+    return this;
+  }
+
   public Parameter build() {
     return new Parameter(
         name,
@@ -221,6 +234,7 @@ public class ParameterBuilder {
         defaultValue,
         required,
         allowMultiple,
+        allowEmptyValue,
         modelRef,
         Optional.fromNullable(type),
         allowableValues,
@@ -232,8 +246,9 @@ public class ParameterBuilder {
         vendorExtensions);
   }
 
-    public ParameterBuilder pattern(String pattern) {
-      this.pattern = defaultIfAbsent(pattern, this.pattern);
-      return this;
-    }
+  public ParameterBuilder pattern(String pattern) {
+    this.pattern = defaultIfAbsent(pattern, this.pattern);
+    return this;
+  }
+
 }

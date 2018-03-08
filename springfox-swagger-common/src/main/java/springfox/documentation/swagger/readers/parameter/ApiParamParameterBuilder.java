@@ -68,6 +68,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .parameterAccess(emptyToNull(annotation.access()))
           .defaultValue(emptyToNull(annotation.defaultValue()))
           .allowMultiple(annotation.allowMultiple())
+          .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
           .hidden(annotation.hidden())
           .collectionFormat(annotation.collectionFormat());
