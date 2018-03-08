@@ -127,7 +127,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
       Optional<AnnotatedMember> annotatedMember
-          = Optional.fromNullable(safeGetPrimaryMember(jacksonProperty));
+          = Optional.fromNullable(safeGetPrimaryMember(jacksonProperty, givenContext.isReturnType()));
       if (annotatedMember.isPresent()) {
         properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext));
       }
@@ -144,9 +144,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     };
   }
 
-  private AnnotatedMember safeGetPrimaryMember(BeanPropertyDefinition jacksonProperty) {
+  private AnnotatedMember safeGetPrimaryMember(BeanPropertyDefinition jacksonProperty, boolean forSerialization) {
     try {
-      return jacksonProperty.getPrimaryMember();
+      if (forSerialization) {
+        return jacksonProperty.getAccessor();
+      }
+      return jacksonProperty.getMutator();
     } catch (IllegalArgumentException e) {
       LOG.warn(String.format("Unable to get unique property. %s", e.getMessage()));
       return null;
