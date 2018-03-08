@@ -30,7 +30,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class GenericTypeSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
   @Unroll
   def "Generic property on a generic types is inferred correctly for types"() {
@@ -41,7 +41,7 @@ class GenericTypeSpec extends SchemaSpecification {
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -49,7 +49,7 @@ class GenericTypeSpec extends SchemaSpecification {
         modelType,
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -91,7 +91,7 @@ class GenericTypeSpec extends SchemaSpecification {
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -99,7 +99,7 @@ class GenericTypeSpec extends SchemaSpecification {
         modelType,
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -130,7 +130,7 @@ class GenericTypeSpec extends SchemaSpecification {
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -140,7 +140,7 @@ class GenericTypeSpec extends SchemaSpecification {
         modelType,
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())

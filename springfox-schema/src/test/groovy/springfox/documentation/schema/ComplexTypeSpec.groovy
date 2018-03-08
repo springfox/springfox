@@ -33,7 +33,7 @@ class ComplexTypeSpec extends Specification {
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
   @Shared
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   
   def "complex type properties are inferred correctly"() {
     given:
@@ -43,7 +43,7 @@ class ComplexTypeSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -51,7 +51,7 @@ class ComplexTypeSpec extends Specification {
           resolver.resolve(complexType()),
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -92,7 +92,7 @@ class ComplexTypeSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -100,7 +100,7 @@ class ComplexTypeSpec extends Specification {
           complexType,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -138,7 +138,7 @@ class ComplexTypeSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -146,7 +146,7 @@ class ComplexTypeSpec extends Specification {
           complexType,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()

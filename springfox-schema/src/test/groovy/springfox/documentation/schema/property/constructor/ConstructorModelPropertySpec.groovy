@@ -42,7 +42,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
   def "Extracting information from resolved constructor params" () {
     given:
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
       def typeToTest = typeWithConstructorProperty()
       def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
       def modelContext = inputParam("group",
@@ -50,7 +50,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           documentationType,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           genericNamingStrategy,
           ImmutableSet.builder().build())

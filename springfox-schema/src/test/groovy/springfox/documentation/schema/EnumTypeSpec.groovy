@@ -35,7 +35,7 @@ class EnumTypeSpec extends Specification {
       def list = newArrayList("ONE", "TWO")
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
       Model asInput = provider.modelFor(
           inputParam("group",
@@ -43,7 +43,7 @@ class EnumTypeSpec extends Specification {
               Optional.absent(),
               new HashSet<>(),
               DocumentationType.SWAGGER_12,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -52,7 +52,7 @@ class EnumTypeSpec extends Specification {
               resolver.resolve(enumType()),
               Optional.absent(),
               DocumentationType.SWAGGER_12,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()

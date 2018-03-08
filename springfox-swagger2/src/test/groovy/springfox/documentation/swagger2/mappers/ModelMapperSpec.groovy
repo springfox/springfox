@@ -50,7 +50,7 @@ import static springfox.documentation.swagger2.mappers.ModelMapper.*
 class ModelMapperSpec extends SchemaSpecification {
 
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
-  def typeNameAdjuster = new TypeNameIndexingAdapter()
+  def typeNameAdapter = new TypeNameIndexingAdapter()
 
   def "models are serialized correctly"() {
     given:
@@ -61,7 +61,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -93,7 +93,7 @@ class ModelMapperSpec extends SchemaSpecification {
               Optional.absent(),
               new HashSet<>(),
               DocumentationType.SWAGGER_2,
-              typeNameAdjuster,
+              typeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -121,7 +121,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -146,7 +146,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -172,7 +172,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -199,7 +199,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -220,7 +220,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -261,7 +261,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -380,7 +380,7 @@ class ModelMapperSpec extends SchemaSpecification {
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdjuster,
+            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()

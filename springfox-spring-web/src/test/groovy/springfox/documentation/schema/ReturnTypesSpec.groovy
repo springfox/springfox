@@ -64,7 +64,7 @@ class ReturnTypesSpec extends Specification {
   def "Get response class name from ResolvedType"(){
     expect:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter()
+      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter()
       def modelResponseClass = sut.typeName(
           returnValue("group",
               new TypeResolver().resolve(
@@ -72,7 +72,7 @@ class ReturnTypesSpec extends Specification {
                   clazz),
               Optional.absent(),
               SWAGGER_12,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))

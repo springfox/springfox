@@ -30,7 +30,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class TypeNameExtractorSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   def TypeResolver resolver = new TypeResolver()
   def "Response class for container types are inferred correctly"() {
     given:
@@ -38,7 +38,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           containerType,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -66,7 +66,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -94,7 +94,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -102,7 +102,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
         genericClassWithGenericField(),
         Optional.absent(),
         SWAGGER_12,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -127,7 +127,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -136,7 +136,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
         Optional.of(resolver.resolve(Views.FirstView.class)),
         new HashSet<>(),
         SWAGGER_12,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -144,7 +144,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
         hashMap(String, SimpleType),
         Optional.absent(),
         SWAGGER_12,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())

@@ -49,7 +49,7 @@ class ModelContextSpec extends Specification {
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
   @Shared
-  def typeNameAdjuster = new TypeNameIndexingAdapter()
+  def typeNameAdapter = new TypeNameIndexingAdapter()
 
   def "ModelContext equals works as expected"() {
     given:
@@ -59,7 +59,7 @@ class ModelContextSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdjuster,
+          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
@@ -80,7 +80,7 @@ class ModelContextSpec extends Specification {
         Optional.absent(),
         new HashSet<>(),
         SWAGGER_12,
-        typeNameAdjuster,
+        typeNameAdapter,
         provider,
         namingStrategy,
         ImmutableSet.builder().build())
@@ -91,7 +91,7 @@ class ModelContextSpec extends Specification {
         ofType,
         Optional.absent(),
         SWAGGER_12,
-        typeNameAdjuster,
+        typeNameAdapter,
         provider,
         namingStrategy,
         ImmutableSet.builder().build())
@@ -104,7 +104,7 @@ class ModelContextSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdjuster,
+          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
@@ -113,7 +113,7 @@ class ModelContextSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdjuster,
+          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
@@ -121,7 +121,7 @@ class ModelContextSpec extends Specification {
           resolver.resolve(ExampleEnum),
           Optional.absent(),
           SWAGGER_12,
-          typeNameAdjuster,
+          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())

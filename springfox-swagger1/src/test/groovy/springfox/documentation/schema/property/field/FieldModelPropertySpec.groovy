@@ -37,7 +37,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
 class FieldModelPropertySpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def typeNameAdjuster = new TypeNameIndexingAdapter()
+  def typeNameAdapter = new TypeNameIndexingAdapter()
 
   def "Extracting information from resolved fields" () {
     given:
@@ -47,7 +47,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdjuster,
+          typeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -92,7 +92,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdjuster,
+          typeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())

@@ -45,7 +45,7 @@ public class ApiListingReferenceScanner {
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
 
-    UniqueTypeNameAdapter typeNameAdfuster = new TypeNameIndexingAdapter();
+    UniqueTypeNameAdapter uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
     ApiSelector selector = context.getApiSelector();
     Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
@@ -55,7 +55,7 @@ public class ApiListingReferenceScanner {
           handler.declaringClass(), 0);
 
       RequestMappingContext requestMappingContext
-          = new RequestMappingContext(context, handler, typeNameAdfuster);
+          = new RequestMappingContext(context, handler, uniqueTypeNameAdapter);
 
       resourceGroupRequestMappings.put(resourceGroup, requestMappingContext);
     }

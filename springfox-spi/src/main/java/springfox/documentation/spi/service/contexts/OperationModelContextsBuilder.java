@@ -36,7 +36,7 @@ import static com.google.common.collect.Sets.*;
 public class OperationModelContextsBuilder {
   private final String group;
   private final DocumentationType documentationType;
-  private final UniqueTypeNameAdapter uniqueTypeNameAdjuster;
+  private final UniqueTypeNameAdapter uniqueTypeNameAdapter;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
@@ -45,13 +45,13 @@ public class OperationModelContextsBuilder {
   public OperationModelContextsBuilder(
       String group,
       DocumentationType documentationType,
-      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdapter,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericsNamingStrategy,
       ImmutableSet<Class> ignorableParameterTypes) {
     this.group = group;
     this.documentationType = documentationType;
-    this.uniqueTypeNameAdjuster = uniqueTypeNameAdjuster;
+    this.uniqueTypeNameAdapter = uniqueTypeNameAdapter;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericsNamingStrategy = genericsNamingStrategy;
     ignorableTypes = ignorableParameterTypes;
@@ -67,7 +67,7 @@ public class OperationModelContextsBuilder {
         type,
         view,
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider,
         genericsNamingStrategy,
         ignorableTypes);
@@ -86,7 +86,7 @@ public class OperationModelContextsBuilder {
         view,
         validationGroups,
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider,
         genericsNamingStrategy,
         ignorableTypes);

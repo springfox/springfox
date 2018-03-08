@@ -30,7 +30,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ContainerTypesSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = resolver.resolve(typeWithLists())
@@ -39,7 +39,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -47,7 +47,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -91,7 +91,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -99,7 +99,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -143,7 +143,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -151,7 +151,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -198,7 +198,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateRulesWithWildcardMap(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -206,7 +206,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateRulesWithWildcardMap(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -248,7 +248,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateRulesWithWildcardMap(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -258,7 +258,7 @@ class ContainerTypesSpec extends SchemaSpecification {
         sut,
         Optional.absent(),
         SWAGGER_12,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateRulesWithWildcardMap(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -302,7 +302,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_2,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -312,7 +312,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           sut,
           Optional.absent(),
           SWAGGER_2,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())

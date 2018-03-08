@@ -49,7 +49,7 @@ public class RequestMappingContext {
 
   public RequestMappingContext(DocumentationContext context,
       RequestHandler handler,
-      UniqueTypeNameAdapter uniqueTypeNameAdjuster) {
+      UniqueTypeNameAdapter uniqueTypeNameAdapter) {
 
     this.documentationContext = context;
     this.handler = handler;
@@ -57,7 +57,7 @@ public class RequestMappingContext {
     this.operationModelContextsBuilder = new OperationModelContextsBuilder(
         context.getGroupName(),
         context.getDocumentationType(),
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         context.getAlternateTypeProvider(),
         context.getGenericsNamingStrategy(),
         context.getIgnorableParameterTypes());

@@ -28,7 +28,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelDependencyProviderSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
   @Unroll
   def "dependencies are inferred correctly"() {
@@ -39,7 +39,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -52,7 +52,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
               Optional.absent(),
               new HashSet<>(),
               documentationType,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -90,7 +90,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
         resolver.resolve(modelType),
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdjuster,,
+        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -102,7 +102,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
               it,
               Optional.absent(),
               documentationType,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))

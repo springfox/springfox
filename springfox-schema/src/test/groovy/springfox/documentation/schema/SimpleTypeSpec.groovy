@@ -30,7 +30,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class SimpleTypeSpec extends SchemaSpecification {
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
@@ -41,7 +41,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               Optional.absent(),
               new HashSet<>(),
               SWAGGER_12,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -50,7 +50,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               resolver.resolve(simpleType()),
               Optional.absent(),
               SWAGGER_12,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -109,7 +109,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               Optional.absent(),
               new HashSet<>(),
               documentationType,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -119,7 +119,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               resolver.resolve(typeWithConstructor()),
               Optional.absent(),
               documentationType,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -152,7 +152,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               Optional.absent(),
               new HashSet<>(),
               documentationType,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -162,7 +162,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               resolver.resolve(typeWithJsonPropertyAnnotation()),
               Optional.absent(),
               documentationType,
-              uniqueTypeNameAdjuster,
+              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()

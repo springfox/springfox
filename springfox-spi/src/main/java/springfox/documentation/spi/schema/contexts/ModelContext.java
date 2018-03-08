@@ -64,13 +64,13 @@ public class ModelContext {
       Optional<ResolvedType> view,
       Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
-      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdapter,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
       ImmutableSet<Class> ignorableTypes) {
     this.groupName = groupName;
     this.documentationType = documentationType;
-    this.uniqueTypeNameAdapter = uniqueTypeNameAdjuster;
+    this.uniqueTypeNameAdapter = uniqueTypeNameAdapter;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericNamingStrategy = genericNamingStrategy;
     this.ignorableTypes = ignorableTypes;
@@ -205,7 +205,7 @@ public class ModelContext {
       Optional<ResolvedType> view,
       Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
-      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdapter,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
       ImmutableSet<Class> ignorableTypes) {
@@ -217,7 +217,7 @@ public class ModelContext {
         view,
         validationGroups,
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider,
         genericNamingStrategy,
         ignorableTypes);
@@ -240,7 +240,7 @@ public class ModelContext {
       ResolvedType type,
       Optional<ResolvedType> view,
       DocumentationType documentationType,
-      UniqueTypeNameAdapter uniqueTypeNameAdjuster,
+      UniqueTypeNameAdapter uniqueTypeNameAdapter,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
       ImmutableSet<Class> ignorableTypes) {
@@ -252,7 +252,7 @@ public class ModelContext {
         view,
         Sets.<ResolvedType>newHashSet(),
         documentationType,
-        uniqueTypeNameAdjuster,
+        uniqueTypeNameAdapter,
         alternateTypeProvider,
         genericNamingStrategy,
         ignorableTypes);

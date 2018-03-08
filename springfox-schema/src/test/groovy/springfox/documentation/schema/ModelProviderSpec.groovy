@@ -36,7 +36,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ModelProviderSpec extends Specification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdjuster = new TypeNameIndexingAdapter();
+  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   def getNames = 
       new Function<Model, String>() {
         public String apply(Model model) {
@@ -51,7 +51,7 @@ class ModelProviderSpec extends Specification {
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdjuster,
+          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -78,7 +78,7 @@ class ModelProviderSpec extends Specification {
             Optional.absent(),
             new HashSet<>(),
             SWAGGER_12,
-            uniqueTypeNameAdjuster,
+            uniqueTypeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).values(), getNames)
