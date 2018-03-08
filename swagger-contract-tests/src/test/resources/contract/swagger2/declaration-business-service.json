@@ -41,7 +41,8 @@
             "in": "path",
             "description": "ID of business",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -138,7 +139,8 @@
             "in": "path",
             "description": "ID of business",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {

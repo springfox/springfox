@@ -46,12 +46,6 @@ public class UiConfiguration {
    * @deprecated @since 2.8.0. This field is unused
    */
   @Deprecated
-  private String[] supportedSubmitMethods;
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
   private boolean jsonEditor;
 
   /**
@@ -79,6 +73,7 @@ public class UiConfiguration {
   /*--------------------------------------------*\
    * Network
   \*--------------------------------------------*/
+  private String[] supportedSubmitMethods;
   private final String validatorUrl;
 
   /**
@@ -95,7 +90,8 @@ public class UiConfiguration {
     this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true, null);
   }
 
-  /** * Use the default constructor instead (with requestTimeout)
+  /**
+   * Use the default constructor instead (with requestTimeout)
    * {@link UiConfiguration#UiConfiguration(String, String, String, String, String[], boolean, boolean, Long)} )}
    *
    * @param validatorUrl           By default, Swagger-UI attempts to validate specs against swagger.io's online
@@ -111,8 +107,8 @@ public class UiConfiguration {
    * @param defaultModelRendering  Controls how models are shown when the API is first rendered. (The user can
    *                               always switch the rendering for a given model by clicking the 'Model' and 'Model
    *                               Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.
-   * @param supportedSubmitMethods An array of of the HTTP operations that will have the 'Try it out!' option. An
-   *                               empty array disables all operations. This does not filter the operations from the
+   * @param supportedSubmitMethods List of HTTP methods that have the Try it out feature enabled. An empty array
+   *                               disables Try it out for all operations. This does not filter the operations from the
    *                               display.
    * @param jsonEditor             Enables a graphical view for editing complex bodies. Defaults to false.
    * @param showRequestHeaders     Whether or not to show the headers that were sent when making a request via the
@@ -155,8 +151,8 @@ public class UiConfiguration {
    * @param defaultModelRendering  Controls how models are shown when the API is first rendered. (The user can
    *                               always switch the rendering for a given model by clicking the 'Model' and 'Model
    *                               Schema' links.) It can be set to 'model' or 'schema', and the default is 'schema'.
-   * @param supportedSubmitMethods An array of of the HTTP operations that will have the 'Try it out!' option. An
-   *                               empty array disables all operations. This does not filter the operations from the
+   * @param supportedSubmitMethods List of HTTP methods that have the Try it out feature enabled. An empty array
+   *                               disables Try it out for all operations. This does not filter the operations from the
    *                               display.
    * @param jsonEditor             Enables a graphical view for editing complex bodies. Defaults to false.
    * @param showRequestHeaders     Whether or not to show the headers that were sent when making a request via the
@@ -247,6 +243,80 @@ public class UiConfiguration {
       Boolean showExtensions,
       TagsSorter tagsSorter,
       String validatorUrl) {
+    this(
+        deepLinking,
+        displayOperationId,
+        defaultModelsExpandDepth,
+        defaultModelExpandDepth,
+        defaultModelRendering,
+        displayRequestDuration,
+        docExpansion,
+        filter,
+        maxDisplayedTags,
+        operationsSorter,
+        showExtensions,
+        tagsSorter,
+        Constants.DEFAULT_SUBMIT_METHODS,
+        validatorUrl);
+  }
+
+  /**
+   * Default constructor
+   *
+   * @param deepLinking              If set to true, enables deep linking for tags and operations. See the Deep Linking
+   *                                 documentation for more information.
+   * @param displayOperationId       Controls the display of operationId in operations list. The default is false.
+   * @param defaultModelsExpandDepth The default expansion depth for models (set to -1 completely hide the models).
+   * @param defaultModelExpandDepth  The default expansion depth for the model on the model-example section.
+   * @param defaultModelRendering    Controls how the model is shown when the API is first rendered. (The user can
+   *                                 always switch the rendering for a given model by clicking the 'Model' and 'Example
+   *                                 Value' links.)
+   * @param displayRequestDuration   Controls the display of the request duration (in milliseconds) for Try-It-Out
+   *                                 requests.
+   * @param docExpansion             Controls the default expansion setting for the operations and tags. It can be
+   *                                 'list' (expands only the tags), 'full' (expands the tags and operations) or 'none'
+   *                                 (expands nothing).
+   * @param filter                   If set, enables filtering. The top bar will show an edit box that you can use to
+   *                                 filter the tagged operations that are shown. Can be Boolean to enable or disable,
+   *                                 or a string, in which case filtering will be enabled using that string as the
+   *                                 filter expression. Filtering is case sensitive matching the filter expression
+   *                                 anywhere inside the tag.
+   * @param maxDisplayedTags         If set, limits the number of tagged operations displayed to at most this many. The
+   *                                 default is to show all operations.
+   * @param operationsSorter         Apply a sort to the operation list of each API. It can be 'alpha' (sort by paths
+   *                                 alphanumerically), 'method' (sort by HTTP method) or a function (see
+   *                                 Array.prototype.sort() to know how sort function works). Default is the order
+   *                                 returned by the server unchanged.
+   * @param showExtensions           Controls the display of vendor extension (x-) fields and values for Operations,
+   *                                 Parameters, and Schema.
+   * @param tagsSorter               Apply a sort to the tag list of each API. It can be 'alpha' (sort by paths
+   *                                 alphanumerically) or a function (see Array.prototype.sort() to learn how to write a
+   *                                 sort function). Two tag name strings are passed to the sorter for each pass.
+   *                                 Default is the order determined by Swagger-UI.
+   * @param supportedSubmitMethods   List of HTTP methods that have the Try it out feature enabled. An empty array
+   *                                 disables Try it out for all operations. This does not filter the operations from
+   *                                 the
+   *                                 display.
+   * @param validatorUrl             By default, Swagger-UI attempts to validate specs against swagger.io's online
+   *                                 validator. You can use this parameter to set a different validator URL, for example
+   *                                 for locally deployed validators (Validator Badge). Setting it to null will disable
+   *                                 validation. This parameter is relevant for Swagger 2.0 specs only.
+   */
+  public UiConfiguration(
+      Boolean deepLinking,
+      Boolean displayOperationId,
+      Integer defaultModelsExpandDepth,
+      Integer defaultModelExpandDepth,
+      ModelRendering defaultModelRendering,
+      Boolean displayRequestDuration,
+      DocExpansion docExpansion,
+      Object filter,
+      Integer maxDisplayedTags,
+      OperationsSorter operationsSorter,
+      Boolean showExtensions,
+      TagsSorter tagsSorter,
+      String[] supportedSubmitMethods,
+      String validatorUrl) {
     this.apisSorter = "alpha";
     this.deepLinking = deepLinking;
     this.displayOperationId = displayOperationId;
@@ -260,6 +330,7 @@ public class UiConfiguration {
     this.operationsSorter = operationsSorter;
     this.showExtensions = showExtensions;
     this.tagsSorter = tagsSorter;
+    this.supportedSubmitMethods = supportedSubmitMethods;
     this.validatorUrl = validatorUrl;
   }
 
@@ -270,15 +341,6 @@ public class UiConfiguration {
   @JsonProperty("apisSorter")
   public String getApisSorter() {
     return apisSorter;
-  }
-
-  /**
-   * @deprecated @since 2.8.0
-   */
-  @Deprecated
-  @JsonProperty("supportedSubmitMethods")
-  public String[] getSupportedSubmitMethods() {
-    return supportedSubmitMethods;
   }
 
   /**
@@ -368,24 +430,22 @@ public class UiConfiguration {
     return tagsSorter;
   }
 
+  @JsonProperty("supportedSubmitMethods")
+  public String[] getSupportedSubmitMethods() {
+    return supportedSubmitMethods;
+  }
+
   @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
     return validatorUrl;
   }
 
-  /**
-   * @deprecated @since 2.8.0
-   */
-  @Deprecated
   public static class Constants {
-    /**
-     * @deprecated @since 2.8.0
-     */
-    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] { "get", "post", "put", "delete", "patch" };
-
-    /**
-     * @deprecated @since 2.8.0
-     */
+    public static final String[] DEFAULT_SUBMIT_METHODS = new String[] {
+        "get", "put", "post",
+        "delete", "options", "head",
+        "patch", "trace" };
+    
     public static final String[] NO_SUBMIT_METHODS = new String[] {};
   }
 }

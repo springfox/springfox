@@ -25,10 +25,11 @@ buildscript {
 
 plugins {
   id "de.undercouch.download" version "3.3.0"
+  id "com.moowork.node" version "1.2.0"
 }
 
 ext {
-  swaggerUiVersion = '3.9.1'
+  swaggerUiVersion = '3.11.0'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -42,6 +43,15 @@ dependencies {
   testCompile libs.test
 }
 
+node {
+  version = '9.6.1'
+  npmVersion = '5.7.1'
+  distBaseUrl = 'https://nodejs.org/dist'
+  download = true
+  workDir = file("${project.buildDir}/nodejs")
+  npmWorkDir = file("${project.buildDir}/npm")
+  nodeModulesDir = file("${project.projectDir}/src/web")
+}
 
 task swaggerUiDownload << {
   if (!file(destinationZip)?.exists()) {
@@ -59,9 +69,13 @@ task unzip(type: Copy) {
   into file("${buildDir}")
 }
 
+task npmBuild(type: NpmTask) {
+  args = ['run', 'build']
+}
+
 task customizeSwaggerUi << {
   copy {
-    from("${projectDir}/src/web/js/springfox.js")
+    from("${projectDir}/src/web/dist/springfox.js")
     into("${buildDir}/${swaggerUiExplodedDir}")
   }
   copy {
@@ -111,3 +125,5 @@ clean.dependsOn(cleanup)
 build.dependsOn(customizeSwaggerUi)
 customizeSwaggerUi.dependsOn(unzip)
 unzip.dependsOn(swaggerUiDownload)
+swaggerUiDownload.dependsOn(npmBuild)
+npmBuild.dependsOn(npm_install)

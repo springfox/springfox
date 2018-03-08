@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -64,6 +65,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
         .or(methodParameter.findAnnotation(ModelAttribute.class).transform(modelAttributeValue()))
         .or(methodParameter.findAnnotation(RequestParam.class).transform(requestParamValue()))
         .or(methodParameter.findAnnotation(RequestHeader.class).transform(requestHeaderValue()))
+        .or(methodParameter.findAnnotation(RequestPart.class).transform(requestPartValue()))
         .orNull();
   }
 
@@ -99,6 +101,15 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     return new Function<PathVariable, String>() {
       @Override
       public String apply(PathVariable input) {
+        return input.value();
+      }
+    };
+  }
+
+  private Function<RequestPart, String> requestPartValue() {
+    return new Function<RequestPart, String>() {
+      @Override
+      public String apply(RequestPart input) {
         return input.value();
       }
     };

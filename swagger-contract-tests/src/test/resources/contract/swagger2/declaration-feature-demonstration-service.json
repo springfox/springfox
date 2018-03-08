@@ -988,7 +988,8 @@
             "maximum": 5,
             "exclusiveMaximum": false,
             "minimum": 1,
-            "exclusiveMinimum": false
+            "exclusiveMinimum": false,
+            "allowEmptyValue": false
           }
         ],
         "responses": {
@@ -1063,8 +1064,7 @@
         "bar": {
           "type": "integer",
           "format": "int32",
-          "description": "description of bar",
-          "allowEmptyValue": false
+          "description": "description of bar"
         },
         "enumType": {
           "type": "string",
@@ -1095,8 +1095,7 @@
         "readOnlyString": {
           "type": "string",
           "description": "A read only string",
-          "readOnly": true,
-          "allowEmptyValue": false
+          "readOnly": true
         }
       },
       "title": "Example"
@@ -1137,7 +1136,6 @@
         "params": {
           "type": "object",
           "description": "Map of params to be sent",
-          "allowEmptyValue": false,
           "additionalProperties": {
             "type": "string"
           }

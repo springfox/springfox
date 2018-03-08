@@ -79,7 +79,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     listOfMapOfStringToString()     | ["Map«string,string»"]
     listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
     listOfErasedMap()               | []
-
+    nestedMaps()                    | ["ApplicationLang", "Language", "LanguageResponse", "LanguageText", "List"]
   }
 
   @Unroll
@@ -129,6 +129,7 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     listOfMapOfStringToString()     | ["Map«string,string»"]
     listOfMapOfStringToSimpleType() | ["Map«string,SimpleType»", "SimpleType"]
     listOfErasedMap()               | []
+    nestedMaps()                    | ["ApplicationLang", "Language", "LanguageResponse", "LanguageText", "List"]
   }
 
 

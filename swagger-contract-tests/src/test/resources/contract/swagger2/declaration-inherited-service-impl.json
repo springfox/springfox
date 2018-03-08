@@ -40,7 +40,8 @@
             "in": "path",
             "description": "param1",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "allowEmptyValue": false
           }
         ],
         "responses": {

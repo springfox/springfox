@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,14 +16,23 @@
  *
  *
  */
+package springfox.documentation.schema;
 
-package springfox.test.contract.swaggertests
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.codehaus.groovy.runtime.ResourceGroovyMethods
+import java.io.Serializable;
 
-trait FileAccess {
-  String fileContents(String fileName) {
-    def resource = this.getClass().getResource("$fileName")
-    return ResourceGroovyMethods.getText(resource, 'UTF-8')
-  }
+public class LanguageText implements Serializable {
+
+    @JsonProperty("TEXT")
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
 }

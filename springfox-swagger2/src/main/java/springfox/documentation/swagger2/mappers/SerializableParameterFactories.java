@@ -69,6 +69,7 @@ public class SerializableParameterFactories {
     toReturn.setAccess(source.getParamAccess());
     toReturn.setPattern(source.getPattern());
     toReturn.setRequired(source.isRequired());
+    toReturn.setAllowEmptyValue(source.isAllowEmptyValue());
     maybeAddAllowableValuesToParameter(toReturn, source.getAllowableValues());
     if (paramModel.isCollection()) {
       if (paramModel.getItemType().equals("byte")) {

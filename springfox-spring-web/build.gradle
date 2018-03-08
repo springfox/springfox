@@ -10,7 +10,6 @@ ext {
 }
 
 dependencies {
-  compile "org.reflections:reflections:$reflections"
   compile libs.core
   compile libs.spring
   compile project(':springfox-spi')
@@ -18,6 +17,7 @@ dependencies {
 
   provided libs.springProvided
   provided libs.clientProvided
+  provided "org.reflections:reflections:$reflections"
 
   testCompile "javax.validation:validation-api:$validationApiVersion"
   testCompile project(':springfox-core')
