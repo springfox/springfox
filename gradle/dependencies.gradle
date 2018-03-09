@@ -3,7 +3,7 @@ ext {
   cglib = "3.2.5"
   classmate = "1.3.4"
   equalsverifierVersion = '2.4'
-  groovy = "2.4.13"
+  groovy = "2.4.14"
   guava = "20.0"
   jacocoVersion = '0.8.0'
   jackson = '2.9.4'

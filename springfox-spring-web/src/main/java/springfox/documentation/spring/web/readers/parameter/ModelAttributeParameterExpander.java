@@ -72,13 +72,12 @@ public class ModelAttributeParameterExpander {
   public ModelAttributeParameterExpander(
       FieldProvider fields,
       EnumTypeDeterminer enumTypeDeterminer) {
-    
+
     this.fieldProvider = fields;
     this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   public List<Parameter> expand(ExpansionContext context) {
-
     List<Parameter> parameters = newArrayList();
     Set<String> beanPropNames = getBeanPropertyNames(context.getParamType().getErasedType());
     Iterable<ResolvedField> fields = FluentIterable.from(fieldProvider.in(context.getParamType()))
@@ -111,12 +110,13 @@ public class ModelAttributeParameterExpander {
       if (Types.isBaseType(itemType) || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
         parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
       } else {
-        parameters.addAll(
-            expand(
-                context.childContext(
-                    nestedParentName(context.getParentName(), each.getField()),
-                    itemType,
-                    context.getDocumentationContext())));
+        ExpansionContext childContext = context.childContext(
+            nestedParentName(context.getParentName(), each.getField()),
+            itemType,
+            context.getDocumentationContext());
+        if (!context.hasSeenType(itemType)) {
+          parameters.addAll(expand(childContext));
+        }
       }
     }
 

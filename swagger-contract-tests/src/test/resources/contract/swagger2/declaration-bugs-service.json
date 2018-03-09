@@ -1336,6 +1336,75 @@
         ]
       }
     },
+    "/bugs/bug1827{?authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name,authorIds}": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "addBook",
+        "operationId": "addBookUsingGET_1",
+        "parameters": [
+          {
+            "name": "authors[0].books[0].id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "authors[0].books[0].name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "authors[0].id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "authors[0].name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "authorIds",
+            "in": "query",
+            "description": "authorIds",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/bug2203": {
       "get": {
         "tags": [
@@ -1351,6 +1420,23 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/Response«LanguageResponse»"
+            }
+          }
+        }
+      }
+    },
+    "/bugs/bug2282": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "/bug2282",
+        "operationId": "bug2282UsingGET_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -1778,6 +1864,9 @@
         "bug_1964"
       ],
       "properties": {
+        "bug_1964": {
+          "type": "boolean"
+        },
         "enabled": {
           "type": "boolean",
           "example": false
@@ -1785,9 +1874,6 @@
         "integerString": {
           "type": "string",
           "example": "1235"
-        },
-        "bug_1964": {
-          "type": "boolean"
         }
       },
       "title": "Status"
