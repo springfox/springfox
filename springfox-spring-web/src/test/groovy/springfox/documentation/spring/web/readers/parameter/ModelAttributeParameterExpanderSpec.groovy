@@ -147,4 +147,121 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     then:
     parameters.size() == 0
   }
+
+
+  def "should handle expansion of Book"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(Book),
+            context()))
+
+    expect:
+    parameters.size() == 3
+    parameters.find { it.name == 'id' }
+    parameters.find { it.name == 'authors[0].id' }
+    parameters.find { it.name == 'authors[0].books[0].id' }
+  }
+
+  class Book {
+    private Long id
+    private Set<Author> authors
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    Set<Author> getAuthors() {
+      return authors
+    }
+
+    void setAuthors(Set<Author> authors) {
+      this.authors = authors
+    }
+  }
+
+  class Author {
+    private Long id
+    private List<Book> books
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    List<Book> getBooks() {
+      return books
+    }
+
+    void setBooks(List<Book> books) {
+      this.books = books
+    }
+  }
+
+  def "should handle expansion of User"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(User),
+            context()))
+
+    expect:
+    parameters.size() == 2
+    parameters.find { it.name == 'office.parent.name' }
+    parameters.find { it.name == 'office.name' }
+  }
+
+  class User {
+    Office office
+
+    Office getOffice() {
+      return office
+    }
+
+    void setOffice(Office office) {
+      this.office = office
+    }
+  }
+
+  class Office extends TreeEntity<Office> {
+    String name
+
+    String getName() {
+      return name
+    }
+
+    void setName(String name) {
+      this.name = name
+    }
+  }
+
+  class TreeEntity<T> {
+    T  parent
+    User user
+
+    User getUser() {
+      return user
+    }
+
+    void setUser(User user) {
+      this.user = user
+    }
+
+    T getParent() {
+      return parent
+    }
+
+    void setParent(T parent) {
+      this.parent = parent
+    }
+  }
 }

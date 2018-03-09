@@ -1425,6 +1425,23 @@
         }
       }
     },
+    "/bugs/bug2282": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "/bug2282",
+        "operationId": "bug2282UsingGET_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/{bar}/2148{?year}": {
       "get": {
         "tags": [

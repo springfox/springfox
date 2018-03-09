@@ -422,6 +422,40 @@ public class BugsController {
     return "";
   }
 
+  @GetMapping("/bug2282")
+  @ApiOperation("/bug2282")
+  public String bug2282(User user){
+    return "";
+  }
+
+  public class User {
+    Office office;
+
+    public Office getOffice() {
+      return office;
+    }
+
+    public void setOffice(Office office) {
+      this.office = office;
+    }
+  }
+
+  public class Office extends TreeEntity<Office> {
+  }
+
+  public class TreeEntity<T> {
+    //    private T  parent ;
+    User user;
+
+    public User getUser() {
+      return user;
+    }
+
+    public void setUser(User user) {
+      this.user = user;
+    }
+  }
+
   public class Book {
     private Long id;
     private String name;
