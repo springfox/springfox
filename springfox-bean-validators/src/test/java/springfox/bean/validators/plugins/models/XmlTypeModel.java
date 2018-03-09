@@ -35,14 +35,10 @@ public class XmlTypeModel implements Serializable {
   @XmlElement(name = "strings")
   private List<String> strings;
 
-  public XmlTypeModel() {
-  }
-
   public List<String> getStrings() {
     if (this.strings == null) {
       this.strings = new ArrayList();
     }
-
     return this.strings;
   }
 
