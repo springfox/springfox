@@ -69,6 +69,7 @@ import java.nio.ByteBuffer;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.*;
@@ -412,6 +413,61 @@ public class BugsController {
       produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<Response<LanguageResponse>> bug2203() {
     return ResponseEntity.ok(null);
+  }
+
+  @GetMapping("/bug1827")
+  public String addBook(
+      @ModelAttribute Book book,
+      @RequestParam(required = false) String[] authorIds) {
+    return "";
+  }
+
+  public class Book {
+    private Long id;
+    private String name;
+    private Set<Author> authors;
+
+    public Long getId() {
+      return id;
+    }
+
+    public void setId(Long id) {
+      this.id = id;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public Set<Author> getAuthors() {
+      return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+      this.authors = authors;
+    }
+  }
+
+  public class Author {
+    private Long id;
+    private String name;
+    private List<Book> books;
+
+    public Long getId() {
+      return id;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public List<Book> getBooks() {
+      return books;
+    }
   }
 
   public enum Lang {

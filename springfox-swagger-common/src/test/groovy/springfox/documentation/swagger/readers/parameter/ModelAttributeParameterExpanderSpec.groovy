@@ -84,6 +84,63 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     parameters.find { it.name == 'accountTypes' }
   }
 
+  def "should handle expansion of nested with lists of objects"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(Book),
+            context()))
+
+    expect:
+    parameters.size() == 3
+    parameters.find { it.name == 'id' }
+    parameters.find { it.name == 'authors[0].id' }
+    parameters.find { it.name == 'authors[0].books[0].id' }
+  }
+
+  class Book {
+    private Long id
+    private Set<Author> authors
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    Set<Author> getAuthors() {
+      return authors
+    }
+
+    void setAuthors(Set<Author> authors) {
+      this.authors = authors
+    }
+  }
+
+  class Author {
+    private Long id
+    private List<Book> books
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    List<Book> getBooks() {
+      return books
+    }
+
+    void setBooks(List<Book> books) {
+      this.books = books
+    }
+  }
+
   class SwaggerDefaults implements DefaultsProviderPlugin {
     private final DefaultConfiguration defaultConfiguration
     private TypeResolver typeResolver
