@@ -49,16 +49,29 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def setup() {
     typeResolver = new TypeResolver()
-    plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), new JacksonEnumTypeDeterminer())
-    sut.pluginsManager = swaggerServicePlugins([new SwaggerDefaults(new Defaults(), new TypeResolver(),
-        Mock(ServletContext))])
+    plugin.alternateTypeRules(
+        newRule(
+            typeResolver.resolve(LocalDateTime),
+            typeResolver.resolve(String)))
+
+    sut = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new JacksonEnumTypeDeterminer())
+
+    sut.pluginsManager = swaggerServicePlugins([
+        new SwaggerDefaults(
+            new Defaults(),
+            new TypeResolver(),
+            Mock(ServletContext))])
   }
 
   def "shouldn't expand hidden parameters"() {
     when:
     def parameters = sut.expand(
-        new ExpansionContext("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context()))
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(ModelAttributeWithHiddenParametersExample),
+            context()))
 
     then:
     parameters.size() == 7
@@ -69,6 +82,63 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     parameters.find { it.name == 'arrayProp' }
     parameters.find { it.name == 'complexProp.name' }
     parameters.find { it.name == 'accountTypes' }
+  }
+
+  def "should handle expansion of nested with lists of objects"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(Book),
+            context()))
+
+    expect:
+    parameters.size() == 3
+    parameters.find { it.name == 'id' }
+    parameters.find { it.name == 'authors[0].id' }
+    parameters.find { it.name == 'authors[0].books[0].id' }
+  }
+
+  class Book {
+    private Long id
+    private Set<Author> authors
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    Set<Author> getAuthors() {
+      return authors
+    }
+
+    void setAuthors(Set<Author> authors) {
+      this.authors = authors
+    }
+  }
+
+  class Author {
+    private Long id
+    private List<Book> books
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    List<Book> getBooks() {
+      return books
+    }
+
+    void setBooks(List<Book> books) {
+      this.books = books
+    }
   }
 
   class SwaggerDefaults implements DefaultsProviderPlugin {
