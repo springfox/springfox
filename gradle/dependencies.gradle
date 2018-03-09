@@ -22,7 +22,7 @@ ext {
   springHateoas = "0.24.0.RELEASE"
   springDataRest = "3.0.5.RELEASE"
   springPluginVersion = "1.2.0.RELEASE"
-  swagger2Core = "1.5.14"
+  swagger2Core = "1.5.18"
   springBoot = "2.0.0.RELEASE"
   springfoxRfc6570Version = "1.0.0"
   undercouch = "3.2.0"
