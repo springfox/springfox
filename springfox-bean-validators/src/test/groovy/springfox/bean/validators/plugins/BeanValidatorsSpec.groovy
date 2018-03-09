@@ -15,7 +15,6 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
-import java.lang.annotation.Annotation
 import java.lang.reflect.AnnotatedElement
 
 class BeanValidatorsSpec extends Specification {
