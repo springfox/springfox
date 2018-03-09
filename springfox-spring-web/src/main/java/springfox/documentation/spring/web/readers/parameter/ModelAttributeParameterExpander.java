@@ -110,12 +110,13 @@ public class ModelAttributeParameterExpander {
       if (Types.isBaseType(itemType) || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
         parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
       } else {
-        parameters.addAll(
-            expand(
-                context.childContext(
-                    nestedParentName(context.getParentName(), each.getField()),
-                    itemType,
-                    context.getDocumentationContext())));
+        ExpansionContext childContext = context.childContext(
+            nestedParentName(context.getParentName(), each.getField()),
+            itemType,
+            context.getDocumentationContext());
+        if (!context.hasSeenType(itemType)) {
+          parameters.addAll(expand(childContext));
+        }
       }
     }
 
