@@ -72,13 +72,12 @@ public class ModelAttributeParameterExpander {
   public ModelAttributeParameterExpander(
       FieldProvider fields,
       EnumTypeDeterminer enumTypeDeterminer) {
-    
+
     this.fieldProvider = fields;
     this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   public List<Parameter> expand(ExpansionContext context) {
-
     List<Parameter> parameters = newArrayList();
     Set<String> beanPropNames = getBeanPropertyNames(context.getParamType().getErasedType());
     Iterable<ResolvedField> fields = FluentIterable.from(fieldProvider.in(context.getParamType()))

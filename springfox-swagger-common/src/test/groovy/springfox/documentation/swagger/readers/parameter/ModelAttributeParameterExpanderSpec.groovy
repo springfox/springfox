@@ -49,16 +49,29 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def setup() {
     typeResolver = new TypeResolver()
-    plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), new JacksonEnumTypeDeterminer())
-    sut.pluginsManager = swaggerServicePlugins([new SwaggerDefaults(new Defaults(), new TypeResolver(),
-        Mock(ServletContext))])
+    plugin.alternateTypeRules(
+        newRule(
+            typeResolver.resolve(LocalDateTime),
+            typeResolver.resolve(String)))
+
+    sut = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new JacksonEnumTypeDeterminer())
+
+    sut.pluginsManager = swaggerServicePlugins([
+        new SwaggerDefaults(
+            new Defaults(),
+            new TypeResolver(),
+            Mock(ServletContext))])
   }
 
   def "shouldn't expand hidden parameters"() {
     when:
     def parameters = sut.expand(
-        new ExpansionContext("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context()))
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(ModelAttributeWithHiddenParametersExample),
+            context()))
 
     then:
     parameters.size() == 7
