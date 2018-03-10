@@ -19,8 +19,10 @@
 
 package springfox.documentation.schema.property
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class BeanPropertyDefinitionsSpec extends Specification {
   def "Cannot instantiate static type"() {
@@ -41,6 +43,31 @@ class BeanPropertyDefinitionsSpec extends Specification {
     then:
     1 * beanPropertyDefinition.getInternalName() >> "aName"
     name == "aName"
+  }
+
+  @Unroll
+  def "Should apply unwrapping prefix correctly for #propertyName with #prefix"() {
+    given:
+    def strategy = new ObjectMapperBeanPropertyNamingStrategy()
+    strategy.objectMapper = new ObjectMapper()
+    def beanDefinition = Mock(BeanPropertyDefinition)
+
+    when:
+    beanDefinition.name >> "property"
+    def name = BeanPropertyDefinitions.name(
+        beanDefinition,
+        true,
+        strategy,
+        prefix)
+
+    then:
+    name == expectedName
+
+    where:
+    prefix | propertyName | expectedName
+    "__"   | "property"   | "__property"
+    ""     | "property"   | "property"
+
   }
 
 }

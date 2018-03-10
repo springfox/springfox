@@ -60,7 +60,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
       ObjectMapper mapper = new ObjectMapper()
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(propertyDefinition, true, namingStrategy)
+      String propName = name(propertyDefinition, true, namingStrategy, "")
       def sut = new BeanModelProperty(
           propName,
           method,
@@ -102,7 +102,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
       ObjectMapper mapper = new ObjectMapper()
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(propertyDefinition, true, namingStrategy)
+      String propName = name(propertyDefinition, true, namingStrategy, "")
       def sut = new BeanModelProperty(
           propName,
           method,
@@ -148,7 +148,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
       ObjectMapper mapper = new ObjectMapper()
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(propertyDefinition, true, namingStrategy)
+      String propName = name(propertyDefinition, true, namingStrategy, "")
       def sut = new BeanModelProperty(
           propName,
           method,
