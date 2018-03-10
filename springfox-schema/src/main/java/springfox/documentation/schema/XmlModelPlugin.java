@@ -20,6 +20,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @Component
+@Conditional(JaxbPresentInClassPathCondition.class)
 public class XmlModelPlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
 
