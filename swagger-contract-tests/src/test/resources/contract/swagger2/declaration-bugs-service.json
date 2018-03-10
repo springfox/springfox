@@ -1405,6 +1405,23 @@
         }
       }
     },
+    "/bugs/bug2182": {
+      "get": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "/bug2182",
+        "operationId": "bug2182UsingGET_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ProductVO"
+            }
+          }
+        }
+      }
+    },
     "/bugs/bug2203": {
       "get": {
         "tags": [
@@ -1930,6 +1947,18 @@
         }
       },
       "title": "NestedType"
+    },
+    "ProductVO": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "specification_name": {
+          "type": "string"
+        }
+      },
+      "title": "ProductVO"
     },
     "Resource«string»": {
       "type": "object",

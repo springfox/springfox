@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
@@ -55,7 +54,6 @@ import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -113,6 +111,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
+    return propertiesFor(type, givenContext, "");
+  }
+
+  private List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext, String namePrefix) {
     List<ModelProperty> properties = newArrayList();
     BeanDescription beanDescription = beanDescription(type, givenContext);
     Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
@@ -123,7 +125,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       Optional<AnnotatedMember> annotatedMember
           = Optional.fromNullable(safeGetPrimaryMember(jacksonProperty));
       if (annotatedMember.isPresent()) {
-        properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext));
+        properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext, namePrefix));
       }
     }
     return FluentIterable.from(properties).toSortedSet(byPropertyName()).asList();
@@ -149,7 +151,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   private Function<ResolvedMethod, List<ModelProperty>> propertyFromBean(
       final ModelContext givenContext,
-      final BeanPropertyDefinition jacksonProperty) {
+      final BeanPropertyDefinition jacksonProperty,
+      final String namePrefix) {
 
     return new Function<ResolvedMethod, List<ModelProperty>>() {
       @Override
@@ -157,9 +160,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         ResolvedType type = paramOrReturnType(typeResolver, input);
         if (!givenContext.canIgnore(type)) {
           if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
-              return propertiesFor(type, fromParent(givenContext, type));
+            return propertiesFor(
+                type,
+                fromParent(givenContext, type),
+                String.format(
+                    "%s%s",
+                    namePrefix,
+                    unwrappedPrefix(jacksonProperty.getPrimaryMember())));
           }
-          return newArrayList(beanModelProperty(input, jacksonProperty, givenContext));
+          return newArrayList(beanModelProperty(input, jacksonProperty, givenContext, namePrefix));
         }
         return newArrayList();
       }
@@ -169,50 +178,54 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   private Function<ResolvedField, List<ModelProperty>> propertyFromField(
       final ModelContext givenContext,
-      final BeanPropertyDefinition jacksonProperty) {
+      final BeanPropertyDefinition jacksonProperty,
+      final String namePrefix) {
 
     return new Function<ResolvedField, List<ModelProperty>>() {
       @Override
       public List<ModelProperty> apply(ResolvedField input) {
         if (!givenContext.canIgnore(input.getType())) {
           if (memberIsUnwrapped(jacksonProperty.getField())) {
-              return propertiesFor(input.getType(), ModelContext.fromParent(givenContext, input.getType()));
+            return propertiesFor(
+                input.getType(),
+                ModelContext.fromParent(givenContext, input.getType()),
+                String.format(
+                    "%s%s",
+                    namePrefix,
+                    unwrappedPrefix(jacksonProperty.getPrimaryMember())));
           }
-          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext));
+          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext, namePrefix));
         }
         return newArrayList();
       }
     };
   }
 
-  private Predicate<? super Annotation> ofType(final Class<?> annotationType) {
-    return new Predicate<Annotation>() {
-      @Override
-      public boolean apply(Annotation input) {
-        return annotationType.isAssignableFrom(input.getClass());
-      }
-    };
-  }
-
-  @VisibleForTesting
-  List<ModelProperty> candidateProperties(
+  private List<ModelProperty> candidateProperties(
       ResolvedType type,
       AnnotatedMember member,
       BeanPropertyDefinition jacksonProperty,
-      ModelContext givenContext) {
+      ModelContext givenContext,
+      String namePrefix) {
 
     List<ModelProperty> properties = newArrayList();
     if (member instanceof AnnotatedMethod) {
       properties.addAll(findAccessorMethod(type, member)
-          .transform(propertyFromBean(givenContext, jacksonProperty))
+          .transform(propertyFromBean(givenContext, jacksonProperty, namePrefix))
           .or(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedField) {
       properties.addAll(findField(type, jacksonProperty.getInternalName())
-          .transform(propertyFromField(givenContext, jacksonProperty))
+          .transform(propertyFromField(givenContext, jacksonProperty, namePrefix))
           .or(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedParameter) {
       ModelContext modelContext = ModelContext.fromParent(givenContext, type);
-      properties.addAll(fromFactoryMethod(type, jacksonProperty, (AnnotatedParameter) member, modelContext));
+      properties.addAll(
+          fromFactoryMethod(
+              type,
+              jacksonProperty,
+              (AnnotatedParameter) member,
+              modelContext,
+              namePrefix));
     }
     return from(properties).filter(hiddenProperties()).toList();
 
@@ -241,15 +254,23 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private ModelProperty fieldModelProperty(
       ResolvedField childField,
       BeanPropertyDefinition jacksonProperty,
-      ModelContext modelContext) {
-    String fieldName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
-    FieldModelProperty fieldModelProperty
-        = new FieldModelProperty(
+      ModelContext modelContext,
+      String namePrefix) {
+
+    String fieldName = name(
+        jacksonProperty,
+        modelContext.isReturnType(),
+        namingStrategy,
+        namePrefix);
+
+    FieldModelProperty fieldModelProperty =
+        new FieldModelProperty(
             fieldName,
             childField,
             typeResolver,
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
+    
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(fieldModelProperty.getName())
         .type(fieldModelProperty.getType())
@@ -270,9 +291,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private ModelProperty beanModelProperty(
       ResolvedMethod childProperty,
       BeanPropertyDefinition jacksonProperty,
-      ModelContext modelContext) {
+      ModelContext modelContext,
+      String namePrefix) {
 
-    String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
+    String propertyName = name(
+        jacksonProperty,
+        modelContext.isReturnType(),
+        namingStrategy,
+        namePrefix);
+
     BeanModelProperty beanModelProperty
         = new BeanModelProperty(
         propertyName,
@@ -304,17 +331,23 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ResolvedParameterizedMember constructor,
       BeanPropertyDefinition jacksonProperty,
       AnnotatedParameter parameter,
-      ModelContext modelContext) {
+      ModelContext modelContext,
+      String namePrefix) {
 
-    String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
+    String propertyName = name(
+        jacksonProperty,
+        modelContext.isReturnType(),
+        namingStrategy,
+        namePrefix);
+
     ParameterModelProperty parameterModelProperty
         = new ParameterModelProperty(
-            propertyName,
-            parameter,
-            constructor,
-            typeResolver,
-            modelContext.getAlternateTypeProvider(),
-            jacksonProperty);
+        propertyName,
+        parameter,
+        constructor,
+        typeResolver,
+        modelContext.getAlternateTypeProvider(),
+        jacksonProperty);
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
@@ -348,13 +381,14 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final ResolvedType resolvedType,
       final BeanPropertyDefinition beanProperty,
       final AnnotatedParameter member,
-      final ModelContext givenContext) {
+      final ModelContext givenContext,
+      final String namePrefix) {
 
     Optional<ModelProperty> property = factoryMethods.in(resolvedType, factoryMethodOf(member))
         .transform(new Function<ResolvedParameterizedMember, ModelProperty>() {
           @Override
           public ModelProperty apply(ResolvedParameterizedMember input) {
-            return paramModelProperty(input, beanProperty, member, givenContext);
+            return paramModelProperty(input, beanProperty, member, givenContext, namePrefix);
           }
         });
     if (property.isPresent()) {

@@ -436,6 +436,47 @@ public class BugsController {
     return "";
   }
 
+  @GetMapping(value = "/bug2182")
+  @ApiOperation("/bug2182")
+  public ProductVO bug2182(){
+    return null;
+  }
+
+  public class ProductVO {
+    private String name;
+
+    @JsonUnwrapped(prefix = "specification_")
+    private Specification specification;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public Specification getSpecification() {
+      return specification;
+    }
+
+    public void setSpecification(Specification specification) {
+      this.specification = specification;
+    }
+  }
+
+  public class Specification {
+    private String name;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+  }
+
   public class User {
     Office office;
 
