@@ -22,6 +22,7 @@ package springfox.documentation.schema;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 
 import java.lang.annotation.Annotation;
@@ -55,6 +56,21 @@ public class Annotations {
       return false;
     }
     return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
+  }
+
+  public static String unwrappedPrefix(AnnotatedMember member) {
+    if (member == null) {
+      return "";
+    }
+
+    return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class))
+        .transform(new Function<JsonUnwrapped,
+            String>() {
+          @Override
+          public String apply(JsonUnwrapped input) {
+            return input.prefix();
+          }
+        }).or("");
   }
 
   @SuppressWarnings("PMD")
