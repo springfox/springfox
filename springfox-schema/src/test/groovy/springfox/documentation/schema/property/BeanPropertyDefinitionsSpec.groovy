@@ -25,20 +25,22 @@ import spock.lang.Specification
 class BeanPropertyDefinitionsSpec extends Specification {
   def "Cannot instantiate static type"() {
     when:
-      new BeanPropertyDefinitions()
+    new BeanPropertyDefinitions()
+
     then:
-      thrown(UnsupportedOperationException)
+    thrown(UnsupportedOperationException)
   }
 
   def "Should return the internal bean name"() {
     given:
-      BeanPropertyDefinition beanPropertyDefinition = Mock(BeanPropertyDefinition)
+    BeanPropertyDefinition beanPropertyDefinition = Mock(BeanPropertyDefinition)
 
     when:
-      def name = BeanPropertyDefinitions.beanPropertyByInternalName().apply(beanPropertyDefinition)
+    def name = BeanPropertyDefinitions.beanPropertyByInternalName().apply(beanPropertyDefinition)
+
     then:
-      1 * beanPropertyDefinition.getInternalName() >> "aName"
-      name == "aName"
+    1 * beanPropertyDefinition.getInternalName() >> "aName"
+    name == "aName"
   }
 
 }

@@ -31,39 +31,43 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)
 class CachingModelPropertiesProviderSpec extends Specification {
-  def "Implementation caches the invocations" () {
+  def "Implementation caches the invocations"() {
     given:
-      def context = inputParam("group",
-          complexType(),
-          DocumentationType.SWAGGER_2,
-          new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
-      def property = aProperty()
-      def mock = Mock(ModelPropertiesProvider) {
-        propertiesFor(_, context) >> [ property ]
-      }
+    def context = inputParam("group",
+        complexType(),
+        DocumentationType.SWAGGER_2,
+        new AlternateTypeProvider([]),
+        new CodeGenGenericTypeNamingStrategy(),
+        ImmutableSet.builder().build())
+    def property = aProperty()
+    def mock = Mock(ModelPropertiesProvider) {
+      propertiesFor(_, context) >> [property]
+    }
+
     when:
-      def sut = new CachingModelPropertiesProvider(new TypeResolver(), mock)
+    def sut = new CachingModelPropertiesProvider(new TypeResolver(), mock)
+
     then:
-      sut.propertiesFor(Mock(ResolvedType), context) == sut.propertiesFor(Mock(ResolvedType), context)
+    sut.propertiesFor(Mock(ResolvedType), context) == sut.propertiesFor(Mock(ResolvedType), context)
   }
 
-  def "When cache miss occurs" () {
+  def "When cache miss occurs"() {
     given:
-      def context = inputParam("group",
-          complexType(),
-          DocumentationType.SWAGGER_2,
-          new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
-      def mock = Mock(ModelPropertiesProvider) {
-        propertiesFor(_, context) >> { throw new NullPointerException("") }
-      }
+    def context = inputParam("group",
+        complexType(),
+        DocumentationType.SWAGGER_2,
+        new AlternateTypeProvider([]),
+        new CodeGenGenericTypeNamingStrategy(),
+        ImmutableSet.builder().build())
+    def mock = Mock(ModelPropertiesProvider) {
+      propertiesFor(_, context) >> { throw new NullPointerException("") }
+    }
+
     when:
-      def sut = new CachingModelPropertiesProvider(new TypeResolver(), mock)
+    def sut = new CachingModelPropertiesProvider(new TypeResolver(), mock)
+
     then:
-      0 == sut.propertiesFor(Mock(ResolvedType), context).size()
+    0 == sut.propertiesFor(Mock(ResolvedType), context).size()
   }
 
   def aProperty() {

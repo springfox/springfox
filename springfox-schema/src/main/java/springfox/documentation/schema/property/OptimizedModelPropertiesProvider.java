@@ -185,17 +185,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     };
   }
 
-  private Predicate<? super Annotation> ofType(final Class<?> annotationType) {
-    return new Predicate<Annotation>() {
-      @Override
-      public boolean apply(Annotation input) {
-        return annotationType.isAssignableFrom(input.getClass());
-      }
-    };
-  }
-
-  @VisibleForTesting
-  List<ModelProperty> candidateProperties(
+  private List<ModelProperty> candidateProperties(
       ResolvedType type,
       AnnotatedMember member,
       BeanPropertyDefinition jacksonProperty,
@@ -309,12 +299,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     String propertyName = name(jacksonProperty, modelContext.isReturnType(), namingStrategy);
     ParameterModelProperty parameterModelProperty
         = new ParameterModelProperty(
-            propertyName,
-            parameter,
-            constructor,
-            typeResolver,
-            modelContext.getAlternateTypeProvider(),
-            jacksonProperty);
+        propertyName,
+        parameter,
+        constructor,
+        typeResolver,
+        modelContext.getAlternateTypeProvider(),
+        jacksonProperty);
 
     LOG.debug("Adding property {} to model", propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()

@@ -46,8 +46,8 @@ public class Annotations {
       Class<A> annotationClass) {
 
     return tryGetFieldAnnotation(beanPropertyDefinition, annotationClass)
-            .or(tryGetGetterAnnotation(beanPropertyDefinition, annotationClass))
-            .or(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass));
+        .or(tryGetGetterAnnotation(beanPropertyDefinition, annotationClass))
+        .or(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass));
   }
 
   public static boolean memberIsUnwrapped(AnnotatedMember member) {
@@ -59,8 +59,8 @@ public class Annotations {
 
   @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetGetterAnnotation(
-          BeanPropertyDefinition beanPropertyDefinition,
-          Class<A> annotationClass) {
+      BeanPropertyDefinition beanPropertyDefinition,
+      Class<A> annotationClass) {
 
     if (beanPropertyDefinition.hasGetter()) {
       return Optional.fromNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
@@ -70,7 +70,9 @@ public class Annotations {
 
   @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetSetterAnnotation(
-          BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
+      BeanPropertyDefinition beanPropertyDefinition,
+      Class<A> annotationClass) {
+
     if (beanPropertyDefinition.hasSetter()) {
       return Optional.fromNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
     }
@@ -79,7 +81,9 @@ public class Annotations {
 
   @SuppressWarnings("PMD")
   private static <A extends Annotation> Optional<A> tryGetFieldAnnotation(
-          BeanPropertyDefinition beanPropertyDefinition, Class<A> annotationClass) {
+      BeanPropertyDefinition beanPropertyDefinition,
+      Class<A> annotationClass) {
+    
     if (beanPropertyDefinition.hasField()) {
       return Optional.fromNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
     }
