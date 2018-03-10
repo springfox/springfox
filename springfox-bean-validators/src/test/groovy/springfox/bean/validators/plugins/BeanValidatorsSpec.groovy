@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.BeanValidatorsTestModel
+import springfox.bean.validators.plugins.models.XmlTypeModel
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.schema.property.XmlPropertyPlugin
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
@@ -45,6 +47,21 @@ class BeanValidatorsSpec extends Specification {
       def annotation = Validators.extractAnnotation(context, NotNull)
     then:
       !annotation.isPresent()
+  }
+
+  def "When XmlPropertyPlugin has absent bean definition"() {
+    when:
+      def plugin = new XmlPropertyPlugin()
+      def property = XmlTypeModel.getDeclaredField("strings")
+      property.getDeclaredAnnotations()
+      def context = new ModelPropertyContext(
+            new ModelPropertyBuilder(),
+            property,
+            new TypeResolver(),
+            DocumentationType.SWAGGER_2)
+      plugin.apply(context)
+    then:
+      noExceptionThrown()
   }
 
   @Unroll
