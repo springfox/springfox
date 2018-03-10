@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlType
 
 class XmlModelPluginSpec extends Specification {
-  def "Should all swagger documentation types"() {
+  def "Should support all swagger documentation types"() {
     given:
     def sut = new XmlModelPlugin()
 
