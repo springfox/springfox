@@ -1425,6 +1425,37 @@
         }
       }
     },
+    "/bugs/bug2230": {
+      "post": {
+        "tags": [
+          "Bugs"
+        ],
+        "summary": "/bug2230",
+        "operationId": "bug2230UsingPOST_1",
+        "consumes": [
+          "application/atom+xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "applicatorUnits",
+            "description": "applicatorUnits",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EHDTOApplicatorUnits"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/bugs/bug2282": {
       "get": {
         "tags": [
@@ -1634,6 +1665,93 @@
       },
       "title": "Bug1881"
     },
+    "EHDTOApplicatorUnits": {
+      "type": "object",
+      "properties": {
+        "ehdtoUnitGroups": {
+          "type": "array",
+          "xml": {
+            "name": "UnitGroup",
+            "attribute": false,
+            "wrapped": false
+          },
+          "items": {
+            "$ref": "#/definitions/EHDTOUnitGroup"
+          }
+        }
+      },
+      "title": "EHDTOApplicatorUnits",
+      "xml": {
+        "name": "ApplicatorUnits",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "EHDTOUnit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "xml": {
+            "name": "id",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": true,
+            "wrapped": false
+          }
+        },
+        "unitSystem": {
+          "type": "string",
+          "xml": {
+            "name": "unitSystem",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "EHDTOUnit",
+      "xml": {
+        "name": "Unit",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
+    "EHDTOUnitGroup": {
+      "type": "object",
+      "properties": {
+        "ehdtoUnits": {
+          "type": "array",
+          "xml": {
+            "name": "unit",
+            "attribute": false,
+            "wrapped": false
+          },
+          "items": {
+            "$ref": "#/definitions/EHDTOUnit"
+          }
+        },
+        "name": {
+          "type": "string",
+          "xml": {
+            "name": "name",
+            "attribute": true,
+            "wrapped": false
+          }
+        }
+      },
+      "title": "EHDTOUnitGroup",
+      "xml": {
+        "name": "UnitGroup",
+        "attribute": false,
+        "wrapped": false
+      }
+    },
     "Example": {
       "type": "object",
       "properties": {
@@ -1829,7 +1947,12 @@
           }
         }
       },
-      "title": "Resource«string»"
+      "title": "Resource«string»",
+      "xml": {
+        "name": "Resource«string»",
+        "attribute": false,
+        "wrapped": false
+      }
     },
     "Response«LanguageResponse»": {
       "type": "object",

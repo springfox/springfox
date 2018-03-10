@@ -50,6 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
+import springfox.documentation.spring.web.dummy.models.EHDTOApplicatorUnits;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.LanguageResponse;
@@ -425,6 +426,13 @@ public class BugsController {
   @GetMapping("/bug2282")
   @ApiOperation("/bug2282")
   public String bug2282(User user){
+    return "";
+  }
+
+  @PostMapping(value = "/bug2230", consumes = MediaType.APPLICATION_ATOM_XML_VALUE)
+  @ApiOperation("/bug2230")
+  public String bug2230(
+      @RequestBody EHDTOApplicatorUnits applicatorUnits){
     return "";
   }
 

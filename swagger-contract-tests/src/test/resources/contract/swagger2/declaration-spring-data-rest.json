@@ -1821,7 +1821,12 @@
           }
         }
       },
-      "title": "ResourceOfPerson"
+      "title": "ResourceOfPerson",
+      "xml": {
+        "name": "ResourceOfPerson",
+        "attribute": false,
+        "wrapped": false
+      }
     },
     "ResourceOfTag": {
       "type": "object",
@@ -1876,7 +1881,12 @@
           }
         }
       },
-      "title": "ResourcesOfAddress"
+      "title": "ResourcesOfAddress",
+      "xml": {
+        "name": "entities",
+        "attribute": false,
+        "wrapped": false
+      }
     },
     "ResourcesOfListOfPerson": {
       "type": "object",
@@ -1951,7 +1961,12 @@
           }
         }
       },
-      "title": "ResourcesOfTag"
+      "title": "ResourcesOfTag",
+      "xml": {
+        "name": "entities",
+        "attribute": false,
+        "wrapped": false
+      }
     },
     "Tag": {
       "type": "object",

@@ -26,6 +26,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @Component
@@ -43,9 +44,21 @@ public class XmlModelPlugin implements ModelBuilderPlugin {
     if (annotation != null) {
       context.getBuilder().xml(buildXml(annotation));
     }
+    XmlRootElement root = AnnotationUtils.findAnnotation(forClass(context), XmlRootElement.class);
+    if (root != null) {
+      context.getBuilder().xml(buildXml(root));
+    }
   }
 
   private Xml buildXml(XmlType annotation) {
+    return new Xml()
+        .name(defaultToNull(annotation.name()))
+        .attribute(false)
+        .namespace(defaultToNull(annotation.namespace()))
+        .wrapped(false);
+  }
+
+  private Xml buildXml(XmlRootElement annotation) {
     return new Xml()
         .name(defaultToNull(annotation.name()))
         .attribute(false)
