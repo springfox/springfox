@@ -54,144 +54,151 @@ class DocketSpec extends DocumentationContextSpec {
 
   def "Should have sensible defaults when built with minimal configuration"() {
     when:
-      def pluginContext = plugin.configure(contextBuilder)
-    then:
-      pluginContext.groupName == 'default'
-      pluginContext.securitySchemes == null
-      pluginContext.apiInfo.getTitle() == "Api Documentation"
-      pluginContext.apiInfo.getDescription() == "Api Documentation"
-      pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
-      pluginContext.apiInfo.getContact() == ApiInfo.DEFAULT_CONTACT
-      pluginContext.apiInfo.getLicense() == 'Apache 2.0'
-      pluginContext.apiInfo.getLicenseUrl() ==  "http://www.apache.org/licenses/LICENSE-2.0"
-      pluginContext.apiInfo.version == "1.0"
+    def pluginContext = plugin.configure(contextBuilder)
 
-      pluginContext.pathProvider instanceof RelativePathProvider
+    then:
+    pluginContext.groupName == 'default'
+    pluginContext.securitySchemes == null
+    pluginContext.apiInfo.getTitle() == "Api Documentation"
+    pluginContext.apiInfo.getDescription() == "Api Documentation"
+    pluginContext.apiInfo.getTermsOfServiceUrl() == 'urn:tos'
+    pluginContext.apiInfo.getContact() == ApiInfo.DEFAULT_CONTACT
+    pluginContext.apiInfo.getLicense() == 'Apache 2.0'
+    pluginContext.apiInfo.getLicenseUrl() == "http://www.apache.org/licenses/LICENSE-2.0"
+    pluginContext.apiInfo.version == "1.0"
+
+    pluginContext.pathProvider instanceof RelativePathProvider
   }
 
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
-      plugin
-              .globalResponseMessage(GET, [new ResponseMessage(
-          OK.value(),
-          "blah",
-          null,
-          [] as Map,
-          [])])
-              .useDefaultResponseMessages(true)
-              .configure(contextBuilder)
+    plugin
+        .globalResponseMessage(GET, [new ResponseMessage(
+        OK.value(),
+        "blah",
+        null,
+        [] as Map,
+        [])])
+        .useDefaultResponseMessages(true)
+        .configure(contextBuilder)
 
     and:
-      def pluginContext = contextBuilder.build()
+    def pluginContext = contextBuilder.build()
+
     then:
-      pluginContext.getGlobalResponseMessages()[GET][0].getMessage() == "blah"
-      pluginContext.getGlobalResponseMessages()[GET].size() == 1
+    pluginContext.getGlobalResponseMessages()[GET][0].getMessage() == "blah"
+    pluginContext.getGlobalResponseMessages()[GET].size() == 1
 
     and: "defaults are preserved"
-      pluginContext.getGlobalResponseMessages().keySet().containsAll(
-              [POST, PUT, DELETE, PATCH, TRACE, OPTIONS, HEAD]
-      )
+    pluginContext.getGlobalResponseMessages().keySet().containsAll(
+        [POST, PUT, DELETE, PATCH, TRACE, OPTIONS, HEAD]
+    )
   }
 
   def "Verify configurer behavior"() {
     when:
-      plugin.enable(true)
+    plugin.enable(true)
+
     then:
-      plugin.isEnabled()
-      !plugin.supports(DocumentationType.SPRING_WEB)
-      plugin.supports(DocumentationType.SWAGGER_12)
-      plugin.documentationType == DocumentationType.SWAGGER_12
+    plugin.isEnabled()
+    !plugin.supports(DocumentationType.SPRING_WEB)
+    plugin.supports(DocumentationType.SWAGGER_12)
+    plugin.documentationType == DocumentationType.SWAGGER_12
   }
 
   def "Swagger global response messages should not be used for a particular RequestMethod"() {
     when:
-      new Docket(DocumentationType.SWAGGER_12)
-              .globalResponseMessage(GET, [new ResponseMessage(
-          OK.value(),
-          "blah",
-          null,
-          [] as Map,
-          [])])
-              .useDefaultResponseMessages(false)
-              .configure(contextBuilder)
+    new Docket(DocumentationType.SWAGGER_12)
+        .globalResponseMessage(GET, [new ResponseMessage(
+        OK.value(),
+        "blah",
+        null,
+        [] as Map,
+        [])])
+        .useDefaultResponseMessages(false)
+        .configure(contextBuilder)
 
     and:
-      def pluginContext = contextBuilder.build()
+    def pluginContext = contextBuilder.build()
+
     then:
-      pluginContext.getGlobalResponseMessages()[GET][0].getMessage() == "blah"
-      pluginContext.getGlobalResponseMessages()[GET].size() == 1
+    pluginContext.getGlobalResponseMessages()[GET][0].getMessage() == "blah"
+    pluginContext.getGlobalResponseMessages()[GET].size() == 1
 
     and: "defaults are preserved"
-      pluginContext.getGlobalResponseMessages().keySet().containsAll([GET])
+    pluginContext.getGlobalResponseMessages().keySet().containsAll([GET])
   }
 
   def "Swagger ignorableParameterTypes should append to the default ignorableParameterTypes"() {
     when:
-      new Docket(DocumentationType.SWAGGER_12)
-              .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
-              .configure(contextBuilder)
+    new Docket(DocumentationType.SWAGGER_12)
+        .ignoredParameterTypes(AbstractSingletonProxyFactoryBean.class, ProxyFactoryBean.class)
+        .configure(contextBuilder)
     and:
-      def pluginContext = contextBuilder.build()
+    def pluginContext = contextBuilder.build()
+
     then:
-      pluginContext.getIgnorableParameterTypes().contains(AbstractSingletonProxyFactoryBean.class)
-      pluginContext.getIgnorableParameterTypes().contains(ProxyFactoryBean.class)
+    pluginContext.getIgnorableParameterTypes().contains(AbstractSingletonProxyFactoryBean.class)
+    pluginContext.getIgnorableParameterTypes().contains(ProxyFactoryBean.class)
 
     and: "one of the defaults"
-      pluginContext.getIgnorableParameterTypes().contains(ServletRequest.class)
+    pluginContext.getIgnorableParameterTypes().contains(ServletRequest.class)
   }
 
   def "Sets alternative AlternateTypeProvider with a rule"() {
     given:
-      def rule = newMapRule(String, String)
-      new Docket(DocumentationType.SWAGGER_12)
-              .alternateTypeRules(rule)
-              .configure(contextBuilder)
+    def rule = newMapRule(String, String)
+    new Docket(DocumentationType.SWAGGER_12)
+        .alternateTypeRules(rule)
+        .configure(contextBuilder)
+
     expect:
-      context().alternateTypeProvider.rules.contains(rule)
+    context().alternateTypeProvider.rules.contains(rule)
   }
 
   def "Model substitution registers new rules"() {
     when:
-      def isjdk8 = System.getProperty("java.version").startsWith("1.8")
-      def jdk8RuleCount = (isjdk8 ? 6 : 0)
-      new Docket(DocumentationType.SWAGGER_12)
-              ."${method}"(*args)
-              .configure(contextBuilder)
+    def isjdk8 = System.getProperty("java.version").startsWith("1.8")
+    def jdk8RuleCount = (isjdk8 ? 6 : 0)
+    new Docket(DocumentationType.SWAGGER_12)
+        ."${method}"(*args)
+        .configure(contextBuilder)
+
     then:
-      context().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
+    context().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
 
     where:
-      method                    | args                               | expectedSize
-      'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 15
-      'directModelSubstitute'   | [LocalDate.class, Date.class]      | 14
+    method                    | args                               | expectedSize
+    'genericModelSubstitutes' | [ResponseEntity.class, List.class] | 15
+    'directModelSubstitute'   | [LocalDate.class, Date.class]      | 14
   }
 
 
   def "Basic property checks"() {
     when:
-      plugin."$builderMethod"(object)
+    plugin."$builderMethod"(object)
 
     then:
-      context()."$property" == object || (context()."$property" == [object] as Set)
+    context()."$property" == object || (context()."$property" == [object] as Set)
 
     where:
-      builderMethod           | object                                          | property
-      'pathProvider'          | new RelativePathProvider(Mock(ServletContext))  | 'pathProvider'
-      'securitySchemes'       | new ArrayList<SecurityScheme>()                 | 'securitySchemes'
-      'securityContexts'      | validContexts()                                 | 'securityContexts'
-      'groupName'             | 'someGroup'                                     | 'groupName'
-      'apiInfo'               | new ApiInfo('', '', "", '', '', '', '')         | 'apiInfo'
-      'apiDescriptionOrdering'| apiDescriptionOrdering()                        | 'apiDescriptionOrdering'
-      'operationOrdering'     | operationOrdering()                             | 'operationOrdering'
-      'produces'              | ['application/json'] as Set                     | 'produces'
-      'consumes'              | ['application/json'] as Set                     | 'consumes'
-      'host'                  | 'someHost'                                      | 'host'
-      'protocols'             | ['application/json'] as Set                     | 'protocols'
-      'additionalModels'      | Mock(ResolvedType)                              | 'additionalModels'
-      'enableUrlTemplating'   | true                                            | 'isUriTemplatesEnabled'
-      'tags'                  | new Tag("test", "test")                         | 'tags'
-      'globalOperationParameters' | [Mock(Parameter)]                           | 'globalOperationParameters'
-      'extensions'            | extensions()                                          | 'vendorExtensions'
+    builderMethod               | object                                         | property
+    'pathProvider'              | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
+    'securitySchemes'           | new ArrayList<SecurityScheme>()                | 'securitySchemes'
+    'securityContexts'          | validContexts()                                | 'securityContexts'
+    'groupName'                 | 'someGroup'                                    | 'groupName'
+    'apiInfo'                   | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
+    'apiDescriptionOrdering'    | apiDescriptionOrdering()                       | 'apiDescriptionOrdering'
+    'operationOrdering'         | operationOrdering()                            | 'operationOrdering'
+    'produces'                  | ['application/json'] as Set                    | 'produces'
+    'consumes'                  | ['application/json'] as Set                    | 'consumes'
+    'host'                      | 'someHost'                                     | 'host'
+    'protocols'                 | ['application/json'] as Set                    | 'protocols'
+    'additionalModels'          | Mock(ResolvedType)                             | 'additionalModels'
+    'enableUrlTemplating'       | true                                           | 'isUriTemplatesEnabled'
+    'tags'                      | new Tag("test", "test")                        | 'tags'
+    'globalOperationParameters' | [Mock(Parameter)]                              | 'globalOperationParameters'
+    'extensions'                | extensions()                                   | 'vendorExtensions'
   }
 
   List<VendorExtension> extensions() {
@@ -200,15 +207,15 @@ class DocketSpec extends DocumentationContextSpec {
 
   def "Code generation strategy property is set"() {
     when:
-      plugin."$builderMethod"(object)
+    plugin."$builderMethod"(object)
 
     then:
-      context().genericsNamingStrategy.getClass() == strategy
+    context().genericsNamingStrategy.getClass() == strategy
 
     where:
-      builderMethod           | object  | strategy
-      'forCodeGeneration'     | false   | DefaultGenericTypeNamingStrategy
-      'forCodeGeneration'     | true    | CodeGenGenericTypeNamingStrategy
+    builderMethod       | object | strategy
+    'forCodeGeneration' | false  | DefaultGenericTypeNamingStrategy
+    'forCodeGeneration' | true   | CodeGenGenericTypeNamingStrategy
   }
 
   def "Path mapping property is set"() {
@@ -219,9 +226,9 @@ class DocketSpec extends DocumentationContextSpec {
     context().pathMapping == path
 
     where:
-    builderMethod     | object  | path
-    'pathMapping'     | "/test" | Optional.of("/test")
-    'pathMapping'     | null    | Optional.absent()
+    builderMethod | object  | path
+    'pathMapping' | "/test" | Optional.of("/test")
+    'pathMapping' | null    | Optional.absent()
   }
 
   Ordering<ApiDescription> apiDescriptionOrdering() {
@@ -234,32 +241,33 @@ class DocketSpec extends DocumentationContextSpec {
 
   private List<SecurityContext> validContexts() {
     newArrayList(SecurityContext.builder()
-            .forPaths(PathSelectors.any())
-            .build())
+        .forPaths(PathSelectors.any())
+        .build())
   }
 
   def "non nullable swaggerApiResourceListing properties"() {
 
     when:
-      new Docket(DocumentationType.SWAGGER_12)
-              .configure(contextBuilder)
+    new Docket(DocumentationType.SWAGGER_12)
+        .configure(contextBuilder)
 
     and:
-      def pluginContext = contextBuilder.build()
+    def pluginContext = contextBuilder.build()
+
     then:
-      "default" == pluginContext.groupName
-      null != pluginContext.pathProvider
-      null != pluginContext.apiInfo
-      null != pluginContext.apiSelector
-      null != pluginContext.globalResponseMessages
-      null != pluginContext.ignorableParameterTypes
-      null != pluginContext.listingReferenceOrdering
-      null != pluginContext.apiDescriptionOrdering
-      null != pluginContext.produces
-      null != pluginContext.protocols
-      null != pluginContext.host
-      null != pluginContext.consumes
-      null != pluginContext.additionalModels
+    "default" == pluginContext.groupName
+    null != pluginContext.pathProvider
+    null != pluginContext.apiInfo
+    null != pluginContext.apiSelector
+    null != pluginContext.globalResponseMessages
+    null != pluginContext.ignorableParameterTypes
+    null != pluginContext.listingReferenceOrdering
+    null != pluginContext.apiDescriptionOrdering
+    null != pluginContext.produces
+    null != pluginContext.protocols
+    null != pluginContext.host
+    null != pluginContext.consumes
+    null != pluginContext.additionalModels
 
   }
 
