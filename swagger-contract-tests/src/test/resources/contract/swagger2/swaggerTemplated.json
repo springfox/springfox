@@ -1,181 +1,183 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Api Documentation",
-    "version": "1.0",
-    "title": "Api Documentation",
-    "termsOfService": "urn:tos",
-    "contact": {},
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    }
-  },
-  "host": "petstore.swagger.io",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "pet-store-resource",
-      "description": "Operations about store"
-    }
-  ],
-  "schemes": [
-    "https",
-    "http"
-  ],
-  "produces": [
-    "application/xml",
-    "application/json"
-  ],
-  "paths": {
-    "/api/store/search?x=CA": {
-      "get": {
-        "tags": [
-          "pet-store-resource"
-        ],
-        "summary": "getPetInCA",
-        "operationId": "getPetInCAUsingGET",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x",
-            "in": "query",
-            "required": true,
-            "type": "string",
-            "default": "CA",
-            "enum": [
-              "CA"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "petstore.swagger.io",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "pet-store-resource",
+            "description": "Operations about store"
+        }
+    ],
+    "schemes": [
+        "https",
+        "http"
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/api/store/search?x=CA": {
+            "get": {
+                "tags": [
+                    "pet-store-resource"
+                ],
+                "summary": "getPetInCA",
+                "operationId": "getPetInCAUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "default": "CA",
+                        "enum": [
+                            "CA"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    },
-    "/api/store/search?x=TX": {
-      "get": {
-        "tags": [
-          "pet-store-resource"
-        ],
-        "summary": "getPetInTx",
-        "operationId": "getPetInTxUsingGET",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "x",
-            "in": "query",
-            "required": true,
-            "type": "string",
-            "default": "TX",
-            "enum": [
-              "TX"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
+        },
+        "/api/store/search?x=TX": {
+            "get": {
+                "tags": [
+                    "pet-store-resource"
+                ],
+                "summary": "getPetInTx",
+                "operationId": "getPetInTxUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "x",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "default": "TX",
+                        "enum": [
+                            "TX"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  },
-  "definitions": {
-    "Category": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
         },
-        "name": {
-          "type": "string"
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
         }
-      },
-      "title": "Category"
     },
-    "Pet": {
-      "type": "object",
-      "properties": {
-        "category": {
-          "$ref": "#/definitions/Category"
+    "definitions": {
+        "Category": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Category"
         },
-        "id": {
-          "type": "integer",
-          "format": "int64"
+        "Pet": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/Category"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "identifier": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photoUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "description": "pet status in the store",
+                    "enum": [
+                        "available",
+                        "pending",
+                        "sold"
+                    ]
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    }
+                }
+            },
+            "title": "Pet"
         },
-        "identifier": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        },
-        "photoUrls": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "status": {
-          "type": "string",
-          "description": "pet status in the store",
-          "enum": [
-            "available",
-            "pending",
-            "sold"
-          ]
-        },
-        "tags": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Tag"
-          }
+        "Tag": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Tag"
         }
-      },
-      "title": "Pet"
-    },
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Tag"
     }
-  }
 }

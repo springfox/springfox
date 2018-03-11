@@ -23,6 +23,7 @@ import com.fasterxml.classmate.members.ResolvedField
 import io.swagger.annotations.ApiModelProperty
 import io.swagger.annotations.ApiParam
 import org.springframework.mock.env.MockEnvironment
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
@@ -32,8 +33,12 @@ import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 import springfox.documentation.spring.web.DescriptionResolver
+import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterMetadataAccessor
 
 class SwaggerExpandedParameterBuilderSpec extends Specification {
+  @Shared
+  def resolver = new TypeResolver()
+
   @Unroll
   def "Swagger parameter expander reads field #field.name as #expectedName "() {
     given:
@@ -47,7 +52,10 @@ class SwaggerExpandedParameterBuilderSpec extends Specification {
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
-        field,
+        new ModelAttributeParameterMetadataAccessor(
+            [field.rawMember],
+            field.type,
+            field.name),
         DocumentationType.SWAGGER_12,
         builderWithDefaultName)
 

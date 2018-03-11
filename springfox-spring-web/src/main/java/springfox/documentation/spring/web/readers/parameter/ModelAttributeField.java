@@ -20,22 +20,53 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.members.ResolvedField;
+import com.fasterxml.classmate.members.ResolvedMember;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+
+import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelAttributeField {
   private final ResolvedType fieldType;
-  private final ResolvedField field;
+  private final String name;
+  private final List<ResolvedMember<?>> resolvedMembers;
 
-  public ModelAttributeField(ResolvedType fieldType, ResolvedField field) {
+  public ModelAttributeField(
+      ResolvedType fieldType,
+      String name,
+      ResolvedMember<?> primary,
+      ResolvedMember<?> secondary) {
     this.fieldType = fieldType;
-    this.field = field;
+    this.name = name;
+    this.resolvedMembers = new ArrayList<ResolvedMember<?>>();
+    resolvedMembers.add(primary);
+    if (secondary != null) {
+      resolvedMembers.add(secondary);
+    }
   }
 
   public ResolvedType getFieldType() {
     return fieldType;
   }
 
-  public ResolvedField getField() {
-    return field;
+  public List<ResolvedMember<?>> getResolvedMembers() {
+    return resolvedMembers;
+  }
+
+  public List<AnnotatedElement> annotatedElements() {
+    return FluentIterable.from(resolvedMembers)
+        .transform(new Function<ResolvedMember<?>, AnnotatedElement>() {
+          @Override
+          public AnnotatedElement apply(ResolvedMember<?> input) {
+            return (AnnotatedElement) input.getRawMember();
+          }
+        })
+        .toList();
+  }
+
+  public String getName() {
+    return name;
   }
 }

@@ -70,6 +70,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
+    maybeWriteToFile("/contract/swagger2/$contractFile", raw)
 
     where:
     contractFile                                                  | groupName

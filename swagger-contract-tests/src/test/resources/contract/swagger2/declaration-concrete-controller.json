@@ -1,244 +1,246 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Api Documentation",
-    "version": "1.0",
-    "title": "Api Documentation",
-    "termsOfService": "urn:tos",
-    "contact": {},
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    }
-  },
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
   "host": "localhost:__PORT__",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "concrete-controller",
-      "description": "Concrete Controller"
-    }
-  ],
-  "produces": [
-    "application/xml",
-    "application/json"
-  ],
-  "paths": {
-    "/foo/create-t": {
-      "put": {
-        "tags": [
-          "concrete-controller"
-        ],
-        "summary": "create",
-        "operationId": "createUsingPUT_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "toCreate",
-            "description": "toCreate",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Resource«Pet»"
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "concrete-controller",
+            "description": "Concrete Controller"
+        }
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/foo/create-t": {
+            "put": {
+                "tags": [
+                    "concrete-controller"
+                ],
+                "summary": "create",
+                "operationId": "createUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "toCreate",
+                        "description": "toCreate",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Resource«Pet»"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/foo/delete-t/{id}": {
-      "delete": {
-        "tags": [
-          "concrete-controller"
-        ],
-        "summary": "delete",
-        "operationId": "deleteUsingDELETE_1",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/HttpEntity«Resource«Pet»»"
+        },
+        "/foo/delete-t/{id}": {
+            "delete": {
+                "tags": [
+                    "concrete-controller"
+                ],
+                "summary": "delete",
+                "operationId": "deleteUsingDELETE_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/HttpEntity«Resource«Pet»»"
+                        }
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
             }
-          },
-          "405": {
-            "description": "Invalid input"
-          }
-        }
-      }
-    },
-    "/foo/get-t/{id}": {
-      "get": {
-        "tags": [
-          "concrete-controller"
-        ],
-        "summary": "get",
-        "operationId": "getUsingGET_1",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Resource«Pet»"
+        },
+        "/foo/get-t/{id}": {
+            "get": {
+                "tags": [
+                    "concrete-controller"
+                ],
+                "summary": "get",
+                "operationId": "getUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Resource«Pet»"
+                        }
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
             }
-          },
-          "405": {
-            "description": "Invalid input"
-          }
         }
-      }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
+    },
+    "definitions": {
+        "HttpEntity«Resource«Pet»»": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "$ref": "#/definitions/Resource«Pet»"
+                }
+            },
+            "title": "HttpEntity«Resource«Pet»»"
+        },
+        "Link": {
+            "type": "object",
+            "properties": {
+                "deprecation": {
+                    "type": "string",
+                    "xml": {
+                        "name": "deprecation",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "href": {
+                    "type": "string",
+                    "xml": {
+                        "name": "href",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "hreflang": {
+                    "type": "string",
+                    "xml": {
+                        "name": "hreflang",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "media": {
+                    "type": "string",
+                    "xml": {
+                        "name": "media",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "rel": {
+                    "type": "string",
+                    "xml": {
+                        "name": "rel",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "templated": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string",
+                    "xml": {
+                        "name": "title",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "xml": {
+                        "name": "type",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                }
+            },
+            "title": "Link"
+        },
+        "Pet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Pet"
+        },
+        "Resource«Pet»": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Resource«Pet»"
+        }
     }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  },
-  "definitions": {
-    "HttpEntity«Resource«Pet»»": {
-      "type": "object",
-      "properties": {
-        "body": {
-          "$ref": "#/definitions/Resource«Pet»"
-        }
-      },
-      "title": "HttpEntity«Resource«Pet»»"
-    },
-    "Link": {
-      "type": "object",
-      "properties": {
-        "deprecation": {
-          "type": "string",
-          "xml": {
-            "name": "deprecation",
-            "attribute": true,
-            "wrapped": false
-          }
-        },
-        "href": {
-          "type": "string",
-          "xml": {
-            "name": "href",
-            "attribute": true,
-            "wrapped": false
-          }
-        },
-        "hreflang": {
-          "type": "string",
-          "xml": {
-            "name": "hreflang",
-            "attribute": true,
-            "wrapped": false
-          }
-        },
-        "media": {
-          "type": "string",
-          "xml": {
-            "name": "media",
-            "attribute": true,
-            "wrapped": false
-          }
-        },
-        "rel": {
-          "type": "string",
-          "xml": {
-            "name": "rel",
-            "attribute": true,
-            "wrapped": false
-          }
-        },
-        "templated": {
-          "type": "boolean"
-        },
-        "title": {
-          "type": "string",
-          "xml": {
-            "name": "title",
-            "attribute": true,
-            "wrapped": false
-          }
-        },
-        "type": {
-          "type": "string",
-          "xml": {
-            "name": "type",
-            "attribute": true,
-            "wrapped": false
-          }
-        }
-      },
-      "title": "Link"
-    },
-    "Pet": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Pet"
-    },
-    "Resource«Pet»": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "id": {
-          "type": "string"
-        },
-        "links": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Link"
-          }
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Resource«Pet»"
-    }
-  }
 }

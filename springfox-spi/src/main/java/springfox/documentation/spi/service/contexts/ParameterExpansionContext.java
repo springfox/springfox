@@ -20,28 +20,33 @@
 package springfox.documentation.spi.service.contexts;
 
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
+import com.google.common.base.Optional;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.ParameterMetadataAccessor;
+
+import java.lang.annotation.Annotation;
 
 public class ParameterExpansionContext {
 
   private final String dataTypeName;
   private final String parentName;
-  private final ResolvedField field;
+  private final ParameterMetadataAccessor metadataAccessor;
   private final DocumentationType documentationType;
-  private ParameterBuilder parameterBuilder;
+  private final ParameterBuilder parameterBuilder;
 
   public ParameterExpansionContext(
       String dataTypeName,
       String parentName,
-      ResolvedField field,
+      ParameterMetadataAccessor metadataAccessor,
       DocumentationType documentationType,
       ParameterBuilder parameterBuilder) {
 
     this.dataTypeName = dataTypeName;
     this.parentName = parentName;
-    this.field = field;
+    this.metadataAccessor = metadataAccessor;
     this.documentationType = documentationType;
     this.parameterBuilder = parameterBuilder;
   }
@@ -54,8 +59,14 @@ public class ParameterExpansionContext {
     return parentName;
   }
 
+  /**
+   * Access to the raw field is deprecated to support interface based model attributes with resolvers e.g. Pageable
+   * @deprecated @since 2.8.0
+   * @return resolved field
+   */
+  @Deprecated
   public ResolvedField getField() {
-    return field;
+    throw new UnsupportedOperationException();
   }
 
   public DocumentationType getDocumentationType() {
@@ -64,5 +75,17 @@ public class ParameterExpansionContext {
 
   public ParameterBuilder getParameterBuilder() {
     return parameterBuilder;
+  }
+
+  public ResolvedType getFieldType() {
+    return metadataAccessor.getFieldType();
+  }
+
+  public String getFieldName() {
+    return metadataAccessor.getFieldName();
+  }
+
+  public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) {
+    return metadataAccessor.findAnnotation(annotationType);
   }
 }

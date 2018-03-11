@@ -1,124 +1,126 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Api Documentation",
-    "version": "1.0",
-    "title": "Api Documentation",
-    "termsOfService": "urn:tos",
-    "contact": {},
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    }
-  },
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
   "host": "localhost:__PORT__",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "enum-service",
-      "description": "Service that return enums"
-    }
-  ],
-  "produces": [
-    "application/xml",
-    "application/json"
-  ],
-  "paths": {
-    "/enums/collection": {
-      "get": {
-        "tags": [
-          "enum-service"
-        ],
-        "summary": "Example with response entity collection",
-        "operationId": "getResponseEntityCollectionUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "ONE",
-                  "TWO"
-                ]
-              }
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "enum-service",
+            "description": "Service that return enums"
+        }
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/enums/collection": {
+            "get": {
+                "tags": [
+                    "enum-service"
+                ],
+                "summary": "Example with response entity collection",
+                "operationId": "getResponseEntityCollectionUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "ONE",
+                                    "TWO"
+                                ]
+                            }
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    },
-    "/enums/entity": {
-      "get": {
-        "tags": [
-          "enum-service"
-        ],
-        "summary": "Example with response entity single value",
-        "operationId": "getResponseEntityValueUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "ONE",
-                "TWO"
-              ]
+        },
+        "/enums/entity": {
+            "get": {
+                "tags": [
+                    "enum-service"
+                ],
+                "summary": "Example with response entity single value",
+                "operationId": "getResponseEntityValueUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ONE",
+                                "TWO"
+                            ]
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
-    },
-    "/enums/wrapped": {
-      "get": {
-        "tags": [
-          "enum-service"
-        ],
-        "summary": "Example with wrapped enum collection",
-        "operationId": "getCollectionValueUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/EnumCollection"
+        },
+        "/enums/wrapped": {
+            "get": {
+                "tags": [
+                    "enum-service"
+                ],
+                "summary": "Example with wrapped enum collection",
+                "operationId": "getCollectionValueUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EnumCollection"
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  },
-  "definitions": {
-    "EnumCollection": {
-      "type": "object",
-      "properties": {
-        "types": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "ONE",
-              "TWO"
-            ]
-          }
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
         }
-      },
-      "title": "EnumCollection"
+    },
+    "definitions": {
+        "EnumCollection": {
+            "type": "object",
+            "properties": {
+                "types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    }
+                }
+            },
+            "title": "EnumCollection"
+        }
     }
-  }
 }

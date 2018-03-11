@@ -1,704 +1,706 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Api Documentation",
-    "version": "1.0",
-    "title": "Api Documentation",
-    "termsOfService": "urn:tos",
-    "contact": {},
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    }
-  },
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
   "host": "localhost:__PORT__",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "pet-grooming-service",
-      "description": "Grooming operations for pets"
-    },
-    {
-      "name": "pet-service",
-      "description": "Operations about pets"
-    }
-  ],
-  "produces": [
-    "application/xml",
-    "application/json"
-  ],
-  "paths": {
-    "/pets/byName/{name}": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "petEntities",
-        "operationId": "petEntitiesUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "description": "name",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pets/echo": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "echo",
-        "operationId": "echoUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "someInput",
-            "description": "someInput",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pets/findByAge{?age}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "Find Pet by age",
-        "description": "Exclusive range with infinity",
-        "operationId": "findPetsByAgeUsingGET_1",
-        "parameters": [
-          {
-            "name": "age",
-            "in": "query",
-            "description": "Age values that need to be considered for filter",
-            "required": true,
-            "type": "string",
-            "exclusiveMaximum": true,
-            "minimum": 0,
-            "exclusiveMinimum": true,
-            "allowEmptyValue": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        }
-      }
-    },
-    "/pets/findByLegs{?legs}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "Find Pet by legs",
-        "description": "Exclusive range should work",
-        "operationId": "findPetsByLegsUsingGET_1",
-        "parameters": [
-          {
-            "name": "legs",
-            "in": "query",
-            "description": "Legs values that need to be considered for filter",
-            "required": true,
-            "type": "string",
-            "maximum": 10,
-            "exclusiveMaximum": true,
-            "minimum": 0,
-            "exclusiveMinimum": true,
-            "allowEmptyValue": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        }
-      }
-    },
-    "/pets/findByStamina{?stamina}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "Find Pet by stamina",
-        "description": "Exclusive range with -infinity",
-        "operationId": "findPetsByStaminaUsingGET_1",
-        "parameters": [
-          {
-            "name": "stamina",
-            "in": "query",
-            "description": "Stamina values",
-            "required": true,
-            "type": "string",
-            "maximum": 12,
-            "exclusiveMaximum": true,
-            "exclusiveMinimum": false,
-            "allowEmptyValue": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        }
-      }
-    },
-    "/pets/findByStatus{?status}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "Find Pet by status",
-        "description": "Multiple status values can be provided with comma-separated strings",
-        "operationId": "findPetsByStatusUsingGET_1",
-        "parameters": [
-          {
-            "name": "status",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": true,
-            "type": "string",
-            "default": "available",
-            "allowEmptyValue": false,
-            "enum": [
-              "available",
-              "pending",
-              "sold"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          },
-          "400": {
-            "description": "Invalid status value"
-          }
-        }
-      }
-    },
-    "/pets/findByTags{?tags}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "Find Pet by tags",
-        "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
-        "operationId": "findPetsByTagsUsingGET_1",
-        "parameters": [
-          {
-            "name": "tags",
-            "in": "query",
-            "description": "Tags to filter by",
-            "required": true,
-            "type": "string",
-            "allowEmptyValue": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          },
-          "400": {
-            "description": "Invalid tag value"
-          }
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "pet-grooming-service",
+            "description": "Grooming operations for pets"
         },
-        "deprecated": true
-      }
-    },
-    "/pets/grooming/voidMethod/{input}": {
-      "delete": {
-        "tags": [
-          "pet-grooming-service"
-        ],
-        "summary": "groomingFunctionThatReturnsVoid",
-        "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_4",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "input",
-            "in": "path",
-            "description": "input",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Just testing"
-          }
+        {
+            "name": "pet-service",
+            "description": "Operations about pets"
         }
-      }
-    },
-    "/pets/grooming{?type}": {
-      "get": {
-        "tags": [
-          "pet-grooming-service"
-        ],
-        "summary": "canGroom",
-        "operationId": "canGroomUsingGET_3",
-        "parameters": [
-          {
-            "name": "type",
-            "in": "query",
-            "description": "type",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        }
-      }
-    },
-    "/pets/nameToNickNamesMap": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "nameToNickNamesMap",
-        "operationId": "nameToNickNamesMapUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "array",
-                "items": {
-                  "type": "string"
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/pets/byName/{name}": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "petEntities",
+                "operationId": "petEntitiesUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    }
                 }
-              }
             }
-          }
-        }
-      }
-    },
-    "/pets/siblings{?id,name,age}": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "siblings",
-        "operationId": "siblingsUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "age",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/pets/transformPetNameToPetMapToAny": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "transformPetNameToPetMapToAny",
-        "operationId": "transformPetNameToPetMapToAnyUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "someInput",
-            "description": "someInput",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          }
-        }
-      }
-    },
-    "/pets/transformPetNameToPetMapToGenericOpenMap": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "transformPetNameToPetMapToGenericOpenMap",
-        "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "someInput",
-            "description": "someInput",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          }
-        }
-      }
-    },
-    "/pets/transformPetNameToPetMapToOpenMap": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "transformPetNameToPetMapToOpenMap",
-        "operationId": "transformPetNameToPetMapToOpenMapUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "someInput",
-            "description": "someInput",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/definitions/Pet"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          }
-        }
-      }
-    },
-    "/pets/voidMethod/{input}": {
-      "delete": {
-        "tags": [
-          "pet-grooming-service"
-        ],
-        "summary": "groomingFunctionThatReturnsVoid",
-        "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_5",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "input",
-            "in": "path",
-            "description": "input",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Just testing"
-          }
-        }
-      }
-    },
-    "/pets/{a}/{b}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "method",
-        "operationId": "methodUsingGET_1",
-        "parameters": [
-          {
-            "name": "a",
-            "in": "path",
-            "description": "a",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "b",
-            "in": "path",
-            "description": "b",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/pets/{name}": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "petByName",
-        "operationId": "petByNameUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "description": "name",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        }
-      }
-    },
-    "/pets/{petId}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
-        "operationId": "getPetByIdUsingGET_4",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet that needs to be fetched",
-            "required": true,
-            "type": "string",
-            "maximum": 5,
-            "exclusiveMaximum": false,
-            "minimum": 1,
-            "exclusiveMinimum": false,
-            "allowEmptyValue": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        }
-      }
-    },
-    "/pets/{petId}/pic": {
-      "post": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "updatePic",
-        "operationId": "updatePicUsingPOST_1",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "petId",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "pic",
-            "in": "formData",
-            "description": "pic",
-            "required": false,
-            "type": "file"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/pets/{petId}/pic/{picId}": {
-      "get": {
-        "tags": [
-          "pet-service"
-        ],
-        "summary": "updatePic",
-        "operationId": "updatePicUsingGET_1",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "petId",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "picId",
-            "in": "path",
-            "description": "picId",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  },
-  "definitions": {
-    "Pet": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
         },
-        "id": {
-          "type": "string"
+        "/pets/echo": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "echo",
+                "operationId": "echoUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "someInput",
+                        "description": "someInput",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    }
+                }
+            }
         },
-        "name": {
-          "type": "string"
+        "/pets/findByAge{?age}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "Find Pet by age",
+                "description": "Exclusive range with infinity",
+                "operationId": "findPetsByAgeUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "age",
+                        "in": "query",
+                        "description": "Age values that need to be considered for filter",
+                        "required": true,
+                        "type": "string",
+                        "exclusiveMaximum": true,
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/findByLegs{?legs}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "Find Pet by legs",
+                "description": "Exclusive range should work",
+                "operationId": "findPetsByLegsUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "legs",
+                        "in": "query",
+                        "description": "Legs values that need to be considered for filter",
+                        "required": true,
+                        "type": "string",
+                        "maximum": 10,
+                        "exclusiveMaximum": true,
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/findByStamina{?stamina}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "Find Pet by stamina",
+                "description": "Exclusive range with -infinity",
+                "operationId": "findPetsByStaminaUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "stamina",
+                        "in": "query",
+                        "description": "Stamina values",
+                        "required": true,
+                        "type": "string",
+                        "maximum": 12,
+                        "exclusiveMaximum": true,
+                        "exclusiveMinimum": false,
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/findByStatus{?status}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "Find Pet by status",
+                "description": "Multiple status values can be provided with comma-separated strings",
+                "operationId": "findPetsByStatusUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status values that need to be considered for filter",
+                        "required": true,
+                        "type": "string",
+                        "default": "available",
+                        "allowEmptyValue": false,
+                        "enum": [
+                            "available",
+                            "pending",
+                            "sold"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value"
+                    }
+                }
+            }
+        },
+        "/pets/findByTags{?tags}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "Find Pet by tags",
+                "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
+                "operationId": "findPetsByTagsUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "tags",
+                        "in": "query",
+                        "description": "Tags to filter by",
+                        "required": true,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid tag value"
+                    }
+                },
+                "deprecated": true
+            }
+        },
+        "/pets/grooming/voidMethod/{input}": {
+            "delete": {
+                "tags": [
+                    "pet-grooming-service"
+                ],
+                "summary": "groomingFunctionThatReturnsVoid",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_4",
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "input",
+                        "in": "path",
+                        "description": "input",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Just testing"
+                    }
+                }
+            }
+        },
+        "/pets/grooming{?type}": {
+            "get": {
+                "tags": [
+                    "pet-grooming-service"
+                ],
+                "summary": "canGroom",
+                "operationId": "canGroomUsingGET_3",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "type",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/nameToNickNamesMap": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "nameToNickNamesMap",
+                "operationId": "nameToNickNamesMapUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/siblings{?age,id,name}": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "siblings",
+                "operationId": "siblingsUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "age",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/transformPetNameToPetMapToAny": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "transformPetNameToPetMapToAny",
+                "operationId": "transformPetNameToPetMapToAnyUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "someInput",
+                        "description": "someInput",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/transformPetNameToPetMapToGenericOpenMap": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "transformPetNameToPetMapToGenericOpenMap",
+                "operationId": "transformPetNameToPetMapToGenericOpenMapUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "someInput",
+                        "description": "someInput",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/transformPetNameToPetMapToOpenMap": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "transformPetNameToPetMapToOpenMap",
+                "operationId": "transformPetNameToPetMapToOpenMapUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "someInput",
+                        "description": "someInput",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "$ref": "#/definitions/Pet"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/voidMethod/{input}": {
+            "delete": {
+                "tags": [
+                    "pet-grooming-service"
+                ],
+                "summary": "groomingFunctionThatReturnsVoid",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_5",
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "input",
+                        "in": "path",
+                        "description": "input",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Just testing"
+                    }
+                }
+            }
+        },
+        "/pets/{a}/{b}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "method",
+                "operationId": "methodUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "a",
+                        "in": "path",
+                        "description": "a",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "b",
+                        "in": "path",
+                        "description": "b",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/pets/{name}": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "petByName",
+                "operationId": "petByNameUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/{petId}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "Find pet by ID",
+                "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
+                "operationId": "getPetByIdUsingGET_4",
+                "parameters": [
+                    {
+                        "name": "petId",
+                        "in": "path",
+                        "description": "ID of pet that needs to be fetched",
+                        "required": true,
+                        "type": "string",
+                        "maximum": 5,
+                        "exclusiveMaximum": false,
+                        "minimum": 1,
+                        "exclusiveMinimum": false,
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
+            }
+        },
+        "/pets/{petId}/pic": {
+            "post": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "updatePic",
+                "operationId": "updatePicUsingPOST_1",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "petId",
+                        "in": "path",
+                        "description": "petId",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pic",
+                        "in": "formData",
+                        "description": "pic",
+                        "required": false,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/pets/{petId}/pic/{picId}": {
+            "get": {
+                "tags": [
+                    "pet-service"
+                ],
+                "summary": "updatePic",
+                "operationId": "updatePicUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "petId",
+                        "in": "path",
+                        "description": "petId",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "picId",
+                        "in": "path",
+                        "description": "picId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
         }
-      },
-      "title": "Pet"
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
+    },
+    "definitions": {
+        "Pet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Pet"
+        }
     }
-  }
 }

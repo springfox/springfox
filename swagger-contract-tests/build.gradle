@@ -49,3 +49,8 @@ dependencies {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }
+// NOTE: Uncomment to bulk update contracts
+//test {
+//  systemProperty("contract.tests.root", "REPLACE-ME-WITH-PATH-TO-TEST-RESOURCES-DIRECTORY")
+//  systemProperty("contract.tests.update", true)
+//}

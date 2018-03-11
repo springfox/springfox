@@ -38,15 +38,12 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
-import static springfox.documentation.swagger.annotations.Annotations.*;
-import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -64,12 +61,11 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<ApiModelProperty> apiModelPropertyOptional
-        = findApiModePropertyAnnotation(context.getField().getRawMember());
+    Optional<ApiModelProperty> apiModelPropertyOptional = context.findAnnotation(ApiModelProperty.class);
     if (apiModelPropertyOptional.isPresent()) {
       fromApiModelProperty(context, apiModelPropertyOptional.get());
     }
-    Optional<ApiParam> apiParamOptional = findApiParamAnnotation(context.getField().getRawMember());
+    Optional<ApiParam> apiParamOptional = context.findAnnotation(ApiParam.class);
     if (apiParamOptional.isPresent()) {
       fromApiParam(context, apiParamOptional.get());
     }
@@ -82,7 +78,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
+    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getFieldType().getErasedType());
     maybeSetParameterName(context, apiParam.name())
         .description(descriptions.resolve(apiParam.value()))
         .defaultValue(apiParam.defaultValue())
@@ -96,7 +92,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
+    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getFieldType().getErasedType());
     maybeSetParameterName(context, apiModelProperty.name())
         .description(descriptions.resolve(apiModelProperty.value()))
         .required(apiModelProperty.required())
@@ -113,11 +109,11 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
     return context.getParameterBuilder();
   }
 
-  private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
+  private AllowableValues allowableValues(final Optional<String> optionalAllowable, Class<?> fieldType) {
 
     AllowableValues allowable = null;
-    if (enumTypeDeterminer.isEnum(field.getType())) {
-      allowable = new AllowableListValues(getEnumValues(field.getType()), "LIST");
+    if (enumTypeDeterminer.isEnum(fieldType)) {
+      allowable = new AllowableListValues(getEnumValues(fieldType), "LIST");
     } else if (optionalAllowable.isPresent()) {
       allowable = ApiModelProperties.allowableValueFromString(optionalAllowable.get());
     }

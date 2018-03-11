@@ -32,7 +32,6 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import javax.validation.constraints.Size;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -48,8 +47,8 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<Size> size = validatorFromExpandedParameter(context, Size.class)
-        .or(validatorFromExpandedParameter(context, Size.class));
+
+    Optional<Size> size = context.findAnnotation(Size.class);
 
     if (size.isPresent()) {
       AllowableRangeValues values = stringLengthRange(size.get());

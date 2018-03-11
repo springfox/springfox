@@ -19,11 +19,36 @@
 
 package springfox.test.contract.swaggertests
 
+import groovy.json.StringEscapeUtils
 import org.codehaus.groovy.runtime.ResourceGroovyMethods
+
+import static groovy.json.JsonOutput.*
 
 trait FileAccess {
   String fileContents(String fileName) {
     def resource = this.getClass().getResource("$fileName")
     return ResourceGroovyMethods.getText(resource, 'UTF-8')
+  }
+
+  def maybeWriteToFile(fileName, String contents) {
+    def root = System.properties.get("contract.tests.root")
+    def updateContracts = System.properties.get("contract.tests.update", false)
+    System.out.println("Update contracts? $updateContracts, root -> $root")
+    if (updateContracts) {
+      System.out.println("Writing file ${root}${File.separator}${fileName}...")
+      def file
+      def writer
+      try {
+        file = new FileOutputStream("${root}${File.separator}${fileName}")
+        writer = new OutputStreamWriter(file, "UTF-8")
+        writer.write(StringEscapeUtils.unescapeJava(prettyPrint(contents)))
+      } catch (Exception e) {
+        System.err.println(e.getMessage())
+      } finally {
+        writer.flush()
+        writer.close()
+      }
+    }
+    true
   }
 }

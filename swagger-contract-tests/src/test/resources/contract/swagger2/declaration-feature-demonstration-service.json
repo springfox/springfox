@@ -1,1186 +1,1188 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Api Documentation",
-    "version": "1.0",
-    "title": "Api Documentation",
-    "termsOfService": "urn:tos",
-    "contact": {},
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    }
-  },
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
   "host": "localhost:__PORT__",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "feature-demonstration-service",
-      "description": "Demonstration of features"
-    }
-  ],
-  "produces": [
-    "application/xml",
-    "application/json"
-  ],
-  "paths": {
-    "/features/1367/{itemId}": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "findIdentityById",
-        "operationId": "findIdentityByIdUsingGET_1",
-        "produces": [
-          "application/vnd.com.fancy-pet+json",
-          "application/vnd.com.pet+json"
-        ],
-        "parameters": [
-          {
-            "name": "itemId",
-            "in": "path",
-            "description": "itemId",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "feature-demonstration-service",
+            "description": "Demonstration of features"
         }
-      }
-    },
-    "/features/1430-body": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "base64EncodedBody",
-        "operationId": "base64EncodedBodyUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "base64Encoded",
-            "description": "base64Encoded",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "byte"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/1430-query": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "proper",
-        "operationId": "properUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "base64Encoded",
-            "in": "query",
-            "description": "base64Encoded",
-            "required": true,
-            "type": "string",
-            "format": "byte"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/1490/entity/{itemId}": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "serializablePetEntity",
-        "operationId": "serializablePetEntityUsingGET_1",
-        "parameters": [
-          {
-            "name": "itemId",
-            "in": "path",
-            "description": "itemId",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        }
-      }
-    },
-    "/features/1490/{itemId}": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "serializablePet",
-        "operationId": "serializablePetUsingGET_1",
-        "parameters": [
-          {
-            "name": "itemId",
-            "in": "path",
-            "description": "itemId",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateSerializablePet",
-        "operationId": "updateSerializablePetUsingPUT_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "itemId",
-            "in": "path",
-            "description": "itemId",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "pet",
-            "description": "pet",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/2031": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "/2031",
-        "operationId": "saveUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "keyId",
-            "in": "path",
-            "description": "keyId",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "contents",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/CustomTypeFor2031"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/addFiles": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "Add a new contact with file attachment",
-        "operationId": "addFilesUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "files",
-            "in": "formData",
-            "description": "files",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "file"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/allMethodsAllowed": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "head": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingHEAD_1",
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingPUT_1",
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingDELETE_1",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "options": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingOPTIONS_1",
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "allMethodAllowed",
-        "operationId": "allMethodAllowedUsingPATCH_1",
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/arrayOfArrays": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "arrayOfArrays",
-        "operationId": "arrayOfArraysUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "arrayOfEnums",
-            "description": "arrayOfEnums",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "enum": [
-                    "PRODUCT",
-                    "SERVICE"
-                  ]
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/features/1367/{itemId}": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "findIdentityById",
+                "operationId": "findIdentityByIdUsingGET_1",
+                "produces": [
+                    "application/vnd.com.fancy-pet+json",
+                    "application/vnd.com.pet+json"
+                ],
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "description": "itemId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
                 }
-              }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
+        },
+        "/features/1430-body": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "base64EncodedBody",
+                "operationId": "base64EncodedBodyUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "base64Encoded",
+                        "description": "base64Encoded",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "byte"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
                 }
-              }
             }
-          }
-        }
-      }
-    },
-    "/features/bare": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "getBare",
-        "operationId": "getBareUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "nestedType.name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "allCapsSet",
-            "in": "query",
-            "description": "description of allCapsSet",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
+        },
+        "/features/1430-query": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "proper",
+                "operationId": "properUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "base64Encoded",
+                        "in": "query",
+                        "description": "base64Encoded",
+                        "required": true,
+                        "type": "string",
+                        "format": "byte"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/1490/entity/{itemId}": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "serializablePetEntity",
+                "operationId": "serializablePetEntityUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "description": "itemId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/1490/{itemId}": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "serializablePet",
+                "operationId": "serializablePetUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "description": "itemId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                }
             },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "parentBeanProperty",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "foo",
-            "in": "query",
-            "description": "description of foo",
-            "required": true,
-            "type": "string",
-            "enum": [
-              "man",
-              "chu"
-            ]
-          },
-          {
-            "name": "bar",
-            "in": "query",
-            "description": "description of bar",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
-            "name": "enumType",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "ONE",
-              "TWO"
-            ]
-          },
-          {
-            "name": "readOnlyString",
-            "in": "query",
-            "description": "A read only string",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "annotatedEnumType",
-            "in": "query",
-            "description": "description of annotatedEnumType",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "ONE",
-              "TWO"
-            ]
-          },
-          {
-            "name": "propertyWithNoSetterMethod",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "localDateTime",
-            "in": "query",
-            "description": "local date time desc dd-MM-yyyy hh:mm:ss",
-            "required": true,
-            "type": "string",
-            "format": "date-time"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/bigDecimal": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateBigDecimal",
-        "operationId": "updateBigDecimalUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "input",
-            "in": "query",
-            "description": "input",
-            "required": false,
-            "type": "number"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/boolean": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateBoolean",
-        "operationId": "updateBooleanUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "input",
-            "in": "query",
-            "description": "input",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/date": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateDate",
-        "operationId": "updateDateUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "localDate",
-            "in": "query",
-            "description": "localDate",
-            "required": false,
-            "type": "string",
-            "format": "date"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/effective": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "getEffective",
-        "operationId": "getEffectiveUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Example"
+            "put": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateSerializablePet",
+                "operationId": "updateSerializablePetUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "itemId",
+                        "in": "path",
+                        "description": "itemId",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "pet",
+                        "description": "pet",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
-          }
+        },
+        "/features/2031": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "/2031",
+                "operationId": "saveUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "contents",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/CustomTypeFor2031"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "keyId",
+                        "in": "path",
+                        "description": "keyId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/addFiles": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "Add a new contact with file attachment",
+                "operationId": "addFilesUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "files",
+                        "in": "formData",
+                        "description": "files",
+                        "required": true,
+                        "type": "array",
+                        "items": {
+                            "type": "file"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/allMethodsAllowed": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "head": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingHEAD_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingDELETE_1",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "options": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingOPTIONS_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "allMethodAllowed",
+                "operationId": "allMethodAllowedUsingPATCH_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/arrayOfArrays": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "arrayOfArrays",
+                "operationId": "arrayOfArraysUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "arrayOfEnums",
+                        "description": "arrayOfEnums",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "PRODUCT",
+                                        "SERVICE"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "format": "int32"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/features/bare": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "getBare",
+                "operationId": "getBareUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "allCapsSet",
+                        "in": "query",
+                        "description": "description of allCapsSet",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "annotatedEnumType",
+                        "in": "query",
+                        "description": "description of annotatedEnumType",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    },
+                    {
+                        "name": "bar",
+                        "in": "query",
+                        "description": "description of bar",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "enumType",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    },
+                    {
+                        "name": "foo",
+                        "in": "query",
+                        "description": "description of foo",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "man",
+                            "chu"
+                        ]
+                    },
+                    {
+                        "name": "localDateTime",
+                        "in": "query",
+                        "description": "local date time desc dd-MM-yyyy hh:mm:ss",
+                        "required": true,
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    {
+                        "name": "nestedType.name",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "parentBeanProperty",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "propertyWithNoSetterMethod",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "readOnlyString",
+                        "in": "query",
+                        "description": "A read only string",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/bigDecimal": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateBigDecimal",
+                "operationId": "updateBigDecimalUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "input",
+                        "in": "query",
+                        "description": "input",
+                        "required": false,
+                        "type": "number"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/boolean": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateBoolean",
+                "operationId": "updateBooleanUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "input",
+                        "in": "query",
+                        "description": "input",
+                        "required": false,
+                        "type": "boolean"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/date": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateDate",
+                "operationId": "updateDateUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "localDate",
+                        "in": "query",
+                        "description": "localDate",
+                        "required": false,
+                        "type": "string",
+                        "format": "date"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/effective": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "getEffective",
+                "operationId": "getEffectiveUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Example"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/effectives": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "getEffectives",
+                "operationId": "getEffectivesUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Example"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/features/enumObject": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "getEnumAsObject",
+                "operationId": "getEnumAsObjectUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/EnumObjectType"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/examples": {
+            "put": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateListOfExamples",
+                "operationId": "updateListOfExamplesUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "examples",
+                        "in": "query",
+                        "description": "examples",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/Example"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/integers": {
+            "put": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateListOfIntegers",
+                "operationId": "updateListOfIntegersUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "integers",
+                        "in": "query",
+                        "description": "integers",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/listOfMaps": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "listOfMaps",
+                "operationId": "listOfMapsUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Map«string,string»"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/features/mapOfMapOfExample": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "mapOfMapOfExample",
+                "operationId": "mapOfMapOfExampleUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "$ref": "#/definitions/Example"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/features/mapProperty": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "modelWithMapProperty",
+                "operationId": "modelWithMapPropertyUsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ModelWithMapProperty"
+                        }
+                    }
+                }
+            }
+        },
+        "/features/modelAttributes": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "getModelAttribute",
+                "operationId": "getModelAttributeUsingGET_1",
+                "parameters": [
+                    {
+                        "name": "accountTypes",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "CASH",
+                                "BANK"
+                            ]
+                        },
+                        "collectionFormat": "multi",
+                        "enum": [
+                            "CASH",
+                            "BANK"
+                        ]
+                    },
+                    {
+                        "name": "arrayProp",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "complexProp.name",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "intProp",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    {
+                        "name": "listProp",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "stringProp",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/propertyWithArrayOfArrays": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "propertyWithArrayOfArrays",
+                "operationId": "propertyWithArrayOfArraysUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "description": "model",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ModelWithArrayOfArrays"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/propertyWithObjectNode": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "propertyWithObjectNode",
+                "operationId": "propertyWithObjectNodeUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "description": "model",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ModelWithObjectNode"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/status": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateBaz",
+                "operationId": "updateBazUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "enumType",
+                        "in": "query",
+                        "description": "enumType",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/statuses": {
+            "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "updateBazes",
+                "operationId": "updateBazesUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "enumType",
+                        "in": "query",
+                        "description": "enumType",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "ONE",
+                                "TWO"
+                            ]
+                        },
+                        "collectionFormat": "multi",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/features/{petId}": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "Find pet by ID",
+                "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
+                "operationId": "getPetByIdUsingGET_2",
+                "parameters": [
+                    {
+                        "name": "petId",
+                        "in": "path",
+                        "description": "ID of pet that needs to be fetched",
+                        "required": true,
+                        "type": "string",
+                        "maximum": 5,
+                        "exclusiveMaximum": false,
+                        "minimum": 1,
+                        "exclusiveMinimum": false,
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Pet"
+                        }
+                    }
+                },
+                "x-test1": "value1",
+                "x-test2": {
+                    "name2": "value2"
+                }
+            }
         }
-      }
     },
-    "/features/effectives": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "getEffectives",
-        "operationId": "getEffectivesUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
+    },
+    "definitions": {
+        "CustomTypeFor2031": {
+            "type": "object",
+            "properties": {
+                "property": {
+                    "type": "string"
+                }
+            },
+            "title": "CustomTypeFor2031"
+        },
+        "EnumObjectType": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "EnumObjectType"
+        },
+        "Example": {
+            "type": "object",
+            "properties": {
+                "allCapsSet": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "annotatedEnumType": {
+                    "type": "string",
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ]
+                },
+                "bar": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "description of bar"
+                },
+                "enumType": {
+                    "type": "string",
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ]
+                },
+                "foo": {
+                    "type": "string"
+                },
+                "localDateTime": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "nestedType": {
+                    "$ref": "#/definitions/NestedType"
+                },
+                "parentBeanProperty": {
+                    "type": "string"
+                },
+                "propertyWithNoGetterMethod": {
+                    "type": "string"
+                },
+                "propertyWithNoSetterMethod": {
+                    "type": "string"
+                },
+                "readOnlyString": {
+                    "type": "string",
+                    "description": "A read only string",
+                    "readOnly": true
+                }
+            },
+            "title": "Example"
+        },
+        "Map«string,Example»": {
+            "type": "object",
+            "title": "Map«string,Example»",
+            "additionalProperties": {
                 "$ref": "#/definitions/Example"
-              }
             }
-          }
-        }
-      }
-    },
-    "/features/enumObject": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "getEnumAsObject",
-        "operationId": "getEnumAsObjectUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/EnumObjectType"
+        },
+        "Map«string,string»": {
+            "type": "object",
+            "title": "Map«string,string»",
+            "additionalProperties": {
+                "type": "string"
             }
-          }
-        }
-      }
-    },
-    "/features/examples": {
-      "put": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateListOfExamples",
-        "operationId": "updateListOfExamplesUsingPUT_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "examples",
-            "in": "query",
-            "description": "examples",
-            "required": false,
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/Example"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/integers": {
-      "put": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateListOfIntegers",
-        "operationId": "updateListOfIntegersUsingPUT_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "integers",
-            "in": "query",
-            "description": "integers",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "collectionFormat": "multi"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/listOfMaps": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "listOfMaps",
-        "operationId": "listOfMapsUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Map«string,string»"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/features/mapOfMapOfExample": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "mapOfMapOfExample",
-        "operationId": "mapOfMapOfExampleUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object",
-                "additionalProperties": {
-                  "$ref": "#/definitions/Example"
+        },
+        "ModelWithArrayOfArrays": {
+            "type": "object",
+            "properties": {
+                "arrayOfArrayOfInts": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
                 }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/features/mapProperty": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "modelWithMapProperty",
-        "operationId": "modelWithMapPropertyUsingGET_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/ModelWithMapProperty"
-            }
-          }
-        }
-      }
-    },
-    "/features/modelAttributes": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "getModelAttribute",
-        "operationId": "getModelAttributeUsingGET_1",
-        "parameters": [
-          {
-            "name": "complexProp.name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "listProp",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
             },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "arrayProp",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "collectionFormat": "multi"
-          },
-          {
-            "name": "accountTypes",
-            "in": "query",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "CASH",
-                "BANK"
-              ]
-            },
-            "collectionFormat": "multi",
-            "enum": [
-              "CASH",
-              "BANK"
-            ]
-          },
-          {
-            "name": "stringProp",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "intProp",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/propertyWithArrayOfArrays": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "propertyWithArrayOfArrays",
-        "operationId": "propertyWithArrayOfArraysUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "model",
-            "description": "model",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ModelWithArrayOfArrays"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/propertyWithObjectNode": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "propertyWithObjectNode",
-        "operationId": "propertyWithObjectNodeUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "model",
-            "description": "model",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ModelWithObjectNode"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/status": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateBaz",
-        "operationId": "updateBazUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "enumType",
-            "in": "query",
-            "description": "enumType",
-            "required": false,
-            "type": "string",
-            "enum": [
-              "ONE",
-              "TWO"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/statuses": {
-      "post": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "updateBazes",
-        "operationId": "updateBazesUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "enumType",
-            "in": "query",
-            "description": "enumType",
-            "required": false,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "ONE",
-                "TWO"
-              ]
-            },
-            "collectionFormat": "multi",
-            "enum": [
-              "ONE",
-              "TWO"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/features/{petId}": {
-      "get": {
-        "tags": [
-          "feature-demonstration-service"
-        ],
-        "summary": "Find pet by ID",
-        "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
-        "operationId": "getPetByIdUsingGET_2",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet that needs to be fetched",
-            "required": true,
-            "type": "string",
-            "maximum": 5,
-            "exclusiveMaximum": false,
-            "minimum": 1,
-            "exclusiveMinimum": false,
-            "allowEmptyValue": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Pet"
-            }
-          }
+            "title": "ModelWithArrayOfArrays"
         },
-        "x-test1": "value1",
-        "x-test2": {
-          "name2": "value2"
+        "ModelWithMapProperty": {
+            "type": "object",
+            "properties": {
+                "params": {
+                    "type": "object",
+                    "description": "Map of params to be sent",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            },
+            "title": "ModelWithMapProperty",
+            "description": "Describes model with map property"
+        },
+        "ModelWithObjectNode": {
+            "type": "object",
+            "properties": {
+                "anyObject": {
+                    "$ref": "#/definitions/ObjectNode"
+                }
+            },
+            "title": "ModelWithObjectNode"
+        },
+        "NestedType": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "NestedType"
+        },
+        "ObjectNode": {
+            "type": "object",
+            "title": "ObjectNode"
+        },
+        "Pet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Pet"
         }
-      }
     }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  },
-  "definitions": {
-    "CustomTypeFor2031": {
-      "type": "object",
-      "properties": {
-        "property": {
-          "type": "string"
-        }
-      },
-      "title": "CustomTypeFor2031"
-    },
-    "EnumObjectType": {
-      "type": "object",
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "EnumObjectType"
-    },
-    "Example": {
-      "type": "object",
-      "properties": {
-        "allCapsSet": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "annotatedEnumType": {
-          "type": "string",
-          "enum": [
-            "ONE",
-            "TWO"
-          ]
-        },
-        "bar": {
-          "type": "integer",
-          "format": "int32",
-          "description": "description of bar"
-        },
-        "enumType": {
-          "type": "string",
-          "enum": [
-            "ONE",
-            "TWO"
-          ]
-        },
-        "foo": {
-          "type": "string"
-        },
-        "localDateTime": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "nestedType": {
-          "$ref": "#/definitions/NestedType"
-        },
-        "parentBeanProperty": {
-          "type": "string"
-        },
-        "propertyWithNoGetterMethod": {
-          "type": "string"
-        },
-        "propertyWithNoSetterMethod": {
-          "type": "string"
-        },
-        "readOnlyString": {
-          "type": "string",
-          "description": "A read only string",
-          "readOnly": true
-        }
-      },
-      "title": "Example"
-    },
-    "Map«string,Example»": {
-      "type": "object",
-      "title": "Map«string,Example»",
-      "additionalProperties": {
-        "$ref": "#/definitions/Example"
-      }
-    },
-    "Map«string,string»": {
-      "type": "object",
-      "title": "Map«string,string»",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "ModelWithArrayOfArrays": {
-      "type": "object",
-      "properties": {
-        "arrayOfArrayOfInts": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        }
-      },
-      "title": "ModelWithArrayOfArrays"
-    },
-    "ModelWithMapProperty": {
-      "type": "object",
-      "properties": {
-        "params": {
-          "type": "object",
-          "description": "Map of params to be sent",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "title": "ModelWithMapProperty",
-      "description": "Describes model with map property"
-    },
-    "ModelWithObjectNode": {
-      "type": "object",
-      "properties": {
-        "anyObject": {
-          "$ref": "#/definitions/ObjectNode"
-        }
-      },
-      "title": "ModelWithObjectNode"
-    },
-    "NestedType": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "NestedType"
-    },
-    "ObjectNode": {
-      "type": "object",
-      "title": "ObjectNode"
-    },
-    "Pet": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "Pet"
-    }
-  }
 }
