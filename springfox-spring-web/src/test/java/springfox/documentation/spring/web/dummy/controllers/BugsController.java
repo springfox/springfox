@@ -442,6 +442,10 @@ public class BugsController {
     return null;
   }
 
+  @GetMapping({"/bug2220", "/bug2220/{bar}"})
+  public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
+  }
+
   public class ProductVO {
     private String name;
 

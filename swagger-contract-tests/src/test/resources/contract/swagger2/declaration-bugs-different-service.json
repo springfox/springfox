@@ -6,7 +6,7 @@
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
         "contact": {
-            
+
         },
         "license": {
             "name": "Apache 2.0",
@@ -1445,6 +1445,52 @@
                 }
             }
         },
+        "/bugs/bug2220": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2220",
+                "operationId": "bug2220UsingGET_4",
+                "parameters": [
+                    {
+                        "name": "bar",
+                        "in": "path",
+                        "description": "bar",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/bugs/bug2220/{bar}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2220",
+                "operationId": "bug2220UsingGET_5",
+                "parameters": [
+                    {
+                        "name": "bar",
+                        "in": "path",
+                        "description": "bar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug2230": {
             "post": {
                 "tags": [
@@ -1930,10 +1976,10 @@
                 "name": {
                     "type": "string"
                 },
-                "specification_name": {
+                "specification_child_name": {
                     "type": "string"
                 },
-                "specification_child_name": {
+                "specification_name": {
                     "type": "string"
                 }
             },
