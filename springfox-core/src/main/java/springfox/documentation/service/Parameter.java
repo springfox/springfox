@@ -135,4 +135,13 @@ public class Parameter {
   public Boolean isAllowEmptyValue() {
     return allowEmptyValue;
   }
+
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("Parameter{");
+    sb.append("name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 }
