@@ -41,88 +41,104 @@ import java.lang.annotation.Annotation
 
 @Mixin([RequestMappingSupport])
 class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ParameterAnnotationSupport {
-  @Shared description = new DescriptionResolver(new MockEnvironment())
+  @Shared
+  def description = new DescriptionResolver(new MockEnvironment())
 
   @Unroll
   def "parameters required paramAnnotations using default reader"() {
     given:
-      MethodParameter methodParameter = Mock(MethodParameter)
-      methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
-      methodParameter.getParameterType() >> Object.class
-      methodParameter.getMethodAnnotation(PathVariable.class) >> paramAnnotations.find { it instanceof PathVariable }
-      def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", paramAnnotations, new TypeResolver().resolve(Object.class))
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+    MethodParameter methodParameter = Mock(MethodParameter)
+    methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
+    methodParameter.getParameterType() >> Object.class
+    methodParameter.getMethodAnnotation(PathVariable.class) >> paramAnnotations.find { it instanceof PathVariable }
+    def resolvedMethodParameter =
+        new ResolvedMethodParameter(
+            0,
+            "",
+            paramAnnotations,
+            new TypeResolver().resolve(Object.class))
+    ParameterContext parameterContext =
+        new ParameterContext(
+            resolvedMethodParameter,
+            new ParameterBuilder(),
+            context(),
+            Mock(GenericTypeNamingStrategy),
+            Mock(OperationContext))
+
     when:
-      def operationCommand = new ParameterRequiredReader(description)
-      operationCommand.apply(parameterContext)
+    def operationCommand = new ParameterRequiredReader(description)
+    operationCommand.apply(parameterContext)
+
     then:
-      parameterContext.parameterBuilder().build().isRequired() == expected
+    parameterContext.parameterBuilder().build().isRequired() == expected
+
     where:
-      paramAnnotations                                                      | expected
-      [[required: { -> false }] as ApiParam, pathVariable(false)]           | true
-      [[required: { -> false }] as ApiParam, requestHeader(false, "", "")]  | false
-      [requestHeader(true, "", "")]                                         | true
-      [requestHeader(false, "", "")]                                        | false
-      [[required: { -> true }] as ApiParam]                                 | false
-      [[required: { -> false }] as ApiParam]                                | false
-      [requestParam(true, "", ValueConstants.DEFAULT_NONE)]                 | true
-      [requestParam(true, "", "")]                                          | false
-      [requestParam(true, "", null)]                                        | false
-      [requestParam(true, "", "default value")]                             | false
-      [requestParam(false, "", ValueConstants.DEFAULT_NONE)]                | false
-      [requestParam(false, "", "")]                | false
-      [requestBody(false)]                                                  | false
-      [requestBody(true)]                                                   | true
-      [requestPart(false, "")]                                              | false
-      [requestPart(true, "")]                                               | true
-      []                                                                    | false
-      [null]                                                                | false
-      [[required: { -> true }] as ApiParam, requestParam(false, "", ValueConstants.DEFAULT_NONE)] | false
-      [[required: { -> false }] as ApiParam, requestParam(true, "", ValueConstants.DEFAULT_NONE)] | true
-      [[required: { -> false }] as ApiParam, requestParam(true, "", ValueConstants.DEFAULT_NONE)] | true
+    paramAnnotations                                                                            | expected
+    [[required: { -> false }] as ApiParam, pathVariable(false)]                                 | true
+    [[required: { -> false }] as ApiParam, requestHeader(false, "", "")]                        | false
+    [requestHeader(true, "", "")]                                                               | true
+    [requestHeader(false, "", "")]                                                              | false
+    [[required: { -> true }] as ApiParam]                                                       | false
+    [[required: { -> false }] as ApiParam]                                                      | false
+    [requestParam(true, "", ValueConstants.DEFAULT_NONE)]                                       | true
+    [requestParam(true, "", "")]                                                                | false
+    [requestParam(true, "", null)]                                                              | false
+    [requestParam(true, "", "default value")]                                                   | false
+    [requestParam(false, "", ValueConstants.DEFAULT_NONE)]                                      | false
+    [requestParam(false, "", "")]                                                               | false
+    [requestBody(false)]                                                                        | false
+    [requestBody(true)]                                                                         | true
+    [requestPart(false, "")]                                                                    | false
+    [requestPart(true, "")]                                                                     | true
+    []                                                                                          | false
+    [null]                                                                                      | false
+    [[required: { -> true }] as ApiParam, requestParam(false, "", ValueConstants.DEFAULT_NONE)] | false
+    [[required: { -> false }] as ApiParam, requestParam(true, "", ValueConstants.DEFAULT_NONE)] | true
+    [[required: { -> false }] as ApiParam, requestParam(true, "", ValueConstants.DEFAULT_NONE)] | true
   }
 
   def "should detect java.util.Optional parameters"() {
     given:
-      def resolvedMethodParameter = new ResolvedMethodParameter(
+    def resolvedMethodParameter = new ResolvedMethodParameter(
         0,
         "",
         paramAnnotations,
         new TypeResolver().resolve(Object.class))
-      ParameterContext parameterContext = new ParameterContext(
-          resolvedMethodParameter,
-          new ParameterBuilder(),
-          context(),
-          Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter,
+        new ParameterBuilder(),
+        context(),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext))
 
     when:
-      def operationCommand = new ParameterRequiredReader(description) {
-        @Override
-        def boolean isOptional(ResolvedMethodParameter input) {
-          true
-        }
+    def operationCommand = new ParameterRequiredReader(description) {
+      @Override
+      def boolean isOptional(ResolvedMethodParameter input) {
+        true
       }
-      operationCommand.apply(parameterContext)
+    }
+    operationCommand.apply(parameterContext)
+
     then:
-      !parameterContext.parameterBuilder().build().isRequired()
+    !parameterContext.parameterBuilder().build().isRequired()
+
     where:
-      paramAnnotations << [
-              [requestHeader(true, "", "")],
-              [requestHeader(false, "", "")],
-              [requestParam(true, "", "")],
-              [requestParam(false, "", "")]
-      ]
+    paramAnnotations << [
+        [requestHeader(true, "", "")],
+        [requestHeader(false, "", "")],
+        [requestParam(true, "", "")],
+        [requestParam(false, "", "")]
+    ]
   }
 
   def "Supports all documentation types"() {
     given:
-      def sut = new ParameterRequiredReader(description)
+    def sut = new ParameterRequiredReader(description)
+
     expect:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
   }
 }
