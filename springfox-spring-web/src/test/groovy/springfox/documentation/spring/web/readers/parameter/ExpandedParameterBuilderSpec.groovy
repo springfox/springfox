@@ -50,9 +50,9 @@ class ExpandedParameterBuilderSpec extends Specification {
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
-        named(field),
-        named(field).type,
-        field,
+        new ModelAttributeParameterMetadataAccessor(named(field),
+            named(field).type,
+            field),
         DocumentationType.SWAGGER_12,
         new ParameterBuilder())
 

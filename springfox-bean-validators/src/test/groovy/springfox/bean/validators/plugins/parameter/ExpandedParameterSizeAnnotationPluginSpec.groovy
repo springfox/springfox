@@ -10,6 +10,7 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
+import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterMetadataAccessor
 
 import javax.validation.constraints.Size
 
@@ -33,15 +34,15 @@ class ExpandedParameterSizeAnnotationPluginSpec
   @Unroll
   def "@Size annotations are reflected for #fieldName"() {
     given:
-      ParameterExpansionContext context = new ParameterExpansionContext(
-          "Test",
-          "",
-          named(Subject, fieldName),
-          resolver.resolve(Subject),
-          fieldName,
-          DocumentationType.SWAGGER_12,
-          new ParameterBuilder())
     def sut = new ExpandedParameterSizeAnnotationPlugin()
+    ParameterExpansionContext context = new ParameterExpansionContext(
+        "Test",
+        "",
+        new ModelAttributeParameterMetadataAccessor(named(Subject, fieldName),
+            resolver.resolve(Subject),
+            fieldName),
+        DocumentationType.SWAGGER_12,
+        new ParameterBuilder())
 
     when:
     sut.apply(context)

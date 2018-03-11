@@ -33,6 +33,7 @@ import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 import springfox.documentation.spring.web.DescriptionResolver
+import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterMetadataAccessor
 
 class SwaggerExpandedParameterBuilderSpec extends Specification {
   @Shared
@@ -51,9 +52,9 @@ class SwaggerExpandedParameterBuilderSpec extends Specification {
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
-        field,
-        field.type,
-        field.name,
+        new ModelAttributeParameterMetadataAccessor(field,
+            field.type,
+            field.name),
         DocumentationType.SWAGGER_12,
         builderWithDefaultName)
 

@@ -27,6 +27,7 @@ import springfox.bean.validators.plugins.ReflectionSupport
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
+import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterMetadataAccessor
 
 import javax.validation.constraints.Pattern
 
@@ -51,9 +52,9 @@ class ExpandedParameterPatternAnnotationPluginSpec
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
-        named(Subject, fieldName),
-        resolver.resolve(Subject),
-        fieldName,
+        new ModelAttributeParameterMetadataAccessor(named(Subject, fieldName),
+            resolver.resolve(Subject),
+            fieldName),
         DocumentationType.SWAGGER_12,
         new ParameterBuilder())
 
