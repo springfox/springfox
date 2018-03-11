@@ -44,8 +44,6 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
-import static springfox.documentation.swagger.annotations.Annotations.*;
-import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -63,12 +61,11 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<ApiModelProperty> apiModelPropertyOptional
-        = findApiModePropertyAnnotation(context.getField().getRawMember());
+    Optional<ApiModelProperty> apiModelPropertyOptional = context.findAnnotation(ApiModelProperty.class);
     if (apiModelPropertyOptional.isPresent()) {
       fromApiModelProperty(context, apiModelPropertyOptional.get());
     }
-    Optional<ApiParam> apiParamOptional = findApiParamAnnotation(context.getField().getRawMember());
+    Optional<ApiParam> apiParamOptional = context.findAnnotation(ApiParam.class);
     if (apiParamOptional.isPresent()) {
       fromApiParam(context, apiParamOptional.get());
     }
