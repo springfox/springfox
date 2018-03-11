@@ -38,7 +38,6 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -82,7 +81,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
+    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getFieldType().getErasedType());
     maybeSetParameterName(context, apiParam.name())
         .description(descriptions.resolve(apiParam.value()))
         .defaultValue(apiParam.defaultValue())
@@ -96,7 +95,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getField().getRawMember());
+    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getFieldType().getErasedType());
     maybeSetParameterName(context, apiModelProperty.name())
         .description(descriptions.resolve(apiModelProperty.value()))
         .required(apiModelProperty.required())
@@ -113,11 +112,11 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
     return context.getParameterBuilder();
   }
 
-  private AllowableValues allowableValues(final Optional<String> optionalAllowable, final Field field) {
+  private AllowableValues allowableValues(final Optional<String> optionalAllowable, Class<?> fieldType) {
 
     AllowableValues allowable = null;
-    if (enumTypeDeterminer.isEnum(field.getType())) {
-      allowable = new AllowableListValues(getEnumValues(field.getType()), "LIST");
+    if (enumTypeDeterminer.isEnum(fieldType)) {
+      allowable = new AllowableListValues(getEnumValues(fieldType), "LIST");
     } else if (optionalAllowable.isPresent()) {
       allowable = ApiModelProperties.allowableValueFromString(optionalAllowable.get());
     }
