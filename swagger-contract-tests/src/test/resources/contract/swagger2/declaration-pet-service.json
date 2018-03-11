@@ -339,7 +339,7 @@
         }
       }
     },
-    "/pets/siblings{?id,name,age}": {
+    "/pets/siblings{?age,id,name}": {
       "post": {
         "tags": [
           "pet-service"

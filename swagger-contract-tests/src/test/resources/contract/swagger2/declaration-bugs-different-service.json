@@ -501,7 +501,7 @@
         }
       }
     },
-    "/bugs/1749{?pageNumber,pageSize,sortDirection,sortField,email,companyName,like}": {
+    "/bugs/1749{?ascending,companyName,email,like,pageNumber,pageSize,set,sortDirection,sortField}": {
       "get": {
         "tags": [
           "Bugs"
@@ -653,7 +653,7 @@
         }
       }
     },
-    "/bugs/1778{?s,e}": {
+    "/bugs/1778{?e,s}": {
       "get": {
         "tags": [
           "Bugs"
@@ -974,7 +974,7 @@
         }
       }
     },
-    "/bugs/1939{?username,password,credential-source-id}": {
+    "/bugs/1939{?credential-source-id,password,username}": {
       "get": {
         "tags": [
           "Bugs"
@@ -1170,7 +1170,7 @@
         }
       }
     },
-    "/bugs/2114{?siteSecret,xmlUrl,stripHtmlTags,clearIndex}": {
+    "/bugs/2114{?clearIndex,siteSecret,stripHtmlTags,xmlUrl}": {
       "put": {
         "tags": [
           "Bugs"
@@ -1325,7 +1325,7 @@
         ]
       }
     },
-    "/bugs/bug1827{?authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name,authorIds}": {
+    "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
       "get": {
         "tags": [
           "Bugs"
