@@ -355,14 +355,27 @@
           {
             "name": "status",
             "in": "query",
+            "description": "Order Status",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "placed",
+              "approved",
+              "delivered"
+            ]
           },
           {
             "name": "complete",
             "in": "query",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "name": "identifier",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "responses": {
@@ -730,9 +743,21 @@
           {
             "name": "userStatus",
             "in": "query",
+            "description": "User Status",
             "required": false,
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "enum": [
+              "1-registered",
+              "2-active",
+              "3-closed"
+            ]
+          },
+          {
+            "name": "identifier",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {

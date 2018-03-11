@@ -510,6 +510,18 @@
         "operationId": "getAllPagedUsingGET_2",
         "parameters": [
           {
+            "name": "set",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "ascending",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
             "name": "pageNumber",
             "in": "query",
             "required": true,
