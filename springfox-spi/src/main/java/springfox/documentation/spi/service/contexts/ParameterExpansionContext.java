@@ -24,31 +24,26 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.ParameterMetadataAccessor;
 
 public class ParameterExpansionContext {
 
   private final String dataTypeName;
   private final String parentName;
-  private final ResolvedField field;
-  private final ResolvedType fieldType;
-  private final String fieldName;
+  private final ParameterMetadataAccessor metadataAccessor;
   private final DocumentationType documentationType;
   private final ParameterBuilder parameterBuilder;
 
   public ParameterExpansionContext(
       String dataTypeName,
       String parentName,
-      ResolvedField field,
-      ResolvedType fieldType,
-      String fieldName,
+      ParameterMetadataAccessor metadataAccessor,
       DocumentationType documentationType,
       ParameterBuilder parameterBuilder) {
 
     this.dataTypeName = dataTypeName;
     this.parentName = parentName;
-    this.field = field;
-    this.fieldType = fieldType;
-    this.fieldName = fieldName;
+    this.metadataAccessor = metadataAccessor;
     this.documentationType = documentationType;
     this.parameterBuilder = parameterBuilder;
   }
@@ -68,7 +63,7 @@ public class ParameterExpansionContext {
    */
   @Deprecated
   public ResolvedField getField() {
-    return field;
+    return metadataAccessor.getField();
   }
 
   public DocumentationType getDocumentationType() {
@@ -80,10 +75,10 @@ public class ParameterExpansionContext {
   }
 
   public ResolvedType getFieldType() {
-    return fieldType;
+    return metadataAccessor.getFieldType();
   }
 
   public String getFieldName() {
-    return fieldName;
+    return metadataAccessor.getFieldName();
   }
 }
