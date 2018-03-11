@@ -1,117 +1,119 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Api Documentation",
-    "version": "1.0",
-    "title": "Api Documentation",
-    "termsOfService": "urn:tos",
-    "contact": {},
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    }
-  },
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
   "host": "localhost:__PORT__",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "fancy-pet-service",
-      "description": "Operations about fancy pets"
-    }
-  ],
-  "produces": [
-    "application/xml",
-    "application/json"
-  ],
-  "paths": {
-    "/fancypets/?{someId}": {
-      "post": {
-        "tags": [
-          "fancy-pet-service"
-        ],
-        "summary": "createObject",
-        "operationId": "createObjectUsingPOST_2",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "object",
-            "description": "object",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/FancyPet"
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "fancy-pet-service",
+            "description": "Operations about fancy pets"
+        }
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/fancypets/?{someId}": {
+            "post": {
+                "tags": [
+                    "fancy-pet-service"
+                ],
+                "summary": "createObject",
+                "operationId": "createObjectUsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "object",
+                        "description": "object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FancyPet"
+                        }
+                    },
+                    {
+                        "name": "someId",
+                        "in": "path",
+                        "description": "someId",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                }
             }
-          },
-          {
-            "name": "someId",
-            "in": "path",
-            "description": "someId",
-            "required": true,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
             }
-          }
         }
-      }
-    }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
     },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  },
-  "definitions": {
-    "Category": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
+    "definitions": {
+        "Category": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Category"
+        },
+        "FancyPet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "FancyPet"
         }
-      },
-      "title": "Category"
-    },
-    "FancyPet": {
-      "type": "object",
-      "properties": {
-        "age": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "categories": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Category"
-          }
-        },
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "FancyPet"
     }
-  }
 }

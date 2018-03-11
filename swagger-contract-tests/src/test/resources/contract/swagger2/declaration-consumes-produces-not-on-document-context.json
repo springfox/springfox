@@ -1,173 +1,175 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Api Documentation",
-    "version": "1.0",
-    "title": "Api Documentation",
-    "termsOfService": "urn:tos",
-    "contact": {},
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0"
-    }
-  },
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
   "host": "localhost:__PORT__",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "consumes-produces-service",
-      "description": "Services to demonstrate produces/consumes override behaviour on document and operation level"
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "consumes-produces-service",
+            "description": "Services to demonstrate produces/consumes override behaviour on document and operation level"
+        }
+    ],
+    "paths": {
+        "/consumes-produces/with-operation-consumes": {
+            "post": {
+                "tags": [
+                    "consumes-produces-service"
+                ],
+                "summary": "Does have operation consumes defined",
+                "operationId": "withOperationConsumesUsingPOST_1",
+                "consumes": [
+                    "application/xml"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "test",
+                        "description": "test",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/consumes-produces/with-operation-consumes-produces": {
+            "post": {
+                "tags": [
+                    "consumes-produces-service"
+                ],
+                "summary": "Does have operation consumes and produces defined",
+                "operationId": "withOperationConsumesAndProducesUsingPOST_1",
+                "consumes": [
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "test",
+                        "description": "test",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/consumes-produces/with-operation-produces": {
+            "get": {
+                "tags": [
+                    "consumes-produces-service"
+                ],
+                "summary": "Does have operation produces defined",
+                "operationId": "withOperationProducesUsingGET_1",
+                "produces": [
+                    "application/xml"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/consumes-produces/without-operation-consumes": {
+            "post": {
+                "tags": [
+                    "consumes-produces-service"
+                ],
+                "summary": "Does not have operation consumes defined",
+                "operationId": "withoutOperationConsumesUsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "test",
+                        "description": "test",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/consumes-produces/without-operation-produces": {
+            "get": {
+                "tags": [
+                    "consumes-produces-service"
+                ],
+                "summary": "Does not have operation produces defined",
+                "operationId": "withoutOperationProducesUsingGET_1",
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
     }
-  ],
-  "paths": {
-    "/consumes-produces/with-operation-consumes": {
-      "post": {
-        "tags": [
-          "consumes-produces-service"
-        ],
-        "summary": "Does have operation consumes defined",
-        "operationId": "withOperationConsumesUsingPOST_1",
-        "consumes": [
-          "application/xml"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "test",
-            "description": "test",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/consumes-produces/with-operation-consumes-produces": {
-      "post": {
-        "tags": [
-          "consumes-produces-service"
-        ],
-        "summary": "Does have operation consumes and produces defined",
-        "operationId": "withOperationConsumesAndProducesUsingPOST_1",
-        "consumes": [
-          "application/xml"
-        ],
-        "produces": [
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "test",
-            "description": "test",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/consumes-produces/with-operation-produces": {
-      "get": {
-        "tags": [
-          "consumes-produces-service"
-        ],
-        "summary": "Does have operation produces defined",
-        "operationId": "withOperationProducesUsingGET_1",
-        "produces": [
-          "application/xml"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    "/consumes-produces/without-operation-consumes": {
-      "post": {
-        "tags": [
-          "consumes-produces-service"
-        ],
-        "summary": "Does not have operation consumes defined",
-        "operationId": "withoutOperationConsumesUsingPOST_1",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "test",
-            "description": "test",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/consumes-produces/without-operation-produces": {
-      "get": {
-        "tags": [
-          "consumes-produces-service"
-        ],
-        "summary": "Does not have operation produces defined",
-        "operationId": "withoutOperationProducesUsingGET_1",
-        "produces": [
-          "*/*"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    }
-  },
-  "securityDefinitions": {
-    "api_key": {
-      "type": "apiKey",
-      "name": "api_key",
-      "in": "header"
-    },
-    "petstore_auth": {
-      "type": "oauth2",
-      "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
-      "flow": "implicit",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  }
 }
