@@ -22,9 +22,12 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
+import com.google.common.base.Optional;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterMetadataAccessor;
+
+import java.lang.annotation.Annotation;
 
 public class ParameterExpansionContext {
 
@@ -80,5 +83,9 @@ public class ParameterExpansionContext {
 
   public String getFieldName() {
     return metadataAccessor.getFieldName();
+  }
+
+  public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) {
+    return metadataAccessor.findAnnotation(annotationType);
   }
 }

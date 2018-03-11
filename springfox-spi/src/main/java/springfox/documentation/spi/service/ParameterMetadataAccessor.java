@@ -20,6 +20,9 @@ package springfox.documentation.spi.service;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
+import com.google.common.base.Optional;
+
+import java.lang.annotation.Annotation;
 
 public interface ParameterMetadataAccessor {
   ResolvedField getField();
@@ -27,4 +30,6 @@ public interface ParameterMetadataAccessor {
   ResolvedType getFieldType();
 
   String getFieldName();
+
+  <T extends Annotation> Optional<T> findAnnotation(Class<T> annotationType);
 }
