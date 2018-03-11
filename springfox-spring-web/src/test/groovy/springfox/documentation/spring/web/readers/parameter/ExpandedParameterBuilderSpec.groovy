@@ -20,6 +20,8 @@ class ExpandedParameterBuilderSpec extends Specification {
         "Test",
         "",
         named("enums"),
+        named("enums").type,
+        "enums",
         DocumentationType.SWAGGER_12,
         new ParameterBuilder())
     when:
@@ -44,6 +46,8 @@ class ExpandedParameterBuilderSpec extends Specification {
         "Test",
         "",
         named(field),
+        named(field).type,
+        field,
         DocumentationType.SWAGGER_12,
         new ParameterBuilder())
     when:

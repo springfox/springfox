@@ -1,5 +1,7 @@
 package springfox.bean.validators.plugins.parameter
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
@@ -15,6 +17,9 @@ import javax.validation.constraints.Min
 class ExpandedParameterMinMaxAnnotationPluginSpec
     extends Specification
     implements AnnotationsSupport, ReflectionSupport {
+  @Shared
+  def resolver = new TypeResolver()
+
   def "Always supported" () {
     expect:
       new ExpandedParameterMinMaxAnnotationPlugin().supports(types)
@@ -30,6 +35,8 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
           "Test",
           "",
           named(Subject, fieldName),
+          resolver.resolve(Subject),
+          fieldName,
           DocumentationType.SWAGGER_12,
           new ParameterBuilder())
 

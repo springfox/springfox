@@ -92,11 +92,11 @@ public class ModelAttributeParameterExpander {
         .filter(not(simpleType()))
         .filter(not(recursiveType(context)));
     for (ModelAttributeField each : expendables) {
-      LOG.debug("Attempting to expand expandable field: {}", each.getField());
+      LOG.debug("Attempting to expand expandable property: {}", each.getName());
       parameters.addAll(
           expand(
               context.childContext(
-                  nestedParentName(context.getParentName(), each.getField()),
+                  nestedParentName(context.getParentName(), each),
                   each.getFieldType(),
                   context.getDocumentationContext())));
     }
@@ -104,14 +104,14 @@ public class ModelAttributeParameterExpander {
     FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
         .filter(and(isCollection(), not(recursiveCollectionItemType(context.getParamType()))));
     for (ModelAttributeField each : collectionTypes) {
-      LOG.debug("Attempting to expand collection/array field: {}", each.getField());
+      LOG.debug("Attempting to expand collection/array field: {}", each.getName());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
       if (Types.isBaseType(itemType) || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
         parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
       } else {
         ExpansionContext childContext = context.childContext(
-            nestedParentName(context.getParentName(), each.getField()),
+            nestedParentName(context.getParentName(), each),
             itemType,
             context.getDocumentationContext());
         if (!context.hasSeenType(itemType)) {
@@ -157,6 +157,8 @@ public class ModelAttributeParameterExpander {
         dataTypeName,
         parentName,
         each.getField(),
+        each.getFieldType(),
+        each.getName(),
         documentationContext.getDocumentationType(),
         new ParameterBuilder());
     return pluginsManager.expandParameter(parameterExpansionContext);
@@ -221,7 +223,7 @@ public class ModelAttributeParameterExpander {
       @Override
       public boolean apply(ModelAttributeField input) {
         return Types.isBaseType(input.getFieldType())
-            || input.getField().getType().isPrimitive();
+            || input.getFieldType().isPrimitive();
       }
     };
   }
@@ -232,7 +234,7 @@ public class ModelAttributeParameterExpander {
     return new Function<ResolvedField, ModelAttributeField>() {
       @Override
       public ModelAttributeField apply(ResolvedField input) {
-        return new ModelAttributeField(fieldType(alternateTypeProvider, input), input);
+        return new ModelAttributeField(fieldType(alternateTypeProvider, input), input.getName(), input);
       }
     };
   }
@@ -246,9 +248,9 @@ public class ModelAttributeParameterExpander {
     };
   }
 
-  private String nestedParentName(String parentName, ResolvedField field) {
-    String name = field.getName();
-    ResolvedType fieldType = field.getType();
+  private String nestedParentName(String parentName, ModelAttributeField attribute) {
+    String name = attribute.getName();
+    ResolvedType fieldType = attribute.getFieldType();
     if (isContainerType(fieldType) && !Types.isBaseType(collectionElementType(fieldType))) {
       name += "[0]";
     }

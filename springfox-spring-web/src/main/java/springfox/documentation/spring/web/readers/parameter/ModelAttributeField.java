@@ -24,10 +24,15 @@ import com.fasterxml.classmate.members.ResolvedField;
 
 public class ModelAttributeField {
   private final ResolvedType fieldType;
+  private final String name;
   private final ResolvedField field;
 
-  public ModelAttributeField(ResolvedType fieldType, ResolvedField field) {
+  public ModelAttributeField(
+      ResolvedType fieldType,
+      String name,
+      ResolvedField field) {
     this.fieldType = fieldType;
+    this.name = name;
     this.field = field;
   }
 
@@ -35,7 +40,18 @@ public class ModelAttributeField {
     return fieldType;
   }
 
+
+  /**
+   * Access to the raw field is deprecated to support interface based model attributes with resolvers e.g. Pageable
+   * @deprecated @since 2.8.0
+   * @return resolved field
+   */
+  @Deprecated
   public ResolvedField getField() {
     return field;
+  }
+
+  public String getName() {
+    return name;
   }
 }
