@@ -65,8 +65,12 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     pluginsManager = swaggerServicePlugins([
         new SwaggerDefaultConfiguration(new Defaults(), typeResolver, Mock(ServletContext))])
     plugin
-        .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
-        HttpServletResponse, BindingResult, ServletContext,
+        .ignoredParameterTypes(
+        ServletRequest,
+        ServletResponse,
+        HttpServletRequest,
+        HttpServletResponse,
+        BindingResult, ServletContext,
         DummyModels.Ignorable.class)
         .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
         .configure(contextBuilder)
