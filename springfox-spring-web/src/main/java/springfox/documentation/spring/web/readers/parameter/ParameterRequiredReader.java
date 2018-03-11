@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -34,11 +35,14 @@ import org.springframework.web.bind.annotation.ValueConstants;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
+import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.google.common.base.Strings.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -53,7 +57,8 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
-    context.parameterBuilder().required(getAnnotatedRequired(methodParameter));
+    context.parameterBuilder()
+        .required(isRequired(context.getOperationContext(), methodParameter));
   }
 
   @Override
@@ -61,7 +66,10 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     return true;
   }
 
-  private Boolean getAnnotatedRequired(ResolvedMethodParameter methodParameter) {
+  private boolean isRequired(
+      OperationContext operationContext,
+      ResolvedMethodParameter methodParameter) {
+
     Set<Boolean> requiredSet = new HashSet<Boolean>();
 
     // when the type is Optional, the required property of @RequestParam/@RequestHeader doesn't matter,
@@ -80,7 +88,14 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
-      requiredSet.add(true);
+      String paramName = MoreObjects.firstNonNull(
+          emptyToNull(pathVariable.get().name()),
+          methodParameter.defaultName().orNull());
+
+      if (pathVariable.get().required() ||
+          optionalButPresentInThePath(operationContext, pathVariable.get(), paramName)) {
+        requiredSet.add(true);
+      }
     }
 
     Optional<RequestBody> requestBody = methodParameter.findAnnotation(RequestBody.class);
@@ -93,6 +108,15 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
       requiredSet.add(!optional && requestPart.get().required());
     }
     return requiredSet.contains(true);
+  }
+
+  private boolean optionalButPresentInThePath(
+      OperationContext operationContext,
+      PathVariable pathVariable,
+      String paramName) {
+
+    return !pathVariable.required()
+         && operationContext.requestMappingPattern().contains("{" + paramName + "}");
   }
 
   @VisibleForTesting

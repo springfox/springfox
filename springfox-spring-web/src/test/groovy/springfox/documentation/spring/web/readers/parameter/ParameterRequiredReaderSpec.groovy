@@ -20,11 +20,9 @@
 package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
-import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.ValueConstants
 import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
@@ -39,6 +37,8 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import java.lang.annotation.Annotation
 
+import static org.springframework.web.bind.annotation.ValueConstants.*
+
 @Mixin([RequestMappingSupport])
 class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ParameterAnnotationSupport {
   @Shared
@@ -51,6 +51,12 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
     methodParameter.getParameterAnnotations() >> (paramAnnotations as Annotation[])
     methodParameter.getParameterType() >> Object.class
     methodParameter.getMethodAnnotation(PathVariable.class) >> paramAnnotations.find { it instanceof PathVariable }
+
+    and:
+    def operation = Mock(OperationContext)
+    operation.requestMappingPattern() >> requestPattern
+
+    and:
     def resolvedMethodParameter =
         new ResolvedMethodParameter(
             0,
@@ -63,7 +69,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
             new ParameterBuilder(),
             context(),
             Mock(GenericTypeNamingStrategy),
-            Mock(OperationContext))
+            operation)
 
     when:
     def operationCommand = new ParameterRequiredReader(description)
@@ -73,28 +79,41 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
     parameterContext.parameterBuilder().build().isRequired() == expected
 
     where:
-    paramAnnotations                                                                            | expected
-    [[required: { -> false }] as ApiParam, pathVariable(false)]                                 | true
-    [[required: { -> false }] as ApiParam, requestHeader(false, "", "")]                        | false
-    [requestHeader(true, "", "")]                                                               | true
-    [requestHeader(false, "", "")]                                                              | false
-    [[required: { -> true }] as ApiParam]                                                       | false
-    [[required: { -> false }] as ApiParam]                                                      | false
-    [requestParam(true, "", ValueConstants.DEFAULT_NONE)]                                       | true
-    [requestParam(true, "", "")]                                                                | false
-    [requestParam(true, "", null)]                                                              | false
-    [requestParam(true, "", "default value")]                                                   | false
-    [requestParam(false, "", ValueConstants.DEFAULT_NONE)]                                      | false
-    [requestParam(false, "", "")]                                                               | false
-    [requestBody(false)]                                                                        | false
-    [requestBody(true)]                                                                         | true
-    [requestPart(false, "")]                                                                    | false
-    [requestPart(true, "")]                                                                     | true
-    []                                                                                          | false
-    [null]                                                                                      | false
-    [[required: { -> true }] as ApiParam, requestParam(false, "", ValueConstants.DEFAULT_NONE)] | false
-    [[required: { -> false }] as ApiParam, requestParam(true, "", ValueConstants.DEFAULT_NONE)] | true
-    [[required: { -> false }] as ApiParam, requestParam(true, "", ValueConstants.DEFAULT_NONE)] | true
+    paramAnnotations                                        | requestPattern           | expected
+    [apiParam(false), pathVariableRequired()]               | "/path/{required-param}" | true
+    [apiParam(true), pathVariableRequired()]                | "/path/{required-param}" | true
+    [apiParam(false), pathVariableOptional()]               | "/path/{optional-param}" | true
+    [apiParam(false), pathVariableOptional()]               | "/path"                  | false
+    [apiParam(true), pathVariableOptional()]                | "/path/{optional-param}" | true
+    [apiParam(true), pathVariableOptional()]                | "/path"                  | false
+    [apiParam(false), requestHeader(false, "", "")]         | "/path"                  | false
+    [requestHeader(true, "", "")]                           | "/path"                  | true
+    [requestHeader(false, "", "")]                          | "/path"                  | false
+    [apiParam(true)]                                        | "/path"                  | false
+    [apiParam(false)]                                       | "/path"                  | false
+    [requestParam(true, "", DEFAULT_NONE)]                  | "/path"                  | true
+    [requestParam(true, "", "")]                            | "/path"                  | false
+    [requestParam(true, "", null)]                          | "/path"                  | false
+    [requestParam(true, "", "default value")]               | "/path"                  | false
+    [requestParam(false, "", DEFAULT_NONE)]                 | "/path"                  | false
+    [requestParam(false, "", "")]                           | "/path"                  | false
+    [requestBody(false)]                                    | "/path"                  | false
+    [requestBody(true)]                                     | "/path"                  | true
+    [requestPart(false, "")]                                | "/path"                  | false
+    [requestPart(true, "")]                                 | "/path"                  | true
+    []                                                      | "/path"                  | false
+    [null]                                                  | "/path"                  | false
+    [apiParam(true), requestParam(false, "", DEFAULT_NONE)] | "/path"                  | false
+    [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "/path"                  | true
+    [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "/path"                  | true
+  }
+
+  def pathVariableRequired() {
+    pathVariable("required-param", true)
+  }
+
+  def pathVariableOptional() {
+    pathVariable("optional-param", false)
   }
 
   def "should detect java.util.Optional parameters"() {
