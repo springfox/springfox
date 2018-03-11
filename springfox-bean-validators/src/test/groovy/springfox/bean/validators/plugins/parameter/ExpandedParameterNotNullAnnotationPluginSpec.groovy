@@ -18,17 +18,17 @@ class ExpandedParameterNotNullAnnotationPluginSpec
   @Shared
   def resolver = new TypeResolver()
 
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
-      new ExpandedParameterNotNullAnnotationPlugin().supports(types)
+    new ExpandedParameterNotNullAnnotationPlugin().supports(types)
+
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@Min/@Max annotations are reflected in the model for #fieldName"()  {
+  def "@Min/@Max annotations are reflected in the model for #fieldName"() {
     given:
-      def sut = new ExpandedParameterNotNullAnnotationPlugin()
       ParameterExpansionContext context = new ParameterExpansionContext(
           "Test",
           "",
@@ -37,16 +37,19 @@ class ExpandedParameterNotNullAnnotationPluginSpec
           fieldName,
           DocumentationType.SWAGGER_12,
           new ParameterBuilder())
+    def sut = new ExpandedParameterNotNullAnnotationPlugin()
 
     when:
-      sut.apply(context)
-      def property = context.parameterBuilder.build()
+    sut.apply(context)
+    def property = context.parameterBuilder.build()
+
     then:
-      property.required == required
+    property.required == required
+
     where:
-      fieldName       | required
-      "noAnnotation"  | false
-      "annotated"     | true
+    fieldName      | required
+    "noAnnotation" | false
+    "annotated"    | true
   }
 
   class Subject {

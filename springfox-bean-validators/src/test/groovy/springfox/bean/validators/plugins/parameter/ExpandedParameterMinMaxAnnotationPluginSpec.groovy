@@ -20,17 +20,17 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
   @Shared
   def resolver = new TypeResolver()
 
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
-      new ExpandedParameterMinMaxAnnotationPlugin().supports(types)
+    new ExpandedParameterMinMaxAnnotationPlugin().supports(types)
+
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@Min/@Max annotations are reflected in the model for #fieldName"()  {
+  def "@Min/@Max annotations are reflected in the model for #fieldName"() {
     given:
-      def sut = new ExpandedParameterMinMaxAnnotationPlugin()
       ParameterExpansionContext context = new ParameterExpansionContext(
           "Test",
           "",
@@ -39,22 +39,25 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
           fieldName,
           DocumentationType.SWAGGER_12,
           new ParameterBuilder())
+    def sut = new ExpandedParameterMinMaxAnnotationPlugin()
 
     when:
-      sut.apply(context)
-      def property = context.parameterBuilder.build()
+    sut.apply(context)
+    def property = context.parameterBuilder.build()
+
     then:
-      def range = property.allowableValues as AllowableRangeValues
-      range?.max == expectedMax
-      range?.exclusiveMax == exclusiveMax
-      range?.min == expectedMin
-      range?.exclusiveMin == exclusiveMin
+    def range = property.allowableValues as AllowableRangeValues
+    range?.max == expectedMax
+    range?.exclusiveMax == exclusiveMax
+    range?.min == expectedMin
+    range?.exclusiveMin == exclusiveMin
+
     where:
-      fieldName       | expectedMin | exclusiveMin | expectedMax | exclusiveMax
-      "noAnnotation"  | null        | null         | null        | null
-      "onlyMin"       | "10.0"      | false        | null        | null
-      "onlyMax"       | null        | null         | "20.0"      | false
-      "both"          | "10.0"      | false        | "20.0"      | false        
+    fieldName      | expectedMin | exclusiveMin | expectedMax | exclusiveMax
+    "noAnnotation" | null        | null         | null        | null
+    "onlyMin"      | "10.0"      | false        | null        | null
+    "onlyMax"      | null        | null         | "20.0"      | false
+    "both"         | "10.0"      | false        | "20.0"      | false
   }
 
   class Subject {
