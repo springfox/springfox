@@ -1932,6 +1932,9 @@
                 },
                 "specification_name": {
                     "type": "string"
+                },
+                "specification_child_name": {
+                    "type": "string"
                 }
             },
             "title": "ProductVO"

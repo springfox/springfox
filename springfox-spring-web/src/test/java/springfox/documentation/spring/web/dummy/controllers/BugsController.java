@@ -467,6 +467,28 @@ public class BugsController {
 
   public class Specification {
     private String name;
+    @JsonUnwrapped(prefix = "child_")
+    private SpecificationChild child;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public SpecificationChild getChild() {
+      return child;
+    }
+
+    public void setChild(SpecificationChild child) {
+      this.child = child;
+    }
+  }
+
+  public class SpecificationChild {
+    private String name;
 
     public String getName() {
       return name;

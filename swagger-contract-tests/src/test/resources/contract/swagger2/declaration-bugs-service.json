@@ -6,7 +6,7 @@
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
         "contact": {
-            
+
         },
         "license": {
             "name": "Apache 2.0",
@@ -1969,6 +1969,9 @@
                     "type": "string"
                 },
                 "specification_name": {
+                    "type": "string"
+                },
+                "specification_child_name": {
                     "type": "string"
                 }
             },
