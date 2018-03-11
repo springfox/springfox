@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.service.contexts.Defaults
@@ -70,7 +71,11 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
         .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
         .configure(contextBuilder)
 
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(new TypeResolver()), enumTypeDeterminer)
+    def expander = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new AccessorsProvider(typeResolver),
+        enumTypeDeterminer)
+
     expander.pluginsManager = pluginsManager
 
     sut = new OperationParameterReader(expander, enumTypeDeterminer)

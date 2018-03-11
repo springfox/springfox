@@ -22,6 +22,7 @@ package springfox.documentation.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -41,7 +42,10 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = defaultWebPlugins()
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(resolver), enumTypeDeterminer)
+    def expander = new ModelAttributeParameterExpander(
+        new FieldProvider(resolver),
+        new AccessorsProvider(resolver),
+        enumTypeDeterminer)
     expander.pluginsManager = plugins
     OperationParameterReader sut = new OperationParameterReader(expander, enumTypeDeterminer)
     sut.pluginsManager = plugins

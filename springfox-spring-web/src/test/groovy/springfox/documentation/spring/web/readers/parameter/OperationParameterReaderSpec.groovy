@@ -24,6 +24,7 @@ import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
 import spock.lang.Unroll
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
@@ -63,7 +64,10 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
         .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
         .configure(contextBuilder)
 
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), enumTypeDeterminer)
+    def expander = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new AccessorsProvider(typeResolver),
+        enumTypeDeterminer)
     expander.pluginsManager = pluginsManager
     sut = new OperationParameterReader(expander, enumTypeDeterminer)
     sut.pluginsManager = pluginsManager
