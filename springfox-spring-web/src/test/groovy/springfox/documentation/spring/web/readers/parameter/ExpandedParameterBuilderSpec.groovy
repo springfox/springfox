@@ -21,7 +21,7 @@ class ExpandedParameterBuilderSpec extends Specification {
         "Test",
         "",
         new ModelAttributeParameterMetadataAccessor(
-            named("enums").rawMember,
+            [named("enums").rawMember],
             named("enums").type,
             "enums"),
         DocumentationType.SWAGGER_12,
@@ -52,7 +52,7 @@ class ExpandedParameterBuilderSpec extends Specification {
         "Test",
         "",
         new ModelAttributeParameterMetadataAccessor(
-            named(field).rawMember,
+            [named(field).rawMember],
             named(field).type,
             field),
         DocumentationType.SWAGGER_12,

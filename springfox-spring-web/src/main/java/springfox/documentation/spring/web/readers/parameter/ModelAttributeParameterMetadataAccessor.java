@@ -25,23 +25,20 @@ import springfox.documentation.spi.service.ParameterMetadataAccessor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.List;
 
 public class ModelAttributeParameterMetadataAccessor implements ParameterMetadataAccessor {
-  private final AnnotatedElement annotatedElement;
+  private final List<AnnotatedElement> annotatedElements;
   private final ResolvedType fieldType;
   private final String fieldName;
 
   public ModelAttributeParameterMetadataAccessor(
-      AnnotatedElement annotatedElement,
+      List<AnnotatedElement> annotatedElements,
       ResolvedType fieldType,
       String fieldName) {
-    this.annotatedElement = annotatedElement;
+    this.annotatedElements = annotatedElements;
     this.fieldType = fieldType;
     this.fieldName = fieldName;
-  }
-
-  public AnnotatedElement getAnnotatedElement() {
-    return annotatedElement;
   }
 
   @Override
@@ -56,6 +53,12 @@ public class ModelAttributeParameterMetadataAccessor implements ParameterMetadat
 
   @Override
   public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(annotatedElement, annotationType));
+    for (AnnotatedElement each: annotatedElements) {
+      A annotation = AnnotationUtils.findAnnotation(each, annotationType);
+      if (annotation != null) {
+        return Optional.of(annotation);
+      }
+    }
+    return Optional.absent();
   }
 }

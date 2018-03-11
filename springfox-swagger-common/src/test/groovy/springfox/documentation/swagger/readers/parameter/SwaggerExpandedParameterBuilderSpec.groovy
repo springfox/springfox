@@ -53,7 +53,7 @@ class SwaggerExpandedParameterBuilderSpec extends Specification {
         "Test",
         "",
         new ModelAttributeParameterMetadataAccessor(
-            field.rawMember,
+            [field.rawMember],
             field.type,
             field.name),
         DocumentationType.SWAGGER_12,

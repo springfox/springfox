@@ -39,7 +39,7 @@ class ExpandedParameterSizeAnnotationPluginSpec
         "Test",
         "",
         new ModelAttributeParameterMetadataAccessor(
-            named(Subject, fieldName).rawMember,
+            [named(Subject, fieldName).rawMember],
             resolver.resolve(Subject),
             fieldName),
         DocumentationType.SWAGGER_12,
