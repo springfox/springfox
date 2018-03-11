@@ -40,7 +40,6 @@ public class ModelAttributeParameterMetadataAccessor implements ParameterMetadat
     this.fieldName = fieldName;
   }
 
-  @Override
   public ResolvedField getField() {
     return field;
   }

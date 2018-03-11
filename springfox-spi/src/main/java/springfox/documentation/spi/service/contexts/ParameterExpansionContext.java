@@ -66,7 +66,7 @@ public class ParameterExpansionContext {
    */
   @Deprecated
   public ResolvedField getField() {
-    return metadataAccessor.getField();
+    throw new UnsupportedOperationException();
   }
 
   public DocumentationType getDocumentationType() {

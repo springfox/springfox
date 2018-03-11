@@ -25,7 +25,6 @@ import com.google.common.base.Optional;
 import java.lang.annotation.Annotation;
 
 public interface ParameterMetadataAccessor {
-  ResolvedField getField();
 
   ResolvedType getFieldType();
 
