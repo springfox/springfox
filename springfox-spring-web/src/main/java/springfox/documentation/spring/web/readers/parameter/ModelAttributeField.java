@@ -20,35 +20,50 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.members.ResolvedField;
+import com.fasterxml.classmate.members.ResolvedMember;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+
+import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelAttributeField {
   private final ResolvedType fieldType;
   private final String name;
-  private final ResolvedField field;
+  private final List<ResolvedMember<?>> resolvedMembers;
 
   public ModelAttributeField(
       ResolvedType fieldType,
       String name,
-      ResolvedField field) {
+      ResolvedMember<?> primary,
+      ResolvedMember<?> secondary) {
     this.fieldType = fieldType;
     this.name = name;
-    this.field = field;
+    this.resolvedMembers = new ArrayList<ResolvedMember<?>>();
+    resolvedMembers.add(primary);
+    if (secondary != null) {
+      resolvedMembers.add(secondary);
+    }
   }
 
   public ResolvedType getFieldType() {
     return fieldType;
   }
 
+  public List<ResolvedMember<?>> getResolvedMembers() {
+    return resolvedMembers;
+  }
 
-  /**
-   * Access to the raw field is deprecated to support interface based model attributes with resolvers e.g. Pageable
-   * @deprecated @since 2.8.0
-   * @return resolved field
-   */
-  @Deprecated
-  public ResolvedField getField() {
-    return field;
+  public List<AnnotatedElement> annotatedElements() {
+    return FluentIterable.from(resolvedMembers)
+        .transform(new Function<ResolvedMember<?>, AnnotatedElement>() {
+          @Override
+          public AnnotatedElement apply(ResolvedMember<?> input) {
+            return (AnnotatedElement) input.getRawMember();
+          }
+        })
+        .toList();
   }
 
   public String getName() {
