@@ -156,7 +156,8 @@ public class ModelAttributeParameterExpander {
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,
         parentName,
-        new ModelAttributeParameterMetadataAccessor(each.getField(),
+        new ModelAttributeParameterMetadataAccessor(
+            each.getField().getRawMember(),
             each.getFieldType(),
             each.getName()),
         documentationContext.getDocumentationType(),

@@ -38,7 +38,8 @@ class ExpandedParameterSizeAnnotationPluginSpec
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
-        new ModelAttributeParameterMetadataAccessor(named(Subject, fieldName),
+        new ModelAttributeParameterMetadataAccessor(
+            named(Subject, fieldName).rawMember,
             resolver.resolve(Subject),
             fieldName),
         DocumentationType.SWAGGER_12,

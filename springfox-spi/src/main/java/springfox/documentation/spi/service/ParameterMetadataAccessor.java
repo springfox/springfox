@@ -19,7 +19,6 @@
 package springfox.documentation.spi.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.members.ResolvedField;
 import com.google.common.base.Optional;
 
 import java.lang.annotation.Annotation;

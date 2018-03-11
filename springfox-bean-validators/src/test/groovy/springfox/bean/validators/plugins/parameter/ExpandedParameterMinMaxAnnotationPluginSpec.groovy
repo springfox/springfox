@@ -37,7 +37,7 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
         "Test",
         "",
         new ModelAttributeParameterMetadataAccessor(
-            named(Subject, fieldName),
+            named(Subject, fieldName).rawMember,
             resolver.resolve(Subject),
             fieldName),
         DocumentationType.SWAGGER_12,

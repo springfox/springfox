@@ -19,29 +19,29 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.members.ResolvedField;
 import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.spi.service.ParameterMetadataAccessor;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 
 public class ModelAttributeParameterMetadataAccessor implements ParameterMetadataAccessor {
-  private final ResolvedField field;
+  private final AnnotatedElement annotatedElement;
   private final ResolvedType fieldType;
   private final String fieldName;
 
   public ModelAttributeParameterMetadataAccessor(
-      ResolvedField field,
+      AnnotatedElement annotatedElement,
       ResolvedType fieldType,
       String fieldName) {
-    this.field = field;
+    this.annotatedElement = annotatedElement;
     this.fieldType = fieldType;
     this.fieldName = fieldName;
   }
 
-  public ResolvedField getField() {
-    return field;
+  public AnnotatedElement getAnnotatedElement() {
+    return annotatedElement;
   }
 
   @Override
@@ -56,6 +56,6 @@ public class ModelAttributeParameterMetadataAccessor implements ParameterMetadat
 
   @Override
   public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(field.getRawMember(), annotationType));
+    return Optional.fromNullable(AnnotationUtils.findAnnotation(annotatedElement, annotationType));
   }
 }
