@@ -18,55 +18,35 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.hateoas.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ResolvedMethodParameter;
-
-import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import java.util.Optional;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import java.util.ArrayList;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 class EntityFindOneExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
-    final Optional<PersistentEntity<?, ?>> potentialEntity = context.entity();
-    if(!potentialEntity.isPresent()){
-        return handlers;
-    }
-    final PersistentEntity<?, ?> entity = context.entity().get();
-    final TypeResolver resolver = context.getTypeResolver();
-    final RepositoryMetadata repository = context.getRepositoryMetadata();
-    context.crudMethods().getFindOneMethod().ifPresent(method -> {
-      final HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(), method);
-      ActionSpecification spec = new ActionSpecification(
-          actionName(entity, method),
-          String.format("%s%s/{id}",
-              context.basePath(),
-              context.resourcePath()),
-          newHashSet(RequestMethod.GET),
-          new HashSet<MediaType>(),
-          new HashSet<MediaType>(),
-          handler,
-          newArrayList(new ResolvedMethodParameter(
-              0,
-              "id",
-              pathAnnotations("id", handler),
-              resolver.resolve(repository.getIdType()))),
-          resolver.resolve(Resource.class, repository.getReturnedDomainClass(handler.getMethod())));
-      handlers.add(new SpringDataRestRequestHandler(context, spec));
-    });
+    final List<RequestHandler> handlers = new ArrayList<>();
+
+    context.crudMethods().getFindOneMethod()
+      .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+      .ifPresent(handler -> {
+
+        SpecificationBuilder.getInstance(context, handler)
+          .withPath(String.format("%s%s/{id}",
+                        context.basePath(),
+                        context.resourcePath()))
+          .supportsMethod(GET)
+          .withParameter(Parameter.ID)
+          .build()
+          .map(get -> new SpringDataRestRequestHandler(context, get))
+          .ifPresent(handlers::add);
+
+      });
+
     return handlers;
   }
 }

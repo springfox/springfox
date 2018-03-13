@@ -42,14 +42,14 @@ class ActionSpecification {
   private final String path;
 
   public ActionSpecification(
-      String name,
-      String path,
-      Collection<RequestMethod> supportedMethods,
-      Set<MediaType> produces,
-      Set<MediaType> consumes,
-      HandlerMethod handlerMethod,
-      List<ResolvedMethodParameter> parameters,
-      ResolvedType returnType) {
+    String name,
+    String path,
+    Collection<RequestMethod> supportedMethods,
+    Set<MediaType> produces,
+    Set<MediaType> consumes,
+    HandlerMethod handlerMethod,
+    List<ResolvedMethodParameter> parameters,
+    ResolvedType returnType) {
     this.name = name;
     this.path = path;
     this.supportedMethods = supportedMethods;
