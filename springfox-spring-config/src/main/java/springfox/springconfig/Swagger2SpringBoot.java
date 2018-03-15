@@ -79,8 +79,7 @@ public class Swagger2SpringBoot {
           .paths(PathSelectors.any())//<6>
           .build()//<7>
         .pathMapping("/")//<8>
-        .directModelSubstitute(LocalDate.class,
-            String.class)//<9>
+        .directModelSubstitute(LocalDate.class, String.class)//<9>
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
