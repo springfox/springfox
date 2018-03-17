@@ -11,7 +11,9 @@ window.onload = () => {
       const resourcesResponse = await fetch(baseUrl + "/swagger-resources", {credentials: 'same-origin'});
       const resources = await resourcesResponse.json();
       resources.forEach(resource => {
-        resource.url = baseUrl + resource.url;
+        if (resource.url.substring(0, 4) !== 'http') {
+          resource.url = baseUrl + resource.url;
+        }
       });
 
       window.ui = getUI(baseUrl, resources, configUI, configSecurity);
