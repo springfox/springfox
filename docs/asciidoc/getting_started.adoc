@@ -106,10 +106,10 @@ see `newArrayList(...)` its actually the guava equivalent of creating an normal 
 [subs="verbatim,attributes"]
 ----
 //This guava code snippet
-List<Something> guavaList = newArrayList(new Something);
+List<Something> guavaList = newArrayList(new Something());
 
 //... is equivalent to
-List<Something> list = new ArrayList<Something>();
+List<Something> list = new ArrayList<>();
 list.add(new Something());
 ----
 
@@ -122,32 +122,35 @@ via swagger.
 (default). Out of the box predicates provided are `any`, `none`, `withClassAnnotation`, `withMethodAnnotation` and
 `basePackage`.
 <6> `paths()` allows selection of ``Path``'s using a predicate. The example here uses an `any` predicate (default). Out of the box we provide predicates for `regex`, `ant`, `any`, `none`.
-<7> The selector requires to be built after configuring the api and path selectors.
-<8> Adds a servlet path mapping, when the servlet has a path mapping. this prefixes paths with the provided path
-mapping
-<9> Convenience rule builder substitutes `LocalDate` with `String` when rendering model properties
+<7> The selector needs to be built after configuring the api and path selectors.
+<8> Adds a servlet path mapping, when the servlet has a path mapping.
+This prefixes paths with the provided path mapping.
+<9> Convenience rule builder that substitutes `LocalDate` with `String` when rendering model properties
 <10> Convenience rule builder that substitutes a generic type with one type parameter with the type
-parameter. In this example `ResponseEntity<T>` with `T`. `alternateTypeRules` allows custom rules that are a bit more
- involved. The example substitutes  `DeferredResult<ResponseEntity<T>>`  with `T` generically
-<11> Flag to indicate if default http response codes need to be used or not
+parameter. In this example `ResponseEntity<T>` with `T`.
+`alternateTypeRules` allows custom rules that are a bit more involved.
+The example substitutes  `DeferredResult<ResponseEntity<T>>`  with `T` generically.
+<11> Flag to indicate if default http response codes need to be used or not.
 <12> Allows globally overriding response messages for different http methods. In this example we override the 500
-error code for all `GET`s ...
-<13> ...and indicate that it will use the response model `Error` (which will be defined elsewhere)
+error code for all `GET` requests ...
+<13> ... and indicate that it will use the response model `Error` (which will be defined elsewhere)
 <14> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
 <15> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
 select operations to be protected by one of the specified security schemes.
 <16> Here we use ApiKey as the security schema that is identified by the name `mykey`
 <17> Selector for the paths this security context applies to.
-<18> Here we same key defined in the security scheme `mykey`
+<18> Here we use the same key defined in the security scheme `mykey`
 <19> Optional swagger-ui security configuration for oauth and apiKey settings
 <20> Optional swagger-ui ui configuration currently only supports the validation url
 <21> * _Incubating_ * setting this flag signals to the processor that the paths generated should try and use
 https://tools.ietf.org/html/rfc6570#section-3.2.8[form style query expansion]. As a result we could distinguish paths
  that have the same path stem but different query string combinations. An example of this would be two apis:
-* http://example.org/findCustomersBy?name=Test to find customers by name. Per https://tools.ietf.org/html/rfc6570[RFC
- 6570] This would be represented as http://example.org/findCustomersBy{?name}
-* http://example.org/findCustomersBy?zip=76051 to find customers by zip. Per https://tools.ietf.org/html/rfc6570[RFC
-  6570] This would be represented as http://example.org/findCustomersBy{?zip}
+First, http://example.org/findCustomersBy?name=Test to find customers by name.
+Per https://tools.ietf.org/html/rfc6570[RFC 6570],
+this would be represented as http://example.org/findCustomersBy{?name}.
+Second, http://example.org/findCustomersBy?zip=76051 to find customers by zip.
+Per https://tools.ietf.org/html/rfc6570[RFC 6570],
+this would be represented as http://example.org/findCustomersBy{?zip}.
 <22> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.
 <23> How do you want to transport the api key via a HEADER (header) or QUERY_PARAM (query)?
 <24> What header key needs to be used to send the api key. By default this value is set to ___api_key___. Depending
@@ -159,6 +162,7 @@ override the default behavior.
  like to be described but aren't explicitly used in any operation. An example of this is an operation that returns a
  model serialized as a string. We do want to communicate the expectation of the schema for the string. This is a way
  to do exactly that.
+
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
 === Springfox Spring Data Rest
@@ -297,9 +301,9 @@ Since swagger ui is a static resource it needs to rely on *known* endpoints to c
 ☝️ are ***cool uris** that cannot change. There is <<q13,some customization>> that is possible, but swagger-ui needs
 to be available at the root of the _webcontext_.
 
-Regarding [where swagger-ui itself is served](http://springfox.github.io/springfox/docs/current/#q13) and [where the
-api docs are served](http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints) those are
- totally configurable.
+Regarding http://springfox.github.io/springfox/docs/current/#q13[where swagger-ui itself is served]
+and http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints[where the api docs are served]
+those are totally configurable.
 
 === Springfox RFC6570 support *incubating*
 NOTE: _Keep in mind this is experimental_!
