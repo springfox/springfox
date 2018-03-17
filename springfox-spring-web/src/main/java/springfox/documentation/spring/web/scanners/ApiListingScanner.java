@@ -60,12 +60,46 @@ public class ApiListingScanner {
   private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiListingScanner(ApiDescriptionReader apiDescriptionReader,
-                           ApiModelReader apiModelReader,
-                           DocumentationPluginsManager pluginsManager) {
+  public ApiListingScanner(
+      ApiDescriptionReader apiDescriptionReader,
+      ApiModelReader apiModelReader,
+      DocumentationPluginsManager pluginsManager) {
+
     this.apiDescriptionReader = apiDescriptionReader;
     this.apiModelReader = apiModelReader;
     this.pluginsManager = pluginsManager;
+  }
+
+  static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
+    List<String> commons = newArrayList();
+    if (null == apiDescriptions || apiDescriptions.isEmpty()) {
+      return Optional.absent();
+    }
+    List<String> firstWords = urlParts(apiDescriptions.get(0));
+
+    for (int position = 0; position < firstWords.size(); position++) {
+      String word = firstWords.get(position);
+      boolean allContain = true;
+      for (int i = 1; i < apiDescriptions.size(); i++) {
+        List<String> words = urlParts(apiDescriptions.get(i));
+        if (words.size() < position + 1 || !words.get(position).equals(word)) {
+          allContain = false;
+          break;
+        }
+      }
+      if (allContain) {
+        commons.add(word);
+      }
+    }
+    Joiner joiner = Joiner.on("/").skipNulls();
+    return Optional.of("/" + joiner.join(commons));
+  }
+
+  static List<String> urlParts(ApiDescription apiDescription) {
+    return Splitter.on('/')
+        .omitEmptyStrings()
+        .trimResults()
+        .splitToList(apiDescription.getPath());
   }
 
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
@@ -73,7 +107,7 @@ public class ApiListingScanner {
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
-            = context.getRequestMappingsByResourceGroup();
+        = context.getRequestMappingsByResourceGroup();
     List<SecurityReference> securityReferences = newArrayList();
     for (ResourceGroup resourceGroup : sortedByName(requestMappingsByResourceGroup.keySet())) {
 
@@ -106,18 +140,18 @@ public class ApiListingScanner {
       String basePath = pathProvider.getApplicationBasePath();
       PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
-              .apiVersion(documentationContext.getApiInfo().getVersion())
-              .basePath(adjuster.adjustedPath(basePath))
-              .resourcePath(resourcePath)
-              .produces(produces)
-              .consumes(consumes)
-              .host(host)
-              .protocols(protocols)
-              .securityReferences(securityReferences)
-              .apis(sortedApis)
-              .models(models)
-              .position(position++)
-              .availableTags(documentationContext.getTags());
+          .apiVersion(documentationContext.getApiInfo().getVersion())
+          .basePath(adjuster.adjustedPath(basePath))
+          .resourcePath(resourcePath)
+          .produces(produces)
+          .consumes(consumes)
+          .host(host)
+          .protocols(protocols)
+          .securityReferences(securityReferences)
+          .apis(sortedApis)
+          .models(models)
+          .position(position++)
+          .availableTags(documentationContext.getTags());
 
       ApiListingContext apiListingContext = new ApiListingContext(
           context.getDocumentationType(),
@@ -144,37 +178,4 @@ public class ApiListingScanner {
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
     return from(contexts).toSortedList(methodComparator());
   }
-
-  static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
-    List<String> commons = newArrayList();
-    if (null == apiDescriptions || apiDescriptions.isEmpty()) {
-      return Optional.absent();
-    }
-    List<String> firstWords = urlParts(apiDescriptions.get(0));
-
-    for (int position = 0; position < firstWords.size(); position++) {
-      String word = firstWords.get(position);
-      boolean allContain = true;
-      for (int i = 1; i < apiDescriptions.size(); i++) {
-        List<String> words = urlParts(apiDescriptions.get(i));
-        if (words.size() < position + 1 || !words.get(position).equals(word)) {
-          allContain = false;
-          break;
-        }
-      }
-      if (allContain) {
-        commons.add(word);
-      }
-    }
-    Joiner joiner = Joiner.on("/").skipNulls();
-    return Optional.of("/" + joiner.join(commons));
-  }
-
-  static List<String> urlParts(ApiDescription apiDescription) {
-    return Splitter.on('/')
-            .omitEmptyStrings()
-            .trimResults()
-            .splitToList(apiDescription.getPath());
-  }
-
 }
