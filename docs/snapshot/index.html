@@ -1172,7 +1172,6 @@ dependencies {
 165
 166
 167
-168
 </pre></td>
   <td class="code"><pre><span class="comment">/*
  *
@@ -1255,8 +1254,7 @@ dependencies {
           .paths(PathSelectors.any())<i class="conum" data-value="6"></i><b>(6)</b>
           .build()<i class="conum" data-value="7"></i><b>(7)</b>
         .pathMapping(<span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>)<i class="conum" data-value="8"></i><b>(8)</b>
-        .directModelSubstitute(LocalDate.class,
-            <span class="predefined-type">String</span>.class)<i class="conum" data-value="9"></i><b>(9)</b>
+        .directModelSubstitute(LocalDate.class, <span class="predefined-type">String</span>.class)<i class="conum" data-value="9"></i><b>(9)</b>
         .genericModelSubstitutes(ResponseEntity.class)
         .alternateTypeRules(
             newRule(typeResolver.resolve(DeferredResult.class,
@@ -1364,10 +1362,10 @@ see <code>newArrayList(&#8230;&#8203;)</code> its actually the guava equivalent 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//This guava code snippet</span>
-<span class="predefined-type">List</span>&lt;Something&gt; guavaList = newArrayList(<span class="keyword">new</span> Something);
+<span class="predefined-type">List</span>&lt;Something&gt; guavaList = newArrayList(<span class="keyword">new</span> Something());
 
 <span class="comment">//... is equivalent to</span>
-<span class="predefined-type">List</span>&lt;Something&gt; list = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;Something&gt;();
+<span class="predefined-type">List</span>&lt;Something&gt; list = <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;();
 list.add(<span class="keyword">new</span> Something());</code></pre>
 </div>
 </div>
@@ -1402,35 +1400,36 @@ via swagger.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>The selector requires to be built after configuring the api and path selectors.</td>
+<td>The selector needs to be built after configuring the api and path selectors.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>Adds a servlet path mapping, when the servlet has a path mapping. this prefixes paths with the provided path
-mapping</td>
+<td>Adds a servlet path mapping, when the servlet has a path mapping.
+This prefixes paths with the provided path mapping.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>Convenience rule builder substitutes <code>LocalDate</code> with <code>String</code> when rendering model properties</td>
+<td>Convenience rule builder that substitutes <code>LocalDate</code> with <code>String</code> when rendering model properties</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="10"></i><b>10</b></td>
 <td>Convenience rule builder that substitutes a generic type with one type parameter with the type
-parameter. In this example <code>ResponseEntity&lt;T&gt;</code> with <code>T</code>. <code>alternateTypeRules</code> allows custom rules that are a bit more
- involved. The example substitutes  <code>DeferredResult&lt;ResponseEntity&lt;T&gt;&gt;</code>  with <code>T</code> generically</td>
+parameter. In this example <code>ResponseEntity&lt;T&gt;</code> with <code>T</code>.
+<code>alternateTypeRules</code> allows custom rules that are a bit more involved.
+The example substitutes  <code>DeferredResult&lt;ResponseEntity&lt;T&gt;&gt;</code>  with <code>T</code> generically.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="11"></i><b>11</b></td>
-<td>Flag to indicate if default http response codes need to be used or not</td>
+<td>Flag to indicate if default http response codes need to be used or not.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="12"></i><b>12</b></td>
 <td>Allows globally overriding response messages for different http methods. In this example we override the 500
-error code for all `GET`s &#8230;&#8203;</td>
+error code for all <code>GET</code> requests &#8230;&#8203;</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="13"></i><b>13</b></td>
-<td>&#8230;&#8203;and indicate that it will use the response model <code>Error</code> (which will be defined elsewhere)</td>
+<td>&#8230;&#8203; and indicate that it will use the response model <code>Error</code> (which will be defined elsewhere)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="14"></i><b>14</b></td>
@@ -1451,7 +1450,7 @@ select operations to be protected by one of the specified security schemes.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="18"></i><b>18</b></td>
-<td>Here we same key defined in the security scheme <code>mykey</code></td>
+<td>Here we use the same key defined in the security scheme <code>mykey</code></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="19"></i><b>19</b></td>
@@ -1465,7 +1464,13 @@ select operations to be protected by one of the specified security schemes.</td>
 <td><i class="conum" data-value="21"></i><b>21</b></td>
 <td>* <em>Incubating</em> * setting this flag signals to the processor that the paths generated should try and use
 <a href="https://tools.ietf.org/html/rfc6570#section-3.2.8">form style query expansion</a>. As a result we could distinguish paths
- that have the same path stem but different query string combinations. An example of this would be two apis:</td>
+ that have the same path stem but different query string combinations. An example of this would be two apis:
+First, <a href="http://example.org/findCustomersBy?name=Test" class="bare">http://example.org/findCustomersBy?name=Test</a> to find customers by name.
+Per <a href="https://tools.ietf.org/html/rfc6570">RFC 6570</a>,
+this would be represented as <a href="http://example.org/findCustomersBy{?name}" class="bare">http://example.org/findCustomersBy{?name}</a>.
+Second, <a href="http://example.org/findCustomersBy?zip=76051" class="bare">http://example.org/findCustomersBy?zip=76051</a> to find customers by zip.
+Per <a href="https://tools.ietf.org/html/rfc6570">RFC 6570</a>,
+this would be represented as <a href="http://example.org/findCustomersBy{?zip}" class="bare">http://example.org/findCustomersBy{?zip}</a>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="22"></i><b>22</b></td>
@@ -1489,12 +1494,14 @@ has name and description.</td>
 <tr>
 <td><i class="conum" data-value="26"></i><b>26</b></td>
 <td>Are there models in the application that are not "reachable"? Not reachable is when we have models that we would
- like to be described but aren&#8217;t explicitly used in any operation. An example of this is an operation that returns a
- model serialized as a string. We do want to communicate the expectation of the schema for the string. This is a way
- to do exactly that.
-There are plenty of more options to configure the <code>Docket</code>. This should provide a good start.</td>
+like to be described but aren&#8217;t explicitly used in any operation. An example of this is an operation that returns a
+model serialized as a string. We do want to communicate the expectation of the schema for the string. This is a way
+to do exactly that.</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>There are plenty of more options to configure the <code>Docket</code>. This should provide a good start.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1713,9 +1720,9 @@ The urls for the discovery are as shown below.</p>
 to be available at the root of the <em>webcontext</em>.</p>
 </div>
 <div class="paragraph">
-<p>Regarding [where swagger-ui itself is served](<a href="http://springfox.github.io/springfox/docs/current/#q13" class="bare">http://springfox.github.io/springfox/docs/current/#q13</a>) and [where the
-api docs are served](<a href="http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints" class="bare">http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints</a>) those are
- totally configurable.</p>
+<p>Regarding <a href="http://springfox.github.io/springfox/docs/current/#q13">where swagger-ui itself is served</a>
+and <a href="http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints">where the api docs are served</a>
+those are totally configurable.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1807,7 +1814,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 <div class="sect2">
 <h3 id="component-model">4.2. Component Model</h3>
 <div class="paragraph">
-<p>The different SpringFox modules are split up as shown below.</p>
+<p>The different Springfox modules are split up as shown below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1821,7 +1828,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
   |                                  springfox-spi                                          |
   |                                                                                         |
   | Contains the service provider interfaces that can be used to extend and enrich the      |
-  | service models e.g. swagger specific annotation processors.                             |
+  | service models, e.g. swagger specific annotation processors.                            |
   +------------------------------------------+----------------------------------------------+
                                              |
                                              |
@@ -1832,9 +1839,9 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
   |                                  |       |       |                                      |
   | Schema inference extensions that |       |       | spring web specific extensions that  |
   | help build up the schema for the |       |       | can build the service models based   |
-  |  the parameters, models and      |       |       | on RequestMapping information.       |
-  |  responses                       |       |       | This is the heart library that       |
-  +----------------------------------+       |       | infers the service model.            |
+  | parameters, models and responses |       |       | on RequestMapping information.       |
+  +----------------------------------+       |       | This is the heart library that       |
+                                             |       | infers the service model.            |
                                              |       +--------------------------------------+
                                              |
         +------------------------------------+------------------------------------+
@@ -4207,7 +4214,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 2.8.1-SNAPSHOT<br>
-Last updated 2018-03-11 23:29:03 UTC
+Last updated 2018-03-17 04:04:55 UTC
 </div>
 </div>
 </body>
