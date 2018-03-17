@@ -23,6 +23,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ import java.util.Set;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
@@ -105,14 +107,18 @@ public class ApiListingScanner {
   }
 
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
-    Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
+    final Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
         = context.getRequestMappingsByResourceGroup();
     Collection<ApiDescription> additionalListings = pluginsManager.additionalListings(context);
+    Set<ResourceGroup> allResourceGroups = FluentIterable.from(collectResourceGroups(additionalListings))
+        .append(requestMappingsByResourceGroup.keySet())
+        .toSet();
+
     List<SecurityReference> securityReferences = newArrayList();
-    for (ResourceGroup resourceGroup : sortedByName(requestMappingsByResourceGroup.keySet())) {
+    for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
       Set<String> produces = new LinkedHashSet<String>(documentationContext.getProduces());
@@ -122,12 +128,14 @@ public class ApiListingScanner {
       Set<ApiDescription> apiDescriptions = newHashSet();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
-      for (RequestMappingContext each : sortedByMethods(requestMappingsByResourceGroup.get(resourceGroup))) {
+      List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
+      for (RequestMappingContext each : sortedByMethods(requestMappings)) {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
       apiDescriptions.addAll(from(additionalListings)
+          .filter(belongsTo(resourceGroup))
           .filter(onlySelectedApis(documentationContext))
           .toList());
 
