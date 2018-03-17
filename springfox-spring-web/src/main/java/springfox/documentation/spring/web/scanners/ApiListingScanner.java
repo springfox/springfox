@@ -53,6 +53,7 @@ import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
 @Component
 public class ApiListingScanner {
@@ -171,10 +172,6 @@ public class ApiListingScanner {
         return context.getApiSelector().getPathSelector().apply(input.getPath());
       }
     };
-  }
-
-  private Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
-    return from(resourceGroups).toSortedList(resourceGroupComparator());
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
