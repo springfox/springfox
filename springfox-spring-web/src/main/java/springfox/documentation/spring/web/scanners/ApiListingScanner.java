@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -108,6 +109,7 @@ public class ApiListingScanner {
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
         = context.getRequestMappingsByResourceGroup();
+    Collection<ApiDescription> additionalListings = pluginsManager.additionalListings(context);
     List<SecurityReference> securityReferences = newArrayList();
     for (ResourceGroup resourceGroup : sortedByName(requestMappingsByResourceGroup.keySet())) {
 
@@ -124,7 +126,7 @@ public class ApiListingScanner {
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      apiDescriptions.addAll(from(pluginsManager.additionalListings(context))
+      apiDescriptions.addAll(from(additionalListings)
           .filter(onlySelectedApis(documentationContext))
           .toList());
 
