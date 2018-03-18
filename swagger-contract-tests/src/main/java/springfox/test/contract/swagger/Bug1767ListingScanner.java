@@ -65,7 +65,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                 false),
             new ApiDescription(
                 "different-group", //<6>
-                "/bugs/2219",
+                "/different/2219",
                 "This is a bug",
                 Arrays.asList(
                     new OperationBuilder(

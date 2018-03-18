@@ -116,6 +116,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "Should create an api listing for an api description with no backing controller"() {
     given:
+    plugin.groupName("different-group")
     def context = context()
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
@@ -147,6 +148,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "Should not mix existing apis with apis with no backing controller"() {
     given:
+    plugin.groupName("different-group")
     def context = context()
     def sut = new ApiListingScanner(
         apiDescriptionReader,

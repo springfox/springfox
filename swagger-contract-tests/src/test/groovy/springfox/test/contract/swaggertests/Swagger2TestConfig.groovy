@@ -212,7 +212,7 @@ class Swagger2TestConfig {
             resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .directModelSubstitute(ByteBuffer.class, String.class)
         .select()
-        .paths(regex("/bug/2219"))
+        .paths(regex("/different/.*"))
         .build()
   }
 

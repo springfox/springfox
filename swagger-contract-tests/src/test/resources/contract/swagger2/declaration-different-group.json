@@ -24,7 +24,7 @@
         "application/json"
     ],
     "paths": {
-        "/bug/2219": {
+        "/different/2219": {
             "get": {
                 "description": "This is a test method",
                 "operationId": "bug2219GET",
