@@ -44,12 +44,12 @@ class ResourceGroups {
     return from(resourceGroups).toSortedList(resourceGroupComparator());
   }
 
-  static Predicate<ApiDescription> belongsTo(final ResourceGroup resourceGroup) {
+  static Predicate<ApiDescription> belongsTo(final String groupName) {
     return new Predicate<ApiDescription>() {
       @Override
       public boolean apply(ApiDescription input) {
         return !input.getGroupName().isPresent()
-            || resourceGroup.getGroupName().equals(input.getGroupName().get());
+            || groupName.equals(input.getGroupName().get());
       }
     };
   }
