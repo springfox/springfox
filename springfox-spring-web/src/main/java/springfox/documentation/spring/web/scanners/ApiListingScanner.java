@@ -137,7 +137,7 @@ public class ApiListingScanner {
       List<ApiDescription> additional = from(additionalListings)
           .filter(
               and(
-                  belongsTo(resourceGroup),
+                  belongsTo(resourceGroup.getGroupName()),
                   onlySelectedApis(documentationContext)))
           .toList();
       apiDescriptions.addAll(additional);
