@@ -185,12 +185,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "should assign resource form @RequestMapping annotation"() {
     given:
-    RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
-
     def context = context()
-    def requestMappingContext = new RequestMappingContext(
-        context,
-        new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyControllerWithResourcePath("dummyMethod")))
+    def requestMappingContext = requestMapping(context, "dummyMethod")
     def resourceGroupRequestMappings = newHashMap()
     resourceGroupRequestMappings.put(
         new ResourceGroup("resourcePath", DummyControllerWithResourcePath),
@@ -242,8 +238,10 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def requestMapping(
       DocumentationContext context,
-      String methodName = "methodWithConcreteResponseBody") {
-    RequestMappingInfo requestMappingInfo = requestMappingInfo("/businesses")
+      String methodName = "methodWithConcreteResponseBody",
+      String path = "/businesses") {
+
+    RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
     RequestMappingContext requestMappingContext =
         new RequestMappingContext(
             context,
