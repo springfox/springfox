@@ -62,6 +62,30 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                     .modelRef(new ModelRef("string")) //<5>
                                     .build()))
                         .build()),
+                false),
+            new ApiDescription(
+                "different-group", //<6>
+                "/bugs/2219",
+                "This is a bug",
+                Arrays.asList(
+                    new OperationBuilder(
+                        new CachingOperationNameGenerator())
+                        .authorizations(new ArrayList())
+                        .codegenMethodNameStem("bug2219GET")
+                        .method(HttpMethod.GET)
+                        .notes("This is a test method")
+                        .parameters(
+                            Arrays.asList(
+                                new ParameterBuilder()
+                                    .description("description of bug 2219")
+                                    .type(new TypeResolver().resolve(String.class))
+                                    .name("description")
+                                    .parameterType("query")
+                                    .parameterAccess("access")
+                                    .required(true)
+                                    .modelRef(new ModelRef("string"))
+                                    .build()))
+                        .build()),
                 false)));
   }
   // tag::api-listing-plugin[]
