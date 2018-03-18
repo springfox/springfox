@@ -69,8 +69,10 @@ class FunctionContractSpec extends Specification implements FileAccess {
     response.statusCode == HttpStatus.OK
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+    maybeWriteToFile(
+        "/contract/swagger2/$contractFile",
+        raw.replace("localhost:$port", "localhost:__PORT__"))
     JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
-    maybeWriteToFile("/contract/swagger2/$contractFile", raw)
 
     where:
     contractFile                                                  | groupName

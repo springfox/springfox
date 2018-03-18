@@ -6,14 +6,14 @@
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
         "contact": {
-
+            
         },
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0"
         }
     },
-  "host": "localhost:__PORT__",
+    "host": "localhost:__PORT__",
     "basePath": "/",
     "tags": [
         {
