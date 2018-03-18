@@ -43,17 +43,17 @@ import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
@@ -134,13 +134,16 @@ public class ApiListingScanner {
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      apiDescriptions.addAll(from(additionalListings)
-          .filter(belongsTo(resourceGroup))
-          .filter(onlySelectedApis(documentationContext))
-          .toList());
+      List<ApiDescription> additional = from(additionalListings)
+          .filter(
+              and(
+                  belongsTo(resourceGroup),
+                  onlySelectedApis(documentationContext)))
+          .toList();
+      apiDescriptions.addAll(additional);
 
-      List<ApiDescription> sortedApis = newArrayList(apiDescriptions);
-      Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
+      List<ApiDescription> sortedApis = FluentIterable.from(apiDescriptions)
+          .toSortedList(documentationContext.getApiDescriptionOrdering());
 
       String resourcePath = new ResourcePathProvider(resourceGroup)
           .resourcePath()
