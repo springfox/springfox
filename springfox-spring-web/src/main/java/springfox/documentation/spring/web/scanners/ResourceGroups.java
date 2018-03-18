@@ -44,7 +44,6 @@ class ResourceGroups {
     return from(resourceGroups).toSortedList(resourceGroupComparator());
   }
 
-
   static Predicate<ApiDescription> belongsTo(final ResourceGroup resourceGroup) {
     return new Predicate<ApiDescription>() {
       @Override

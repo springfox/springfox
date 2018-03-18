@@ -46,8 +46,10 @@ public class ApiListingReferenceScanner {
     Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
         .filter(selector.getRequestHandlerSelector());
     for (RequestHandler handler : matchingHandlers) {
-      ResourceGroup resourceGroup = new ResourceGroup(handler.groupName(),
-          handler.declaringClass(), 0);
+      ResourceGroup resourceGroup = new ResourceGroup(
+          handler.groupName(),
+          handler.declaringClass(),
+          0);
 
       RequestMappingContext requestMappingContext
           = new RequestMappingContext(context, handler);
