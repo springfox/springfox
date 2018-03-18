@@ -198,7 +198,7 @@ class Swagger2TestConfig {
   }
 
   @Bean
-  Docket differentGroup(List<SecurityScheme> authorizationTypes) {
+  Docket differentGroup() {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("different-group")
         .useDefaultResponseMessages(false)

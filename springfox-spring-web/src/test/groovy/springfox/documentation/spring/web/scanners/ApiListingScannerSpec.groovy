@@ -192,7 +192,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
         context,
         new WebMvcRequestHandler(methodResolver, requestMappingInfo, dummyControllerWithResourcePath("dummyMethod")))
     def resourceGroupRequestMappings = newHashMap()
-    resourceGroupRequestMappings.put(new ResourceGroup("resourcePath", DummyControllerWithResourcePath), [requestMappingContext])
+    resourceGroupRequestMappings.put(
+        new ResourceGroup("resourcePath", DummyControllerWithResourcePath),
+        [requestMappingContext])
 
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
 
@@ -228,7 +230,10 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g'] | '/a/b/c'
   }
 
-  def listingContext(RequestMappingContext requestMappingContext, DocumentationContext context) {
+  def listingContext(
+      RequestMappingContext requestMappingContext,
+      DocumentationContext context) {
+
     ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
     resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])

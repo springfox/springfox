@@ -89,11 +89,7 @@ class ServicePluginsSupport {
     plugins.resourceGroupingStrategies = create(groupingStrategyPlugins)
     plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
     plugins.defaultsProviders = create(defaultProviderPlugins)
-    plugins.pathDecorators = create([
-        new OperationPathDecorator(),
-        new PathSanitizer(),
-        new PathMappingDecorator(),
-        new QueryStringUriTemplateDecorator()])
+    plugins.pathDecorators = create(pathDecorators)
     plugins.apiListingScanners = create(listingScanners)
     return plugins
   }
