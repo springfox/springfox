@@ -843,6 +843,30 @@ is applied to the parameter.</td>
 33
 34
 35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
 </pre></td>
   <td class="code"><pre>  <span class="annotation">@Override</span>
   <span class="directive">public</span> <span class="predefined-type">List</span>&lt;ApiDescription&gt; apply(DocumentationContext context) {
@@ -868,6 +892,30 @@ is applied to the parameter.</td>
                                     .parameterAccess(<span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>)
                                     .required(<span class="predefined-constant">true</span>)
                                     .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="5"></i><b>(5)</b>
+                                    .build()))
+                        .build()),
+                <span class="predefined-constant">false</span>),
+            <span class="keyword">new</span> ApiDescription(
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">different-group</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="6"></i><b>(6)</b>
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">/different/2219</span><span class="delimiter">&quot;</span></span>,
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
+                <span class="predefined-type">Arrays</span>.asList(
+                    <span class="keyword">new</span> OperationBuilder(
+                        <span class="keyword">new</span> CachingOperationNameGenerator())
+                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
+                        .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug2219GET</span><span class="delimiter">&quot;</span></span>)
+                        .method(HttpMethod.GET)
+                        .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
+                        .parameters(
+                            <span class="predefined-type">Arrays</span>.asList(
+                                <span class="keyword">new</span> ParameterBuilder()
+                                    .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">description of bug 2219</span><span class="delimiter">&quot;</span></span>)
+                                    .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
+                                    .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">description</span><span class="delimiter">&quot;</span></span>)
+                                    .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
+                                    .parameterAccess(<span class="string"><span class="delimiter">&quot;</span><span class="content">access</span><span class="delimiter">&quot;</span></span>)
+                                    .required(<span class="predefined-constant">true</span>)
+                                    .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
                                     .build()))
                         .build()),
                 <span class="predefined-constant">false</span>)));
@@ -899,7 +947,16 @@ responsibility of the service author to ensure.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Added parameters to the operation</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
 <td>NOTE: It is important to also ensure we pass in a model reference even for primitive types</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Optionally provide a group name, if provided this api  will only appear under that group. If absent,
+the api will appear under the default group.</td>
 </tr>
 </table>
 </div>
@@ -1283,7 +1340,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-03-17 12:41:45 UTC
+Last updated 2018-03-19 00:07:06 UTC
 </div>
 </div>
 </body>
