@@ -64,6 +64,7 @@ task swaggerUiDownload << {
 }
 
 task unzip(type: Copy) {
+  dependsOn swaggerUiDownload
   from zipTree(file(destinationZip))
   include "*/dist/**"
   into file("${buildDir}")
@@ -122,8 +123,6 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-build.dependsOn(customizeSwaggerUi)
-customizeSwaggerUi.dependsOn(unzip)
-unzip.dependsOn(swaggerUiDownload)
-swaggerUiDownload.dependsOn(npmBuild)
 npmBuild.dependsOn(npm_install)
+customizeSwaggerUi.dependsOn(unzip, npmBuild)
+jar.dependsOn(customizeSwaggerUi)

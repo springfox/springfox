@@ -1,5 +1,5 @@
 {
-  "name": "sprinngfox-swagger-ui",
+  "name": "springfox-swagger-ui",
   "version": "1.0.0",
   "description": "Automated JSON API documentation for API's built with Spring",
   "scripts": {
