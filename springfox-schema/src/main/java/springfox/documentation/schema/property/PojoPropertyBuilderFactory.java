@@ -39,23 +39,31 @@ class PojoPropertyBuilderFactory {
           ? config.getAnnotationIntrospector()
           : null;
     boolean forSerialization = config instanceof SerializationConfig;
-    Optional<POJOPropertyBuilder> instance
-        = jackson26Instance(beanProperty, annotationIntrospector, forSerialization);
+    Optional<POJOPropertyBuilder> instance =
+        jackson26Instance(
+            beanProperty,
+            annotationIntrospector,
+            forSerialization);
+
     if (!instance.isPresent()) {
-      return jackson27Instance(config, beanProperty, annotationIntrospector, forSerialization);
+      return jackson27AndHigherInstance(
+          config,
+          beanProperty,
+          annotationIntrospector,
+          forSerialization);
     }
     return instance.get();
   }
 
   /**
    * Applies to constructor
-      new POJOPropertyBuilder(
-        config,
-        annotationIntrospector,
-        forSerialization,
-        new PropertyName(beanProperty.getName()))
+   * new POJOPropertyBuilder(
+   * config,
+   * annotationIntrospector,
+   * forSerialization,
+   * new PropertyName(beanProperty.getName()))
    */
-  private POJOPropertyBuilder jackson27Instance(
+  private POJOPropertyBuilder jackson27AndHigherInstance(
       MapperConfig<?> config,
       BeanPropertyDefinition beanProperty,
       AnnotationIntrospector annotationIntrospector,
@@ -79,7 +87,7 @@ class PojoPropertyBuilderFactory {
 
   /**
    * Applies to constructor
-     new POJOPropertyBuilder(new PropertyName(beanProperty.getName()),  annotationIntrospector,  true);
+   * new POJOPropertyBuilder(new PropertyName(beanProperty.getName()),  annotationIntrospector,  true);
    */
   private Optional<POJOPropertyBuilder> jackson26Instance(
       BeanPropertyDefinition beanProperty,
@@ -95,7 +103,7 @@ class PojoPropertyBuilderFactory {
           annotationIntrospector,
           forSerialization));
     } catch (Exception e) {
-      LOG.debug("Unable to instantiate jackson 26 object", e);
+      LOG.debug("Unable to instantiate jackson 2.6 object. Using higher version of jackson.");
     }
     return Optional.absent();
   }
