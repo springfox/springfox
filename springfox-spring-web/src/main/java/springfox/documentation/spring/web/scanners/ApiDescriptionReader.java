@@ -70,6 +70,7 @@ public class ApiDescriptionReader {
         List<Operation> operations = operationReader.read(operationContext);
         if (operations.size() > 0) {
           operationContext.apiDescriptionBuilder()
+              .groupName(outerContext.getGroupName())
               .operations(operations)
               .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
               .path(path)

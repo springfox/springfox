@@ -1,0 +1,43 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {},
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "localhost:__PORT__",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Different",
+            "description": "Different Group"
+        }
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/different/2219": {
+            "get": {
+                "description": "This is a test method",
+                "operationId": "bug2219GET",
+                "parameters": [
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "description of bug 2219",
+                        "required": true,
+                        "type": "string"
+                    }
+                ]
+            }
+        }
+    }
+}

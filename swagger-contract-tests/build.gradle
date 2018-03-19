@@ -51,6 +51,6 @@ dependencies {
 }
 // NOTE: Uncomment to bulk update contracts
 //test {
-//  systemProperty("contract.tests.root", "REPLACE-ME-WITH-PATH-TO-TEST-RESOURCES-DIRECTORY")
+//  systemProperty("contract.tests.root", "PATH-TO-REPO/springfox/swagger-contract-tests/src/test/resources")
 //  systemProperty("contract.tests.update", true)
 //}

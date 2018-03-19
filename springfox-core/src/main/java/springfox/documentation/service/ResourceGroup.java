@@ -19,6 +19,7 @@
 
 package springfox.documentation.service;
 
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 
@@ -81,6 +82,15 @@ public class ResourceGroup {
         "ResourceGroup{groupName='%s', position=%d, controller=%s}",
         groupName,
         position,
-        controllerClazz.getName());
+        getControllerClass().transform(toName()).or(""));
+  }
+
+  private Function<Class<?>, String> toName() {
+    return new Function<Class<?>, String>() {
+      @Override
+      public String apply(Class<?> input) {
+        return input.getName();
+      }
+    };
   }
 }

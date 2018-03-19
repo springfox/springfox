@@ -198,6 +198,25 @@ class Swagger2TestConfig {
   }
 
   @Bean
+  Docket differentGroup() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("different-group")
+        .useDefaultResponseMessages(false)
+        .tags(new Tag("Different", "Different Group"))
+        .produces(['application/xml', 'application/json'] as Set)
+        .enableUrlTemplating(true)
+        .alternateTypeRules(
+        newRule(URL.class, String.class),
+        newRule(
+            resolver.resolve(List.class, Link.class),
+            resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
+        .directModelSubstitute(ByteBuffer.class, String.class)
+        .select()
+        .paths(regex("/different/.*"))
+        .build()
+  }
+
+  @Bean
   Docket petGrooming(List<SecurityScheme> authorizationTypes) {
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("petGroomingService")

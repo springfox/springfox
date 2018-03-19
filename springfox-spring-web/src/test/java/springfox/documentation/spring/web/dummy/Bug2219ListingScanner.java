@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.test.contract.swagger;
+package springfox.documentation.spring.web.dummy;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.http.HttpMethod;
@@ -33,40 +33,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Bug1767ListingScanner implements ApiListingScannerPlugin {
+public class Bug2219ListingScanner implements ApiListingScannerPlugin {
 
-  // tag::api-listing-plugin[]
   @Override
   public List<ApiDescription> apply(DocumentationContext context) {
     return new ArrayList<ApiDescription>(
-        Arrays.asList( //<1>
+        Arrays.asList(
             new ApiDescription(
-                "/bugs/1767",
-                "This is a bug",
-                Arrays.asList( //<2>
-                    new OperationBuilder(
-                        new CachingOperationNameGenerator())
-                        .authorizations(new ArrayList())
-                        .codegenMethodNameStem("bug1767GET") //<3>
-                        .method(HttpMethod.GET)
-                        .notes("This is a test method")
-                        .parameters(
-                            Arrays.asList( //<4>
-                                new ParameterBuilder()
-                                    .description("search by description")
-                                    .type(new TypeResolver().resolve(String.class))
-                                    .name("description")
-                                    .parameterType("query")
-                                    .parameterAccess("access")
-                                    .required(true)
-                                    .modelRef(new ModelRef("string")) //<5>
-                                    .build()))
-                        .build()),
-                false),
-            new ApiDescription(
-                "different-group", //<6>
-                "/different/2219",
-                "This is a bug",
+                "different-group",
+                "/bugs/2219",
+                "This is a bug-fix for 2219",
                 Arrays.asList(
                     new OperationBuilder(
                         new CachingOperationNameGenerator())
@@ -88,11 +64,10 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                         .build()),
                 false)));
   }
-  // tag::api-listing-plugin[]
 
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return DocumentationType.SWAGGER_2.equals(delimiter);
+    return true;
   }
 
 }

@@ -109,7 +109,10 @@ include::../../swagger-contract-tests/src/main/java/springfox/test/contract/swag
 <2> Add a list of ``Operation``s for each description
 <3> NOTE: the code generated names are not guaranteed to be unique. For these custom endpoints it is the
 responsibility of the service author to ensure.
-<4> NOTE: It is important to also ensure we pass in a model reference even for primitive types
+<4> Added parameters to the operation
+<5> NOTE: It is important to also ensure we pass in a model reference even for primitive types
+<6> Optionally provide a group name, if provided this api  will only appear under that group. If absent,
+the api will appear under the default group.
 
 == Additional extensibility options
 .Other Extensibility
