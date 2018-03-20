@@ -504,7 +504,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ResourcesOfListOfPerson"
+                            "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
                 }
@@ -532,7 +532,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ResourcesOfListOfPerson"
+                            "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
                 }
@@ -1889,33 +1889,6 @@
                 "attribute": false,
                 "wrapped": false
             }
-        },
-        "ResourcesOfListOfPerson": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/Person"
-                        }
-                    }
-                },
-                "links": {
-                    "type": "array",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "items": {
-                        "$ref": "#/definitions/Link"
-                    }
-                }
-            },
-            "title": "ResourcesOfListOfPerson"
         },
         "ResourcesOfPerson": {
             "type": "object",
