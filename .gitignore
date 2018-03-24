@@ -1,6 +1,7 @@
 .idea/
 *.iml
 *.imi
+*.iws
 *.ipr
 target
 .settings

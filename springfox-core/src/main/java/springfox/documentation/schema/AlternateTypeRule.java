@@ -16,41 +16,12 @@
  *
  *
  */
-
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.Ordered;
 
-import static springfox.documentation.schema.WildcardType.*;
-
-public class AlternateTypeRule implements Ordered {
-  protected final ResolvedType original;
-  protected final ResolvedType alternate;
-  protected final int order;
-
-  /**
-   * Instantiates a new Alternate type rule.
-   *
-   * @param original  the original type
-   * @param alternate the alternate type
-   */
-  public AlternateTypeRule(ResolvedType original, ResolvedType alternate) {
-    this(original, alternate, Ordered.HIGHEST_PRECEDENCE);
-  }
-
-  /**
-   * Instantiates a new Alternate type rule.
-   *
-   * @param original  the original type
-   * @param alternate the alternate type
-   * @param order the order {@link Ordered} in which the rules are applied
-   */
-  public AlternateTypeRule(ResolvedType original, ResolvedType alternate, int order) {
-    this.original = original;
-    this.alternate = alternate;
-    this.order = order;
-  }
+public interface AlternateTypeRule extends Ordered {
 
   /**
    * Provides alternate for supplier type.
@@ -58,16 +29,7 @@ public class AlternateTypeRule implements Ordered {
    * @param type the type
    * @return the alternate for the type
    */
-  public ResolvedType alternateFor(ResolvedType type) {
-    if (appliesTo(type)) {
-      if (hasWildcards(original)) {
-        return replaceWildcardsFrom(WildcardType.collectReplaceables(type, original), alternate);
-      } else {
-        return alternate;
-      }
-    }
-    return type;
-  }
+  ResolvedType alternateFor(ResolvedType type);
 
   /**
    * Check if an alternate applies to type.
@@ -75,13 +37,13 @@ public class AlternateTypeRule implements Ordered {
    * @param type the source
    * @return the boolean
    */
-  public boolean appliesTo(ResolvedType type) {
-    return hasWildcards(original)
-            && wildcardMatch(type, original)
-            || exactMatch(original, type);
-  }
+  boolean appliesTo(ResolvedType type);
 
-  public int getOrder() {
-    return order;
-  }
+  /**
+   * Provides the type to use for the properties
+   *
+   * @return the type for retrieving properties
+   */
+  ResolvedType typeForProperties();
+
 }

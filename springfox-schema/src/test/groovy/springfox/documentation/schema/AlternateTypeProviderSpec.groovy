@@ -101,14 +101,14 @@ class AlternateTypeProviderSpec extends Specification {
       hateoasResourcesRule()                                  | resources(SimpleTypeResource)   | resolver.resolve(List, SimpleType)
   }
 
-  AlternateTypeRule hateoasResourcesRule() {
+  SimpleAlternateTypeRule hateoasResourcesRule() {
     def typeResolver = new TypeResolver()
     newRule(
         typeResolver.resolve(Resources.class, SimpleTypeResource.class),
         typeResolver.resolve(List.class, SimpleType.class))
   }
 
-  private AlternateTypeRule mismatchedNestedGenericRule() {
+  private SimpleAlternateTypeRule mismatchedNestedGenericRule() {
     newRule(nestedGenericType(WildcardType), nestedGenericType(nestedGenericType(WildcardType)))
   }
 }
