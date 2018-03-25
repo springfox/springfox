@@ -36,8 +36,9 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {
@@ -78,7 +79,9 @@ class EntityServicesProvider implements RequestHandlerProvider {
   public List<RequestHandler> requestHandlers() {
     List<EntityContext> contexts = newArrayList();
     for (Class each : repositories) {
-      RepositoryInformation repositoryInfo = repositories.getRepositoryInformationFor(each);
+      Object repositoryInformation = repositories.getRepositoryInformationFor(each);
+      RepositoryInformation repositoryInfo = repositoryInformation instanceof Optional ?
+          ((Optional<RepositoryInformation>)repositoryInformation).get() : (RepositoryInformation)repositoryInformation;
       Object repositoryInstance = repositories.getRepositoryFor(each);
       ResourceMetadata resource = mappings.getMetadataFor(each);
       if (resource.isExported()) {

@@ -28,12 +28,15 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.pathAnnotations;
 
 class EntityDeleteExtractor implements EntityOperationsExtractor {
   @Override
@@ -43,12 +46,14 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
+    Object deleteMethod = crudMethods.getDeleteMethod();
+    Method actualDeleteMethod = deleteMethod instanceof Optional ? ((Optional<Method>)deleteMethod).get() : (Method)deleteMethod;
     if (crudMethods.hasDelete()) {
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getDeleteMethod());
+          actualDeleteMethod);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getDeleteMethod()),
+          actionName(entity, actualDeleteMethod),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),

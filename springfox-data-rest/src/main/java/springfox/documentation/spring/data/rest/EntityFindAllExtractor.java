@@ -32,15 +32,19 @@ import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
-import static org.springframework.http.MediaType.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.HAL_JSON;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.SPRING_DATA_COMPACT_JSON;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.TEXT_URI_LIST;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
 
 class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
@@ -50,12 +54,14 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
+    Object getFindAllMethod = crudMethods.getFindAllMethod();
+    Method actualFindAllMethod= getFindAllMethod instanceof Optional ? ((Optional<Method>)getFindAllMethod).get() : (Method)getFindAllMethod;
     if (crudMethods.hasFindAllMethod()) {
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getFindAllMethod());
+          actualFindAllMethod);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getFindAllMethod()),
+          actionName(entity, actualFindAllMethod),
           String.format("%s%s",
               context.basePath(),
               context.resourcePath()),

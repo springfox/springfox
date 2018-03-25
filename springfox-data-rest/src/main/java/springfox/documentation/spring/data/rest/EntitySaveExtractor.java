@@ -29,14 +29,20 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.bodyAnnotations;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.pathAnnotations;
 
 class EntitySaveExtractor implements EntityOperationsExtractor {
   @Override
@@ -44,10 +50,12 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
     final List<RequestHandler> handlers = newArrayList();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
+    Object getSaveMethod = crudMethods.getSaveMethod();
+    Method actualSaveMethod= getSaveMethod instanceof Optional ? ((Optional<Method>)getSaveMethod).get() : (Method)getSaveMethod;
     if (crudMethods.hasSaveMethod()) {
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getSaveMethod());
+          actualSaveMethod);
       RepositoryMetadata resource = context.getRepositoryMetadata();
       ActionSpecification put = saveActionSpecification(
           entity,

@@ -29,12 +29,15 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.pathAnnotations;
 
 class EntityFindOneExtractor implements EntityOperationsExtractor {
   @Override
@@ -44,12 +47,14 @@ class EntityFindOneExtractor implements EntityOperationsExtractor {
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
+    Object getFindOneMethod = crudMethods.getFindOneMethod();
+    Method actualFindOneMethod= getFindOneMethod instanceof Optional ? ((Optional<Method>)getFindOneMethod).get() : (Method)getFindOneMethod;
     if (crudMethods.hasFindOneMethod()) {
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getFindOneMethod());
+          actualFindOneMethod);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getFindOneMethod()),
+          actionName(entity, actualFindOneMethod),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
