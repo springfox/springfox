@@ -114,6 +114,10 @@ public class ModelContext {
     return alternateTypeProvider.alternateFor(resolved);
   }
 
+  public ResolvedType propertiesTypeFor(ResolvedType resolved) {
+    return alternateTypeProvider.propertiesTypeFor(resolved);
+  }
+
   /**
    * @return group name of the docket
    */

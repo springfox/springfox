@@ -62,7 +62,7 @@ class AlternatePropertiesSpec extends Specification {
       Model model = modelProvider.modelFor(inputParam("group",
           typeWithResponseEntityOfVoid(),
           SWAGGER_12,
-          alternateTypeProvider(),
+          provider,
           namingStrategy,
           ImmutableSet.builder().build())).get()
     expect:
@@ -76,4 +76,28 @@ class AlternatePropertiesSpec extends Specification {
       !item.collection
       item.itemType == null
   }
+
+  def "RichAlternateType renders as a String within RichAlternateTypeContainer" () {
+    given:
+      def provider = alternateTypeProvider()
+      provider.addRule(new RichAlternateTypeRule(resolver.resolve(RichAlternateType), resolver.resolve(String)))
+      ModelProvider modelProvider = defaultModelProvider()
+      Model model = modelProvider.modelFor(inputParam("group",
+              typeWithRichAlternateProperty(),
+              SWAGGER_12,
+              provider,
+              namingStrategy,
+              ImmutableSet.builder().build())).get()
+    expect:
+      model.getName() == "RichAlternateTypeContainer"
+      model.getProperties().containsKey("richAlternateType")
+      def modelProperty = model.getProperties().get("richAlternateType")
+      modelProperty.type.erasedType == String
+      modelProperty.getQualifiedType() == "java.lang.String"
+      def item = modelProperty.getModelRef()
+      item.type == "string"
+      !item.collection
+      item.itemType == null
+  }
+
 }

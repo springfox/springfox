@@ -163,7 +163,11 @@ class TypesForTestingSupport {
   }
 
   static ResolvedType typeWithAlternateProperty() {
-    resolver.resolve(TypeWithAlternateProperty);
+    resolver.resolve(TypeWithAlternateProperty)
+  }
+
+  static ResolvedType typeWithRichAlternateProperty() {
+    resolver.resolve(RichAlternateTypeContainer)
   }
 
   static ResolvedType typeWithResponseEntityOfVoid() {

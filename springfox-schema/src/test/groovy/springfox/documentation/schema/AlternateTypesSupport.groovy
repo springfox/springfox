@@ -27,7 +27,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*
 class AlternateTypesSupport {
 
   def defaultRules(TypeResolver resolver = new TypeResolver()) {
-    def rules = new Defaults().defaultRules(resolver);
+    def rules = new Defaults().defaultRules(resolver)
     rules.add(newRule(resolver.arrayType(ToSubstitute), resolver.arrayType(Substituted)))
     rules.add(newRule(resolver.resolve(List, ToSubstitute), resolver.resolve(List, Substituted)))
     rules

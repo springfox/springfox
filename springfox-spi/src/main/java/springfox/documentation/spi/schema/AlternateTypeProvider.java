@@ -38,12 +38,23 @@ public class AlternateTypeProvider {
   }
 
   public ResolvedType alternateFor(ResolvedType type) {
-    Optional<AlternateTypeRule> matchingRule = FluentIterable.from(rules)
-            .firstMatch(thatAppliesTo(type));
+    Optional<AlternateTypeRule> matchingRule = firstMatchedRule(type);
     if (matchingRule.isPresent()) {
       return matchingRule.get().alternateFor(type);
     }
     return type;
+  }
+
+  public ResolvedType propertiesTypeFor(ResolvedType type) {
+    Optional<AlternateTypeRule> matchingRule = firstMatchedRule(type);
+    if (matchingRule.isPresent()) {
+      return matchingRule.get().typeForProperties();
+    }
+    return type;
+  }
+
+  private Optional<AlternateTypeRule> firstMatchedRule(final ResolvedType type) {
+    return FluentIterable.from(rules).firstMatch(thatAppliesTo(type));
   }
 
   public void addRule(AlternateTypeRule rule) {
