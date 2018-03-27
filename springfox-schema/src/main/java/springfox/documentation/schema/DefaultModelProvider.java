@@ -76,17 +76,17 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Override
   public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
-    ResolvedType originalType = modelContext.resolvedType(resolver);
-    ResolvedType alternateType = modelContext.alternateFor(originalType);
-    ResolvedType propertiesType = modelContext.propertiesTypeFor(originalType);
+    ResolvedType original = modelContext.resolvedType(resolver);
+    ResolvedType alternate = modelContext.alternateFor(original);
+    ResolvedType propertiesHost = modelContext.propertiesTypeFor(original);
 
-    if (isContainerType(propertiesType)
-        || isMapType(propertiesType)
-        || enumTypeDeterminer.isEnum(propertiesType.getErasedType())
-        || isBaseType(propertiesType)
-        || modelContext.hasSeenBefore(propertiesType)) {
+    if (isContainerType(propertiesHost)
+        || isMapType(propertiesHost)
+        || enumTypeDeterminer.isEnum(propertiesHost.getErasedType())
+        || isBaseType(propertiesHost)
+        || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
-          + "been handled", resolvedTypeSignature(propertiesType).or("<null>"));
+          + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
     }
 
@@ -99,12 +99,12 @@ public class DefaultModelProvider implements ModelProvider {
 
   private Optional<Model> reflectionBasedModel(ModelContext modelContext, ResolvedType propertiesHost) {
     ImmutableMap<String, ModelProperty> propertiesIndex
-        = uniqueIndex(properties(modelContext, propertiesType), byPropertyName());
+        = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
         Joiner.on(", ").join(propertiesIndex.keySet()));
     Map<String, ModelProperty> properties = newTreeMap();
     properties.putAll(propertiesIndex);
-    return Optional.of(modelBuilder(alternateType, properties, modelContext));
+    return Optional.of(modelBuilder(alternate, properties, modelContext));
   }
 
   private Model modelBuilder(ResolvedType propertiesHost,

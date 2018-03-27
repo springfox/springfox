@@ -22,7 +22,7 @@ package springfox.documentation.swagger.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
-import springfox.documentation.schema.SimpleAlternateTypeRule
+import springfox.documentation.schema.AlternateTypeRule
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.WildcardType
 import springfox.documentation.schema.property.bean.AccessorsProvider
@@ -98,7 +98,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
     @Override
     DocumentationContextBuilder create(DocumentationType documentationType) {
-      List<SimpleAlternateTypeRule> rules = newArrayList()
+      List<AlternateTypeRule> rules = newArrayList()
       rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
           typeResolver.resolve(Object.class)))
       rules.add(newMapRule(WildcardType.class, WildcardType.class))

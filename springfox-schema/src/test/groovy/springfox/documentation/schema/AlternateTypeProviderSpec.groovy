@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.schema
+
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.hateoas.Resources
 import org.springframework.http.ResponseEntity
@@ -101,14 +102,14 @@ class AlternateTypeProviderSpec extends Specification {
       hateoasResourcesRule()                                  | resources(SimpleTypeResource)   | resolver.resolve(List, SimpleType)
   }
 
-  SimpleAlternateTypeRule hateoasResourcesRule() {
+  AlternateTypeRule hateoasResourcesRule() {
     def typeResolver = new TypeResolver()
     newRule(
         typeResolver.resolve(Resources.class, SimpleTypeResource.class),
         typeResolver.resolve(List.class, SimpleType.class))
   }
 
-  private SimpleAlternateTypeRule mismatchedNestedGenericRule() {
+  private AlternateTypeRule mismatchedNestedGenericRule() {
     newRule(nestedGenericType(WildcardType), nestedGenericType(nestedGenericType(WildcardType)))
   }
 }
