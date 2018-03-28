@@ -38,6 +38,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.web.readers.operation.util.AnnotationUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -178,9 +179,10 @@ public class HandlerMethodResolver {
         MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
         for (int i = 0; i < input.getArgumentCount(); i++) {
           parameters.add(new ResolvedMethodParameter(
-              discoveredName(methodParameters[i]).or(String.format("param%s", i)),
-              methodParameters[i],
-              input.getArgumentType(i)));
+                  methodParameters[i].getParameterIndex(),
+                  discoveredName(methodParameters[i]).or(String.format("param%s", i)),
+                  AnnotationUtils.getInheritedAnnotations(methodToResolve, methodParameters[i].getParameterIndex()),
+                  input.getArgumentType(i)));
         }
         return parameters;
       }
