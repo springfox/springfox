@@ -24,6 +24,7 @@ dependencies {
   compile libs.spring
   provided libs.springProvided
   provided libs.clientProvided
+  provided libs.springBootProvided
 
   compile "org.mapstruct:mapstruct:$mapstruct"
   apt "org.mapstruct:mapstruct-processor:$mapstruct"
