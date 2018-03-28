@@ -59,6 +59,9 @@ ext {
                   "org.springframework:spring-webmvc:$spring",
                   "org.springframework:spring-context:$spring",
           ],
+          springBootProvided: [
+              "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
+          ],
           clientProvided: [
                   "javax.servlet:javax.servlet-api:$servlet",
                   "com.fasterxml.jackson.core:jackson-core:${jackson}",
