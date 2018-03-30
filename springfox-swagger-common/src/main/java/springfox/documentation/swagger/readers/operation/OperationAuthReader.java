@@ -49,22 +49,20 @@ public class OperationAuthReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
 
-    Optional<SecurityContext> securityContext = context.securityContext();
+    List<SecurityContext> securityContexts = context.securityContext();
 
     String requestMappingPattern = context.requestMappingPattern();
     List<SecurityReference> securityReferences = newArrayList();
 
-    if (securityContext.isPresent()) {
-      securityReferences = securityContext.get().securityForPath(requestMappingPattern);
+    for (SecurityContext each: securityContexts) {
+      securityReferences.addAll(each.securityForPath(requestMappingPattern));
     }
 
     Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
 
-    if (apiOperationAnnotation.isPresent() && null != apiOperationAnnotation.get().authorizations()) {
+    if (apiOperationAnnotation.isPresent()) {
       Authorization[] authorizationAnnotations = apiOperationAnnotation.get().authorizations();
-      if (authorizationAnnotations != null
-              && authorizationAnnotations.length > 0
-              && StringUtils.hasText(authorizationAnnotations[0].value())) {
+      if (authorizationAnnotations.length > 0 && StringUtils.hasText(authorizationAnnotations[0].value())) {
 
         securityReferences = newArrayList();
         for (Authorization authorization : authorizationAnnotations) {
@@ -84,8 +82,9 @@ public class OperationAuthReader implements OperationBuilderPlugin {
                               .build());
             }
           }
-          springfox.documentation.service.AuthorizationScope[] authorizationScopes = authorizationScopeList
-                  .toArray(new springfox.documentation.service.AuthorizationScope[authorizationScopeList.size()]);
+          springfox.documentation.service.AuthorizationScope[] authorizationScopes
+              = authorizationScopeList
+                  .toArray(new springfox.documentation.service.AuthorizationScope[0]);
           SecurityReference securityReference =
                   SecurityReference.builder()
                           .reference(value)
@@ -95,10 +94,8 @@ public class OperationAuthReader implements OperationBuilderPlugin {
         }
       }
     }
-    if (securityReferences != null) {
-      LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
-      context.operationBuilder().authorizations(securityReferences);
-    }
+    LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
+    context.operationBuilder().authorizations(securityReferences);
   }
 
   @Override
