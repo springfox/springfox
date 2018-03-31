@@ -173,10 +173,12 @@ class Swagger2TestConfig {
         .tags(new Tag("foo", "Foo Description"))
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
-        .securityContexts([new SecurityContext(
-            [new SecurityReference("petstore_auth", scopes)],
-            regex("/bugs/2268")
-        )])
+        .securityContexts(
+        [SecurityContext.builder()
+             .securityReferences([new SecurityReference("petstore_auth", scopes)])
+             .forPaths(regex("/bugs/2268"))
+             .build()
+        ])
         .alternateTypeRules(
         newRule(URL.class, String.class),
         newRule(
