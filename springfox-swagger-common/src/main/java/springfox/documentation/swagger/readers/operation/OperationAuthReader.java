@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -39,9 +40,11 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Maps.newHashMap;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -55,10 +58,12 @@ public class OperationAuthReader implements OperationBuilderPlugin {
     List<SecurityContext> securityContexts = context.securityContext();
 
     String requestMappingPattern = context.requestMappingPattern();
-    List<SecurityReference> securityReferences = newArrayList();
+    Map<String, SecurityReference> securityReferences = newHashMap();
 
     for (SecurityContext each : securityContexts) {
-      securityReferences.addAll(each.securityForPath(requestMappingPattern));
+      securityReferences.putAll(
+          FluentIterable.from(each.securityForPath(requestMappingPattern))
+          .uniqueIndex(byReferenceName()));
     }
 
     Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
@@ -93,13 +98,20 @@ public class OperationAuthReader implements OperationBuilderPlugin {
                 .build();
         securityReferenceOverrides.add(securityReference);
       }
-      if (!securityReferenceOverrides.isEmpty()) {
-        securityReferences.clear();
-        securityReferences.addAll(securityReferenceOverrides);
-      }
+      securityReferences.putAll(FluentIterable.from(securityReferenceOverrides)
+          .uniqueIndex(byReferenceName()));
     }
     LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
-    context.operationBuilder().authorizations(securityReferences);
+    context.operationBuilder().authorizations(securityReferences.values());
+  }
+
+  private Function<SecurityReference, String> byReferenceName() {
+    return new Function<SecurityReference, String>() {
+      @Override
+      public String apply(SecurityReference input) {
+        return input.getReference();
+      }
+    };
   }
 
   private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
