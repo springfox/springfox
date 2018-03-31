@@ -25,10 +25,14 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
+import springfox.documentation.builders.AuthorizationScopeBuilder
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
@@ -158,6 +162,10 @@ class Swagger2TestConfig {
 
   @Bean
   Docket bugs(List<SecurityScheme> authorizationTypes) {
+    AuthorizationScope[] scopes = [new AuthorizationScopeBuilder()
+         .scope("read")
+         .description("Read access")
+         .build()]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugs")
         .useDefaultResponseMessages(false)
@@ -165,6 +173,10 @@ class Swagger2TestConfig {
         .tags(new Tag("foo", "Foo Description"))
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
+        .securityContexts([new SecurityContext(
+            [new SecurityReference("petstore_auth", scopes)],
+            regex("/bugs/2268")
+        )])
         .alternateTypeRules(
         newRule(URL.class, String.class),
         newRule(

@@ -22,8 +22,8 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -84,8 +84,10 @@ public class OperationContext {
     return nullToEmptyList(getDocumentationContext().getGlobalRequestParameters());
   }
 
-  public Optional<SecurityContext> securityContext() {
-    return Iterables.tryFind(getDocumentationContext().getSecurityContexts(), pathMatches());
+  public List<SecurityContext> securityContext() {
+    return FluentIterable.from(getDocumentationContext().getSecurityContexts())
+        .filter(pathMatches())
+        .toList();
   }
 
   private Predicate<SecurityContext> pathMatches() {
