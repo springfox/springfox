@@ -19,12 +19,14 @@
 package springfox.test.contract.swaggertests
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Predicates
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
+import org.springframework.http.HttpMethod
 import springfox.documentation.builders.AuthorizationScopeBuilder
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.SecurityReference
@@ -177,6 +179,7 @@ class Swagger2TestConfig {
         [SecurityContext.builder()
              .securityReferences([new SecurityReference("petstore_auth", scopes)])
              .forPaths(regex("/bugs/2268"))
+             .forHttpMethods(equalTo(HttpMethod.GET))
              .build()
         ])
         .alternateTypeRules(

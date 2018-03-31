@@ -57,12 +57,11 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     List<SecurityContext> securityContexts = context.securityContext();
 
-    String requestMappingPattern = context.requestMappingPattern();
     Map<String, SecurityReference> securityReferences = newHashMap();
 
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
-          FluentIterable.from(each.securityForPath(requestMappingPattern))
+          FluentIterable.from(each.securityForOperation(context))
           .uniqueIndex(byReferenceName()));
     }
 

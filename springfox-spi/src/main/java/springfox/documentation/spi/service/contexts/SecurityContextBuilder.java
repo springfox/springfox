@@ -57,6 +57,9 @@ public class SecurityContextBuilder {
     if (securityReferences == null) {
       securityReferences = newArrayList();
     }
+    if (methodSelector == null) {
+      methodSelector = Predicates.alwaysTrue();
+    }
     return new SecurityContext(
         securityReferences,
         pathSelector,

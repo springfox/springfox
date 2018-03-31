@@ -57,8 +57,24 @@ public class SecurityContext {
     this.methodSelector = methodSelector;
   }
 
+  /**
+   * Use securitForOperation instead
+   * @since 2.8.1
+   * @param path
+   * @return list of applicable security references
+   * @deprecated {@see SecurityContext#securityForOperation}
+   */
+  @Deprecated
   public List<SecurityReference> securityForPath(String path) {
     if (selector.apply(path)) {
+      return securityReferences;
+    }
+    return null;
+  }
+
+  public List<SecurityReference> securityForOperation(OperationContext operationContext) {
+    if (selector.apply(operationContext.requestMappingPattern())
+        && methodSelector.apply(operationContext.httpMethod())) {
       return securityReferences;
     }
     return null;
