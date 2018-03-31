@@ -19,12 +19,14 @@
 package springfox.test.contract.swaggertests
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Predicates
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
+import org.springframework.http.HttpMethod
 import springfox.documentation.builders.AuthorizationScopeBuilder
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.SecurityReference
@@ -163,9 +165,9 @@ class Swagger2TestConfig {
   @Bean
   Docket bugs(List<SecurityScheme> authorizationTypes) {
     AuthorizationScope[] scopes = [new AuthorizationScopeBuilder()
-         .scope("read")
-         .description("Read access")
-         .build()]
+                                       .scope("read")
+                                       .description("Read access")
+                                       .build()]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugs")
         .useDefaultResponseMessages(false)
@@ -173,10 +175,13 @@ class Swagger2TestConfig {
         .tags(new Tag("foo", "Foo Description"))
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
-        .securityContexts([new SecurityContext(
-            [new SecurityReference("petstore_auth", scopes)],
-            regex("/bugs/2268")
-        )])
+        .securityContexts(
+        [SecurityContext.builder()
+             .securityReferences([new SecurityReference("petstore_auth", scopes)])
+             .forPaths(regex("/bugs/2268"))
+             .forHttpMethods(equalTo(HttpMethod.GET))
+             .build()
+        ])
         .alternateTypeRules(
         newRule(URL.class, String.class),
         newRule(

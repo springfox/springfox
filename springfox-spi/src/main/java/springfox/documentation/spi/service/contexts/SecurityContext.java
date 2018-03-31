@@ -20,9 +20,12 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.google.common.base.Predicate;
+import org.springframework.http.HttpMethod;
 import springfox.documentation.service.SecurityReference;
 
 import java.util.List;
+
+import static com.google.common.base.Predicates.*;
 
 /**
  * A class to represent a default set of authorizations to apply to each api operation
@@ -33,15 +36,45 @@ public class SecurityContext {
 
   private final List<SecurityReference> securityReferences;
   private final Predicate<String> selector;
+  private final Predicate<HttpMethod> methodSelector;
 
-  public SecurityContext(List<SecurityReference> securityReferences, Predicate<String> selector) {
+  public SecurityContext(
+      List<SecurityReference> securityReferences,
+      Predicate<String> selector) {
 
     this.securityReferences = securityReferences;
     this.selector = selector;
+    this.methodSelector = alwaysTrue();
   }
 
+  public SecurityContext(
+      List<SecurityReference> securityReferences,
+      Predicate<String> selector,
+      Predicate<HttpMethod> methodSelector) {
+
+    this.securityReferences = securityReferences;
+    this.selector = selector;
+    this.methodSelector = methodSelector;
+  }
+
+  /**
+   * Use securitForOperation instead
+   * @since 2.8.1
+   * @param path
+   * @return list of applicable security references
+   * @deprecated {@see SecurityContext#securityForOperation}
+   */
+  @Deprecated
   public List<SecurityReference> securityForPath(String path) {
     if (selector.apply(path)) {
+      return securityReferences;
+    }
+    return null;
+  }
+
+  public List<SecurityReference> securityForOperation(OperationContext operationContext) {
+    if (selector.apply(operationContext.requestMappingPattern())
+        && methodSelector.apply(operationContext.httpMethod())) {
       return securityReferences;
     }
     return null;
@@ -51,8 +84,11 @@ public class SecurityContext {
     return securityReferences;
   }
 
+  public Predicate<HttpMethod> getMethodSelector() {
+    return methodSelector;
+  }
+
   public static SecurityContextBuilder builder() {
     return new SecurityContextBuilder();
   }
-
 }
