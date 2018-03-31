@@ -163,9 +163,9 @@ class Swagger2TestConfig {
   @Bean
   Docket bugs(List<SecurityScheme> authorizationTypes) {
     AuthorizationScope[] scopes = [new AuthorizationScopeBuilder()
-         .scope("read")
-         .description("Read access")
-         .build()]
+                                       .scope("read")
+                                       .description("Read access")
+                                       .build()]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugs")
         .useDefaultResponseMessages(false)
