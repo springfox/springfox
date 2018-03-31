@@ -1346,6 +1346,11 @@
                             "ADMIN",
                             "USER"
                         ]
+                    },
+                    {
+                        "petstore_auth": [
+                            "read"
+                        ]
                     }
                 ]
             }
