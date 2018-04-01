@@ -335,6 +335,108 @@ NOTE: The newer version has changed the group id from `_io.springfox_` to `_io.s
 
 - Enable url templating; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
 
+=== Securing swagger-ui
+https://github.com/springfox/springfox/issues/2191#issuecomment-359159833[The user contributed example] uses OAuth2 and
+cookies-based auth in the browser. (Credit: https://github.com/evser[@evser])
+
+[source,java]
+[subs="verbatim,attributes"]
+----
+       protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        .anyRequest().authenticated()
+        .and().exceptionHandling().accessDeniedHandler(new AccessDeniedHandlerImpl())
+        .and().logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+        .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+        .addFilterBefore(ssoFilter(ApplicationConfiguration.API_BASE_PATH + "/login"), BasicAuthenticationFilter.class)
+        .requiresChannel().anyRequest().requireSecure();
+  }
+
+  @Bean
+  public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+    FilterRegistrationBean frb = new FilterRegistrationBean();
+    frb.setFilter(filter);
+    frb.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER);
+    return frb;
+  }
+
+  @Bean
+  @ConfigurationProperties("oauth2.client")
+  public OAuth2ProtectedResourceDetails authDetails() {
+    return new AuthorizationCodeResourceDetails();
+  }
+
+  @Bean
+  public SecurityConfiguration swaggerSecurityConfiguration() {
+    return new SecurityConfiguration("client-id", "client-secret", "realm",
+        "", "{{X-XSRF-COOKIE}}", ApiKeyVehicle.HEADER, "X-XSRF-TOKEN", ",");
+  }
+
+  private Filter ssoFilter(String path) {
+    OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationFilter = new OAuth2ClientAuthenticationProcessingFilter(path);
+    OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(authDetails(), oauth2ClientContext);
+    DefaultRedirectStrategy defaultRedirectStrategy = new DefaultRedirectStrategy();
+    oAuth2ClientAuthenticationFilter.setRestTemplate(oAuth2RestTemplate);
+    oAuth2ClientAuthenticationFilter.setTokenServices(resourceServerTokenServices);
+    oAuth2ClientAuthenticationFilter.setAuthenticationSuccessHandler(
+        (request, response, authentication) -> {
+          String redirectUrl = request.getParameter(REDIRECT_URL_PARAM);
+          if (redirectUrl == null) {
+            redirectUrl = DEFAULT_REDIRECT_URL;
+          } else {
+            if (!redirectUrlValidator.validateRedirectUrl(redirectUrl)) {
+              request.setAttribute(MESSAGE_ATTRIBUTE_NAME,
+                  messageSource.getMessage("ivalid.redirect.url", new String[] { redirectUrl }, LocaleContextHolder.getLocale()));
+              response.sendError(HttpStatus.FORBIDDEN.value());
+            }
+          }
+          defaultRedirectStrategy.sendRedirect(request, response, redirectUrl);
+        });
+    return oAuth2ClientAuthenticationFilter;
+  }
+----
+
+
+And configure the Docket to be secured via the `AUTHORIZATION` header:
+[source,java]
+[subs="verbatim,attributes"]
+----
+
+  @Bean
+  public Docket api() throws IOException, URISyntaxException {
+    final List<ResponseMessage> globalResponses = Arrays.asList(
+        new ResponseMessageBuilder()
+            .code(200)
+            .message("OK")
+            .build(),
+        new ResponseMessageBuilder()
+            .code(400)
+            .message("Bad Request")
+            .build(),
+        new ResponseMessageBuilder()
+            .code(500)
+            .message("Internal Error")
+            .build());
+    final ApiInfo apiInfo = new ApiInfo("REST API", new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(CHANGELOG_FILENAME)))
+        .lines()
+        .collect(Collectors.joining(System.lineSeparator())),
+        "1.0.0-RC1", "", new Contact("team", "", "bla@bla.com"), "", "", Collections.emptyList());
+    return new Docket(DocumentationType.SWAGGER_2),
+        .securitySchemes(Arrays.asList(new ApiKey("Token Access", HttpHeaders.AUTHORIZATION, In.HEADER.name()))))
+        .useDefaultResponseMessages(false)
+        .globalResponseMessage(RequestMethod.GET, globalResponses)
+        .globalResponseMessage(RequestMethod.POST, globalResponses)
+        .globalResponseMessage(RequestMethod.DELETE, globalResponses)
+        .globalResponseMessage(RequestMethod.PATCH, globalResponses)
+        .select()
+        .apis(RequestHandlerSelectors.basePackage("com.controller"))
+        .build()
+        .apiInfo(apiInfo)
+        .directModelSubstitute(Temporal.class, String.class);
+  }
+----
+
 === Springfox samples
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.
 
