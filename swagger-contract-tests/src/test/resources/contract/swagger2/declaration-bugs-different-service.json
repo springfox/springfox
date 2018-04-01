@@ -638,7 +638,7 @@
         "/bugs/1767": {
             "get": {
                 "description": "This is a test method",
-                "operationId": "bug1767GET",
+                "operationId": "bug1767GET_1",
                 "parameters": [
                     {
                         "name": "description",
@@ -647,7 +647,15 @@
                         "required": true,
                         "type": "string"
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully received bug 1767 or 2219 response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/bugs/1777": {

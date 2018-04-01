@@ -43,7 +43,7 @@ trait FileAccess {
         writer = new OutputStreamWriter(file, "UTF-8")
         writer.write(StringEscapeUtils.unescapeJava(prettyPrint(contents)))
       } catch (Exception e) {
-        System.err.println(e.getMessage())
+        System.err.println("**** ERROR WRITING FILE: " + e.getMessage())
       } finally {
         writer.flush()
         writer.close()

@@ -111,8 +111,12 @@ include::../../swagger-contract-tests/src/main/java/springfox/test/contract/swag
 responsibility of the service author to ensure.
 <4> Added parameters to the operation
 <5> NOTE: It is important to also ensure we pass in a model reference even for primitive types
-<6> Optionally provide a group name, if provided this api  will only appear under that group. If absent,
+<6> Set of response messages that overide the default/global response messages
+<7> Response model reference of the default model returned by the operation. Usually the  response model returned
+in a 200 or 201 response.
+<8> Optionally provide a group name, if provided this api  will only appear under that group. If absent,
 the api will appear under the default group.
+<9> CachingOperationNameGenerator is a component bean that is available to be autowired
 
 == Additional extensibility options
 .Other Extensibility

@@ -19,7 +19,6 @@
 package springfox.test.contract.swaggertests
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Predicates
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -39,6 +38,7 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
 import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import springfox.petstore.PetStoreConfiguration
 import springfox.test.contract.swagger.Bug1767ListingScanner
@@ -323,8 +323,8 @@ class Swagger2TestConfig {
   }
 
   @Bean
-  ApiListingScannerPlugin listingScanner() {
-    new Bug1767ListingScanner()
+  ApiListingScannerPlugin listingScanner(CachingOperationNameGenerator operationNames) {
+    new Bug1767ListingScanner(operationNames)
   }
 
   @Bean
