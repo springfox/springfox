@@ -446,6 +446,15 @@ public class BugsController {
   public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
   }
 
+  @ApiResponses({
+      @ApiResponse(code = 404, message = "No object was found with the given ID"),
+      @ApiResponse(code = 200, message = "The object was deleted successfully.",
+          response = void.class)
+  })
+  @GetMapping("/bug1944")
+  public void bug1944() {
+  }
+
   public class ProductVO {
     private String name;
 
