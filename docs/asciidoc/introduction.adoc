@@ -85,6 +85,19 @@ The docs are generated in the `build/all-docs` folder. To publish the current do
 ./gradlew publishDocs
 ----
 
+==== Updating the contract tests
+When developing new contract test, to make it easy to update the existing tests with new contracts, uncomment the
+following lines in https://github.com/springfox/springfox/blob/master/swagger-contract-tests/build.gradle[swagger-contract-tests/build.gradle].
+Usually this happens when we add a new contract test for a bug we've fixed or a feature that was added, we create an
+endpoint in https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/BugsController.java[BugsController]
+or https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java[FeatureDemonstrationService] to demonstrate the new fix or behavior.
+
+[[update-contract-tests]]
+[source,gradle,linenums]
+----
+include::../../swagger-contract-tests/build.gradle[tags=update-contract-tests,indent=0]
+----
+
 ==== CI Environment
 
 https://circleci.com/gh/springfox/springfox[Circle CI]
