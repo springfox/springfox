@@ -160,8 +160,12 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     }
   }
 
-  private Optional<ResolvedType> resolvedType(ResolvedType resolvedType, ApiResponse apiResponse) {
-    return fromNullable(resolvedTypeFromResponse(typeResolver, resolvedType).apply(apiResponse));
+  private Optional<ResolvedType> resolvedType(
+      ResolvedType resolvedType,
+      ApiResponse apiResponse) {
+    return fromNullable(resolvedTypeFromResponse(
+        typeResolver,
+        resolvedType).apply(apiResponse));
   }
 
 }

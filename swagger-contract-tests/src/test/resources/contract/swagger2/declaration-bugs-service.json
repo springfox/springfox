@@ -1432,6 +1432,23 @@
                 }
             }
         },
+        "/bugs/bug1944": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug1944",
+                "operationId": "bug1944UsingGET_1",
+                "responses": {
+                    "200": {
+                        "description": "The object was deleted successfully."
+                    },
+                    "404": {
+                        "description": "No object was found with the given ID"
+                    }
+                }
+            }
+        },
         "/bugs/bug2182": {
             "get": {
                 "tags": [
