@@ -527,6 +527,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#springfox-support-for-jsr-303">Springfox Support for JSR-303</a></li>
 <li><a href="#springfox-swagger-ui">Springfox Swagger UI</a></li>
 <li><a href="#springfox-rfc6570-support-strong-incubating-strong">Springfox RFC6570 support <strong>incubating</strong></a></li>
+<li><a href="#securing-swagger-ui">Securing swagger-ui</a></li>
 <li><a href="#springfox-samples">Springfox samples</a></li>
 </ul>
 </li>
@@ -1448,6 +1449,109 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 </div>
 <div class="sect2">
+<h3 id="securing-swagger-ui">Securing swagger-ui</h3>
+<div class="paragraph">
+<p><a href="https://github.com/springfox/springfox/issues/2191#issuecomment-359159833">The user contributed example</a> uses OAuth2 and
+cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@evser</a>)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">       <span class="directive">protected</span> <span class="type">void</span> configure(HttpSecurity http) <span class="directive">throws</span> <span class="exception">Exception</span> {
+    http.authorizeRequests()
+        .anyRequest().authenticated()
+        .and().exceptionHandling().accessDeniedHandler(<span class="keyword">new</span> AccessDeniedHandlerImpl())
+        .and().logout().logoutSuccessHandler(<span class="keyword">new</span> HttpStatusReturningLogoutSuccessHandler())
+        .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+        .addFilterBefore(ssoFilter(ApplicationConfiguration.API_BASE_PATH + <span class="string"><span class="delimiter">&quot;</span><span class="content">/login</span><span class="delimiter">&quot;</span></span>), BasicAuthenticationFilter.class)
+        .requiresChannel().anyRequest().requireSecure();
+  }
+
+  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+    FilterRegistrationBean frb = <span class="keyword">new</span> FilterRegistrationBean();
+    frb.setFilter(filter);
+    frb.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER);
+    <span class="keyword">return</span> frb;
+  }
+
+  <span class="annotation">@Bean</span>
+  <span class="annotation">@ConfigurationProperties</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">oauth2.client</span><span class="delimiter">&quot;</span></span>)
+  <span class="directive">public</span> OAuth2ProtectedResourceDetails authDetails() {
+    <span class="keyword">return</span> <span class="keyword">new</span> AuthorizationCodeResourceDetails();
+  }
+
+  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> SecurityConfiguration swaggerSecurityConfiguration() {
+    <span class="keyword">return</span> <span class="keyword">new</span> SecurityConfiguration(<span class="string"><span class="delimiter">&quot;</span><span class="content">client-id</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">client-secret</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">realm</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">{{X-XSRF-COOKIE}}</span><span class="delimiter">&quot;</span></span>, ApiKeyVehicle.HEADER, <span class="string"><span class="delimiter">&quot;</span><span class="content">X-XSRF-TOKEN</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">,</span><span class="delimiter">&quot;</span></span>);
+  }
+
+  <span class="directive">private</span> <span class="predefined-type">Filter</span> ssoFilter(<span class="predefined-type">String</span> path) {
+    OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationFilter = <span class="keyword">new</span> OAuth2ClientAuthenticationProcessingFilter(path);
+    OAuth2RestTemplate oAuth2RestTemplate = <span class="keyword">new</span> OAuth2RestTemplate(authDetails(), oauth2ClientContext);
+    DefaultRedirectStrategy defaultRedirectStrategy = <span class="keyword">new</span> DefaultRedirectStrategy();
+    oAuth2ClientAuthenticationFilter.setRestTemplate(oAuth2RestTemplate);
+    oAuth2ClientAuthenticationFilter.setTokenServices(resourceServerTokenServices);
+    oAuth2ClientAuthenticationFilter.setAuthenticationSuccessHandler(
+        (request, response, authentication) -&gt; {
+          <span class="predefined-type">String</span> redirectUrl = request.getParameter(REDIRECT_URL_PARAM);
+          <span class="keyword">if</span> (redirectUrl == <span class="predefined-constant">null</span>) {
+            redirectUrl = DEFAULT_REDIRECT_URL;
+          } <span class="keyword">else</span> {
+            <span class="keyword">if</span> (!redirectUrlValidator.validateRedirectUrl(redirectUrl)) {
+              request.setAttribute(MESSAGE_ATTRIBUTE_NAME,
+                  messageSource.getMessage(<span class="string"><span class="delimiter">&quot;</span><span class="content">ivalid.redirect.url</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">String</span><span class="type">[]</span> { redirectUrl }, LocaleContextHolder.getLocale()));
+              response.sendError(HttpStatus.FORBIDDEN.value());
+            }
+          }
+          defaultRedirectStrategy.sendRedirect(request, response, redirectUrl);
+        });
+    <span class="keyword">return</span> oAuth2ClientAuthenticationFilter;
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And configure the Docket to be secured via the <code>AUTHORIZATION</code> header:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> Docket api() <span class="directive">throws</span> <span class="exception">IOException</span>, <span class="exception">URISyntaxException</span> {
+    <span class="directive">final</span> <span class="predefined-type">List</span>&lt;ResponseMessage&gt; globalResponses = <span class="predefined-type">Arrays</span>.asList(
+        <span class="keyword">new</span> ResponseMessageBuilder()
+            .code(<span class="integer">200</span>)
+            .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">OK</span><span class="delimiter">&quot;</span></span>)
+            .build(),
+        <span class="keyword">new</span> ResponseMessageBuilder()
+            .code(<span class="integer">400</span>)
+            .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">Bad Request</span><span class="delimiter">&quot;</span></span>)
+            .build(),
+        <span class="keyword">new</span> ResponseMessageBuilder()
+            .code(<span class="integer">500</span>)
+            .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">Internal Error</span><span class="delimiter">&quot;</span></span>)
+            .build());
+    <span class="directive">final</span> ApiInfo apiInfo = <span class="keyword">new</span> ApiInfo(<span class="string"><span class="delimiter">&quot;</span><span class="content">REST API</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">BufferedReader</span>(<span class="keyword">new</span> <span class="predefined-type">InputStreamReader</span>(getClass().getResourceAsStream(CHANGELOG_FILENAME)))
+        .lines()
+        .collect(Collectors.joining(<span class="predefined-type">System</span>.lineSeparator())),
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0.0-RC1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> Contact(<span class="string"><span class="delimiter">&quot;</span><span class="content">team</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">bla@bla.com</span><span class="delimiter">&quot;</span></span>), <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Collections</span>.emptyList());
+    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2),
+        .securitySchemes(<span class="predefined-type">Arrays</span>.asList(<span class="keyword">new</span> ApiKey(<span class="string"><span class="delimiter">&quot;</span><span class="content">Token Access</span><span class="delimiter">&quot;</span></span>, HttpHeaders.AUTHORIZATION, In.HEADER.name()))))
+        .useDefaultResponseMessages(<span class="predefined-constant">false</span>)
+        .globalResponseMessage(RequestMethod.GET, globalResponses)
+        .globalResponseMessage(RequestMethod.POST, globalResponses)
+        .globalResponseMessage(RequestMethod.DELETE, globalResponses)
+        .globalResponseMessage(RequestMethod.PATCH, globalResponses)
+        .select()
+        .apis(RequestHandlerSelectors.basePackage(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.controller</span><span class="delimiter">&quot;</span></span>))
+        .build()
+        .apiInfo(apiInfo)
+        .directModelSubstitute(Temporal.class, <span class="predefined-type">String</span>.class);
+  }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="springfox-samples">Springfox samples</h3>
 <div class="paragraph">
 <p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of samples.</p>
@@ -1458,7 +1562,7 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-01 13:02:28 UTC
+Last updated 2018-04-01 13:33:38 UTC
 </div>
 </div>
 </body>
