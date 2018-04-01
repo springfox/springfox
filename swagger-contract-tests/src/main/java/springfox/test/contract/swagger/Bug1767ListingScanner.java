@@ -22,8 +22,10 @@ import com.fasterxml.classmate.TypeResolver;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
@@ -32,10 +34,23 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 public class Bug1767ListingScanner implements ApiListingScannerPlugin {
 
   // tag::api-listing-plugin[]
+  private final CachingOperationNameGenerator operationNames;
+
+  /**
+   * @param operationNames - CachingOperationNameGenerator is a component bean
+   *                       that is available to be autowired
+   */
+  public Bug1767ListingScanner(CachingOperationNameGenerator operationNames) {//<9>
+    this.operationNames = operationNames;
+  }
+
   @Override
   public List<ApiDescription> apply(DocumentationContext context) {
     return new ArrayList<ApiDescription>(
@@ -45,7 +60,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                 "This is a bug",
                 Arrays.asList( //<2>
                     new OperationBuilder(
-                        new CachingOperationNameGenerator())
+                        operationNames)
                         .authorizations(new ArrayList())
                         .codegenMethodNameStem("bug1767GET") //<3>
                         .method(HttpMethod.GET)
@@ -61,15 +76,17 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                     .required(true)
                                     .modelRef(new ModelRef("string")) //<5>
                                     .build()))
+                        .responseMessages(responseMessages()) //<6>
+                        .responseModel(new ModelRef("string")) //<7>
                         .build()),
                 false),
             new ApiDescription(
-                "different-group", //<6>
+                "different-group", //<8>
                 "/different/2219",
                 "This is a bug",
                 Arrays.asList(
                     new OperationBuilder(
-                        new CachingOperationNameGenerator())
+                        operationNames)
                         .authorizations(new ArrayList())
                         .codegenMethodNameStem("bug2219GET")
                         .method(HttpMethod.GET)
@@ -85,8 +102,21 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                                     .required(true)
                                     .modelRef(new ModelRef("string"))
                                     .build()))
+                        .responseMessages(responseMessages())
+                        .responseModel(new ModelRef("string"))
                         .build()),
                 false)));
+  }
+
+  /**
+   * @return Set of response messages that overide the default/global response messages
+   */
+  private Set<ResponseMessage> responseMessages() { //<8>
+    return newHashSet(new ResponseMessageBuilder()
+        .code(200)
+        .message("Successfully received bug 1767 or 2219 response")
+        .responseModel(new ModelRef("string"))
+        .build());
   }
   // tag::api-listing-plugin[]
 

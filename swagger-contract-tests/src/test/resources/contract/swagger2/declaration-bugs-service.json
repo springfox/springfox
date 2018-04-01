@@ -658,7 +658,15 @@
                         "required": true,
                         "type": "string"
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully received bug 1767 or 2219 response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/bugs/1777": {

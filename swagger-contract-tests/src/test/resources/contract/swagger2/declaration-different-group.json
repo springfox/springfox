@@ -5,7 +5,9 @@
         "version": "1.0",
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
-        "contact": {},
+        "contact": {
+            
+        },
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0"
@@ -27,7 +29,7 @@
         "/different/2219": {
             "get": {
                 "description": "This is a test method",
-                "operationId": "bug2219GET",
+                "operationId": "bug2219GET_6",
                 "parameters": [
                     {
                         "name": "description",
@@ -36,7 +38,15 @@
                         "required": true,
                         "type": "string"
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully received bug 1767 or 2219 response",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         }
     }
