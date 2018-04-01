@@ -85,7 +85,7 @@ class AnnotationsSpec extends Specification {
     where:
     apiOperation                                                 | type
     null                                                         | defaultType
-    [response: { -> Void }]      | defaultType
+    [response: { -> Void }, responseContainer: { -> null }]      | defaultType
     [response: { -> String }, responseContainer: { -> "List" }]  | resolver.resolve(List, String)
     [response: { -> String }, responseContainer: { -> "Set" }]   | resolver.resolve(Set, String)
     [response: { -> String }, responseContainer: { -> "Other" }] | resolver.resolve(String)
@@ -102,7 +102,7 @@ class AnnotationsSpec extends Specification {
     where:
     apiOperation                                                 | type
     null                                                         | defaultType
-    [response: { -> Void }]      | defaultType
+    [response: { -> Void }, responseContainer: { -> null }]      | defaultType
     [response: { -> String }, responseContainer: { -> "List" }]  | resolver.resolve(List, String)
     [response: { -> String }, responseContainer: { -> "Set" }]   | resolver.resolve(Set, String)
     [response: { -> String }, responseContainer: { -> "Other" }] | resolver.resolve(String)
