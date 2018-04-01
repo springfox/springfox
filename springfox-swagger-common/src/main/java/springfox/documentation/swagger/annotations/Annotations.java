@@ -74,7 +74,8 @@ public class Annotations {
     };
   }
 
-  public static Function<ApiResponse, ResolvedType> resolvedTypeFromResponse(final TypeResolver typeResolver,
+  public static Function<ApiResponse, ResolvedType> resolvedTypeFromResponse(
+      final TypeResolver typeResolver,
       final ResolvedType defaultType) {
 
     return new Function<ApiResponse, ResolvedType>() {
