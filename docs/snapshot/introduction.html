@@ -664,6 +664,33 @@ and building will NOT work!
 </div>
 </div>
 <div class="sect3">
+<h4 id="updating-the-contract-tests">Updating the contract tests</h4>
+<div class="paragraph">
+<p>When developing new contract test, to make it easy to update the existing tests with new contracts, uncomment the
+following lines in <a href="https://github.com/springfox/springfox/blob/master/swagger-contract-tests/build.gradle">swagger-contract-tests/build.gradle</a>.
+Usually this happens when we add a new contract test for a bug we&#8217;ve fixed or a feature that was added, we create an
+endpoint in <a href="https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/BugsController.java">BugsController</a>
+or <a href="https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java">FeatureDemonstrationService</a> to demonstrate the new fix or behavior.</p>
+</div>
+<div id="update-contract-tests" class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="gradle"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+</pre></td>
+  <td class="code"><pre>// NOTE: Uncomment to bulk update contracts
+//test {
+//  systemProperty(&quot;contract.tests.root&quot;, &quot;$projectDir/src/test/resources&quot;)
+//  systemProperty(&quot;contract.tests.update&quot;, true)
+//}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="ci-environment">CI Environment</h4>
 <div class="paragraph">
 <p><a href="https://circleci.com/gh/springfox/springfox">Circle CI</a></p>
@@ -766,7 +793,7 @@ The below properties are required to run a release:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-01 13:53:10 UTC
+Last updated 2018-04-01 14:55:34 UTC
 </div>
 </div>
 </body>
