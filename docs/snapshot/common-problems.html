@@ -1165,6 +1165,33 @@ configure a request mapping to allow specific origins.</p>
 </div>
 </div>
 <div class="paragraph">
+<p>If that doesn&#8217;t work, most likely the cors registration is happening earlier than the SpringFox beans are registered.
+ To fix this, we can register a CORS filter registration bean, that registers our endpoints. In the example below,
+ we&#8217;ve registered it for all endpoints.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">WebConfig</span> <span class="directive">extends</span> WebMvcConfigurerAdapter {
+
+    <span class="comment">//https://stackoverflow.com/questions/31724994/spring-data-rest-and-cors</span>
+    <span class="annotation">@Bean</span>
+    <span class="directive">public</span> FilterRegistrationBean corsFilter() {
+        UrlBasedCorsConfigurationSource source = <span class="keyword">new</span> UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration config = <span class="keyword">new</span> CorsConfiguration().applyPermitDefaultValues();
+        config.setAllowCredentials(<span class="predefined-constant">false</span>);
+        source.registerCorsConfiguration(<span class="string"><span class="delimiter">&quot;</span><span class="content">/**</span><span class="delimiter">&quot;</span></span>, config);
+
+        FilterRegistrationBean bean = <span class="keyword">new</span> FilterRegistrationBean(<span class="keyword">new</span> CorsFilter(source));
+        bean.setOrder(<span class="integer">0</span>);
+
+        <span class="keyword">return</span> bean;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p><a id="q22"></a>*22. How to configure the docket when using <a href="https://immutables.github.io">Immutables</a>? (thanks <a href="https://github" class="bare">https://github</a>
 .com/kevinm416[@kevinm416])</p>
 </div>
@@ -1455,7 +1482,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-01 13:33:38 UTC
+Last updated 2018-04-01 13:53:10 UTC
 </div>
 </div>
 </body>
