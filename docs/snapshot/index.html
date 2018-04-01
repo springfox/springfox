@@ -2864,8 +2864,43 @@ is applied to the parameter.</td>
 57
 58
 59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
 </pre></td>
-  <td class="code"><pre>  <span class="annotation">@Override</span>
+  <td class="code"><pre>  <span class="directive">private</span> <span class="directive">final</span> CachingOperationNameGenerator operationNames;
+
+  <span class="comment">/**
+   * @param operationNames - CachingOperationNameGenerator is a component bean
+   *                       that is available to be autowired
+   */</span>
+  <span class="directive">public</span> Bug1767ListingScanner(CachingOperationNameGenerator operationNames) {<i class="conum" data-value="9"></i><b>(9)</b>
+    <span class="local-variable">this</span>.operationNames = operationNames;
+  }
+
+  <span class="annotation">@Override</span>
   <span class="directive">public</span> <span class="predefined-type">List</span>&lt;ApiDescription&gt; apply(DocumentationContext context) {
     <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;ApiDescription&gt;(
         <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="1"></i><b>(1)</b>
@@ -2874,7 +2909,7 @@ is applied to the parameter.</td>
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
                 <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="2"></i><b>(2)</b>
                     <span class="keyword">new</span> OperationBuilder(
-                        <span class="keyword">new</span> CachingOperationNameGenerator())
+                        operationNames)
                         .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
                         .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug1767GET</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
                         .method(HttpMethod.GET)
@@ -2890,15 +2925,17 @@ is applied to the parameter.</td>
                                     .required(<span class="predefined-constant">true</span>)
                                     .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="5"></i><b>(5)</b>
                                     .build()))
+                        .responseMessages(responseMessages()) <i class="conum" data-value="6"></i><b>(6)</b>
+                        .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="7"></i><b>(7)</b>
                         .build()),
                 <span class="predefined-constant">false</span>),
             <span class="keyword">new</span> ApiDescription(
-                <span class="string"><span class="delimiter">&quot;</span><span class="content">different-group</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="6"></i><b>(6)</b>
+                <span class="string"><span class="delimiter">&quot;</span><span class="content">different-group</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="8"></i><b>(8)</b>
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">/different/2219</span><span class="delimiter">&quot;</span></span>,
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
                 <span class="predefined-type">Arrays</span>.asList(
                     <span class="keyword">new</span> OperationBuilder(
-                        <span class="keyword">new</span> CachingOperationNameGenerator())
+                        operationNames)
                         .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
                         .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug2219GET</span><span class="delimiter">&quot;</span></span>)
                         .method(HttpMethod.GET)
@@ -2914,8 +2951,21 @@ is applied to the parameter.</td>
                                     .required(<span class="predefined-constant">true</span>)
                                     .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
                                     .build()))
+                        .responseMessages(responseMessages())
+                        .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
                         .build()),
                 <span class="predefined-constant">false</span>)));
+  }
+
+  <span class="comment">/**
+   * @return Set of response messages that overide the default/global response messages
+   */</span>
+  <span class="directive">private</span> <span class="predefined-type">Set</span>&lt;ResponseMessage&gt; responseMessages() { <i class="conum" data-value="8"></i><b>(8)</b>
+    <span class="keyword">return</span> newHashSet(<span class="keyword">new</span> ResponseMessageBuilder()
+        .code(<span class="integer">200</span>)
+        .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully received bug 1767 or 2219 response</span><span class="delimiter">&quot;</span></span>)
+        .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
+        .build());
   }
 
   <span class="annotation">@Override</span>
@@ -2952,8 +3002,21 @@ responsibility of the service author to ensure.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Set of response messages that overide the default/global response messages</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Response model reference of the default model returned by the operation. Usually the  response model returned
+in a 200 or 201 response.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
 <td>Optionally provide a group name, if provided this api  will only appear under that group. If absent,
 the api will appear under the default group.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>CachingOperationNameGenerator is a component bean that is available to be autowired</td>
 </tr>
 </table>
 </div>
@@ -4271,7 +4334,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 2.8.1-SNAPSHOT<br>
-Last updated 2018-03-31 15:49:29 UTC
+Last updated 2018-04-01 13:02:28 UTC
 </div>
 </div>
 </body>
