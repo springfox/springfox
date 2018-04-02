@@ -67,6 +67,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
           .modelRef(new ModelRef("string"))
           .allowableValues(allowableValues)
           .parameterType(parameterType)
+          .order(DEFAULT_PRECEDENCE)
           .build();
       parameters.add(parameter);
     }

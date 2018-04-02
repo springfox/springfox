@@ -91,6 +91,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
         .allowableValues(allowable)
         .parameterAccess(apiParam.access())
         .hidden(apiParam.hidden())
+        .order(SWAGGER_PLUGIN_ORDER)
         .build();
   }
 
@@ -106,6 +107,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
         .allowableValues(allowable)
         .parameterAccess(apiModelProperty.access())
         .hidden(apiModelProperty.hidden())
+        .order(SWAGGER_PLUGIN_ORDER)
         .build();
   }
 

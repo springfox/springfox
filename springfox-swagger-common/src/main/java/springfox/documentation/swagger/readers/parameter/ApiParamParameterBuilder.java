@@ -70,7 +70,8 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
           .hidden(annotation.hidden())
-          .collectionFormat(annotation.collectionFormat());
+          .collectionFormat(annotation.collectionFormat())
+          .order(SWAGGER_PLUGIN_ORDER);
     }
   }
 

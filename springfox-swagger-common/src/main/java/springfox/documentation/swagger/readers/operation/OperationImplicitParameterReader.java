@@ -75,6 +75,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .allowableValues(allowableValueFromString(param.allowableValues()))
         .parameterType(emptyToNull(param.paramType()))
         .parameterAccess(param.access())
+        .order(SWAGGER_PLUGIN_ORDER)
         .build();
   }
 
