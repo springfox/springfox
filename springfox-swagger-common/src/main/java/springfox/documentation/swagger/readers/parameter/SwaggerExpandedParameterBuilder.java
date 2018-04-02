@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -44,9 +44,10 @@ import java.util.List;
 import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
-@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@Order(SWAGGER_PLUGIN_ORDER)
 public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
   private final EnumTypeDeterminer enumTypeDeterminer;
@@ -78,7 +79,10 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getFieldType().getErasedType());
+    AllowableValues allowable = allowableValues(
+        fromNullable(allowableProperty),
+        context.getFieldType().getErasedType());
+
     maybeSetParameterName(context, apiParam.name())
         .description(descriptions.resolve(apiParam.value()))
         .defaultValue(apiParam.defaultValue())
@@ -92,7 +96,10 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
-    AllowableValues allowable = allowableValues(fromNullable(allowableProperty), context.getFieldType().getErasedType());
+    AllowableValues allowable = allowableValues(
+        fromNullable(allowableProperty),
+        context.getFieldType().getErasedType());
+    
     maybeSetParameterName(context, apiModelProperty.name())
         .description(descriptions.resolve(apiModelProperty.value()))
         .required(apiModelProperty.required())

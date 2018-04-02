@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -67,9 +67,10 @@ class ParameterMerger {
     return parameters;
   }
 
-  private List<Parameter> mergedParameters(SetView<String> paramsToMerge,
-                                           List<Parameter> existingParameters,
-                                           List<Parameter> newParams) {
+  private List<Parameter> mergedParameters(
+      SetView<String> paramsToMerge,
+      List<Parameter> existingParameters,
+      List<Parameter> newParams) {
     List<Parameter> parameters = newArrayList();
     for (Parameter newParam : newParams) {
       Optional<Parameter> original = from(existingParameters).firstMatch(withName(newParam.getName()));
