@@ -75,7 +75,11 @@ class ParameterMerger {
     for (Parameter newParam : newParams) {
       Optional<Parameter> original = from(existingParameters).firstMatch(withName(newParam.getName()));
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
-        parameters.add(merged(original.get(), newParam));
+        if (newParam.getOrder() > original.get().getOrder()){
+          parameters.add(merged(newParam, original.get()));
+        } else {
+          parameters.add(merged(original.get(), newParam));
+        }
       }
     }
     return parameters;
