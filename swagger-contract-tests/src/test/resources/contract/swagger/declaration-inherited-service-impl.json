@@ -1,123 +1,131 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "demonstrateInheritanceWithAnnotations",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "GET",
-          "summary": "demonstrateInheritanceWithAnnotations",
-          "nickname": "demonstrateInheritanceWithAnnotationsUsingGET",
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "param1",
-              "name": "param1",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "kkj",
-              "responseModel": "Pet"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "Pet"
+            "description": "demonstrateInheritanceWithAnnotations",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "demonstrateInheritanceWithAnnotations",
+                    "nickname": "demonstrateInheritanceWithAnnotationsUsingGET",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "param1",
+                            "name": "param1",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "kkj",
+                            "responseModel": "Pet"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "Pet"
+                }
+            ],
+            "path": "/child/1575"
+        },
+        {
+            "description": "getSomething",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getSomething",
+                    "nickname": "getSomethingUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "parameter",
+                            "name": "parameter",
+                            "paramType": "query",
+                            "type": "string",
+                            "required": false
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ],
+            "path": "/child/child-method"
         }
-      ],
-      "path": "/child/1575"
+    ],
+    "basePath": "/",
+    "consumes": [
+        
+    ],
+    "models": {
+        "Pet": {
+            "description": "",
+            "id": "Pet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        }
     },
-    {
-      "description": "getSomething",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "getSomething",
-          "nickname": "getSomethingUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "parameter",
-              "name": "parameter",
-              "paramType": "query",
-              "type": "string",
-              "required": false
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "string"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "string"
-        }
-      ],
-      "path": "/child/child-method"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [],
-  "models": {
-    "Pet": {
-      "description": "",
-      "id": "Pet",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    }
-  },
-  "produces": [],
-  "resourcePath": "/child",
-  "swaggerVersion": "1.2"
+    "produces": [
+        
+    ],
+    "resourcePath": "/child",
+    "swaggerVersion": "1.2"
 }

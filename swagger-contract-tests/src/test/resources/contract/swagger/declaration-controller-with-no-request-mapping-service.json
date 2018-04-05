@@ -1,125 +1,133 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "exampleWithNoRequestMapping",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "GET",
-          "summary": "exampleWithNoRequestMapping",
-          "nickname": "exampleWithNoRequestMappingUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "Example"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
+            "description": "exampleWithNoRequestMapping",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "exampleWithNoRequestMapping",
+                    "nickname": "exampleWithNoRequestMappingUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "Example"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "Example"
+                }
+            ],
+            "path": "/no-request-mapping"
+        }
+    ],
+    "basePath": "/",
+    "consumes": [
+        
+    ],
+    "models": {
+        "Example": {
+            "description": "",
+            "id": "Example",
+            "properties": {
+                "allCapsSet": {
+                    "required": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                },
+                "annotatedEnumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "bar": {
+                    "description": "description of bar",
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "enumType": {
+                    "enum": [
+                        "ONE",
+                        "TWO"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "foo": {
+                    "required": false,
+                    "type": "string"
+                },
+                "localDateTime": {
+                    "required": false,
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "nestedType": {
+                    "required": false,
+                    "type": "NestedType"
+                },
+                "parentBeanProperty": {
+                    "required": false,
+                    "type": "string"
+                },
+                "propertyWithNoGetterMethod": {
+                    "required": false,
+                    "type": "string"
+                },
+                "propertyWithNoSetterMethod": {
+                    "required": false,
+                    "type": "string"
+                },
+                "readOnlyString": {
+                    "description": "A read only string",
+                    "required": false,
+                    "type": "string"
+                }
             }
-          ],
-          "deprecated": "false",
-          "type": "Example"
+        },
+        "NestedType": {
+            "description": "",
+            "id": "NestedType",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
         }
-      ],
-      "path": "/no-request-mapping"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [],
-  "models": {
-    "Example": {
-      "description": "",
-      "id": "Example",
-      "properties": {
-        "allCapsSet": {
-          "required": false,
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "uniqueItems": true
-        },
-        "annotatedEnumType": {
-          "enum": [
-            "ONE",
-            "TWO"
-          ],
-          "required": false,
-          "type": "string"
-        },
-        "bar": {
-          "description": "description of bar",
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "enumType": {
-          "enum": [
-            "ONE",
-            "TWO"
-          ],
-          "required": false,
-          "type": "string"
-        },
-        "foo": {
-          "required": false,
-          "type": "string"
-        },
-        "localDateTime": {
-          "required": false,
-          "format": "date-time",
-          "type": "string"
-        },
-        "nestedType": {
-          "required": false,
-          "type": "NestedType"
-        },
-        "parentBeanProperty": {
-          "required": false,
-          "type": "string"
-        },
-        "propertyWithNoGetterMethod": {
-          "required": false,
-          "type": "string"
-        },
-        "propertyWithNoSetterMethod": {
-          "required": false,
-          "type": "string"
-        },
-        "readOnlyString": {
-          "description": "A read only string",
-          "required": false,
-          "type": "string"
-        }
-      }
     },
-    "NestedType": {
-      "description": "",
-      "id": "NestedType",
-      "properties": {
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    }
-  },
-  "produces": [],
-  "resourcePath": "/no-request-mapping",
-  "swaggerVersion": "1.2"
+    "produces": [
+        
+    ],
+    "resourcePath": "/no-request-mapping",
+    "swaggerVersion": "1.2"
 }

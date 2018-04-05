@@ -67,11 +67,20 @@ public class Operation {
   public Operation() {
   }
 
-  public Operation(String method, String summary, String notes, String responseClass, String nickname, int position,
-                   List<String> produces, List<String> consumes, List<String> protocol,
-                   List<Authorization> authorizations,
-                   List<Parameter> parameters, Set<ResponseMessage> responseMessages,
-                   String deprecated) {
+  public Operation(
+      String method,
+      String summary,
+      String notes,
+      String responseClass,
+      String nickname,
+      int position,
+      List<String> produces,
+      List<String> consumes,
+      List<String> protocol,
+      List<Authorization> authorizations,
+      List<Parameter> parameters,
+      Set<ResponseMessage> responseMessages,
+      String deprecated) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
