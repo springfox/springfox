@@ -1,237 +1,237 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "createObject",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "POST",
-          "summary": "createObject",
-          "nickname": "createObjectUsingPOST_1",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "object",
-              "name": "body",
-              "paramType": "body",
-              "type": "FancyPet",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "int"
-            },
-            {
-              "code": 201,
-              "message": "Created"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "format": "int32",
-          "type": "integer"
-        }
-      ],
-      "path": "/fancypets"
-    },
-    {
-      "description": "updatePet",
-      "operations": [
+            "description": "createObject",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "createObject",
+                    "nickname": "createObjectUsingPOST_1",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "object",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "FancyPet",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "int"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "format": "int32",
+                    "type": "integer"
+                }
+            ],
+            "path": "/fancypets"
+        },
         {
-          "method": "PUT",
-          "summary": "updatePet",
-          "nickname": "updatePetUsingPUT",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "pet",
-              "name": "body",
-              "paramType": "body",
-              "type": "Pet",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK"
-            },
-            {
-              "code": 201,
-              "message": "Created"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "void"
-        }
-      ],
-      "path": "/fancypets"
-    },
-    {
-      "description": "createObject",
-      "operations": [
+            "description": "updatePet",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "updatePet",
+                    "nickname": "updatePetUsingPUT",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "pet",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "Pet",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ],
+            "path": "/fancypets"
+        },
         {
-          "method": "POST",
-          "summary": "createObject",
-          "nickname": "createObjectUsingPOST",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "object",
-              "name": "body",
-              "paramType": "body",
-              "type": "FancyPet",
-              "required": true
-            },
-            {
-              "allowMultiple": false,
-              "description": "someId",
-              "name": "someId",
-              "paramType": "path",
-              "format": "int32",
-              "type": "integer",
-              "required": true
+            "description": "createObject",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "createObject",
+                    "nickname": "createObjectUsingPOST",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "object",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "FancyPet",
+                            "required": true
+                        },
+                        {
+                            "allowMultiple": false,
+                            "description": "someId",
+                            "name": "someId",
+                            "paramType": "path",
+                            "format": "int32",
+                            "type": "integer",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "int"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "format": "int32",
+                    "type": "integer"
+                }
+            ],
+            "path": "/fancypets/?{someId}"
+        }
+    ],
+    "basePath": "/",
+    "consumes": [
+        
+    ],
+    "models": {
+        "Category": {
+            "description": "",
+            "id": "Category",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
             }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "int"
-            },
-            {
-              "code": 201,
-              "message": "Created"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
+        },
+        "Pet": {
+            "description": "",
+            "id": "Pet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
             }
-          ],
-          "deprecated": "false",
-          "format": "int32",
-          "type": "integer"
+        },
+        "FancyPet": {
+            "description": "",
+            "id": "FancyPet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "categories": {
+                    "required": false,
+                    "items": {
+                        "type": "Category"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
         }
-      ],
-      "path": "/fancypets/?{someId}"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [
-
-  ],
-  "models": {
-    "Category": {
-      "description": "",
-      "id": "Category",
-      "properties": {
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
     },
-    "FancyPet": {
-      "description": "",
-      "id": "FancyPet",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "categories": {
-          "required": false,
-          "items": {
-            "type": "Category"
-          },
-          "type": "array"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Pet": {
-      "description": "",
-      "id": "Pet",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    }
-  },
-  "produces": [
-
-  ],
-  "resourcePath": "/fancypets",
-  "swaggerVersion": "1.2"
+    "produces": [
+        
+    ],
+    "resourcePath": "/fancypets",
+    "swaggerVersion": "1.2"
 }

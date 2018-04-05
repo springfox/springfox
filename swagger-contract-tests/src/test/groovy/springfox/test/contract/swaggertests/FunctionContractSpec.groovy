@@ -159,6 +159,9 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     String raw = response.body
     response.statusCode == HttpStatus.OK
+    maybeWriteToFile(
+        "/contract/swagger/$contractFile",
+        raw.replace("localhost:$port", "localhost:__PORT__"))
     JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
     where:

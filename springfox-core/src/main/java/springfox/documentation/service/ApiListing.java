@@ -19,8 +19,10 @@
 
 package springfox.documentation.service;
 
+import com.google.common.collect.FluentIterable;
 import springfox.documentation.schema.Model;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +65,8 @@ public class ApiListing {
     this.host = host;
     this.protocols = protocols;
     this.securityReferences = securityReferences;
-    this.apis = apis;
+    this.apis = FluentIterable.from(apis)
+        .toSortedList(byPath());
     this.models = models;
     this.description = description;
     this.position = position;
@@ -120,6 +123,15 @@ public class ApiListing {
 
   public Set<Tag> getTags() {
     return tags;
+  }
+
+  private Comparator<ApiDescription> byPath() {
+    return new Comparator<ApiDescription>() {
+      @Override
+      public int compare(ApiDescription first, ApiDescription second) {
+        return first.getPath().compareTo(second.getPath());
+      }
+    };
   }
 
 }

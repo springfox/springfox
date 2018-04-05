@@ -44,6 +44,7 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.service.Parameter.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -94,6 +95,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .modelRef(new ModelRef(typeName, itemModel))
         .allowableValues(allowable)
         .parameterType("query")
+        .order(DEFAULT_PRECEDENCE)
         .parameterAccess(null);
   }
 

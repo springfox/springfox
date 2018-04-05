@@ -112,12 +112,12 @@
                         "name": "age",
                         "in": "query",
                         "description": "Age values that need to be considered for filter",
-                        "required": true,
-                        "type": "string",
+                        "required": false,
+                        "type": "integer",
                         "exclusiveMaximum": true,
                         "minimum": 0,
                         "exclusiveMinimum": true,
-                        "allowEmptyValue": false
+                        "format": "int32"
                     }
                 ],
                 "responses": {
@@ -143,13 +143,13 @@
                         "name": "legs",
                         "in": "query",
                         "description": "Legs values that need to be considered for filter",
-                        "required": true,
-                        "type": "string",
+                        "required": false,
+                        "type": "integer",
                         "maximum": 10,
                         "exclusiveMaximum": true,
                         "minimum": 0,
                         "exclusiveMinimum": true,
-                        "allowEmptyValue": false
+                        "format": "int32"
                     }
                 ],
                 "responses": {
@@ -175,12 +175,12 @@
                         "name": "stamina",
                         "in": "query",
                         "description": "Stamina values",
-                        "required": true,
-                        "type": "string",
+                        "required": false,
+                        "type": "integer",
                         "maximum": 12,
                         "exclusiveMaximum": true,
                         "exclusiveMinimum": false,
-                        "allowEmptyValue": false
+                        "format": "int64"
                     }
                 ],
                 "responses": {
@@ -209,7 +209,6 @@
                         "required": true,
                         "type": "string",
                         "default": "available",
-                        "allowEmptyValue": false,
                         "enum": [
                             "available",
                             "pending",

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,14 +34,13 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
-import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component("swaggerParameterDescriptionReader")
-@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@Order(SWAGGER_PLUGIN_ORDER)
 public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
   private final DescriptionResolver descriptions;
   private final EnumTypeDeterminer enumTypeDeterminer;
@@ -71,7 +70,8 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
           .hidden(annotation.hidden())
-          .collectionFormat(annotation.collectionFormat());
+          .collectionFormat(annotation.collectionFormat())
+          .order(SWAGGER_PLUGIN_ORDER);
     }
   }
 

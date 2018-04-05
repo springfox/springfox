@@ -21,11 +21,14 @@ package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import org.springframework.core.Ordered;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
 
-public class Parameter {
+public class Parameter implements Ordered {
+  public static final int DEFAULT_PRECEDENCE = 0;
+  
   private final String name;
   private final String description;
   private final String defaultValue;
@@ -39,6 +42,7 @@ public class Parameter {
   private final Boolean hidden;
   private final String pattern;
   private final String collectionFormat;
+  private final int order;
   private final List<VendorExtension> vendorExtensions;
   private final Boolean allowEmptyValue;
 
@@ -57,6 +61,7 @@ public class Parameter {
       boolean hidden,
       String pattern,
       String collectionFormat,
+      int order,
       List<VendorExtension> vendorExtensions) {
 
     this.description = description;
@@ -73,6 +78,7 @@ public class Parameter {
     this.hidden = hidden;
     this.pattern = pattern;
     this.collectionFormat = collectionFormat;
+    this.order = order;
     this.vendorExtensions = vendorExtensions;
   }
 
@@ -137,10 +143,16 @@ public class Parameter {
   }
 
   @Override
+  public int getOrder() {
+    return order;
+  }
+
+  @Override
   public String toString() {
     final StringBuffer sb = new StringBuffer("Parameter{");
     sb.append("name='").append(name).append('\'');
     sb.append(", description='").append(description).append('\'');
+    sb.append(", order='").append(order).append('\'');
     sb.append('}');
     return sb.toString();
   }

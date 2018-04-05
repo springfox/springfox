@@ -1,50 +1,58 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "getAll",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "GET",
-          "summary": "getAll",
-          "nickname": "getAllUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "array"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
+            "description": "getAll",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getAll",
+                    "nickname": "getAllUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "array"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            ],
+            "path": "/"
         }
-      ],
-      "path": "/"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [],
-  "produces": [],
-  "resourcePath": "/",
-  "swaggerVersion": "1.2"
+    ],
+    "basePath": "/",
+    "consumes": [
+        
+    ],
+    "produces": [
+        
+    ],
+    "resourcePath": "/",
+    "swaggerVersion": "1.2"
 }

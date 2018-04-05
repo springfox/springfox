@@ -59,7 +59,10 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
 
     when:
     ApiParamParameterBuilder operationCommand =
-        new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+        new ApiParamParameterBuilder(
+            descriptions,
+            new JacksonEnumTypeDeterminer()
+        )
     operationCommand.apply(parameterContext)
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
 
@@ -143,7 +146,11 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
 
   def "supports all swagger types"() {
     given:
-    ApiParamParameterBuilder sut = new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    ApiParamParameterBuilder sut =
+        new ApiParamParameterBuilder(
+            descriptions,
+            new JacksonEnumTypeDeterminer()
+        )
 
     expect:
     sut.supports(documentationType)
@@ -153,7 +160,10 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   }
 
   def stubbedParamBuilder() {
-    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    new ApiParamParameterBuilder(
+        descriptions,
+        new JacksonEnumTypeDeterminer()
+    )
   }
 
   def stubbedResolvedType() {

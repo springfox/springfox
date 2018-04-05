@@ -83,12 +83,7 @@ public class Operation {
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
     this.parameters = FluentIterable.from(parameters)
-        .toSortedList(new Comparator<Parameter>() {
-          @Override
-          public int compare(Parameter first, Parameter second) {
-            return first.getName().compareTo(second.getName());
-          }
-        });
+        .toSortedList(byParameterName());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
     this.vendorExtensions = newArrayList(vendorExtensions);
@@ -176,9 +171,16 @@ public class Operation {
     return deprecated;
   }
 
-
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
   }
 
+  private Comparator<Parameter> byParameterName() {
+    return new Comparator<Parameter>() {
+      @Override
+      public int compare(Parameter first, Parameter second) {
+        return first.getName().compareTo(second.getName());
+      }
+    };
+  }
 }
