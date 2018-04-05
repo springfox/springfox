@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.primitives.Ints;
 
 import java.util.Comparator;
@@ -81,7 +82,8 @@ public class Operation {
     this.consumes = consumes;
     this.protocol = protocol;
     this.authorizations = toAuthorizationsMap(authorizations);
-    this.parameters = parameters;
+    this.parameters = FluentIterable.from(parameters)
+        .toSortedList(byName());
     this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
     this.deprecated = deprecated;
   }
@@ -216,5 +218,14 @@ public class Operation {
 
   public void setDataType(SwaggerDataType dataType) {
     this.dataType = dataType;
+  }
+
+  private Comparator<Parameter> byName() {
+    return new Comparator<Parameter>() {
+      @Override
+      public int compare(Parameter first, Parameter second) {
+        return first.getName().compareTo(second.getName());
+      }
+    };
   }
 }
