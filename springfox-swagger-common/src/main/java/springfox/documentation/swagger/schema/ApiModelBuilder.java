@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.swagger.annotations.SwaggerExampleObject;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -48,6 +49,15 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
     ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
     if (annotation != null) {
       context.getBuilder().description(annotation.description());
+    }
+    SwaggerExampleObject exampleObjectAnnotation =
+            AnnotationUtils.findAnnotation(forClass(context), SwaggerExampleObject.class);
+    if (exampleObjectAnnotation != null) {
+      Class clazz = exampleObjectAnnotation.example();
+      try {
+        context.getBuilder().example(clazz.newInstance());
+      } catch (Exception ignored) {
+      }
     }
   }
 

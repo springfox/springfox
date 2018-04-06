@@ -40,7 +40,7 @@ public class ModelBuilder {
   private String baseModel;
   private String discriminator;
   private ResolvedType modelType;
-  private String example;
+  private Object example;
   private Xml xml;
 
   private Map<String, ModelProperty> properties = newHashMap();
@@ -142,7 +142,7 @@ public class ModelBuilder {
    * @param example - example of the model
    * @return this
    */
-  public ModelBuilder example(String example) {
+  public ModelBuilder example(Object example) {
     this.example = defaultIfAbsent(example, this.example);
     return this;
   }
