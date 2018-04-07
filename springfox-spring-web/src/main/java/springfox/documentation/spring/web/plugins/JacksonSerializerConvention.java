@@ -25,7 +25,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
-import org.reflections.Reflections;
+
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -34,6 +36,7 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -58,9 +61,11 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
   @Override
   public List<AlternateTypeRule> rules() {
     List<AlternateTypeRule> rules = newArrayList();
-    Reflections reflections = new Reflections(packagePrefix);
-    Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
-    Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);
+    Set<Class<?>> serialized = new HashSet<>();
+    Set<Class<?>> deserialized = new HashSet<>();
+    new FastClasspathScanner(packagePrefix).matchClassesWithAnnotation(JsonSerialize.class, serialized::add)
+                                           .matchClassesWithAnnotation(JsonDeserialize.class, deserialized::add)
+                                           .scan();
     for (Class<?> type : Sets.union(serialized, deserialized)) {
       Optional<Type> found = findAlternate(type);
       if (found.isPresent()) {
