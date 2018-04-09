@@ -76,11 +76,11 @@ class ExpandedParameterBuilderSpec extends Specification {
     "enums"         | "List"    | "string"
     "strings"       | "List"    | "string"
     "integers"      | "List"    | "int"
-    "uuids"         | "List"    | "string"
+    "uuids"         | "List"    | "uuid"
     "enumsArray"    | "Array"   | "string"
     "stringsArray"  | "Array"   | "string"
     "integersArray" | "Array"   | "int"
-    "uuidsArray"    | "Array"   | "string"
+    "uuidsArray"    | "Array"   | "uuid"
   }
 
   def named(String name) {

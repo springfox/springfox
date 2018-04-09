@@ -1227,14 +1227,16 @@
                         "in": "path",
                         "description": "siteId",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "format": "uuid"
                     },
                     {
                         "name": "siteSecret",
                         "in": "query",
                         "description": "siteSecret",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "format": "uuid"
                     },
                     {
                         "name": "stripHtmlTags",
