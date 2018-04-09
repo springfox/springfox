@@ -21,7 +21,9 @@ package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.Multimap;
 import org.springframework.core.Ordered;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
@@ -43,6 +45,8 @@ public class Parameter implements Ordered {
   private final String pattern;
   private final String collectionFormat;
   private final int order;
+  private final Object scalarExample;
+  private final Multimap<String, Example> examples;
   private final List<VendorExtension> vendorExtensions;
   private final Boolean allowEmptyValue;
 
@@ -62,6 +66,8 @@ public class Parameter implements Ordered {
       String pattern,
       String collectionFormat,
       int order,
+      Object scalarExample,
+      Multimap<String, Example> examples,
       List<VendorExtension> vendorExtensions) {
 
     this.description = description;
@@ -79,6 +85,8 @@ public class Parameter implements Ordered {
     this.pattern = pattern;
     this.collectionFormat = collectionFormat;
     this.order = order;
+    this.scalarExample = scalarExample;
+    this.examples = examples;
     this.vendorExtensions = vendorExtensions;
   }
 
@@ -140,6 +148,14 @@ public class Parameter implements Ordered {
 
   public Boolean isAllowEmptyValue() {
     return allowEmptyValue;
+  }
+
+  public Object getScalarExample() {
+    return scalarExample;
+  }
+
+  public Multimap<String, Example> getExamples() {
+    return examples;
   }
 
   @Override
