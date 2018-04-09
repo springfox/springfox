@@ -28,6 +28,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
+import springfox.documentation.schema.Example;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -38,6 +39,7 @@ import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
+import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
 @Component("swaggerParameterDescriptionReader")
 @Order(SWAGGER_PLUGIN_ORDER)
@@ -69,6 +71,8 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .allowMultiple(annotation.allowMultiple())
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
+          .scalarExample(new Example(annotation.example()))
+          .complexExamples(examples(annotation.examples()))
           .hidden(annotation.hidden())
           .collectionFormat(annotation.collectionFormat())
           .order(SWAGGER_PLUGIN_ORDER);

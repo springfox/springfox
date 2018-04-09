@@ -41,6 +41,7 @@ import java.util.List;
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
+import static springfox.documentation.swagger.readers.parameter.Examples.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
 @Component
@@ -76,6 +77,8 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .parameterType(emptyToNull(param.paramType()))
         .parameterAccess(param.access())
         .order(SWAGGER_PLUGIN_ORDER)
+        .scalarExample(param.example())
+        .complexExamples(examples(param.examples()))
         .build();
   }
 

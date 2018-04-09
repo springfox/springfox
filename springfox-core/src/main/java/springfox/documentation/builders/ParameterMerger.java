@@ -99,6 +99,8 @@ class ParameterMerger {
         .required(source.isRequired())
         .type(source.getType().orNull())
         .order(source.getOrder())
+        .scalarExample(source.getScalarExample())
+        .complexExamples(source.getExamples())
         .build();
   }
 
