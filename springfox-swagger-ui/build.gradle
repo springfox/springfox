@@ -24,12 +24,12 @@ buildscript {
 }
 
 plugins {
-  id "de.undercouch.download" version "3.3.0"
+  id "de.undercouch.download" version "3.4.2"
   id "com.moowork.node" version "1.2.0"
 }
 
 ext {
-  swaggerUiVersion = '3.11.0'
+  swaggerUiVersion = '3.13.3'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
