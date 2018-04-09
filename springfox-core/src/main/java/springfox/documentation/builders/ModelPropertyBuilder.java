@@ -41,7 +41,7 @@ public class ModelPropertyBuilder {
   private AllowableValues allowableValues;
   private String name;
   private boolean isHidden;
-  private String example;
+  private Object example;
   private String pattern;
   private String defaultValue;
   private Xml xml;
@@ -83,7 +83,25 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  /**
+   * Updates the example
+   * @param example - example value
+   * @return this
+   * @deprecated @since 2.8.1 Use the one with Object as parameter
+   */
+  @Deprecated
   public ModelPropertyBuilder example(String example) {
+    this.example = defaultIfAbsent(example, this.example);
+    return this;
+  }
+
+  /**
+   * Updates the example
+   * @param example - example value
+   * @return this
+   * @since 2.8.1
+   */
+  public ModelPropertyBuilder example(Object example) {
     this.example = defaultIfAbsent(example, this.example);
     return this;
   }
