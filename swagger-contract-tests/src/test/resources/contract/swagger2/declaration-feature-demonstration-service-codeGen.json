@@ -214,6 +214,9 @@
                         "required": false,
                         "schema": {
                             "$ref": "#/definitions/CustomTypeFor2031"
+                        },
+                        "x-examples": {
+                            "application/json": "{'property': 'test'}"
                         }
                     },
                     {
@@ -456,7 +459,8 @@
                         "description": "description of bar",
                         "required": false,
                         "type": "integer",
-                        "format": "int32"
+                        "format": "int32",
+                        "x-example": 10
                     },
                     {
                         "name": "enumType",
@@ -991,7 +995,8 @@
                         "exclusiveMaximum": false,
                         "minimum": 1,
                         "exclusiveMinimum": false,
-                        "allowEmptyValue": false
+                        "allowEmptyValue": false,
+                        "x-example": "3"
                     }
                 ],
                 "responses": {
@@ -1066,6 +1071,7 @@
                 "bar": {
                     "type": "integer",
                     "format": "int32",
+                    "example": 10,
                     "description": "description of bar"
                 },
                 "enumType": {

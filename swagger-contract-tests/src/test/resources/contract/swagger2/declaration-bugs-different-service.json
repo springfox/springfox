@@ -1853,6 +1853,7 @@
                 "bar": {
                     "type": "integer",
                     "format": "int32",
+                    "example": 10,
                     "description": "description of bar"
                 },
                 "enumType": {

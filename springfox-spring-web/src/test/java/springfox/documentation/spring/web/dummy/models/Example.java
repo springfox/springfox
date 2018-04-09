@@ -33,7 +33,7 @@ public class Example extends Parent implements Serializable {
   @ApiParam(value = "description of foo", required = true, allowableValues = "man,chu")
   private String foo;
 
-  @ApiModelProperty(value = "description of bar", required = false)
+  @ApiModelProperty(value = "description of bar", required = false, example = "10")
   private int bar;
 
   private EnumType enumType;
