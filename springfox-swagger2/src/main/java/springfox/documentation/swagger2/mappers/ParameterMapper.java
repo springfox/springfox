@@ -43,6 +43,8 @@ import static springfox.documentation.swagger2.mappers.Properties.*;
 @Mapper
 public class ParameterMapper {
 
+  private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
+
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
     Parameter bodyParameter = bodyParameter(source);
     return SerializableParameterFactories.create(source).or(bodyParameter);
@@ -57,6 +59,7 @@ public class ParameterMapper {
     parameter.setAccess(source.getParamAccess());
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
+    parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
     for (Entry<String, Collection<Example>> each : source.getExamples().asMap().entrySet()) {
       Optional<Example> example = FluentIterable.from(each.getValue()).first();
       if (example.isPresent() && example.get().getValue() != null) {

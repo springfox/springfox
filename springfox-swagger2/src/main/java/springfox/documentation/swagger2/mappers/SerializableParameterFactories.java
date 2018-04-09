@@ -50,6 +50,9 @@ public class SerializableParameterFactories {
       .put("cookie", new CookieSerializableParameterFactory())
       .build();
 
+  private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
+
+
   private SerializableParameterFactories() {
     throw new UnsupportedOperationException();
   }
@@ -70,6 +73,8 @@ public class SerializableParameterFactories {
     toReturn.setPattern(source.getPattern());
     toReturn.setRequired(source.isRequired());
     toReturn.setAllowEmptyValue(source.isAllowEmptyValue());
+    toReturn.getVendorExtensions()
+        .putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
     maybeAddAllowableValuesToParameter(toReturn, source.getAllowableValues());
     if (paramModel.isCollection()) {
       if (paramModel.getItemType().equals("byte")) {
