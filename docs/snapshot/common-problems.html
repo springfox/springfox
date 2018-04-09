@@ -1389,17 +1389,29 @@ and if it is present in both request and response it will have a, b and c.</p>
 21
 22
 23
+24
+25
+26
+27
+28
+29
 </pre></td>
   <td class="code"><pre><span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/2031</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.POST)
 <span class="annotation">@ResponseBody</span>
 <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/2031</span><span class="delimiter">&quot;</span></span>)
 <span class="annotation">@ApiImplicitParams</span>({
-    <span class="annotation">@ApiImplicitParam</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">contents</span><span class="delimiter">&quot;</span></span>, dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">CustomTypeFor2031</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="annotation">@ApiImplicitParam</span>(
+        name = <span class="string"><span class="delimiter">&quot;</span><span class="content">contents</span><span class="delimiter">&quot;</span></span>,
+        dataType = <span class="string"><span class="delimiter">&quot;</span><span class="content">CustomTypeFor2031</span><span class="delimiter">&quot;</span></span>,
+        examples = <span class="annotation">@io</span>.swagger.annotations.Example(
+            value = {
+                <span class="annotation">@ExampleProperty</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">{'property': 'test'}</span><span class="delimiter">&quot;</span></span>, mediaType = <span class="string"><span class="delimiter">&quot;</span><span class="content">application/json</span><span class="delimiter">&quot;</span></span>)
+            })) <i class="conum" data-value="1"></i><b>(1)</b>
 })
 <span class="directive">public</span> <span class="type">void</span> save(<span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">keyId</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> keyId,
-                  <span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> id,
-                  <span class="annotation">@RequestBody</span> <span class="predefined-type">String</span> contents <i class="conum" data-value="2"></i><b>(2)</b>
-                ) {
+                 <span class="annotation">@PathVariable</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">id</span><span class="delimiter">&quot;</span></span>) <span class="predefined-type">String</span> id,
+                 <span class="annotation">@RequestBody</span> <span class="predefined-type">String</span> contents <i class="conum" data-value="2"></i><b>(2)</b>
+) {
 }
 
 <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">CustomTypeFor2031</span> { <i class="conum" data-value="3"></i><b>(3)</b>
@@ -1482,7 +1494,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-05 12:12:13 UTC
+Last updated 2018-04-09 11:52:07 UTC
 </div>
 </div>
 </body>
