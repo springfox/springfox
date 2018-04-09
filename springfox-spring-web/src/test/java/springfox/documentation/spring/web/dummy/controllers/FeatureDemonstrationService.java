@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ExampleProperty;
 import io.swagger.annotations.Extension;
 import io.swagger.annotations.ExtensionProperty;
 import org.joda.time.LocalDate;
@@ -76,7 +77,11 @@ public class FeatureDemonstrationService {
       }
   )
   public Pet getPetById(
-      @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]", required = true)
+      @ApiParam(
+          value = "ID of pet that needs to be fetched",
+          allowableValues = "range[1,5]",
+          required = true,
+          example = "3")
       @PathVariable("petId") String petId) {
     throw new RuntimeException("NotImplementedException");
   }
@@ -245,12 +250,18 @@ public class FeatureDemonstrationService {
   @ResponseBody
   @ApiOperation(value = "/2031")
   @ApiImplicitParams({
-      @ApiImplicitParam(name="contents", dataType = "CustomTypeFor2031") //<1>
+      @ApiImplicitParam(
+          name = "contents",
+          dataType = "CustomTypeFor2031",
+          examples = @io.swagger.annotations.Example(
+              value = {
+                  @ExampleProperty(value = "{'property': 'test'}", mediaType = "application/json")
+              })) //<1>
   })
   public void save(@PathVariable("keyId") String keyId,
-                    @PathVariable("id") String id,
-                    @RequestBody String contents //<2>
-                  ) {
+                   @PathVariable("id") String id,
+                   @RequestBody String contents //<2>
+  ) {
   }
 
   public static class CustomTypeFor2031 { //<3>

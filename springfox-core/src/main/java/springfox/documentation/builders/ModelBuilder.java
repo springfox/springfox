@@ -40,7 +40,7 @@ public class ModelBuilder {
   private String baseModel;
   private String discriminator;
   private ResolvedType modelType;
-  private String example;
+  private Object example;
   private Xml xml;
 
   private Map<String, ModelProperty> properties = newHashMap();
@@ -141,8 +141,22 @@ public class ModelBuilder {
    *
    * @param example - example of the model
    * @return this
+   * @deprecated @since 2.8.1 Use the one which takes in an Object instead
    */
+  @Deprecated
   public ModelBuilder example(String example) {
+    this.example = defaultIfAbsent(example, this.example);
+    return this;
+  }
+
+  /**
+   * Updates the Example for the model
+   *
+   * @param example - example of the model
+   * @return this
+   * @since 2.8.1
+   */
+  public ModelBuilder example(Object example) {
     this.example = defaultIfAbsent(example, this.example);
     return this;
   }

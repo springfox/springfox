@@ -1,6 +1,8 @@
 package springfox.documentation.swagger.readers.parameter
 
 import io.swagger.annotations.ApiParam
+import io.swagger.annotations.Example
+import io.swagger.annotations.ExampleProperty
 
 trait ApiParamAnnotationSupport {
   ApiParam apiParamWithAllowableValues(allowableValues) {
@@ -13,6 +15,8 @@ trait ApiParamAnnotationSupport {
       allowEmptyValue: { -> false},
       required: { -> true},
       collectionFormat: { -> ""},
+      example: { -> ""},
+      examples: { -> examples()},
       hidden: { -> false}] as ApiParam
   }
 
@@ -26,6 +30,8 @@ trait ApiParamAnnotationSupport {
       allowEmptyValue: { -> false},
       required: { -> true},
       collectionFormat: { -> ""},
+      example: { -> ""},
+      examples: { -> examples()},
       hidden: { -> false}] as ApiParam
   }
 
@@ -39,6 +45,8 @@ trait ApiParamAnnotationSupport {
       allowEmptyValue: { -> false},
       required: { -> required},
       collectionFormat: { -> ""},
+      example: { -> ""},
+      examples: { -> examples()},
       hidden: { -> false}] as ApiParam
   }
 
@@ -52,11 +60,13 @@ trait ApiParamAnnotationSupport {
       allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
+      example: { -> ""},
+      examples: { -> examples()},
       hidden: { -> false}] as ApiParam
   }
 
   ApiParam apiParamWithDefault(defaultValue) {
-    [ allowableValues: { ->  ""},
+    [allowableValues: { ->  ""},
       name: { -> ""},
       value: { -> ""},
       access: { -> ""},
@@ -65,6 +75,8 @@ trait ApiParamAnnotationSupport {
       allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
+      example: { -> ""},
+     examples: { -> examples()},
       hidden: { -> false}] as ApiParam
   }
 
@@ -78,6 +90,8 @@ trait ApiParamAnnotationSupport {
       allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
+      example: { -> ""},
+      examples: { -> examples()},
       hidden: { -> false}] as ApiParam
   }
 
@@ -91,7 +105,22 @@ trait ApiParamAnnotationSupport {
       allowEmptyValue: { -> false},
       required: { -> false},
       collectionFormat: { -> ""},
+      example: { -> ""},
+      examples: { -> examples()},
       hidden: { -> hidden}] as ApiParam
+  }
+
+  Example examples() {
+    [
+        value: { ->
+          [
+              [
+                  mediaType: { -> "application/json" },
+                  value   : { -> "{'hello': 'world'}" }
+              ]
+          ] as ExampleProperty[]
+        }
+    ] as Example
   }
 
 }

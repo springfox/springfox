@@ -21,7 +21,10 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import org.springframework.core.Ordered;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
@@ -49,6 +52,8 @@ public class ParameterBuilder {
   private String collectionFormat = null;
   private Boolean allowEmptyValue;
   private int order = Ordered.LOWEST_PRECEDENCE;
+  private Object scalarExample;
+  private Multimap<String, Example> examples = LinkedListMultimap.create();
 
   /**
    * Copy builder
@@ -246,6 +251,25 @@ public class ParameterBuilder {
     return this;
   }
 
+  /**
+   * @since 2.8.1
+   * @param scalarExample example for non-body parameters
+   * @return this
+   */
+  public ParameterBuilder scalarExample(Object scalarExample) {
+    this.scalarExample = defaultIfAbsent(scalarExample, this.scalarExample);
+    return this;
+  }
+  /**
+   * @since 2.8.1
+   * @param examples example for body parameters
+   * @return this
+   */
+  public ParameterBuilder complexExamples(Multimap<String, Example> examples) {
+    this.examples.putAll(examples);
+    return this;
+  }
+
   public Parameter build() {
     return new Parameter(
         name,
@@ -263,7 +287,8 @@ public class ParameterBuilder {
         pattern,
         collectionFormat,
         order,
+        scalarExample,
+        examples,
         vendorExtensions);
   }
-
 }
