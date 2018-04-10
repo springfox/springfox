@@ -114,8 +114,8 @@ public class ModelContext {
     return alternateTypeProvider.alternateFor(resolved);
   }
 
-  public ResolvedType propertiesTypeFor(ResolvedType resolved) {
-    return alternateTypeProvider.propertiesTypeFor(resolved);
+  public ResolvedType propertiesHostFor(ResolvedType resolved) {
+    return alternateTypeProvider.propertiesHostFor(resolved);
   }
 
   /**

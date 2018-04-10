@@ -44,6 +44,6 @@ public interface AlternateTypeRule extends Ordered {
    *
    * @return the type for retrieving properties
    */
-  ResolvedType typeForProperties();
+  ResolvedType propertiesHost();
 
 }

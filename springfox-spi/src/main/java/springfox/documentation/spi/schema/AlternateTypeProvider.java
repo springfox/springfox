@@ -45,10 +45,10 @@ public class AlternateTypeProvider {
     return type;
   }
 
-  public ResolvedType propertiesTypeFor(ResolvedType type) {
+  public ResolvedType propertiesHostFor(ResolvedType type) {
     Optional<AlternateTypeRule> matchingRule = firstMatchedRule(type);
     if (matchingRule.isPresent()) {
-      return matchingRule.get().typeForProperties();
+      return matchingRule.get().propertiesHost();
     }
     return type;
   }

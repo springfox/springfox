@@ -78,7 +78,7 @@ public class DefaultModelProvider implements ModelProvider {
   public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType original = modelContext.resolvedType(resolver);
     ResolvedType alternate = modelContext.alternateFor(original);
-    ResolvedType propertiesHost = modelContext.propertiesTypeFor(original);
+    ResolvedType propertiesHost = modelContext.propertiesHostFor(original);
 
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)

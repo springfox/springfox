@@ -82,7 +82,7 @@ public class SimpleAlternateTypeRule implements AlternateTypeRule {
   }
 
   @Override
-  public ResolvedType typeForProperties() {
+  public ResolvedType propertiesHost() {
     return alternate;
   }
 

@@ -32,7 +32,7 @@ public class RichAlternateTypeRule extends SimpleAlternateTypeRule {
   }
 
   @Override
-  public ResolvedType typeForProperties() {
+  public ResolvedType propertiesHost() {
     return original;
   }
 }
