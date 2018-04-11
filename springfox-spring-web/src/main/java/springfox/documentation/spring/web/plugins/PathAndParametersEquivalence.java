@@ -38,7 +38,7 @@ class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
     return a.getPatternsCondition().equals(b.getPatternsCondition())
         && !Sets.intersection(a.supportedMethods(), b.supportedMethods()).isEmpty()
         && a.params().equals(b.params())
-        && Sets.difference(wrapped(a.getParameters()), wrapped(b.getParameters())).isEmpty();
+        && Sets.symmetricDifference(wrapped(a.getParameters()), wrapped(b.getParameters())).isEmpty();
   }
 
   private Set<Wrapper<ResolvedMethodParameter>> wrapped(List<ResolvedMethodParameter> parameters) {
