@@ -79,7 +79,7 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
       TypeResolver resolver) {
     ResolvedType returnType = methodResolver.methodReturnType(handler);
     if (Collections.isContainerType(returnType)) {
-      return resolver.resolve(Resources.class, returnType);
+      return resolver.resolve(Resources.class, Collections.collectionElementType(returnType));
     } else if (Types.isBaseType(returnType)) {
       return returnType;
     }
