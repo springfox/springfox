@@ -76,7 +76,8 @@ class ModelProviderForServiceSupport {
             typeResolver,
             modelPropertiesProvider,
             typeNameExtractor,
-            enumTypeDeterminer)
+            enumTypeDeterminer,
+            defaultSchemaPlugins())
     new DefaultModelProvider(
         typeResolver,
         modelPropertiesProvider,
@@ -108,7 +109,8 @@ class ModelProviderForServiceSupport {
             typeResolver,
             modelPropertiesProvider,
             typeNameExtractor,
-            enumTypeDeterminer)
+            enumTypeDeterminer,
+            defaultSchemaPlugins())
     new DefaultModelProvider(
         typeResolver,
         modelPropertiesProvider,

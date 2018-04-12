@@ -27,6 +27,8 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
+import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.service.DefaultsProviderPlugin
 import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
@@ -54,7 +56,10 @@ class SwaggerPluginsSupport {
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
         create(newArrayList(new ApiModelBuilder(new TypeResolver())))
 
-    new SchemaPluginsManager(propRegistry, modelRegistry)
+    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
+        create(newArrayList())
+
+    new SchemaPluginsManager(propRegistry, modelRegistry, sytheticModelRegistry)
   }
 
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {

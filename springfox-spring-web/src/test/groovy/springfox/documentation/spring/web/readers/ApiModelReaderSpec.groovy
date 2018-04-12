@@ -26,6 +26,7 @@ import org.springframework.web.method.HandlerMethod
 import spock.lang.Ignore
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyModels
@@ -44,7 +45,7 @@ import springfox.documentation.spring.web.scanners.ApiModelReader
 
 import javax.servlet.http.HttpServletResponse
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
+@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class ApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut

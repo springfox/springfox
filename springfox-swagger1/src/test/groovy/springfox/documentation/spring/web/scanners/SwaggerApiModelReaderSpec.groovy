@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -41,7 +42,7 @@ import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport])
+@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport, SchemaPluginsSupport])
 class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
