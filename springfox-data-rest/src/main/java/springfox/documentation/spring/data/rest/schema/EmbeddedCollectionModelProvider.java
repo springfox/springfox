@@ -28,6 +28,7 @@ import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -69,6 +70,10 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
         .properties(Maps.uniqueIndex(properties(context), byName()))
+        .xml(new Xml()
+            .wrapped(true)
+            .name("content")
+        )
         .build();
   }
 

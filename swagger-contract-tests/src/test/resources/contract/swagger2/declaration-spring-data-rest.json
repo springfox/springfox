@@ -1667,7 +1667,11 @@
                 }
             },
             "title": "EmbeddedCollectionOfAddress",
-            "description": "Embedded collection of Address"
+            "description": "Embedded collection of Address",
+            "xml": {
+                "name": "content",
+                "wrapped": true
+            }
         },
         "EmbeddedCollectionOfPerson": {
             "type": "object",
@@ -1701,21 +1705,76 @@
                 }
             },
             "title": "EmbeddedCollectionOfTag",
-            "description": "Embedded collection of Tag"
+            "description": "Embedded collection of Tag",
+            "xml": {
+                "name": "content",
+                "wrapped": true
+            }
         },
         "Link": {
             "type": "object",
-            "required": [
-                "href"
-            ],
             "properties": {
+                "deprecation": {
+                    "type": "string",
+                    "xml": {
+                        "name": "deprecation",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
                 "href": {
                     "type": "string",
-                    "description": "Resource collection"
+                    "xml": {
+                        "name": "href",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "hreflang": {
+                    "type": "string",
+                    "xml": {
+                        "name": "hreflang",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "media": {
+                    "type": "string",
+                    "xml": {
+                        "name": "media",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "rel": {
+                    "type": "string",
+                    "xml": {
+                        "name": "rel",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "templated": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string",
+                    "xml": {
+                        "name": "title",
+                        "attribute": true,
+                        "wrapped": false
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "xml": {
+                        "name": "type",
+                        "attribute": true,
+                        "wrapped": false
+                    }
                 }
             },
-            "title": "Link",
-            "description": "Links"
+            "title": "Link"
         },
         "Person": {
             "type": "object",
@@ -1869,7 +1928,6 @@
             ],
             "properties": {
                 "_embedded": {
-                    "description": "Resource collection",
                     "$ref": "#/definitions/EmbeddedCollectionOfAddress"
                 },
                 "_links": {
@@ -1881,7 +1939,12 @@
                 }
             },
             "title": "ResourcesOfAddress",
-            "description": "Resources of Address"
+            "description": "Resources of Address",
+            "xml": {
+                "name": "entities",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "ResourcesOfPerson": {
             "type": "object",
@@ -1891,7 +1954,6 @@
             ],
             "properties": {
                 "_embedded": {
-                    "description": "Resource collection",
                     "$ref": "#/definitions/EmbeddedCollectionOfPerson"
                 },
                 "_links": {
@@ -1913,7 +1975,6 @@
             ],
             "properties": {
                 "_embedded": {
-                    "description": "Resource collection",
                     "$ref": "#/definitions/EmbeddedCollectionOfTag"
                 },
                 "_links": {
@@ -1925,7 +1986,12 @@
                 }
             },
             "title": "ResourcesOfTag",
-            "description": "Resources of Tag"
+            "description": "Resources of Tag",
+            "xml": {
+                "name": "entities",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "Tag": {
             "type": "object",

@@ -90,7 +90,7 @@ public class DefaultModelProvider implements ModelProvider {
 
     Optional<Model> syntheticModel = schemaPluginsManager.syntheticModel(modelContext);
     if (syntheticModel.isPresent()) {
-      return syntheticModel;
+      return Optional.of(schemaPluginsManager.model(modelContext));
     }
     return reflectionBasedModel(modelContext, propertiesHost);
   }
