@@ -270,7 +270,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             typeResolver,
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
-    
+
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(fieldModelProperty.getName())
         .type(fieldModelProperty.getType())
