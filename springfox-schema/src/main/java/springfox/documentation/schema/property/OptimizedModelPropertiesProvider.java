@@ -111,6 +111,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
+    List<ModelProperty> syntheticProperties = schemaPluginsManager.syntheticProperties(givenContext);
+    if (!syntheticProperties.isEmpty()) {
+      return syntheticProperties;
+    }
     return propertiesFor(type, givenContext, "");
   }
 

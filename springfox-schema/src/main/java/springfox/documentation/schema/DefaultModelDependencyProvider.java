@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
@@ -53,25 +54,29 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   private final ModelPropertiesProvider propertiesProvider;
   private final TypeNameExtractor nameExtractor;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  private final SchemaPluginsManager schemaPluginsManager;
 
   @Autowired
   public DefaultModelDependencyProvider(
       TypeResolver typeResolver,
       @Qualifier("cachedModelProperties") ModelPropertiesProvider propertiesProvider,
       TypeNameExtractor nameExtractor,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      SchemaPluginsManager schemaPluginsManager) {
 
     this.typeResolver = typeResolver;
     this.propertiesProvider = propertiesProvider;
     this.nameExtractor = nameExtractor;
     this.enumTypeDeterminer = enumTypeDeterminer;
+    this.schemaPluginsManager = schemaPluginsManager;
   }
 
   @Override
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
-    return from(resolvedDependencies(modelContext))
-        .filter(ignorableTypes(modelContext))
-        .filter(not(baseTypes(modelContext)))
+    return concat(from(resolvedDependencies(modelContext))
+            .filter(ignorableTypes(modelContext))
+            .filter(not(baseTypes(modelContext))),
+        schemaPluginsManager.dependencies(modelContext))
         .toSet();
   }
 
