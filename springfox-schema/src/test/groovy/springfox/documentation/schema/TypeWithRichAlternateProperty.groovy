@@ -20,14 +20,14 @@
 
 package springfox.documentation.schema
 
-class RichAlternateTypeContainer {
-  private RichAlternateType richAlternateType
+class TypeWithRichAlternateProperty {
+  private RichAlternateType alternate
 
-  RichAlternateType getRichAlternateType() {
-    return richAlternateType
+  RichAlternateType getAlternate() {
+    return alternate
   }
 
-  void setRichAlternateType(RichAlternateType richAlternateType) {
-    this.richAlternateType = richAlternateType
+  void setAlternate(RichAlternateType richAlternateType) {
+    this.alternate = richAlternateType
   }
 }

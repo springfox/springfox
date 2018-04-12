@@ -20,11 +20,12 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.springframework.core.Ordered;
 
 public class RichAlternateTypeRule extends SimpleAlternateTypeRule {
 
   public RichAlternateTypeRule(ResolvedType original, ResolvedType alternate) {
-    super(original, alternate);
+    this(original, alternate, Ordered.HIGHEST_PRECEDENCE);
   }
 
   public RichAlternateTypeRule(ResolvedType original, ResolvedType alternate, int order) {

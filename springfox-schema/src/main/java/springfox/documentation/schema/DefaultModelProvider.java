@@ -86,7 +86,7 @@ public class DefaultModelProvider implements ModelProvider {
         || isBaseType(propertiesHost)
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
-          + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
+          + "been handled", resolvedTypeSignature(alternate).or("<null>"));
       return Optional.absent();
     }
 
@@ -94,17 +94,19 @@ public class DefaultModelProvider implements ModelProvider {
     if (syntheticModel.isPresent()) {
       return Optional.of(schemaPluginsManager.model(modelContext));
     }
-    return reflectionBasedModel(modelContext, propertiesHost);
+
+    Map<String, ModelProperty> properties = reflectionBasedProperties(modelContext, propertiesHost);
+    return Optional.of(modelBuilder(alternate, properties, modelContext));
   }
 
-  private Optional<Model> reflectionBasedModel(ModelContext modelContext, ResolvedType propertiesHost) {
+  private Map<String, ModelProperty> reflectionBasedProperties(ModelContext modelContext, ResolvedType propertiesHost) {
     ImmutableMap<String, ModelProperty> propertiesIndex
         = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
         Joiner.on(", ").join(propertiesIndex.keySet()));
     Map<String, ModelProperty> properties = newTreeMap();
     properties.putAll(propertiesIndex);
-    return Optional.of(modelBuilder(alternate, properties, modelContext));
+    return properties;
   }
 
   private Model modelBuilder(ResolvedType propertiesHost,

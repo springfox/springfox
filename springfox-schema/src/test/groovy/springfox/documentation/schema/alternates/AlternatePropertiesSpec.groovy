@@ -77,7 +77,7 @@ class AlternatePropertiesSpec extends Specification {
       item.itemType == null
   }
 
-  def "RichAlternateType renders as a String within RichAlternateTypeContainer" () {
+  def "RichAlternateType renders as a String within TypeWithRichAlternateProperty" () {
     given:
       def provider = alternateTypeProvider()
       provider.addRule(new RichAlternateTypeRule(resolver.resolve(RichAlternateType), resolver.resolve(String)))
@@ -89,9 +89,9 @@ class AlternatePropertiesSpec extends Specification {
               namingStrategy,
               ImmutableSet.builder().build())).get()
     expect:
-      model.getName() == "RichAlternateTypeContainer"
-      model.getProperties().containsKey("richAlternateType")
-      def modelProperty = model.getProperties().get("richAlternateType")
+      model.getName() == "TypeWithRichAlternateProperty"
+      model.getProperties().containsKey("alternate")
+      def modelProperty = model.getProperties().get("alternate")
       modelProperty.type.erasedType == String
       modelProperty.getQualifiedType() == "java.lang.String"
       def item = modelProperty.getModelRef()
