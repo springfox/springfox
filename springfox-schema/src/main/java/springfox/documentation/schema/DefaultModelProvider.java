@@ -87,6 +87,15 @@ public class DefaultModelProvider implements ModelProvider {
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
     }
+
+    Optional<Model> syntheticModel = schemaPluginsManager.syntheticModel(modelContext);
+    if (syntheticModel.isPresent()) {
+      return Optional.of(schemaPluginsManager.model(modelContext));
+    }
+    return reflectionBasedModel(modelContext, propertiesHost);
+  }
+
+  private Optional<Model> reflectionBasedModel(ModelContext modelContext, ResolvedType propertiesHost) {
     ImmutableMap<String, ModelProperty> propertiesIndex
         = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),

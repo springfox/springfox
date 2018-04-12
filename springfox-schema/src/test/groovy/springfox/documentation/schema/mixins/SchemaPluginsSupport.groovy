@@ -24,6 +24,8 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
+import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
+import springfox.documentation.spi.schema.contexts.ModelContext
 
 import static com.google.common.collect.Lists.*
 
@@ -36,6 +38,9 @@ class SchemaPluginsSupport {
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
             OrderAwarePluginRegistry.create(newArrayList())
 
-    new SchemaPluginsManager(propRegistry, modelRegistry)
+    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
+        OrderAwarePluginRegistry.create(newArrayList())
+
+    new SchemaPluginsManager(propRegistry, modelRegistry, sytheticModelRegistry)
   }
 }

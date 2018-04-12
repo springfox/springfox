@@ -504,7 +504,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ResourcesOfListOfPerson"
+                            "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
                 }
@@ -532,7 +532,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ResourcesOfListOfPerson"
+                            "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
                 }
@@ -1652,6 +1652,65 @@
             },
             "title": "Category"
         },
+        "EmbeddedCollectionOfAddress": {
+            "type": "object",
+            "required": [
+                "addresses"
+            ],
+            "properties": {
+                "addresses": {
+                    "type": "array",
+                    "description": "Resource collection",
+                    "items": {
+                        "$ref": "#/definitions/Address"
+                    }
+                }
+            },
+            "title": "EmbeddedCollectionOfAddress",
+            "description": "Embedded collection of Address",
+            "xml": {
+                "name": "content",
+                "wrapped": true
+            }
+        },
+        "EmbeddedCollectionOfPerson": {
+            "type": "object",
+            "required": [
+                "people"
+            ],
+            "properties": {
+                "people": {
+                    "type": "array",
+                    "description": "Resource collection",
+                    "items": {
+                        "$ref": "#/definitions/Person"
+                    }
+                }
+            },
+            "title": "EmbeddedCollectionOfPerson",
+            "description": "Embedded collection of Person"
+        },
+        "EmbeddedCollectionOfTag": {
+            "type": "object",
+            "required": [
+                "tags"
+            ],
+            "properties": {
+                "tags": {
+                    "type": "array",
+                    "description": "Resource collection",
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    }
+                }
+            },
+            "title": "EmbeddedCollectionOfTag",
+            "description": "Embedded collection of Tag",
+            "xml": {
+                "name": "content",
+                "wrapped": true
+            }
+        },
         "Link": {
             "type": "object",
             "properties": {
@@ -1863,107 +1922,71 @@
         },
         "ResourcesOfAddress": {
             "type": "object",
+            "required": [
+                "_embedded",
+                "_links"
+            ],
             "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Address"
-                    }
+                "_embedded": {
+                    "$ref": "#/definitions/EmbeddedCollectionOfAddress"
                 },
-                "links": {
-                    "type": "array",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "items": {
+                "_links": {
+                    "type": "object",
+                    "description": "Link collection",
+                    "additionalProperties": {
                         "$ref": "#/definitions/Link"
                     }
                 }
             },
             "title": "ResourcesOfAddress",
+            "description": "Resources of Address",
             "xml": {
                 "name": "entities",
                 "attribute": false,
                 "wrapped": false
             }
         },
-        "ResourcesOfListOfPerson": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/Person"
-                        }
-                    }
-                },
-                "links": {
-                    "type": "array",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "items": {
-                        "$ref": "#/definitions/Link"
-                    }
-                }
-            },
-            "title": "ResourcesOfListOfPerson"
-        },
         "ResourcesOfPerson": {
             "type": "object",
+            "required": [
+                "_embedded",
+                "_links"
+            ],
             "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Person"
-                    }
+                "_embedded": {
+                    "$ref": "#/definitions/EmbeddedCollectionOfPerson"
                 },
-                "links": {
-                    "type": "array",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "items": {
+                "_links": {
+                    "type": "object",
+                    "description": "Link collection",
+                    "additionalProperties": {
                         "$ref": "#/definitions/Link"
                     }
                 }
             },
-            "title": "ResourcesOfPerson"
+            "title": "ResourcesOfPerson",
+            "description": "Resources of Person"
         },
         "ResourcesOfTag": {
             "type": "object",
+            "required": [
+                "_embedded",
+                "_links"
+            ],
             "properties": {
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Tag"
-                    }
+                "_embedded": {
+                    "$ref": "#/definitions/EmbeddedCollectionOfTag"
                 },
-                "links": {
-                    "type": "array",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "items": {
+                "_links": {
+                    "type": "object",
+                    "description": "Link collection",
+                    "additionalProperties": {
                         "$ref": "#/definitions/Link"
                     }
                 }
             },
             "title": "ResourcesOfTag",
+            "description": "Resources of Tag",
             "xml": {
                 "name": "entities",
                 "attribute": false,

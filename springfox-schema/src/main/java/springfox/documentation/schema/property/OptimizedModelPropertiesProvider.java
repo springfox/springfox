@@ -111,6 +111,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
+    List<ModelProperty> syntheticProperties = schemaPluginsManager.syntheticProperties(givenContext);
+    if (!syntheticProperties.isEmpty()) {
+      return syntheticProperties;
+    }
     return propertiesFor(type, givenContext, "");
   }
 
@@ -270,7 +274,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             typeResolver,
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
-    
+
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(fieldModelProperty.getName())
         .type(fieldModelProperty.getType())
