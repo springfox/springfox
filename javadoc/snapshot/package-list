@@ -19,6 +19,7 @@ springfox.documentation.spi.service
 springfox.documentation.spi.service.contexts
 springfox.documentation.spring.data.rest
 springfox.documentation.spring.data.rest.configuration
+springfox.documentation.spring.data.rest.schema
 springfox.documentation.spring.web
 springfox.documentation.spring.web.json
 springfox.documentation.spring.web.paths
