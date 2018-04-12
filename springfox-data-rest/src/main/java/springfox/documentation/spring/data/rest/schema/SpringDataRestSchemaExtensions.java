@@ -43,11 +43,4 @@ public class SpringDataRestSchemaExtensions {
       TypeNameExtractor typeNameExtractor) {
     return new EmbeddedCollectionModelProvider(resolver, relProvider, typeNameExtractor);
   }
-
-  @Bean
-  public LinkModelProvider linkProvider(
-      TypeResolver resolver,
-      TypeNameExtractor typeNameExtractor) {
-    return new LinkModelProvider(resolver, typeNameExtractor);
-  }
 }
