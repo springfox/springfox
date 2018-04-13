@@ -27,7 +27,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.*;
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.*;
 
 public class Tag implements Ordered {
   private final String name;
