@@ -99,7 +99,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   @Mappings({
       @Mapping(target = "externalDocs", ignore = true),
-      @Mapping(target = "vendorExtensions", ignore = true)
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions")
   })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
