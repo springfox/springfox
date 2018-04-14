@@ -57,7 +57,7 @@ class AlternatePropertiesSpec extends Specification {
   def "ResponseEntity«Void» renders correctly when an alternate type is provided" () {
     given:
       def provider = alternateTypeProvider()
-      provider.addRule(new SimpleAlternateTypeRule(resolver.resolve(ResponseEntity, Void), resolver.resolve(Void)))
+      provider.addRule(new AlternateTypeRule(resolver.resolve(ResponseEntity, Void), resolver.resolve(Void)))
       ModelProvider modelProvider = defaultModelProvider()
       Model model = modelProvider.modelFor(inputParam("group",
           typeWithResponseEntityOfVoid(),

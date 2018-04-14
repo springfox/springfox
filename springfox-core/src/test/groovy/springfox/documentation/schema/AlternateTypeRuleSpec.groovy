@@ -121,7 +121,7 @@ class AlternateTypeRuleSpec extends Specification {
       def rule1 = newRule(original, alternate)
       def rule2 = newRule(original, alternate, Ordered.HIGHEST_PRECEDENCE)
       def rule3 = newRule(original, alternate, Ordered.HIGHEST_PRECEDENCE + 1000)
-      def rule4 = new SimpleAlternateTypeRule(original, alternate)
+      def rule4 = new AlternateTypeRule(original, alternate)
       def sut = [rule1, rule2, rule3, rule4]
     and:
       OrderComparator.sort(sut)

@@ -55,7 +55,7 @@ public class AlternateTypeRules {
    */
   public static AlternateTypeRule newRule(Type original, Type alternate, int order) {
     TypeResolver resolver = new TypeResolver();
-    return new SimpleAlternateTypeRule(resolver.resolve(original), resolver.resolve(alternate), order);
+    return new AlternateTypeRule(resolver.resolve(original), resolver.resolve(alternate), order);
   }
 
   /**
@@ -68,7 +68,7 @@ public class AlternateTypeRules {
    */
   public static AlternateTypeRule newMapRule(Class<?> key, Class<?> value) {
     TypeResolver resolver = new TypeResolver();
-    return new SimpleAlternateTypeRule(
+    return new AlternateTypeRule(
             resolver.resolve(Map.class, key, value),
             resolver.resolve(List.class, resolver.resolve(Entry.class, key, value)),
             Ordered.LOWEST_PRECEDENCE);
