@@ -42,6 +42,9 @@ import static com.google.common.base.Suppliers.*
 import static com.google.common.collect.Maps.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
+import java.lang.reflect.Method
+import java.lang.reflect.Modifier
+
 import static springfox.documentation.swagger2.mappers.ModelMapper.*
 
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
@@ -410,6 +413,15 @@ class ModelMapperSpec extends SchemaSpecification {
     then:
     mapped != null
     ['d', 'c', 'b', 'a', 'e'] == mapped['test'].properties.keySet().toList()
+  }
+
+  def "ModelMapper.mapProperties(Model) should be overridable" (){
+    given:
+      Method mapPropertiesMethod = ModelMapper.class.getDeclaredMethod("mapProperties", springfox.documentation.schema.Model.class);
+    when:
+      def modifiers = mapPropertiesMethod.getModifiers();
+    then:
+      Modifier.isProtected(modifiers);
   }
 
   def "model property positions affect the serialization order with same positions"() {

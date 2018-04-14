@@ -71,7 +71,7 @@ public abstract class ModelMapper {
     return map;
   }
 
-  private Model mapProperties(springfox.documentation.schema.Model source) {
+  protected Model mapProperties(springfox.documentation.schema.Model source) {
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())

@@ -21,6 +21,9 @@ package springfox.documentation.schema
 import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import java.lang.reflect.Method
+import java.lang.reflect.Modifier
+
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -73,6 +76,15 @@ class TypeNameExtractorSpec extends SchemaSpecification {
       genericClassWithGenericField() | "GenericType«ResponseEntityAlternative«SimpleType»»"
       hashMap(String, SimpleType)    | "Map«string,SimpleType»"
       hashMap(String, String)        | "Map«string,string»"
+  }
+
+  def "TypeNameExtractor.asResolved(Model) should be accessible from subclasses" (){
+    given:
+      Method mapPropertiesMethod = TypeNameExtractor.class.getDeclaredMethod("asResolved", java.lang.reflect.Type.class);
+    when:
+      def modifiers = mapPropertiesMethod.getModifiers();
+    then:
+      Modifier.isProtected(modifiers);
   }
   //TODO: test cases for parent (withAndWithout)
 }

@@ -66,7 +66,7 @@ public class TypeNameExtractor {
     return innerTypeName(type, context);
   }
 
-  private ResolvedType asResolved(Type type) {
+  protected ResolvedType asResolved(Type type) {
     return typeResolver.resolve(type);
   }
 
@@ -98,7 +98,7 @@ public class TypeNameExtractor {
     return simpleTypeName(type, context);
   }
 
-  private String simpleTypeName(ResolvedType type, ModelContext context) {
+  protected String simpleTypeName(ResolvedType type, ModelContext context) {
     Class<?> erasedType = type.getErasedType();
     if (type instanceof ResolvedPrimitiveType) {
       return typeNameFor(erasedType);
@@ -117,7 +117,7 @@ public class TypeNameExtractor {
     return typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()));
   }
 
-  private String typeName(ModelNameContext context) {
+  protected String typeName(ModelNameContext context) {
     TypeNameProviderPlugin selected =
         typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
     return selected.nameFor(context.getType());
