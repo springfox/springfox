@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 
@@ -44,12 +45,15 @@ class EntityFindOneExtractor implements EntityOperationsExtractor {
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
+    Object getFindOneMethod = crudMethods.getFindOneMethod();
     if (crudMethods.hasFindOneMethod()) {
+      Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
+      Method actualFindOneMethod = (Method) converter.convert(getFindOneMethod).orNull();
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getFindOneMethod());
+          actualFindOneMethod);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getFindOneMethod()),
+          actionName(entity, actualFindOneMethod),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
