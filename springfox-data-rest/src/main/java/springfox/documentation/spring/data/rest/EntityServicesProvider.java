@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -78,10 +78,13 @@ class EntityServicesProvider implements RequestHandlerProvider {
   public List<RequestHandler> requestHandlers() {
     List<EntityContext> contexts = newArrayList();
     for (Class each : repositories) {
-      RepositoryInformation repositoryInfo = repositories.getRepositoryInformationFor(each);
+      Object repositoryInformation = repositories.getRepositoryInformationFor(each);
       Object repositoryInstance = repositories.getRepositoryFor(each);
       ResourceMetadata resource = mappings.getMetadataFor(each);
       if (resource.isExported()) {
+        Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
+        RepositoryInformation repositoryInfo =
+            (RepositoryInformation) converter.convert(repositoryInformation).orNull();
         contexts.add(new EntityContext(
             typeResolver,
             configuration,

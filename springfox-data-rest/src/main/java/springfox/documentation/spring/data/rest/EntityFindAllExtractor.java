@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -50,19 +51,22 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
+    Object getFindAllMethod = crudMethods.getFindAllMethod();
     if (crudMethods.hasFindAllMethod()) {
+      Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
+      Method actualFindAllMethod = (Method) converter.convert(getFindAllMethod).orNull();
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getFindAllMethod());
+          actualFindAllMethod);
       ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getFindAllMethod()),
+          actionName(entity, actualFindAllMethod),
           String.format("%s%s",
               context.basePath(),
               context.resourcePath()),
           newHashSet(RequestMethod.GET),
           newHashSet(
               APPLICATION_JSON,
-              HAL_JSON ,
+              HAL_JSON,
               SPRING_DATA_COMPACT_JSON,
               TEXT_URI_LIST),
           new HashSet<MediaType>(),
