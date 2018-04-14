@@ -74,26 +74,28 @@ task npmBuild(type: NpmTask) {
   args = ['run', 'build']
 }
 
-task customizeSwaggerUi << {
-  copy {
-    from("${projectDir}/src/web/dist/springfox.js")
-    into("${buildDir}/${swaggerUiExplodedDir}")
+task customizeSwaggerUi {
+  doLast {
+    copy {
+      from("${projectDir}/src/web/dist/springfox.js")
+      into("${buildDir}/${swaggerUiExplodedDir}")
+    }
+    copy {
+      from("${projectDir}/src/web/css/springfox.css")
+      into("${buildDir}/${swaggerUiExplodedDir}")
+    }
+    copy {
+      from "${projectDir}/src/web/fonts"
+      into "${buildDir}/${swaggerUiExplodedDir}/fonts"
+    }
+    copy {
+      from "${projectDir}/src/web/swagger-ui.html"
+      into "${buildDir}/swagger-ui-${swaggerUiVersion}"
+      filter(ReplaceTokens, tokens: [VERSION: "${project.version}".toString()])
+    }
+    delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
+    delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
   }
-  copy {
-    from("${projectDir}/src/web/css/springfox.css")
-    into("${buildDir}/${swaggerUiExplodedDir}")
-  }
-  copy {
-    from "${projectDir}/src/web/fonts"
-    into "${buildDir}/${swaggerUiExplodedDir}/fonts"
-  }
-  copy {
-    from "${projectDir}/src/web/swagger-ui.html"
-    into "${buildDir}/swagger-ui-${swaggerUiVersion}"
-    filter(ReplaceTokens, tokens: [VERSION: "${project.version}".toString()])
-  }
-  delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
-  delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
 }
 
 jar {
