@@ -63,6 +63,9 @@ public interface ServiceModelToSwaggerMapper {
 
   springfox.documentation.swagger1.dto.ApiListingReference toSwaggerApiListingReference(ApiListingReference from);
 
+  @Mappings({
+      @Mapping(target = "subTypes", source = "subTypes", qualifiedBy = DataTypeMapper.ResponseTypeName.class),
+  })
   ModelDto toSwaggerModelDto(Model from);
 
   @Mappings({
