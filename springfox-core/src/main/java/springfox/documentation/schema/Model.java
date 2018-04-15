@@ -34,7 +34,7 @@ public class Model {
   private final String description;
   private final String baseModel;
   private final String discriminator;
-  private final List<String> subTypes;
+  private final List<ModelRef> subTypes;
   private final Object example;
   private final Xml xml;
 
@@ -47,7 +47,7 @@ public class Model {
       String description,
       String baseModel,
       String discriminator,
-      List<String> subTypes,
+      List<ModelRef> subTypes,
       Object example,
       Xml xml) {
 
@@ -92,7 +92,7 @@ public class Model {
     return discriminator;
   }
 
-  public List<String> getSubTypes() {
+  public List<ModelRef> getSubTypes() {
     return subTypes;
   }
 
