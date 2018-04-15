@@ -1423,6 +1423,57 @@
             "path": "/features/examples"
         },
         {
+            "description": "findVehicles",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "findVehicles",
+                    "nickname": "findVehiclesUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "type",
+                            "name": "type",
+                            "paramType": "query",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "array"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "items": {
+                        "type": "Vehicle"
+                    },
+                    "type": "array"
+                }
+            ],
+            "path": "/features/inheritance"
+        },
+        {
             "description": "updateListOfIntegers",
             "operations": [
                 {
@@ -1913,6 +1964,30 @@
         
     ],
     "models": {
+        "Car": {
+            "description": "",
+            "id": "Car",
+            "properties": {
+                "make": {
+                    "required": false,
+                    "type": "string"
+                },
+                "model": {
+                    "required": false,
+                    "type": "string"
+                },
+                "seatingCapacity": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "topSpeed": {
+                    "required": false,
+                    "format": "double",
+                    "type": "number"
+                }
+            }
+        },
         "EnumObjectType": {
             "description": "",
             "id": "EnumObjectType",
@@ -2016,7 +2091,26 @@
             "description": "",
             "id": "ObjectNode",
             "properties": {
-                
+
+            }
+        },
+        "Truck": {
+            "description": "",
+            "id": "Truck",
+            "properties": {
+                "make": {
+                    "required": false,
+                    "type": "string"
+                },
+                "model": {
+                    "required": false,
+                    "type": "string"
+                },
+                "payloadCapacity": {
+                    "required": false,
+                    "format": "double",
+                    "type": "number"
+                }
             }
         },
         "Entry«string,Map«string,Example»»": {
@@ -2069,6 +2163,25 @@
                     "type": "ObjectNode"
                 }
             }
+        },
+        "Vehicle": {
+            "description": "",
+            "discriminator": "type",
+            "id": "Vehicle",
+            "properties": {
+                "make": {
+                    "required": false,
+                    "type": "string"
+                },
+                "model": {
+                    "required": false,
+                    "type": "string"
+                }
+            },
+            "subTypes": [
+                "Car",
+                "Truck"
+            ]
         }
     },
     "produces": [
