@@ -22,6 +22,7 @@ package springfox.documentation.builders;
 import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.Xml;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class ModelBuilder {
   private Xml xml;
 
   private Map<String, ModelProperty> properties = newHashMap();
-  private List<String> subTypes = newArrayList();
+  private List<ModelReference> subTypes = newArrayList();
 
   /**
    * Updates the Id of the model, usually the type name
@@ -128,8 +129,9 @@ public class ModelBuilder {
    *
    * @param subTypes - Models inheriting from this model
    * @return this
+   * @since 2.8.1 We changed the subType to be a model refers
    */
-  public ModelBuilder subTypes(List<String> subTypes) {
+  public ModelBuilder subTypes(List<ModelReference> subTypes) {
     if (subTypes != null) {
       this.subTypes.addAll(subTypes);
     }

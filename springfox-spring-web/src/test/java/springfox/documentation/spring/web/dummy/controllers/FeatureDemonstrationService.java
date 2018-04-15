@@ -32,6 +32,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,8 +55,10 @@ import springfox.documentation.spring.web.dummy.models.ModelWithObjectNode;
 import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
 import springfox.documentation.spring.web.dummy.models.PetWithSerializer;
+import springfox.documentation.spring.web.dummy.models.Vehicle;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -243,6 +246,11 @@ public class FeatureDemonstrationService {
 
   @RequestMapping(value = "/1490/{itemId}", method = RequestMethod.PUT)
   public void updateSerializablePet(@PathVariable String itemId, @RequestBody PetWithSerializer pet) {
+  }
+
+  @GetMapping(value = "/inheritance")
+  public List<Vehicle> findVehicles(@RequestParam("type") String type) {
+    return new ArrayList<Vehicle>();
   }
 
   // tag::question-27[]

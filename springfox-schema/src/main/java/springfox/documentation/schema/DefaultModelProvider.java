@@ -118,7 +118,7 @@ public class DefaultModelProvider implements ModelProvider {
         .description("")
         .baseModel("")
         .discriminator("")
-        .subTypes(new ArrayList<String>());
+        .subTypes(new ArrayList<ModelReference>());
     return schemaPluginsManager.model(modelContext);
   }
 
@@ -147,7 +147,7 @@ public class DefaultModelProvider implements ModelProvider {
           .description("")
           .baseModel("")
           .discriminator("")
-          .subTypes(new ArrayList<String>())
+          .subTypes(new ArrayList<ModelReference>())
           .build());
     }
     return Optional.absent();

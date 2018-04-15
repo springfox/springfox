@@ -16,13 +16,15 @@
  *
  *
  */
-package springfox.documentation.schema;
+package springfox.documentation.schema.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.JaxbPresentInClassPathCondition;
+import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;

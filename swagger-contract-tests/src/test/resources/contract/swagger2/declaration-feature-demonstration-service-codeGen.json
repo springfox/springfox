@@ -687,6 +687,35 @@
                 }
             }
         },
+        "/features/inheritance": {
+            "get": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "findVehicles",
+                "operationId": "findVehiclesUsingGET_2",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "type",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Vehicle"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/features/integers": {
             "put": {
                 "tags": [
@@ -1031,6 +1060,34 @@
         }
     },
     "definitions": {
+        "Car": {
+            "title": "Car",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Vehicle"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "make": {
+                            "type": "string"
+                        },
+                        "model": {
+                            "type": "string"
+                        },
+                        "seatingCapacity": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "topSpeed": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    },
+                    "title": "Car"
+                }
+            ]
+        },
         "CustomTypeFor2031": {
             "type": "object",
             "properties": {
@@ -1189,6 +1246,43 @@
                 }
             },
             "title": "Pet"
+        },
+        "Truck": {
+            "title": "Truck",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Vehicle"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "make": {
+                            "type": "string"
+                        },
+                        "model": {
+                            "type": "string"
+                        },
+                        "payloadCapacity": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    },
+                    "title": "Truck"
+                }
+            ]
+        },
+        "Vehicle": {
+            "type": "object",
+            "discriminator": "type",
+            "properties": {
+                "make": {
+                    "type": "string"
+                },
+                "model": {
+                    "type": "string"
+                }
+            },
+            "title": "Vehicle"
         }
     }
 }

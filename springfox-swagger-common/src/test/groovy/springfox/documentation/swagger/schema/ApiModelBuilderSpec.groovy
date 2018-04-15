@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModel
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
@@ -33,7 +34,7 @@ class ApiModelBuilderSpec extends Specification {
 
   def "Should all swagger documentation types"() {
     given:
-      def sut = new ApiModelBuilder(resolver)
+      def sut = new ApiModelBuilder(resolver, Mock(TypeNameExtractor))
     expect:
       !sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
@@ -42,7 +43,7 @@ class ApiModelBuilderSpec extends Specification {
 
   def "Api model builder parses ApiModel annotation as expected" () {
     given:
-      ApiModelBuilder sut = new ApiModelBuilder(resolver)
+      ApiModelBuilder sut = new ApiModelBuilder(resolver, Mock(TypeNameExtractor))
       ModelContext context = ModelContext.inputParam(
           "group",
           type,

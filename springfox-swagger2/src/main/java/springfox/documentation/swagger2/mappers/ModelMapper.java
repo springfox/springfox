@@ -26,8 +26,10 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
+import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
+import io.swagger.models.RefModel;
 import io.swagger.models.Xml;
 import io.swagger.models.properties.AbstractNumericProperty;
 import io.swagger.models.properties.ArrayProperty;
@@ -42,6 +44,7 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -61,17 +64,37 @@ public abstract class ModelMapper {
     }
 
     Map<String, Model> map = newTreeMap();
-
+    InheritanceDeterminer determiner = new InheritanceDeterminer(from);
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
-      Model value = mapProperties(entry.getValue());
+      Model value;
+      if (determiner.hasParent(entry.getValue())) {
+        value = mapComposedModel(determiner.parent(entry.getValue()), entry.getValue());
+      } else {
+        value = mapModel(entry.getValue());
+      }
       map.put(key, value);
     }
 
     return map;
   }
 
-  private Model mapProperties(springfox.documentation.schema.Model source) {
+  private Model mapComposedModel(RefModel parent, springfox.documentation.schema.Model source) {
+    ComposedModel model = new ComposedModel()
+        .interfaces(Collections.singletonList(parent))
+        .child(mapModel(source));
+
+    model.setDescription(source.getDescription());
+    model.setExample(source.getExample());
+    model.setTitle(source.getName());
+
+    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
+    Map<String, Property> modelProperties = mapProperties(sortedProperties);
+    model.setProperties(modelProperties);
+    return model;
+  }
+
+  private Model mapModel(springfox.documentation.schema.Model source) {
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())

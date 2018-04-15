@@ -122,9 +122,10 @@ public class ApiModelReader {
     }
   }
 
-  private void markIgnorablesAsHasSeen(TypeResolver typeResolver,
-                                       Set<Class> ignorableParameterTypes,
-                                       ModelContext modelContext) {
+  private void markIgnorablesAsHasSeen(
+      TypeResolver typeResolver,
+      Set<Class> ignorableParameterTypes,
+      ModelContext modelContext) {
 
     for (Class ignorableParameterType : ignorableParameterTypes) {
       modelContext.seen(typeResolver.resolve(ignorableParameterType));

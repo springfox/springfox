@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
  *
  *
  */
-
-package springfox.documentation.swagger.schema;
+package springfox.documentation.schema.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import io.swagger.annotations.ApiModel;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -30,22 +32,21 @@ import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
-import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
 @Component
-@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-public class ApiModelBuilder implements ModelBuilderPlugin {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ApiModelBuilder(
+  public PropertyDiscriminatorBasedInheritancePlugin(
       TypeResolver typeResolver,
       TypeNameExtractor typeNameExtractor) {
     this.typeResolver = typeResolver;
@@ -54,27 +55,45 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
 
   @Override
   public void apply(ModelContext context) {
-    ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
-    if (annotation != null) {
-      List<ModelReference> modelRefs = new ArrayList<ModelReference>();
-      for (Class<?> each : annotation.subTypes()) {
-        modelRefs.add(modelRefFactory(context, typeNameExtractor)
-            .apply(typeResolver.resolve(each)));
-      }
+
+    List<ModelReference> modelRefs =  modelRefs(context);
+
+    if (!modelRefs.isEmpty()) {
       context.getBuilder()
-          .description(annotation.description())
-          .discriminator(annotation.discriminator())
+          .discriminator(discriminator(context))
           .subTypes(modelRefs);
     }
+  }
+
+  private List<ModelReference> modelRefs(ModelContext context) {
+    JsonSubTypes subTypes = AnnotationUtils.getAnnotation(forClass(context), JsonSubTypes.class);
+    List<ModelReference> modelRefs = new ArrayList<ModelReference>();
+    if (subTypes != null) {
+      for (JsonSubTypes.Type each : subTypes.value()) {
+        modelRefs.add(modelRefFactory(context, typeNameExtractor)
+            .apply(typeResolver.resolve(each.value())));
+      }
+    }
+    return modelRefs;
+  }
+
+  private String discriminator(ModelContext context) {
+    JsonTypeInfo typeInfo = AnnotationUtils.getAnnotation(forClass(context), JsonTypeInfo.class);
+    if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
+      if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
+        return Optional.fromNullable(emptyToNull(typeInfo.property()))
+            .or(typeInfo.use().getDefaultPropertyName());
+      }
+    }
+    return "";
   }
 
   private Class<?> forClass(ModelContext context) {
     return typeResolver.resolve(context.getType()).getErasedType();
   }
 
-
   @Override
   public boolean supports(DocumentationType delimiter) {
-    return pluginDoesApply(delimiter);
+    return true;
   }
 }

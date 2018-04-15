@@ -1,9 +1,10 @@
-package springfox.documentation.schema
+package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
