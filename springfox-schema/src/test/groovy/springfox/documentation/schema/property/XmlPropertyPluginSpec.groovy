@@ -21,7 +21,7 @@ package springfox.documentation.schema.property
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.XmlModelPlugin
+import springfox.documentation.schema.plugins.XmlModelPlugin
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
