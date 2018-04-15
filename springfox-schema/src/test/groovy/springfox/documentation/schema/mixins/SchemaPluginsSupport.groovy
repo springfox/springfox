@@ -38,9 +38,9 @@ class SchemaPluginsSupport {
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
             OrderAwarePluginRegistry.create(newArrayList())
 
-    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
+    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
         OrderAwarePluginRegistry.create(newArrayList())
 
-    new SchemaPluginsManager(propRegistry, modelRegistry, sytheticModelRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry, syntheticModelRegistry)
   }
 }

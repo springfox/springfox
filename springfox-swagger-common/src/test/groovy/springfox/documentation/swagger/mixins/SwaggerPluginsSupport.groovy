@@ -66,10 +66,10 @@ class SwaggerPluginsSupport {
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
         create(newArrayList(new ApiModelBuilder(resolver, typeNameExtractor)))
 
-    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
+    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
         create(newArrayList())
 
-    new SchemaPluginsManager(propRegistry, modelRegistry, sytheticModelRegistry)
+    new SchemaPluginsManager(propRegistry, modelRegistry, syntheticModelRegistry)
   }
 
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
