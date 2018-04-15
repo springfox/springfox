@@ -21,18 +21,21 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +118,22 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     dependencies.addAll(resolvedArrayElementType(modelContext, resolvedType));
     dependencies.addAll(resolvedMapType(modelContext, resolvedType));
     dependencies.addAll(resolvedPropertiesAndFields(modelContext, resolvedType));
+    dependencies.addAll(resolvedSubclasses(resolvedType));
     return dependencies;
+  }
+
+  private Collection<? extends ResolvedType> resolvedSubclasses(ResolvedType resolvedType) {
+    JsonSubTypes subTypes = AnnotationUtils.findAnnotation(
+        resolvedType.getErasedType(),
+        JsonSubTypes.class);
+
+    List<ResolvedType> subclasses = new ArrayList<ResolvedType>();
+    if (subTypes != null) {
+      for (JsonSubTypes.Type each : subTypes.value()) {
+        subclasses.add(typeResolver.resolve(each.value()));
+      }
+    }
+    return subclasses;
   }
 
   private Collection<? extends ResolvedType> resolvedMapType(ModelContext modelContext, ResolvedType resolvedType) {
