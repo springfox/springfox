@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
@@ -61,6 +62,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   private final List<RequestHandlerProvider> handlerProviders;
   private final DocumentationCache scanned;
   private final ApiDocumentationScanner resourceListing;
+  private final Environment environment;
   private final DefaultConfiguration defaultConfiguration;
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
@@ -78,12 +80,14 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
       ApiDocumentationScanner resourceListing,
       TypeResolver typeResolver,
       Defaults defaults,
-      ServletContext servletContext) {
+      ServletContext servletContext,
+      Environment environment) {
 
     this.documentationPluginsManager = documentationPluginsManager;
     this.handlerProviders = handlerProviders;
     this.scanned = scanned;
     this.resourceListing = resourceListing;
+    this.environment = environment;
     this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
   }
 
@@ -137,7 +141,11 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
 
   @Override
   public boolean isAutoStartup() {
-    return true;
+    String autoStartupConfig =
+        environment.getProperty(
+            "springfox.documentation.auto-startup",
+            "true");
+    return Boolean.valueOf(autoStartupConfig);
   }
 
   @Override
