@@ -179,8 +179,7 @@ include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/
 
 === Aggregating multiple swagger specifications in the same swagger-ui
 
-You need to create a bean that implements the https://github
-.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26[`SwaggerResourcesProvider`]
+You need to create a bean that implements the https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26[`SwaggerResourcesProvider`]
 interface. Typically you'd have to make a composite bean that uses multiple https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/InMemorySwaggerResourcesProvider.java#L38[InMemorySwaggerResourcesProvider]
 and adds your own json file to it as well.
 

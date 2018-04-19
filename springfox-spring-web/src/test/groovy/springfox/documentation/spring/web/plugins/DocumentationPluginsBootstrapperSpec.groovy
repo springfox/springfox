@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.mock.env.MockEnvironment
 import spock.lang.Specification
 import springfox.documentation.service.Documentation
 import springfox.documentation.spi.DocumentationType
@@ -46,7 +47,8 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
               apiGroup,
               new TypeResolver(),
               new Defaults(),
-              Mock(ServletContext))
+              Mock(ServletContext),
+              new MockEnvironment())
 
   def setup() {
     pluginManager.createContextBuilder(_, _) >> new DocumentationContextBuilder(DocumentationType.SWAGGER_12)

@@ -66,7 +66,10 @@ public class Swagger2Controller {
       ServiceModelToSwagger2Mapper mapper,
       JsonSerializer jsonSerializer) {
 
-    this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
+    this.hostNameOverride =
+        environment.getProperty(
+            "springfox.documentation.swagger.v2.host",
+            "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
