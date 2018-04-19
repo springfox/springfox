@@ -26,18 +26,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.PropertySourcedMapping;
-import springfox.documentation.spring.web.json.Json;
-import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.doc.DocOutput;
+import springfox.documentation.spring.web.doc.Serializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
@@ -47,24 +45,23 @@ import static com.google.common.base.Strings.*;
 import static org.springframework.util.MimeTypeUtils.*;
 import static springfox.documentation.swagger2.web.HostNameProvider.*;
 
-@Controller
+@RestController
 @ApiIgnore
 public class Swagger2Controller {
 
-  public static final String DEFAULT_URL = "/v2/api-docs";
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
   private final String hostNameOverride;
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
-  private final JsonSerializer jsonSerializer;
+  private final Serializer serializer;
 
   @Autowired
   public Swagger2Controller(
       Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
-      JsonSerializer jsonSerializer) {
+      Serializer serializer) {
 
     this.hostNameOverride =
         environment.getProperty(
@@ -72,25 +69,44 @@ public class Swagger2Controller {
             "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
-    this.jsonSerializer = jsonSerializer;
+    this.serializer = serializer;
   }
 
-  @RequestMapping(
-      value = DEFAULT_URL,
-      method = RequestMethod.GET,
+  @GetMapping(
+      path = "/v2/api-docs",
       produces = { APPLICATION_JSON_VALUE, HAL_MEDIA_TYPE })
   @PropertySourcedMapping(
       value = "${springfox.documentation.swagger.v2.path}",
       propertyKey = "springfox.documentation.swagger.v2.path")
-  @ResponseBody
-  public ResponseEntity<Json> getDocumentation(
+  public ResponseEntity<DocOutput> getDocumentation(
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
+    return getDocumentationGeneric(null, swaggerGroup, servletRequest);
+  }
+
+  @GetMapping("/v2/api-docs.yml")
+  @PropertySourcedMapping(
+      value = "${springfox.documentation.swagger.v2.path}.yml",
+      propertyKey = "springfox.documentation.swagger.v2.path")
+  public ResponseEntity<DocOutput> getDocumentationYml(
+      @RequestParam(value = "group", required = false) String swaggerGroup,
+      HttpServletRequest servletRequest) {
+    if (!serializer.supports("yml")) {
+      throw new IllegalArgumentException("YML not supported under current configuration." +
+              " To enable support for YML add jackson-dataformat-yaml as a dependency.");
+    }
+    return getDocumentationGeneric("yml", swaggerGroup, servletRequest);
+  }
+
+  private ResponseEntity<DocOutput> getDocumentationGeneric(
+          String format,
+          String swaggerGroup,
+          HttpServletRequest servletRequest) {
 
     String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<DocOutput>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
@@ -98,7 +114,7 @@ public class Swagger2Controller {
     if (isNullOrEmpty(swagger.getHost())) {
       swagger.host(hostName(uriComponents));
     }
-    return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<DocOutput>(serializer.serialize(swagger, format), HttpStatus.OK);
   }
 
   private String hostName(UriComponents uriComponents) {

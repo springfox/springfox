@@ -30,8 +30,8 @@ import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
-import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.doc.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.doc.Serializer;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 import springfox.documentation.swagger1.web.Swagger1Controller;
@@ -57,10 +57,10 @@ public class Swagger1DocumentationConfiguration {
       Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwaggerMapper mapper,
-      JsonSerializer jsonSerializer) {
+      Serializer serializer) {
     return new PropertySourcedRequestMappingHandlerMapping(
         environment,
-        new Swagger1Controller(documentationCache, mapper, jsonSerializer));
+        new Swagger1Controller(documentationCache, mapper, serializer));
   }
 
   @Bean

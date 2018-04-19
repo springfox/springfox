@@ -10,10 +10,13 @@ import springfox.documentation.PathProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.DocumentationCache
-import springfox.documentation.spring.web.json.JsonSerializer
+import springfox.documentation.spring.web.doc.JsonFormatSerializer
+import springfox.documentation.spring.web.doc.Serializer
+import springfox.documentation.spring.web.doc.YmlFormatSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
+import springfox.documentation.spring.web.mixins.YamlSupport
 import springfox.documentation.spring.web.paths.AbstractPathProvider
 import springfox.documentation.spring.web.plugins.DefaultConfiguration
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
@@ -32,13 +35,15 @@ import static springfox.documentation.spi.service.contexts.Orderings.nickNameCom
 
 @Mixin([ApiListingSupport, AuthSupport])
 class Swagger2ControllerSpec extends DocumentationContextSpec
-    implements MapperSupport, JsonSupport{
+    implements MapperSupport, JsonSupport, YamlSupport {
+
+  def formatSerializers = [new JsonFormatSerializer(), new YmlFormatSerializer()]
 
   Swagger2Controller controller = new Swagger2Controller(
       mockEnvironment(),
       new DocumentationCache(),
       swagger2Mapper(),
-      new JsonSerializer([new Swagger2JacksonModule()]))
+      new Serializer(formatSerializers, [new Swagger2JacksonModule()]))
 
   ApiListingReferenceScanner listingReferenceScanner
   ApiListingScanner listingScanner
@@ -158,15 +163,71 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       result.getStatusCode().value() == 200
   }
 
+  def "Should include port number in the documentation "() {
+    given:
+      def request = servletRequest("http://salami:1024/api-docs")
+      ApiDocumentationScanner swaggerApiResourceListing =
+        new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+    when:
+      def result = controller.getDocumentationYml(null, request)
+    and:
+      def slurped = yamlBodyResponse(result.getBody().value())
+    then:
+      slurped.host == "salami:1024"
+      result.getStatusCode().value() == 200
+  }
+
+  def "Should replace hostname in the documentation "() {
+    given:
+      def environment = mockEnvironment()
+    environment.withProperty("springfox.documentation.swagger.v2.host", "mouse")
+      def controller = new Swagger2Controller(
+              environment,
+            new DocumentationCache(),
+            swagger2Mapper(),
+            new Serializer(formatSerializers, [new Swagger2JacksonModule()]))
+      ApiDocumentationScanner swaggerApiResourceListing =
+        new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+    when:
+      def result = controller.getDocumentation(null, request)
+    and:
+      def slurped = jsonBodyResponse(result.getBody().value())
+    then:
+      slurped.host == "mouse"
+      result.getStatusCode().value() == 200
+  }
+
+  def "Should inform about missing dependency"() {
+    given:
+      def controller = new Swagger2Controller(
+            mockEnvironment(),
+            new DocumentationCache(),
+            swagger2Mapper(),
+            new Serializer([], []))
+
+    when:
+      controller.getDocumentationYml(null, request)
+
+    then:
+      def ex = thrown(IllegalArgumentException)
+      ex.message == "YML not supported under current configuration. To enable support for YML " +
+            "add jackson-dataformat-yaml as a dependency."
+  }
 
   def servletRequest() {
+    servletRequest("http://localhost/api-docs")
+  }
+
+  def servletRequest(String url) {
     def contextPath = "/contextPath"
 
     HttpServletRequest request = Mock(HttpServletRequest)
     request.contextPath >> contextPath
     request.servletPath >> "/servletPath"
     request.getAttribute(WebUtils.INCLUDE_REQUEST_URI_ATTRIBUTE) >> "http://localhost:8080/api-docs"
-    request.requestURL >> new StringBuffer("http://localhost/api-docs")
+    request.requestURL >> new StringBuffer(url)
     request.headerNames >> Collections.enumeration([])
     request.servletContext >> servletContext(contextPath)
 
@@ -198,4 +259,5 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
     servletContext
   }
+
 }

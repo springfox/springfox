@@ -16,21 +16,21 @@
  *
  *
  */
-package springfox.documentation.spring.web.json;
+package springfox.documentation.spring.web.doc;
 
-import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.io.IOContext;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 
-public class Json {
-  private final String value;
+import java.io.IOException;
+import java.io.Writer;
 
-  public Json(String value) {
-    this.value = value;
+final class YmlFactory extends YAMLFactory {
+
+  @Override
+  protected YAMLGenerator _createGenerator(Writer out, IOContext ctxt) throws IOException {
+    int feats = _yamlGeneratorFeatures;
+    return new YmlGenerator(ctxt, _generatorFeatures, feats, _objectCodec, out, _version);
   }
 
-  @JsonValue
-  @JsonRawValue
-  public String value() {
-    return value;
-  }
 }

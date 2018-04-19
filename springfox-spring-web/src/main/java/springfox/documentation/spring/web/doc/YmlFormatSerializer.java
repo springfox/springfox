@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,11 +16,23 @@
  *
  *
  */
-
-package springfox.documentation.spring.web.json;
+package springfox.documentation.spring.web.doc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public interface JacksonModuleRegistrar {
-  void maybeRegisterModule(ObjectMapper objectMapper);
+import java.util.List;
+
+import static java.util.Collections.singletonList;
+
+public class YmlFormatSerializer extends JsonFormatSerializer {
+
+  public YmlFormatSerializer() {
+    super(new ObjectMapper(new YmlFactory()));
+  }
+
+  @Override
+  public List<String> getSupportedFormats() {
+    return singletonList("yml");
+  }
+
 }

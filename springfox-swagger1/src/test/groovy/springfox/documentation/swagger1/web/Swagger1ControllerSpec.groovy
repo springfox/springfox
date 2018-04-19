@@ -32,7 +32,8 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.PropertySourcedMapping
 import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping
-import springfox.documentation.spring.web.json.JsonSerializer
+import springfox.documentation.spring.web.doc.JsonFormatSerializer
+import springfox.documentation.spring.web.doc.Serializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
@@ -53,10 +54,13 @@ import static com.google.common.collect.Maps.*
 class Swagger1ControllerSpec extends DocumentationContextSpec
     implements MapperSupport, JsonSupport {
 
+  def formatSerializer = new JsonFormatSerializer()
+  def formatSerializers = [formatSerializer]
+
   Swagger1Controller sut =  new Swagger1Controller(
           new DocumentationCache(),
           serviceMapper(),
-          new JsonSerializer([new SwaggerJacksonModule()]))
+          new Serializer(formatSerializers, [new SwaggerJacksonModule()]))
 
 
   ApiListingReferenceScanner listingReferenceScanner
@@ -112,6 +116,13 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
       def result = sut.getApiListing("groupName", "businesses", servletRequest())
     then:
       result.getStatusCode() == HttpStatus.OK 
+  }
+
+  def "should respond with 404 for bad resource group"() {
+    when:
+      def result = sut.getApiListing("groupName", "businesses", servletRequest())
+    then:
+      result.getStatusCode() == HttpStatus.NOT_FOUND
   }
 
   def "should respond with auth included"() {

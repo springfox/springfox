@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
+import springfox.documentation.spring.web.doc.JacksonModuleRegistrar;
 import springfox.documentation.swagger1.dto.AllowableListValues;
 import springfox.documentation.swagger1.dto.AllowableRangeValues;
 import springfox.documentation.swagger1.dto.ApiDescription;
