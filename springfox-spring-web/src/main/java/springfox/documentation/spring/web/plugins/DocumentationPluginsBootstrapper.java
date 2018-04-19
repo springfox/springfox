@@ -58,6 +58,7 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 @Component
 public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
+  private static final String SPRINGFOX_DOCUMENTATION_AUTO_STARTUP = "springfox.documentation.auto-startup";
   private final DocumentationPluginsManager documentationPluginsManager;
   private final List<RequestHandlerProvider> handlerProviders;
   private final DocumentationCache scanned;
@@ -143,7 +144,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   public boolean isAutoStartup() {
     String autoStartupConfig =
         environment.getProperty(
-            "springfox.documentation.auto-startup",
+            SPRINGFOX_DOCUMENTATION_AUTO_STARTUP,
             "true");
     return Boolean.valueOf(autoStartupConfig);
   }
