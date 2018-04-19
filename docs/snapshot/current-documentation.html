@@ -518,6 +518,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#configuring-the-objectmapper">Configuring the ObjectMapper</a></li>
 <li><a href="#customizing-the-swagger-endpoints">Customizing the swagger endpoints.</a></li>
+<li><a href="#configuring-startup">Configuring startup.</a></li>
 <li><a href="#overriding-property-datatypes">Overriding property datatypes</a></li>
 <li><a href="#docket-xml-configuration">Docket XML Configuration</a></li>
 <li><a href="#docket-spring-java-configuration">Docket Spring Java Configuration</a></li>
@@ -687,6 +688,54 @@ allows the properties to be  overridden</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="configuring-startup">Configuring startup.</h3>
+<div class="paragraph">
+<p>If you&#8217;d like to delay the startup of springfox, you could choose to set auto-startup to false. The property to use
+is <code>springfox.documentation.auto-startup</code> and this could either be passed in as a <code>-D</code> jvm arg or via a property in
+<code>application.yml/properties</code> file.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Override property</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This setting starts scanning for endpoints only when when the <code>Lifecycle#start()</code> method is called explicitly.
+This is very useful for frameworks like grails that has its own lifecycle. It indicates that the library
+user is responsible for starting the <code>DocumentationPluginsBootStrapper</code> lifecycle.</p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This is the default value, which starts scanning for endpoints automatically when
+the spring contexts is refreshed.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Change this default to <code>false</code> with caution. This implies managing the startup of the plugins prior to
+requesting the swagger endpoints in a thread-safe manner.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="overriding-property-datatypes">Overriding property datatypes</h3>
@@ -1155,7 +1204,7 @@ this is based on swagger-ui pre 3.x
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-15 22:29:03 UTC
+Last updated 2018-04-19 02:11:05 UTC
 </div>
 </div>
 </body>

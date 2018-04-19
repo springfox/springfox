@@ -859,11 +859,11 @@ to use absolute urls use <code>AbsoluteSwaggerPathProvider</code> as a guide and
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>@Controller
+<pre>@Controller
 @Api(value="", description="Operations on Businesses", position = 2)
 public class BusinessService {
     ...
-}</code></pre>
+}</pre>
 </div>
 </div>
 </div>
@@ -909,30 +909,28 @@ example of this can be seen in the <a href="https://github.com/swagger-api/swagg
 </div>
 <div class="sect5">
 <h6 id="given-this-annotated-method">Given this annotated method &#8230;&#8203;</h6>
-<div class="literalblock">
-<div class="content">
-<pre>```java
-  @ApiOperation(value = "")
-  @RequestMapping(value = "/pets", method = RequestMethod.GET)
-  public Model getAllThePets() {
-       ...
-  }</pre>
-</div>
-</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>====== the default `operationId` will render looking like this:
-
-```json
-
-"paths": {
-	"/pets": {
-		"get": {
-            ...
-			"operationId":"getAllThePetsUsingGET"
-			...
-		}
-	}
+<pre class="CodeRay highlight"><code data-lang="java">   <span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+   <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
+   <span class="directive">public</span> Model getAllThePets() {
+        ...
+   }</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="the-default-code-operationid-code-will-render-looking-like-this">the default <code>operationId</code> will render looking like this:</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
+                <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
+            <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+                        <span class="key"><span class="delimiter">&quot;</span><span class="content">operationId</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">getAllThePetsUsingGET</span><span class="delimiter">&quot;</span></span>
+                        <span class="error">.</span><span class="error">.</span><span class="error">.</span>
+                }
+        }
 }</code></pre>
 </div>
 </div>
@@ -1029,8 +1027,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>By default, a number of Spring&#8217;s handler method arguments are ignored. See: <code><code>com.mangofactory.documentation.swagger
-.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes</code></code></p>
+<p>By default, a number of Spring&#8217;s handler method arguments are ignored. See: <code>com.mangofactory.documentation.swagger.configuration.SpringSwaggerConfig#defaultIgnorableParameterTypes</code></p>
 </div>
 </div>
 </div>
@@ -1039,7 +1036,7 @@ to be encoded as 'MapOfStringAndObject' you could implement the following:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-15 22:29:03 UTC
+Last updated 2018-04-19 02:11:05 UTC
 </div>
 </div>
 </body>
