@@ -94,6 +94,23 @@ allows the properties to be  overridden
 |2.0             | springfox.documentation.swagger.v2.path
 |=======================
 
+=== Configuring startup.
+If you'd like to delay the startup of springfox, you could choose to set auto-startup to false. The property to use
+is `springfox.documentation.auto-startup` and this could either be passed in as a `-D` jvm arg or via a property in
+`application.yml/properties` file.
+[options="header,footer"]
+|=======================
+|Override property | description
+| true | This is the default value, which starts scanning for endpoints automatically when
+the spring contexts is refreshed.
+| false | This setting starts scanning for endpoints only when when the `Lifecycle#start()` method is called explicitly.
+This is very useful for frameworks like grails that has its own lifecycle. It indicates that the library
+user is responsible for starting the `DocumentationPluginsBootStrapper` lifecycle.
+|=======================
+
+WARNING: Change this default to `false` with caution. This implies managing the startup of the plugins prior to
+requesting the swagger endpoints in a thread-safe manner.
+
 === Overriding property datatypes
 
 Using the `ApiModelProperty#dataType` we can override the inferred data types. However it is restricted
