@@ -1,5 +1,5 @@
 ext {
-  byteBuddyVersion = "1.8.3"
+  byteBuddyVersion = "1.8.8"
   cglib = "3.2.6"
   classmate = "1.4.0"
   equalsverifierVersion = '2.4.5'
@@ -16,7 +16,7 @@ ext {
   reflections = "0.9.11"
   servlet = "3.1.0"
   slf4j = "1.7.25"
-  snakeyaml = '1.20'
+  snakeyaml = '1.21'
   spock = "1.1-groovy-2.4"
   spring = "4.3.15.RELEASE"
   springHateoas = "0.24.0.RELEASE"

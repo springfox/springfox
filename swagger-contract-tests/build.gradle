@@ -1,5 +1,5 @@
 plugins {
-  id 'org.springframework.boot' version '1.5.9.RELEASE'
+  id 'org.springframework.boot' version '1.5.11.RELEASE'
 }
 
 repositories {
