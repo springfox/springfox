@@ -622,8 +622,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#plugins-available-for-extensibility">9.2. Plugins Available For Extensibility</a></li>
 <li><a href="#steps-to-create-a-plugin">9.3. Steps To Create A Plugin</a>
 <ul class="sectlevel3">
-<li><a href="#example-parameterbuilderplugin">9.3.1. Example ParameterBuilderPlugin</a></li>
-<li><a href="#example-apilistingscannerplugin">9.3.2. Example ApiListingScannerPlugin</a></li>
+<li><a href="#example-operationbuilderplugin">9.3.1. Example OperationBuilderPlugin</a></li>
+<li><a href="#example-parameterbuilderplugin">9.3.2. Example ParameterBuilderPlugin</a></li>
+<li><a href="#example-apilistingscannerplugin">9.3.3. Example ApiListingScannerPlugin</a></li>
 </ul>
 </li>
 </ul>
@@ -2855,7 +2856,14 @@ order specified in the bean. In general spring plugins get the highest priority,
 <p>That is it!</p>
 </div>
 <div class="sect3">
-<h4 id="example-parameterbuilderplugin">9.3.1. Example ParameterBuilderPlugin</h4>
+<h4 id="example-operationbuilderplugin">9.3.1. Example OperationBuilderPlugin</h4>
+<div class="paragraph">
+<p>This example by <a href="https://github.com/koderman">@koderman</a>  is a custom extension for <a href="https://aws.amazon.com/api-gateway/">AWS Amazon Api Gateway</a> integration.</p>
+</div>
+<script src="https://gist.github.com/koderman/d49a67274e33f03405a8e45672794968.js"></script>
+</div>
+<div class="sect3">
+<h4 id="example-parameterbuilderplugin">9.3.2. Example ParameterBuilderPlugin</h4>
 <div class="paragraph">
 <p>Here is an example of how to add parameters by hand.</p>
 </div>
@@ -2976,7 +2984,7 @@ is applied to the parameter.</td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="example-apilistingscannerplugin">9.3.2. Example ApiListingScannerPlugin</h4>
+<h4 id="example-apilistingscannerplugin">9.3.3. Example ApiListingScannerPlugin</h4>
 <div class="paragraph">
 <p>Here is an example of how to add Api Descriptions by hand.</p>
 </div>
@@ -4553,7 +4561,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 2.9.0-SNAPSHOT<br>
-Last updated 2018-04-21 13:45:03 UTC
+Last updated 2018-04-21 15:54:01 UTC
 </div>
 </div>
 </body>
