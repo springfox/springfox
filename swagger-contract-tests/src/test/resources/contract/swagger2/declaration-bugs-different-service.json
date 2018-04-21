@@ -1349,6 +1349,20 @@
                 ]
             }
         },
+        "/bugs/2368": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2368",
+                "operationId": "bug2368UsingGET_2",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
