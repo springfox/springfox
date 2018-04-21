@@ -71,6 +71,14 @@ TIP: The ___same___ patterns apply to all of the extensibility mechanisms
 
 That is it!
 
+==== Example OperationBuilderPlugin
+
+This example by https://github.com/koderman[@koderman]  is a custom extension for https://aws.amazon.com/api-gateway/[AWS Amazon Api Gateway] integration.
+
+++++
+<script src="https://gist.github.com/koderman/d49a67274e33f03405a8e45672794968.js"></script>
+++++
+
 ==== Example ParameterBuilderPlugin
 
 Here is an example of how to add parameters by hand.
