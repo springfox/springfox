@@ -142,7 +142,19 @@ public class ModelAttributeParameterExpander {
     for (ModelAttributeField each : simpleFields) {
       parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
     }
-    return FluentIterable.from(parameters).filter(not(hiddenParameters())).toList();
+    return FluentIterable.from(parameters)
+        .filter(not(hiddenParameters()))
+        .filter(not(voidParameters()))
+        .toList();
+  }
+
+  private Predicate<Parameter> voidParameters() {
+    return new Predicate<Parameter>() {
+      @Override
+      public boolean apply(Parameter input) {
+        return isVoid(input.getType().orNull());
+      }
+    };
   }
 
   private Predicate<ModelAttributeField> recursiveCollectionItemType(final ResolvedType paramType) {

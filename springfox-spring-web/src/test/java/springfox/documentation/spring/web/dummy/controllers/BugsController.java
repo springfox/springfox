@@ -455,6 +455,26 @@ public class BugsController {
   public void bug1944() {
   }
 
+  @RequestMapping(value = "/2368", method = RequestMethod.GET)
+  public ResponseEntity<Void> bug2368(@ModelAttribute @Valid GenericRequest<Void> voidRequest) {
+    return ResponseEntity.ok(null);
+  }
+
+  public class GenericRequest<T> {
+
+    @NotNull
+    private T parameters;
+
+    public T getParameters() {
+      return parameters;
+    }
+
+    public void setParameters(T parameters) {
+      this.parameters = parameters;
+    }
+
+  }
+
   public class ProductVO {
     private String name;
 
