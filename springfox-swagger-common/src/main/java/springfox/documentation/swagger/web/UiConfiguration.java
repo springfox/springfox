@@ -29,31 +29,6 @@ public class UiConfiguration {
    */
   @Deprecated
   static final UiConfiguration DEFAULT = new UiConfiguration(null);
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private String apisSorter;
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private Long requestTimeout;
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private boolean jsonEditor;
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private boolean showRequestHeaders;
-
   /*--------------------------------------------*\
    * Display
   \*--------------------------------------------*/
@@ -69,12 +44,31 @@ public class UiConfiguration {
   private final OperationsSorter operationsSorter;
   private final Boolean showExtensions;
   private final TagsSorter tagsSorter;
-
+  private final String validatorUrl;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private String apisSorter;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private Long requestTimeout;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private boolean jsonEditor;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private boolean showRequestHeaders;
   /*--------------------------------------------*\
    * Network
   \*--------------------------------------------*/
   private String[] supportedSubmitMethods;
-  private final String validatorUrl;
 
   /**
    * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
@@ -445,7 +439,7 @@ public class UiConfiguration {
         "get", "put", "post",
         "delete", "options", "head",
         "patch", "trace" };
-    
+
     public static final String[] NO_SUBMIT_METHODS = new String[] {};
   }
 }
