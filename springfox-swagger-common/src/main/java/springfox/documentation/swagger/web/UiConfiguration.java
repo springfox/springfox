@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static com.google.common.base.Strings.*;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UiConfiguration {
   /**
@@ -431,7 +433,7 @@ public class UiConfiguration {
 
   @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
-    return validatorUrl;
+    return nullToEmpty(validatorUrl);
   }
 
   public static class Constants {
