@@ -519,6 +519,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#configuring-the-objectmapper">Configuring the ObjectMapper</a></li>
 <li><a href="#customizing-the-swagger-endpoints">Customizing the swagger endpoints.</a></li>
 <li><a href="#configuring-startup">Configuring startup.</a></li>
+<li><a href="#overriding-descriptions-via-properties">Overriding descriptions via properties</a></li>
 <li><a href="#overriding-property-datatypes">Overriding property datatypes</a></li>
 <li><a href="#docket-xml-configuration">Docket XML Configuration</a></li>
 <li><a href="#docket-spring-java-configuration">Docket Spring Java Configuration</a></li>
@@ -736,6 +737,87 @@ requesting the swagger endpoints in a thread-safe manner.
 </tr>
 </table>
 </div>
+</div>
+<div class="sect2">
+<h3 id="overriding-descriptions-via-properties">Overriding descriptions via properties</h3>
+<div class="paragraph">
+<p>Added support for resolving properties in property sources to replace expressions in certain annotations. In order to
+ use it simply define properties in <code>application.properties</code>, <code>application.yml</code> file or property files in your
+ classpath with values that you&#8217;d like to see replaced in known annotations. For e.g. <code>@ApiModelProperty(value="${property1.description}")</code>
+ will evaluate <code>property1.description</code> from the available properties. If none is found, it will render the
+ un-resolved expression as-is.</p>
+</div>
+<div class="paragraph">
+<p>Currently supported list of annotations are in order of priority within the annotation:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Annotation</th>
+<th class="tableblock halign-left valign-top">attribute</th>
+<th class="tableblock halign-left valign-top">target property</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RequestHeader</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">defaultValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter#defaultValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@RequestHeader(defaultValue="${param1.defaultValue}")</code></p></td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ApiModelProperty</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ModelProperty#description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@ApiModelProperty(value="${property1.description}")</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ApiModelProperty</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ModelProperty#description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@ApiModelProperty(notes="${property1.description}")</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ApiParam</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter#description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@ApiParam(value="${param1.description}")</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ApiImplicitParam</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter#description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@ApiImplicitParam(value="${param1.description}")</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ApiOperation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">notes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operation#notes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@ApiOperation(notes="${operation1.description}")</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ApiOperation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operation#summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@ApiOperation(value="${operation1.summary}")</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">RequestParam</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">defaultValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter#defaultValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">e.g. <code>@RequestParam(defaultValue="${param1.defaultValue}")</code></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="overriding-property-datatypes">Overriding property datatypes</h3>
@@ -1204,7 +1286,7 @@ this is based on swagger-ui pre 3.x
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-23 01:29:48 UTC
+Last updated 2018-04-23 19:53:22 UTC
 </div>
 </div>
 </body>
