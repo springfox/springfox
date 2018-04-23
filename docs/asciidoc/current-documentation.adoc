@@ -172,6 +172,7 @@ Currently supported list of annotations are in order of priority within the anno
 |===
 
 For a detailed explanation <<property-file-lookup, see here>>.
+
 === Overriding property datatypes
 
 Using the `ApiModelProperty#dataType` we can override the inferred data types. However it is restricted
