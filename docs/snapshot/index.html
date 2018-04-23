@@ -600,19 +600,18 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#customizing-the-swagger-endpoints">6.2. Customizing the swagger endpoints.</a></li>
 <li><a href="#configuring-startup">6.3. Configuring startup.</a></li>
 <li><a href="#overriding-descriptions-via-properties">6.4. Overriding descriptions via properties</a></li>
-<li><a href="#overriding-property-datatypes">6.5. Overriding property datatypes</a></li>
-<li><a href="#docket-xml-configuration">6.6. Docket XML Configuration</a></li>
-<li><a href="#docket-spring-java-configuration">6.7. Docket Spring Java Configuration</a></li>
-<li><a href="#support-for-documentation-from-property-file-lookup">6.8. Support for documentation from property file lookup</a>
+<li><a href="#docket-xml-configuration">6.5. Docket XML Configuration</a></li>
+<li><a href="#docket-spring-java-configuration">6.6. Docket Spring Java Configuration</a></li>
+<li><a href="#property-file-lookup">6.7. Support for documentation from property file lookup</a>
 <ul class="sectlevel3">
-<li><a href="#swagger-group">6.8.1. Swagger group</a></li>
-<li><a href="#configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">6.8.2. Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</a></li>
-<li><a href="#changing-how-generic-types-are-named">6.8.3. Changing how Generic Types are Named</a></li>
+<li><a href="#swagger-group">6.7.1. Swagger group</a></li>
+<li><a href="#configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">6.7.2. Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</a></li>
+<li><a href="#changing-how-generic-types-are-named">6.7.3. Changing how Generic Types are Named</a></li>
 </ul>
 </li>
-<li><a href="#caching">6.9. Caching</a></li>
-<li><a href="#configuring-security-schemes-and-contexts-an-overview">6.10. Configuring Security Schemes and Contexts an Overview</a></li>
-<li><a href="#example-application">6.11. Example application</a></li>
+<li><a href="#caching">6.8. Caching</a></li>
+<li><a href="#configuring-security-schemes-and-contexts-an-overview">6.9. Configuring Security Schemes and Contexts an Overview</a></li>
+<li><a href="#example-application">6.10. Example application</a></li>
 </ul>
 </li>
 <li><a href="#configuring-springfox-staticdocs">7. Configuring springfox-staticdocs</a></li>
@@ -2067,8 +2066,38 @@ document; an abstract.</strong></p>
 to this is the ability to provide an expressive predicate based for api selection.</p>
 </div>
 <div class="listingblock">
+<div class="title">Example configuration</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors</span>.*;
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td>
+  <td class="code"><pre>  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors</span>.*;
   <span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.base.Predicates</span>.*;
 
   <span class="annotation">@Bean</span>
@@ -2094,7 +2123,8 @@ to this is the ability to provide an expressive predicate based for api selectio
         regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/pet.*</span><span class="delimiter">&quot;</span></span>),
         regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/springsRestController.*</span><span class="delimiter">&quot;</span></span>),
         regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test.*</span><span class="delimiter">&quot;</span></span>));
-  }</code></pre>
+  }</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2134,6 +2164,7 @@ good example of where this breaks down is the following <a href="http://stackove
 <p>By default the swagger service descriptions are generated at the following urls</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. api docs default paths</caption>
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -2176,6 +2207,7 @@ good example of where this breaks down is the following <a href="http://stackove
 allows the properties to be  overridden</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. api docs path properties</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2208,6 +2240,7 @@ is <code>springfox.documentation.auto-startup</code> and this could either be pa
 <code>application.yml/properties</code> file.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 3. startup properties</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2261,6 +2294,7 @@ requesting the swagger endpoints in a thread-safe manner.
 <p>Currently supported list of annotations are in order of priority within the annotation:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 4. description resolution targets</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2270,9 +2304,9 @@ requesting the swagger endpoints in a thread-safe manner.
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Annotation</th>
-<th class="tableblock halign-left valign-top">attribute</th>
-<th class="tableblock halign-left valign-top">target property</th>
-<th class="tableblock halign-left valign-top">description</th>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Target Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tfoot>
@@ -2328,15 +2362,17 @@ requesting the swagger endpoints in a thread-safe manner.
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>For a detailed explanation <a href="#property-file-lookup">see here</a>.
+=== Overriding property datatypes</p>
 </div>
-<div class="sect2">
-<h3 id="overriding-property-datatypes">6.5. Overriding property datatypes</h3>
 <div class="paragraph">
 <p>Using the <code>ApiModelProperty#dataType</code> we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
  definition</p>
 </div>
 <div class="listingblock">
+<div class="title">Example data type override</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -2377,6 +2413,7 @@ use one of the base types specified in the Types class &#8658;
 </table>
 </div>
 <div class="listingblock">
+<div class="title">Primitive types</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -2393,6 +2430,7 @@ use one of the base types specified in the Types class &#8658;
 12
 13
 14
+15
 </pre></td>
   <td class="code"><pre>  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">Set</span>&lt;<span class="predefined-type">String</span>&gt; baseTypes = newHashSet(
       <span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>,
@@ -2407,31 +2445,62 @@ use one of the base types specified in the Types class &#8658;
       <span class="string"><span class="delimiter">&quot;</span><span class="content">date-time</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">__file</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">biginteger</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">bigdecimal</span><span class="delimiter">&quot;</span></span>,</pre></td>
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">bigdecimal</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">uuid</span><span class="delimiter">&quot;</span></span>);</pre></td>
 </tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="docket-xml-configuration">6.6. Docket XML Configuration</h3>
+<h3 id="docket-xml-configuration">6.5. Docket XML Configuration</h3>
 <div class="paragraph">
 <p>To use the plugin you must create a spring java configuration class which uses spring&#8217;s <code>@Configuration</code>.
 This config class must then be defined in your xml application context.</p>
 </div>
 <div class="listingblock">
+<div class="title">Xml Configuration</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="comment">&lt;!-- Required so springfox can access spring's RequestMappingHandlerMapping  --&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="xml"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td>
+  <td class="code"><pre><span class="comment">&lt;!-- Required so springfox can access spring's RequestMappingHandlerMapping  --&gt;</span>
 <span class="tag">&lt;mvc:annotation-driven</span><span class="tag">/&gt;</span>
 
 <span class="comment">&lt;!-- Required to enable Spring post processing on @Configuration classes. --&gt;</span>
 <span class="tag">&lt;context:annotation-config</span><span class="tag">/&gt;</span>
 
-<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.yourapp.configuration.MySwaggerConfig</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></code></pre>
+<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.yourapp.configuration.MySwaggerConfig</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">Configuration bean pulled into xml a configuration as a bean</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td>
+  <td class="code"><pre>
+<span class="annotation">@Configuration</span>
 <span class="annotation">@EnableSwagger</span> <span class="comment">//Loads the spring beans required by the framework</span>
 <span class="directive">public</span> <span class="type">class</span> <span class="class">MySwaggerConfig</span> {
 
@@ -2444,12 +2513,13 @@ This config class must then be defined in your xml application context.</p>
       <span class="keyword">return</span> <span class="keyword">new</span> Docket(); <span class="comment">//some customization goes here</span>
    }
 
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="docket-spring-java-configuration">6.7. Docket Spring Java Configuration</h3>
+<h3 id="docket-spring-java-configuration">6.6. Docket Spring Java Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2461,8 +2531,28 @@ This config class must then be defined in your xml application context.</p>
 </ul>
 </div>
 <div class="listingblock">
+<div class="title">Java Configuration</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+  <td class="code"><pre><span class="annotation">@Configuration</span>
 <span class="annotation">@EnableWebMvc</span> <span class="comment">//NOTE: Only needed in a non-springboot application</span>
 <span class="annotation">@EnableSwagger2</span>
 <span class="annotation">@ComponentScan</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.myapp.controllers</span><span class="delimiter">&quot;</span></span>)
@@ -2478,12 +2568,13 @@ This config class must then be defined in your xml application context.</p>
    }
 
    <span class="comment">//...</span>
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="support-for-documentation-from-property-file-lookup">6.8. Support for documentation from property file lookup</h3>
+<h3 id="property-file-lookup">6.7. Support for documentation from property file lookup</h3>
 <div class="paragraph">
 <p>Starting with <code>2.7.0</code> we support looking up description from the following annotations given a property just like
 property place holders resolve a value annotation <code>@Value(${key})</code>. The following annotations attributes support
@@ -2604,7 +2695,7 @@ SomeModel.someProperty=Some property description</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="swagger-group">6.8.1. Swagger group</h4>
+<h4 id="swagger-group">6.7.1. Swagger group</h4>
 <div class="paragraph">
 <p>A swagger group is a concept introduced by this library which is simply a unique identifier for a Swagger Resource Listing
 within your application. The reason this concept was introduced was to support applications which require more than one
@@ -2617,7 +2708,7 @@ Resource Listing. Why would you need more than one Resource Listing?
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">6.8.2. Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</h4>
+<h4 id="configuring-the-output-of-em-operationid-em-in-a-swagger-2-0-spec">6.7.2. Configuring the output of <em>operationId</em> in a Swagger 2.0 spec</h4>
 <div class="paragraph">
 <p>As defined <a href="https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#fixed-fields-5"><code>operationId</code> was
 introduced</a> in the Swagger 2.0 spec, the <code>operationId</code> parameter, which was referred to as <code>nickname</code> in pre-2.0
@@ -2635,20 +2726,43 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <div class="sect5">
 <h6 id="given-this-annotated-method">Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
+<div class="title">Standard Annotation On Method</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+</pre></td>
+  <td class="code"><pre><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
 <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
 <span class="directive">public</span> Model getAllThePets() {
     ...
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect5">
 <h6 id="the-default-code-operationid-code-will-render-looking-like-this">the default <code>operationId</code> will render looking like this:</h6>
 <div class="listingblock">
+<div class="title">Default Rendered Operation Id</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
+<pre class="CodeRay highlight"><code data-lang="json"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre>
+<span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
             <span class="error">.</span><span class="error">.</span><span class="error">.</span>
@@ -2656,7 +2770,9 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
       <span class="error">.</span><span class="error">.</span><span class="error">.</span>
     }
   }
-}</code></pre>
+}
+</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
@@ -2670,20 +2786,43 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <div class="sect5">
 <h6 id="given-this-annotated-method-2">Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
+<div class="title">Nickname overrides default operationId</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+</pre></td>
+  <td class="code"><pre><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
 <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
 <span class="directive">public</span> Model getAllThePets() {
     ...
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect5">
 <h6 id="the-customized-strong-operationid-strong-will-render-looking-like-this">&#8230;&#8203; the customized <strong>operationId</strong> will render looking like this:</h6>
 <div class="listingblock">
+<div class="title">Default Rendered Operation Id</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
+<pre class="CodeRay highlight"><code data-lang="json"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre>
+<span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
             <span class="error">.</span><span class="error">.</span><span class="error">.</span>
@@ -2691,14 +2830,15 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
       <span class="error">.</span><span class="error">.</span><span class="error">.</span>
     }
   }
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="changing-how-generic-types-are-named">6.8.3. Changing how Generic Types are Named</h4>
+<h4 id="changing-how-generic-types-are-named">6.7.3. Changing how Generic Types are Named</h4>
 <div class="paragraph">
 <p>By default, types with generics will be labeled with '\u00ab'(&lt;&lt;), '\u00bb'(&gt;&gt;), and commas. This can be problematic
 with things like swagger-codegen. You can override this behavior by implementing your own <code>GenericTypeNamingStrategy</code>.
@@ -2708,13 +2848,17 @@ plugin customization:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"> docket.forCodeGeneration(<span class="predefined-constant">true</span>|<span class="predefined-constant">false</span>);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="json"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+</pre></td>
+  <td class="code"><pre> <span class="error">d</span><span class="error">o</span><span class="error">c</span><span class="error">k</span><span class="error">e</span><span class="error">t</span><span class="error">.</span><span class="error">f</span><span class="error">o</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">d</span><span class="error">e</span><span class="error">G</span><span class="error">e</span><span class="error">n</span><span class="error">e</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">(</span><span class="value">true</span><span class="error">|</span><span class="value">false</span><span class="error">)</span><span class="error">;</span></pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="caching">6.9. Caching</h3>
+<h3 id="caching">6.8. Caching</h3>
 <div class="paragraph">
 <p>The caching feature that was introduced in 2.1.0 has been removed. Springfox no longer uses the cache abstraction to
 improve performance the api scanners and readers. It has been rolled into the library as an internal implementation
@@ -2723,7 +2867,7 @@ other than the introduction of configuration change in consuming applications, w
 </div>
 </div>
 <div class="sect2">
-<h3 id="configuring-security-schemes-and-contexts-an-overview">6.10. Configuring Security Schemes and Contexts an Overview</h3>
+<h3 id="configuring-security-schemes-and-contexts-an-overview">6.9. Configuring Security Schemes and Contexts an Overview</h3>
 <div class="paragraph">
 <p>The security provisions in SpringFox at a high level, without getting into the code, has different pieces
 that all work together in concert</p>
@@ -2746,7 +2890,7 @@ think in your example, you&#8217;re missing the last piece of the puzzle, the se
 </div>
 </div>
 <div class="sect2">
-<h3 id="example-application">6.11. Example application</h3>
+<h3 id="example-application">6.10. Example application</h3>
 <div class="paragraph">
 <p>For an examples for spring-boot, vanilla spring applications take a look <a href="https://github.com/springfox/springfox-demos">examples</a>
 in the demo application.</p>
@@ -2843,7 +2987,7 @@ are  implementations of <code>ModelPropertyBuilderPlugin</code>.</p>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Service Plugins</caption>
+<caption class="title">Table 5. Service Plugins</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3299,7 +3443,7 @@ the api will appear under the default group.</td>
 <h2 id="additional-extensibility-options">10. Additional extensibility options</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 2. Other Extensibility</caption>
+<caption class="title">Table 6. Other Extensibility</caption>
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -3630,7 +3774,7 @@ These are incubating features and may change.
 </table>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 3. Spring Data REST Extensibility</caption>
+<caption class="title">Table 7. Spring Data REST Extensibility</caption>
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -4643,7 +4787,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 2.9.0-SNAPSHOT<br>
-Last updated 2018-04-23 19:53:22 UTC
+Last updated 2018-04-23 20:33:51 UTC
 </div>
 </div>
 </body>

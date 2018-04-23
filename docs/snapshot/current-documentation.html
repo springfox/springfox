@@ -520,10 +520,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#customizing-the-swagger-endpoints">Customizing the swagger endpoints.</a></li>
 <li><a href="#configuring-startup">Configuring startup.</a></li>
 <li><a href="#overriding-descriptions-via-properties">Overriding descriptions via properties</a></li>
-<li><a href="#overriding-property-datatypes">Overriding property datatypes</a></li>
 <li><a href="#docket-xml-configuration">Docket XML Configuration</a></li>
 <li><a href="#docket-spring-java-configuration">Docket Spring Java Configuration</a></li>
-<li><a href="#support-for-documentation-from-property-file-lookup">Support for documentation from property file lookup</a></li>
+<li><a href="#property-file-lookup">Support for documentation from property file lookup</a></li>
 <li><a href="#caching">Caching</a></li>
 <li><a href="#configuring-security-schemes-and-contexts-an-overview">Configuring Security Schemes and Contexts an Overview</a></li>
 <li><a href="#example-application">Example application</a></li>
@@ -557,8 +556,38 @@ document; an abstract.</strong></p>
 to this is the ability to provide an expressive predicate based for api selection.</p>
 </div>
 <div class="listingblock">
+<div class="title">Example configuration</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors</span>.*;
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td>
+  <td class="code"><pre>  <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.builders.PathSelectors</span>.*;
   <span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.base.Predicates</span>.*;
 
   <span class="annotation">@Bean</span>
@@ -584,7 +613,8 @@ to this is the ability to provide an expressive predicate based for api selectio
         regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/pet.*</span><span class="delimiter">&quot;</span></span>),
         regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/springsRestController.*</span><span class="delimiter">&quot;</span></span>),
         regex(<span class="string"><span class="delimiter">&quot;</span><span class="content">/test.*</span><span class="delimiter">&quot;</span></span>));
-  }</code></pre>
+  }</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -624,6 +654,7 @@ good example of where this breaks down is the following <a href="http://stackove
 <p>By default the swagger service descriptions are generated at the following urls</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. api docs default paths</caption>
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -666,6 +697,7 @@ good example of where this breaks down is the following <a href="http://stackove
 allows the properties to be  overridden</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. api docs path properties</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -698,6 +730,7 @@ is <code>springfox.documentation.auto-startup</code> and this could either be pa
 <code>application.yml/properties</code> file.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 3. startup properties</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -751,6 +784,7 @@ requesting the swagger endpoints in a thread-safe manner.
 <p>Currently supported list of annotations are in order of priority within the annotation:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 4. description resolution targets</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -760,9 +794,9 @@ requesting the swagger endpoints in a thread-safe manner.
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Annotation</th>
-<th class="tableblock halign-left valign-top">attribute</th>
-<th class="tableblock halign-left valign-top">target property</th>
-<th class="tableblock halign-left valign-top">description</th>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Target Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tfoot>
@@ -818,15 +852,17 @@ requesting the swagger endpoints in a thread-safe manner.
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>For a detailed explanation <a href="#property-file-lookup">see here</a>.
+=== Overriding property datatypes</p>
 </div>
-<div class="sect2">
-<h3 id="overriding-property-datatypes">Overriding property datatypes</h3>
 <div class="paragraph">
 <p>Using the <code>ApiModelProperty#dataType</code> we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
  definition</p>
 </div>
 <div class="listingblock">
+<div class="title">Example data type override</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -867,6 +903,7 @@ use one of the base types specified in the Types class &#8658;
 </table>
 </div>
 <div class="listingblock">
+<div class="title">Primitive types</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><table class="CodeRay"><tr>
   <td class="line-numbers"><pre>1
@@ -883,6 +920,7 @@ use one of the base types specified in the Types class &#8658;
 12
 13
 14
+15
 </pre></td>
   <td class="code"><pre>  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">Set</span>&lt;<span class="predefined-type">String</span>&gt; baseTypes = newHashSet(
       <span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>,
@@ -897,7 +935,8 @@ use one of the base types specified in the Types class &#8658;
       <span class="string"><span class="delimiter">&quot;</span><span class="content">date-time</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">__file</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">biginteger</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">bigdecimal</span><span class="delimiter">&quot;</span></span>,</pre></td>
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">bigdecimal</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">uuid</span><span class="delimiter">&quot;</span></span>);</pre></td>
 </tr></table></code></pre>
 </div>
 </div>
@@ -909,19 +948,49 @@ use one of the base types specified in the Types class &#8658;
 This config class must then be defined in your xml application context.</p>
 </div>
 <div class="listingblock">
+<div class="title">Xml Configuration</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="comment">&lt;!-- Required so springfox can access spring's RequestMappingHandlerMapping  --&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="xml"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td>
+  <td class="code"><pre><span class="comment">&lt;!-- Required so springfox can access spring's RequestMappingHandlerMapping  --&gt;</span>
 <span class="tag">&lt;mvc:annotation-driven</span><span class="tag">/&gt;</span>
 
 <span class="comment">&lt;!-- Required to enable Spring post processing on @Configuration classes. --&gt;</span>
 <span class="tag">&lt;context:annotation-config</span><span class="tag">/&gt;</span>
 
-<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.yourapp.configuration.MySwaggerConfig</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></code></pre>
+<span class="tag">&lt;bean</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">com.yourapp.configuration.MySwaggerConfig</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span></pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">Configuration bean pulled into xml a configuration as a bean</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td>
+  <td class="code"><pre>
+<span class="annotation">@Configuration</span>
 <span class="annotation">@EnableSwagger</span> <span class="comment">//Loads the spring beans required by the framework</span>
 <span class="directive">public</span> <span class="type">class</span> <span class="class">MySwaggerConfig</span> {
 
@@ -934,7 +1003,8 @@ This config class must then be defined in your xml application context.</p>
       <span class="keyword">return</span> <span class="keyword">new</span> Docket(); <span class="comment">//some customization goes here</span>
    }
 
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
@@ -951,8 +1021,28 @@ This config class must then be defined in your xml application context.</p>
 </ul>
 </div>
 <div class="listingblock">
+<div class="title">Java Configuration</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Configuration</span>
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td>
+  <td class="code"><pre><span class="annotation">@Configuration</span>
 <span class="annotation">@EnableWebMvc</span> <span class="comment">//NOTE: Only needed in a non-springboot application</span>
 <span class="annotation">@EnableSwagger2</span>
 <span class="annotation">@ComponentScan</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">com.myapp.controllers</span><span class="delimiter">&quot;</span></span>)
@@ -968,12 +1058,13 @@ This config class must then be defined in your xml application context.</p>
    }
 
    <span class="comment">//...</span>
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="support-for-documentation-from-property-file-lookup">Support for documentation from property file lookup</h3>
+<h3 id="property-file-lookup">Support for documentation from property file lookup</h3>
 <div class="paragraph">
 <p>Starting with <code>2.7.0</code> we support looking up description from the following annotations given a property just like
 property place holders resolve a value annotation <code>@Value(${key})</code>. The following annotations attributes support
@@ -1125,20 +1216,43 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <div class="sect5">
 <h6 id="given-this-annotated-method">Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
+<div class="title">Standard Annotation On Method</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+</pre></td>
+  <td class="code"><pre><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>)
 <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
 <span class="directive">public</span> Model getAllThePets() {
     ...
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect5">
 <h6 id="the-default-code-operationid-code-will-render-looking-like-this">the default <code>operationId</code> will render looking like this:</h6>
 <div class="listingblock">
+<div class="title">Default Rendered Operation Id</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
+<pre class="CodeRay highlight"><code data-lang="json"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre>
+<span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
             <span class="error">.</span><span class="error">.</span><span class="error">.</span>
@@ -1146,7 +1260,9 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
       <span class="error">.</span><span class="error">.</span><span class="error">.</span>
     }
   }
-}</code></pre>
+}
+</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
@@ -1160,20 +1276,43 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
 <div class="sect5">
 <h6 id="given-this-annotated-method-2">Given this annotated method &#8230;&#8203;</h6>
 <div class="listingblock">
+<div class="title">Nickname overrides default operationId</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
+<pre class="CodeRay highlight"><code data-lang="java"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+</pre></td>
+  <td class="code"><pre><span class="annotation">@ApiOperation</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>, nickname = <span class="string"><span class="delimiter">&quot;</span><span class="content">getMeAllThePetsPlease</span><span class="delimiter">&quot;</span></span>)
 <span class="annotation">@RequestMapping</span>(value = <span class="string"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>, method = RequestMethod.GET)
 <span class="directive">public</span> Model getAllThePets() {
     ...
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
 <div class="sect5">
 <h6 id="the-customized-strong-operationid-strong-will-render-looking-like-this">&#8230;&#8203; the customized <strong>operationId</strong> will render looking like this:</h6>
 <div class="listingblock">
+<div class="title">Default Rendered Operation Id</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
+<pre class="CodeRay highlight"><code data-lang="json"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+  <td class="code"><pre>
+<span class="key"><span class="delimiter">&quot;</span><span class="content">paths</span><span class="delimiter">&quot;</span></span>: {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">/pets</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">get</span><span class="delimiter">&quot;</span></span>: {
             <span class="error">.</span><span class="error">.</span><span class="error">.</span>
@@ -1181,7 +1320,8 @@ connected to an HTTP GET verb, Springfox will render <code>getPetsUsingGET</code
       <span class="error">.</span><span class="error">.</span><span class="error">.</span>
     }
   }
-}</code></pre>
+}</pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
@@ -1198,7 +1338,11 @@ plugin customization:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"> docket.forCodeGeneration(<span class="predefined-constant">true</span>|<span class="predefined-constant">false</span>);</code></pre>
+<pre class="CodeRay highlight"><code data-lang="json"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+</pre></td>
+  <td class="code"><pre> <span class="error">d</span><span class="error">o</span><span class="error">c</span><span class="error">k</span><span class="error">e</span><span class="error">t</span><span class="error">.</span><span class="error">f</span><span class="error">o</span><span class="error">r</span><span class="error">C</span><span class="error">o</span><span class="error">d</span><span class="error">e</span><span class="error">G</span><span class="error">e</span><span class="error">n</span><span class="error">e</span><span class="error">r</span><span class="error">a</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">(</span><span class="value">true</span><span class="error">|</span><span class="value">false</span><span class="error">)</span><span class="error">;</span></pre></td>
+</tr></table></code></pre>
 </div>
 </div>
 </div>
@@ -1286,7 +1430,7 @@ this is based on swagger-ui pre 3.x
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-23 19:53:22 UTC
+Last updated 2018-04-23 20:33:51 UTC
 </div>
 </div>
 </body>
