@@ -111,6 +111,28 @@ user is responsible for starting the `DocumentationPluginsBootStrapper` lifecycl
 WARNING: Change this default to `false` with caution. This implies managing the startup of the plugins prior to
 requesting the swagger endpoints in a thread-safe manner.
 
+=== Overriding descriptions via properties
+Added support for resolving properties in property sources to replace expressions in certain annotations. In order to
+ use it simply define properties in `application.properties`, `application.yml` file or property files in your
+ classpath with values that you'd like to see replaced in known annotations. For e.g. `@ApiModelProperty(value="${property1.description}")`
+ will evaluate `property1.description` from the available properties. If none is found, it will render the
+ un-resolved expression as-is.
+
+Currently supported list of annotations are in order of priority within the annotation:
+
+[options="header,footer"]
+|=======================
+|Annotation | attribute | target property| description
+| ApiModelProperty | value | ModelProperty#description |e.g. `@ApiModelProperty(value="${property1.description}")`
+| ApiModelProperty | description | ModelProperty#description |e.g. `@ApiModelProperty(notes="${property1.description}")`
+| ApiParam | value | Parameter#description |e.g. `@ApiParam(value="${param1.description}")`
+| ApiImplicitParam | value | Parameter#description |e.g. `@ApiImplicitParam(value="${param1.description}")`
+| ApiOperation | notes | Operation#notes |e.g. `@ApiOperation(notes="${operation1.description}")`
+| ApiOperation | summary | Operation#summary |e.g. `@ApiOperation(value="${operation1.summary}")`
+| RequestParam | defaultValue | Parameter#defaultValue |e.g. `@RequestParam(defaultValue="${param1.defaultValue}")`
+| RequestHeader | defaultValue | Parameter#defaultValue |e.g. `@RequestHeader(defaultValue="${param1.defaultValue}")`
+|=======================
+
 === Overriding property datatypes
 
 Using the `ApiModelProperty#dataType` we can override the inferred data types. However it is restricted
