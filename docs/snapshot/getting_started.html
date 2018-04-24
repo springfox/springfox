@@ -936,8 +936,8 @@ dependencies {
                 .parameterType(<span class="string"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>)
                 .required(<span class="predefined-constant">true</span>)
                 .build()))
-        .tags(<span class="keyword">new</span> Tag(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet Service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">All apis relating to pets</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="25"></i><b>(25)</b>
-        .additionalModels(typeResolver.resolve(AdditionalModel.class)) <i class="conum" data-value="26"></i><b>(26)</b>
+        .tags(<span class="keyword">new</span> Tag(<span class="string"><span class="delimiter">&quot;</span><span class="content">Pet Service</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">All apis relating to pets</span><span class="delimiter">&quot;</span></span>)) <i class="conum" data-value="23"></i><b>(23)</b>
+        .additionalModels(typeResolver.resolve(AdditionalModel.class)) <i class="conum" data-value="24"></i><b>(24)</b>
         ;
   }
 
@@ -1132,25 +1132,17 @@ this would be represented as <a href="http://example.org/findCustomersBy{?zip}" 
 </tr>
 <tr>
 <td><i class="conum" data-value="22"></i><b>22</b></td>
-<td>Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="23"></i><b>23</b></td>
-<td>How do you want to transport the api key via a HEADER (header) or QUERY_PARAM (query)?</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="24"></i><b>24</b></td>
-<td>What header key needs to be used to send the api key. By default this value is set to <em><em>api_key</em></em>. Depending
+<td>Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.
 on how the security is setup the name of the header used may need to be different. Overriding this value is a way to
 override the default behavior.</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="25"></i><b>25</b></td>
+<td><i class="conum" data-value="23"></i><b>23</b></td>
 <td>Adding tags is a way to define all the available tags that services/operations can opt into. Currently this only
 has name and description.</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="26"></i><b>26</b></td>
+<td><i class="conum" data-value="24"></i><b>24</b></td>
 <td>Are there models in the application that are not "reachable"? Not reachable is when we have models that we would
 like to be described but aren&#8217;t explicitly used in any operation. An example of this is an operation that returns a
 model serialized as a string. We do want to communicate the expectation of the schema for the string. This is a way
@@ -1562,7 +1554,7 @@ cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-24 10:36:29 UTC
+Last updated 2018-04-24 11:16:54 UTC
 </div>
 </div>
 </body>
