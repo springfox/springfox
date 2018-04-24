@@ -30,7 +30,7 @@ class BumpAndTagTask extends DefaultTask {
   @TaskAction
   void exec() {
     BuildInfo buildInfo = project.rootProject.buildInfo
-    project.logger.lifecycle("Bumping the version and tagging after release using " +
+    project.logger.lifecycle("[RELEASE] Bumping the version and tagging after release using " +
         "(${buildInfo.versioningStrategy.class.simpleName})")
     buildInfo.versioningStrategy.persist(project, buildInfo)
   }

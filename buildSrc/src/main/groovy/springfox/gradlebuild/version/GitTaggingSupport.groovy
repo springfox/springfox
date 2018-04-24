@@ -20,10 +20,11 @@ trait GitTaggingSupport {
   }
 
   def createAnnotatedTag(Project project, BuildInfo buildInfo) {
-    project.logger.info("Annotating ${buildInfo.releaseType} release with tag ${buildInfo.releaseTag}")
+    project.logger.info("[RELEASE] Annotating ${buildInfo.releaseType} release with tag ${buildInfo.releaseTag}")
     if (buildInfo.dryRun) {
       project.logger.warn(
-          "Would have executed -> git tag -a ${buildInfo.releaseTag} -m \"Release of ${buildInfo.releaseTag}\"")
+          "[RELEASE] [DRYRUN] Would have executed -> git tag -a ${buildInfo.releaseTag} " +
+              "-m \"Release of ${buildInfo.releaseTag}\"")
       return
     }
     project.exec {
