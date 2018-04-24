@@ -66,7 +66,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     configureSnapshotTaskGraph(project)
     configureReleaseTaskGraph(project)
     project.tasks.showPublishInfo << {
-      project.logger.info "======= Project version: $project.version, $versioningInfo"
+      project.logger.lifecycle "======= Project version: $project.version, $versioningInfo"
     }
   }
 
@@ -138,7 +138,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
       releaseRepos = {
         //Only snapshots - bintray plugin takes care of non-snapshot releases
         if (isSnapshotBuild) {
-          project.logger.info("Setting up maven repo for snapshot build: $buildInfo")
+          project.logger.lifecycle("Setting up maven repo for snapshot build: $buildInfo")
           maven {
             name 'jfrogOss'
             url "${artifactRepoBase}/${repoPrefix}-${type}-local"
@@ -169,7 +169,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     project.hasProperty('buildNumberFormat') ? project.property('buildNumberFormat') : '-SNAPSHOT'
   }
 
-  public static boolean dryRun(Project project) {
+  static boolean dryRun(Project project) {
     project.hasProperty('dryRun') ? Boolean.valueOf(project.property('dryRun')) : false
   }
 
