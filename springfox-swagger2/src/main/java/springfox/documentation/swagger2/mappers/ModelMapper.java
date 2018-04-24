@@ -137,8 +137,8 @@ public abstract class ModelMapper {
    * Returns a {@link TreeMap} where the keys are sorted by their respective property position values in ascending
    * order.
    *
-   * @param modelProperties
-   * @return
+   * @param modelProperties properties to sort
+   * @return sorted properties by position and name
    */
   private SortedMap<String, ModelProperty> sort(Map<String, ModelProperty> modelProperties) {
 

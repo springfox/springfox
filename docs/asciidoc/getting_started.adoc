@@ -152,13 +152,11 @@ Second, http://example.org/findCustomersBy?zip=76051 to find customers by zip.
 Per https://tools.ietf.org/html/rfc6570[RFC 6570],
 this would be represented as http://example.org/findCustomersBy{?zip}.
 <22> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.
-<23> How do you want to transport the api key via a HEADER (header) or QUERY_PARAM (query)?
-<24> What header key needs to be used to send the api key. By default this value is set to ___api_key___. Depending
 on how the security is setup the name of the header used may need to be different. Overriding this value is a way to
 override the default behavior.
-<25> Adding tags is a way to define all the available tags that services/operations can opt into. Currently this only
+<23> Adding tags is a way to define all the available tags that services/operations can opt into. Currently this only
  has name and description.
-<26> Are there models in the application that are not "reachable"? Not reachable is when we have models that we would
+<24> Are there models in the application that are not "reachable"? Not reachable is when we have models that we would
  like to be described but aren't explicitly used in any operation. An example of this is an operation that returns a
  model serialized as a string. We do want to communicate the expectation of the schema for the string. This is a way
  to do exactly that.

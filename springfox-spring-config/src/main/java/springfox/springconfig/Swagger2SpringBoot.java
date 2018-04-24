@@ -103,8 +103,8 @@ public class Swagger2SpringBoot {
                 .parameterType("query")
                 .required(true)
                 .build()))
-        .tags(new Tag("Pet Service", "All apis relating to pets")) // <25>
-        .additionalModels(typeResolver.resolve(AdditionalModel.class)) //<26>
+        .tags(new Tag("Pet Service", "All apis relating to pets")) // <23>
+        .additionalModels(typeResolver.resolve(AdditionalModel.class)) //<24>
         ;
   }
 

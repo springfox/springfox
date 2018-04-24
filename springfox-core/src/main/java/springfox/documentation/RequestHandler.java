@@ -38,7 +38,7 @@ public interface RequestHandler {
 
   /**
    * @deprecated @since 2.7.0 This is introduced to preserve backwards compat with groups
-   * @return
+   * @return declaring class
    */
   @Deprecated
   Class<?> declaringClass();
@@ -73,14 +73,14 @@ public interface RequestHandler {
 
   /**
    * @deprecated This is introduced to preserve backwards compat
-   * @return
+   * @return request mapping info
    */
   @Deprecated
   RequestMappingInfo getRequestMapping();
 
   /**
    * @deprecated This is introduced to preserve backwards compat
-   * @return
+   * @return handler method
    */
   @Deprecated
   HandlerMethod getHandlerMethod();
@@ -89,7 +89,7 @@ public interface RequestHandler {
    * This is to merge two request handlers that are indistinguishable other than the media types supported
    * @param other handler
    * @since 2.5.0
-   * @return
+   * @return combined request handler
    */
   @Incubating
   RequestHandler combine(RequestHandler other);

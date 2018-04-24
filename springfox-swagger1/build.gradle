@@ -43,7 +43,7 @@ dependencies {
   provided libs.clientProvided
 
   compile "org.mapstruct:mapstruct:$mapstruct"
-  apt "org.mapstruct:mapstruct-processor:$mapstruct"
+  annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
 
   testCompile project(':springfox-core')
   testCompile project(':springfox-core').sourceSets.test.output
