@@ -71,8 +71,8 @@ task createReleaseDocs(type: Exec, dependsOn: allDocs) {
   """
   
   if (buildInfo.dryRun) {
-    logger.info("Will run the following commands:")
-    logger.info(commands)
+    logger.warn("Will run the following commands:")
+    logger.warn(commands)
     commandLine "sh", "-c", "echo This is a dry run"
     return
   }

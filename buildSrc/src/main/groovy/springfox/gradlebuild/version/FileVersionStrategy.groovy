@@ -50,8 +50,8 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
   }
 
   def commitToRepository(Project project, BuildInfo buildInfo) {
-    def commitChanges = """git commit -i '${versionFile.absolutePath}' \
--m 'Releasing version (${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"""
+    def commitChanges = """git commit -am \
+ 'Preparing for next version ${buildInfo.nextVersion}.'"""
     if (buildInfo.dryRun) {
       project.logger.warn("[RELEASE] [DRYRUN] Will execute command: $commitChanges")
       return
