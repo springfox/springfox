@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
@@ -83,7 +82,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
   }
 
   private static ModelRef maybeGetModelRef(ApiImplicitParam param) {
-    String dataType = MoreObjects.firstNonNull(emptyToNull(param.dataType()), "string");
+    String dataType = emptyToNull(param.dataType()) != null ? emptyToNull(param.dataType()) : "string" ;
     AllowableValues allowableValues = null;
     if (isBaseType(dataType)) {
       allowableValues = allowableValueFromString(param.allowableValues());

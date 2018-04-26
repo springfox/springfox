@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -88,9 +87,9 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
-      String paramName = MoreObjects.firstNonNull(
-          emptyToNull(pathVariable.get().name()),
-          methodParameter.defaultName().orNull());
+      String paramName = emptyToNull(pathVariable.get().name()) != null ?
+          emptyToNull(pathVariable.get().name()) :
+          methodParameter.defaultName().orNull();
 
       if (pathVariable.get().required() ||
           optionalButPresentInThePath(operationContext, pathVariable.get(), paramName)) {

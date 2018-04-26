@@ -18,7 +18,6 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public class StringVendorExtension implements VendorExtension<String> {
@@ -60,9 +59,10 @@ public class StringVendorExtension implements VendorExtension<String> {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("name", name)
-        .add("value", value)
-        .toString();
+    return new StringBuffer(this.getClass().getSimpleName())
+        .append("{")
+        .append("name").append(name).append(", ")
+        .append("value").append(value).append(", ")
+        .append("}").toString();
   }
 }

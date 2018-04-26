@@ -18,7 +18,6 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import springfox.documentation.schema.ModelReference;
 
@@ -66,10 +65,11 @@ public class Header {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("name", name)
-        .add("modelReference", modelReference)
-        .add("description", description)
-        .toString();
+    return new StringBuffer(this.getClass().getSimpleName())
+        .append("{")
+        .append("name=").append(name).append(", ")
+        .append("modelReference=").append(modelReference).append(", ")
+        .append("description=").append(description)
+        .append("}").toString();
   }
 }

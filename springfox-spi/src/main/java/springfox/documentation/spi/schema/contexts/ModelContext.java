@@ -20,7 +20,6 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import springfox.documentation.builders.ModelBuilder;
@@ -273,11 +272,12 @@ public class ModelContext {
   }
 
   public String description() {
-    return MoreObjects.toStringHelper(ModelContext.class)
-        .add("groupName", this.getGroupName())
-        .add("type", this.getType())
-        .add("isReturnType", this.isReturnType())
-        .toString();
+    return new StringBuffer(this.getClass().getSimpleName())
+        .append("{")
+        .append("groupName=").append(this.getGroupName()).append(", ")
+        .append("type=").append(this.getType()).append(", ")
+        .append("isReturnType=").append(this.isReturnType())
+        .append("}").toString();
   }
 
   public boolean canIgnore(ResolvedType type) {
