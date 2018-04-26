@@ -4,7 +4,7 @@ ext {
   classmate = "1.4.0"
   equalsverifierVersion = '2.4.7'
   groovy = "2.4.15"
-  guava = "20.0"
+  guava = "21.0"
   jacocoVersion = '0.8.1'
   jackson = '2.9.6'
   joda = "2.10"
