@@ -52,9 +52,9 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.base.Objects.*;
 import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.FluentIterable.*;
@@ -208,7 +208,7 @@ public class ModelAttributeParameterExpander {
     return new Predicate<ModelAttributeField>() {
       @Override
       public boolean apply(ModelAttributeField input) {
-        return equal(collectionElementType(input.getFieldType()), paramType);
+        return Objects.equals(collectionElementType(input.getFieldType()), paramType);
       }
     };
   }

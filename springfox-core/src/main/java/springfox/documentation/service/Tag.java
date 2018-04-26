@@ -19,11 +19,11 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import org.springframework.core.Ordered;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.*;
 import static com.google.common.base.Strings.*;
@@ -80,12 +80,12 @@ public class Tag implements Ordered {
       return false;
     }
     Tag tag = (Tag) o;
-    return Objects.equal(name, tag.name) &&
-        Objects.equal(description, tag.description);
+    return Objects.equals(name, tag.name) &&
+        Objects.equals(description, tag.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, description);
+    return Objects.hash(name, description);
   }
 }

@@ -24,9 +24,9 @@ import com.google.common.collect.Sets;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.base.Objects.*;
 import static com.google.common.collect.Sets.*;
 
 public class ExpansionContext {
@@ -69,10 +69,10 @@ public class ExpansionContext {
     return operationContext.getDocumentationContext();
   }
 
-  public boolean hasSeenType(ResolvedType type) {
-    return seenTypes.contains(type)
-        || equal(type, paramType);
-  }
+    public boolean hasSeenType(ResolvedType type) {
+        return seenTypes.contains(type)
+                || Objects.equals(type, paramType);
+    }
 
   public ExpansionContext childContext(
       String parentName,

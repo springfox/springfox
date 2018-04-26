@@ -20,7 +20,6 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
@@ -28,6 +27,7 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
@@ -246,11 +246,11 @@ public class ModelContext {
     ModelContext that = (ModelContext) o;
 
     return
-        Objects.equal(groupName, that.groupName) &&
-        Objects.equal(type, that.type) &&
-        Objects.equal(documentationType, that.documentationType) &&
-        Objects.equal(returnType, that.returnType) &&
-        Objects.equal(namingStrategy(), that.namingStrategy());
+        Objects.equals(groupName, that.groupName) &&
+        Objects.equals(type, that.type) &&
+        Objects.equals(documentationType, that.documentationType) &&
+        Objects.equals(returnType, that.returnType) &&
+        Objects.equals(namingStrategy(), that.namingStrategy());
 
   }
 
@@ -263,7 +263,7 @@ public class ModelContext {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(
+    return Objects.hash(
         groupName,
         type,
         documentationType,

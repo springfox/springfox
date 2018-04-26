@@ -18,13 +18,13 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.collect.Lists.*;
 
@@ -76,12 +76,12 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
       return false;
     }
     ObjectVendorExtension that = (ObjectVendorExtension) o;
-    return Objects.equal(properties, that.properties);
+    return Objects.equals(properties, that.properties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(properties);
+    return Objects.hash(properties);
   }
 
   @Override
