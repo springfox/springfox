@@ -36,8 +36,8 @@ public class ApiListingReader implements ApiListingBuilderPlugin {
   public void apply(ApiListingContext apiListingContext) {
     ResourceGroup group = apiListingContext.getResourceGroup();
     String description = group.getControllerClass()
-        .transform(description())
-        .or(group.getGroupName());
+        .map(description())
+        .orElse(group.getGroupName());
 
     apiListingContext.apiListingBuilder()
         .description(description);

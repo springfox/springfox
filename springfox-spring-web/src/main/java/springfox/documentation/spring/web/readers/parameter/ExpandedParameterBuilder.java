@@ -22,7 +22,6 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -39,6 +38,7 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
@@ -72,7 +72,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     ModelReference itemModel = null;
     ResolvedType resolved = resolver.resolve(context.getFieldType());
     if (isContainerType(resolved)) {
-      resolved = fieldType(context).or(resolved);
+      resolved = fieldType(context).orElse(resolved);
       ResolvedType elementType = collectionElementType(resolved);
       String itemTypeName = typeNameFor(elementType.getErasedType());
       AllowableValues itemAllowables = null;

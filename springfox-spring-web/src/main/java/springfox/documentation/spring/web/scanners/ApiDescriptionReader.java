@@ -72,7 +72,7 @@ public class ApiDescriptionReader {
           operationContext.apiDescriptionBuilder()
               .groupName(outerContext.getGroupName())
               .operations(operations)
-              .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
+              .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first().toJavaUtil())))
               .path(path)
               .description(methodName)
               .hidden(false);

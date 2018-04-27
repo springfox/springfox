@@ -23,7 +23,6 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.Collections.*;
@@ -75,7 +75,7 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   @Override
-  public com.google.common.base.Optional<Model> modelFor(ModelContext modelContext) {
+  public Optional<Model> modelFor(ModelContext modelContext) {
     ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
 
     if (isContainerType(propertiesHost)
@@ -84,8 +84,8 @@ public class DefaultModelProvider implements ModelProvider {
         || isBaseType(propertiesHost)
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
-          + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
-      return Optional.absent();
+          + "been handled", resolvedTypeSignature(propertiesHost).orElse("<null>"));
+      return Optional.empty();
     }
 
     Optional<Model> syntheticModel = schemaPluginsManager.syntheticModel(modelContext);
@@ -127,7 +127,7 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, Model> models = newHashMap();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
-      Optional<Model> model = modelFor(parentContext).or(mapModel(parentContext, resolvedType));
+      Optional<Model> model = modelFor(parentContext).map(Optional::of).orElse(mapModel(parentContext, resolvedType));
       if (model.isPresent()) {
         models.put(model.get().getName(), model.get());
       }
@@ -150,7 +150,7 @@ public class DefaultModelProvider implements ModelProvider {
           .subTypes(new ArrayList<ModelReference>())
           .build());
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Function<ModelProperty, String> byPropertyName() {

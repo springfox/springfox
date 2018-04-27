@@ -203,7 +203,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     if (isContainerType(property.getType()) || isMapType(property.getType())) {
       return newArrayList();
     }
-    LOG.debug("Recursively resolving dependencies for type {}", resolvedTypeSignature(property.getType()).or("<null>"));
+    LOG.debug("Recursively resolving dependencies for type {}", resolvedTypeSignature(property.getType()).orElse("<null>"));
     return newArrayList(resolvedDependencies(ModelContext.fromParent(modelContext, property.getType())));
   }
 
@@ -211,7 +211,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     List<ResolvedType> dependencies = newArrayList();
     if (isContainerType(property.getType())) {
       ResolvedType collectionElementType = collectionElementType(property.getType());
-      String resolvedTypeSignature = resolvedTypeSignature(collectionElementType).or("<null>");
+      String resolvedTypeSignature = resolvedTypeSignature(collectionElementType).orElse("<null>");
       if (!isBaseType(ModelContext.fromParent(modelContext, collectionElementType))) {
         LOG.debug("Adding collectionElement type {}", resolvedTypeSignature);
         dependencies.add(collectionElementType);
@@ -226,7 +226,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     List<ResolvedType> dependencies = newArrayList();
     if (isMapType(property.getType())) {
       ResolvedType valueType = Maps.mapValueType(property.getType());
-      String resolvedTypeSignature = resolvedTypeSignature(valueType).or("<null>");
+      String resolvedTypeSignature = resolvedTypeSignature(valueType).orElse("<null>");
       if (!isBaseType(ModelContext.fromParent(modelContext, valueType))) {
         LOG.debug("Adding value type {}", resolvedTypeSignature);
         dependencies.add(valueType);

@@ -33,7 +33,6 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
@@ -58,6 +57,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Map;
 
 import static com.google.common.collect.FluentIterable.*;
@@ -127,7 +127,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
       Optional<AnnotatedMember> annotatedMember
-          = Optional.fromNullable(safeGetPrimaryMember(jacksonProperty));
+          = Optional.ofNullable(safeGetPrimaryMember(jacksonProperty));
       if (annotatedMember.isPresent()) {
         properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext, namePrefix));
       }
@@ -215,12 +215,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     List<ModelProperty> properties = newArrayList();
     if (member instanceof AnnotatedMethod) {
       properties.addAll(findAccessorMethod(type, member)
-          .transform(propertyFromBean(givenContext, jacksonProperty, namePrefix))
-          .or(new ArrayList<ModelProperty>()));
+          .map(propertyFromBean(givenContext, jacksonProperty, namePrefix))
+          .orElse(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedField) {
       properties.addAll(findField(type, jacksonProperty.getInternalName())
-          .transform(propertyFromField(givenContext, jacksonProperty, namePrefix))
-          .or(new ArrayList<ModelProperty>()));
+          .map(propertyFromField(givenContext, jacksonProperty, namePrefix))
+          .orElse(new ArrayList<ModelProperty>()));
     } else if (member instanceof AnnotatedParameter) {
       ModelContext modelContext = ModelContext.fromParent(givenContext, type);
       properties.addAll(
@@ -252,7 +252,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       public boolean apply(ResolvedField input) {
         return fieldName.equals(input.getName());
       }
-    });
+    }).toJavaUtil();
   }
 
   private ModelProperty fieldModelProperty(
@@ -378,7 +378,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
         return methodComparer.equivalent(accessorMethod.getRawMember(), (Method) member.getMember());
       }
-    });
+    }).toJavaUtil();
   }
 
   private List<ModelProperty> fromFactoryMethod(
@@ -389,7 +389,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final String namePrefix) {
 
     Optional<ModelProperty> property = factoryMethods.in(resolvedType, factoryMethodOf(member))
-        .transform(new Function<ResolvedParameterizedMember, ModelProperty>() {
+        .map(new Function<ResolvedParameterizedMember, ModelProperty>() {
           @Override
           public ModelProperty apply(ResolvedParameterizedMember input) {
             return paramModelProperty(input, beanProperty, member, givenContext, namePrefix);

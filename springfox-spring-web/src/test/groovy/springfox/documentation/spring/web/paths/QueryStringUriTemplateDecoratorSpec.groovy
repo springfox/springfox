@@ -1,6 +1,5 @@
 package springfox.documentation.spring.web.paths
 
-import com.google.common.base.Optional
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableValues
@@ -62,7 +61,7 @@ class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
 
   Optional<Operation> operation(List<String> paramNames, allowableValueLookup) {
     if (paramNames == null) {
-      return Optional.absent()
+      return Optional.empty()
     }
     def operation = Mock(Operation)
     operation.getParameters() >> paramNames.collect {

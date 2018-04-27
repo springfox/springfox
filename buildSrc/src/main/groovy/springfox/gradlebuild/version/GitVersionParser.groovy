@@ -1,6 +1,5 @@
 package springfox.gradlebuild.version
 
-import com.google.common.base.Optional
 import com.google.common.base.Splitter
 import com.google.common.collect.Iterables
 
@@ -23,7 +22,7 @@ trait GitVersionParser {
           "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: $versionPart")
     }
     Integer patch = patchComponents[1].toInteger()
-    Integer count = Optional.fromNullable(patchComponents[3]).or("0").toInteger()
+    Integer count = Optional.ofNullable(patchComponents[3]).orElse("0").toInteger()
     String sha = patchComponents[4]
     String build = patchComponents[2]?.substring(1)
     [patch, build, count, sha]

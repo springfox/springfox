@@ -24,7 +24,6 @@ import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Sets;
@@ -53,6 +52,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
@@ -199,7 +199,7 @@ public class ModelAttributeParameterExpander {
     return new Predicate<Parameter>() {
       @Override
       public boolean apply(Parameter input) {
-        return isVoid(input.getType().orNull());
+        return isVoid(input.getType().orElse(null));
       }
     };
   }
@@ -227,8 +227,8 @@ public class ModelAttributeParameterExpander {
       ExpansionContext context,
       ModelAttributeField each) {
     LOG.debug("Attempting to expand field: {}", each);
-    String dataTypeName = Optional.fromNullable(typeNameFor(each.getFieldType().getErasedType()))
-        .or(each.getFieldType().getErasedType().getSimpleName());
+    String dataTypeName = Optional.ofNullable(typeNameFor(each.getFieldType().getErasedType()))
+        .orElse(each.getFieldType().getErasedType().getSimpleName());
     LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,

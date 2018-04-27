@@ -24,11 +24,11 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
+import java.util.Optional;
 
 class PojoPropertyBuilderFactory {
   private static final Logger LOG = LoggerFactory.getLogger(POJOPropertyBuilder.class);
@@ -105,7 +105,7 @@ class PojoPropertyBuilderFactory {
     } catch (Exception e) {
       LOG.debug("Unable to instantiate jackson 2.6 object. Using higher version of jackson.");
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Constructor<POJOPropertyBuilder> constructorWithParams(Class<?>... clazzes)

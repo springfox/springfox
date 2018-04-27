@@ -22,7 +22,6 @@ package springfox.documentation.swagger.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -39,6 +38,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -153,14 +153,14 @@ public final class ApiModelProperties {
   }
 
   public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
-    Optional<ApiModelProperty> annotation = Optional.absent();
+    Optional<ApiModelProperty> annotation = Optional.empty();
 
     if (annotated instanceof Method) {
       // If the annotated element is a method we can use this information to check superclasses as well
-      annotation = Optional.fromNullable(AnnotationUtils.findAnnotation(((Method) annotated), ApiModelProperty.class));
+      annotation = Optional.ofNullable(AnnotationUtils.findAnnotation(((Method) annotated), ApiModelProperty.class));
     }
 
-    return annotation.or(Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class)));
+    return annotation.map(Optional::of).orElse(Optional.ofNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class)));
   }
 
   static Function<ApiModelProperty, Boolean> toHidden() {

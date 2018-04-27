@@ -84,7 +84,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
       if (resource.isExported()) {
         Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
         RepositoryInformation repositoryInfo =
-            (RepositoryInformation) converter.convert(repositoryInformation).orNull();
+            (RepositoryInformation) converter.convert(repositoryInformation).orElse(null);
         contexts.add(new EntityContext(
             typeResolver,
             configuration,

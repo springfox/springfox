@@ -48,7 +48,7 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
     Object getSaveMethod = crudMethods.getSaveMethod();
     Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
     if (crudMethods.hasSaveMethod()) {
-      Method actualSaveMethod = (Method) converter.convert(getSaveMethod).orNull();
+      Method actualSaveMethod = (Method) converter.convert(getSaveMethod).orElse(null);
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
           actualSaveMethod);

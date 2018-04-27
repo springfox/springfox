@@ -21,7 +21,6 @@ package springfox.documentation.schema.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -35,6 +34,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -81,8 +81,8 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     JsonTypeInfo typeInfo = AnnotationUtils.getAnnotation(forClass(context), JsonTypeInfo.class);
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
-        return Optional.fromNullable(emptyToNull(typeInfo.property()))
-            .or(typeInfo.use().getDefaultPropertyName());
+        return Optional.ofNullable(emptyToNull(typeInfo.property()))
+            .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }
     return "";

@@ -23,7 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -32,10 +32,11 @@ import io.swagger.annotations.ApiResponses;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Lists.*;
+import static java.util.Optional.ofNullable;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 public class Annotations {
@@ -45,7 +46,7 @@ public class Annotations {
   }
 
   public static Optional<ApiParam> findApiParamAnnotation(AnnotatedElement annotated) {
-    return fromNullable(getAnnotation(annotated, ApiParam.class));
+    return ofNullable(getAnnotation(annotated, ApiParam.class));
   }
 
   public static List<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
@@ -133,7 +134,7 @@ public class Annotations {
         return Optional.of(resolver.resolve(response));
       }
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private static boolean isNotVoid(Class<?> response) {

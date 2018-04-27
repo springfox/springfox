@@ -22,7 +22,6 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
@@ -51,6 +50,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.*;
@@ -92,7 +92,7 @@ public class Docket implements DocumentationPlugin {
   private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
   private String host = "";
-  private Optional<String> pathMapping = Optional.absent();
+  private Optional<String> pathMapping = Optional.empty();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
   private List<VendorExtension> vendorExtensions = newArrayList();
@@ -378,7 +378,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket pathMapping(String path) {
-    this.pathMapping = Optional.fromNullable(path);
+    this.pathMapping = Optional.ofNullable(path);
     return this;
   }
 

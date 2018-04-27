@@ -54,7 +54,7 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
     Object getFindAllMethod = crudMethods.getFindAllMethod();
     if (crudMethods.hasFindAllMethod()) {
       Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
-      Method actualFindAllMethod = (Method) converter.convert(getFindAllMethod).orNull();
+      Method actualFindAllMethod = (Method) converter.convert(getFindAllMethod).orElse(null);
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
           actualFindAllMethod);

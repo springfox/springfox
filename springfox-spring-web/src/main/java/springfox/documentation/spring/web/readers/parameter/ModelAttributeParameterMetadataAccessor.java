@@ -19,13 +19,13 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.spi.service.ParameterMetadataAccessor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
+import java.util.Optional;
 
 public class ModelAttributeParameterMetadataAccessor implements ParameterMetadataAccessor {
   private final List<AnnotatedElement> annotatedElements;
@@ -59,6 +59,6 @@ public class ModelAttributeParameterMetadataAccessor implements ParameterMetadat
         return Optional.of(annotation);
       }
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 }

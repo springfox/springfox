@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
@@ -47,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
@@ -77,7 +77,7 @@ public class ApiListingScanner {
   static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
     List<String> commons = newArrayList();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
-      return Optional.absent();
+      return Optional.empty();
     }
     List<String> firstWords = urlParts(apiDescriptions.get(0));
 
@@ -147,8 +147,8 @@ public class ApiListingScanner {
 
       String resourcePath = new ResourcePathProvider(resourceGroup)
           .resourcePath()
-          .or(longestCommonPath(sortedApis))
-          .orNull();
+          .orElse(longestCommonPath(sortedApis)
+          .orElse(null));
 
       PathProvider pathProvider = documentationContext.getPathProvider();
       String basePath = pathProvider.getApplicationBasePath();

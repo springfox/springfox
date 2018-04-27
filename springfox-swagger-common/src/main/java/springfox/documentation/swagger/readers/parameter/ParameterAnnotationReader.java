@@ -19,23 +19,24 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-import com.google.common.base.Optional;
+
 import com.google.common.base.Predicate;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
+import static java.util.Optional.ofNullable;
 
 public class ParameterAnnotationReader {
 
   public static <A extends Annotation> Optional<A> fromHierarchy(
       MethodParameter methodParameter,
       Class<A> annotationType) {
-    return fromNullable(searchOnInterfaces(methodParameter.getMethod(),
+    return ofNullable(searchOnInterfaces(methodParameter.getMethod(),
         methodParameter.getParameterIndex(),
         annotationType,
         getParentInterfaces(methodParameter)));
@@ -54,7 +55,7 @@ public class ParameterAnnotationReader {
     try {
       return Optional.of(iface.getMethod(method.getName(), method.getParameterTypes()));
     } catch (NoSuchMethodException ex) {
-      return Optional.absent();
+      return Optional.empty();
     }
   }
 
@@ -71,7 +72,7 @@ public class ParameterAnnotationReader {
       if (interfaceMethod.isPresent()) {
         Method superMethod = interfaceMethod.get();
         Optional<Annotation> found = tryFind(
-                newArrayList(superMethod.getParameterAnnotations()[parameterIndex]), annotationOfType(annotationType));
+                newArrayList(superMethod.getParameterAnnotations()[parameterIndex]), annotationOfType(annotationType)).toJavaUtil();
         if (found.isPresent()) {
           annotation = (A) found.get();
           break;

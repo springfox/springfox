@@ -21,10 +21,10 @@ package springfox.documentation.schema.property.bean;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,11 +83,11 @@ public class Accessors {
   }
 
   private static Optional<JsonGetter> getterAnnotation(Method method) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
+    return Optional.ofNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
   }
 
   private static Optional<JsonSetter> setterAnnotation(Method method) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
+    return Optional.ofNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
   }
 
   private static boolean isSetterMethod(Method method) {

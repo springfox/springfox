@@ -19,7 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
@@ -36,6 +35,7 @@ import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
@@ -53,7 +53,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public Class<?> declaringClass() {
-    return actionSpecification.getDeclaringClass().orNull();
+    return actionSpecification.getDeclaringClass().orElse(null);
   }
 
   @Override
@@ -104,9 +104,9 @@ class SpringDataRestRequestHandler implements RequestHandler {
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
     if (getHandlerMethod() != null) {
-      return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
+      return Optional.ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   @Override
@@ -128,14 +128,14 @@ class SpringDataRestRequestHandler implements RequestHandler {
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     if (getHandlerMethod() != null) {
-      return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
+      return Optional.ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   @Override
   public HandlerMethod getHandlerMethod() {
-    return actionSpecification.getHandlerMethod().orNull();
+    return actionSpecification.getHandlerMethod().orElse(null);
   }
 
   @Override

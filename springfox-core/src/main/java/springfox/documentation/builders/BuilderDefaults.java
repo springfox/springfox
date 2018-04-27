@@ -20,7 +20,6 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import springfox.documentation.service.AllowableListValues;
@@ -29,6 +28,7 @@ import springfox.documentation.service.AllowableValues;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
@@ -53,9 +53,9 @@ public class BuilderDefaults {
    * @return Coalesces the newValue and defaultValue to return a non-null value
    */
   public static <T> T defaultIfAbsent(T newValue, T defaultValue) {
-    return Optional.fromNullable(newValue)
-        .or(Optional.fromNullable(defaultValue))
-        .orNull();
+    return Optional.ofNullable(newValue)
+        .orElse(Optional.ofNullable(defaultValue)
+        .orElse(null));
   }
 
   /**

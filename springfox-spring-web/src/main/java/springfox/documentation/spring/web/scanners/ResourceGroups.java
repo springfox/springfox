@@ -59,7 +59,7 @@ class ResourceGroups {
       @Override
       public ResourceGroup apply(ApiDescription input) {
         return new ResourceGroup(
-            input.getGroupName().or(Docket.DEFAULT_GROUP_NAME),
+            input.getGroupName().orElse(Docket.DEFAULT_GROUP_NAME),
             null);
       }
     };

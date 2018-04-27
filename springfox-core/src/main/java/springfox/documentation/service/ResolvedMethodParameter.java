@@ -20,12 +20,12 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.Lists.*;
 
@@ -63,7 +63,7 @@ public class ResolvedMethodParameter {
   }
 
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return FluentIterable.from(annotations).filter(annotation).first();
+    return FluentIterable.from(annotations).filter(annotation).first().toJavaUtil();
   }
 
   public int getParameterIndex() {
@@ -71,7 +71,7 @@ public class ResolvedMethodParameter {
   }
 
   public Optional<String> defaultName() {
-    return Optional.fromNullable(defaultName);
+    return Optional.ofNullable(defaultName);
   }
 
   public ResolvedMethodParameter replaceResolvedParameterType(ResolvedType parameterType) {

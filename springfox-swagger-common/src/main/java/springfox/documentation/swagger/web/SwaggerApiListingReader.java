@@ -19,7 +19,7 @@
 package springfox.documentation.swagger.web;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
 import org.springframework.core.annotation.Order;
@@ -28,13 +28,14 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.Optional.ofNullable;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -46,11 +47,11 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
   public void apply(ApiListingContext apiListingContext) {
     Optional<? extends Class<?>> controller = apiListingContext.getResourceGroup().getControllerClass();
     if (controller.isPresent()) {
-      Optional<Api> apiAnnotation = fromNullable(findAnnotation(controller.get(), Api.class));
-      String description = emptyToNull(apiAnnotation.transform(descriptionExtractor()).orNull());
+      Optional<Api> apiAnnotation = ofNullable(findAnnotation(controller.get(), Api.class));
+      String description = emptyToNull(apiAnnotation.map(descriptionExtractor()).orElse(null));
 
-      Set<String> tagSet = apiAnnotation.transform(tags())
-          .or(Sets.<String>newTreeSet());
+      Set<String> tagSet = apiAnnotation.map(tags())
+          .orElse(Sets.<String>newTreeSet());
       if (tagSet.isEmpty()) {
         tagSet.add(apiListingContext.getResourceGroup().getGroupName());
       }

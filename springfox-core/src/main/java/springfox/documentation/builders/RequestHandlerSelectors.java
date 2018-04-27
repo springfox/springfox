@@ -20,13 +20,13 @@
 package springfox.documentation.builders;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import org.springframework.util.ClassUtils;
 import springfox.documentation.RequestHandler;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 public class RequestHandlerSelectors {
   private RequestHandlerSelectors() {
@@ -76,7 +76,7 @@ public class RequestHandlerSelectors {
     return new Predicate<RequestHandler>() {
       @Override
       public boolean apply(RequestHandler input) {
-        return declaringClass(input).transform(annotationPresent(annotation)).or(false);
+        return declaringClass(input).map(annotationPresent(annotation)).orElse(false);
       }
     };
   }
@@ -111,13 +111,13 @@ public class RequestHandlerSelectors {
     return new Predicate<RequestHandler>() {
       @Override
       public boolean apply(RequestHandler input) {
-        return declaringClass(input).transform(handlerPackage(basePackage)).or(true);
+        return declaringClass(input).map(handlerPackage(basePackage)).orElse(true);
       }
     };
   }
 
   private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
-    return Optional.fromNullable(input.declaringClass());
+    return Optional.ofNullable(input.declaringClass());
   }
 
 }

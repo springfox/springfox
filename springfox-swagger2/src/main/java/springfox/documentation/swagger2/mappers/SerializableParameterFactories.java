@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.CookieParameter;
@@ -34,6 +33,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Parameter;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.base.Functions.*;
 import static com.google.common.base.Strings.*;
@@ -64,7 +64,7 @@ public class SerializableParameterFactories {
 
     SerializableParameter toReturn = factory.create(source);
     if (toReturn == null) {
-      return Optional.absent();
+      return Optional.empty();
     }
     ModelReference paramModel = source.getModelRef();
     toReturn.setName(source.getName());

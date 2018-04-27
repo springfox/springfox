@@ -47,7 +47,7 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
     Object deleteMethod = crudMethods.getDeleteMethod();
     if (crudMethods.hasDelete()) {
       Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
-      Method actualDeleteMethod = (Method) converter.convert(deleteMethod).orNull();
+      Method actualDeleteMethod = (Method) converter.convert(deleteMethod).orElse(null);
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
           actualDeleteMethod);

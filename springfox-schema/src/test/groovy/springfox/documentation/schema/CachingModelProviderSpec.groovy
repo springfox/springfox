@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport

@@ -21,7 +21,6 @@ package springfox.documentation.schema;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
@@ -30,6 +29,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
@@ -55,7 +55,7 @@ public class Enums {
       @Override
       public String apply(Object input) {
         Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
-                .transform(evaluateJsonValue(input));
+                .map(evaluateJsonValue(input));
         if (jsonValue.isPresent() && !isNullOrEmpty(jsonValue.get())) {
           return jsonValue.get();
         }
@@ -90,7 +90,7 @@ public class Enums {
         return Optional.of(each);
       }
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   public static AllowableValues emptyListValuesToNull(AllowableListValues values) {

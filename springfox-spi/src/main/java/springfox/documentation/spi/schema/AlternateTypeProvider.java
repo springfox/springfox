@@ -20,12 +20,12 @@
 package springfox.documentation.spi.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import springfox.documentation.schema.AlternateTypeRule;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.Lists.*;
 
@@ -39,7 +39,7 @@ public class AlternateTypeProvider {
 
   public ResolvedType alternateFor(ResolvedType type) {
     Optional<AlternateTypeRule> matchingRule = FluentIterable.from(rules)
-            .firstMatch(thatAppliesTo(type));
+            .firstMatch(thatAppliesTo(type)).toJavaUtil();
     if (matchingRule.isPresent()) {
       return matchingRule.get().alternateFor(type);
     }

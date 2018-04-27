@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.ResolvedType
-import com.google.common.base.Optional
 import com.google.common.collect.Ordering
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
@@ -228,7 +227,7 @@ class DocketSpec extends DocumentationContextSpec {
     where:
     builderMethod | object  | path
     'pathMapping' | "/test" | Optional.of("/test")
-    'pathMapping' | null    | Optional.absent()
+    'pathMapping' | null    | Optional.empty()
   }
 
   Ordering<ApiDescription> apiDescriptionOrdering() {

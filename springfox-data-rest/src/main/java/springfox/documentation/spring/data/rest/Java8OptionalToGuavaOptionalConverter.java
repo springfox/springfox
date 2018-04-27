@@ -19,13 +19,13 @@
 package springfox.documentation.spring.data.rest;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optional<?>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(Java8OptionalToGuavaOptionalConverter.class);
@@ -52,9 +52,9 @@ class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optiona
       } else {
         return Optional.of(source);
       }
-      return Optional.absent();
+      return Optional.empty();
     }
-    return Optional.fromNullable(source);
+    return Optional.ofNullable(source);
   }
 
   @VisibleForTesting

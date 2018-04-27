@@ -20,9 +20,9 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class ResourceGroup {
   private final String groupName;
@@ -48,7 +48,7 @@ public class ResourceGroup {
   }
 
   public Optional<? extends Class<?>> getControllerClass() {
-    return Optional.fromNullable(controllerClazz);
+    return Optional.ofNullable(controllerClazz);
   }
 
   @Override
@@ -81,7 +81,7 @@ public class ResourceGroup {
         "ResourceGroup{groupName='%s', position=%d, controller=%s}",
         groupName,
         position,
-        getControllerClass().transform(toName()).or(""));
+        getControllerClass().map(toName()).orElse(""));
   }
 
   private Function<Class<?>, String> toName() {

@@ -22,7 +22,6 @@ package springfox.documentation.swagger2.mappers;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Multimap;
@@ -47,6 +46,7 @@ import springfox.documentation.service.ApiListing;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -156,11 +156,11 @@ public abstract class ModelMapper {
       }
       return Optional.of((Class) Object.class);
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Optional<ResolvedType> findMapInterface(ResolvedType type) {
-    return Optional.fromNullable(type.findSupertype(Map.class));
+    return Optional.ofNullable(type.findSupertype(Map.class));
   }
 
   private Property mapProperty(ModelProperty source) {

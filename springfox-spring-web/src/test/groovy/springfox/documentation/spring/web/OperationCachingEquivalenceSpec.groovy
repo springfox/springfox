@@ -20,7 +20,6 @@ package springfox.documentation.spring.web
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod

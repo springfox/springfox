@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.swagger.readers.parameter
-import com.google.common.base.Optional
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Specification

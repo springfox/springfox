@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.mapping.MethodResourceMapping;
@@ -39,6 +38,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;

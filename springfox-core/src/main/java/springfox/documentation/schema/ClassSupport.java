@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 public class ClassSupport {
   private ClassSupport() {
@@ -29,7 +29,7 @@ public class ClassSupport {
     try {
       return Optional.of(Class.forName(className));
     } catch (ClassNotFoundException e) {
-      return Optional.absent();
+      return Optional.empty();
     }
   }
 }

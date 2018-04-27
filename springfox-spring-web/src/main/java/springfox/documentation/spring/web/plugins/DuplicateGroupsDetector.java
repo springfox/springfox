@@ -20,7 +20,6 @@ package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
@@ -30,6 +29,7 @@ import springfox.documentation.spi.service.DocumentationPlugin;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.collect.FluentIterable.*;
 
@@ -70,7 +70,7 @@ class DuplicateGroupsDetector {
     return new Function<DocumentationPlugin, String>() {
       @Override
       public String apply(DocumentationPlugin input) {
-        return Optional.fromNullable(input.getGroupName()).or("default");
+        return Optional.ofNullable(input.getGroupName()).orElse("default");
       }
     };
   }

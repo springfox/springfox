@@ -74,7 +74,7 @@ public class EntityContext {
   public PersistentEntity<?, ?> entity() {
     Object domainType = resource.getDomainType();
     Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
-    Class actualDomainType = (Class) converter.convert(domainType).orNull();
+    Class actualDomainType = (Class) converter.convert(domainType).orElse(null);
     return entities.getPersistentEntity(actualDomainType);
   }
 

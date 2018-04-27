@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -30,6 +29,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -59,7 +59,7 @@ public class CachingModelProvider implements ModelProvider {
       return cache.get(modelContext);
     } catch (Exception e) {
       LOGGER.warn("Failed to get the model for -> {}. {}", modelContext.description(), e.getMessage());
-      return Optional.absent();
+      return Optional.empty();
     }
   }
 

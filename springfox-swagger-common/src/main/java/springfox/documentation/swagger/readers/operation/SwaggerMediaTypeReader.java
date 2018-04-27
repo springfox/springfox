@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
@@ -29,6 +28,7 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;

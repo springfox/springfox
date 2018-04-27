@@ -18,10 +18,10 @@
  */
 package springfox.documentation.swagger1.web;
 
-import com.google.common.base.Optional;
 import springfox.documentation.swagger1.dto.ApiListing;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Sets.*;
@@ -47,6 +47,6 @@ public class ApiListingMerger {
       }
       return Optional.of(merged);
     }
-    return from(nullToEmptyList(apiListings)).first();
+    return from(nullToEmptyList(apiListings)).first().toJavaUtil();
   }
 }

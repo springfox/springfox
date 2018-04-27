@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -33,6 +33,8 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
+
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static java.lang.String.*;
@@ -61,12 +63,12 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   }
 
   private String findParameterNameFromAnnotations(ResolvedMethodParameter methodParameter) {
-    return methodParameter.findAnnotation(PathVariable.class).transform(pathVariableValue())
-        .or(methodParameter.findAnnotation(ModelAttribute.class).transform(modelAttributeValue()))
-        .or(methodParameter.findAnnotation(RequestParam.class).transform(requestParamValue()))
-        .or(methodParameter.findAnnotation(RequestHeader.class).transform(requestHeaderValue()))
-        .or(methodParameter.findAnnotation(RequestPart.class).transform(requestPartValue()))
-        .orNull();
+    return methodParameter.findAnnotation(PathVariable.class).map(pathVariableValue())
+        .orElse(methodParameter.findAnnotation(ModelAttribute.class).map(modelAttributeValue())
+        .orElse(methodParameter.findAnnotation(RequestParam.class).map(requestParamValue())
+        .orElse(methodParameter.findAnnotation(RequestHeader.class).map(requestHeaderValue())
+        .orElse(methodParameter.findAnnotation(RequestPart.class).map(requestPartValue())
+        .orElse(null)))));
   }
 
 

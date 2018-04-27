@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.web;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -33,12 +33,13 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.Optional.ofNullable;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
@@ -53,11 +54,11 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     Class<?> controllerClass = handlerMethod.getBeanType();
     String className = splitCamelCase(controllerClass.getSimpleName(), " ");
 
-    return fromNullable(
+    return ofNullable(
         emptyToNull(
           stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
-              .or(""))))
-        .or(className);
+              .orElse(""))))
+        .orElse(className);
   }
 
   @Override
@@ -78,8 +79,8 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
   private Set<String> groups(HandlerMethod handlerMethod) {
     Class<?> controllerClass = handlerMethod.getBeanType();
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
-    String apiValue = fromNullable(findAnnotation(controllerClass, Api.class))
-        .transform(toApiValue()).or("");
+    String apiValue = ofNullable(findAnnotation(controllerClass, Api.class))
+        .map(toApiValue()).orElse("");
     return Strings.isNullOrEmpty(apiValue) ? newHashSet(normalize(group)) : newHashSet(normalize(apiValue));
   }
 
@@ -120,7 +121,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         //noinspection ConstantConditions
-        return descriptionExtractor().apply(input).or(valueExtractor().apply(input));
+        return descriptionExtractor().apply(input).map(Optional::of).orElse(valueExtractor().apply(input));
       }
     };
   }
@@ -139,9 +140,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         if (null != input) {
-          return fromNullable(emptyToNull(input.description()));
+          return ofNullable(emptyToNull(input.description()));
         }
-        return Optional.absent();
+        return Optional.empty();
       }
     };
   }
@@ -151,9 +152,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         if (null != input) {
-          return fromNullable(emptyToNull(input.value()));
+          return ofNullable(emptyToNull(input.value()));
         }
-        return Optional.absent();
+        return Optional.empty();
       }
     };
   }

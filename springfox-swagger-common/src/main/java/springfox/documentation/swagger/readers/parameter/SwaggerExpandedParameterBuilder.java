@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.readers.parameter;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import com.google.common.base.Strings;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -40,10 +40,11 @@ import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
@@ -81,7 +82,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
     String allowableProperty = emptyToNull(apiParam.allowableValues());
     AllowableValues allowable = allowableValues(
-        fromNullable(allowableProperty),
+        ofNullable(allowableProperty),
         context.getFieldType().getErasedType());
 
     maybeSetParameterName(context, apiParam.name())
@@ -101,7 +102,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
     String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
     AllowableValues allowable = allowableValues(
-        fromNullable(allowableProperty),
+        ofNullable(allowableProperty),
         context.getFieldType().getErasedType());
 
     maybeSetParameterName(context, apiModelProperty.name())

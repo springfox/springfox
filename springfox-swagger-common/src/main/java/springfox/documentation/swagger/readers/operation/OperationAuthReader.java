@@ -20,7 +20,6 @@
 package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
@@ -41,6 +40,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;

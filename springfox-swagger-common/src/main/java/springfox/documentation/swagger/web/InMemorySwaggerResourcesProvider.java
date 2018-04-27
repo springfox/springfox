@@ -19,7 +19,7 @@
 package springfox.documentation.swagger.web;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static springfox.documentation.schema.ClassSupport.*;
 

@@ -90,7 +90,7 @@ class Properties {
     if (modelRef.isMap()) {
       return new MapProperty(property(modelRef.itemModel().get()));
     } else if (modelRef.isCollection()) {
-      if ("byte".equals(modelRef.itemModel().transform(toTypeName()).or(""))) {
+      if ("byte".equals(modelRef.itemModel().map(toTypeName()).orElse(""))) {
         return new ByteArrayProperty();
       }
       return new ArrayProperty(

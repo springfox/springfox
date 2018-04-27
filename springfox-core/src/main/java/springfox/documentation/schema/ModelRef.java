@@ -20,8 +20,9 @@
 package springfox.documentation.schema;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
+
+import java.util.Optional;
 
 public class ModelRef implements ModelReference {
   private final String type;
@@ -52,8 +53,8 @@ public class ModelRef implements ModelReference {
   public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap) {
     this.type = type;
     this.isMap = isMap;
-    this.allowableValues = Optional.fromNullable(allowableValues);
-    this.itemModel = Optional.fromNullable(itemModel);
+    this.allowableValues = Optional.ofNullable(allowableValues);
+    this.itemModel = Optional.ofNullable(itemModel);
   }
 
   @Override
@@ -73,12 +74,12 @@ public class ModelRef implements ModelReference {
 
   @Override
   public String getItemType() {
-    return itemModel.transform(toName()).orNull();
+    return itemModel.map(toName()).orElse(null);
   }
 
   @Override
   public AllowableValues getAllowableValues() {
-    return allowableValues.orNull();
+    return allowableValues.orElse(null);
   }
 
   @Override

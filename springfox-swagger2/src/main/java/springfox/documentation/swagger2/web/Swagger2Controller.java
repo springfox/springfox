@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger2.web;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
 import org.slf4j.Logger;
@@ -44,6 +43,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static org.springframework.util.MimeTypeUtils.*;
@@ -90,7 +91,7 @@ public class Swagger2Controller {
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
-    String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
+    String groupName = Optional.ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       LOGGER.warn("Unable to find specification for group {}", groupName);

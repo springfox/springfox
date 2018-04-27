@@ -19,12 +19,12 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.*;
 import springfox.documentation.service.Parameter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.*;
@@ -73,7 +73,7 @@ class ParameterMerger {
       List<Parameter> newParams) {
     List<Parameter> parameters = newArrayList();
     for (Parameter newParam : newParams) {
-      Optional<Parameter> original = from(existingParameters).firstMatch(withName(newParam.getName()));
+      Optional<Parameter> original = from(existingParameters).firstMatch(withName(newParam.getName())).toJavaUtil();
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
         if (newParam.getOrder() > original.get().getOrder()){
           parameters.add(merged(newParam, original.get()));
@@ -97,7 +97,7 @@ class ParameterMerger {
         .parameterAccess(source.getParamAccess())
         .parameterType(source.getParamType())
         .required(source.isRequired())
-        .type(source.getType().orNull())
+        .type(source.getType().orElse(null))
         .order(source.getOrder())
         .scalarExample(source.getScalarExample())
         .complexExamples(source.getExamples())

@@ -20,7 +20,6 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Contact;
@@ -46,6 +45,7 @@ import springfox.documentation.service.ResponseMessage;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.*;
@@ -157,7 +157,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     Map<String, Path> paths = newTreeMap();
     for (ApiListing each : apiListings.values()) {
       for (ApiDescription api : each.getApis()) {
-        paths.put(api.getPath(), mapOperations(api, Optional.fromNullable(paths.get(api.getPath()))));
+        paths.put(api.getPath(), mapOperations(api, Optional.ofNullable(paths.get(api.getPath()))));
       }
     }
     return paths;
@@ -173,7 +173,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
-    Path path = existingPath.or(new Path());
+    Path path = existingPath.orElse(new Path());
     for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
       Operation operation = mapOperation(each);
       path.set(each.getMethod().toString().toLowerCase(), operation);

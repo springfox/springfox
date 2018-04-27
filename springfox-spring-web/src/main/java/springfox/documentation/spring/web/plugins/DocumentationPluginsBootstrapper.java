@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,7 @@ import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
 
 import javax.servlet.ServletContext;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.google.common.collect.FluentIterable.*;
@@ -128,7 +129,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   }
 
   private RequestHandlerCombiner combiner() {
-    return Optional.fromNullable(combiner).or(new DefaultRequestHandlerCombiner());
+    return Optional.ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {

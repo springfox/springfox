@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,7 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.Types.*;

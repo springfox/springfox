@@ -20,7 +20,6 @@
 package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.FluentIterable;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Extension;
@@ -38,6 +37,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
@@ -70,9 +70,9 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
     return new Function<Extension, VendorExtension>() {
       @Override
       public VendorExtension apply(Extension input) {
-        return Optional.fromNullable(emptyToNull(input.name()))
-            .transform(propertyExtension(input))
-            .or(objectExtension(input));
+        return Optional.ofNullable(emptyToNull(input.name()))
+            .map(propertyExtension(input))
+            .orElse(objectExtension(input));
       }
     };
   }

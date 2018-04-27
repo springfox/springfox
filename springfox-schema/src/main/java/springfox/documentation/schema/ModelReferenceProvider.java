@@ -20,9 +20,10 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spi.schema.contexts.ModelContext;
+
+import java.util.Optional;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
@@ -41,8 +42,8 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   @Override
   public ModelReference apply(ResolvedType type) {
     return collectionReference(type)
-        .or(mapReference(type))
-        .or(modelReference(type));
+        .map(Optional::of).orElse(mapReference(type))
+        .orElse(modelReference(type));
   }
 
   private ModelReference modelReference(ResolvedType type) {
@@ -62,7 +63,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
       return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), true));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Optional<ModelReference> collectionReference(ResolvedType type) {
@@ -75,6 +76,6 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
               apply(collectionElementType),
               allowableValues(collectionElementType)));
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 }

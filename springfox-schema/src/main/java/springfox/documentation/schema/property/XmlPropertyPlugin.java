@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema.property;
 
-import com.google.common.base.Optional;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -33,6 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.Annotations.*;
@@ -43,23 +43,23 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<XmlElement> elementAnnotation = Optional.absent();
-    Optional<XmlAttribute> attributeAnnotation = Optional.absent();
+    Optional<XmlElement> elementAnnotation = Optional.empty();
+    Optional<XmlAttribute> attributeAnnotation = Optional.empty();
 
     if (context.getAnnotatedElement().isPresent()) {
-      elementAnnotation = elementAnnotation.or(findAnnotation(
+      elementAnnotation = elementAnnotation.map(Optional::of).orElse(findAnnotation(
           context.getAnnotatedElement().get(),
           XmlElement.class));
-      attributeAnnotation = attributeAnnotation.or(findAnnotation(
+      attributeAnnotation = attributeAnnotation.map(Optional::of).orElse(findAnnotation(
           context.getAnnotatedElement().get(),
           XmlAttribute.class));
     }
 
     if (context.getBeanPropertyDefinition().isPresent()) {
-      elementAnnotation = elementAnnotation.or(findPropertyAnnotation(
+      elementAnnotation = elementAnnotation.map(Optional::of).orElse(findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           XmlElement.class));
-      attributeAnnotation = attributeAnnotation.or(findPropertyAnnotation(
+      attributeAnnotation = attributeAnnotation.map(Optional::of).orElse(findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           XmlAttribute.class));
     }
@@ -88,14 +88,14 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   public static <T extends Annotation> Optional<T> findAnnotation(
       AnnotatedElement annotated,
       Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, annotation));
+    return Optional.ofNullable(AnnotationUtils.getAnnotation(annotated, annotation));
   }
 
   private String wrapperName(Optional<XmlElementWrapper> wrapper, Optional<XmlElement> element) {
     if (wrapper.isPresent()) {
-      return Optional.fromNullable(defaultToNull(emptyToNull(wrapper.get().name())))
-          .or(Optional.fromNullable(elementName(element)))
-          .orNull();
+      return Optional.ofNullable(defaultToNull(emptyToNull(wrapper.get().name())))
+          .orElse(Optional.ofNullable(elementName(element))
+          .orElse(null));
     }
     return elementName(element);
   }

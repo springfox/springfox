@@ -29,12 +29,12 @@ import springfox.documentation.service.Header;
 
 import java.util.Map;
 
-import static com.google.common.base.Optional.fromNullable;
 import static com.google.common.base.Predicates.not;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.Types.typeNameFor;
 
 public class ResponseHeaders {
@@ -70,7 +70,7 @@ public class ResponseHeaders {
 
   private static ModelReference headerModel(ResponseHeader each) {
     ModelReference modelReference;
-    String typeName = fromNullable(typeNameFor(each.response())).or("string");
+    String typeName = ofNullable(typeNameFor(each.response())).orElse("string");
     if (isNullOrEmpty(each.responseContainer())) {
       modelReference = new ModelRef(typeName);
     } else {

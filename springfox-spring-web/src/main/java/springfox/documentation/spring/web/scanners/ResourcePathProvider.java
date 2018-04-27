@@ -20,7 +20,7 @@ package springfox.documentation.spring.web.scanners;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.service.ResourceGroup;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 class ResourcePathProvider {
   private final ResourceGroup resourceGroup;
@@ -37,10 +38,10 @@ class ResourcePathProvider {
   }
 
   public Optional<String> resourcePath() {
-    return Optional.fromNullable(
+    return Optional.ofNullable(
         Strings.emptyToNull(controllerClass()
-            .transform(resourcePathExtractor())
-            .or("")));
+            .map(resourcePathExtractor())
+            .orElse("")));
   }
 
   private Function<Class<?>, String> resourcePathExtractor() {

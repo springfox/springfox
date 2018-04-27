@@ -19,7 +19,6 @@
 package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +31,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.*;
@@ -63,12 +63,12 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
 
   private Set<String> controllerTags(OperationContext context) {
     Optional<Api> controllerAnnotation = context.findControllerAnnotation(Api.class);
-    return controllerAnnotation.transform(tagsFromController()).or(Sets.<String>newHashSet());
+    return controllerAnnotation.map(tagsFromController()).orElse(Sets.<String>newHashSet());
   }
 
   private Set<String> operationTags(OperationContext context) {
     Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
-    return annotation.transform(tagsFromOperation()).or(Sets.<String>newHashSet());
+    return annotation.map(tagsFromOperation()).orElse(Sets.<String>newHashSet());
   }
 
   private Function<ApiOperation, Set<String>> tagsFromOperation() {

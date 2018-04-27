@@ -20,7 +20,6 @@
 package springfox.documentation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -32,6 +31,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface RequestHandler {

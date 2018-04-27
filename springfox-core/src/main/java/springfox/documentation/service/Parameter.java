@@ -20,13 +20,13 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import org.springframework.core.Ordered;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Parameter implements Ordered {
   public static final int DEFAULT_PRECEDENCE = 0;

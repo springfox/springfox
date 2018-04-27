@@ -19,7 +19,6 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
@@ -29,6 +28,7 @@ import com.google.common.collect.Ordering;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -90,9 +90,9 @@ public class Tags {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return Optional.fromNullable(tagLookup.get(input))
-            .transform(toTagDescription())
-            .or(defaultDescription);
+        return Optional.ofNullable(tagLookup.get(input))
+            .map(toTagDescription())
+            .orElse(defaultDescription);
       }
     };
   }

@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +32,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
@@ -102,7 +102,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return first.findAnnotation(annotation).or(second.findAnnotation(annotation));
+    return first.findAnnotation(annotation).map(Optional::of).orElse(second.findAnnotation(annotation));
   }
 
   @Override
@@ -126,7 +126,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return first.findControllerAnnotation(annotation).or(second.findControllerAnnotation(annotation));
+    return first.findControllerAnnotation(annotation).map(Optional::of).orElse(second.findControllerAnnotation(annotation)) ;
   }
 
   @Override

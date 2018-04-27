@@ -22,13 +22,13 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
@@ -121,8 +121,8 @@ public class WildcardType {
     List<ResolvedType> bindings = newArrayList();
     int index = 0;
     for (TypeVariable each : replacingType.getErasedType().getTypeParameters()) {
-      ResolvedType boundType = Optional.fromNullable(replacingBindings.findBoundType(each.getName()))
-          .or(new TypeResolver().resolve(Object.class));
+      ResolvedType boundType = Optional.ofNullable(replacingBindings.findBoundType(each.getName()))
+          .orElse(new TypeResolver().resolve(Object.class));
       if (isWildcardType(wildcardTypeBindings.getBoundType(index))) {
         bindings.add(boundType);
       } else {

@@ -20,7 +20,6 @@
 package springfox.documentation.builders;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
@@ -35,6 +34,7 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Strings.emptyToNull;
@@ -297,7 +297,7 @@ public class OperationBuilder {
 
   private String uniqueOperationIdStem() {
     String defaultStem = String.format("%sUsing%s", uniqueId, method);
-    return Optional.fromNullable(emptyToNull(codeGenMethodNameStem)).or(defaultStem);
+    return Optional.ofNullable(emptyToNull(codeGenMethodNameStem)).orElse(defaultStem);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {

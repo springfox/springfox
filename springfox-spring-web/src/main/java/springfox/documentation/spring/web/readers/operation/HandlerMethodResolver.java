@@ -26,7 +26,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
@@ -47,6 +47,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
@@ -64,23 +65,23 @@ public class HandlerMethodResolver {
   }
 
   public ResolvedType methodReturnType(HandlerMethod handlerMethod) {
-    return resolvedMethod(handlerMethod).transform(toReturnType(typeResolver)).or(typeResolver.resolve(Void.TYPE));
+    return resolvedMethod(handlerMethod).map(toReturnType(typeResolver)).orElse(typeResolver.resolve(Void.TYPE));
   }
 
   public static Optional<Class> useType(Class beanType) {
     if (Proxy.class.isAssignableFrom(beanType)) {
-      return Optional.absent();
+      return Optional.empty();
     }
     if (Class.class.getName().equals(beanType.getName())) {
-      return Optional.absent();
+      return Optional.empty();
     }
-    return Optional.fromNullable(beanType);
+    return Optional.ofNullable(beanType);
   }
 
   public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
     return resolvedMethod(methodToResolve)
-        .transform(toParameters(methodToResolve))
-        .or(Lists.<ResolvedMethodParameter>newArrayList());
+        .map(toParameters(methodToResolve))
+        .orElse(Lists.<ResolvedMethodParameter>newArrayList());
   }
 
   boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
@@ -140,10 +141,10 @@ public class HandlerMethodResolver {
 
   private Optional<ResolvedMethod> resolvedMethod(HandlerMethod handlerMethod) {
     if (handlerMethod == null) {
-      return Optional.absent();
+      return Optional.empty();
     }
     Class hostClass = useType(handlerMethod.getBeanType())
-        .or(handlerMethod.getMethod().getDeclaringClass());
+        .orElse(handlerMethod.getMethod().getDeclaringClass());
     Iterable<ResolvedMethod> filtered = filter(getMemberMethods(hostClass),
         methodNamesAreSame(handlerMethod.getMethod()));
     return resolveToMethodWithMaxResolvedTypes(filtered, handlerMethod.getMethod());
@@ -165,7 +166,7 @@ public class HandlerMethodResolver {
     return new Function<ResolvedMethod, ResolvedType>() {
       @Override
       public ResolvedType apply(ResolvedMethod input) {
-        return Optional.fromNullable(input.getReturnType()).or(resolver.resolve(Void.TYPE));
+        return Optional.ofNullable(input.getReturnType()).orElse(resolver.resolve(Void.TYPE));
       }
     };
   }
@@ -178,7 +179,7 @@ public class HandlerMethodResolver {
         MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
         for (int i = 0; i < input.getArgumentCount(); i++) {
           parameters.add(new ResolvedMethodParameter(
-              discoveredName(methodParameters[i]).or(String.format("param%s", i)),
+              discoveredName(methodParameters[i]).orElse(String.format("param%s", i)),
               methodParameters[i],
               input.getArgumentType(i)));
         }
@@ -215,14 +216,14 @@ public class HandlerMethodResolver {
       Iterable<ResolvedMethod> covariantMethods = covariantMethods(filtered, methodToResolve);
       if (Iterables.size(covariantMethods) == 0) {
         return FluentIterable.from(filtered)
-            .firstMatch(sameMethod(methodToResolve));
+            .firstMatch(sameMethod(methodToResolve)).toJavaUtil();
       } else if (Iterables.size(covariantMethods) == 1) {
-        return FluentIterable.from(covariantMethods).first();
+        return FluentIterable.from(covariantMethods).first().toJavaUtil();
       } else {
         return Optional.of(byArgumentCount().max(covariantMethods));
       }
     }
-    return FluentIterable.from(filtered).first();
+    return FluentIterable.from(filtered).first().toJavaUtil();
   }
 
   private Predicate<ResolvedMethod> sameMethod(final Method methodToResolve) {
@@ -268,10 +269,10 @@ public class HandlerMethodResolver {
 
   private Optional<String> discoveredName(MethodParameter methodParameter) {
     String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
-    int discoveredNameCount = Optional.fromNullable(discoveredNames).or(new String[0]).length;
+    int discoveredNameCount = Optional.ofNullable(discoveredNames).orElse(new String[0]).length;
     return methodParameter.getParameterIndex() < discoveredNameCount
-           ? Optional.fromNullable(emptyToNull(discoveredNames[methodParameter.getParameterIndex()]))
-           : Optional.fromNullable(methodParameter.getParameterName());
+           ? Optional.ofNullable(emptyToNull(discoveredNames[methodParameter.getParameterIndex()]))
+           : Optional.ofNullable(methodParameter.getParameterName());
   }
 
 

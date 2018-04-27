@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
+
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +36,7 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Maps.*;

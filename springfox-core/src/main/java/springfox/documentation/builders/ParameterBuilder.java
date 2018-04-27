@@ -20,8 +20,6 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.core.Ordered;
@@ -31,15 +29,17 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
   private static final Collection<String> PARAMETER_TYPES_ALLOWING_EMPTY_VALUE =
-      ImmutableList.of("query", "formData");
+      Arrays.asList("query", "formData");
   private String name;
   private String description;
   private String defaultValue;
@@ -75,7 +75,7 @@ public class ParameterBuilder {
         .parameterAccess(other.getParamAccess())
         .parameterType(other.getParamType())
         .required(other.isRequired())
-        .type(other.getType().orNull())
+        .type(other.getType().orElse(null))
         .hidden(other.isHidden())
         .allowEmptyValue(other.isAllowEmptyValue())
         .order(other.getOrder())
@@ -286,7 +286,7 @@ public class ParameterBuilder {
         allowMultiple,
         allowEmptyValue,
         modelRef,
-        Optional.fromNullable(type),
+        Optional.ofNullable(type),
         allowableValues,
         paramType,
         paramAccess,

@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -31,6 +30,8 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
 

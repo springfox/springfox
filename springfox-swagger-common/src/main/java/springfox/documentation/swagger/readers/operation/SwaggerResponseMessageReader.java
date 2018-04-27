@@ -20,7 +20,6 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -42,11 +41,12 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.base.Optional.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
@@ -83,8 +83,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
-        operationAnnotation.transform(resolvedTypeFromOperation(typeResolver, defaultResponse));
-    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.transform(responseHeaders());
+        operationAnnotation.map(resolvedTypeFromOperation(typeResolver, defaultResponse));
+    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(responseHeaders());
     Map<String, Header> defaultHeaders = newHashMap();
     if (defaultResponseHeaders.isPresent()) {
       defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
@@ -105,10 +105,10 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context.getAlternateTypeProvider(),
               context.getGenericsNamingStrategy(),
               context.getIgnorableParameterTypes());
-          Optional<ModelReference> responseModel = Optional.absent();
+          Optional<ModelReference> responseModel = Optional.empty();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
           if (isSuccessful(apiResponse.code())) {
-            type = type.or(operationResponse);
+            type = type.map(Optional::of).orElse(operationResponse);
           }
           if (type.isPresent()) {
             responseModel = Optional.of(
@@ -121,7 +121,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           responseMessages.add(new ResponseMessageBuilder()
               .code(apiResponse.code())
               .message(apiResponse.message())
-              .responseModel(responseModel.orNull())
+              .responseModel(responseModel.orElse(null))
               .headersWithDescription(headers)
               .build());
         }
@@ -163,7 +163,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   private Optional<ResolvedType> resolvedType(
       ResolvedType resolvedType,
       ApiResponse apiResponse) {
-    return fromNullable(resolvedTypeFromResponse(
+    return ofNullable(resolvedTypeFromResponse(
         typeResolver,
         resolvedType).apply(apiResponse));
   }

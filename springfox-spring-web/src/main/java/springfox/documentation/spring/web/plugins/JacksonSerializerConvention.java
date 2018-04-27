@@ -23,7 +23,6 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -35,6 +34,7 @@ import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
@@ -76,22 +76,22 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
   }
 
   private Optional<Type> findAlternate(Class<?> type) {
-    Class serializer = Optional.fromNullable(type.getAnnotation(JsonSerialize.class))
-        .transform(new Function<JsonSerialize, Class>() {
+    Class serializer = Optional.ofNullable(type.getAnnotation(JsonSerialize.class))
+        .map(new Function<JsonSerialize, Class>() {
           @Override
           public Class apply(JsonSerialize input) {
             return input.as();
           }
         })
-        .or(Void.class);
-    Class deserializer = Optional.fromNullable(type.getAnnotation(JsonDeserialize.class))
-        .transform(new Function<JsonDeserialize, Class>() {
+        .orElse(Void.class);
+    Class deserializer = Optional.ofNullable(type.getAnnotation(JsonDeserialize.class))
+        .map(new Function<JsonDeserialize, Class>() {
           @Override
           public Class apply(JsonDeserialize input) {
             return input.as();
           }
         })
-        .or(Void.class);
+        .orElse(Void.class);
     Type toUse;
     if (serializer != deserializer) {
       LOGGER.warn("The serializer {} and deserializer {} . Picking the serializer by default",
@@ -105,7 +105,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
     } else {
       toUse = deserializer;
     }
-    return Optional.fromNullable(toUse);
+    return Optional.ofNullable(toUse);
   }
 
   @Override

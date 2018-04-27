@@ -211,7 +211,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   @Unroll
   def "should find longest common path"() {
     given:
-    String result = longestCommonPath(apiDescriptions(paths)).orNull()
+    String result = longestCommonPath(apiDescriptions(paths)).orElse(null)
 
     expect:
     result == expected

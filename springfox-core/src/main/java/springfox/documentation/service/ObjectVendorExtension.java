@@ -18,13 +18,13 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.google.common.collect.Lists.*;
 
@@ -51,7 +51,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   }
 
   public void replaceProperty(VendorExtension property) {
-    Optional<VendorExtension> vendorProperty = Iterables.tryFind(properties, withName(property.getName()));
+    Optional<VendorExtension> vendorProperty = Iterables.tryFind(properties, withName(property.getName())).toJavaUtil();
     if (vendorProperty.isPresent()) {
       properties.remove(vendorProperty.get());
     }

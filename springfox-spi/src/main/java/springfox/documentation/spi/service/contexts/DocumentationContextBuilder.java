@@ -22,7 +22,6 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import org.springframework.core.OrderComparator;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,6 +45,7 @@ import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.FluentIterable.*;

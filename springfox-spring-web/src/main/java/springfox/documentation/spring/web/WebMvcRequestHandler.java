@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +33,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class WebMvcRequestHandler implements RequestHandler {
@@ -112,7 +112,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
+    return Optional.ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
   }
 
   @Override
@@ -136,7 +136,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), annotation));
+    return Optional.ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), annotation));
   }
 
   @Override
