@@ -29,8 +29,9 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Multimaps.*;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -43,8 +44,8 @@ public class ApiListingReferenceScanner {
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
     ApiSelector selector = context.getApiSelector();
-    Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
-        .filter(selector.getRequestHandlerSelector());
+    Iterable<RequestHandler> matchingHandlers = context.getRequestHandlers().stream()
+        .filter(selector.getRequestHandlerSelector()).collect(toList());
     for (RequestHandler handler : matchingHandlers) {
       ResourceGroup resourceGroup = new ResourceGroup(
           handler.groupName(),

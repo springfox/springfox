@@ -32,10 +32,11 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Strings.emptyToNull;
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -74,7 +75,7 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
     return new Function<Api, Set<String>>() {
       @Override
       public Set<String> apply(Api input) {
-        return newTreeSet(from(newArrayList(input.tags())).filter(emptyTags()).toSet());
+        return newTreeSet(newArrayList(input.tags()).stream().filter(emptyTags()).collect(toSet()));
       }
     };
   }

@@ -33,9 +33,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Iterables.concat;
+
 import static com.google.common.collect.Lists.*;
 
 @Component
@@ -50,7 +50,7 @@ public class FactoryMethodProvider {
   public Optional<? extends ResolvedParameterizedMember> in(
       ResolvedType resolvedType,
       Predicate<ResolvedParameterizedMember> predicate) {
-    return from(concat(constructors(resolvedType), delegatedFactoryMethods(resolvedType))).firstMatch(predicate).toJavaUtil();
+    return Stream.concat(constructors(resolvedType).stream(), delegatedFactoryMethods(resolvedType).stream()).filter(predicate).findFirst();
   }
 
   static Predicate<ResolvedParameterizedMember> factoryMethodOf(final AnnotatedParameter parameter) {

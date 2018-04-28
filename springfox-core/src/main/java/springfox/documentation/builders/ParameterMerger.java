@@ -27,9 +27,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.Parameters.*;
 
 class ParameterMerger {
@@ -43,8 +44,8 @@ class ParameterMerger {
   }
 
   public List<Parameter> merged() {
-    Set<String> existingParameterNames = from(destination).transform(toParameterName()).toSet();
-    Set<String> newParameterNames = from(source).transform(toParameterName()).toSet();
+    Set<String> existingParameterNames = destination.stream().map(toParameterName()).collect(toSet());
+    Set<String> newParameterNames = source.stream().map(toParameterName()).collect(toSet());
     List<Parameter> merged = newArrayList();
 
     SetView<String> asIsParams = difference(existingParameterNames, newParameterNames);
@@ -73,7 +74,7 @@ class ParameterMerger {
       List<Parameter> newParams) {
     List<Parameter> parameters = newArrayList();
     for (Parameter newParam : newParams) {
-      Optional<Parameter> original = from(existingParameters).firstMatch(withName(newParam.getName())).toJavaUtil();
+      Optional<Parameter> original = existingParameters.stream().filter(withName(newParam.getName())).findFirst();
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
         if (newParam.getOrder() > original.get().getOrder()){
           parameters.add(merged(newParam, original.get()));

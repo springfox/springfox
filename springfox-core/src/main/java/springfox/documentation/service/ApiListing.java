@@ -19,13 +19,15 @@
 
 package springfox.documentation.service;
 
-import com.google.common.collect.FluentIterable;
+
 import springfox.documentation.schema.Model;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 public class ApiListing {
   private final String apiVersion;
@@ -65,8 +67,8 @@ public class ApiListing {
     this.host = host;
     this.protocols = protocols;
     this.securityReferences = securityReferences;
-    this.apis = FluentIterable.from(apis)
-        .toSortedList(byPath());
+    this.apis = apis.stream()
+        .sorted(byPath()).collect(toList());
     this.models = models;
     this.description = description;
     this.position = position;

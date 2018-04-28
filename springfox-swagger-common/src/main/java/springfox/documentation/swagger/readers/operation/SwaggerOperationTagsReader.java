@@ -34,9 +34,10 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.service.Tags.*;
 
 @Component
@@ -76,7 +77,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
       @Override
       public Set<String> apply(ApiOperation input) {
         Set<String> tags = newTreeSet();
-        tags.addAll(from(newArrayList(input.tags())).filter(emptyTags()).toSet());
+        tags.addAll(newArrayList(input.tags()).stream().filter(emptyTags()).collect(toSet()));
         return tags;
       }
     };
@@ -87,7 +88,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
       @Override
       public Set<String> apply(Api input) {
         Set<String> tags = newTreeSet();
-        tags.addAll(from(newArrayList(input.tags())).filter(emptyTags()).toSet());
+        tags.addAll(newArrayList(input.tags()).stream().filter(emptyTags()).collect(toSet()));
         return tags;
       }
     };

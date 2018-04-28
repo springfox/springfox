@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.paths;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Ordering;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -32,11 +31,14 @@ import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
+import static java.util.stream.Collectors.toCollection;
+
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 60)
@@ -83,17 +85,17 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   }
 
   private Set<String> queryParamNames(PathContext context) {
-    return from(context.getParameters())
+    return context.getParameters().stream()
         .filter(and(queryStringParams(), not(onlyOneAllowableValue())))
-        .transform(paramName())
-        .toSortedSet(Ordering.natural());
+        .map(paramName())
+        .sorted(Comparator.naturalOrder()).collect(toCollection(TreeSet::new));
   }
 
   private String prefilledQueryParams(PathContext context) {
-    return Joiner.on("&").join(from(context.getParameters())
+    return Joiner.on("&").join(context.getParameters().stream()
         .filter(onlyOneAllowableValue())
-        .transform(queryStringWithValue())
-        .toSortedSet(Ordering.natural()))
+        .map(queryStringWithValue())
+        .sorted(Comparator.naturalOrder()).collect(toCollection(TreeSet::new)).iterator())
         .trim();
   }
 

@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.scanners;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
-import com.google.common.collect.FluentIterable;
+
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +48,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
@@ -113,9 +117,9 @@ public class ApiListingScanner {
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
         = context.getRequestMappingsByResourceGroup();
     Collection<ApiDescription> additionalListings = pluginsManager.additionalListings(context);
-    Set<ResourceGroup> allResourceGroups = FluentIterable.from(collectResourceGroups(additionalListings))
-        .append(requestMappingsByResourceGroup.keySet())
-        .toSet();
+    Set<ResourceGroup> allResourceGroups = Stream.concat(StreamSupport.stream(collectResourceGroups(additionalListings).spliterator(), false),
+        requestMappingsByResourceGroup.keySet().stream())
+        .collect(toSet());
 
     List<SecurityReference> securityReferences = newArrayList();
     for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
@@ -134,16 +138,16 @@ public class ApiListingScanner {
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      List<ApiDescription> additional = from(additionalListings)
+      List<ApiDescription> additional = additionalListings.stream()
           .filter(
               and(
                   belongsTo(resourceGroup.getGroupName()),
                   onlySelectedApis(documentationContext)))
-          .toList();
+          .collect(toList());
       apiDescriptions.addAll(additional);
 
-      List<ApiDescription> sortedApis = FluentIterable.from(apiDescriptions)
-          .toSortedList(documentationContext.getApiDescriptionOrdering());
+      List<ApiDescription> sortedApis = apiDescriptions.stream()
+          .sorted(documentationContext.getApiDescriptionOrdering()).collect(toList());
 
       String resourcePath = new ResourcePathProvider(resourceGroup)
           .resourcePath()
@@ -186,6 +190,6 @@ public class ApiListingScanner {
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
-    return from(contexts).toSortedList(methodComparator());
+    return contexts.stream().sorted(methodComparator()).collect(toList());
   }
 }

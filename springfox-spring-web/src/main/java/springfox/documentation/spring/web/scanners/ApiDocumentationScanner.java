@@ -21,10 +21,9 @@ package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
+
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.Ordering;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -40,11 +39,14 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -87,7 +89,7 @@ public class ApiDocumentationScanner {
 
     ResourceListing resourceListing = new ResourceListingBuilder()
         .apiVersion(context.getApiInfo().getVersion())
-        .apis(from(apiReferenceSet).toSortedList(context.getListingReferenceOrdering()))
+        .apis(apiReferenceSet.stream().sorted(context.getListingReferenceOrdering()).collect(toList()))
         .securitySchemes(context.getSecuritySchemes())
         .info(context.getApiInfo())
         .build();
@@ -99,7 +101,7 @@ public class ApiDocumentationScanner {
       Multimap<String, ApiListing> apiListings,
       DocumentationContext context) {
     Map<String, Collection<ApiListing>> grouped = Multimaps.asMap(apiListings);
-    return FluentIterable.from(grouped.entrySet()).transform(toApiListingReference(context)).toSet();
+    return grouped.entrySet().stream().map(toApiListingReference(context)).collect(toSet());
   }
 
   private Function<Map.Entry<String, Collection<ApiListing>>, ApiListingReference> toApiListingReference(final DocumentationContext context) {
@@ -117,7 +119,7 @@ public class ApiDocumentationScanner {
   }
 
   private Iterable<String> descriptions(Collection<ApiListing> apiListings) {
-    return FluentIterable.from(apiListings).transform(toDescription()).toSortedList(Ordering.natural());
+    return apiListings.stream().map(toDescription()).sorted(Comparator.naturalOrder()).collect(toList());
   }
 
   private Function<ApiListing, String> toDescription() {

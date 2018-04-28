@@ -21,7 +21,6 @@ package springfox.documentation.spring.data.rest.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import org.springframework.hateoas.RelProvider;
 import org.springframework.hateoas.Resources;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -38,6 +37,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
@@ -69,7 +69,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
         .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(Maps.uniqueIndex(properties(context), byName()))
+        .properties(properties(context).stream().collect(toMap(byName(), java.util.function.Function.identity())))
         .xml(new Xml()
             .wrapped(true)
             .name("content")

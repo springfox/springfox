@@ -19,12 +19,13 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
 public abstract class SecurityScheme {
@@ -50,13 +51,13 @@ public abstract class SecurityScheme {
   }
 
   protected void addValidVendorExtensions(List<VendorExtension> vendorExtensions) {
-    this.vendorExtensions.addAll(FluentIterable.from(nullToEmptyList(vendorExtensions))
+    this.vendorExtensions.addAll(nullToEmptyList(vendorExtensions).stream()
         .filter(new Predicate<VendorExtension>() {
           @Override
           public boolean apply(VendorExtension input) {
             return input.getName().toLowerCase().startsWith("x-");
           }
         })
-        .toList());
+        .collect(toList()));
   }
 }

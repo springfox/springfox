@@ -33,8 +33,10 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
+
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -54,9 +56,9 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    return byPatternsCondition().sortedCopy(from(nullToEmptyList(handlerMappings))
-        .transformAndConcat(toMappingEntries())
-        .transform(toRequestHandler()));
+    return byPatternsCondition().sortedCopy(nullToEmptyList(handlerMappings).stream()
+        .map(toMappingEntries()).flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+        .map(toRequestHandler()).collect(toList()));
   }
 
   private Function<? super RequestMappingInfoHandlerMapping,

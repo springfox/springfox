@@ -34,7 +34,6 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +58,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
-import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
@@ -118,11 +120,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return propertiesFor(type, givenContext, "");
   }
 
+  // List cannot contain duplicated byPropertyName()
   private List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext, String namePrefix) {
-    List<ModelProperty> properties = newArrayList();
+    Set<ModelProperty> properties = new TreeSet<>(byPropertyName());
     BeanDescription beanDescription = beanDescription(type, givenContext);
-    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-        BeanPropertyDefinitions.beanPropertyByInternalName());
+    Map<String, BeanPropertyDefinition> propertyLookup = beanDescription.findProperties().stream().collect(toMap(
+        BeanPropertyDefinitions.beanPropertyByInternalName(), java.util.function.Function.identity()));
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
@@ -132,7 +135,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext, namePrefix));
       }
     }
-    return FluentIterable.from(properties).toSortedSet(byPropertyName()).asList();
+    return properties.stream().collect(toList());
   }
 
   private Comparator<ModelProperty> byPropertyName() {
@@ -231,7 +234,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
               modelContext,
               namePrefix));
     }
-    return from(properties).filter(hiddenProperties()).toList();
+    List<ModelProperty> value = properties.stream().filter(hiddenProperties()).collect(toList());
+    return value;
 
   }
 

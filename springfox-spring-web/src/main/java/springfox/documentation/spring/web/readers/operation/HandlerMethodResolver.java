@@ -28,7 +28,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
@@ -215,15 +216,15 @@ public class HandlerMethodResolver {
     if (Iterables.size(filtered) > 1) {
       Iterable<ResolvedMethod> covariantMethods = covariantMethods(filtered, methodToResolve);
       if (Iterables.size(covariantMethods) == 0) {
-        return FluentIterable.from(filtered)
-            .firstMatch(sameMethod(methodToResolve)).toJavaUtil();
+        return StreamSupport.stream(filtered.spliterator(), false)
+            .filter(sameMethod(methodToResolve)).findFirst();
       } else if (Iterables.size(covariantMethods) == 1) {
-        return FluentIterable.from(covariantMethods).first().toJavaUtil();
+        return StreamSupport.stream(covariantMethods.spliterator(), false).findFirst();
       } else {
         return Optional.of(byArgumentCount().max(covariantMethods));
       }
     }
-    return FluentIterable.from(filtered).first().toJavaUtil();
+    return StreamSupport.stream(filtered.spliterator(), false).findFirst();
   }
 
   private Predicate<ResolvedMethod> sameMethod(final Method methodToResolve) {

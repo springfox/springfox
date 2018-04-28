@@ -37,9 +37,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Sets.*;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
@@ -73,7 +74,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
 
   @Override
   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-    return from(groups(handlerMethod)).transform(toResourceGroup(requestMappingInfo, handlerMethod)).toSet();
+    return groups(handlerMethod).stream().map(toResourceGroup(requestMappingInfo, handlerMethod)).collect(toSet());
   }
 
   private Set<String> groups(HandlerMethod handlerMethod) {

@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Ordering;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -32,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 @JsonPropertyOrder({"apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
@@ -125,9 +124,9 @@ public class ApiListing {
   }
 
   public void setApis(List<ApiDescription> apis) {
-    this.apis = FluentIterable.from(apis)
-      .toSortedList(Ordering.from(byPath())
-          .compound(byDescription()));
+    this.apis = apis.stream()
+      .sorted(byPath()
+          .thenComparing(byDescription())).collect(toList());
   }
 
   public Map<String, ModelDto> getModels() {

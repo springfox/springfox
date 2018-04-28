@@ -27,7 +27,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import java.util.Collection;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
+
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 class ResourceGroups {
@@ -36,12 +37,12 @@ class ResourceGroups {
   }
 
   static Iterable<ResourceGroup> collectResourceGroups(Collection<ApiDescription> apiDescriptions) {
-    return from(apiDescriptions)
-        .transform(toResourceGroups());
+    return apiDescriptions.stream()
+        .map(toResourceGroups()).collect(toList());
   }
 
   static Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
-    return from(resourceGroups).toSortedList(resourceGroupComparator());
+    return resourceGroups.stream().sorted(resourceGroupComparator()).collect(toList());
   }
 
   static Predicate<ApiDescription> belongsTo(final String groupName) {

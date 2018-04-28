@@ -22,7 +22,7 @@ package springfox.documentation.swagger.readers.operation;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
@@ -38,6 +38,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,6 +46,8 @@ import java.util.Optional;
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.newHashMap;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -61,8 +64,8 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
-          FluentIterable.from(each.securityForOperation(context))
-          .uniqueIndex(byReferenceName()));
+          each.securityForOperation(context).stream()
+          .collect(toMap(byReferenceName(), java.util.function.Function.identity())));
     }
 
     Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
@@ -97,8 +100,8 @@ public class OperationAuthReader implements OperationBuilderPlugin {
                 .build();
         securityReferenceOverrides.add(securityReference);
       }
-      securityReferences.putAll(FluentIterable.from(securityReferenceOverrides)
-          .uniqueIndex(byReferenceName()));
+      securityReferences.putAll(securityReferenceOverrides.stream()
+          .collect(toMap(byReferenceName(), java.util.function.Function.identity())));
     }
     LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
     context.operationBuilder().authorizations(securityReferences.values());
@@ -114,13 +117,13 @@ public class OperationAuthReader implements OperationBuilderPlugin {
   }
 
   private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
-    return FluentIterable.from(apiOperationAnnotation.authorizations())
+    return Arrays.asList(apiOperationAnnotation.authorizations()).stream()
         .filter(new Predicate<Authorization>() {
           @Override
           public boolean apply(Authorization input) {
             return !Strings.isNullOrEmpty(input.value());
           }
-        });
+        }).collect(toList());
   }
 
   @Override

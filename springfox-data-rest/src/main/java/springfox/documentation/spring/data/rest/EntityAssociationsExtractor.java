@@ -19,7 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+
 import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
@@ -28,8 +28,10 @@ import org.springframework.data.rest.webmvc.mapping.Associations;
 import springfox.documentation.RequestHandler;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 
 public class EntityAssociationsExtractor implements EntityOperationsExtractor {
 
@@ -49,9 +51,9 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
           return;
         }
         final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
-        handlers.addAll(FluentIterable.from(context.getAssociationExtractors())
-            .transformAndConcat(extractHandlers(associationContext))
-            .toList());
+        handlers.addAll(context.getAssociationExtractors().stream()
+            .map(extractHandlers(associationContext)).flatMap(each -> StreamSupport.stream(each.spliterator(), false))
+            .collect(toList()));
       }
     });
     return handlers;

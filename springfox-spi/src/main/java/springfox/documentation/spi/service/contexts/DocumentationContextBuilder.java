@@ -48,10 +48,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
@@ -173,9 +173,9 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
-    rules.addAll(from(ruleBuilders)
-        .transform(evaluator(typeResolver))
-        .toList());
+    rules.addAll(ruleBuilders.stream()
+        .map(evaluator(typeResolver))
+        .collect(toList()));
     return this;
   }
 

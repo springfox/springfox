@@ -20,7 +20,6 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelReference;
@@ -33,6 +32,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.toList;
 
 public class Operation {
   private final HttpMethod method;
@@ -82,8 +82,8 @@ public class Operation {
     this.protocol = protocol;
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
-    this.parameters = FluentIterable.from(parameters)
-        .toSortedList(byParameterName());
+    this.parameters = parameters.stream()
+        .sorted(byParameterName()).collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
     this.vendorExtensions = newArrayList(vendorExtensions);

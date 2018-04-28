@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.collect.FluentIterable;
+
 import io.swagger.models.ArrayModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
@@ -61,7 +61,7 @@ public class ParameterMapper {
     parameter.setRequired(source.isRequired());
     parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
     for (Entry<String, Collection<Example>> each : source.getExamples().asMap().entrySet()) {
-      Optional<Example> example = FluentIterable.from(each.getValue()).first().toJavaUtil();
+      Optional<Example> example = each.getValue().stream().findFirst();
       if (example.isPresent() && example.get().getValue() != null) {
         parameter.addExample(each.getKey(), String.valueOf(example.get().getValue()));
       }

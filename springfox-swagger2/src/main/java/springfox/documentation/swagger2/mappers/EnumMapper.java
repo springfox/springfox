@@ -36,8 +36,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
+
+import static java.util.stream.Collectors.toList;
 
 public class EnumMapper {
   static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {
@@ -130,7 +130,7 @@ public class EnumMapper {
   }
 
   private static <T extends Number> List<T> convert(List<String> values, Class<T> toType) {
-    return newArrayList(from(values).transform(converterOfType(toType)).filter(Optional::isPresent).transform(Optional::get));
+    return values.stream().map(converterOfType(toType)).filter(Optional::isPresent).map(Optional::get).collect(toList());
   }
 
   private static <T extends Number> Function<? super String, Optional<T>> converterOfType(final Class<T> toType) {

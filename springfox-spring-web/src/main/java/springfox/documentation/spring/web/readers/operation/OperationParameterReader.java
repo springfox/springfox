@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -48,6 +48,7 @@ import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.Types.*;
@@ -104,7 +105,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         }
       }
     }
-    return FluentIterable.from(parameters).filter(not(hiddenParams())).toList();
+    return parameters.stream().filter(not(hiddenParams())).collect(toList());
   }
 
   private Predicate<Parameter> hiddenParams() {
@@ -124,9 +125,9 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     if (ignorableParamTypes.contains(resolvedParameterType.getErasedType())) {
       return true;
     }
-    return FluentIterable.from(ignorableParamTypes)
+    return ignorableParamTypes.stream()
         .filter(isAnnotation())
-        .filter(parameterIsAnnotatedWithIt(parameter)).size() > 0;
+        .anyMatch(parameterIsAnnotatedWithIt(parameter));
 
   }
 

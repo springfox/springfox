@@ -20,7 +20,6 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.FluentIterable;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
@@ -59,11 +58,11 @@ public class ResolvedMethodParameter {
   }
 
   public boolean hasParameterAnnotation(Class<? extends Annotation> annotation) {
-    return FluentIterable.from(annotations).filter(annotation).size() > 0;
+    return annotations.stream().filter(annotation::isInstance).count() > 0;
   }
 
-  public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return FluentIterable.from(annotations).filter(annotation).first().toJavaUtil();
+  public <T extends Annotation> Optional<T> findAnnotation(final Class<T> annotation) {
+    return (Optional<T>) annotations.stream().filter(annotation::isInstance).findFirst();
   }
 
   public int getParameterIndex() {

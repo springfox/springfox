@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Extension;
 import io.swagger.annotations.ExtensionProperty;
@@ -41,6 +41,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -62,8 +63,8 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private List<VendorExtension> readExtensions(Extension[] vendorAnnotations) {
-    return FluentIterable.from(newArrayList(vendorAnnotations))
-        .transform(toVendorExtension()).toList();
+    return newArrayList(vendorAnnotations).stream()
+        .map(toVendorExtension()).collect(toList());
   }
 
   private Function<Extension, VendorExtension> toVendorExtension() {

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+
 import com.google.common.primitives.Ints;
 
 import java.util.Comparator;
@@ -37,6 +37,7 @@ import java.util.SortedSet;
 import static com.google.common.collect.ImmutableSortedSet.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.toList;
 
 @JsonPropertyOrder({
         "method", "summary", "notes", "type", "nickname", "produces",
@@ -91,8 +92,8 @@ public class Operation {
     this.consumes = consumes;
     this.protocol = protocol;
     this.authorizations = toAuthorizationsMap(authorizations);
-    this.parameters = FluentIterable.from(parameters)
-        .toSortedList(byName());
+    this.parameters = parameters.stream()
+        .sorted(byName()).collect(toList());
     this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
     this.deprecated = deprecated;
   }

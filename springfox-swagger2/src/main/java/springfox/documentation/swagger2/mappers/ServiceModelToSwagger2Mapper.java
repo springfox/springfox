@@ -48,9 +48,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
@@ -109,7 +110,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
-    return from(from).transform(toScheme()).toList();
+    return from.stream().map(toScheme()).collect(toList());
   }
 
   protected List<Map<String, List<String>>> mapAuthorizations(
@@ -117,7 +118,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     List<Map<String, List<String>>> security = newArrayList();
     for (Map.Entry<String, List<AuthorizationScope>> each : from.entrySet()) {
       Map<String, List<String>> newEntry = newHashMap();
-      newEntry.put(each.getKey(), from(each.getValue()).transform(scopeToString()).toList());
+      newEntry.put(each.getKey(), each.getValue().stream().map(scopeToString()).collect(toList()));
       security.add(newEntry);
     }
     return security;

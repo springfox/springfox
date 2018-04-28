@@ -55,8 +55,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
 @Component
@@ -159,8 +160,8 @@ public class DocumentationPluginsManager {
       @Override
       public String apply(String input) {
         Iterable<Function<String, String>> decorators
-            = from(pathDecorators.getPluginsFor(context.documentationContext()))
-            .transform(toDecorator(context));
+            = pathDecorators.getPluginsFor(context.documentationContext()).stream()
+            .map(toDecorator(context)).collect(toList());
         String decorated = input;
         for (Function<String, String> decorator : decorators) {
           decorated = decorator.apply(decorated);

@@ -25,12 +25,16 @@ import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.property.bean.Accessors.*;
 
 @Component
@@ -52,15 +56,15 @@ public class AccessorsProvider {
     };
   }
 
-  public com.google.common.collect.ImmutableList<ResolvedMethod> in(ResolvedType resolvedType) {
+  public List<ResolvedMethod> in(ResolvedType resolvedType) {
     MemberResolver resolver = new MemberResolver(typeResolver);
     resolver.setIncludeLangObject(false);
     if (resolvedType.getErasedType() == Object.class) {
-      return ImmutableList.of();
+      return Collections.emptyList();
     }
     ResolvedTypeWithMembers typeWithMembers = resolver.resolve(resolvedType, null, null);
-    return FluentIterable
-        .from(newArrayList(typeWithMembers.getMemberMethods()))
-        .filter(onlyGettersAndSetters()).toList();
+    return
+        newArrayList(typeWithMembers.getMemberMethods()).stream()
+        .filter(onlyGettersAndSetters()).collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
 }

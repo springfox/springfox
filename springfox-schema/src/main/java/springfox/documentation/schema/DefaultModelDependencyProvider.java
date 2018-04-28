@@ -23,7 +23,6 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +39,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -76,11 +78,11 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
 
   @Override
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
-    return concat(from(resolvedDependencies(modelContext))
+    return Stream.concat(resolvedDependencies(modelContext).stream()
             .filter(ignorableTypes(modelContext))
             .filter(not(baseTypes(modelContext))),
-        schemaPluginsManager.dependencies(modelContext))
-        .toSet();
+        schemaPluginsManager.dependencies(modelContext).stream())
+        .collect(toSet());
   }
 
   private Predicate<ResolvedType> baseTypes(final ModelContext modelContext) {
@@ -185,9 +187,9 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return properties;
   }
 
-  private FluentIterable<ModelProperty> nonTrivialProperties(ModelContext modelContext, ResolvedType resolvedType) {
-    return from(propertiesFor(modelContext, resolvedType))
-        .filter(not(baseProperty(modelContext)));
+  private Collection<ModelProperty> nonTrivialProperties(ModelContext modelContext, ResolvedType resolvedType) {
+    return propertiesFor(modelContext, resolvedType).stream()
+        .filter(not(baseProperty(modelContext))).collect(toList());
   }
 
   private Predicate<? super ModelProperty> baseProperty(final ModelContext modelContext) {

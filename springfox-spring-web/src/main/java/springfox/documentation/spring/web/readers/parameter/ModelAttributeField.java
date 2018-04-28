@@ -22,11 +22,13 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedMember;
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class ModelAttributeField {
   private final ResolvedType fieldType;
@@ -56,14 +58,14 @@ public class ModelAttributeField {
   }
 
   public List<AnnotatedElement> annotatedElements() {
-    return FluentIterable.from(resolvedMembers)
-        .transform(new Function<ResolvedMember<?>, AnnotatedElement>() {
+    return resolvedMembers.stream()
+        .map(new Function<ResolvedMember<?>, AnnotatedElement>() {
           @Override
           public AnnotatedElement apply(ResolvedMember<?> input) {
             return (AnnotatedElement) input.getRawMember();
           }
         })
-        .toList();
+        .collect(toList());
   }
 
   public String getName() {

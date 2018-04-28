@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.service.Tags.*;
 
@@ -264,10 +264,10 @@ public class ApiListingBuilder {
   }
 
   public ApiListing build() {
-    this.tags.addAll(from(tagNames)
+    this.tags.addAll(tagNames.stream()
         .filter(emptyTags())
-        .transform(toTag(descriptor(tagLookup, description)))
-        .toSet());
+        .map(toTag(descriptor(tagLookup, description)))
+        .collect(toSet()));
     return new ApiListing(
         apiVersion,
         basePath,

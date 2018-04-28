@@ -31,9 +31,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class Tags {
@@ -43,9 +45,10 @@ public class Tags {
 
   public static Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
     Iterable<ApiListing> allListings = Iterables.concat(nullToEmptyMultimap(apiListings).asMap().values());
-    List<Tag> tags = from(allListings)
-        .transformAndConcat(collectTags())
-        .toList();
+    List<Tag> tags =
+        StreamSupport.stream(allListings.spliterator(), false)
+            .map(collectTags()).flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))
+            .collect(toList());
     TreeSet<Tag> tagSet = newTreeSet(tagComparator());
     tagSet.addAll(tags);
     return tagSet;

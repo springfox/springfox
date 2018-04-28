@@ -31,7 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.google.common.collect.FluentIterable.*;
+import static java.util.stream.Collectors.toList;
+
 
 class DuplicateGroupsDetector {
   private DuplicateGroupsDetector() {
@@ -40,7 +41,7 @@ class DuplicateGroupsDetector {
 
   public static void ensureNoDuplicateGroups(List<DocumentationPlugin> allPlugins) throws IllegalStateException {
     Multimap<String, DocumentationPlugin> plugins = Multimaps.index(allPlugins, byGroupName());
-    Iterable<String> duplicateGroups = from(plugins.asMap().entrySet()).filter(duplicates()).transform(toGroupNames());
+    Iterable<String> duplicateGroups = plugins.asMap().entrySet().stream().filter(duplicates()).map(toGroupNames()).collect(toList());
     if (Iterables.size(duplicateGroups) > 0) {
       throw new IllegalStateException(String.format("Multiple Dockets with the same group name are not supported. "
               + "The following duplicate groups were discovered. %s", Joiner.on(',').join(duplicateGroups)));

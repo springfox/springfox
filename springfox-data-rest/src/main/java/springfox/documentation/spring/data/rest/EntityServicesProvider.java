@@ -20,7 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {
@@ -100,9 +101,9 @@ class EntityServicesProvider implements RequestHandlerProvider {
 
     List<RequestHandler> handlers = new ArrayList<RequestHandler>();
     for (EntityContext each : contexts) {
-      handlers.addAll(FluentIterable.from(extractorConfiguration.getEntityExtractors())
-          .transformAndConcat(extractFromContext(each))
-          .toList());
+      handlers.addAll(extractorConfiguration.getEntityExtractors().stream()
+          .map(extractFromContext(each)).flatMap(l -> l.stream())
+          .collect(toList()));
     }
     return handlers;
   }

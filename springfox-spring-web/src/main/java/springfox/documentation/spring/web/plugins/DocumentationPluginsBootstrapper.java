@@ -45,8 +45,10 @@ import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
+
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -107,12 +109,12 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
 
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin plugin) {
     DocumentationType documentationType = plugin.getDocumentationType();
-    List<RequestHandler> requestHandlers = from(handlerProviders)
-        .transformAndConcat(handlers())
-        .toList();
-    List<AlternateTypeRule> rules = from(nullToEmptyList(typeConventions))
-          .transformAndConcat(toRules())
-          .toList();
+    List<RequestHandler> requestHandlers = handlerProviders.stream()
+        .map(handlers()).flatMap((handle) -> StreamSupport.stream(handle.spliterator(), false))
+        .collect(toList());
+    List<AlternateTypeRule> rules = nullToEmptyList(typeConventions).stream()
+          .map(toRules()).flatMap((rule) -> StreamSupport.stream(rule.spliterator(), false))
+          .collect(toList());
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
         .rules(rules)

@@ -23,7 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+
 import com.google.common.collect.Multimap;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
@@ -49,9 +49,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
@@ -106,10 +108,10 @@ public abstract class ModelMapper {
     Map<String, Property> modelProperties = mapProperties(sortedProperties);
     model.setProperties(modelProperties);
 
-    FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
+    Stream<String> requiredFields = source.getProperties().values().stream()
         .filter(requiredProperty())
-        .transform(propertyName());
-    model.setRequired(requiredFields.toList());
+        .map(propertyName());
+    model.setRequired(requiredFields.collect(toList()));
     model.setSimple(false);
     model.setType(ModelImpl.OBJECT);
     model.setTitle(source.getName());

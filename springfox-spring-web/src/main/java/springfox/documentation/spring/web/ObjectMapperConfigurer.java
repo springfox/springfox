@@ -30,10 +30,12 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 
+import java.util.Collections;
 import java.util.List;
 
-import static com.google.common.collect.FluentIterable.*;
+
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 
 public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
 
@@ -73,9 +75,11 @@ public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEve
 
   private Iterable<MappingJackson2HttpMessageConverter> jackson2Converters(
       List<HttpMessageConverter<?>> messageConverters) {
-    return reverse(from(messageConverters)
-        .filter(MappingJackson2HttpMessageConverter.class)
-        .toList());
+    List<MappingJackson2HttpMessageConverter> converters = messageConverters.stream()
+        .filter(MappingJackson2HttpMessageConverter.class::isInstance).map((each) -> (MappingJackson2HttpMessageConverter)each)
+        .collect(toList());
+    Collections.reverse(converters);
+    return converters;
   }
 
   private MappingJackson2HttpMessageConverter configuredMessageConverter() {

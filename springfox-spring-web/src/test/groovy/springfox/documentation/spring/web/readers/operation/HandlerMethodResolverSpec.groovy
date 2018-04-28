@@ -24,7 +24,6 @@ import com.fasterxml.classmate.MemberResolver
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.members.ResolvedMethod
 import com.google.common.base.Predicate
-import com.google.common.collect.FluentIterable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.util.MultiValueMap
@@ -39,6 +38,7 @@ import java.lang.reflect.Type
 
 import static com.google.common.collect.Lists.*
 import static HandlerMethodResolver.*
+import static java.util.stream.Collectors.toList;
 
 class HandlerMethodResolverSpec extends Specification implements HandlerMethodsSupport{
   def "Methods with same name are distinguished based on variance of parameters and return types" () {
@@ -108,7 +108,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
       def allMethods = newArrayList(dummyClass.memberMethods)
 
     when:
-      def list = FluentIterable.from(allMethods).filter(subset())
+      def list = allMethods.stream().filter(subset()).collect(toList())
       def sorted = byArgumentCount().sortedCopy(list)
 
     then:
