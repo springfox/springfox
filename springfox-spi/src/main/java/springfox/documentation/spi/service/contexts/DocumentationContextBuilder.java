@@ -22,7 +22,7 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.collect.Ordering;
+
 import org.springframework.core.OrderComparator;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
@@ -43,6 +43,7 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -76,10 +77,10 @@ public class DocumentationContextBuilder {
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
-  private Ordering<ApiListingReference> listingReferenceOrdering;
-  private Ordering<ApiDescription> apiDescriptionOrdering;
+  private Comparator<ApiListingReference> listingReferenceOrdering;
+  private Comparator<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
-  private Ordering<Operation> operationOrdering;
+  private Comparator<Operation> operationOrdering;
   private boolean applyDefaultResponseMessages;
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private String host;
@@ -147,13 +148,13 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder apiListingReferenceOrdering(
-      Ordering<ApiListingReference> listingReferenceOrdering) {
+          Comparator<ApiListingReference> listingReferenceOrdering) {
 
     this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this.listingReferenceOrdering);
     return this;
   }
 
-  public DocumentationContextBuilder apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
+  public DocumentationContextBuilder apiDescriptionOrdering(Comparator<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = defaultIfAbsent(apiDescriptionOrdering, this.apiDescriptionOrdering);
     return this;
   }
@@ -184,7 +185,7 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder operationOrdering(Ordering<Operation> operationOrdering) {
+  public DocumentationContextBuilder operationOrdering(Comparator<Operation> operationOrdering) {
     this.operationOrdering = defaultIfAbsent(operationOrdering, this.operationOrdering);
     return this;
   }

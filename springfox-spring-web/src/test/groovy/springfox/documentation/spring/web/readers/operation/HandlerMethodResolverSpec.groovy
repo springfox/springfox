@@ -109,7 +109,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
 
     when:
       def list = allMethods.stream().filter(subset()).collect(toList())
-      def sorted = byArgumentCount().sortedCopy(list)
+      def sorted = list.stream().sorted(byArgumentCount()).collect(toList())
 
     then:
       sorted.get(0).name == 'methodWithNoArgs'

@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
-import com.google.common.collect.Ordering;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
@@ -48,11 +48,11 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
@@ -83,9 +83,9 @@ public class Docket implements DocumentationPlugin {
 
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
-  private Ordering<ApiListingReference> apiListingReferenceOrdering;
-  private Ordering<ApiDescription> apiDescriptionOrdering;
-  private Ordering<Operation> operationOrdering;
+  private Comparator<ApiListingReference> apiListingReferenceOrdering;
+  private Comparator<ApiDescription> apiDescriptionOrdering;
+  private Comparator<Operation> operationOrdering;
 
   private ApiInfo apiInfo = ApiInfo.DEFAULT;
   private String groupName = DEFAULT_GROUP_NAME;
@@ -266,7 +266,7 @@ public class Docket implements DocumentationPlugin {
    * @param operationOrdering
    * @return this Docket
    */
-  public Docket operationOrdering(Ordering<Operation> operationOrdering) {
+  public Docket operationOrdering(Comparator<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
     return this;
   }
@@ -326,7 +326,7 @@ public class Docket implements DocumentationPlugin {
    * @param apiListingReferenceOrdering
    * @return this Docket
    */
-  public Docket apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
+  public Docket apiListingReferenceOrdering(Comparator<ApiListingReference> apiListingReferenceOrdering) {
     this.apiListingReferenceOrdering = apiListingReferenceOrdering;
     return this;
   }
@@ -342,7 +342,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    * @see springfox.documentation.spring.web.scanners.ApiListingScanner
    */
-  public Docket apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
+  public Docket apiDescriptionOrdering(Comparator<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = apiDescriptionOrdering;
     return this;
   }

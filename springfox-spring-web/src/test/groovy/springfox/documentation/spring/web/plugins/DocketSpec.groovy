@@ -230,11 +230,11 @@ class DocketSpec extends DocumentationContextSpec {
     'pathMapping' | null    | Optional.empty()
   }
 
-  Ordering<ApiDescription> apiDescriptionOrdering() {
+  Comparator<ApiDescription> apiDescriptionOrdering() {
     new Defaults().apiDescriptionOrdering()
   }
 
-  Ordering<ApiDescription> operationOrdering() {
+  Comparator<ApiDescription> operationOrdering() {
     new Defaults().operationOrdering()
   }
 

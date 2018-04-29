@@ -20,7 +20,7 @@
 package springfox.documentation.builders;
 
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
+
 import com.google.common.collect.TreeMultimap;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
@@ -38,7 +38,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
-  private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Ordering.natural(), byListingPosition());
+  private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Comparator.naturalOrder(), byListingPosition());
   private ResourceListing resourceListing;
   private Set<Tag> tags = newLinkedHashSet();
   private String basePath;

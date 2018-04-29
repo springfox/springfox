@@ -19,13 +19,14 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.collect.Ordering;
+
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,12 +34,13 @@ import java.util.Set;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.service.Tags.*;
 
 public class ApiListingBuilder {
-  private final Ordering<ApiDescription> descriptionOrdering;
+  private final Comparator<ApiDescription> descriptionOrdering;
   private String apiVersion;
   private String basePath;
   private String resourcePath;
@@ -62,7 +64,7 @@ public class ApiListingBuilder {
    *
    * @param descriptionOrdering - ordering for the api descriptions
    */
-  public ApiListingBuilder(Ordering<ApiDescription> descriptionOrdering) {
+  public ApiListingBuilder(Comparator<ApiDescription> descriptionOrdering) {
     this.descriptionOrdering = descriptionOrdering;
   }
 
@@ -192,7 +194,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder apis(List<ApiDescription> apis) {
     if (apis != null) {
-      this.apis = descriptionOrdering.sortedCopy(apis);
+      this.apis = apis.stream().sorted(descriptionOrdering).collect(toList());
     }
     return this;
   }

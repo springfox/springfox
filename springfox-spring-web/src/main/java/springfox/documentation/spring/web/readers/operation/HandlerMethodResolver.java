@@ -31,7 +31,7 @@ import com.google.common.base.Predicate;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
+
 import com.google.common.primitives.Ints;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
@@ -92,13 +92,13 @@ public class HandlerMethodResolver {
 
 
   @VisibleForTesting
-  static Ordering<ResolvedMethod> byArgumentCount() {
-    return Ordering.from(new Comparator<ResolvedMethod>() {
+  static Comparator<ResolvedMethod> byArgumentCount() {
+    return new Comparator<ResolvedMethod>() {
       @Override
       public int compare(ResolvedMethod first, ResolvedMethod second) {
         return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
       }
-    });
+    };
   }
 
   @VisibleForTesting
@@ -221,7 +221,7 @@ public class HandlerMethodResolver {
       } else if (Iterables.size(covariantMethods) == 1) {
         return StreamSupport.stream(covariantMethods.spliterator(), false).findFirst();
       } else {
-        return Optional.of(byArgumentCount().max(covariantMethods));
+        return StreamSupport.stream(covariantMethods.spliterator(), false).max(byArgumentCount());
       }
     }
     return StreamSupport.stream(filtered.spliterator(), false).findFirst();

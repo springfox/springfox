@@ -21,7 +21,7 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Ordering;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
@@ -35,6 +35,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.annotation.Annotation;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -118,7 +119,7 @@ public class RequestMappingContext {
     return documentationContext.getAlternateTypeProvider().alternateFor(resolvedType);
   }
 
-  public Ordering<Operation> operationOrdering() {
+  public Comparator<Operation> operationOrdering() {
     return documentationContext.operationOrdering();
   }
 

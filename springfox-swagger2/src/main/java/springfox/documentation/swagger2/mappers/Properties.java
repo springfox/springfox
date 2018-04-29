@@ -23,7 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Ordering;
+
 import com.google.common.primitives.Ints;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BaseIntegerProperty;
@@ -130,8 +130,8 @@ class Properties {
     };
   }
 
-  static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
-    return Ordering.from(byPosition(properties)).compound(byName());
+  static Comparator<String> defaultOrdering(Map<String, ModelProperty> properties) {
+    return byPosition(properties).thenComparing(byName());
   }
 
   private static Function<String, ? extends Property> voidOrRef(final String typeName) {

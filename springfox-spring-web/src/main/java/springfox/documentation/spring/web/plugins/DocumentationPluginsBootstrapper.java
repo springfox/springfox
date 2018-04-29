@@ -161,8 +161,8 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   public void start() {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      List<DocumentationPlugin> plugins = pluginOrdering()
-          .sortedCopy(documentationPluginsManager.documentationPlugins());
+      List<DocumentationPlugin> plugins = StreamSupport.stream(documentationPluginsManager.documentationPlugins().spliterator(), false)
+          .sorted(pluginOrdering()).collect(toList());
       log.info("Found {} custom documentation plugin(s)", plugins.size());
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();

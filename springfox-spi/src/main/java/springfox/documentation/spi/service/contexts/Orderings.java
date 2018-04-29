@@ -19,8 +19,7 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
+
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
@@ -51,7 +50,7 @@ public class Orderings {
     return new Comparator<Operation>() {
       @Override
       public int compare(Operation first, Operation second) {
-        return Ints.compare(first.getPosition(), second.getPosition());
+        return Integer.compare(first.getPosition(), second.getPosition());
       }
     };
   }
@@ -69,7 +68,7 @@ public class Orderings {
     return new Comparator<ApiListingReference>() {
       @Override
       public int compare(ApiListingReference first, ApiListingReference second) {
-        return Ints.compare(first.getPosition(), second.getPosition());
+        return Integer.compare(first.getPosition(), second.getPosition());
       }
     };
   }
@@ -105,38 +104,38 @@ public class Orderings {
     return String.format("%s.%s", context.getGroupName(), context.getName());
   }
 
-  public static Ordering<RequestHandler> byPatternsCondition() {
-    return Ordering.from(new Comparator<RequestHandler>() {
+  public static Comparator<RequestHandler> byPatternsCondition() {
+    return new Comparator<RequestHandler>() {
       @Override
       public int compare(RequestHandler first, RequestHandler second) {
         return patternsCondition(first).toString()
             .compareTo(patternsCondition(second).toString());
       }
-    });
+    };
   }
 
-  public static Ordering<RequestHandler> byOperationName() {
-    return Ordering.from(new Comparator<RequestHandler>() {
+  public static Comparator<RequestHandler> byOperationName() {
+    return new Comparator<RequestHandler>() {
       @Override
       public int compare(RequestHandler first, RequestHandler second) {
         return first.getName().compareTo(second.getName());
       }
-    });
+    };
   }
 
   public static PatternsRequestCondition patternsCondition(RequestHandler handler) {
     return handler.getPatternsCondition();
   }
 
-  public static Ordering<DocumentationPlugin> pluginOrdering() {
-    return Ordering.from(byPluginType()).compound(byPluginName());
+  public static Comparator<? super DocumentationPlugin> pluginOrdering() {
+    return byPluginType().thenComparing(byPluginName());
   }
 
   public static Comparator<DocumentationPlugin> byPluginType() {
     return new Comparator<DocumentationPlugin>() {
       @Override
       public int compare(DocumentationPlugin first, DocumentationPlugin second) {
-        return Ints.compare(first.getDocumentationType().hashCode(), second.getDocumentationType().hashCode());
+        return Integer.compare(first.getDocumentationType().hashCode(), second.getDocumentationType().hashCode());
       }
     };
   }

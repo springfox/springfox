@@ -56,9 +56,9 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    return byPatternsCondition().sortedCopy(nullToEmptyList(handlerMappings).stream()
+    return nullToEmptyList(handlerMappings).stream()
         .map(toMappingEntries()).flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
-        .map(toRequestHandler()).collect(toList()));
+        .map(toRequestHandler()).sorted(byPatternsCondition()).collect(toList());
   }
 
   private Function<? super RequestMappingInfoHandlerMapping,

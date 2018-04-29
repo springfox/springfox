@@ -86,7 +86,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), req.servletContext)
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
-          .operationOrdering(Ordering.from(nickNameComparator()))
+          .operationOrdering(nickNameComparator())
 
       ApiDocumentationScanner swaggerApiResourceListing =
           new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
@@ -125,7 +125,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
           .pathProvider(pathProvider)
-          .operationOrdering(Ordering.from(nickNameComparator()))
+          .operationOrdering(nickNameComparator())
 
       ApiDocumentationScanner swaggerApiResourceListing =
           new ApiDocumentationScanner(listingReferenceScanner, listingScanner)

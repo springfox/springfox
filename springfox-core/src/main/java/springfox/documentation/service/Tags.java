@@ -23,7 +23,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
+
 
 import java.util.Comparator;
 import java.util.List;
@@ -55,8 +55,8 @@ public class Tags {
   }
 
   public static Comparator<Tag> tagComparator() {
-    return Ordering.from(byOrder())
-        .compound(thenByName());
+    return byOrder()
+        .thenComparing(thenByName());
   }
 
   private static Comparator<Tag> thenByName() {

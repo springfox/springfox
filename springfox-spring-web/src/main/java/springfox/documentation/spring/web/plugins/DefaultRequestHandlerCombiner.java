@@ -37,6 +37,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -56,7 +57,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
       combined.addAll(combined(byPath.get(key)));
     }
     LOGGER.debug("Combined number of request handlers {}", combined.size());
-    return byPatternsCondition().sortedCopy(combined);
+    return combined.stream().sorted(byPatternsCondition()).collect(toList());
   }
 
   private Collection<? extends RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
@@ -71,7 +72,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
 
       RequestHandler toCombine = path.get();
       if (handlers.size() > 1) {
-        for (RequestHandler each : sortedByPathAndName(handlers)) {
+        for (RequestHandler each : handlers) {
           if (each.equals(toCombine)) {
             continue;
           }
@@ -86,9 +87,9 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   }
 
   private List<RequestHandler> sortedByPathAndName(List<RequestHandler> handlers) {
-    return byPatternsCondition()
-        .compound(byOperationName())
-        .sortedCopy(handlers);
+    return handlers.stream().sorted(byPatternsCondition()
+        .thenComparing(byOperationName()))
+            .collect(toList());
   }
 
   private Ordering<Equivalence.Wrapper<RequestHandler>> wrapperComparator() {
@@ -96,7 +97,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
       @Override
       public int compare(Equivalence.Wrapper<RequestHandler> first, Equivalence.Wrapper<RequestHandler> second) {
         return byPatternsCondition()
-            .compound(byOperationName())
+            .thenComparing(byOperationName())
             .compare(first.get(), second.get());
       }
     });
