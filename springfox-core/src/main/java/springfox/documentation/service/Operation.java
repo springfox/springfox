@@ -19,8 +19,7 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
+
 import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelReference;
 
@@ -29,10 +28,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class Operation {
   private final HttpMethod method;
@@ -102,13 +102,13 @@ public class Operation {
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
-    return Maps.transformEntries(Maps.uniqueIndex(securityReferences, byType()), toScopes());
+    return securityReferences.stream().collect(toMap(byType(), toScopes()));
   }
 
-  private EntryTransformer<? super String, ? super SecurityReference, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, SecurityReference, List<AuthorizationScope>>() {
+  private Function<? super SecurityReference, List<AuthorizationScope>> toScopes() {
+    return new Function<SecurityReference, List<AuthorizationScope>>() {
       @Override
-      public List<AuthorizationScope> transformEntry(String key, SecurityReference value) {
+      public List<AuthorizationScope> apply(SecurityReference value) {
         return newArrayList(value.getScopes());
       }
     };

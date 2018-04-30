@@ -18,7 +18,7 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 

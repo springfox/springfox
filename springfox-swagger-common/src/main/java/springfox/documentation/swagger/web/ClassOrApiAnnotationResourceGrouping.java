@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger.web;
 
-import com.google.common.base.Function;
+
 
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -35,6 +35,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 

@@ -19,9 +19,11 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import springfox.documentation.service.Parameter;
+
+import java.util.function.Function;
 
 public class Parameters {
   private Parameters() {

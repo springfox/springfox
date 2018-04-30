@@ -22,13 +22,14 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-import com.google.common.base.Function;
+
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;

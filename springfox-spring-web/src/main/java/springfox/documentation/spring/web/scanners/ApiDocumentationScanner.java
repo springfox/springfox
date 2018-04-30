@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Joiner;
 
 import com.google.common.collect.Multimap;
@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 
 import static com.google.common.collect.Sets.*;

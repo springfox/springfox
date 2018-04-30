@@ -18,8 +18,8 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
+
+
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
@@ -29,6 +29,7 @@ import springfox.documentation.service.ResourceGroup;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Function;
 
 class ResourcePathProvider {
   private final ResourceGroup resourceGroup;
@@ -60,7 +61,6 @@ class ResourcePathProvider {
     };
   }
 
-  @VisibleForTesting
   String[] paths(Class<?> controller) {
     RequestMapping annotation
         = AnnotationUtils.findAnnotation(controller, RequestMapping.class);

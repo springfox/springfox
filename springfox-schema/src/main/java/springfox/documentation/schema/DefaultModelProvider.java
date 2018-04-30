@@ -21,7 +21,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
+
 import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.schema.Collections.*;
@@ -97,7 +98,7 @@ public class DefaultModelProvider implements ModelProvider {
 
   private Optional<Model> reflectionBasedModel(ModelContext modelContext, ResolvedType propertiesHost) {
     Map<String, ModelProperty> propertiesIndex
-        = properties(modelContext, propertiesHost).stream().collect(toMap(byPropertyName(), java.util.function.Function.identity()));
+        = properties(modelContext, propertiesHost).stream().collect(toMap(byPropertyName(), Function.identity()));
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
         Joiner.on(", ").join(propertiesIndex.keySet()));
     Map<String, ModelProperty> properties = newTreeMap();

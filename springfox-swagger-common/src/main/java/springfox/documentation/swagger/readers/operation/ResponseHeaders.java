@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +28,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Header;
 
 import java.util.Map;
+import java.util.function.Function;
 
 import static com.google.common.base.Predicates.not;
 import static com.google.common.base.Strings.isNullOrEmpty;

@@ -20,7 +20,7 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 
@@ -49,6 +49,7 @@ import springfox.documentation.schema.ModelReference;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.function.Function;
 
 import static com.google.common.base.Functions.*;
 import static com.google.common.base.Strings.*;

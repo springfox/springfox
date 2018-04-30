@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
+
 import com.google.common.collect.ImmutableMap;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.mapstruct.Mapper;
@@ -27,6 +27,8 @@ import springfox.documentation.service.SecurityScheme;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Maps.*;
 
@@ -43,8 +45,8 @@ public class SecurityMapper {
       return newHashMap();
     }
     TreeMap<String, SecuritySchemeDefinition> result = newTreeMap();
-    result.putAll(transformValues(uniqueIndex(from.getSecuritySchemes(), schemeName()),
-        toSecuritySchemeDefinition()));
+    result.putAll(from.getSecuritySchemes().stream().collect(Collectors.toMap(schemeName(),
+        toSecuritySchemeDefinition())));
     return result;
   }
 

@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +45,7 @@ import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 

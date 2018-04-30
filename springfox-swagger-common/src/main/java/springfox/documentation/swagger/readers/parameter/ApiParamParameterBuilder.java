@@ -20,7 +20,7 @@
 package springfox.documentation.swagger.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
+
 
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,7 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;

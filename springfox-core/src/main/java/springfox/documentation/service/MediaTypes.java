@@ -18,7 +18,7 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicates;
 
 import org.slf4j.Logger;
@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
 import java.util.Set;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toSet;
 

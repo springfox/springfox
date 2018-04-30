@@ -19,7 +19,7 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Equivalence;
-import com.google.common.base.Function;
+
 
 import com.google.common.collect.Sets;
 import springfox.documentation.RequestHandler;
@@ -28,6 +28,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toSet;
 

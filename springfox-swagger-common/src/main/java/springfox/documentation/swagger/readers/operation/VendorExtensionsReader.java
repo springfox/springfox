@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Function;
+
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Extension;
@@ -38,6 +38,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;

@@ -18,12 +18,14 @@
  */
 package springfox.documentation.spring.web.paths;
 
-import com.google.common.base.Function;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
+
+import java.util.function.Function;
 
 @Component
 @Order

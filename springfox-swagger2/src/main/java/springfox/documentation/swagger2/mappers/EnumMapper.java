@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
+
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.AbstractNumericProperty;
@@ -35,6 +35,7 @@ import springfox.documentation.service.AllowableValues;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 
 import static java.util.stream.Collectors.toList;

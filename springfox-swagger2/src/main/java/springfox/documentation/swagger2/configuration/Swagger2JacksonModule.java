@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.google.common.annotations.VisibleForTesting;
+
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.Info;
@@ -152,13 +152,11 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
         return false;
       }
 
-      @VisibleForTesting
       boolean isStringLiteral(String value) {
         return (value.startsWith("\"") && value.endsWith("\""))
             || (value.startsWith("'") && value.endsWith("'"));
       }
 
-      @VisibleForTesting
       boolean isNotJsonString(final String value) {
         // strictly speaking, should also test for equals("null") since {"example": null} would be valid JSON
         // but swagger2 does not support null values

@@ -19,7 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
+
 import org.springframework.aop.support.AopUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 class ActionSpecification {
   private final Collection<RequestMethod> supportedMethods;

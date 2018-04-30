@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -39,9 +39,11 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.service.Parameter.*;
@@ -119,11 +121,11 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
+    return Arrays.asList(subject.getEnumConstants()).stream().map(new Function<Object, String>() {
       @Override
       public String apply(final Object input) {
         return input.toString();
       }
-    });
+    }).collect(toList());
   }
 }

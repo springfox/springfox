@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.paths;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import org.springframework.core.Ordered;
@@ -34,6 +34,7 @@ import springfox.documentation.spi.service.contexts.PathContext;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import static com.google.common.base.Predicates.*;
 import static com.google.common.base.Strings.*;

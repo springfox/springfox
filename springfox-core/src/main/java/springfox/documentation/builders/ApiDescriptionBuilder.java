@@ -19,7 +19,7 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Functions;
 
 import springfox.documentation.service.ApiDescription;
@@ -27,6 +27,7 @@ import springfox.documentation.service.Operation;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;

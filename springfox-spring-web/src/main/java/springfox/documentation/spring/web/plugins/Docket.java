@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
+
 
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;

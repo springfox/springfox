@@ -19,7 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
@@ -36,6 +36,7 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 import static java.util.stream.Collectors.toList;

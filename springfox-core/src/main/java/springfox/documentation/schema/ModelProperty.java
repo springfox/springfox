@@ -20,11 +20,12 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
+
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 

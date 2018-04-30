@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.base.Function;
+
 import com.google.common.collect.Sets;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -36,6 +36,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;

@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Function;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
@@ -35,6 +35,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 

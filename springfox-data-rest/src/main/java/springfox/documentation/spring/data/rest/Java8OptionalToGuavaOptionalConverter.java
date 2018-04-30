@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
@@ -57,7 +57,6 @@ class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optiona
     return Optional.ofNullable(source);
   }
 
-  @VisibleForTesting
   boolean isJdk8Optional(Object source) {
     return "java.util.Optional".equals(source.getClass().getName());
   }

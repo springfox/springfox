@@ -19,9 +19,7 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+
 import org.springframework.http.HttpMethod;
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
@@ -32,14 +30,13 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toMap;
 import static org.springframework.http.MediaType.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -302,7 +299,7 @@ public class OperationBuilder {
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
-    ImmutableMap<Integer, ResponseMessage> responsesByCode = Maps.uniqueIndex(this.responseMessages, byStatusCode());
+    Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream().collect(toMap(byStatusCode(), Function.identity()));
     Set<ResponseMessage> merged = newHashSet(this.responseMessages);
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {

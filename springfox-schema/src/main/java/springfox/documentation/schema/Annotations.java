@@ -22,10 +22,11 @@ package springfox.documentation.schema;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Function;
+
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class Annotations {
 
@@ -65,7 +66,7 @@ public class Annotations {
 
     return Optional.ofNullable(member.getAnnotation(JsonUnwrapped.class))
         .map(new Function<JsonUnwrapped,
-            String>() {
+                    String>() {
           @Override
           public String apply(JsonUnwrapped input) {
             return input.prefix();

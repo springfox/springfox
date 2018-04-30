@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.base.Function;
+
 
 import com.google.common.primitives.Ints;
 
@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.ImmutableSortedSet.*;
 import static com.google.common.collect.Lists.*;
@@ -108,13 +110,13 @@ public class Operation {
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
-    return transformEntries(uniqueIndex(authorizations, byType()), toScopes());
+    return authorizations.stream().collect(Collectors.toMap(byType(), toScopes()));
   }
 
-  private EntryTransformer<? super String, ? super Authorization, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, Authorization, List<AuthorizationScope>>() {
+  private Function<? super Authorization, List<AuthorizationScope>> toScopes() {
+    return new Function<Authorization, List<AuthorizationScope>>() {
       @Override
-      public List<AuthorizationScope> transformEntry(String key, Authorization value) {
+      public List<AuthorizationScope> apply(Authorization value) {
         return newArrayList(value.getScopes());
       }
     };

@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -33,6 +33,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 
@@ -62,7 +63,7 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
   }
 
   private Function<? super RequestMappingInfoHandlerMapping,
-      Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+        Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
     return new Function<RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>>() {
       @Override
       public Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>> apply(RequestMappingInfoHandlerMapping input) {

@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ResourceGroup;
@@ -26,6 +26,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Function;
 
 
 import static java.util.stream.Collectors.toList;

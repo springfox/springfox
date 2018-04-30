@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.google.common.base.Function;
+
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -35,6 +35,7 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 import static java.lang.String.*;

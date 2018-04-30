@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger.web;
 
-import com.google.common.annotations.VisibleForTesting;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -40,9 +40,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   private final String swagger1Url;
   private final String swagger2Url;
 
-  @VisibleForTesting
   boolean swagger1Available;
-  @VisibleForTesting
   boolean swagger2Available;
 
   private final DocumentationCache documentationCache;

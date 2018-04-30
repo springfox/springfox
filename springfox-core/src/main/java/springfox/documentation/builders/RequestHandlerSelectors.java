@@ -19,7 +19,7 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import org.springframework.util.ClassUtils;
@@ -27,6 +27,7 @@ import springfox.documentation.RequestHandler;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class RequestHandlerSelectors {
   private RequestHandlerSelectors() {

@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.google.common.base.Function;
+
 
 import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.PersistentEntity;
@@ -28,6 +28,7 @@ import org.springframework.data.rest.webmvc.mapping.Associations;
 import springfox.documentation.RequestHandler;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.collect.Lists.*;

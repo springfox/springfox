@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 
@@ -42,6 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
@@ -65,7 +66,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
           each.securityForOperation(context).stream()
-          .collect(toMap(byReferenceName(), java.util.function.Function.identity())));
+          .collect(toMap(byReferenceName(), Function.identity())));
     }
 
     Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
@@ -101,7 +102,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
         securityReferenceOverrides.add(securityReference);
       }
       securityReferences.putAll(securityReferenceOverrides.stream()
-          .collect(toMap(byReferenceName(), java.util.function.Function.identity())));
+          .collect(toMap(byReferenceName(), Function.identity())));
     }
     LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
     context.operationBuilder().authorizations(securityReferences.values());

@@ -20,8 +20,7 @@ package springfox.documentation.spring.data.rest.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
+
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -37,9 +36,11 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 class ResourcesModelProvider implements SyntheticModelProviderPlugin {
@@ -68,7 +69,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
         .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(Maps.uniqueIndex(properties(context), byName()))
+        .properties(properties(context).stream().collect(toMap(byName(), Function.identity())))
         .xml(new Xml()
             .name("entities")
             .wrapped(false)

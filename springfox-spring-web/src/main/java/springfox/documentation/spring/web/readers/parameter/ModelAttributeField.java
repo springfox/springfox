@@ -21,12 +21,13 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedMember;
-import com.google.common.base.Function;
+
 
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 

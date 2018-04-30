@@ -18,7 +18,7 @@
  */
 package springfox.bean.validators.plugins.schema;
 
-import com.google.common.annotations.VisibleForTesting;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
@@ -52,7 +52,6 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
     }
   }
 
-  @VisibleForTesting
   Optional<Size> extractAnnotation(ModelPropertyContext context) {
     return annotationFromBean(context, Size.class).map(Optional::of).orElse(annotationFromField(context, Size.class));
   }

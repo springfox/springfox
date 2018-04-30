@@ -19,10 +19,11 @@
 
 package springfox.documentation.schema;
 
-import com.google.common.base.Function;
+
 import springfox.documentation.service.AllowableValues;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class ModelRef implements ModelReference {
   private final String type;

@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
+
 import org.mapstruct.Mapper;
 import springfox.documentation.service.ListVendorExtension;
 import springfox.documentation.service.ObjectVendorExtension;
@@ -27,6 +27,7 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 

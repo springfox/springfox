@@ -20,8 +20,8 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
+
+
 import com.google.common.base.Predicate;
 
 import com.google.common.collect.Multimap;
@@ -49,6 +49,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.*;
@@ -149,7 +150,6 @@ public abstract class ModelMapper {
     return sortedMap;
   }
 
-  @VisibleForTesting
   Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {

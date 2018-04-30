@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Contact;
@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 
 import static com.google.common.collect.Lists.*;

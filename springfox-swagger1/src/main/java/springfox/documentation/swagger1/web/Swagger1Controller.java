@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger1.web;
 
-import com.google.common.base.Function;
+
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.google.common.collect.Multimaps.*;
 import static springfox.documentation.swagger1.mappers.Mappers.*;

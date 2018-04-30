@@ -20,21 +20,17 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.base.Function;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 
 public class Enums {
 
@@ -78,7 +74,7 @@ public class Enums {
   }
 
   private static <E> List<String> transformUnique(E[] values, Function<E, String> mapper) {
-    List<String> nonUniqueValues = transform(asList(values), mapper);
+    List<String> nonUniqueValues = Arrays.asList(values).stream().map( mapper).collect(toList());
     Set<String> uniqueValues = new LinkedHashSet<String>(nonUniqueValues);
     return new ArrayList<String>(uniqueValues);
   }

@@ -30,6 +30,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
@@ -261,7 +263,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
-    this.tagLookup.putAll(uniqueIndex(nullToEmptySet(availableTags), toTagName()));
+    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(Collectors.toMap(toTagName(), Function.identity())));
     return this;
   }
 

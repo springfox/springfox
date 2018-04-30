@@ -21,8 +21,8 @@ package springfox.documentation.swagger.annotations;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
+
+
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,6 +34,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 import static java.util.Optional.ofNullable;
@@ -65,7 +66,7 @@ public class Annotations {
   }
 
   public static Function<ApiOperation, ResolvedType> resolvedTypeFromOperation(final TypeResolver typeResolver,
-      final ResolvedType defaultType) {
+                                                                               final ResolvedType defaultType) {
 
     return new Function<ApiOperation, ResolvedType>() {
       @Override
@@ -88,7 +89,6 @@ public class Annotations {
   }
 
   @SuppressWarnings("Duplicates")
-  @VisibleForTesting
   static ResolvedType getResolvedType(
       ApiOperation annotation,
       TypeResolver resolver,
@@ -105,7 +105,6 @@ public class Annotations {
   }
 
   @SuppressWarnings("Duplicates")
-  @VisibleForTesting
   static ResolvedType getResolvedType(
       ApiResponse annotation,
       TypeResolver resolver,

@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -54,6 +54,7 @@ import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 
 import static com.google.common.collect.Lists.*;

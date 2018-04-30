@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Function;
+
 import com.google.common.base.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +60,7 @@ import java.util.Optional;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Lists.*;
@@ -125,7 +126,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     Set<ModelProperty> properties = new TreeSet<>(byPropertyName());
     BeanDescription beanDescription = beanDescription(type, givenContext);
     Map<String, BeanPropertyDefinition> propertyLookup = beanDescription.findProperties().stream().collect(toMap(
-        BeanPropertyDefinitions.beanPropertyByInternalName(), java.util.function.Function.identity()));
+        BeanPropertyDefinitions.beanPropertyByInternalName(), Function.identity()));
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();

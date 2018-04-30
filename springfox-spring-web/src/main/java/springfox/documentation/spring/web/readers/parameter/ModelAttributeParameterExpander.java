@@ -372,7 +372,7 @@ public class ModelAttributeParameterExpander {
           public Method apply(PropertyDescriptor input) {
             return input.getReadMethod();
           }
-        }, java.util.function.Function.identity()));
+        }, Function.identity()));
 
   }
 

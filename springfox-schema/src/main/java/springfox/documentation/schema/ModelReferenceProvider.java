@@ -19,11 +19,12 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
+
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
