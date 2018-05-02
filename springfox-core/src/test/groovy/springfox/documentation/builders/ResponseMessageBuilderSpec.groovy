@@ -84,7 +84,7 @@ class ResponseMessageBuilderSpec extends Specification {
   }
 
   def headers(String ... names) {
-    def map = newHashMap()
+    def map = new HashMap()
     names.collect({map.put(it, new ModelRef("string"))})
     map
   }
@@ -94,7 +94,7 @@ class ResponseMessageBuilderSpec extends Specification {
   }
 
   def headersWithDescription(String description, String ... names) {
-    def map = newHashMap()
+    def map = new HashMap()
     names.collect({map.put(it, new Header(it, description, new ModelRef("string")))})
     map
   }

@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
 public class ApiListingMerger {
@@ -40,10 +40,10 @@ public class ApiListingMerger {
         merged.setDescription(each.getDescription());
         merged.appendAuthorizations(each.getAuthorizations());
         merged.appendApis(each.getApis());
-        merged.appendProtocols(newHashSet(each.getProtocols()));
-        merged.appendConsumes(newHashSet(each.getConsumes()));
+        merged.appendProtocols(each.getProtocols().stream().collect(toSet()));
+        merged.appendConsumes(each.getConsumes().stream().collect(toSet()));
         merged.appendModels(each.getModels());
-        merged.appendProduces(newHashSet(each.getProduces()));
+        merged.appendProduces(each.getProduces().stream().collect(toSet()));
       }
       return Optional.of(merged);
     }

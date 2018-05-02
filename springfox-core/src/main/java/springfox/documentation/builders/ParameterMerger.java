@@ -19,8 +19,6 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.collect.Sets;
-import com.google.common.collect.Sets.*;
 import springfox.documentation.service.Parameter;
 
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.Set;
 
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.Parameters.*;
 
@@ -48,9 +46,9 @@ class ParameterMerger {
     Set<String> newParameterNames = source.stream().map(toParameterName()).collect(toSet());
     List<Parameter> merged = newArrayList();
 
-    SetView<String> asIsParams = difference(existingParameterNames, newParameterNames);
-    SetView<String> missingParamNames = difference(newParameterNames, existingParameterNames);
-    SetView<String> paramsToMerge = Sets.intersection(newParameterNames, existingParameterNames);
+    Set<String> asIsParams = existingParameterNames.stream().filter(entry -> !newParameterNames.contains(entry)).collect(toSet());
+    Set<String> missingParamNames = newParameterNames.stream().filter(entry -> !existingParameterNames.contains(entry)).collect(toSet());
+    Set<String> paramsToMerge = newParameterNames.stream().filter(entry -> existingParameterNames.contains(entry)).collect(toSet());
 
     merged.addAll(asIsParameters(asIsParams, destination));
     merged.addAll(newParameters(missingParamNames, source));
@@ -58,7 +56,7 @@ class ParameterMerger {
     return merged;
   }
 
-  private List<Parameter> asIsParameters(SetView<String> asIsParams, List<Parameter> source) {
+  private List<Parameter> asIsParameters(Set<String> asIsParams, List<Parameter> source) {
     List<Parameter> parameters = newArrayList();
     for (Parameter each : source) {
       if (asIsParams.contains(each.getName())) {
@@ -69,7 +67,7 @@ class ParameterMerger {
   }
 
   private List<Parameter> mergedParameters(
-      SetView<String> paramsToMerge,
+      Set<String> paramsToMerge,
       List<Parameter> existingParameters,
       List<Parameter> newParams) {
     List<Parameter> parameters = newArrayList();
@@ -105,7 +103,7 @@ class ParameterMerger {
         .build();
   }
 
-  private List<Parameter> newParameters(SetView<String> missingParamNames, List<Parameter> newParams) {
+  private List<Parameter> newParameters(Set<String> missingParamNames, List<Parameter> newParams) {
     List<Parameter> parameters = newArrayList();
     for (Parameter each : newParams) {
       if (missingParamNames.contains(each.getName())) {

@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.plugins;
 import com.google.common.base.Equivalence;
 
 
-import com.google.common.collect.Sets;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
@@ -40,9 +40,9 @@ class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
   protected boolean doEquivalent(RequestHandler a, RequestHandler b) {
 
     return a.getPatternsCondition().equals(b.getPatternsCondition())
-        && !Sets.intersection(a.supportedMethods(), b.supportedMethods()).isEmpty()
+        && a.supportedMethods().stream().anyMatch(item -> b.supportedMethods().contains(item))
         && a.params().equals(b.params())
-        && Sets.symmetricDifference(wrapped(a.getParameters()), wrapped(b.getParameters())).isEmpty();
+        && Objects.equals(wrapped(a.getParameters()), wrapped(b.getParameters()));
   }
 
   private Set<Wrapper<ResolvedMethodParameter>> wrapped(List<ResolvedMethodParameter> parameters) {

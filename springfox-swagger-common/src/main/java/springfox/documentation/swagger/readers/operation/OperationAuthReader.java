@@ -38,15 +38,12 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.newHashMap;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -61,7 +58,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     List<SecurityContext> securityContexts = context.securityContext();
 
-    Map<String, SecurityReference> securityReferences = newHashMap();
+    Map<String, SecurityReference> securityReferences = new HashMap();
 
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
@@ -118,7 +115,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
   }
 
   private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
-    return Arrays.asList(apiOperationAnnotation.authorizations()).stream()
+    return Stream.of(apiOperationAnnotation.authorizations())
         .filter(new Predicate<Authorization>() {
           @Override
           public boolean apply(Authorization input) {

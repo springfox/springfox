@@ -21,7 +21,7 @@ package springfox.documentation.builders
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.google.common.collect.Sets.*
+
 import static org.springframework.core.Ordered.*
 
 class ParameterMergerSpec extends Specification {
@@ -32,7 +32,7 @@ class ParameterMergerSpec extends Specification {
 
     when:
     def merged = merger.merged()
-    def expected = newHashSet()
+    def expected = new HashSet()
     expected.addAll(destination.collect { it.name })
     expected.addAll(source.collect { it.name })
 

@@ -26,16 +26,13 @@ import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -50,16 +47,16 @@ public class ApiListingBuilder {
   private String host;
   private int position;
 
-  private Set<String> produces = newHashSet();
-  private Set<String> consumes = newHashSet();
-  private Set<String> protocol = newHashSet();
+  private Set<String> produces = new HashSet();
+  private Set<String> consumes = new HashSet();
+  private Set<String> protocol = new HashSet();
   private List<SecurityReference> securityReferences = newArrayList();
   private List<ApiDescription> apis = newArrayList();
 
-  private final Set<Tag> tags = newTreeSet(tagComparator());
-  private final Set<String> tagNames = newHashSet();
-  private final Map<String, Model> models = newHashMap();
-  private final Map<String, Tag> tagLookup = newHashMap();
+  private final Set<Tag> tags = new TreeSet(tagComparator());
+  private final Set<String> tagNames = new HashSet();
+  private final Map<String, Model> models = new HashMap();
+  private final Map<String, Tag> tagLookup = new HashMap();
 
   /**
    * Update the sorting order for api descriptions
@@ -111,7 +108,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder produces(Set<String> mediaTypes) {
     if (mediaTypes != null) {
-      this.produces = newHashSet(mediaTypes);
+      this.produces = mediaTypes.stream().collect(toSet());
     }
     return this;
   }
@@ -124,7 +121,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder consumes(Set<String> mediaTypes) {
     if (mediaTypes != null) {
-      this.consumes = newHashSet(mediaTypes);
+      this.consumes = mediaTypes.stream().collect(toSet());
     }
     return this;
   }

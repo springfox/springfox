@@ -20,7 +20,6 @@
 package springfox.documentation.swagger2.mappers;
 
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Contact;
 import io.swagger.models.Info;
@@ -43,10 +42,7 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 
@@ -118,7 +114,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       Map<String, List<AuthorizationScope>> from) {
     List<Map<String, List<String>>> security = newArrayList();
     for (Map.Entry<String, List<AuthorizationScope>> each : from.entrySet()) {
-      Map<String, List<String>> newEntry = newHashMap();
+      Map<String, List<String>> newEntry = new HashMap();
       newEntry.put(each.getKey(), each.getValue().stream().map(scopeToString()).collect(toList()));
       security.add(newEntry);
     }
@@ -134,7 +130,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
-      response.setExamples(Maps.<String, Object>newHashMap());
+      response.setExamples(new HashMap<String, Object>());
       response.setHeaders(transformEntries(responseMessage.getHeaders(), toPropertyEntry()));
       Map<String, Object> extensions = new VendorExtensionsMapper()
           .mapExtensions(responseMessage.getVendorExtensions());

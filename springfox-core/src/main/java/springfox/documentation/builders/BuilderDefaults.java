@@ -25,15 +25,11 @@ import com.google.common.collect.Multimap;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+
 import static springfox.documentation.schema.Enums.*;
 
 /**
@@ -67,9 +63,9 @@ public class BuilderDefaults {
    */
   public static <T> List<T> nullToEmptyList(Collection<T> newValue) {
     if (newValue == null) {
-      return newArrayList();
+      return new ArrayList();
     }
-    return newArrayList(newValue);
+    return new ArrayList(newValue);
   }
 
   /**
@@ -82,7 +78,7 @@ public class BuilderDefaults {
    */
   public static <K, V> Map<K, V> nullToEmptyMap(Map<K, V> newValue) {
     if (newValue == null) {
-      return newHashMap();
+      return new HashMap<K, V>();
     }
     return newValue;
   }
@@ -111,7 +107,7 @@ public class BuilderDefaults {
    */
   public static <T> Set<T> nullToEmptySet(Set<T> newValue) {
     if (newValue == null) {
-      return newHashSet();
+      return new HashSet<T>();
     }
     return newValue;
   }

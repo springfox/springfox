@@ -41,20 +41,14 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Predicates.*;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -129,7 +123,7 @@ public class ApiListingScanner {
       Set<String> consumes = new LinkedHashSet<String>(documentationContext.getConsumes());
       String host = documentationContext.getHost();
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
-      Set<ApiDescription> apiDescriptions = newHashSet();
+      Set<ApiDescription> apiDescriptions = new HashSet();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
       List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));

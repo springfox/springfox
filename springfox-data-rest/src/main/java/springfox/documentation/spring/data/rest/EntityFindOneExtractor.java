@@ -34,7 +34,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityFindOneExtractor implements EntityOperationsExtractor {
@@ -57,7 +58,7 @@ class EntityFindOneExtractor implements EntityOperationsExtractor {
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
-          newHashSet(RequestMethod.GET),
+          singleton(RequestMethod.GET),
           new HashSet<MediaType>(),
           new HashSet<MediaType>(),
           handler,

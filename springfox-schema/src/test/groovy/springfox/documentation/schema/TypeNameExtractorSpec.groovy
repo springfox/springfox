@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
+
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static springfox.documentation.spi.DocumentationType.*
@@ -34,7 +34,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
     expect:
       typeNameExtractor.typeName(context) == name
 
@@ -58,7 +58,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
     expect:
       typeNameExtractor.typeName(context) == name
 

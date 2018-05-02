@@ -19,7 +19,7 @@
 
 package springfox.documentation.schema.property.field
 
-import com.google.common.collect.ImmutableSet
+
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
@@ -43,7 +43,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       def field = field(TypeWithGettersAndSetters, fieldName)
       def jacksonProperty = beanPropertyDefinitionByField(TypeWithGettersAndSetters, fieldName)
       def sut = new FieldModelProperty(
@@ -85,7 +85,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       def field = field(typeToTest, fieldName)
       def jacksonProperty = beanPropertyDefinitionByField(TypeWithGettersAndSetters, fieldName)
       def sut = new FieldModelProperty(

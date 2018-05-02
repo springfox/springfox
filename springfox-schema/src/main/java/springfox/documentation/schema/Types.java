@@ -31,15 +31,17 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
+
 
 public class Types {
   private Types() {
     throw new UnsupportedOperationException();
   }
 
-  private static final Set<String> baseTypes = newHashSet(
+  private static final Set<String> baseTypes = Stream.of(
       "int",
       "date",
       "string",
@@ -53,7 +55,7 @@ public class Types {
       "__file",
       "biginteger",
       "bigdecimal",
-      "uuid");
+      "uuid").collect(toSet());
   private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
       .put(Long.TYPE, "long")
       .put(Short.TYPE, "int")

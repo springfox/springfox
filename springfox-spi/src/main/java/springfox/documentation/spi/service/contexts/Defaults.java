@@ -45,9 +45,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
 import static java.util.Arrays.asList;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -95,7 +92,7 @@ public class Defaults {
   }
 
   public List<AlternateTypeRule> defaultRules(TypeResolver typeResolver) {
-    List<AlternateTypeRule> rules = newArrayList();
+    List<AlternateTypeRule> rules = new ArrayList();
     rules.add(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
     rules.add(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
             typeResolver.resolve(Object.class)));
@@ -163,7 +160,7 @@ public class Defaults {
   }
 
   private void initIgnorableTypes() {
-    ignored = newHashSet();
+    ignored = new HashSet();
     ignored.add(ServletRequest.class);
     ignored.add(Class.class);
     ignored.add(Void.class);
@@ -180,7 +177,7 @@ public class Defaults {
   }
 
   private void initResponseMessages() {
-    responses = newLinkedHashMap();
+    responses = new LinkedHashMap();
     responses.put(GET, asList(
             new ResponseMessageBuilder()
                     .code(OK.value())

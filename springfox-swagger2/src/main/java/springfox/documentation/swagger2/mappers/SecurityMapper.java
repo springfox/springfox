@@ -25,6 +25,7 @@ import org.mapstruct.Mapper;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.SecurityScheme;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -42,7 +43,7 @@ public class SecurityMapper {
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
     if (from == null) {
-      return newHashMap();
+      return new HashMap();
     }
     TreeMap<String, SecuritySchemeDefinition> result = newTreeMap();
     result.putAll(from.getSecuritySchemes().stream().collect(Collectors.toMap(schemeName(),

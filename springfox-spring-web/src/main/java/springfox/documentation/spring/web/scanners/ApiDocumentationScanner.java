@@ -45,7 +45,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 
-import static com.google.common.collect.Sets.*;
+import static com.google.common.collect.Sets.newTreeSet;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.service.Tags.*;

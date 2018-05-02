@@ -35,13 +35,14 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -83,7 +84,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   private void collectApiResponses(RequestMappingContext context) {
     List<ApiResponses> allApiResponses = context.findAnnotations(ApiResponses.class);
     LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
-    Set<ResolvedType> seenTypes = newHashSet();
+    Set<ResolvedType> seenTypes = new HashSet();
     for (ApiResponses apiResponses : allApiResponses) {
       List<ResolvedType> modelTypes = toResolvedTypes(context).apply(apiResponses);
       for (ResolvedType modelType : modelTypes) {

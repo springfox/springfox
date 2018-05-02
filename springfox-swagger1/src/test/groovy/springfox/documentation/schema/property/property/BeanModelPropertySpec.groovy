@@ -20,7 +20,7 @@ package springfox.documentation.schema.property.property
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Ignore
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -53,7 +53,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -95,7 +95,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -141,7 +141,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 

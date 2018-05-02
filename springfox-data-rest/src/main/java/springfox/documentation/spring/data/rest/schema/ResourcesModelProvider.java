@@ -37,10 +37,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 class ResourcesModelProvider implements SyntheticModelProviderPlugin {
@@ -114,10 +116,10 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
 
-    return newHashSet(
+    return Stream.of(
         resolver.resolve(EmbeddedCollection.class, type),
         resolver.resolve(Link.class)
-    );
+    ).collect(toSet());
   }
 
   @Override

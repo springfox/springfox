@@ -32,17 +32,20 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.http.MediaType.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
   private static final Collection<String> REQUEST_BODY_MEDIA_TYPES
-      = newHashSet(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE);
+      = Stream.of(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE).collect(toSet());
   private final OperationNameGenerator nameGenerator;
   private HttpMethod method = HttpMethod.GET;
   private String summary;
@@ -50,13 +53,13 @@ public class OperationBuilder {
   private String uniqueId;
   private String codeGenMethodNameStem;
   private int position;
-  private Set<String> produces = newLinkedHashSet();
-  private Set<String> consumes = newLinkedHashSet();
-  private Set<String> protocol = newLinkedHashSet();
+  private Set<String> produces = new LinkedHashSet();
+  private Set<String> consumes = new LinkedHashSet();
+  private Set<String> protocol = new LinkedHashSet();
   private List<SecurityReference> securityReferences = newArrayList();
   private List<Parameter> parameters = newArrayList();
-  private Set<ResponseMessage> responseMessages = newHashSet();
-  private Set<String> tags = newLinkedHashSet();
+  private Set<ResponseMessage> responseMessages = new HashSet();
+  private Set<String> tags = new LinkedHashSet();
   private String deprecated;
   private boolean isHidden;
   private ModelReference responseModel;
@@ -203,7 +206,7 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = newHashSet(mergeResponseMessages(responseMessages));
+    this.responseMessages = mergeResponseMessages(responseMessages).stream().collect(toSet());
     return this;
   }
 
@@ -285,8 +288,8 @@ public class OperationBuilder {
   }
 
   private Set<String> adjustConsumableMediaTypes() {
-    Set<String> adjustedConsumes = newHashSet(consumes);
-    if (newHashSet(HttpMethod.GET, HttpMethod.DELETE).contains(method)) {
+    Set<String> adjustedConsumes = consumes.stream().collect(toSet());
+    if (Stream.of(HttpMethod.GET, HttpMethod.DELETE).anyMatch(Predicate.isEqual(method))) {
       adjustedConsumes.removeAll(REQUEST_BODY_MEDIA_TYPES);
     }
     return adjustedConsumes;
@@ -300,7 +303,7 @@ public class OperationBuilder {
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
     Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream().collect(toMap(byStatusCode(), Function.identity()));
-    Set<ResponseMessage> merged = newHashSet(this.responseMessages);
+    Set<ResponseMessage> merged = this.responseMessages.stream().collect(toSet());
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());

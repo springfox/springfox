@@ -125,7 +125,7 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Override
   public Map<String, Model> dependencies(ModelContext modelContext) {
-    Map<String, Model> models = newHashMap();
+    Map<String, Model> models = new HashMap();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
       Optional<Model> model = modelFor(parentContext).map(Optional::of).orElse(mapModel(parentContext, resolvedType));

@@ -32,7 +32,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
+
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -53,10 +54,10 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
 
 
   private Set<String> asSet(String mediaTypes) {
-    return newHashSet(Splitter.on(',')
+    return Splitter.on(',')
             .trimResults()
             .omitEmptyStrings()
-            .splitToList(mediaTypes));
+            .splitToList(mediaTypes).stream().collect(toSet());
   }
 
 

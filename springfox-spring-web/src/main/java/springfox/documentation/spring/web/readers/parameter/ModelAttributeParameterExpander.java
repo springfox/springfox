@@ -50,6 +50,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static java.util.Collections.emptySet;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -352,7 +353,7 @@ public class ModelAttributeParameterExpander {
     } catch (IntrospectionException e) {
       LOG.warn(String.format("Failed to get bean properties on (%s)", clazz), e);
     }
-    return new HashSet();
+    return emptySet();
   }
 
   private Map<Method, PropertyDescriptor> propertyDescriptorsByMethod(

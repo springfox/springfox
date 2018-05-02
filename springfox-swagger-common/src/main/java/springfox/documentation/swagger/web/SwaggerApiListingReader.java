@@ -19,8 +19,6 @@
 package springfox.documentation.swagger.web;
 
 
-
-import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -30,14 +28,14 @@ import springfox.documentation.spi.service.contexts.ApiListingContext;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.emptyToNull;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.toCollection;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -53,7 +51,7 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
       String description = emptyToNull(apiAnnotation.map(descriptionExtractor()).orElse(null));
 
       Set<String> tagSet = apiAnnotation.map(tags())
-          .orElse(Sets.<String>newTreeSet());
+          .orElse(new TreeSet<String>());
       if (tagSet.isEmpty()) {
         tagSet.add(apiListingContext.getResourceGroup().getGroupName());
       }
@@ -76,7 +74,7 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
     return new Function<Api, Set<String>>() {
       @Override
       public Set<String> apply(Api input) {
-        return newTreeSet(newArrayList(input.tags()).stream().filter(emptyTags()).collect(toSet()));
+        return Stream.of(input.tags()).filter(emptyTags()).collect(toCollection(TreeSet::new));
       }
     };
   }

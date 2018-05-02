@@ -42,33 +42,28 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 
-  private final List<SecurityContext> securityContexts = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
+  private final List<SecurityContext> securityContexts = new ArrayList();
+  private final Set<Class> ignorableParameterTypes = new HashSet();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap();
   private final List<Parameter> globalOperationParameters = newArrayList();
   private final List<AlternateTypeRule> rules = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
-  private final Set<ResolvedType> additionalModels = newHashSet();
-  private final Set<Tag> tags = newTreeSet(Tags.tagComparator());
+  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap();
+  private final Set<String> protocols = new HashSet();
+  private final Set<String> produces = new HashSet();
+  private final Set<String> consumes = new HashSet();
+  private final Set<ResolvedType> additionalModels = new HashSet();
+  private final Set<Tag> tags = new TreeSet(Tags.tagComparator());
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
   private TypeResolver typeResolver;
@@ -161,7 +156,7 @@ public class DocumentationContextBuilder {
   }
 
   private Map<RequestMethod, List<ResponseMessage>> aggregateResponseMessages() {
-    Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+    Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap();
     if (applyDefaultResponseMessages) {
       responseMessages.putAll(defaultResponseMessages);
     }

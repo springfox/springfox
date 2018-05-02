@@ -38,7 +38,8 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
@@ -56,7 +57,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
-    context.operationBuilder().responseMessages(newHashSet(responseMessages));
+    context.operationBuilder().responseMessages(responseMessages.stream().collect(toSet()));
     applyReturnTypeOverride(context);
   }
 
@@ -86,7 +87,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
         .message(message)
         .responseModel(modelRef)
         .build();
-    context.operationBuilder().responseMessages(newHashSet(built));
+    context.operationBuilder().responseMessages(singleton(built));
   }
 
 

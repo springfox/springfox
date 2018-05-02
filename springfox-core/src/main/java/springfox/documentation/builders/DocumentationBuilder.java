@@ -28,24 +28,21 @@ import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static com.google.common.collect.Sets.*;
+
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
   private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Comparator.naturalOrder(), byListingPosition());
   private ResourceListing resourceListing;
-  private Set<Tag> tags = newLinkedHashSet();
+  private Set<Tag> tags = new LinkedHashSet();
   private String basePath;
-  private Set<String> produces = newLinkedHashSet();
-  private Set<String> consumes = newLinkedHashSet();
+  private Set<String> produces = new LinkedHashSet();
+  private Set<String> consumes = new LinkedHashSet();
   private String host;
-  private Set<String> schemes = newLinkedHashSet();
+  private Set<String> schemes = new LinkedHashSet();
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
 

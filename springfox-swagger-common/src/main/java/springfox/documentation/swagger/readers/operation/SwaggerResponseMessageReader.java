@@ -39,13 +39,10 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
@@ -85,15 +82,15 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     Optional<ResolvedType> operationResponse =
         operationAnnotation.map(resolvedTypeFromOperation(typeResolver, defaultResponse));
     Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(responseHeaders());
-    Map<String, Header> defaultHeaders = newHashMap();
+    Map<String, Header> defaultHeaders = new HashMap();
     if (defaultResponseHeaders.isPresent()) {
       defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
     }
 
     List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
-    Set<ResponseMessage> responseMessages = newHashSet();
+    Set<ResponseMessage> responseMessages = new HashSet();
 
-    Map<Integer, ApiResponse> seenResponsesByCode = newHashMap();
+    Map<Integer, ApiResponse> seenResponsesByCode = new HashMap();
     for (ApiResponses apiResponses : allApiResponses) {
       ApiResponse[] apiResponseAnnotations = apiResponses.value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {

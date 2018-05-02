@@ -25,6 +25,7 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.Xml;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class ModelBuilder {
   private Object example;
   private Xml xml;
 
-  private Map<String, ModelProperty> properties = newHashMap();
+  private Map<String, ModelProperty> properties = new HashMap();
   private List<ModelReference> subTypes = newArrayList();
 
   /**

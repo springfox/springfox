@@ -23,7 +23,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import com.google.common.collect.Sets;
+
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
@@ -62,7 +63,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
     Reflections reflections = new Reflections(packagePrefix);
     Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
     Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);
-    for (Class<?> type : Sets.union(serialized, deserialized)) {
+    Stream.concat(serialized.stream(), deserialized.stream()).forEach(type -> {
       Optional<Type> found = findAlternate(type);
       if (found.isPresent()) {
         rules.add(newRule(
@@ -72,7 +73,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
             resolver.resolve(ResponseEntity.class, type),
             resolver.resolve(found.get()), getOrder()));
       }
-    }
+    });
     return rules;
   }
 

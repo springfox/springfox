@@ -20,14 +20,16 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.Sets;
+
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
+
 
 public class ExpansionContext {
   private final String parentName;
@@ -39,7 +41,7 @@ public class ExpansionContext {
       String parentName,
       ResolvedType paramType,
       OperationContext operationContext) {
-    this(parentName, paramType, operationContext, Sets.<ResolvedType>newHashSet());
+    this(parentName, paramType, operationContext, new HashSet<ResolvedType>());
   }
 
   private ExpansionContext(
@@ -50,8 +52,9 @@ public class ExpansionContext {
     this.parentName = parentName;
     this.paramType = paramType;
     this.operationContext = operationContext;
-    this.seenTypes = newHashSet(seenTypes);
+    this.seenTypes = seenTypes.stream().collect(toSet());
   }
+
 
   public String getParentName() {
     return parentName;
@@ -78,7 +81,7 @@ public class ExpansionContext {
       String parentName,
       ResolvedType childType,
       OperationContext operationContext) {
-    Set<ResolvedType> childSeenTypes = newHashSet(seenTypes);
+    Set<ResolvedType> childSeenTypes = seenTypes.stream().collect(toSet());
     childSeenTypes.add(childType);
     return new ExpansionContext(parentName, childType, operationContext, childSeenTypes);
   }

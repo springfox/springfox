@@ -33,7 +33,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityDeleteExtractor implements EntityOperationsExtractor {
@@ -56,7 +57,7 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
-          newHashSet(RequestMethod.DELETE),
+              singleton(RequestMethod.DELETE),
           new HashSet<MediaType>(),
           new HashSet<MediaType>(),
           handler,

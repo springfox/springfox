@@ -19,7 +19,7 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
+
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -92,7 +92,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           new AlternateTypeProvider([]),
           namingStrategy,
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
     and:
       context.documentationType >> SPRING_WEB
     when:
@@ -109,7 +109,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
     and:
       context.documentationType >> SPRING_WEB
     when:

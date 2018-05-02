@@ -18,16 +18,16 @@
  */
 package springfox.documentation.spring.web.readers.operation;
 
-import com.google.common.collect.ImmutableSet;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
-import static com.google.common.collect.ImmutableSet.*;
-import static com.google.common.collect.Sets.*;
+import java.util.Set;
+
+import static java.util.Collections.singleton;
 
 @Component
 public class DefaultTagsProvider {
-  public ImmutableSet<String> tags(OperationContext context) {
-    return copyOf(newHashSet(context.getGroupName()));
+  public Set<String> tags(OperationContext context) {
+    return singleton(context.getGroupName());
   }
 }

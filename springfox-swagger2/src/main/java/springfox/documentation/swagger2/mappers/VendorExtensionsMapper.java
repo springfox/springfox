@@ -25,6 +25,7 @@ import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -63,7 +64,7 @@ public class VendorExtensionsMapper {
       @Override
       public Map<String, Object> apply(ObjectVendorExtension input) {
         if (!isNullOrEmpty(input.getName())) {
-          Map<String, Object> map = newHashMap();
+          Map<String, Object> map = new HashMap();
           map.put(input.getName(), mapExtensions(input.getValue()));
           return map;
         }
@@ -73,7 +74,7 @@ public class VendorExtensionsMapper {
   }
 
   private Map<String, Object> propertiesAsMap(ObjectVendorExtension input) {
-    Map<String, Object> properties = newHashMap();
+    Map<String, Object> properties = new HashMap();
     Iterable<StringVendorExtension> stringExtensions = input.getValue().stream().filter(StringVendorExtension.class::isInstance)
             .map(each -> (StringVendorExtension)each).collect(toList());
     for (StringVendorExtension property : stringExtensions) {

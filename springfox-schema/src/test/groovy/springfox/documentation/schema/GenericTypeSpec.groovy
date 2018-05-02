@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -39,13 +39,13 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        java.util.Collections.emptySet())
     def returnContext = returnValue("group",
         modelType,
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        java.util.Collections.emptySet())
     def propertyLookup = ["GenericType": "genericField", "Resource": "links"]
 
     when:
@@ -84,13 +84,13 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        java.util.Collections.emptySet())
     def returnContext = returnValue("group",
         modelType,
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        java.util.Collections.emptySet())
 
     when:
     Model asInput = modelProvider.modelFor(inputContext).get()
@@ -118,7 +118,7 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        java.util.Collections.emptySet())
     Model asInput = modelProvider.modelFor(inputContext).get()
 
     def returnContext = returnValue("group",
@@ -126,7 +126,7 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        java.util.Collections.emptySet())
     Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:

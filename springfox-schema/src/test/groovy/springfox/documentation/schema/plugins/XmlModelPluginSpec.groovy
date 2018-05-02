@@ -1,7 +1,7 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -33,7 +33,7 @@ class XmlModelPluginSpec extends Specification {
         DocumentationType.SWAGGER_12,
         new AlternateTypeProvider([]),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        Collections.emptySet())
     when:
     sut.apply(context)
 

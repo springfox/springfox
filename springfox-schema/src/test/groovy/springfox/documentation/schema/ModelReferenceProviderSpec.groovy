@@ -19,7 +19,7 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
+
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -39,7 +39,7 @@ class ModelReferenceProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
       def resolver = new TypeResolver()
       def typeNameExtractor = aTypeNameExtractor(resolver)
     when:

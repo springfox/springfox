@@ -36,9 +36,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.http.MediaType.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
@@ -63,12 +66,12 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
           String.format("%s%s",
               context.basePath(),
               context.resourcePath()),
-          newHashSet(RequestMethod.GET),
-          newHashSet(
+          singleton(RequestMethod.GET),
+          Stream.of(
               APPLICATION_JSON,
               HAL_JSON,
               SPRING_DATA_COMPACT_JSON,
-              TEXT_URI_LIST),
+              TEXT_URI_LIST).collect(toSet()),
           new HashSet<MediaType>(),
           handler,
           findAllParameters(context.getConfiguration(), context.getTypeResolver()),

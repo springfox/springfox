@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema.plugins
 
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -44,7 +44,7 @@ class ModelContextSpec extends Specification {
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
     expect:
       context.equals(test) == expectedEquality
       context.equals(context)
@@ -62,7 +62,7 @@ class ModelContextSpec extends Specification {
         SWAGGER_12,
         provider,
         namingStrategy,
-        ImmutableSet.builder().build())
+        Collections.emptySet())
   }
 
   def returnValue(Class ofType) {
@@ -71,7 +71,7 @@ class ModelContextSpec extends Specification {
         SWAGGER_12,
         provider,
         namingStrategy,
-        ImmutableSet.builder().build())
+        Collections.emptySet())
   }
 
   def "ModelContext hashcode generated takes into account immutable values"() {
@@ -81,19 +81,19 @@ class ModelContextSpec extends Specification {
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       ModelContext other = inputParam("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       ModelContext otherReturn = returnValue("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
     expect:
       context.hashCode() == other.hashCode()
       context.hashCode() != otherReturn.hashCode()

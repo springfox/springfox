@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -40,14 +40,14 @@ class EnumTypeSpec extends Specification {
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              java.util.Collections.emptySet())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
               enumType(),
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              java.util.Collections.emptySet())).get()
 
     expect:
       asInput.getName() == "ExampleWithEnums"

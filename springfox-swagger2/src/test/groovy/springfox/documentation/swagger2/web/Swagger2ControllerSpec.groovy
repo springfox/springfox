@@ -46,7 +46,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
   def setup() {
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner = Mock(ApiListingScanner)
     listingScanner.scan(_) >> LinkedListMultimap.create()
 

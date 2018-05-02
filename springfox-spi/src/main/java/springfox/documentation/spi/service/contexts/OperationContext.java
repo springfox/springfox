@@ -22,7 +22,7 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Predicate;
 
-import com.google.common.collect.ImmutableSet;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,12 +36,15 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationContext {
@@ -128,8 +131,8 @@ public class OperationContext {
     return requestContext.consumes();
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
-    return ImmutableSet.copyOf(getDocumentationContext().getIgnorableParameterTypes());
+  public Set<Class> getIgnorableParameterTypes() {
+    return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
   }
 
   public GenericTypeNamingStrategy getGenericsNamingStrategy() {

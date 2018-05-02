@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers
 
-import com.google.common.collect.ImmutableSet
+
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
@@ -58,8 +58,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            Collections.emptySet())).get()
+    def modelMap = new HashMap()
 
     and:
     modelMap.put("test", model)
@@ -87,9 +87,9 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
         .get()
-    def modelMap = newHashMap()
+    def modelMap = new HashMap()
 
     and:
     modelMap.put("test", model)
@@ -112,7 +112,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -134,7 +134,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -156,7 +156,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -179,7 +179,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -197,8 +197,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            Collections.emptySet())).get()
+    def modelMap = new HashMap()
 
     and:
     modelMap.put("test", model)
@@ -235,8 +235,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            Collections.emptySet())).get()
+    def modelMap = new HashMap()
 
     and:
     modelMap.put("test", model)
@@ -351,8 +351,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            Collections.emptySet())).get()
+    def modelMap = new HashMap()
 
     and:
     modelMap.put("test", model)

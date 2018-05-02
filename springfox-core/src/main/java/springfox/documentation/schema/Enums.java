@@ -28,6 +28,7 @@ import springfox.documentation.service.AllowableValues;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.*;
 import static java.util.stream.Collectors.toList;
@@ -74,7 +75,7 @@ public class Enums {
   }
 
   private static <E> List<String> transformUnique(E[] values, Function<E, String> mapper) {
-    List<String> nonUniqueValues = Arrays.asList(values).stream().map( mapper).collect(toList());
+    List<String> nonUniqueValues = Stream.of(values).map( mapper).collect(toList());
     Set<String> uniqueValues = new LinkedHashSet<String>(nonUniqueValues);
     return new ArrayList<String>(uniqueValues);
   }

@@ -40,7 +40,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.toSet;
+
 
 @Component
 public class ApiModelReader {
@@ -62,7 +63,7 @@ public class ApiModelReader {
 
   public Map<String, Model> read(RequestMappingContext context) {
 
-    Set<Class> ignorableTypes = newHashSet(context.getIgnorableParameterTypes());
+    Set<Class> ignorableTypes = context.getIgnorableParameterTypes().stream().collect(toSet());
     Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
     Map<String, Model> modelMap = newHashMap(context.getModelMap());
     for (ModelContext each : modelContexts) {
@@ -98,7 +99,7 @@ public class ApiModelReader {
       Map<String, ModelProperty> targetProperties = targetModelValue.getProperties();
       Map<String, ModelProperty> sourceProperties = source.getProperties();
 
-      Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
+      Set<String> newSourcePropKeys = sourceProperties.keySet().stream().collect(toSet());
       newSourcePropKeys.removeAll(targetProperties.keySet());
       Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
       for (String newProperty : newSourcePropKeys) {

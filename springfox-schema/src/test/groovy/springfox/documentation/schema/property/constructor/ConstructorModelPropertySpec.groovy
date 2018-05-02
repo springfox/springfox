@@ -19,7 +19,7 @@
 package springfox.documentation.schema.property.constructor
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.ImmutableSet
+
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -47,7 +47,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           genericNamingStrategy,
-          ImmutableSet.builder().build())
+          Collections.emptySet())
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()

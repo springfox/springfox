@@ -20,7 +20,6 @@
 package springfox.documentation.swagger.web;
 
 
-
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -39,7 +38,8 @@ import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.core.annotation.AnnotationUtils.*;
@@ -83,7 +83,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
     String apiValue = ofNullable(findAnnotation(controllerClass, Api.class))
         .map(toApiValue()).orElse("");
-    return Strings.isNullOrEmpty(apiValue) ? newHashSet(normalize(group)) : newHashSet(normalize(apiValue));
+    return Strings.isNullOrEmpty(apiValue) ? singleton(normalize(group)) : singleton(normalize(apiValue));
   }
 
   private String normalize(String tag) {

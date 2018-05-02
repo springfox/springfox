@@ -20,7 +20,6 @@
 package springfox.documentation.swagger.readers.parameter;
 
 
-
 import com.google.common.base.Strings;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -38,13 +37,12 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -137,7 +135,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return Arrays.asList(subject.getEnumConstants()).stream().map(new Function<Object, String>() {
+    return Stream.of(subject.getEnumConstants()).map(new Function<Object, String>() {
       @Override
       public String apply(final Object input) {
         return input.toString();

@@ -33,9 +33,12 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
@@ -55,7 +58,7 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
       RepositoryMetadata resource = context.getRepositoryMetadata();
       ActionSpecification put = saveActionSpecification(
           entity,
-          newHashSet(PUT, PATCH),
+          Stream.of(PUT, PATCH).collect(toSet()),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
@@ -75,7 +78,7 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
       handlers.add(new SpringDataRestRequestHandler(context, put));
       ActionSpecification post = saveActionSpecification(
           entity,
-          newHashSet(POST),
+          singleton(POST),
           String.format("%s%s", context.basePath(), context.resourcePath()),
           handler,
           context.getTypeResolver(), resource, newArrayList(

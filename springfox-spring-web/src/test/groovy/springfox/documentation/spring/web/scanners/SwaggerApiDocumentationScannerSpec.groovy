@@ -45,7 +45,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     and:
@@ -76,7 +76,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .apiInfo(expected)
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     and:
@@ -105,7 +105,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .securitySchemes([apiKey])
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     and:
@@ -177,7 +177,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     listings.each {
       listingsMap.put("test", it)
     }
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner.scan(_) >> listingsMap
 
     when:

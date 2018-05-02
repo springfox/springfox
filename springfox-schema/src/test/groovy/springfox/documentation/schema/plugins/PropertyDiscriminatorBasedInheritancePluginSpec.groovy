@@ -4,7 +4,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.google.common.collect.ImmutableSet
+
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -154,7 +154,7 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
         DocumentationType.SWAGGER_2,
         new AlternateTypeProvider([]),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.of()
+        Collections.emptySet()
     )
   }
 

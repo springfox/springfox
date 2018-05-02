@@ -35,7 +35,7 @@ import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -50,7 +50,7 @@ public class Tags {
         StreamSupport.stream(allListings.spliterator(), false)
             .map(collectTags()).flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))
             .collect(toList());
-    TreeSet<Tag> tagSet = newTreeSet(tagComparator());
+    TreeSet<Tag> tagSet = new TreeSet(tagComparator());
     tagSet.addAll(tags);
     return tagSet;
   }

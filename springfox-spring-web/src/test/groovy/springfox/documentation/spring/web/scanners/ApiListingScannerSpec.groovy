@@ -76,7 +76,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
-    apiModelReader.read(_) >> newHashMap()
+    apiModelReader.read(_) >> new HashMap()
     scanner = new ApiListingScanner(apiDescriptionReader, apiModelReader, defaultWebPlugins())
   }
 
@@ -118,7 +118,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     given:
     plugin.groupName("different-group")
     def context = documentationContext()
-    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = new HashMap()
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
 
     and:
@@ -189,7 +189,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     given:
     def context = documentationContext()
     def requestMappingContext = requestMapping(context, "dummyMethod")
-    def resourceGroupRequestMappings = newHashMap()
+    def resourceGroupRequestMappings = new HashMap()
     resourceGroupRequestMappings.put(
         new ResourceGroup("resourcePath", DummyControllerWithResourcePath),
         [requestMappingContext])
@@ -233,7 +233,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       DocumentationContext context) {
 
     ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
-    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = new HashMap()
     resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
     new ApiListingScanningContext(context, resourceGroupRequestMappings)
   }

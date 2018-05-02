@@ -20,17 +20,18 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.ImmutableSet;
+
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.reflect.Type;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+
 
 public class ModelContext {
   private final Type type;
@@ -39,11 +40,11 @@ public class ModelContext {
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
-  private final Set<ResolvedType> seenTypes = newHashSet();
+  private final Set<ResolvedType> seenTypes = new HashSet();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
-  private final ImmutableSet<Class> ignorableTypes;
+  private final Set<Class> ignorableTypes;
 
   ModelContext(
       String groupName,
@@ -52,7 +53,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
     this.groupName = groupName;
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
@@ -137,7 +138,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
 
     return new ModelContext(
         group,
@@ -167,7 +168,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
 
     return new ModelContext(
         groupName,

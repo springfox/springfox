@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
@@ -61,7 +61,7 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              java.util.Collections.emptySet()))
           .get()
       Model asReturn = provider.modelFor(
           returnValue("group",
@@ -69,7 +69,7 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              java.util.Collections.emptySet()))
           .get()
 
     then:
@@ -110,7 +110,7 @@ class UnwrappedTypeSpec extends Specification {
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            java.util.Collections.emptySet()))
         .get()
     Model asReturn = provider.modelFor(
         returnValue("group",
@@ -118,7 +118,7 @@ class UnwrappedTypeSpec extends Specification {
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            java.util.Collections.emptySet()))
         .get()
 
     then:
@@ -159,14 +159,14 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              java.util.Collections.emptySet())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
               UnwrappedTypeForGetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              java.util.Collections.emptySet())).get()
 
     then:
       asInput.getName() == UnwrappedTypeForGetter.simpleName
@@ -206,14 +206,14 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              java.util.Collections.emptySet())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
               UnwrappedTypeForSetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              java.util.Collections.emptySet())).get()
 
     then:
       asInput.getName() == UnwrappedTypeForSetter.simpleName

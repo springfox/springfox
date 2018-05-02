@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.dummy.models;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.*;
@@ -29,7 +30,7 @@ import static com.google.common.collect.Maps.*;
 @ApiModel(description = "Describes model with map property")
 public class ModelWithMapProperty {
   @ApiModelProperty(value = "Map of params to be sent")
-  private final Map<String, String> params = newHashMap();
+  private final Map<String, String> params = new HashMap();
 
   public Map<String, String> getParams() {
     return params;

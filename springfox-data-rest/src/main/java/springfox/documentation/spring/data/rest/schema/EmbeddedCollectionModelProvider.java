@@ -37,7 +37,8 @@ import java.util.Set;
 import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
@@ -102,7 +103,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
 
-    return newHashSet(resolver.resolve(type));
+    return singleton(resolver.resolve(type));
   }
 
   @Override

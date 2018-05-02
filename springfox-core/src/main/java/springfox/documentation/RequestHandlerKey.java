@@ -18,7 +18,7 @@
  */
 package springfox.documentation;
 
-import com.google.common.collect.Sets;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -69,10 +69,10 @@ public class RequestHandlerKey {
       return false;
     }
     RequestHandlerKey that = (RequestHandlerKey) o;
-    return Sets.symmetricDifference(pathMappings, that.pathMappings).isEmpty() &&
-        Sets.symmetricDifference(supportedMethods, that.supportedMethods).isEmpty() &&
-        Sets.symmetricDifference(supportedMediaTypes, that.supportedMediaTypes).isEmpty() &&
-        Sets.symmetricDifference(producibleMediaTypes, that.producibleMediaTypes).isEmpty();
+    return Objects.equals(pathMappings, that.pathMappings) &&
+        Objects.equals(supportedMethods, that.supportedMethods) &&
+        Objects.equals(supportedMediaTypes, that.supportedMediaTypes) &&
+        Objects.equals(producibleMediaTypes, that.producibleMediaTypes);
   }
 
   @Override

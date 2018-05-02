@@ -19,13 +19,15 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.ImmutableSet;
+
 import org.springframework.core.MethodParameter;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
+
+import java.util.Set;
 
 public class ParameterContext {
   private final ParameterBuilder parameterBuilder;
@@ -90,7 +92,7 @@ public class ParameterContext {
     return operationContext;
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
+  public Set<Class> getIgnorableParameterTypes() {
     return documentationContext.getIgnorableParameterTypes();
   }
 

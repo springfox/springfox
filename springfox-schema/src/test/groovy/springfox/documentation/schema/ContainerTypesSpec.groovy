@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -37,13 +37,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
 
     expect:
       asInput.getName() == "ListsContainer"
@@ -84,13 +84,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
 
     expect:
       asInput.getName() == "SetsContainer"
@@ -131,13 +131,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
 
     expect:
       asInput.getName() == "ArraysContainer"
@@ -181,13 +181,13 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
       Model asReturn = modelProvider.modelFor(returnValue("group",
           sut,
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          java.util.Collections.emptySet())).get()
 
     expect:
       asInput.getName() == "MapsContainer"
@@ -226,7 +226,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateRulesWithWildcardMap(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
     def returnContext = returnValue("group",
@@ -234,7 +234,7 @@ class ContainerTypesSpec extends SchemaSpecification {
         SWAGGER_12,
         alternateRulesWithWildcardMap(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        java.util.Collections.emptySet())
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:
@@ -275,7 +275,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_2,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
       Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
 
       def returnContext = returnValue("group",
@@ -283,7 +283,7 @@ class ContainerTypesSpec extends SchemaSpecification {
           SWAGGER_2,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          java.util.Collections.emptySet())
       Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
 
     expect:

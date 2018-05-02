@@ -29,10 +29,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.collect.Sets.*;
+
 
 @Component
 @Qualifier("cachedModelDependencies")
@@ -61,7 +62,7 @@ public class CachingModelDependencyProvider implements ModelDependencyProvider {
           modelContext.description(),
           e.getMessage()
       );
-      return newHashSet();
+      return new HashSet();
     }
   }
 

@@ -20,7 +20,7 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.ImmutableSet;
+
 
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
@@ -46,6 +46,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 public class DocumentationContext {
   private final DocumentationType documentationType;
@@ -150,8 +152,8 @@ public class DocumentationContext {
     return apiSelector;
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
-    return ImmutableSet.copyOf(ignorableParameterTypes);
+  public Set<Class> getIgnorableParameterTypes() {
+    return ignorableParameterTypes.stream().collect(toSet());
   }
 
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {

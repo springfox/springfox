@@ -19,7 +19,7 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.Sets;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -34,9 +34,10 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 
 public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
@@ -59,9 +60,9 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    SetView<String> patterns = Sets.union(
-        first.getPatternsCondition().getPatterns(),
-        second.getPatternsCondition().getPatterns());
+    Set<String> patterns = Stream.concat(
+        first.getPatternsCondition().getPatterns().stream(),
+        second.getPatternsCondition().getPatterns().stream()).collect(toSet());
     return new PatternsRequestCondition(patterns.toArray(new String[patterns.size()]));
   }
 
@@ -77,22 +78,24 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return Sets.union(first.supportedMethods(), second.supportedMethods());
+    return Stream.concat(first.supportedMethods().stream(), second.supportedMethods().stream()).collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    return Sets.union(nullToEmptySet(first.produces()), nullToEmptySet(second.produces()));
+    return Stream.concat(Optional.ofNullable(first.produces()).orElse(emptySet()).stream(),
+            Optional.ofNullable(second.produces()).orElse(emptySet()).stream()).collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return Sets.union(nullToEmptySet(first.consumes()), nullToEmptySet(second.consumes()));
+    return Stream.concat(Optional.ofNullable(first.consumes()).orElse(emptySet()).stream(),
+            Optional.ofNullable(second.consumes()).orElse(emptySet()).stream()).collect(toSet());
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return Sets.union(first.headers(), second.headers());
+    return Stream.concat(first.headers().stream(), second.headers().stream()).collect(toSet());
   }
 
   @Override

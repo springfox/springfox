@@ -21,7 +21,7 @@ package springfox.documentation.schema.property
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.ImmutableSet
+
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -80,7 +80,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
@@ -88,7 +88,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
 
     then:
     inputValue.collect { it.name }.containsAll(['property'])
@@ -130,7 +130,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
@@ -138,7 +138,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
 
     then:
     inputValue.collect { it.name }.containsAll(['name'])
@@ -179,13 +179,13 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         SPRING_WEB,
         new AlternateTypeProvider(newArrayList()),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        Collections.emptySet())
     def returnContext = returnValue("group",
         type,
         SPRING_WEB,
         new AlternateTypeProvider(newArrayList()),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        Collections.emptySet())
 
     when:
     inputContext.seen(typeResolver.resolve(Category))
@@ -235,7 +235,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
@@ -243,7 +243,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            Collections.emptySet()))
 
     then:
     def inputProp = inputValue.find({ it.name == "localDate" })

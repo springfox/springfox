@@ -34,9 +34,12 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 public class EntityAssociationItemDeleteExtractor implements EntityAssociationOperationsExtractor {
@@ -62,9 +65,9 @@ public class EntityAssociationItemDeleteExtractor implements EntityAssociationOp
               entityContext.resourcePath(),
               mapping.getPath(),
               propertyIdentifier),
-          newHashSet(RequestMethod.DELETE),
+              singleton(RequestMethod.DELETE),
           new HashSet<MediaType>(),
-          newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
+          Stream.of(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON).collect(toSet()),
           null,
           newArrayList(new ResolvedMethodParameter(
                   0,

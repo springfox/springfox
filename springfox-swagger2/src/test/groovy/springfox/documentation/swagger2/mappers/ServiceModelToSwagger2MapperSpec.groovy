@@ -13,7 +13,8 @@ import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
-import static com.google.common.collect.Sets.*
+import static java.util.Collections.singleton
+
 
 class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSupport {
   def "Maps the api operation correctly"() {
@@ -175,13 +176,13 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                              .reference("basic")
                              .scopes(scope)
                              .build()])
-        .consumes(newHashSet("application/json"))
-        .produces(newHashSet("application/json"))
+        .consumes(singleton("application/json"))
+        .produces(singleton("application/json"))
         .deprecated("true")
         .method(HttpMethod.POST)
         .uniqueId("op1")
         .notes("operation 1 notes")
-        .tags(newHashSet("sometag"))
+        .tags(singleton("sometag"))
         .parameters([new ParameterBuilder()
                          .allowableValues(new AllowableListValues(["FIRST", "SECOND"], "string"))
                          .allowMultiple(false)
@@ -195,9 +196,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
                          .build()])
         .position(1)
         .codegenMethodNameStem("")
-        .protocols(newHashSet("HTTPS"))
+        .protocols(singleton("HTTPS"))
         .responseModel(new ModelRef("string"))
-        .responseMessages(newHashSet(response))
+        .responseMessages(singleton(response))
         .extensions([first, second])
         .build()
     def description = new ApiDescriptionBuilder(defaults.operationOrdering())

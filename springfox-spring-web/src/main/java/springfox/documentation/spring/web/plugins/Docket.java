@@ -47,18 +47,14 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
@@ -72,15 +68,15 @@ public class Docket implements DocumentationPlugin {
 
   private final DocumentationType documentationType;
   private final List<SecurityContext> securityContexts = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap();
   private final List<Parameter> globalOperationParameters = newArrayList();
-  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
-  private final Set<ResolvedType> additionalModels = newHashSet();
-  private final Set<Tag> tags = newHashSet();
+  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList();
+  private final Set<Class> ignorableParameterTypes = new HashSet();
+  private final Set<String> protocols = new HashSet();
+  private final Set<String> produces = new HashSet();
+  private final Set<String> consumes = new HashSet();
+  private final Set<ResolvedType> additionalModels = new HashSet();
+  private final Set<Tag> tags = new HashSet();
 
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
@@ -410,7 +406,7 @@ public class Docket implements DocumentationPlugin {
    */
   public Docket additionalModels(ResolvedType first, ResolvedType... remaining) {
     additionalModels.add(first);
-    additionalModels.addAll(newHashSet(remaining));
+    additionalModels.addAll(Arrays.stream(remaining).collect(toSet()));
     return this;
   }
 
@@ -423,7 +419,7 @@ public class Docket implements DocumentationPlugin {
    */
   public Docket tags(Tag first, Tag... remaining) {
     tags.add(first);
-    tags.addAll(newHashSet(remaining));
+    tags.addAll(Arrays.stream(remaining).collect(toSet()));
     return this;
   }
 
