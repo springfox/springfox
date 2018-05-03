@@ -21,11 +21,12 @@ package springfox.documentation.service;
 
 import com.google.common.collect.Multimap;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
+
 
 public class Documentation {
   private final String groupName;
@@ -60,7 +61,7 @@ public class Documentation {
     this.consumes = consumes;
     this.host = host;
     this.schemes = schemes;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public String getGroupName() {
@@ -84,7 +85,7 @@ public class Documentation {
   }
 
   public List<String> getProduces() {
-    return newArrayList(produces);
+    return new ArrayList(produces);
   }
 
   public String getHost() {
@@ -92,11 +93,11 @@ public class Documentation {
   }
 
   public List<String> getSchemes() {
-    return newArrayList(schemes);
+    return new ArrayList(schemes);
   }
 
   public List<String> getConsumes() {
-    return newArrayList(consumes);
+    return new ArrayList(consumes);
   }
 
   public List<VendorExtension> getVendorExtensions() {

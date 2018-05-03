@@ -43,8 +43,9 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.collect.Lists.*
+
 import static com.google.common.collect.Maps.*
+import static java.util.Collections.singletonList
 import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.*
@@ -71,7 +72,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
     contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
-        .securityContexts(newArrayList(securityContext))
+        .securityContexts(singletonList(securityContext))
         .configure(contextBuilder)
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []

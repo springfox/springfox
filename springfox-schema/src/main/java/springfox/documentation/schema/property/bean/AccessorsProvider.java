@@ -31,8 +31,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.property.bean.Accessors.*;
@@ -64,7 +65,7 @@ public class AccessorsProvider {
     }
     ResolvedTypeWithMembers typeWithMembers = resolver.resolve(resolvedType, null, null);
     return
-        newArrayList(typeWithMembers.getMemberMethods()).stream()
+        Stream.of(typeWithMembers.getMemberMethods())
         .filter(onlyGettersAndSetters()).collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
 }

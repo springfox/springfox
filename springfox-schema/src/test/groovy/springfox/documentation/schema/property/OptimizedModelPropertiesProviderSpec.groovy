@@ -41,7 +41,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
-import static com.google.common.collect.Lists.*
+
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -78,7 +78,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         inputParam("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             Collections.emptySet()))
     def returnValue = sut.propertiesFor(
@@ -86,7 +86,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         returnValue("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             Collections.emptySet()))
 
@@ -128,7 +128,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         inputParam("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             Collections.emptySet()))
     def returnValue = sut.propertiesFor(
@@ -136,7 +136,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         returnValue("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             Collections.emptySet()))
 
@@ -177,13 +177,13 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     def inputContext = inputParam("group",
         type,
         SPRING_WEB,
-        new AlternateTypeProvider(newArrayList()),
+        new AlternateTypeProvider(new ArrayList()),
         new DefaultGenericTypeNamingStrategy(),
         Collections.emptySet())
     def returnContext = returnValue("group",
         type,
         SPRING_WEB,
-        new AlternateTypeProvider(newArrayList()),
+        new AlternateTypeProvider(new ArrayList()),
         new DefaultGenericTypeNamingStrategy(),
         Collections.emptySet())
 
@@ -233,7 +233,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         inputParam("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             Collections.emptySet()))
     def returnValue = sut.propertiesFor(
@@ -241,7 +241,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         returnValue("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             Collections.emptySet()))
 

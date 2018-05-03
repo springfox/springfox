@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.emptyToNull;
-import static com.google.common.collect.Lists.*;
+
 
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
@@ -56,14 +56,14 @@ public class OperationBuilder {
   private Set<String> produces = new LinkedHashSet();
   private Set<String> consumes = new LinkedHashSet();
   private Set<String> protocol = new LinkedHashSet();
-  private List<SecurityReference> securityReferences = newArrayList();
-  private List<Parameter> parameters = newArrayList();
+  private List<SecurityReference> securityReferences = new ArrayList();
+  private List<Parameter> parameters = new ArrayList();
   private Set<ResponseMessage> responseMessages = new HashSet();
   private Set<String> tags = new LinkedHashSet();
   private String deprecated;
   private boolean isHidden;
   private ModelReference responseModel;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList();
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;
@@ -192,9 +192,9 @@ public class OperationBuilder {
    */
   public OperationBuilder parameters(final List<Parameter> parameters) {
     List<Parameter> source = nullToEmptyList(parameters);
-    List<Parameter> destination = newArrayList(this.parameters);
+    List<Parameter> destination = new ArrayList(this.parameters);
     ParameterMerger merger = new ParameterMerger(destination, source);
-    this.parameters = newArrayList(merger.merged());
+    this.parameters = new ArrayList(merger.merged());
     return this;
   }
 

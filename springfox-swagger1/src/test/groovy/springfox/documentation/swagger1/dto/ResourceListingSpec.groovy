@@ -19,7 +19,7 @@
 
 package springfox.documentation.swagger1.dto
 
-import static com.google.common.collect.Lists.*
+
 
 class ResourceListingSpec extends InternalJsonSerializationSpec {
 
@@ -119,10 +119,10 @@ class ResourceListingSpec extends InternalJsonSerializationSpec {
 
 
   def resourceListing() {
-    List<AuthorizationScope> authorizationScopeList = newArrayList();
+    List<AuthorizationScope> authorizationScopeList = new ArrayList();
     authorizationScopeList.add(new AuthorizationScope("global", "access all"));
 
-    List<GrantType> grantTypes = newArrayList();
+    List<GrantType> grantTypes = new ArrayList();
 
     LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.io/oauth/dialog")
     grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"))

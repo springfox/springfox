@@ -22,9 +22,8 @@ package springfox.documentation.swagger.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +35,17 @@ import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+
+import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.*;
 
 public final class ApiModelProperties {
@@ -64,7 +66,7 @@ public final class ApiModelProperties {
   }
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
-    AllowableValues allowableValues = new AllowableListValues(Lists.<String>newArrayList(), "LIST");
+    AllowableValues allowableValues = new AllowableListValues(new ArrayList<String>(), "LIST");
     String trimmed = allowableValueString.trim();
     Matcher matcher = RANGE_PATTERN.matcher(trimmed.replaceAll(" ", ""));
     if (matcher.matches()) {
@@ -78,8 +80,8 @@ public final class ApiModelProperties {
             matcher.group(4).equals(")"));
       }
     } else if (trimmed.contains(",")) {
-      Iterable<String> split = Splitter.on(',').trimResults().omitEmptyStrings().split(trimmed);
-      allowableValues = new AllowableListValues(newArrayList(split), "LIST");
+      List<String> split = Stream.of(trimmed.split(",")).map(String::trim).filter(item -> !item.isEmpty()).collect(toList());
+      allowableValues = new AllowableListValues(split, "LIST");
     } else if (hasText(trimmed)) {
       List<String> singleVal = Collections.singletonList(trimmed);
       allowableValues = new AllowableListValues(singleVal, "LIST");

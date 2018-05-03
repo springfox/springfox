@@ -63,8 +63,9 @@ import java.util.TreeSet;
 import java.util.function.Function;
 
 import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
+
 import static com.google.common.collect.Maps.*;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.Annotations.*;
@@ -176,9 +177,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
                     namePrefix,
                     unwrappedPrefix(jacksonProperty.getPrimaryMember())));
           }
-          return newArrayList(beanModelProperty(input, jacksonProperty, givenContext, namePrefix));
+          return singletonList(beanModelProperty(input, jacksonProperty, givenContext, namePrefix));
         }
-        return newArrayList();
+        return new ArrayList();
       }
     };
   }
@@ -202,9 +203,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
                     namePrefix,
                     unwrappedPrefix(jacksonProperty.getPrimaryMember())));
           }
-          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext, namePrefix));
+          return singletonList(fieldModelProperty(input, jacksonProperty, givenContext, namePrefix));
         }
-        return newArrayList();
+        return new ArrayList();
       }
     };
   }
@@ -216,7 +217,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext givenContext,
       String namePrefix) {
 
-    List<ModelProperty> properties = newArrayList();
+    List<ModelProperty> properties = new ArrayList();
     if (member instanceof AnnotatedMethod) {
       properties.addAll(findAccessorMethod(type, member)
           .map(propertyFromBean(givenContext, jacksonProperty, namePrefix))
@@ -401,9 +402,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
           }
         });
     if (property.isPresent()) {
-      return newArrayList(property.get());
+      return singletonList(property.get());
     }
-    return newArrayList();
+    return new ArrayList();
   }
 
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {

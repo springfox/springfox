@@ -31,10 +31,11 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
+
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
@@ -52,7 +53,7 @@ public class ParameterBuilder {
   private ModelReference modelRef;
   private boolean hidden;
   private String pattern;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList();
   private String collectionFormat = null;
   private Boolean allowEmptyValue;
   private int order = Ordered.LOWEST_PRECEDENCE;

@@ -19,15 +19,16 @@
 
 package springfox.documentation.service;
 
-import com.google.common.collect.Lists;
+
 import org.springframework.core.Ordered;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.google.common.base.Preconditions.*;
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+
 
 public class Tag implements Ordered {
   private final String name;
@@ -40,7 +41,7 @@ public class Tag implements Ordered {
   }
 
   public Tag(String name, String description, int order) {
-    this(name, description, order, Lists.<VendorExtension>newArrayList());
+    this(name, description, order, new ArrayList<VendorExtension>());
   }
 
   public Tag(String name, String description, List<VendorExtension> vendorExtensions) {
@@ -51,7 +52,7 @@ public class Tag implements Ordered {
     this.name = checkNotNull(emptyToNull(name));
     this.description = description;
     this.order = order;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public String getName() {

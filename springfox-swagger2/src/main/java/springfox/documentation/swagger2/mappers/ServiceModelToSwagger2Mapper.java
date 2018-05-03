@@ -46,7 +46,7 @@ import java.util.*;
 import java.util.function.Function;
 
 
-import static com.google.common.collect.Lists.*;
+
 import static com.google.common.collect.Maps.*;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -112,7 +112,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   protected List<Map<String, List<String>>> mapAuthorizations(
       Map<String, List<AuthorizationScope>> from) {
-    List<Map<String, List<String>>> security = newArrayList();
+    List<Map<String, List<String>>> security = new ArrayList();
     for (Map.Entry<String, List<AuthorizationScope>> each : from.entrySet()) {
       Map<String, List<String>> newEntry = new HashMap();
       newEntry.put(each.getKey(), each.getValue().stream().map(scopeToString()).collect(toList()));

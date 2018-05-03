@@ -22,16 +22,17 @@ import com.google.common.base.Predicate;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
 public abstract class SecurityScheme {
   protected final String name;
   protected final String type;
-  private final List<VendorExtension> vendorExtensions = newArrayList();
+  private final List<VendorExtension> vendorExtensions = new ArrayList();
 
   protected SecurityScheme(String name, String type) {
     this.type = type;

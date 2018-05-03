@@ -35,13 +35,10 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
@@ -100,7 +97,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     return new Function<ApiResponses, List<ResolvedType>>() {
       @Override
       public List<ResolvedType> apply(ApiResponses input) {
-        List<ResolvedType> resolvedTypes = newArrayList();
+        List<ResolvedType> resolvedTypes = new ArrayList();
         for (ApiResponse response : input.value()) {
           ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
           LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));

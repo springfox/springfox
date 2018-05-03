@@ -37,10 +37,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
 
 import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component
@@ -76,8 +77,8 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
       RequestMapping annotation = findAnnotation(controller.get(), RequestMapping.class);
       if (annotation != null) {
         context.apiListingBuilder()
-            .appendProduces(newArrayList(annotation.produces()))
-            .appendConsumes(newArrayList(annotation.consumes()));
+            .appendProduces(Stream.of(annotation.produces()).collect(toList()))
+            .appendConsumes(Stream.of(annotation.consumes()).collect(toList()));
       }
     }
   }

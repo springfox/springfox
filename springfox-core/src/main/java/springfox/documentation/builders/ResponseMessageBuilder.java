@@ -24,10 +24,11 @@ import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.newArrayList;
+
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -36,7 +37,7 @@ public class ResponseMessageBuilder {
   private String message;
   private ModelReference responseModel;
   private Map<String, Header> headers = newTreeMap();
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList();
 
   /**
    * Updates the http response code

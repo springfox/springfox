@@ -24,14 +24,13 @@ import com.google.common.base.Predicate;
 
 import springfox.documentation.schema.AlternateTypeRule;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
-
 
 public class AlternateTypeProvider {
-  private List<AlternateTypeRule> rules = newArrayList();
+  private List<AlternateTypeRule> rules = new ArrayList();
 
   public AlternateTypeProvider(List<AlternateTypeRule> alternateTypeRules) {
     rules.addAll(alternateTypeRules);

@@ -30,7 +30,7 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 import com.google.common.base.Predicate;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+
 
 import com.google.common.primitives.Ints;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
@@ -43,17 +43,15 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
+
 
 public class HandlerMethodResolver {
 
@@ -83,7 +81,7 @@ public class HandlerMethodResolver {
   public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
     return resolvedMethod(methodToResolve)
         .map(toParameters(methodToResolve))
-        .orElse(Lists.<ResolvedMethodParameter>newArrayList());
+        .orElse(new ArrayList<ResolvedMethodParameter>());
   }
 
   boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
@@ -153,7 +151,7 @@ public class HandlerMethodResolver {
       MemberResolver resolver = new MemberResolver(typeResolver);
       resolver.setIncludeLangObject(false);
       ResolvedTypeWithMembers typeWithMembers = resolver.resolve(beanType, null, null);
-      methodsResolvedForHostClasses.put(hostClass, newArrayList(typeWithMembers.getMemberMethods()));
+      methodsResolvedForHostClasses.put(hostClass, Stream.of(typeWithMembers.getMemberMethods()).collect(toList()));
     }
     return methodsResolvedForHostClasses.get(hostClass);
   }
@@ -171,7 +169,7 @@ public class HandlerMethodResolver {
     return new Function<ResolvedMethod, List<ResolvedMethodParameter>>() {
       @Override
       public List<ResolvedMethodParameter> apply(ResolvedMethod input) {
-        List<ResolvedMethodParameter> parameters = newArrayList();
+        List<ResolvedMethodParameter> parameters = new ArrayList();
         MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
         for (int i = 0; i < input.getArgumentCount(); i++) {
           parameters.add(new ResolvedMethodParameter(

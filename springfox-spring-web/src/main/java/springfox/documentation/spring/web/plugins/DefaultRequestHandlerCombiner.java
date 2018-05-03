@@ -30,7 +30,7 @@ import springfox.documentation.spi.service.RequestHandlerCombiner;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -56,12 +56,12 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   }
 
   private Collection<? extends RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
-    List<RequestHandler> source = newArrayList(requestHandlers);
+    List<RequestHandler> source = new ArrayList(requestHandlers);
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;
     }
     Map<Equivalence.Wrapper<RequestHandler>, List<RequestHandler>> groupByEquality = safeGroupBy(source);
-    List<RequestHandler> combined = newArrayList();
+    List<RequestHandler> combined = new ArrayList();
     groupByEquality.keySet().stream().sorted(wrapperComparator()).forEachOrdered(path -> {
       List<RequestHandler> handlers = groupByEquality.get(path);
 

@@ -28,12 +28,10 @@ import springfox.documentation.service.Tag;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.service.Tags.*;
@@ -50,8 +48,8 @@ public class ApiListingBuilder {
   private Set<String> produces = new HashSet();
   private Set<String> consumes = new HashSet();
   private Set<String> protocol = new HashSet();
-  private List<SecurityReference> securityReferences = newArrayList();
-  private List<ApiDescription> apis = newArrayList();
+  private List<SecurityReference> securityReferences = new ArrayList();
+  private List<ApiDescription> apis = new ArrayList();
 
   private final Set<Tag> tags = new TreeSet(tagComparator());
   private final Set<String> tagNames = new HashSet();
@@ -180,7 +178,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder securityReferences(List<SecurityReference> securityReferences) {
     if (securityReferences != null) {
-      this.securityReferences = newArrayList(securityReferences);
+      this.securityReferences = new ArrayList(securityReferences);
     }
     return this;
   }
@@ -260,7 +258,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
-    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(Collectors.toMap(toTagName(), Function.identity())));
+    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(toTagName(), Function.identity())));
     return this;
   }
 

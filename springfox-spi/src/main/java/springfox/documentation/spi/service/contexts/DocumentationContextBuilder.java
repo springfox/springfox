@@ -45,7 +45,7 @@ import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
 import static com.google.common.collect.Maps.*;
 
 import static java.util.stream.Collectors.toList;
@@ -56,8 +56,8 @@ public class DocumentationContextBuilder {
   private final List<SecurityContext> securityContexts = new ArrayList();
   private final Set<Class> ignorableParameterTypes = new HashSet();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap();
-  private final List<Parameter> globalOperationParameters = newArrayList();
-  private final List<AlternateTypeRule> rules = newArrayList();
+  private final List<Parameter> globalOperationParameters = new ArrayList();
+  private final List<AlternateTypeRule> rules = new ArrayList();
   private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap();
   private final Set<String> protocols = new HashSet();
   private final Set<String> produces = new HashSet();

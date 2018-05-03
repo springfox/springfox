@@ -33,13 +33,14 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**
@@ -59,7 +60,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   @Override
   public List<AlternateTypeRule> rules() {
-    List<AlternateTypeRule> rules = newArrayList();
+    List<AlternateTypeRule> rules = new ArrayList();
     Reflections reflections = new Reflections(packagePrefix);
     Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
     Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);

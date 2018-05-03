@@ -32,10 +32,11 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.collect.Lists.*;
+
 
 @Component
 @Qualifier("cachedModelProperties")
@@ -65,7 +66,7 @@ public class CachingModelPropertiesProvider implements ModelPropertiesProvider {
     } catch (Exception e) {
       LOGGER.warn("Exception calculating properties for model({}) -> {}. {}",
           type, givenContext.description(), e.getMessage());
-      return newArrayList();
+      return new ArrayList();
     }
   }
 

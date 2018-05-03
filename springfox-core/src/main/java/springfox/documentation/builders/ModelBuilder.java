@@ -25,12 +25,13 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.Xml;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+
 import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -46,7 +47,7 @@ public class ModelBuilder {
   private Xml xml;
 
   private Map<String, ModelProperty> properties = new HashMap();
-  private List<ModelReference> subTypes = newArrayList();
+  private List<ModelReference> subTypes = new ArrayList();
 
   /**
    * Updates the Id of the model, usually the type name

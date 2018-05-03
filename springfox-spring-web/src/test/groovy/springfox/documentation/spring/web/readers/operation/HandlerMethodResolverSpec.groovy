@@ -35,8 +35,8 @@ import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import java.util.stream.Stream
 
-import static com.google.common.collect.Lists.*
 import static HandlerMethodResolver.*
 import static java.util.stream.Collectors.toList;
 
@@ -105,7 +105,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
       def resolver = new TypeResolver()
       def memberResolver = new MemberResolver(resolver)
       def dummyClass = memberResolver.resolve(resolver.resolve(DummyClass), null, null)
-      def allMethods = newArrayList(dummyClass.memberMethods)
+      def allMethods = Stream.of(dummyClass.memberMethods).collect(toList())
 
     when:
       def list = allMethods.stream().filter(subset()).collect(toList())

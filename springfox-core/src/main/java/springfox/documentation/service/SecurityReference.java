@@ -20,8 +20,10 @@
 package springfox.documentation.service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
 
 public class SecurityReference {
@@ -29,7 +31,7 @@ public class SecurityReference {
   private final List<AuthorizationScope> scopes;
 
   public SecurityReference(String reference, AuthorizationScope[] scopes) {
-    this.scopes = newArrayList(scopes);
+    this.scopes = Stream.of(scopes).collect(toList());
     this.reference = reference;
   }
 

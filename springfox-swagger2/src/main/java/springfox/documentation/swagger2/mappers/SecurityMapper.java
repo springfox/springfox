@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.toMap;
+
 
 @Mapper
 public class SecurityMapper {
@@ -45,8 +45,8 @@ public class SecurityMapper {
     if (from == null) {
       return new HashMap();
     }
-    TreeMap<String, SecuritySchemeDefinition> result = newTreeMap();
-    result.putAll(from.getSecuritySchemes().stream().collect(Collectors.toMap(schemeName(),
+    TreeMap<String, SecuritySchemeDefinition> result = new TreeMap();
+    result.putAll(from.getSecuritySchemes().stream().collect(toMap(schemeName(),
         toSecuritySchemeDefinition())));
     return result;
   }

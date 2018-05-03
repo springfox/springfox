@@ -27,11 +27,12 @@ import org.springframework.data.mapping.SimpleAssociationHandler;
 import org.springframework.data.rest.webmvc.mapping.Associations;
 import springfox.documentation.RequestHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.toList;
 
 public class EntityAssociationsExtractor implements EntityOperationsExtractor {
@@ -39,7 +40,7 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
 
   @Override
   public List<RequestHandler> extract(final EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList();
     final PersistentEntity<?, ?> entity = context.entity();
     final Associations associations = context.getAssociations();
 

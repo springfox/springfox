@@ -47,7 +47,7 @@ import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Predicates.*;
 
-import static com.google.common.collect.Lists.*;
+
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -73,7 +73,7 @@ public class ApiListingScanner {
   }
 
   static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
-    List<String> commons = newArrayList();
+    List<String> commons = new ArrayList();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
       return Optional.empty();
     }
@@ -115,7 +115,7 @@ public class ApiListingScanner {
         requestMappingsByResourceGroup.keySet().stream())
         .collect(toSet());
 
-    List<SecurityReference> securityReferences = newArrayList();
+    List<SecurityReference> securityReferences = new ArrayList();
     for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();

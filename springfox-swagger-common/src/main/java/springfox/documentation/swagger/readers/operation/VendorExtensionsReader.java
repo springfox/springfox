@@ -39,9 +39,10 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -64,7 +65,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private List<VendorExtension> readExtensions(Extension[] vendorAnnotations) {
-    return newArrayList(vendorAnnotations).stream()
+    return Stream.of(vendorAnnotations)
         .map(toVendorExtension()).collect(toList());
   }
 

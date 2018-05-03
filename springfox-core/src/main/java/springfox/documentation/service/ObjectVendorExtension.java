@@ -22,14 +22,14 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
 
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
-  private final List<VendorExtension> properties = newArrayList();
+  private final List<VendorExtension> properties = new ArrayList();
   private final String name;
 
   public ObjectVendorExtension(String name) {

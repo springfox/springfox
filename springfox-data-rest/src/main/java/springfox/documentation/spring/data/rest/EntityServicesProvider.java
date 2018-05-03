@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -78,7 +78,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    List<EntityContext> contexts = newArrayList();
+    List<EntityContext> contexts = new ArrayList();
     for (Class each : repositories) {
       Object repositoryInformation = repositories.getRepositoryInformationFor(each);
       Object repositoryInstance = repositories.getRepositoryFor(each);

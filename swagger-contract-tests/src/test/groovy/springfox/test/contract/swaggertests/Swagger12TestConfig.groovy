@@ -11,7 +11,7 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
 
 import static com.google.common.base.Predicates.*
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.singletonList
 import static springfox.documentation.builders.PathSelectors.*
 
 @Configuration
@@ -29,7 +29,7 @@ public class Swagger12TestConfig {
         .build()
 
     SecurityContext.builder()
-        .securityReferences(newArrayList(securityReference))
+        .securityReferences(singletonList(securityReference))
         .forPaths(ant("/petgrooming/**"))
         .build()
   }

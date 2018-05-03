@@ -31,12 +31,13 @@ import io.swagger.annotations.ApiResponses;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.Optional.ofNullable;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
@@ -51,7 +52,7 @@ public class Annotations {
   }
 
   public static List<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    List<ApiResponses> results = newArrayList();
+    List<ApiResponses> results = new ArrayList();
     ApiResponses currentLevel = getAnnotation(annotated, ApiResponses.class);
     if (currentLevel != null) {
       results.add(currentLevel);

@@ -36,7 +36,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import java.lang.reflect.AnnotatedElement
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.singletonList
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -51,19 +51,19 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(propertyPlugin))
+            OrderAwarePluginRegistry.create(singletonList(propertyPlugin))
     propertyPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(modelPlugin))
+            OrderAwarePluginRegistry.create(singletonList(modelPlugin))
     modelPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(namePlugin))
+            OrderAwarePluginRegistry.create(singletonList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
-        OrderAwarePluginRegistry.create(newArrayList(resourcesModelPlugin))
+        OrderAwarePluginRegistry.create(singletonList(resourcesModelPlugin))
     resourcesModelPlugin.supports(_) >> false
 
     sut = new SchemaPluginsManager(propRegistry, modelRegistry, sytheticModelRegistry)

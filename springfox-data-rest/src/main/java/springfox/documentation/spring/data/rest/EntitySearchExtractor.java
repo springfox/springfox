@@ -37,7 +37,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.util.*;
 
-import static com.google.common.collect.Lists.*;
+
 
 import static java.util.Collections.singleton;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
@@ -45,7 +45,7 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 class EntitySearchExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList();
     final PersistentEntity<?, ?> entity = context.entity();
     HandlerMethodResolver methodResolver = new HandlerMethodResolver(context.getTypeResolver());
     SearchResourceMappings searchMappings = context.searchMappings();

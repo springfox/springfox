@@ -23,14 +23,10 @@ package springfox.documentation.service;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelReference;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -86,7 +82,7 @@ public class Operation {
         .sorted(byParameterName()).collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public boolean isHidden() {
@@ -109,7 +105,7 @@ public class Operation {
     return new Function<SecurityReference, List<AuthorizationScope>>() {
       @Override
       public List<AuthorizationScope> apply(SecurityReference value) {
-        return newArrayList(value.getScopes());
+        return new ArrayList(value.getScopes());
       }
     };
   }

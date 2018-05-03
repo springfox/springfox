@@ -20,13 +20,14 @@ package springfox.documentation.service;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ListVendorExtension<T> implements VendorExtension<List<T>> {
-  private final List<T> values = newArrayList();
+  private final List<T> values = new ArrayList();
   private final String name;
 
   public ListVendorExtension(String name, List<T> values) {

@@ -23,10 +23,13 @@ import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
+
 
 public class ResolvedMethodParameter {
   private final int parameterIndex;
@@ -37,7 +40,7 @@ public class ResolvedMethodParameter {
   public ResolvedMethodParameter(String paramName, MethodParameter methodParameter, ResolvedType parameterType) {
     this(methodParameter.getParameterIndex(),
         paramName,
-        newArrayList(methodParameter.getParameterAnnotations()),
+        Stream.of(methodParameter.getParameterAnnotations()).collect(toList()),
         parameterType);
   }
 
@@ -82,7 +85,7 @@ public class ResolvedMethodParameter {
   }
 
   public ResolvedMethodParameter annotate(Annotation annotation) {
-    List<Annotation> annotations = newArrayList(this.annotations);
+    List<Annotation> annotations = new ArrayList(this.annotations);
     annotations.add(annotation);
     return new ResolvedMethodParameter(parameterIndex, defaultName, annotations, parameterType);
   }

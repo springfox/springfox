@@ -28,12 +28,14 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
+
+import static java.util.Collections.singletonList;
 import static springfox.documentation.builders.Parameters.*;
 import static springfox.documentation.service.Parameter.*;
 
@@ -46,7 +48,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   public List<Parameter> getParameters(Set<NameValueExpression<String>> expressions, String parameterType) {
-    List<Parameter> parameters = newArrayList();
+    List<Parameter> parameters = new ArrayList();
     for (NameValueExpression<String> expression : expressions) {
       if (skipParameter(parameters, expression)) {
         continue;
@@ -55,7 +57,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
       String paramValue = expression.getValue();
       AllowableListValues allowableValues = null;
       if (!isNullOrEmpty(paramValue)) {
-        allowableValues = new AllowableListValues(newArrayList(paramValue), "string");
+        allowableValues = new AllowableListValues(singletonList(paramValue), "string");
       }
       Parameter parameter = new ParameterBuilder()
           .name(expression.getName())

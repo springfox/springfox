@@ -33,9 +33,10 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.Comparator.naturalOrder;
 import static java.util.stream.Collectors.toList;
 
@@ -61,7 +62,7 @@ public class ApiDescriptionReader {
     PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
 
-    List<ApiDescription> apiDescriptionList = newArrayList();
+    List<ApiDescription> apiDescriptionList = new ArrayList();
     for (String path : matchingPaths(selector, patternsCondition)) {
       String methodName = outerContext.getName();
       try {

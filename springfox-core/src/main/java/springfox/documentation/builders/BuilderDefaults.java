@@ -26,10 +26,10 @@ import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.util.*;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
 
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Enums.*;
 
 /**
@@ -139,9 +139,9 @@ public class BuilderDefaults {
    */
   public static <T> List<T> nullVarArgsToEmptyList(T ... args) {
     if (args == null) {
-      return newArrayList();
+      return new ArrayList();
     }
-    return newArrayList(args);
+    return Stream.of(args).collect(toList());
   }
 
   private static boolean isNotObject(ResolvedType defaultValue) {

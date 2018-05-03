@@ -30,10 +30,11 @@ import springfox.documentation.service.Header;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.not;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Lists.newArrayList;
+
 import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.Types.typeNameFor;
 
@@ -53,7 +54,7 @@ public class ResponseHeaders {
 
   public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
     Map<String, Header> headers = new HashMap();
-    newArrayList(responseHeaders).stream().filter(not(emptyOrVoid())).forEach(each -> {
+    Stream.of(responseHeaders).filter(not(emptyOrVoid())).forEach(each -> {
       headers.put(each.name(), new Header(each.name(), each.description(), headerModel(each)));
     });
     return headers;

@@ -24,16 +24,17 @@ import com.google.common.base.Predicates;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.service.SecurityReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+
 
 public class SecurityContextBuilder {
   SecurityContextBuilder() {
   }
 
 
-  private List<SecurityReference> securityReferences = newArrayList();
+  private List<SecurityReference> securityReferences = new ArrayList();
   private Predicate<String> pathSelector = Predicates.alwaysTrue();
   private Predicate<HttpMethod> methodSelector;
 
@@ -55,7 +56,7 @@ public class SecurityContextBuilder {
 
   public SecurityContext build() {
     if (securityReferences == null) {
-      securityReferences = newArrayList();
+      securityReferences = new ArrayList();
     }
     if (methodSelector == null) {
       methodSelector = Predicates.alwaysTrue();

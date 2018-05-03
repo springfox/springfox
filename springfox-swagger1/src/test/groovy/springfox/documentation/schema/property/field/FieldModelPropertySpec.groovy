@@ -28,7 +28,7 @@ import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableListValues
 
-import static com.google.common.collect.Lists.*
+
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -59,7 +59,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
       typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
-        def values = newArrayList(allowableValues)
+        def values = new ArrayList(allowableValues)
         sut.allowableValues() == new AllowableListValues(values, "string")
       } else {
         sut.allowableValues() == null

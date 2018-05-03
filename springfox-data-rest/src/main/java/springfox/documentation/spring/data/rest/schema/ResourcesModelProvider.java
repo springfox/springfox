@@ -39,8 +39,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -87,7 +87,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     ResolvedType embedded = resolver.resolve(EmbeddedCollection.class, type);
     ResolvedType mapOfLinks = resolver.resolve(Map.class, String.class, Link.class);
-    return newArrayList(
+    return Stream.of(
         new ModelPropertyBuilder()
             .name("_embedded")
             .type(embedded)
@@ -107,7 +107,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
             .description("Link collection")
             .build()
             .updateModelRef(modelRefFactory(context, typeNameExtractor))
-    );
+    ).collect(toList());
   }
 
   @Override

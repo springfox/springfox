@@ -30,10 +30,11 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
+
 
 @Component
 public class BasePathAwareServicesProvider implements RequestHandlerProvider {
@@ -52,7 +53,7 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    List<RequestHandler> requestHandlers = newArrayList();
+    List<RequestHandler> requestHandlers = new ArrayList();
     for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
       if (!isEntitySchemaService(each.getValue())
           && !isAlpsProfileServices(each.getValue())) {

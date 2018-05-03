@@ -43,11 +43,12 @@ import springfox.documentation.spring.web.readers.parameter.ExpansionContext;
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
@@ -84,7 +85,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private List<Parameter> readParameters(final OperationContext context) {
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
-    List<Parameter> parameters = newArrayList();
+    List<Parameter> parameters = new ArrayList();
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());

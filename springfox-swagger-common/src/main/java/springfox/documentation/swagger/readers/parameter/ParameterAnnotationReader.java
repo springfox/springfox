@@ -26,9 +26,10 @@ import org.springframework.core.MethodParameter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
+
 import static java.util.Optional.ofNullable;
 
 public class ParameterAnnotationReader {
@@ -71,8 +72,8 @@ public class ParameterAnnotationReader {
       Optional<Method> interfaceMethod = interfaceMethod(interfaze, method);
       if (interfaceMethod.isPresent()) {
         Method superMethod = interfaceMethod.get();
-        Optional<Annotation> found = tryFind(
-                newArrayList(superMethod.getParameterAnnotations()[parameterIndex]), annotationOfType(annotationType)).toJavaUtil();
+        Optional<Annotation> found = Stream.of(
+                superMethod.getParameterAnnotations()[parameterIndex]).filter(annotationOfType(annotationType)).findFirst();
         if (found.isPresent()) {
           annotation = (A) found.get();
           break;

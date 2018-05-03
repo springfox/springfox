@@ -37,8 +37,6 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.*;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -188,7 +186,7 @@ public class RequestMappingContext {
   }
 
   public <T extends Annotation> List<T> findAnnotations(Class<T> annotation) {
-    List<T> annotations = newArrayList();
+    List<T> annotations = new ArrayList();
     Optional<T> methodAnnotation = findAnnotation(annotation);
     Optional<T> controllerAnnotation = findControllerAnnotation(annotation);
     if (methodAnnotation.isPresent()) {

@@ -39,7 +39,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 
-import static com.google.common.collect.Lists.*;
+
 
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.service.Tags.*;
@@ -81,7 +81,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
       @Override
       public Set<String> apply(ApiOperation input) {
         Set<String> tags = new TreeSet();
-        tags.addAll(newArrayList(input.tags()).stream().filter(emptyTags()).collect(toSet()));
+        tags.addAll(Stream.of(input.tags()).filter(emptyTags()).collect(toSet()));
         return tags;
       }
     };
@@ -92,7 +92,7 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
       @Override
       public Set<String> apply(Api input) {
         Set<String> tags = new TreeSet();
-        tags.addAll(newArrayList(input.tags()).stream().filter(emptyTags()).collect(toSet()));
+        tags.addAll(Stream.of(input.tags()).filter(emptyTags()).collect(toSet()));
         return tags;
       }
     };

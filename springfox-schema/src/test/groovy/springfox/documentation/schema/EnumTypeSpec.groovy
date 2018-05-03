@@ -24,14 +24,16 @@ import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
 class EnumTypeSpec extends Specification {
   def "enum type are inferred as type string with allowable values" () {
     given:
-      def list = newArrayList("ONE", "TWO")
+      def list = Stream.of("ONE", "TWO").collect(toList())
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       Model asInput = provider.modelFor(

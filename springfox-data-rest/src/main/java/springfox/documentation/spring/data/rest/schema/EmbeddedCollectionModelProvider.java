@@ -36,9 +36,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
 
 import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
@@ -84,7 +85,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     ResolvedType resourceType = resolver.resolve(context.getType());
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
-    return newArrayList(
+    return singletonList(
         new ModelPropertyBuilder()
             .name(relProvider.getCollectionResourceRelFor(type))
             .type(resolver.resolve(List.class, type))

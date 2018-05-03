@@ -49,8 +49,9 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+
 import static com.google.common.collect.Maps.*;
 
 import static java.util.stream.Collectors.toList;
@@ -67,9 +68,9 @@ public class Docket implements DocumentationPlugin {
   public static final String DEFAULT_GROUP_NAME = "default";
 
   private final DocumentationType documentationType;
-  private final List<SecurityContext> securityContexts = newArrayList();
+  private final List<SecurityContext> securityContexts = new ArrayList();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap();
-  private final List<Parameter> globalOperationParameters = newArrayList();
+  private final List<Parameter> globalOperationParameters = new ArrayList();
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList();
   private final Set<Class> ignorableParameterTypes = new HashSet();
   private final Set<String> protocols = new HashSet();
@@ -93,7 +94,7 @@ public class Docket implements DocumentationPlugin {
   private Optional<String> pathMapping = Optional.empty();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList();
 
 
   public Docket(DocumentationType documentationType) {
@@ -250,7 +251,7 @@ public class Docket implements DocumentationPlugin {
    * java.lang.reflect.Type)
    */
   public Docket alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
-    this.ruleBuilders.addAll(newArrayList(alternateTypeRules).stream().map(identityRuleBuilder()).collect(toList()));
+    this.ruleBuilders.addAll(Stream.of(alternateTypeRules).map(identityRuleBuilder()).collect(toList()));
     return this;
   }
 

@@ -43,7 +43,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -70,11 +70,11 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     if (apiOperationAnnotation.isPresent()) {
 
-      List<SecurityReference> securityReferenceOverrides = newArrayList();
+      List<SecurityReference> securityReferenceOverrides = new ArrayList();
       for (Authorization authorization : authorizationReferences(apiOperationAnnotation.get())) {
         String value = authorization.value();
         AuthorizationScope[] scopes = authorization.scopes();
-        List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = newArrayList();
+        List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = new ArrayList();
         for (AuthorizationScope authorizationScope : scopes) {
           String description = authorizationScope.description();
           String scope = authorizationScope.scope();

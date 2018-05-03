@@ -44,7 +44,7 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.singletonList
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -239,7 +239,7 @@ class DocketSpec extends DocumentationContextSpec {
   }
 
   private List<SecurityContext> validContexts() {
-    newArrayList(SecurityContext.builder()
+    singletonList(SecurityContext.builder()
         .forPaths(PathSelectors.any())
         .build())
   }

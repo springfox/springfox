@@ -28,18 +28,13 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import com.google.common.primitives.Ints;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.google.common.collect.ImmutableSortedSet.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @JsonPropertyOrder({
         "method", "summary", "notes", "type", "nickname", "produces",
@@ -110,14 +105,14 @@ public class Operation {
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
-    return authorizations.stream().collect(Collectors.toMap(byType(), toScopes()));
+    return authorizations.stream().collect(toMap(byType(), toScopes()));
   }
 
   private Function<? super Authorization, List<AuthorizationScope>> toScopes() {
     return new Function<Authorization, List<AuthorizationScope>>() {
       @Override
       public List<AuthorizationScope> apply(Authorization value) {
-        return newArrayList(value.getScopes());
+        return new ArrayList(value.getScopes());
       }
     };
   }

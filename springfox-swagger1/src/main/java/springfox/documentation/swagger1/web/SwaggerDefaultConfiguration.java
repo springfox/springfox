@@ -29,10 +29,11 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spring.web.plugins.DefaultConfiguration;
 
 import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
+
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
@@ -50,7 +51,7 @@ public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
 
   @Override
   public DocumentationContextBuilder create(DocumentationType documentationType) {
-    List<AlternateTypeRule> rules = newArrayList();
+    List<AlternateTypeRule> rules = new ArrayList();
     rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
         typeResolver.resolve(Object.class)));
     rules.add(newMapRule(WildcardType.class, WildcardType.class));

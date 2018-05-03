@@ -19,7 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.Lists;
+
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -38,7 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+
 
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toSet;
@@ -49,7 +49,7 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
@@ -88,17 +88,17 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
     parameters.add(new ResolvedMethodParameter(
         0,
         configuration.getPageParamName(),
-        Lists.<Annotation>newArrayList(),
+        new ArrayList<Annotation>(),
         resolver.resolve(String.class)));
     parameters.add(new ResolvedMethodParameter(
         1,
         configuration.getLimitParamName(),
-        Lists.<Annotation>newArrayList(),
+        new ArrayList<Annotation>(),
         resolver.resolve(String.class)));
     parameters.add(new ResolvedMethodParameter(
         2,
         configuration.getSortParamName(),
-        Lists.<Annotation>newArrayList(),
+        new ArrayList<Annotation>(),
         resolver.resolve(String.class)));
     return parameters;
   }

@@ -35,8 +35,8 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 
-import static com.google.common.collect.Lists.*;
 
 @Component
 public class FactoryMethodProvider {
@@ -64,11 +64,11 @@ public class FactoryMethodProvider {
 
   public Collection<ResolvedConstructor> constructors(ResolvedType resolvedType) {
     ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(resolvedType, null, null);
-    return newArrayList(typeWithMembers.getConstructors());
+    return Stream.of(typeWithMembers.getConstructors()).collect(toList());
   }
 
   public Collection<ResolvedMethod> delegatedFactoryMethods(ResolvedType resolvedType) {
     ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(resolvedType, null, null);
-    return newArrayList(typeWithMembers.getStaticMethods());
+    return Stream.of(typeWithMembers.getStaticMethods()).collect(toList());
   }
 }

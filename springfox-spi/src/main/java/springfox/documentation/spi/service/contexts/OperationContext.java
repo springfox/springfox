@@ -36,12 +36,9 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -81,7 +78,7 @@ public class OperationContext {
     if (documentationContext.getGlobalResponseMessages().containsKey(RequestMethod.valueOf(forHttpMethod))) {
       return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
     }
-    return newArrayList();
+    return new ArrayList();
   }
 
   public List<Parameter> getGlobalOperationParameters() {

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+
 
 public class ApiInfo {
 
@@ -72,7 +72,7 @@ public class ApiInfo {
     this.contact = contact;
     this.license = license;
     this.licenseUrl = licenseUrl;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public String getTitle() {

@@ -6,7 +6,8 @@ import springfox.documentation.swagger1.dto.ApiListing
 import springfox.documentation.swagger1.dto.ModelDto
 import springfox.documentation.swagger1.dto.ModelPropertyDto
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.singletonList
+
 
 class ApiListingMergerSpec extends Specification {
 
@@ -16,12 +17,12 @@ class ApiListingMergerSpec extends Specification {
     then:
       !merged.isPresent()
     where:
-      apiListings << [newArrayList(), null]
+      apiListings << [new ArrayList(), null]
   }
 
   def "it returns api listing absent when collection has one element"(){
     when:
-      def merged = ApiListingMerger.mergedApiListing(newArrayList(Mock(ApiListing)))
+      def merged = ApiListingMerger.mergedApiListing(singletonList(Mock(ApiListing)))
     then:
       merged.isPresent()
   }

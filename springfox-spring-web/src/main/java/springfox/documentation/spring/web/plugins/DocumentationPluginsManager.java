@@ -51,13 +51,14 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.SpringGroupingStrategy;
 import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
@@ -98,7 +99,7 @@ public class DocumentationPluginsManager {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
     ensureNoDuplicateGroups(plugins);
     if (plugins.isEmpty()) {
-      return newArrayList(defaultDocumentationPlugin());
+      return singleton(defaultDocumentationPlugin());
     }
     return plugins;
   }
@@ -183,7 +184,7 @@ public class DocumentationPluginsManager {
 
   public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {
     final DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
-    List<ApiDescription> additional = newArrayList();
+    List<ApiDescription> additional = new ArrayList();
     for (ApiListingScannerPlugin each : apiListingScanners.getPluginsFor(documentationType)) {
       additional.addAll(each.apply(context.getDocumentationContext()));
     }
