@@ -29,8 +29,8 @@ import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
+import java.util.Optional;
 
-import static com.google.common.base.Strings.*;
 
 public class Orderings {
   private Orderings() {
@@ -41,7 +41,7 @@ public class Orderings {
     return new Comparator<Operation>() {
       @Override
       public int compare(Operation first, Operation second) {
-        return nullToEmpty(first.getUniqueId()).compareTo(nullToEmpty(second.getUniqueId()));
+        return Optional.ofNullable(first.getUniqueId()).orElse("").compareTo(Optional.ofNullable(second.getUniqueId()).orElse(""));
       }
     };
   }

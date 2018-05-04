@@ -35,8 +35,9 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
@@ -81,7 +82,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     JsonTypeInfo typeInfo = AnnotationUtils.getAnnotation(forClass(context), JsonTypeInfo.class);
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
-        return Optional.ofNullable(emptyToNull(typeInfo.property()))
+        return Optional.ofNullable(typeInfo.property()).filter(((Predicate<String>)String::isEmpty).negate())
             .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }

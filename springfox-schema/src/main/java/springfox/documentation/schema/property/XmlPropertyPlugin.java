@@ -33,8 +33,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+
 import static springfox.documentation.schema.Annotations.*;
 
 @Component
@@ -93,7 +94,8 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
 
   private String wrapperName(Optional<XmlElementWrapper> wrapper, Optional<XmlElement> element) {
     if (wrapper.isPresent()) {
-      return Optional.ofNullable(defaultToNull(emptyToNull(wrapper.get().name())))
+      return Optional.ofNullable(defaultToNull(Optional.ofNullable(wrapper.get().name())
+              .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null)))
           .orElse(Optional.ofNullable(elementName(element))
           .orElse(null));
     }
@@ -102,14 +104,14 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
 
   private String elementName(Optional<XmlElement> element) {
     if (element.isPresent()) {
-      return defaultToNull(emptyToNull(element.get().name()));
+      return defaultToNull(Optional.ofNullable(element.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
     }
     return null;
   }
 
   private String attributeName(Optional<XmlAttribute> attribute) {
     if (attribute.isPresent()) {
-      return defaultToNull(emptyToNull(attribute.get().name()));
+      return defaultToNull(Optional.ofNullable(attribute.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
     }
     return null;
   }

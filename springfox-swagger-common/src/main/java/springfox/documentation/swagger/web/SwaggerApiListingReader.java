@@ -30,9 +30,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import static com.google.common.base.Strings.emptyToNull;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toCollection;
@@ -48,7 +47,7 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
     Optional<? extends Class<?>> controller = apiListingContext.getResourceGroup().getControllerClass();
     if (controller.isPresent()) {
       Optional<Api> apiAnnotation = ofNullable(findAnnotation(controller.get(), Api.class));
-      String description = emptyToNull(apiAnnotation.map(descriptionExtractor()).orElse(null));
+      String description = apiAnnotation.map(descriptionExtractor()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
 
       Set<String> tagSet = apiAnnotation.map(tags())
           .orElse(new TreeSet<String>());

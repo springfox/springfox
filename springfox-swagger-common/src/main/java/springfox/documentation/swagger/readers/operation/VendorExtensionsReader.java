@@ -20,7 +20,6 @@
 package springfox.documentation.swagger.readers.operation;
 
 
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Extension;
 import io.swagger.annotations.ExtensionProperty;
@@ -39,11 +38,12 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -73,7 +73,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
     return new Function<Extension, VendorExtension>() {
       @Override
       public VendorExtension apply(Extension input) {
-        return Optional.ofNullable(emptyToNull(input.name()))
+        return Optional.ofNullable(input.name()).filter(((Predicate<String>)String::isEmpty).negate())
             .map(propertyExtension(input))
             .orElse(objectExtension(input));
       }
@@ -81,9 +81,9 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private VendorExtension objectExtension(Extension each) {
-    ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(nullToEmpty(each.name())));
+    ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(Optional.ofNullable(each.name()).orElse("")));
     for (ExtensionProperty property : each.properties()) {
-      if (!isNullOrEmpty(property.name()) && !isNullOrEmpty(property.value())) {
+      if (!isEmpty(property.name()) && !isEmpty(property.value())) {
         extension.addProperty(new StringVendorExtension(property.name(), property.value()));
       }
     }
@@ -104,7 +104,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private String ensurePrefixed(String name) {
-    if (!isNullOrEmpty(name) && !name.startsWith("x-")) {
+    if (!isEmpty(name) && !name.startsWith("x-")) {
       return "x-" + name;
     }
     return name;

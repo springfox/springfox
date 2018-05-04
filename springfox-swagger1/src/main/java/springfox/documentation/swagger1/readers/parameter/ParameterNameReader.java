@@ -28,8 +28,9 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+
 import static springfox.documentation.spring.web.readers.parameter.ParameterTypeReader.*;
 
 @Component("swagger1ParameterNameReader")
@@ -42,7 +43,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     String paramType = findParameterType(context);
     String name = null;
     if (apiParam.isPresent()) {
-      name = emptyToNull(apiParam.get().name());
+      name = Optional.ofNullable(apiParam.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     }
     context.parameterBuilder().name(maybeOverrideName(name, paramType));
   }

@@ -45,7 +45,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.google.common.base.Strings.*;
+
 import static java.util.stream.Collectors.toList;
 
 
@@ -262,7 +262,7 @@ public class HandlerMethodResolver {
     String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
     int discoveredNameCount = Optional.ofNullable(discoveredNames).orElse(new String[0]).length;
     return methodParameter.getParameterIndex() < discoveredNameCount
-           ? Optional.ofNullable(emptyToNull(discoveredNames[methodParameter.getParameterIndex()]))
+           ? Optional.ofNullable(discoveredNames[methodParameter.getParameterIndex()]).filter(((Predicate<String>)String::isEmpty).negate())
            : Optional.ofNullable(methodParameter.getParameterName());
   }
 

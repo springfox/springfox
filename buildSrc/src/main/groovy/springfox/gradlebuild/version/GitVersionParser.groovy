@@ -4,8 +4,6 @@ import com.google.common.base.Splitter
 
 import java.util.stream.StreamSupport
 
-import static com.google.common.base.Strings.nullToEmpty
-
 // Lifted from plugin 'com.cinnober.gradle:semver-git:2.2.0'
 // https://github.com/cinnober/semver-git
 trait GitVersionParser {
@@ -45,7 +43,7 @@ trait GitVersionParser {
       suffix = ""
     } else {
       suffix = suffix.replaceAll("<count>", "$count")
-      suffix = suffix.replaceAll("<sha>", nullToEmpty(sha))
+      suffix = suffix.replaceAll("<sha>", Optional.ofNullable(sha).orElse(""))
     }
     return new SemanticVersion(parsedVersion.major, parsedVersion.minor, patch, suffix)
   }

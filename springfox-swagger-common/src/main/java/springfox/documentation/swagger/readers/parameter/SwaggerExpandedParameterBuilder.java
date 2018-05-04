@@ -20,7 +20,8 @@
 package springfox.documentation.swagger.readers.parameter;
 
 
-import com.google.common.base.Strings;
+
+import com.google.common.base.Predicate;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
+
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
@@ -80,7 +82,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
-    String allowableProperty = emptyToNull(apiParam.allowableValues());
+    String allowableProperty = Optional.ofNullable(apiParam.allowableValues()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     AllowableValues allowable = allowableValues(
         ofNullable(allowableProperty),
         context.getFieldType().getErasedType());
@@ -100,7 +102,8 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
-    String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
+    String allowableProperty = Optional.ofNullable(apiModelProperty.allowableValues())
+            .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     AllowableValues allowable = allowableValues(
         ofNullable(allowableProperty),
         context.getFieldType().getErasedType());
@@ -117,7 +120,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private ParameterBuilder maybeSetParameterName(ParameterExpansionContext context, String parameterName) {
-    if (!Strings.isNullOrEmpty(parameterName)) {
+    if (!isEmpty(parameterName)) {
       context.getParameterBuilder().name(parameterName);
     }
     return context.getParameterBuilder();

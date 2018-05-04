@@ -30,9 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Strings.*;
 
-
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelBuilder {
@@ -182,7 +181,7 @@ public class ModelBuilder {
   }
 
   public Model build() {
-    if (xml != null && isNullOrEmpty(xml.getName())) {
+    if (xml != null && isEmpty(xml.getName())) {
       xml.setName(name);
     }
     return new Model(

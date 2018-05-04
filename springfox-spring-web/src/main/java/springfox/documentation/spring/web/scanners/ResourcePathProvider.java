@@ -16,9 +16,10 @@
  *
  *
  */
+
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Strings;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.service.ResourceGroup;
@@ -26,6 +27,7 @@ import springfox.documentation.service.ResourceGroup;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 class ResourcePathProvider {
   private final ResourceGroup resourceGroup;
@@ -36,23 +38,24 @@ class ResourcePathProvider {
 
   public Optional<String> resourcePath() {
     return Optional.ofNullable(
-        Strings.emptyToNull(controllerClass()
+        controllerClass()
             .map(resourcePathExtractor())
-            .orElse("")));
+            .filter(((Predicate<String>)String::isEmpty).negate())
+            .orElse(null));
   }
 
   private Function<Class<?>, String> resourcePathExtractor() {
     return new Function<Class<?>, String>() {
       @Override
       public String apply(Class<?> input) {
-        String path = Arrays.asList(paths(input)).stream().findFirst().orElse("");
-        if (Strings.isNullOrEmpty(path)) {
+        Optional<String> path = Arrays.asList(paths(input)).stream().findFirst().filter(((Predicate<String>)String::isEmpty).negate());
+        if (!path.isPresent()) {
           return "";
         }
-        if (path.startsWith("/")) {
-          return path;
+        if (path.get().startsWith("/")) {
+          return path.get();
         }
-        return "/" + path;
+        return "/" + path.get();
       }
     };
   }

@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.swagger.readers.operation;
 
 import com.google.common.base.Splitter;
@@ -31,7 +30,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
+
 import static java.util.stream.Collectors.toSet;
 
 
@@ -42,8 +41,8 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
   public void apply(OperationContext context) {
     Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
     if (annotation.isPresent()) {
-      context.operationBuilder().consumes(asSet(nullToEmpty(annotation.get().consumes())));
-      context.operationBuilder().produces(asSet(nullToEmpty(annotation.get().produces())));
+      context.operationBuilder().consumes(asSet(Optional.ofNullable(annotation.get().consumes()).orElse("")));
+      context.operationBuilder().produces(asSet(Optional.ofNullable(annotation.get().produces()).orElse("")));
     }
   }
 

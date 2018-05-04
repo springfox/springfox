@@ -31,10 +31,11 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
 
-import static com.google.common.base.Strings.*;
+
 
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Mapper
 public class VendorExtensionsMapper {
@@ -64,7 +65,7 @@ public class VendorExtensionsMapper {
     return new Function<ObjectVendorExtension, Map<String, Object>>() {
       @Override
       public Map<String, Object> apply(ObjectVendorExtension input) {
-        if (!isNullOrEmpty(input.getName())) {
+        if (!isEmpty(input.getName())) {
           Map<String, Object> map = new HashMap();
           map.put(input.getName(), mapExtensions(input.getValue()));
           return map;

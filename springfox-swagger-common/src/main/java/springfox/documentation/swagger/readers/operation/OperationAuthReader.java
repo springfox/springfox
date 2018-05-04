@@ -21,7 +21,7 @@ package springfox.documentation.swagger.readers.operation;
 
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
+
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -42,10 +42,11 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
+
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -80,7 +81,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
           String scope = authorizationScope.scope();
           // @Authorization has a default blank authorization scope, which we need to
           // ignore in the case of api keys.
-          if (!isNullOrEmpty(scope)) {
+          if (!isEmpty(scope)) {
             authorizationScopeList.add(
                 new AuthorizationScopeBuilder()
                     .scope(scope)
@@ -119,7 +120,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
         .filter(new Predicate<Authorization>() {
           @Override
           public boolean apply(Authorization input) {
-            return !Strings.isNullOrEmpty(input.value());
+            return !isEmpty(input.value());
           }
         }).collect(toList());
   }

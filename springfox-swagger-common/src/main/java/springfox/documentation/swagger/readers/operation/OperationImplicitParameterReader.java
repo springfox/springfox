@@ -37,8 +37,9 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
@@ -74,7 +75,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .allowMultiple(param.allowMultiple())
         .modelRef(modelRef)
         .allowableValues(allowableValueFromString(param.allowableValues()))
-        .parameterType(emptyToNull(param.paramType()))
+        .parameterType(Optional.ofNullable(param.paramType()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
         .parameterAccess(param.access())
         .order(SWAGGER_PLUGIN_ORDER)
         .scalarExample(param.example())
@@ -83,7 +84,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
   }
 
   private static ModelRef maybeGetModelRef(ApiImplicitParam param) {
-    String dataType = emptyToNull(param.dataType()) != null ? emptyToNull(param.dataType()) : "string" ;
+    String dataType = Optional.ofNullable(param.dataType()).filter(((Predicate<String>)String::isEmpty).negate()).orElse("string");
     AllowableValues allowableValues = null;
     if (isBaseType(dataType)) {
       allowableValues = allowableValueFromString(param.allowableValues());

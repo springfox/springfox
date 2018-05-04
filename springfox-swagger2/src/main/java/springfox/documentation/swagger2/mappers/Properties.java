@@ -49,10 +49,11 @@ import springfox.documentation.schema.ModelReference;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static com.google.common.base.Functions.*;
-import static com.google.common.base.Strings.*;
+
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
@@ -81,7 +82,7 @@ class Properties {
   }
 
   public static Property property(final String typeName) {
-    String safeTypeName = nullToEmpty(typeName);
+    String safeTypeName = Optional.ofNullable(typeName).orElse("");
     Function<String, Function<String, ? extends Property>> propertyLookup
         = forMap(typeFactory, voidOrRef(safeTypeName));
     return propertyLookup.apply(safeTypeName.toLowerCase()).apply(safeTypeName);

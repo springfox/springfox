@@ -22,7 +22,7 @@ package springfox.documentation.swagger.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
-import com.google.common.base.Strings;
+
 
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
@@ -132,9 +132,9 @@ public final class ApiModelProperties {
       @Override
       public String apply(ApiModelProperty annotation) {
         String description = "";
-        if (!Strings.isNullOrEmpty(annotation.value())) {
+        if (!isEmpty(annotation.value())) {
           description = annotation.value();
-        } else if (!Strings.isNullOrEmpty(annotation.notes())) {
+        } else if (!isEmpty(annotation.notes())) {
           description = annotation.notes();
         }
         return descriptions.resolve(description);
@@ -180,7 +180,7 @@ public final class ApiModelProperties {
       @Override
       public String apply(ApiModelProperty annotation) {
         String example = "";
-        if (!Strings.isNullOrEmpty(annotation.example())) {
+        if (!isEmpty(annotation.example())) {
           example = annotation.example();
         }
         return example;

@@ -36,7 +36,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.google.common.base.Functions.*;
-import static com.google.common.base.Strings.*;
+
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
@@ -60,7 +61,7 @@ public class SerializableParameterFactories {
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
     SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory,
         new NullSerializableParameterFactory())
-        .apply(nullToEmpty(source.getParamType()).toLowerCase());
+        .apply(Optional.ofNullable(source.getParamType()).map(String::toLowerCase).orElse(""));
 
     SerializableParameter toReturn = factory.create(source);
     if (toReturn == null) {
@@ -109,7 +110,7 @@ public class SerializableParameterFactories {
   }
 
   private static String collectionFormat(Parameter source) {
-    return isNullOrEmpty(source.getCollectionFormat()) ? "multi" : source.getCollectionFormat();
+    return isEmpty(source.getCollectionFormat()) ? "multi" : source.getCollectionFormat();
   }
 
   static class CookieSerializableParameterFactory implements SerializableParameterFactory {

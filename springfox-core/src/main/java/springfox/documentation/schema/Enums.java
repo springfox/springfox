@@ -30,8 +30,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
+
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 
 public class Enums {
 
@@ -53,7 +54,7 @@ public class Enums {
       public String apply(Object input) {
         Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
                 .map(evaluateJsonValue(input));
-        if (jsonValue.isPresent() && !isNullOrEmpty(jsonValue.get())) {
+        if (jsonValue.isPresent() && !isEmpty(jsonValue.get())) {
           return jsonValue.get();
         }
         return input.toString();

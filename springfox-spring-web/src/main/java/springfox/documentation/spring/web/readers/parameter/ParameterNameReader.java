@@ -37,8 +37,9 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.google.common.base.Strings.*;
+
 import static java.lang.String.*;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -47,7 +48,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     String name = findParameterNameFromAnnotations(context.resolvedMethodParameter());
-    if (isNullOrEmpty(name)) {
+    if (isEmpty(name)) {
       Optional<String> discoveredName = context.resolvedMethodParameter().defaultName();
       name = discoveredName.isPresent()
              ? discoveredName.get()

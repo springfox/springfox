@@ -20,7 +20,7 @@ package springfox.documentation.service;
 
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
+
 import com.google.common.collect.Multimap;
 
 
@@ -36,6 +36,7 @@ import java.util.stream.StreamSupport;
 
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class Tags {
@@ -131,7 +132,7 @@ public class Tags {
     return new Predicate<String>() {
       @Override
       public boolean apply(String input) {
-        return !Strings.isNullOrEmpty(input);
+        return !isEmpty(input);
       }
     };
   }

@@ -16,9 +16,7 @@
  *
  *
  */
-
 package springfox.documentation.builders;
-
 
 import org.springframework.http.HttpMethod;
 import springfox.documentation.OperationNameGenerator;
@@ -34,9 +32,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import static com.google.common.base.Strings.emptyToNull;
-
 
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
@@ -297,7 +292,7 @@ public class OperationBuilder {
 
   private String uniqueOperationIdStem() {
     String defaultStem = String.format("%sUsing%s", uniqueId, method);
-    return Optional.ofNullable(emptyToNull(codeGenMethodNameStem)).orElse(defaultStem);
+    return Optional.ofNullable(codeGenMethodNameStem).filter(((Predicate<String>)String::isEmpty).negate()).orElse(defaultStem);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
@@ -307,7 +302,8 @@ public class OperationBuilder {
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
-        String message = defaultIfAbsent(emptyToNull(each.getMessage()), responseMessage.getMessage());
+        String message = defaultIfAbsent(Optional.ofNullable(each.getMessage())
+                .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null), responseMessage.getMessage());
         ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
         merged.remove(responseMessage);
         merged.add(new ResponseMessageBuilder()

@@ -37,8 +37,9 @@ import java.util.TreeSet;
 import java.util.function.Function;
 
 import static com.google.common.base.Predicates.*;
-import static com.google.common.base.Strings.*;
+
 import static java.util.stream.Collectors.toCollection;
+import static org.springframework.util.StringUtils.isEmpty;
 
 
 @Component
@@ -51,7 +52,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
       public String apply(String input) {
         StringBuilder sb = new StringBuilder(input);
         String prefilled = prefilledQueryParams(context);
-        if (!isNullOrEmpty(prefilled)) {
+        if (!isEmpty(prefilled)) {
           sb.append(requiresContinuation(input) ? "&" : "?");
           sb.append(prefilled);
         }
@@ -69,7 +70,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
 
   private String queryTemplatePrefix(String input, String prefilled) {
     String prefix;
-    if (isNullOrEmpty(prefilled)) {
+    if (isEmpty(prefilled)) {
       if (requiresContinuation(input)) {
         prefix = "{&";
       } else {

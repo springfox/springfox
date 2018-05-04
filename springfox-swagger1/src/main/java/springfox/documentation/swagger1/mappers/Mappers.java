@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 public class Mappers {
@@ -61,7 +61,7 @@ public class Mappers {
       UriComponents uriComponents,
       String hostNameOverride,
       String basePath) {
-    if (!isNullOrEmpty(hostNameOverride)) {
+    if (!isEmpty(hostNameOverride)) {
       int port = uriComponents.getPort();
       if (port > -1) {
         return String.format("%s://%s:%d%s", uriComponents.getScheme(), hostNameOverride, port, basePath);

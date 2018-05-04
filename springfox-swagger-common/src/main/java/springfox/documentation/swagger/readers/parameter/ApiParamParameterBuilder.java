@@ -39,8 +39,10 @@ import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
@@ -67,10 +69,12 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
             apiParam.map(toAllowableValue()).orElse("")));
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
-      context.parameterBuilder().name(emptyToNull(annotation.name()))
-          .description(emptyToNull(descriptions.resolve(annotation.value())))
-          .parameterAccess(emptyToNull(annotation.access()))
-          .defaultValue(emptyToNull(annotation.defaultValue()))
+      context.parameterBuilder().name(Optional.ofNullable(annotation.name())
+              .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
+          .description(Optional.ofNullable(descriptions.resolve(annotation.value()))
+                  .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
+          .parameterAccess(Optional.ofNullable(annotation.access()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
+          .defaultValue(Optional.ofNullable(annotation.defaultValue()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
           .allowMultiple(annotation.allowMultiple())
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
@@ -93,7 +97,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
 
   private AllowableValues allowableValues(ResolvedType parameterType, String allowableValueString) {
     AllowableValues allowableValues = null;
-    if (!isNullOrEmpty(allowableValueString)) {
+    if (!isEmpty(allowableValueString)) {
       allowableValues = ApiModelProperties.allowableValueFromString(allowableValueString);
     } else {
       if (enumTypeDeterminer.isEnum(parameterType.getErasedType())) {

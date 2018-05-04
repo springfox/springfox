@@ -18,11 +18,10 @@
  */
 package springfox.documentation.schema
 
-
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
-import static com.google.common.base.Strings.*
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -151,7 +150,7 @@ class GenericTypeSpec extends SchemaSpecification {
   }
 
   def expectedModelName(String modelName, String hostType = "GenericType") {
-    if (!isNullOrEmpty(modelName)) {
+    if (!isEmpty(modelName)) {
       "$hostType«$modelName»"
     } else {
       hostType

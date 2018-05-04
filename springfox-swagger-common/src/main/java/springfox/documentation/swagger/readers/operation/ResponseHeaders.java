@@ -20,7 +20,7 @@ package springfox.documentation.swagger.readers.operation;
 
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
 import springfox.documentation.schema.ModelRef;
@@ -33,9 +33,9 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.not;
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 import static java.util.Optional.ofNullable;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.schema.Types.typeNameFor;
 
 public class ResponseHeaders {
@@ -64,7 +64,7 @@ public class ResponseHeaders {
     return new Predicate<ResponseHeader>() {
       @Override
       public boolean apply(ResponseHeader input) {
-        return Strings.isNullOrEmpty(input.name()) || Void.class.equals(input.response());
+        return isEmpty(input.name()) || Void.class.equals(input.response());
       }
     };
   }
@@ -72,7 +72,7 @@ public class ResponseHeaders {
   private static ModelReference headerModel(ResponseHeader each) {
     ModelReference modelReference;
     String typeName = ofNullable(typeNameFor(each.response())).orElse("string");
-    if (isNullOrEmpty(each.responseContainer())) {
+    if (isEmpty(each.responseContainer())) {
       modelReference = new ModelRef(typeName);
     } else {
       modelReference = new ModelRef(each.responseContainer(), new ModelRef(typeName));

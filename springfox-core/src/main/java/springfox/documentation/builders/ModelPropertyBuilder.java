@@ -28,8 +28,8 @@ import springfox.documentation.service.VendorExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Strings.*;
 
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelPropertyBuilder {
@@ -148,7 +148,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    if (xml != null && isNullOrEmpty(xml.getName())) {
+    if (xml != null && isEmpty(xml.getName())) {
       xml.setName(name);
     }
     return new ModelProperty(

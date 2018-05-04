@@ -16,10 +16,8 @@
  *
  *
  */
-
 package springfox.documentation.swagger2.web;
 
-import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +44,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
 
-import static com.google.common.base.Strings.*;
 import static org.springframework.util.MimeTypeUtils.*;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 @Controller
@@ -99,8 +97,8 @@ public class Swagger2Controller {
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
-    swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
-    if (isNullOrEmpty(swagger.getHost())) {
+    swagger.basePath(isEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
+    if (isEmpty(swagger.getHost())) {
       swagger.host(hostName(uriComponents));
     }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);

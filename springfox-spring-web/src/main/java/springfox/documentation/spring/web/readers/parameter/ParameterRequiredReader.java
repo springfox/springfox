@@ -40,8 +40,8 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -87,9 +87,8 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
-      String paramName = emptyToNull(pathVariable.get().name()) != null ?
-          emptyToNull(pathVariable.get().name()) :
-          methodParameter.defaultName().orElse(null);
+      String paramName = Optional.ofNullable(pathVariable.get().name()).filter(((Predicate<String>)String::isEmpty).negate())
+          .orElse(methodParameter.defaultName().orElse(null));
 
       if (pathVariable.get().required() ||
           optionalButPresentInThePath(operationContext, pathVariable.get(), paramName)) {

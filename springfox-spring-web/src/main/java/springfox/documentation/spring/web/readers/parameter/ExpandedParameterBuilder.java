@@ -41,8 +41,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
+
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.service.Parameter.*;
@@ -65,7 +66,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   public void apply(ParameterExpansionContext context) {
     AllowableValues allowable = allowableValues(context.getFieldType().getErasedType());
 
-    String name = isNullOrEmpty(context.getParentName())
+    String name = isEmpty(context.getParentName())
                   ? context.getFieldName()
                   : String.format("%s.%s", context.getParentName(), context.getFieldName());
 

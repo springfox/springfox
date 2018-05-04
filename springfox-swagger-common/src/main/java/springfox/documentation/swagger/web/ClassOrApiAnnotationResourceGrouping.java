@@ -16,11 +16,9 @@
  *
  *
  */
-
 package springfox.documentation.swagger.web;
 
 
-import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +33,10 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-
-import static com.google.common.base.Strings.*;
-
+import java.util.function.Predicate;
 
 import static java.util.Collections.singleton;
+import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.core.annotation.AnnotationUtils.*;
@@ -56,11 +53,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     Class<?> controllerClass = handlerMethod.getBeanType();
     String className = splitCamelCase(controllerClass.getSimpleName(), " ");
 
-    return ofNullable(
-        emptyToNull(
-          stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
-              .orElse(""))))
-        .orElse(className);
+    return stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
+              .filter(((Predicate<String>)String::isEmpty).negate())
+              .orElse(className));
   }
 
   @Override
@@ -83,7 +78,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
     String apiValue = ofNullable(findAnnotation(controllerClass, Api.class))
         .map(toApiValue()).orElse("");
-    return Strings.isNullOrEmpty(apiValue) ? singleton(normalize(group)) : singleton(normalize(apiValue));
+    return singleton(normalize(Optional.ofNullable(apiValue).filter(((Predicate<String>)String::isEmpty).negate()).orElse(group)));
   }
 
   private String normalize(String tag) {
@@ -142,7 +137,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         if (null != input) {
-          return ofNullable(emptyToNull(input.description()));
+          return of(input.description()).filter(((Predicate<String>)String::isEmpty).negate());
         }
         return Optional.empty();
       }
@@ -154,7 +149,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       @Override
       public Optional<String> apply(Api input) {
         if (null != input) {
-          return ofNullable(emptyToNull(input.value()));
+          return of(input.value()).filter(((Predicate<String>)String::isEmpty).negate());
         }
         return Optional.empty();
       }

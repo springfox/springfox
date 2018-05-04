@@ -32,9 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Strings.*;
+
 
 import static java.util.Collections.singletonList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.builders.Parameters.*;
 import static springfox.documentation.service.Parameter.*;
 
@@ -55,7 +56,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
 
       String paramValue = expression.getValue();
       AllowableListValues allowableValues = null;
-      if (!isNullOrEmpty(paramValue)) {
+      if (!isEmpty(paramValue)) {
         allowableValues = new AllowableListValues(singletonList(paramValue), "string");
       }
       Parameter parameter = new ParameterBuilder()
