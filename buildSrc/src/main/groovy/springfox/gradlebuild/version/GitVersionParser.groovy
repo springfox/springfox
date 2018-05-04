@@ -1,8 +1,9 @@
 package springfox.gradlebuild.version
 
-import com.google.common.base.Splitter
-
+import java.util.stream.Stream
 import java.util.stream.StreamSupport
+
+import static java.util.stream.Collectors.toList;
 
 // Lifted from plugin 'com.cinnober.gradle:semver-git:2.2.0'
 // https://github.com/cinnober/semver-git
@@ -28,7 +29,7 @@ trait GitVersionParser {
   }
 
   SemanticVersion parseTransform(String version, String buildSuffix) {
-    def components = Splitter.on('.').split(version)
+    def components = Stream.of(version.split("\\.")).collect(toList())
     if (StreamSupport.stream(components.spliterator(), false).count() < 3) {
       throw new IllegalArgumentException("Not a valid version. Expecting a version of form <MAJOR.MINOR.PATCH> where " +
           "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: ${version}")

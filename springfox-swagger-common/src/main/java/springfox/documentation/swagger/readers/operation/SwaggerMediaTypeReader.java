@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Splitter;
+import com.google.common.base.Predicate;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -29,6 +29,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 
 import static java.util.stream.Collectors.toSet;
@@ -53,10 +54,10 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
 
 
   private Set<String> asSet(String mediaTypes) {
-    return Splitter.on(',')
-            .trimResults()
-            .omitEmptyStrings()
-            .splitToList(mediaTypes).stream().collect(toSet());
+    return Stream.of(mediaTypes.split(","))
+            .map(String::trim)
+            .filter(((Predicate<String>)String::isEmpty).negate())
+            .collect(toSet());
   }
 
 

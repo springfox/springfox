@@ -29,7 +29,6 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 
 import com.google.common.base.Predicate;
 
-import com.google.common.primitives.Ints;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -90,7 +89,7 @@ public class HandlerMethodResolver {
     return new Comparator<ResolvedMethod>() {
       @Override
       public int compare(ResolvedMethod first, ResolvedMethod second) {
-        return Ints.compare(first.getArgumentCount(), second.getArgumentCount());
+        return Integer.compare(first.getArgumentCount(), second.getArgumentCount());
       }
     };
   }

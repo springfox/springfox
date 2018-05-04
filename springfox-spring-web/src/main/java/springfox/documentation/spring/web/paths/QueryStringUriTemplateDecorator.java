@@ -19,7 +19,7 @@
 package springfox.documentation.spring.web.paths;
 
 
-import com.google.common.base.Joiner;
+
 import com.google.common.base.Predicate;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -61,7 +61,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
           return sb.toString();
         }
         String prefix = queryTemplatePrefix(input, prefilled);
-        String queryTemplate = Joiner.on(',').join(expressions);
+        String queryTemplate = String.join(",", expressions);
         sb.append(prefix).append(queryTemplate).append("}");
         return sb.toString();
       }
@@ -94,10 +94,10 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   }
 
   private String prefilledQueryParams(PathContext context) {
-    return Joiner.on("&").join(context.getParameters().stream()
+    return String.join("&", context.getParameters().stream()
         .filter(onlyOneAllowableValue())
         .map(queryStringWithValue())
-        .sorted(Comparator.naturalOrder()).collect(toCollection(TreeSet::new)).iterator())
+        .sorted(Comparator.naturalOrder()).collect(toCollection(TreeSet::new)))
         .trim();
   }
 

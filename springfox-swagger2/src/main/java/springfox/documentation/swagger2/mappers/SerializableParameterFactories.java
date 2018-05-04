@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.collect.ImmutableMap;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.CookieParameter;
 import io.swagger.models.parameters.FormParameter;
@@ -32,24 +31,27 @@ import io.swagger.models.properties.Property;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Parameter;
 
+import java.util.AbstractMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Functions.*;
 
+import static java.util.stream.Collectors.toMap;
 import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
 public class SerializableParameterFactories {
-  public static final Map<String, SerializableParameterFactory> factory = ImmutableMap.<String,
-      SerializableParameterFactory>builder()
-      .put("header", new HeaderSerializableParameterFactory())
-      .put("form", new FormSerializableParameterFactory())
-      .put("path", new PathSerializableParameterFactory())
-      .put("query", new QuerySerializableParameterFactory())
-      .put("cookie", new CookieSerializableParameterFactory())
-      .build();
+  public static final Map<String, SerializableParameterFactory> factory = Collections.unmodifiableMap(Stream.of(
+      new AbstractMap.SimpleEntry<>("header", new HeaderSerializableParameterFactory()),
+      new AbstractMap.SimpleEntry<>("form", new FormSerializableParameterFactory()),
+      new AbstractMap.SimpleEntry<>("path", new PathSerializableParameterFactory()),
+      new AbstractMap.SimpleEntry<>("query", new QuerySerializableParameterFactory()),
+      new AbstractMap.SimpleEntry<>("cookie", new CookieSerializableParameterFactory()))
+      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
   private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
 

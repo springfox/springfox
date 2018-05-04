@@ -19,8 +19,6 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.ImmutableMap;
-
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -99,8 +97,8 @@ public class RequestMappingContext {
     return requestMappingPattern;
   }
 
-  public ImmutableMap<String, Model> getModelMap() {
-    return ImmutableMap.copyOf(modelMap);
+  public Map<String, Model> getModelMap() {
+    return Collections.unmodifiableMap(modelMap);
   }
 
   public OperationModelContextsBuilder operationModelsBuilder() {

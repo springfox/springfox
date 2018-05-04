@@ -19,9 +19,8 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Joiner;
+
 import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -93,15 +92,14 @@ public class ApiListingScanner {
         commons.add(word);
       }
     }
-    Joiner joiner = Joiner.on("/").skipNulls();
-    return Optional.of("/" + joiner.join(commons));
+    return Optional.of("/" + String.join("/", commons.stream().filter(Objects::nonNull).collect(toList())));
   }
 
   static List<String> urlParts(ApiDescription apiDescription) {
-    return Splitter.on('/')
-        .omitEmptyStrings()
-        .trimResults()
-        .splitToList(apiDescription.getPath());
+    return Stream.of(apiDescription.getPath().split("\\/"))
+        .filter(((Predicate<String>)String::isEmpty).negate())
+        .map(String::trim)
+        .collect(toList());
   }
 
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {

@@ -22,7 +22,6 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
-import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +95,7 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, ModelProperty> propertiesIndex
         = properties(modelContext, propertiesHost).stream().collect(toMap(byPropertyName(), Function.identity()));
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
-        Joiner.on(", ").join(propertiesIndex.keySet()));
+        String.join(", ", propertiesIndex.keySet()));
     Map<String, ModelProperty> properties = new TreeMap();
     properties.putAll(propertiesIndex);
     return Optional.of(modelBuilder(propertiesHost, properties, modelContext));

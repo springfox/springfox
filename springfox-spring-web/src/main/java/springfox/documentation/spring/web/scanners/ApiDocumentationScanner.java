@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.scanners;
 
 
-import com.google.common.base.Joiner;
+
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -105,8 +105,8 @@ public class ApiDocumentationScanner {
     return new Function<Map.Entry<String, Collection<ApiListing>>, ApiListingReference>() {
       @Override
       public ApiListingReference apply(Map.Entry<String, Collection<ApiListing>> input) {
-        String description = Joiner.on(System.getProperty("line.separator"))
-            .join(descriptions(input.getValue()));
+        String description = String.join(System.getProperty("line.separator"),
+            descriptions(input.getValue()));
         PathAdjuster adjuster = new PathMappingAdjuster(context);
         PathProvider pathProvider = context.getPathProvider();
         String path = pathProvider.getResourceListingPath(context.getGroupName(), input.getKey());

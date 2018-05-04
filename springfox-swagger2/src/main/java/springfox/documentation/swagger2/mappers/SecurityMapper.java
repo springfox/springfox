@@ -18,28 +18,25 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-
-import com.google.common.collect.ImmutableMap;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.mapstruct.Mapper;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.SecurityScheme;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
 
 @Mapper
 public class SecurityMapper {
-  private Map<String, SecuritySchemeFactory> factories = ImmutableMap.<String, SecuritySchemeFactory>builder()
-      .put("oauth2", new OAuth2AuthFactory())
-      .put("apiKey", new ApiKeyAuthFactory())
-      .put("basicAuth", new BasicAuthFactory())
-      .build();
+  private Map<String, SecuritySchemeFactory> factories = Collections.unmodifiableMap(Stream.of(
+      new AbstractMap.SimpleEntry<>("oauth2", new OAuth2AuthFactory()),
+      new AbstractMap.SimpleEntry<>("apiKey", new ApiKeyAuthFactory()),
+      new AbstractMap.SimpleEntry<>("basicAuth", new BasicAuthFactory()))
+      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
     if (from == null) {

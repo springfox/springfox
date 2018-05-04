@@ -25,9 +25,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-
-import com.google.common.primitives.Ints;
-
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -98,7 +95,7 @@ public class Operation {
     return new Comparator<ResponseMessage>() {
       @Override
       public int compare(ResponseMessage first, ResponseMessage second) {
-        return Ints.compare(first.getCode(), second.getCode());
+        return Integer.compare(first.getCode(), second.getCode());
       }
     };
   }
