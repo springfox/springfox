@@ -47,6 +47,7 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
   CheckGitBranchTask checkGitBranchTask
   Task showPublishInfo
   VersioningStrategy versioningStrategy
+  IntermediaryTask checkWorkspaceTask
 
   @Override
   void apply(Project project) {
@@ -59,12 +60,15 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
     credentialCheck = project.task(CheckRequiredSecretsTask.TASK_NAME, type: CheckRequiredSecretsTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
     checkGitBranchTask = project.task(CheckGitBranchTask.TASK_NAME, type: CheckGitBranchTask)
+    checkWorkspaceTask = project.task('checkWorkspace', type: IntermediaryTask)
+
     showPublishInfo = project.task('showPublishInfo') {
       group = 'Help'
       description = 'Show project publishing information'
     }
 
     configureVersion(project, versioningInfo)
+    configureGlobalTasks()
     configureSnapshotTaskGraph(project)
     configureReleaseTaskGraph(project)
     project.tasks.showPublishInfo << {
@@ -72,38 +76,39 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
     }
   }
 
+  def configureGlobalTasks() {
+    checkWorkspaceTask.dependsOn showPublishInfo
+    checkWorkspaceTask.dependsOn checkCleanWorkspaceTask
+    checkWorkspaceTask.dependsOn credentialCheck
+  }
+
   def configureSnapshotTaskGraph(Project project) {
-    def snapshotTask = project.task('snapshot', type: IntermediaryTask, group: "release")
-    snapshotTask.dependsOn showPublishInfo
-    snapshotTask.dependsOn checkCleanWorkspaceTask
-    snapshotTask.dependsOn credentialCheck
+    def publishSnapshot = project.task('publishSnapshot', type: IntermediaryTask, group: "release")
+
+    publishSnapshot.dependsOn checkWorkspaceTask
+
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
       def artifactoryPublishTasks = evaluatedProject.getTasksByName('artifactoryPublish', true)
-      snapshotTask.dependsOn javaCheckTasks
-      snapshotTask.dependsOn artifactoryPublishTasks
+      publishSnapshot.dependsOn javaCheckTasks
+      publishSnapshot.dependsOn artifactoryPublishTasks
     }
   }
 
   def configureReleaseTaskGraph(Project project) {
-    def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
-    def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
+    def publishTask = project.task('publishRelease', type: IntermediaryTask)
 
-    iCheckTask.dependsOn showPublishInfo
-    iCheckTask.dependsOn checkGitBranchTask
-    iCheckTask.dependsOn checkCleanWorkspaceTask
-    iCheckTask.dependsOn credentialCheck
+    publishTask.dependsOn checkWorkspaceTask
+    publishTask.dependsOn checkGitBranchTask
 
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
-      def artifactoryPublishTasks = evaluatedProject.getTasksByName('artifactoryPublish', true)
-      iCheckTask.dependsOn javaCheckTasks
-      iPublishTask.dependsOn artifactoryPublishTasks
+      def bintrayUploadTasks = evaluatedProject.getTasksByName('bintrayUpload', true)
+      publishTask.dependsOn javaCheckTasks
+      publishTask.dependsOn bintrayUploadTasks
     }
 
-    iPublishTask.dependsOn iCheckTask
-
-    bumpAndTagTask.dependsOn iPublishTask
+    bumpAndTagTask.dependsOn publishTask
     releaseTask.dependsOn bumpAndTagTask
   }
 
