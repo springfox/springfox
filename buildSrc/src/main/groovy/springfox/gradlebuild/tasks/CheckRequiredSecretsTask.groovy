@@ -21,6 +21,7 @@ package springfox.gradlebuild.tasks
 
 import com.google.common.base.Strings
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
 class CheckRequiredSecretsTask extends DefaultTask {
@@ -38,15 +39,13 @@ class CheckRequiredSecretsTask extends DefaultTask {
   }
 
   String requiredProperty(String propName, String environmentVariable) {
-    def userName = project.hasProperty(propName) ?
+    def value = project.hasProperty(propName) ?
         project.property(propName) :
         System.getenv(environmentVariable)
-    if (Strings.isNullOrEmpty(userName)) {
-      assert project.property(propName): "Both property: $propName or env variable:  $environmentVariable must not " +
-          "be blank!"
+    if (!Strings.isNullOrEmpty(value)) {
       return project.property(propName)
-    } else {
-      throw new IllegalArgumentException("Property: ${propName} or env variable: $environmentVariable is required!")
     }
+    throw new GradleException("Either gradle property: $propName or environment variable: $environmentVariable" +
+        " must not present!")
   }
 }
