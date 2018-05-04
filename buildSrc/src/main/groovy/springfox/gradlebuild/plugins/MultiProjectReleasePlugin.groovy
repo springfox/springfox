@@ -28,9 +28,8 @@ import springfox.gradlebuild.tasks.BumpAndTagTask
 import springfox.gradlebuild.tasks.CheckCleanWorkspaceTask
 import springfox.gradlebuild.tasks.CheckGitBranchTask
 import springfox.gradlebuild.tasks.IntermediaryTask
-import springfox.gradlebuild.tasks.PublishCredentialsCheckTask
+import springfox.gradlebuild.tasks.CheckRequiredSecretsTask
 import springfox.gradlebuild.tasks.ReleaseTask
-import springfox.gradlebuild.tasks.SnapshotTask
 import springfox.gradlebuild.version.FileVersionStrategy
 import springfox.gradlebuild.version.ReleaseType
 import springfox.gradlebuild.version.VersioningStrategy
@@ -44,8 +43,7 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
   ReleaseTask releaseTask
   BumpAndTagTask bumpAndTagTask
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
-  SnapshotTask snapshotTask
-  PublishCredentialsCheckTask credentialCheck
+  CheckRequiredSecretsTask credentialCheck
   CheckGitBranchTask checkGitBranchTask
   Task showPublishInfo
   VersioningStrategy versioningStrategy
@@ -58,8 +56,7 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
     BuildInfo versioningInfo = createBuildInfo(project, versioningStrategy)
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
     bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask)
-    snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
-    credentialCheck = project.task(PublishCredentialsCheckTask.TASK_NAME, type: PublishCredentialsCheckTask)
+    credentialCheck = project.task(CheckRequiredSecretsTask.TASK_NAME, type: CheckRequiredSecretsTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
     checkGitBranchTask = project.task(CheckGitBranchTask.TASK_NAME, type: CheckGitBranchTask)
     showPublishInfo = project.task('showPublishInfo') {
@@ -76,47 +73,33 @@ class MultiProjectReleasePlugin implements Plugin<Project> {
   }
 
   def configureSnapshotTaskGraph(Project project) {
-    def iSnapshotCheckTask = project.task('iSnapshotCheck', type: IntermediaryTask)
-    iSnapshotCheckTask.dependsOn showPublishInfo
-    project.afterEvaluate { evaluatedProject ->
-      def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
-      iSnapshotCheckTask.dependsOn javaCheckTasks
-
-      evaluatedProject.subprojects.each { p ->
-        p.tasks.findByPath('publish').each { t ->
-          snapshotTask.dependsOn(t)
-        }
-      }
-    }
-
-    snapshotTask.dependsOn iSnapshotCheckTask
+    def snapshotTask = project.task('snapshot', type: IntermediaryTask, group: "release")
+    snapshotTask.dependsOn showPublishInfo
     snapshotTask.dependsOn checkCleanWorkspaceTask
     snapshotTask.dependsOn credentialCheck
-    iSnapshotCheckTask.mustRunAfter checkCleanWorkspaceTask
-    iSnapshotCheckTask.mustRunAfter credentialCheck
-
+    project.afterEvaluate { evaluatedProject ->
+      def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
+      def artifactoryPublishTasks = evaluatedProject.getTasksByName('artifactoryPublish', true)
+      snapshotTask.dependsOn javaCheckTasks
+      snapshotTask.dependsOn artifactoryPublishTasks
+    }
   }
 
   def configureReleaseTaskGraph(Project project) {
-    def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
     def iCheckTask = project.task('iCheckTask', type: IntermediaryTask)
-    def iWorkspaceTask = project.task('iWorkspaceTask', type: IntermediaryTask)
+    def iPublishTask = project.task('iPublishTask', type: IntermediaryTask)
+
+    iCheckTask.dependsOn showPublishInfo
+    iCheckTask.dependsOn checkGitBranchTask
+    iCheckTask.dependsOn checkCleanWorkspaceTask
+    iCheckTask.dependsOn credentialCheck
 
     project.afterEvaluate { evaluatedProject ->
       def javaCheckTasks = evaluatedProject.getTasksByName('check', true)
+      def artifactoryPublishTasks = evaluatedProject.getTasksByName('artifactoryPublish', true)
       iCheckTask.dependsOn javaCheckTasks
-
-      evaluatedProject.subprojects.each { p ->
-        p.tasks.findByPath('bintrayUpload').each { t ->
-          iPublishTask.dependsOn(t)
-        }
-      }
+      iPublishTask.dependsOn artifactoryPublishTasks
     }
-
-    iWorkspaceTask.dependsOn checkGitBranchTask
-    iWorkspaceTask.dependsOn checkCleanWorkspaceTask
-
-    iCheckTask.dependsOn iWorkspaceTask, showPublishInfo, credentialCheck
 
     iPublishTask.dependsOn iCheckTask
 

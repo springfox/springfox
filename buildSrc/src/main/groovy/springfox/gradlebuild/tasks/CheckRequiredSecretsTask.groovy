@@ -23,9 +23,9 @@ import com.google.common.base.Strings
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-class PublishCredentialsCheckTask extends DefaultTask {
-  public static final TASK_NAME = "publishCredentialsCheck"
-  String description = 'verifies credentials bintray/github/oss-sonatype credentials'
+class CheckRequiredSecretsTask extends DefaultTask {
+  public static final TASK_NAME = "checkRequiredSecrets"
+  String description = 'verifies credentials for bintray/github/oss-sonatype'
   String group = 'release'
 
   @TaskAction
