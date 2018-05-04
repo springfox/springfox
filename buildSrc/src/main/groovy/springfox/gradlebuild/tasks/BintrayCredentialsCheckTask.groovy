@@ -19,6 +19,7 @@
 
 package springfox.gradlebuild.tasks
 
+import com.google.common.base.Strings
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
@@ -29,16 +30,20 @@ class BintrayCredentialsCheckTask extends DefaultTask {
 
   @TaskAction
   def action() {
-    requiredProperty('bintrayUsername')
-    requiredProperty('bintrayPassword')
+    requiredProperty('bintrayUsername', 'BINTRAY_USER_NAME')
+    requiredProperty('bintrayPassword', 'BINTRAY_PASSWORD')
   }
 
-  String requiredProperty(String propName) {
-    if (project.hasProperty(propName)) {
-      assert project.property(propName): "Property ${propName} must not be blank!"
+  String requiredProperty(String propName, String environmentVariable) {
+    def userName = project.hasProperty(propName) ?
+        project.property(propName) :
+        System.getenv(environmentVariable)
+    if (Strings.isNullOrEmpty(userName)) {
+      assert project.property(propName): "Both property: $propName or env variable:  $environmentVariable must not " +
+          "be blank!"
       return project.property(propName)
     } else {
-      throw new IllegalArgumentException("Property ${propName} is required!")
+      throw new IllegalArgumentException("Property: ${propName} or env variable: $environmentVariable is required!")
     }
   }
 }
