@@ -43,7 +43,7 @@ class CheckRequiredSecretsTask extends DefaultTask {
         project.property(propName) :
         System.getenv(environmentVariable)
     if (!Strings.isNullOrEmpty(value)) {
-      return project.property(propName)
+      return value
     }
     throw new GradleException("Either gradle property: $propName or environment variable: $environmentVariable" +
         " must not present!")
