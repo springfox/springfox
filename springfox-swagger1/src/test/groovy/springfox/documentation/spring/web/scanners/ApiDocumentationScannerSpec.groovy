@@ -30,7 +30,7 @@ import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.collect.Maps.*
+
 import static springfox.documentation.builders.PathSelectors.*
 
 @Mixin([RequestMappingSupport])

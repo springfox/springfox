@@ -21,7 +21,6 @@ package springfox.documentation.service;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 
 
@@ -45,7 +44,7 @@ public class Tags {
   }
 
   public static Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
-    Iterable<ApiListing> allListings = Iterables.concat(nullToEmptyMultimap(apiListings).asMap().values());
+    Iterable<ApiListing> allListings = nullToEmptyMultimap(apiListings).values();
     List<Tag> tags =
         StreamSupport.stream(allListings.spliterator(), false)
             .map(collectTags()).flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))

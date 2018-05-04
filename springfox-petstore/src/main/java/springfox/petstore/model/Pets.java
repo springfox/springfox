@@ -24,8 +24,6 @@ import com.google.common.base.Predicate;
 
 import java.util.Objects;
 
-import static com.google.common.collect.Iterables.*;
-
 public class Pets {
   public static Predicate<Pet> statusIs(final String status) {
     return new Predicate<Pet>() {
@@ -40,7 +38,7 @@ public class Pets {
     return new Predicate<Pet>() {
       @Override
       public boolean apply(Pet input) {
-        return any(input.getTags(), withName(tag));
+        return input.getTags().stream().anyMatch(withName(tag));
       }
     };
   }

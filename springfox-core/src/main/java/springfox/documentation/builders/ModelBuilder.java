@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static com.google.common.base.Strings.*;
 
-import static com.google.common.collect.Maps.*;
+
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelBuilder {

@@ -19,13 +19,9 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.StreamSupport;
 
 
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
@@ -42,7 +38,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
 
   @Override
   public List<VendorExtension> getValue() {
-    return ImmutableList.copyOf(properties);
+    return Collections.unmodifiableList(properties);
   }
 
 
@@ -51,7 +47,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   }
 
   public void replaceProperty(VendorExtension property) {
-    Optional<VendorExtension> vendorProperty = Iterables.tryFind(properties, withName(property.getName())).toJavaUtil();
+    Optional<VendorExtension> vendorProperty = StreamSupport.stream(properties.spliterator(), false).filter(withName(property.getName())).findFirst();
     if (vendorProperty.isPresent()) {
       properties.remove(vendorProperty.get());
     }

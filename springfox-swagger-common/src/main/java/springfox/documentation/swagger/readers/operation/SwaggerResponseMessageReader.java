@@ -41,7 +41,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.*;
 
-import static com.google.common.collect.Maps.*;
+
 
 import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -112,7 +112,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
-          Map<String, Header> headers = newHashMap(defaultHeaders);
+          Map<String, Header> headers = new HashMap(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
           responseMessages.add(new ResponseMessageBuilder()

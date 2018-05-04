@@ -1,7 +1,8 @@
 package springfox.gradlebuild.version
 
 import com.google.common.base.Splitter
-import com.google.common.collect.Iterables
+
+import java.util.stream.StreamSupport
 
 import static com.google.common.base.Strings.nullToEmpty
 
@@ -30,7 +31,7 @@ trait GitVersionParser {
 
   SemanticVersion parseTransform(String version, String buildSuffix) {
     def components = Splitter.on('.').split(version)
-    if (Iterables.size(components) < 3) {
+    if (StreamSupport.stream(components.spliterator(), false).count() < 3) {
       throw new IllegalArgumentException("Not a valid version. Expecting a version of form <MAJOR.MINOR.PATCH> where " +
           "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: ${version}")
     }

@@ -29,9 +29,6 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 
 import com.google.common.base.Predicate;
 
-import com.google.common.collect.Iterables;
-
-
 import com.google.common.primitives.Ints;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
@@ -49,7 +46,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Iterables.*;
 import static java.util.stream.Collectors.toList;
 
 
@@ -139,8 +135,8 @@ public class HandlerMethodResolver {
     }
     Class hostClass = useType(handlerMethod.getBeanType())
         .orElse(handlerMethod.getMethod().getDeclaringClass());
-    Iterable<ResolvedMethod> filtered = filter(getMemberMethods(hostClass),
-        methodNamesAreSame(handlerMethod.getMethod()));
+    Iterable<ResolvedMethod> filtered = getMemberMethods(hostClass).stream()
+        .filter(methodNamesAreSame(handlerMethod.getMethod())).collect(toList());
     return resolveToMethodWithMaxResolvedTypes(filtered, handlerMethod.getMethod());
   }
 
@@ -186,12 +182,12 @@ public class HandlerMethodResolver {
       Iterable<ResolvedMethod> filtered,
       final Method methodToResolve) {
 
-    return filter(filtered, new Predicate<ResolvedMethod>() {
+    return StreamSupport.stream(filtered.spliterator(), false).filter(new Predicate<ResolvedMethod>() {
       @Override
       public boolean apply(ResolvedMethod input) {
         return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
       }
-    });
+    }).collect(toList());
   }
 
   private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {
@@ -206,12 +202,12 @@ public class HandlerMethodResolver {
   private Optional<ResolvedMethod> resolveToMethodWithMaxResolvedTypes(
       Iterable<ResolvedMethod> filtered,
       Method methodToResolve) {
-    if (Iterables.size(filtered) > 1) {
+    if (StreamSupport.stream(filtered.spliterator(), false).count() > 1) {
       Iterable<ResolvedMethod> covariantMethods = covariantMethods(filtered, methodToResolve);
-      if (Iterables.size(covariantMethods) == 0) {
+      if (StreamSupport.stream(covariantMethods.spliterator(), false).count() == 0) {
         return StreamSupport.stream(filtered.spliterator(), false)
             .filter(sameMethod(methodToResolve)).findFirst();
-      } else if (Iterables.size(covariantMethods) == 1) {
+      } else if (StreamSupport.stream(covariantMethods.spliterator(), false).count() == 1) {
         return StreamSupport.stream(covariantMethods.spliterator(), false).findFirst();
       } else {
         return StreamSupport.stream(covariantMethods.spliterator(), false).max(byArgumentCount());
@@ -233,7 +229,8 @@ public class HandlerMethodResolver {
       Iterable<ResolvedMethod> filtered,
       final Method methodToResolve) {
 
-    return filter(methodsWithSameNumberOfParams(filtered, methodToResolve), onlyCovariantMethods(methodToResolve));
+    return StreamSupport.stream(methodsWithSameNumberOfParams(filtered, methodToResolve).spliterator(), false)
+            .filter(onlyCovariantMethods(methodToResolve)).collect(toList());
   }
 
   private Predicate<ResolvedMethod> onlyCovariantMethods(final Method methodToResolve) {

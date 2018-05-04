@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Iterables.*;
 
 import static java.util.Collections.singletonList;
 import static springfox.documentation.builders.Parameters.*;
@@ -82,7 +81,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {
-    return any(parameters, withName(expression.getName()));
+    return parameters.stream().anyMatch(withName(expression.getName()));
   }
 
   @Override

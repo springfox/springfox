@@ -53,7 +53,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.Maps.*;
+
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
@@ -66,7 +66,7 @@ public abstract class ModelMapper {
       return null;
     }
 
-    Map<String, Model> map = newTreeMap();
+    Map<String, Model> map = new TreeMap();
     InheritanceDeterminer determiner = new InheritanceDeterminer(from);
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
@@ -129,10 +129,10 @@ public abstract class ModelMapper {
 
   private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<String, Property>();
-    SortedMap<String, ModelProperty> nonVoidProperties = filterEntries(properties, not(voidProperties()));
-    for (Map.Entry<String, ModelProperty> propertyEntry : nonVoidProperties.entrySet()) {
+    properties.entrySet().stream().filter(voidProperties().negate())
+    .forEach(propertyEntry -> {
       mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
-    }
+    });
     return mappedProperties;
   }
 
@@ -257,7 +257,7 @@ public abstract class ModelMapper {
   }
 
   Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, springfox.documentation.schema.Model> definitions = newTreeMap();
+    Map<String, springfox.documentation.schema.Model> definitions = new TreeMap();
     for (ApiListing each : apiListings.values()) {
       definitions.putAll(each.getModels());
     }

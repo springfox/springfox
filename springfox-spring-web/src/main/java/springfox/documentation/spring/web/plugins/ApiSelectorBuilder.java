@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 
@@ -58,7 +57,7 @@ public class ApiSelectorBuilder {
     return new Predicate<RequestHandler>() {
       @Override
       public boolean apply(RequestHandler input) {
-        return Iterables.any(input.getPatternsCondition().getPatterns(), pathSelector);
+        return input.getPatternsCondition().getPatterns().stream().anyMatch(pathSelector);
       }
     };
   }

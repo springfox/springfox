@@ -18,11 +18,7 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-
-
-
 import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.service.ResourceGroup;
@@ -49,7 +45,7 @@ class ResourcePathProvider {
     return new Function<Class<?>, String>() {
       @Override
       public String apply(Class<?> input) {
-        String path = Iterables.getFirst(Arrays.asList(paths(input)), "");
+        String path = Arrays.asList(paths(input)).stream().findFirst().orElse("");
         if (Strings.isNullOrEmpty(path)) {
           return "";
         }

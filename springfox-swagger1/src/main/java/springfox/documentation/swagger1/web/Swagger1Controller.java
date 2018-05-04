@@ -16,7 +16,6 @@
  *
  *
  */
-
 package springfox.documentation.swagger1.web;
 
 
@@ -47,7 +46,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.google.common.collect.Multimaps.*;
+import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.swagger1.mappers.Mappers.*;
 import static springfox.documentation.swagger1.web.ApiListingMerger.*;
 
@@ -106,7 +105,8 @@ public class Swagger1Controller {
     }
     Multimap<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
     Map<String, Collection<ApiListing>> dtoApiListings
-        = transformEntries(apiListingMap, toApiListingDto(servletRequest, documentation.getHost(), mapper)).asMap();
+        = apiListingMap.asMap().entrySet().stream().map(toApiListingDto(servletRequest, documentation.getHost(), mapper))
+            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);
     return mergedApiListing(apiListings)

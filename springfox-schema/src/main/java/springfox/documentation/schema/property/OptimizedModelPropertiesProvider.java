@@ -61,10 +61,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.Iterables.*;
 
-import static com.google.common.collect.Maps.*;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -254,11 +253,11 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ResolvedType resolvedType,
       final String fieldName) {
 
-    return tryFind(fields.in(resolvedType), new Predicate<ResolvedField>() {
+    return StreamSupport.stream(fields.in(resolvedType).spliterator(), false).filter(new Predicate<ResolvedField>() {
       public boolean apply(ResolvedField input) {
         return fieldName.equals(input.getName());
       }
-    }).toJavaUtil();
+    }).findFirst();
   }
 
   private ModelProperty fieldModelProperty(
@@ -379,12 +378,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
-    return tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
+    return StreamSupport.stream(accessors.in(resolvedType).spliterator(), false).filter(new Predicate<ResolvedMethod>() {
       public boolean apply(ResolvedMethod accessorMethod) {
         SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
         return methodComparer.equivalent(accessorMethod.getRawMember(), (Method) member.getMember());
       }
-    }).toJavaUtil();
+    }).findFirst();
   }
 
   private List<ModelProperty> fromFactoryMethod(

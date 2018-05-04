@@ -28,8 +28,6 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.google.common.collect.Iterables.*;
-
 import static java.util.Optional.ofNullable;
 
 public class ParameterAnnotationReader {

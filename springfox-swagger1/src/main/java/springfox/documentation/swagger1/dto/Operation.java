@@ -30,8 +30,7 @@ import com.google.common.primitives.Ints;
 
 import java.util.*;
 import java.util.function.Function;
-
-import static com.google.common.collect.ImmutableSortedSet.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -91,7 +90,7 @@ public class Operation {
     this.authorizations = toAuthorizationsMap(authorizations);
     this.parameters = parameters.stream()
         .sorted(byName()).collect(toList());
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(() -> new TreeSet<>(responseMessageOrdering())));
     this.deprecated = deprecated;
   }
 
@@ -212,7 +211,7 @@ public class Operation {
   }
 
   public void setResponseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(()->new TreeSet<>(responseMessageOrdering())));
   }
 
   public String getDeprecated() {

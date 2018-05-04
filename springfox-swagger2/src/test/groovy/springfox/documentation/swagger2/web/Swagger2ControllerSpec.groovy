@@ -27,7 +27,7 @@ import springfox.documentation.swagger2.mappers.MapperSupport
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletRequest
 
-import static com.google.common.collect.Maps.*
+
 import static springfox.documentation.spi.service.contexts.Orderings.nickNameComparator
 
 @Mixin([ApiListingSupport, AuthSupport])

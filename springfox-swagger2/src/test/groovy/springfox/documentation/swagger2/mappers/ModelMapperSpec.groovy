@@ -39,7 +39,7 @@ import springfox.documentation.spi.DocumentationType
 
 import static com.google.common.base.Functions.*
 import static com.google.common.base.Suppliers.*
-import static com.google.common.collect.Maps.*
+
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 import static springfox.documentation.swagger2.mappers.ModelMapper.*

@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterables;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,7 +32,7 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.stream.StreamSupport;
 
 
 import static java.util.stream.Collectors.toList;
@@ -64,7 +63,7 @@ public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEve
 
   private List<HttpMessageConverter<?>> configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     Iterable<MappingJackson2HttpMessageConverter> jackson2Converters = jackson2Converters(converters);
-    if (Iterables.size(jackson2Converters) > 0) {
+    if (StreamSupport.stream(jackson2Converters.spliterator(), false).count() > 0) {
       for (MappingJackson2HttpMessageConverter each : jackson2Converters) {
         fireObjectMapperConfiguredEvent(each.getObjectMapper());
       }

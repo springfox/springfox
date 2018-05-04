@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
+
 
 @ApiModel(description = "Describes model with map property")
 public class ModelWithMapProperty {

@@ -26,7 +26,7 @@ import springfox.documentation.OperationNameGenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
+
 
 @Component
 public class CachingOperationNameGenerator implements OperationNameGenerator {

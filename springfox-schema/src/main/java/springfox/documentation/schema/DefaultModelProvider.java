@@ -33,14 +33,10 @@ import springfox.documentation.schema.property.ModelPropertiesProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
-import static com.google.common.collect.Maps.*;
+
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -101,7 +97,7 @@ public class DefaultModelProvider implements ModelProvider {
         = properties(modelContext, propertiesHost).stream().collect(toMap(byPropertyName(), Function.identity()));
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
         Joiner.on(", ").join(propertiesIndex.keySet()));
-    Map<String, ModelProperty> properties = newTreeMap();
+    Map<String, ModelProperty> properties = new TreeMap();
     properties.putAll(propertiesIndex);
     return Optional.of(modelBuilder(propertiesHost, properties, modelContext));
   }

@@ -31,8 +31,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import static com.google.common.collect.Iterables.*;
-
 
 public class WildcardType {
   private WildcardType() {
@@ -40,7 +38,7 @@ public class WildcardType {
   }
 
   public static boolean hasWildcards(ResolvedType type) {
-    return any(type.getTypeBindings().getTypeParameters(), thatAreWildcards());
+    return type.getTypeBindings().getTypeParameters().stream().anyMatch(thatAreWildcards());
   }
 
   public static boolean exactMatch(ResolvedType first, ResolvedType second) {
@@ -112,7 +110,7 @@ public class WildcardType {
         bindings.add(breadthFirstReplace(replaceableIterator, wildcardTypeBindings.getBoundType(index)));
       }
     }
-    return new TypeResolver().resolve(wildcardType.getErasedType(), toArray(bindings, Type.class));
+    return new TypeResolver().resolve(wildcardType.getErasedType(), bindings.toArray(new Type[0]));
   }
 
   private static List<ResolvedType> breadthFirstSearch(ResolvedType replacingType, ResolvedType wildcardType) {

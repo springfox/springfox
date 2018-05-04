@@ -44,7 +44,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
 
-import static com.google.common.collect.Maps.*
+
 import static java.util.Collections.singletonList
 import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*

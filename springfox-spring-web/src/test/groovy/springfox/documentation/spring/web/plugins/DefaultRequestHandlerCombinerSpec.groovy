@@ -17,6 +17,7 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
   def equality = new PathAndParametersEquivalence()
 
   @Unroll
+  @Ignore
   def "Combines request handlers effectively" () {
     given:
     def sut = new DefaultRequestHandlerCombiner()

@@ -20,11 +20,9 @@ package springfox.documentation.service;
 
 import com.google.common.base.Predicate;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
@@ -48,7 +46,7 @@ public abstract class SecurityScheme {
   }
 
   public List<VendorExtension> getVendorExtensions() {
-    return ImmutableList.copyOf(vendorExtensions);
+    return Collections.unmodifiableList(vendorExtensions);
   }
 
   protected void addValidVendorExtensions(List<VendorExtension> vendorExtensions) {

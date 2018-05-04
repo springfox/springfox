@@ -33,7 +33,7 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.collect.Maps.*
+
 import static springfox.documentation.builders.PathSelectors.*
 
 @Mixin([RequestMappingSupport])

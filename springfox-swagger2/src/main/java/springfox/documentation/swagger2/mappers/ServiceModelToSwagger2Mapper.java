@@ -45,10 +45,8 @@ import springfox.documentation.service.ResponseMessage;
 import java.util.*;
 import java.util.function.Function;
 
-
-
-import static com.google.common.collect.Maps.*;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
@@ -122,7 +120,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
-    Map<String, Response> responses = newTreeMap();
+    Map<String, Response> responses = new TreeMap();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
       ModelReference modelRef = responseMessage.getResponseModel();
@@ -131,7 +129,8 @@ public abstract class ServiceModelToSwagger2Mapper {
           .description(responseMessage.getMessage())
           .schema(responseProperty);
       response.setExamples(new HashMap<String, Object>());
-      response.setHeaders(transformEntries(responseMessage.getHeaders(), toPropertyEntry()));
+      response.setHeaders(responseMessage.getHeaders().entrySet().stream().map(toPropertyEntry())
+              .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
       Map<String, Object> extensions = new VendorExtensionsMapper()
           .mapExtensions(responseMessage.getVendorExtensions());
       response.getVendorExtensions().putAll(extensions);
@@ -140,19 +139,19 @@ public abstract class ServiceModelToSwagger2Mapper {
     return responses;
   }
 
-  private EntryTransformer<String, Header, Property> toPropertyEntry() {
-    return new EntryTransformer<String, Header, Property>() {
+  private Function<Map.Entry<String, Header>, Map.Entry<String, Property>> toPropertyEntry() {
+    return new Function<Map.Entry<String, Header>, Map.Entry<String, Property>>() {
       @Override
-      public Property transformEntry(String key, Header value) {
-        Property property = modelRefToProperty(value.getModelReference());
-        property.setDescription(value.getDescription());
-        return property;
+      public Map.Entry<String, Property> apply(Map.Entry<String, Header> entry) {
+        Property property = modelRefToProperty(entry.getValue().getModelReference());
+        property.setDescription(entry.getValue().getDescription());
+        return new AbstractMap.SimpleEntry<>(entry.getKey(), property);
       }
     };
   }
 
   protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, Path> paths = newTreeMap();
+    Map<String, Path> paths = new TreeMap();
     for (ApiListing each : apiListings.values()) {
       for (ApiDescription api : each.getApis()) {
         paths.put(api.getPath(), mapOperations(api, Optional.ofNullable(paths.get(api.getPath()))));

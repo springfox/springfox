@@ -18,9 +18,8 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -42,6 +41,6 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
 
   @Override
   public List<T> getValue() {
-    return ImmutableList.copyOf(values);
+    return Collections.unmodifiableList(values);
   }
 }

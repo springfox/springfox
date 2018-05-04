@@ -23,7 +23,6 @@ import spock.lang.Specification
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.Header
 
-import static com.google.common.collect.Maps.*
 
 class ResponseMessageBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {

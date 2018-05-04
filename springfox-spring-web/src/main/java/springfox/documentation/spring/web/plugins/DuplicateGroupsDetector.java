@@ -20,13 +20,13 @@ package springfox.documentation.spring.web.plugins;
 
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
 import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -40,7 +40,7 @@ class DuplicateGroupsDetector {
   public static void ensureNoDuplicateGroups(List<DocumentationPlugin> allPlugins) throws IllegalStateException {
     Map<String, List<DocumentationPlugin>> plugins = allPlugins.stream().collect(groupingBy(byGroupName()));
     Iterable<String> duplicateGroups = plugins.entrySet().stream().filter(duplicates()).map(toGroupNames()).collect(toList());
-    if (Iterables.size(duplicateGroups) > 0) {
+    if (StreamSupport.stream(duplicateGroups.spliterator(), false).count() > 0) {
       throw new IllegalStateException(String.format("Multiple Dockets with the same group name are not supported. "
               + "The following duplicate groups were discovered. %s", Joiner.on(',').join(duplicateGroups)));
     }

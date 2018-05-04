@@ -27,8 +27,6 @@ import springfox.documentation.service.ApiDescription;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
-
 /**
  * Given a handler method this class serves to lookup the api description. The overall goal of this abstraction is to
  * serve the purpose of looking up a given description.

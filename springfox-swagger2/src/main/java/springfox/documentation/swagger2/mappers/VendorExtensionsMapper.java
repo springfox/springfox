@@ -28,18 +28,19 @@ import springfox.documentation.service.VendorExtension;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 import static com.google.common.base.Strings.*;
 
-import static com.google.common.collect.Maps.*;
+
 import static java.util.stream.Collectors.toList;
 
 @Mapper
 public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {
-    Map<String, Object> extensions = newTreeMap();
+    Map<String, Object> extensions = new TreeMap();
     Iterable<ListVendorExtension> listExtensions = from.stream()
         .filter(ListVendorExtension.class::isInstance).map(each -> (ListVendorExtension)each).collect(toList());
     for (ListVendorExtension each : listExtensions) {

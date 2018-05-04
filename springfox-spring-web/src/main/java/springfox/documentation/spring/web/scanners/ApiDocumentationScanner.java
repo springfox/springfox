@@ -38,14 +38,10 @@ import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 
-import static com.google.common.collect.Sets.newTreeSet;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.service.Tags.*;
@@ -85,7 +81,7 @@ public class ApiDocumentationScanner {
         .extensions(context.getVendorExtentions())
         .tags(tags);
 
-    Set<ApiListingReference> apiReferenceSet = newTreeSet(listingReferencePathComparator());
+    Set<ApiListingReference> apiReferenceSet = new TreeSet(listingReferencePathComparator());
     apiReferenceSet.addAll(apiListingReferences(apiListings, context));
 
     ResourceListing resourceListing = new ResourceListingBuilder()

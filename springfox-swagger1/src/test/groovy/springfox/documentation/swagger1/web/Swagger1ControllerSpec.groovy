@@ -47,7 +47,7 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletRequest
 
-import static com.google.common.collect.Maps.*
+
 
 @Mixin([ApiListingSupport, AuthSupport])
 class Swagger1ControllerSpec extends DocumentationContextSpec
