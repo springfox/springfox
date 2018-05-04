@@ -40,7 +40,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
   BumpAndTagTask bumpAndTagTask
   CheckCleanWorkspaceTask checkCleanWorkspaceTask
   SnapshotTask snapshotTask
-  BintrayCredentialsCheckTask credentialCheck
+  PublishCredentialsCheckTask credentialCheck
   CheckGitBranchTask checkGitBranchTask
   Task showPublishInfo
   VersioningStrategy versioningStrategy
@@ -54,7 +54,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     releaseTask = project.task(ReleaseTask.TASK_NAME, type: ReleaseTask)
     bumpAndTagTask = project.task(BumpAndTagTask.TASK_NAME, type: BumpAndTagTask)
     snapshotTask = project.task(SnapshotTask.TASK_NAME, type: SnapshotTask)
-    credentialCheck = project.task(BintrayCredentialsCheckTask.TASK_NAME, type: BintrayCredentialsCheckTask)
+    credentialCheck = project.task(PublishCredentialsCheckTask.TASK_NAME, type: PublishCredentialsCheckTask)
     checkCleanWorkspaceTask = project.task(CheckCleanWorkspaceTask.TASK_NAME, type: CheckCleanWorkspaceTask)
     checkGitBranchTask = project.task(CheckGitBranchTask.TASK_NAME, type: CheckGitBranchTask)
     showPublishInfo = project.task('showPublishInfo') {
@@ -111,8 +111,7 @@ public class MultiProjectReleasePlugin implements Plugin<Project> {
     iWorkspaceTask.dependsOn checkGitBranchTask
     iWorkspaceTask.dependsOn checkCleanWorkspaceTask
 
-    iCheckTask.dependsOn iWorkspaceTask
-    iCheckTask.dependsOn showPublishInfo
+    iCheckTask.dependsOn iWorkspaceTask, showPublishInfo, credentialCheck
 
     iPublishTask.dependsOn iCheckTask
 

@@ -23,15 +23,18 @@ import com.google.common.base.Strings
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-class BintrayCredentialsCheckTask extends DefaultTask {
-  public static final TASK_NAME = "bintrayCredentialsCheck"
-  String description = 'verifies bintray credentials'
+class PublishCredentialsCheckTask extends DefaultTask {
+  public static final TASK_NAME = "publishCredentialsCheck"
+  String description = 'verifies credentials bintray/github/oss-sonatype credentials'
   String group = 'release'
 
   @TaskAction
   def action() {
     requiredProperty('bintrayUsername', 'BINTRAY_USER_NAME')
     requiredProperty('bintrayPassword', 'BINTRAY_PASSWORD')
+    requiredProperty('githubToken', 'GITHUB_TOKEN')
+    requiredProperty('sonatypeUsername', 'SONATYPE_USER_NAME')
+    requiredProperty('sonatypePassword', 'SONATYPE_PASSWORD')
   }
 
   String requiredProperty(String propName, String environmentVariable) {
