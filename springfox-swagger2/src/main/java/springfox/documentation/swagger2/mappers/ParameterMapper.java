@@ -32,7 +32,7 @@ import org.mapstruct.Mapper;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 
@@ -60,7 +60,7 @@ public class ParameterMapper {
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
     parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
-    for (Entry<String, Collection<Example>> each : source.getExamples().asMap().entrySet()) {
+    for (Entry<String, List<Example>> each : source.getExamples().entrySet()) {
       Optional<Example> example = each.getValue().stream().findFirst();
       if (example.isPresent() && example.get().getValue() != null) {
         parameter.addExample(each.getKey(), String.valueOf(example.get().getValue()));

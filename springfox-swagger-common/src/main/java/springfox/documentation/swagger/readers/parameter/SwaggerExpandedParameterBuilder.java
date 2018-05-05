@@ -20,7 +20,6 @@
 package springfox.documentation.swagger.readers.parameter;
 
 
-
 import com.google.common.base.Predicate;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;

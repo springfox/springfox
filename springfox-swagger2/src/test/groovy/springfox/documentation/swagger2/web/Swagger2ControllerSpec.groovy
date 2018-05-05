@@ -1,8 +1,6 @@
 package springfox.documentation.swagger2.web
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.LinkedListMultimap
-import com.google.common.collect.Ordering
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.web.util.WebUtils
 import spock.lang.Unroll
@@ -48,7 +46,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner = Mock(ApiListingScanner)
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingScanner.scan(_) >> new HashMap()
 
     request = servletRequest()
   }

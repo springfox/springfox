@@ -19,7 +19,6 @@
 package springfox.documentation.swagger1.web;
 
 
-import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +41,7 @@ import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -103,9 +103,9 @@ public class Swagger1Controller {
     if (documentation == null) {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
-    Multimap<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
+    Map<String, List<springfox.documentation.service.ApiListing>> apiListingMap = documentation.getApiListings();
     Map<String, Collection<ApiListing>> dtoApiListings
-        = apiListingMap.asMap().entrySet().stream().map(toApiListingDto(servletRequest, documentation.getHost(), mapper))
+        = apiListingMap.entrySet().stream().map(toApiListingDto(servletRequest, documentation.getHost(), mapper))
             .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);

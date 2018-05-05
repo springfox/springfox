@@ -20,8 +20,6 @@ package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Equivalence;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.RequestHandler;
@@ -42,11 +40,12 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
 
   public List<RequestHandler> combine(List<RequestHandler> source) {
     List<RequestHandler> combined = new ArrayList<RequestHandler>();
-    Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
-    LOGGER.debug("Total number of request handlers {}", nullToEmptyList(source).size());
+    Map<String, List<RequestHandler>> byPath = new HashMap();
+      LOGGER.debug("Total number of request handlers {}", nullToEmptyList(source).size());
     for (RequestHandler each : nullToEmptyList(source)) {
       LOGGER.debug("Adding key: {}, {}", patternsCondition(each).toString(), each.toString());
-      byPath.put(patternsCondition(each).toString(), each);
+      byPath.putIfAbsent(patternsCondition(each).toString(), new ArrayList());
+      byPath.get(patternsCondition(each).toString()).add(each);
     }
     for (String key : byPath.keySet()) {
       combined.addAll(combined(byPath.get(key)));

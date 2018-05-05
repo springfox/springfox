@@ -1,6 +1,5 @@
 package springfox.documentation.service
 
-import com.google.common.collect.LinkedListMultimap
 import spock.lang.Specification
 
 import static springfox.documentation.service.Tags.emptyTags
@@ -17,7 +16,7 @@ class TagsSpec extends Specification {
 
   def "Inspects a class with no ApiListings" () {
     given:
-      def listings = LinkedListMultimap.create()
+      def listings = new HashMap()
     expect:
       toTags(listings).isEmpty()
   }

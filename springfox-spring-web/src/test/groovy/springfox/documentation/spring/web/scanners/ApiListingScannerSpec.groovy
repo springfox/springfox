@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.Multimap
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
@@ -42,7 +41,6 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
-
 
 
 import static java.util.Collections.singletonList
@@ -108,7 +106,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     listingContext = listingContext(requestMappingContext, context)
 
     when:
-    Multimap<String, ApiListing> apiListingMap = scanner.scan(listingContext)
+    Map<String, ApiListing> apiListingMap = scanner.scan(listingContext)
 
     then:
     Collection<ApiListing> listings = apiListingMap.get('businesses')

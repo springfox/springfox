@@ -20,8 +20,6 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
@@ -91,9 +89,9 @@ public class BuilderDefaults {
    * @param <V>      - map value
    * @return non-null Map
    */
-  public static <K, V> Multimap<K, V> nullToEmptyMultimap(Multimap<K, V> newValue) {
+  public static <K, V> Map<K, List<V>> nullToEmptyMultimap(Map<K, List<V>> newValue) {
     if (newValue == null) {
-      return LinkedListMultimap.create();
+      return new HashMap<>();
     }
     return newValue;
   }

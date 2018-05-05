@@ -19,19 +19,13 @@
 
 package springfox.documentation.service;
 
-import com.google.common.collect.Multimap;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 
 
 public class Documentation {
   private final String groupName;
   private final String basePath;
-  private final Multimap<String, ApiListing> apiListings;
+  private final Map<String, List<ApiListing>> apiListings;
   private final Set<Tag> tags;
   private final ResourceListing resourceListing;
   private final Set<String> produces;
@@ -44,7 +38,7 @@ public class Documentation {
       String groupName,
       String basePath,
       Set<Tag> tags,
-      Multimap<String, ApiListing> apiListings,
+      Map<String, List<ApiListing>> apiListings,
       ResourceListing resourceListing,
       Set<String> produces,
       Set<String> consumes,
@@ -68,7 +62,7 @@ public class Documentation {
     return groupName;
   }
 
-  public Multimap<String, ApiListing> getApiListings() {
+  public Map<String, List<ApiListing>> getApiListings() {
     return apiListings;
   }
 

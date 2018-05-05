@@ -19,12 +19,10 @@
 package springfox.documentation.swagger.readers.parameter;
 
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import io.swagger.annotations.ExampleProperty;
 import springfox.documentation.schema.Example;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static org.springframework.util.StringUtils.isEmpty;
@@ -34,11 +32,12 @@ public class Examples {
     throw new UnsupportedOperationException();
   }
 
-  public static Multimap<String, Example> examples(io.swagger.annotations.Example example) {
-    Multimap<String, Example> examples = LinkedListMultimap.create();
+  public static Map<String, List<Example>> examples(io.swagger.annotations.Example example) {
+    Map<String, List<Example>> examples = new HashMap();
     for (ExampleProperty each: example.value()) {
       if (!isEmpty(each.value())) {
-        examples.put(each.mediaType(), new Example(Optional.ofNullable(each.mediaType())
+        examples.putIfAbsent(each.mediaType(), new LinkedList());
+        examples.get(each.mediaType()).add(new Example(Optional.ofNullable(each.mediaType())
                 .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null), each.value()));
       }
     }

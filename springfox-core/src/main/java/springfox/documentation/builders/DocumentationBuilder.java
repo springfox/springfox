@@ -19,9 +19,6 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.collect.Multimap;
-
-import com.google.common.collect.TreeMultimap;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
@@ -35,7 +32,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
-  private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Comparator.naturalOrder(), byListingPosition());
+  private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());//, byListingPosition());
   private ResourceListing resourceListing;
   private Set<Tag> tags = new LinkedHashSet();
   private String basePath;
@@ -63,7 +60,7 @@ public class DocumentationBuilder {
    * @param apiListings - entries to add to the existing documentation
    * @return this
    */
-  public DocumentationBuilder apiListingsByResourceGroupName(Multimap<String, ApiListing> apiListings) {
+  public DocumentationBuilder apiListingsByResourceGroupName(Map<String, List<ApiListing>> apiListings) {
     this.apiListings.putAll(nullToEmptyMultimap(apiListings));
     return this;
   }

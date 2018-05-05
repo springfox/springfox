@@ -28,9 +28,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.google.common.base.Preconditions.*;
-
-
 
 public class Tag implements Ordered {
   private final String name;

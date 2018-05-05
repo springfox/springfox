@@ -22,8 +22,6 @@ package springfox.documentation.spring.web.scanners;
 
 import com.google.common.base.Predicate;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -45,8 +43,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.google.common.base.Predicates.*;
-
-
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -102,8 +98,8 @@ public class ApiListingScanner {
         .collect(toList());
   }
 
-  public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
-    final Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
+  public Map<String, List<ApiListing>> scan(ApiListingScanningContext context) {
+    final Map<String, List<ApiListing>> apiListingMap = new HashMap<>();
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
@@ -167,7 +163,8 @@ public class ApiListingScanner {
           context.getDocumentationType(),
           resourceGroup,
           apiListingBuilder);
-      apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.apiListing(apiListingContext));
+      apiListingMap.putIfAbsent(resourceGroup.getGroupName(), new LinkedList<>());
+      apiListingMap.get(resourceGroup.getGroupName()).add(pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;
   }

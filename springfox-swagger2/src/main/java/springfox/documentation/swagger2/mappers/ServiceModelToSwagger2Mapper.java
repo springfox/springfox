@@ -20,7 +20,6 @@
 package springfox.documentation.swagger2.mappers;
 
 
-import com.google.common.collect.Multimap;
 import io.swagger.models.Contact;
 import io.swagger.models.Info;
 import io.swagger.models.Operation;
@@ -150,13 +149,13 @@ public abstract class ServiceModelToSwagger2Mapper {
     };
   }
 
-  protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
+  protected Map<String, Path> mapApiListings(Map<String, List<ApiListing>> apiListings) {
     Map<String, Path> paths = new TreeMap();
-    for (ApiListing each : apiListings.values()) {
+    apiListings.values().stream().flatMap(l -> l.stream()).forEach(each -> {
       for (ApiDescription api : each.getApis()) {
         paths.put(api.getPath(), mapOperations(api, Optional.ofNullable(paths.get(api.getPath()))));
       }
-    }
+    });
     return paths;
   }
 

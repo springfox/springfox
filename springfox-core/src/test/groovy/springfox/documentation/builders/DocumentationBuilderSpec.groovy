@@ -19,8 +19,6 @@
 
 package springfox.documentation.builders
 
-import com.google.common.collect.LinkedListMultimap
-import com.google.common.collect.Multimap
 import spock.lang.Specification
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ListVendorExtension
@@ -43,7 +41,7 @@ class DocumentationBuilderSpec extends Specification {
     then:
     if (value instanceof Set) {
       assert built."$property".containsAll(value)
-    } else if (value instanceof Multimap) {
+    } else if (value instanceof Map) {
       assert built."$property".keySet().containsAll(value.keySet())
     } else {
       assert built."$property" == value
@@ -77,7 +75,7 @@ class DocumentationBuilderSpec extends Specification {
     then:
     if (value instanceof Set) {
       assert built."$property".containsAll(value)
-    } else if (value instanceof Multimap) {
+    } else if (value instanceof Map) {
       assert built."$property".keySet().containsAll(value.keySet())
     } else {
       assert built."$property" == value
@@ -118,9 +116,9 @@ class DocumentationBuilderSpec extends Specification {
     assert builtDocumentationTags[2] == thirdTag
   }
 
-  Multimap<String, ApiListing> multiMap() {
-    Multimap<String, ApiListing> multiMap = LinkedListMultimap.create()
-    multiMap.put("group1", Mock(ApiListing))
+  Map<String, List<ApiListing>> multiMap() {
+    Map<String, List<ApiListing>> multiMap = new HashMap()
+    multiMap.putIfAbsent("group1", new LinkedList<ApiListing>()); multiMap.put("group1", Mock(ApiListing))
     return multiMap
   }
 

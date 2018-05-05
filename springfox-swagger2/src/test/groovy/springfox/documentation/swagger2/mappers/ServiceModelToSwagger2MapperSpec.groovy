@@ -4,7 +4,6 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.base.Functions
 import com.google.common.base.Suppliers
-import com.google.common.collect.LinkedListMultimap
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.*
@@ -22,8 +21,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       def built = apiListing()
       def sut = swagger2Mapper()
     when:
-      def apiListings = LinkedListMultimap.create()
-      apiListings.put("new", built)
+      def apiListings = new HashMap()
+    apiListings.putIfAbsent("new", new ArrayList())
+    apiListings.get("new").add(built)
       def mappedListing = sut.mapApiListings(apiListings)
     and:
       def mappedPath = mappedListing.entrySet().first()
@@ -102,8 +102,9 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
 
   def "Maps documentation with api listing to swagger models"() {
     given:
-      def listingLookup = LinkedListMultimap.create()
-      listingLookup.put("test", apiListing())
+      def listingLookup = new HashMap()
+    listingLookup.putIfAbsent("test", new LinkedList<>())
+    listingLookup.get("test").add(apiListing())
       Documentation documentation = new DocumentationBuilder()
           .basePath("base:uri")
           .produces(["application/json"] as Set)

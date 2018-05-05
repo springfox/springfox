@@ -25,7 +25,6 @@ import springfox.documentation.swagger1.dto.ApiListing;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.AbstractMap;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -35,15 +34,15 @@ import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 public class Mappers {
-  public static Function<Map.Entry<String, Collection<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>
+  public static Function<Map.Entry<String, List<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>
     toApiListingDto(
         final HttpServletRequest servletRequest,
         final String host,
         final ServiceModelToSwaggerMapper mapper) {
 
-    return new Function<Map.Entry<String, Collection<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>() {
+    return new Function<Map.Entry<String, List<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>() {
       @Override
-      public Map.Entry<String, List<ApiListing>> apply(Map.Entry<String, Collection<springfox.documentation.service.ApiListing>> entry) {
+      public Map.Entry<String, List<ApiListing>> apply(Map.Entry<String, List<springfox.documentation.service.ApiListing>> entry) {
         List<ApiListing> newApiListings = entry.getValue().stream().map(value -> {
           ApiListing apiListing = mapper.toSwaggerApiListing(value);
           UriComponents uriComponents = componentsFrom(servletRequest, apiListing.getBasePath());

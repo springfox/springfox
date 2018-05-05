@@ -24,7 +24,6 @@ import com.fasterxml.classmate.ResolvedType;
 
 import com.google.common.base.Predicate;
 
-import com.google.common.collect.Multimap;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
@@ -43,12 +42,7 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -256,11 +250,11 @@ public abstract class ModelMapper {
     return responseProperty;
   }
 
-  Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
+  Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
     Map<String, springfox.documentation.schema.Model> definitions = new TreeMap();
-    for (ApiListing each : apiListings.values()) {
+    apiListings.values().stream().flatMap(l -> l.stream()).forEach(each -> {
       definitions.putAll(each.getModels());
-    }
+    });
     return mapModels(definitions);
   }
 

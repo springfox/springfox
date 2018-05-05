@@ -21,9 +21,6 @@ package springfox.documentation.service;
 
 import com.google.common.base.Predicate;
 
-import com.google.common.collect.Multimap;
-
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +29,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
-
-
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -44,8 +39,8 @@ public class Tags {
     throw new UnsupportedOperationException();
   }
 
-  public static Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
-    Iterable<ApiListing> allListings = nullToEmptyMultimap(apiListings).values();
+  public static Set<Tag> toTags(Map<String, List<ApiListing>> apiListings) {
+    Iterable<ApiListing> allListings = nullToEmptyMultimap(apiListings).values().stream().flatMap(l -> l.stream()).collect(toList());
     List<Tag> tags =
         StreamSupport.stream(allListings.spliterator(), false)
             .map(collectTags()).flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))

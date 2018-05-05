@@ -19,11 +19,6 @@
 
 package springfox.documentation.spring.web.scanners;
 
-
-
-
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -67,7 +62,7 @@ public class ApiDocumentationScanner {
     ApiListingScanningContext listingContext = new ApiListingScanningContext(context,
         result.getResourceGroupRequestMappings());
 
-    Multimap<String, ApiListing> apiListings = apiListingScanner.scan(listingContext);
+    Map<String, List<ApiListing>> apiListings = apiListingScanner.scan(listingContext);
     Set<Tag> tags = toTags(apiListings);
     tags.addAll(context.getTags());
     DocumentationBuilder group = new DocumentationBuilder()
@@ -95,16 +90,15 @@ public class ApiDocumentationScanner {
   }
 
   private Collection<? extends ApiListingReference> apiListingReferences(
-      Multimap<String, ApiListing> apiListings,
+      Map<String, List<ApiListing>> apiListings,
       DocumentationContext context) {
-    Map<String, Collection<ApiListing>> grouped = Multimaps.asMap(apiListings);
-    return grouped.entrySet().stream().map(toApiListingReference(context)).collect(toSet());
+    return apiListings.entrySet().stream().map(toApiListingReference(context)).collect(toSet());
   }
 
-  private Function<Map.Entry<String, Collection<ApiListing>>, ApiListingReference> toApiListingReference(final DocumentationContext context) {
-    return new Function<Map.Entry<String, Collection<ApiListing>>, ApiListingReference>() {
+  private Function<Map.Entry<String, List<ApiListing>>, ApiListingReference> toApiListingReference(final DocumentationContext context) {
+    return new Function<Map.Entry<String, List<ApiListing>>, ApiListingReference>() {
       @Override
-      public ApiListingReference apply(Map.Entry<String, Collection<ApiListing>> input) {
+      public ApiListingReference apply(Map.Entry<String, List<ApiListing>> input) {
         String description = String.join(System.getProperty("line.separator"),
             descriptions(input.getValue()));
         PathAdjuster adjuster = new PathMappingAdjuster(context);
