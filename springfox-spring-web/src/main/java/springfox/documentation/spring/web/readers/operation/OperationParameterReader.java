@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Predicate;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -46,6 +46,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static com.google.common.base.Predicates.*;
 
@@ -106,13 +107,13 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         }
       }
     }
-    return parameters.stream().filter(not(hiddenParams())).collect(toList());
+    return parameters.stream().filter(hiddenParams().negate()).collect(toList());
   }
 
   private Predicate<Parameter> hiddenParams() {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         return input.isHidden();
       }
     };
@@ -135,7 +136,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private Predicate<Class> parameterIsAnnotatedWithIt(final ResolvedMethodParameter parameter) {
     return new Predicate<Class>() {
       @Override
-      public boolean apply(Class input) {
+      public boolean test(Class input) {
         return parameter.hasParameterAnnotation(input);
       }
     };
@@ -144,7 +145,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private Predicate<Class> isAnnotation() {
     return new Predicate<Class>() {
       @Override
-      public boolean apply(Class input) {
+      public boolean test(Class input) {
         return Annotation.class.isAssignableFrom(input);
       }
     };

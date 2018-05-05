@@ -19,12 +19,13 @@
 package springfox.documentation.service;
 
 
-import com.google.common.base.Predicates;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -39,7 +40,7 @@ public class MediaTypes {
   public static Set<MediaType> toMediaTypes(Set<String> consumes) {
     return consumes.stream()
         .map(parsedMediaType())
-        .filter(Predicates.<MediaType>notNull())
+        .filter(Objects::nonNull)
         .collect(toSet());
   }
 

@@ -20,7 +20,7 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Predicate;
+
 
 
 import org.springframework.http.HttpMethod;
@@ -37,6 +37,7 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.function.Predicate;
 
 
 import static java.util.stream.Collectors.collectingAndThen;
@@ -93,8 +94,7 @@ public class OperationContext {
 
   private Predicate<SecurityContext> pathMatches() {
     return new Predicate<SecurityContext>() {
-      @Override
-      public boolean apply(SecurityContext input) {
+      public boolean test(SecurityContext input) {
         return input.securityForOperation(OperationContext.this) != null;
       }
     };

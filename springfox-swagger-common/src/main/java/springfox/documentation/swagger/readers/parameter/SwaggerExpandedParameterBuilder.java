@@ -19,8 +19,6 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-
-import com.google.common.base.Predicate;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,7 @@ import springfox.documentation.swagger.schema.ApiModelProperties;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 

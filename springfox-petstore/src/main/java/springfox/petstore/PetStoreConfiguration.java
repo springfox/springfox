@@ -43,11 +43,10 @@ public class PetStoreConfiguration {
         .securitySchemes(authorizationTypes)
         .produces(Stream.of("application/xml", "application/json").collect(toSet()))
         .select()
-        .paths(or(
-            and(
-                regex("/api/.*"),
-                not(regex("/api/store/search.*"))),
-            regex("/generic/.*")))
+        .paths((
+            regex("/api/.*")
+            .and(regex("/api/store/search.*").negate())
+            .or(regex("/generic/.*"))))
         .build()
         .host("petstore.swagger.io")
         .protocols(Stream.of("http", "https").collect(toSet()));

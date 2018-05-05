@@ -18,9 +18,6 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
-
-import com.google.common.base.Predicate;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
 import springfox.documentation.schema.ModelRef;
@@ -30,9 +27,8 @@ import springfox.documentation.service.Header;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import static com.google.common.base.Predicates.not;
 
 import static java.util.Optional.ofNullable;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -54,7 +50,7 @@ public class ResponseHeaders {
 
   public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
     Map<String, Header> headers = new HashMap();
-    Stream.of(responseHeaders).filter(not(emptyOrVoid())).forEach(each -> {
+    Stream.of(responseHeaders).filter(emptyOrVoid().negate()).forEach(each -> {
       headers.put(each.name(), new Header(each.name(), each.description(), headerModel(each)));
     });
     return headers;
@@ -63,7 +59,7 @@ public class ResponseHeaders {
   private static Predicate<ResponseHeader> emptyOrVoid() {
     return new Predicate<ResponseHeader>() {
       @Override
-      public boolean apply(ResponseHeader input) {
+      public boolean test(ResponseHeader input) {
         return isEmpty(input.name()) || Void.class.equals(input.response());
       }
     };

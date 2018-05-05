@@ -21,7 +21,7 @@ package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
 
-import com.google.common.base.Predicate;
+
 
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BaseIntegerProperty;
@@ -47,6 +47,7 @@ import springfox.documentation.schema.ModelReference;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Functions.*;
@@ -191,7 +192,7 @@ class Properties {
   static Predicate<Map.Entry<String, ModelProperty>> voidProperties() {
     return new Predicate<Map.Entry<String, ModelProperty>>() {
       @Override
-      public boolean apply(Map.Entry<String, ModelProperty> input) {
+      public boolean test(Map.Entry<String, ModelProperty> input) {
         return isVoid(input.getValue().getType())
             || collectionOfVoid(input.getValue().getType())
             || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());

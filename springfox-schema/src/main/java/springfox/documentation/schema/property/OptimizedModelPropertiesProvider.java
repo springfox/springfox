@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
-import com.google.common.base.Predicate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
 
@@ -243,7 +244,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private Predicate<? super ModelProperty> hiddenProperties() {
     return new Predicate<ModelProperty>() {
       @Override
-      public boolean apply(ModelProperty input) {
+      public boolean test(ModelProperty input) {
         return !input.isHidden();
       }
     };
@@ -254,7 +255,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final String fieldName) {
 
     return StreamSupport.stream(fields.in(resolvedType).spliterator(), false).filter(new Predicate<ResolvedField>() {
-      public boolean apply(ResolvedField input) {
+      public boolean test(ResolvedField input) {
         return fieldName.equals(input.getName());
       }
     }).findFirst();
@@ -379,7 +380,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
     return StreamSupport.stream(accessors.in(resolvedType).spliterator(), false).filter(new Predicate<ResolvedMethod>() {
-      public boolean apply(ResolvedMethod accessorMethod) {
+      public boolean test(ResolvedMethod accessorMethod) {
         SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
         return methodComparer.equivalent(accessorMethod.getRawMember(), (Method) member.getMember());
       }

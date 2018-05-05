@@ -18,11 +18,12 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Predicate;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
@@ -53,7 +54,7 @@ public abstract class SecurityScheme {
     this.vendorExtensions.addAll(nullToEmptyList(vendorExtensions).stream()
         .filter(new Predicate<VendorExtension>() {
           @Override
-          public boolean apply(VendorExtension input) {
+          public boolean test(VendorExtension input) {
             return input.getName().toLowerCase().startsWith("x-");
           }
         })

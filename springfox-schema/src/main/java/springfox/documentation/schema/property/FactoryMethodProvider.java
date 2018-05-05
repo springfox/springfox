@@ -27,12 +27,13 @@ import com.fasterxml.classmate.members.ResolvedConstructor;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
-import com.google.common.base.Predicate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -56,7 +57,7 @@ public class FactoryMethodProvider {
   static Predicate<ResolvedParameterizedMember> factoryMethodOf(final AnnotatedParameter parameter) {
     return new Predicate<ResolvedParameterizedMember>() {
       @Override
-      public boolean apply(ResolvedParameterizedMember input) {
+      public boolean test(ResolvedParameterizedMember input) {
         return input.getRawMember().equals(parameter.getOwner().getMember());
       }
     };

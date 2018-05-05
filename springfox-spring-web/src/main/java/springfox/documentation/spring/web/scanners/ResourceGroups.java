@@ -19,7 +19,7 @@
 package springfox.documentation.spring.web.scanners;
 
 
-import com.google.common.base.Predicate;
+
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -27,6 +27,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 
 import static java.util.stream.Collectors.toList;
@@ -49,7 +50,7 @@ class ResourceGroups {
   static Predicate<ApiDescription> belongsTo(final String groupName) {
     return new Predicate<ApiDescription>() {
       @Override
-      public boolean apply(ApiDescription input) {
+      public boolean test(ApiDescription input) {
         return !input.getGroupName().isPresent()
             || groupName.equals(input.getGroupName().get());
       }

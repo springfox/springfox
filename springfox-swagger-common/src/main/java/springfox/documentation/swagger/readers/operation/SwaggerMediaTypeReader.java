@@ -18,7 +18,6 @@
  */
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Predicate;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -29,11 +28,11 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 
 import static java.util.stream.Collectors.toSet;
-
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)

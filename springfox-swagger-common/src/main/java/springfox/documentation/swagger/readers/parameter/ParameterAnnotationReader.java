@@ -19,13 +19,12 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-
-import com.google.common.base.Predicate;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
@@ -44,7 +43,7 @@ public class ParameterAnnotationReader {
   private static <A extends Annotation> Predicate<? super Annotation> annotationOfType(final Class<A> annotationType) {
     return new Predicate<Annotation>() {
       @Override
-      public boolean apply(Annotation input) {
+      public boolean test(Annotation input) {
         return input.annotationType().equals(annotationType);
       }
     };

@@ -23,7 +23,6 @@ import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.MemberResolver
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.members.ResolvedMethod
-import com.google.common.base.Predicate
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.util.MultiValueMap
@@ -35,6 +34,7 @@ import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import java.util.function.Predicate
 import java.util.stream.Stream
 
 import static HandlerMethodResolver.*
@@ -126,7 +126,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
   private Predicate<ResolvedMethod> subset() {
     new Predicate<ResolvedMethod>() {
       @Override
-      boolean apply(ResolvedMethod input) {
+      boolean test(ResolvedMethod input) {
         return ['methodWithNoArgs', 'methodWithOneArgs', 'methodWithTwoArgs'].contains(input.name)
       }
     }

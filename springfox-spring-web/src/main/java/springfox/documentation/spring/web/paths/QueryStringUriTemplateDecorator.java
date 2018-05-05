@@ -20,7 +20,7 @@ package springfox.documentation.spring.web.paths;
 
 
 
-import com.google.common.base.Predicate;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -35,6 +35,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.google.common.base.Predicates.*;
 
@@ -88,7 +89,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
 
   private Set<String> queryParamNames(PathContext context) {
     return context.getParameters().stream()
-        .filter(and(queryStringParams(), not(onlyOneAllowableValue())))
+        .filter(queryStringParams().and(onlyOneAllowableValue().negate()))
         .map(paramName())
         .sorted(Comparator.naturalOrder()).collect(toCollection(TreeSet::new));
   }
@@ -104,7 +105,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   private Predicate<Parameter> onlyOneAllowableValue() {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         AllowableValues allowableValues = input.getAllowableValues();
         return allowableValues != null
             && allowableValues instanceof AllowableListValues
@@ -116,7 +117,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   private Predicate<Parameter> queryStringParams() {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         return "query".equals(input.getParamType());
       }
     };

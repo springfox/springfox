@@ -19,16 +19,14 @@
 
 package springfox.petstore.model;
 
-
-import com.google.common.base.Predicate;
-
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class Pets {
   public static Predicate<Pet> statusIs(final String status) {
     return new Predicate<Pet>() {
       @Override
-      public boolean apply(Pet input) {
+      public boolean test(Pet input) {
         return Objects.equals(input.getStatus(), status);
       }
     };
@@ -37,7 +35,7 @@ public class Pets {
   public static Predicate<Pet> tagsContain(final String tag) {
     return new Predicate<Pet>() {
       @Override
-      public boolean apply(Pet input) {
+      public boolean test(Pet input) {
         return input.getTags().stream().anyMatch(withName(tag));
       }
     };
@@ -46,7 +44,7 @@ public class Pets {
   private static Predicate<Tag> withName(final String tag) {
     return new Predicate<Tag>() {
       @Override
-      public boolean apply(Tag input) {
+      public boolean test(Tag input) {
         return Objects.equals(input.getName(), tag);
       }
     };

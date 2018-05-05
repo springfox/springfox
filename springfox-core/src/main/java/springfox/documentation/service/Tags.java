@@ -19,7 +19,7 @@
 package springfox.documentation.service;
 
 
-import com.google.common.base.Predicate;
+
 
 import java.util.Comparator;
 import java.util.List;
@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
@@ -126,7 +127,7 @@ public class Tags {
   public static Predicate<String> emptyTags() {
     return new Predicate<String>() {
       @Override
-      public boolean apply(String input) {
+      public boolean test(String input) {
         return !isEmpty(input);
       }
     };

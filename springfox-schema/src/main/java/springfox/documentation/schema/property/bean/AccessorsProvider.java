@@ -24,13 +24,14 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
-import com.google.common.base.Predicate;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 
@@ -51,7 +52,7 @@ public class AccessorsProvider {
   private Predicate<ResolvedMethod> onlyGettersAndSetters() {
     return new Predicate<ResolvedMethod>() {
       @Override
-      public boolean apply(ResolvedMethod input) {
+      public boolean test(ResolvedMethod input) {
         return maybeAGetter(input.getRawMember()) || maybeASetter(input.getRawMember());
       }
     };

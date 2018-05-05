@@ -18,9 +18,10 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Predicate;
+
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
 
@@ -57,7 +58,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   private Predicate<VendorExtension> withName(final String name) {
     return new Predicate<VendorExtension>() {
       @Override
-      public boolean apply(VendorExtension input) {
+      public boolean test(VendorExtension input) {
         return input.getName().equals(name);
       }
     };

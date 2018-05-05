@@ -20,13 +20,14 @@
 package springfox.documentation.spi.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Predicate;
+
 
 import springfox.documentation.schema.AlternateTypeRule;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 
 public class AlternateTypeProvider {
@@ -52,7 +53,7 @@ public class AlternateTypeProvider {
   private Predicate<AlternateTypeRule> thatAppliesTo(final ResolvedType type) {
     return new Predicate<AlternateTypeRule>() {
       @Override
-      public boolean apply(AlternateTypeRule input) {
+      public boolean test(AlternateTypeRule input) {
         return input.appliesTo(type);
       }
     };

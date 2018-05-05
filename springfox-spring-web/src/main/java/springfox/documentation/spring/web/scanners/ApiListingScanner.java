@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.scanners;
 
 
-import com.google.common.base.Predicate;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,6 +39,7 @@ import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -128,8 +129,7 @@ public class ApiListingScanner {
 
       List<ApiDescription> additional = additionalListings.stream()
           .filter(
-              and(
-                  belongsTo(resourceGroup.getGroupName()),
+                  belongsTo(resourceGroup.getGroupName()).and(
                   onlySelectedApis(documentationContext)))
           .collect(toList());
       apiDescriptions.addAll(additional);
@@ -172,8 +172,8 @@ public class ApiListingScanner {
   private Predicate<ApiDescription> onlySelectedApis(final DocumentationContext context) {
     return new Predicate<ApiDescription>() {
       @Override
-      public boolean apply(ApiDescription input) {
-        return context.getApiSelector().getPathSelector().apply(input.getPath());
+      public boolean test(ApiDescription input) {
+        return context.getApiSelector().getPathSelector().test(input.getPath());
       }
     };
   }

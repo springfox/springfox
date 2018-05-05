@@ -41,12 +41,11 @@ public class Swagger12TestConfig {
     return new Docket(DocumentationType.SWAGGER_12)
         .groupName("default")
         .select()
-          .paths(and(
-              regex("^((?!/api).)*\$"),//Not beginning with /api
-              not(regex("^\\/features\\/.*Arrays\$")), //Not operations that use 2d arrays
-              not(regex("^\\/features\\/2031\$")) //Not operations that use ApiImplicitParams datatype
+          .paths(
+              regex("^((?!/api).)*\$")//Not beginning with /api
+              .and(regex("^\\/features\\/.*Arrays\$").negate()) //Not operations that use 2d arrays
+              .and(regex("^\\/features\\/2031\$").negate()) //Not operations that use ApiImplicitParams datatype
             )
-          )
           .build()
         .securitySchemes(securitySchemes)
         .securityContexts(securityContexts)

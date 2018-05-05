@@ -22,7 +22,7 @@ package springfox.documentation.swagger2.mappers;
 import com.fasterxml.classmate.ResolvedType;
 
 
-import com.google.common.base.Predicate;
+
 
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
@@ -44,6 +44,7 @@ import springfox.documentation.service.ApiListing;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.*;
@@ -270,7 +271,7 @@ public abstract class ModelMapper {
   private Predicate<ModelProperty> requiredProperty() {
     return new Predicate<ModelProperty>() {
       @Override
-      public boolean apply(ModelProperty input) {
+      public boolean test(ModelProperty input) {
         return input.isRequired();
       }
     };

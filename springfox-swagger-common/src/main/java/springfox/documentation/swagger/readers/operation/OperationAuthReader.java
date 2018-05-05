@@ -19,10 +19,6 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-
-import com.google.common.base.Predicate;
-
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
@@ -40,6 +36,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 
@@ -119,7 +116,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
     return Stream.of(apiOperationAnnotation.authorizations())
         .filter(new Predicate<Authorization>() {
           @Override
-          public boolean apply(Authorization input) {
+          public boolean test(Authorization input) {
             return !isEmpty(input.value());
           }
         }).collect(toList());

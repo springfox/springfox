@@ -19,12 +19,13 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.base.Predicate;
+
 import org.springframework.http.HttpMethod;
 import springfox.documentation.service.SecurityReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.google.common.base.Predicates.*;
 
@@ -67,15 +68,15 @@ public class SecurityContext {
    */
   @Deprecated
   public List<SecurityReference> securityForPath(String path) {
-    if (selector.apply(path)) {
+    if (selector.test(path)) {
       return securityReferences;
     }
     return new ArrayList<SecurityReference>();
   }
 
   public List<SecurityReference> securityForOperation(OperationContext operationContext) {
-    if (selector.apply(operationContext.requestMappingPattern())
-        && methodSelector.apply(operationContext.httpMethod())) {
+    if (selector.test(operationContext.requestMappingPattern())
+        && methodSelector.test(operationContext.httpMethod())) {
       return securityReferences;
     }
     return new ArrayList<SecurityReference>();

@@ -27,7 +27,7 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 
 
 
-import com.google.common.base.Predicate;
+
 
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
@@ -41,6 +41,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -183,7 +184,7 @@ public class HandlerMethodResolver {
 
     return StreamSupport.stream(filtered.spliterator(), false).filter(new Predicate<ResolvedMethod>() {
       @Override
-      public boolean apply(ResolvedMethod input) {
+      public boolean test(ResolvedMethod input) {
         return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
       }
     }).collect(toList());
@@ -192,7 +193,7 @@ public class HandlerMethodResolver {
   private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {
     return new Predicate<ResolvedMethod>() {
       @Override
-      public boolean apply(ResolvedMethod input) {
+      public boolean test(ResolvedMethod input) {
         return input.getRawMember().getName().equals(methodToResolve.getName());
       }
     };
@@ -218,7 +219,7 @@ public class HandlerMethodResolver {
   private Predicate<ResolvedMethod> sameMethod(final Method methodToResolve) {
     return new Predicate<ResolvedMethod>() {
       @Override
-      public boolean apply(ResolvedMethod input) {
+      public boolean test(ResolvedMethod input) {
         return methodToResolve.equals(input.getRawMember());
       }
     };
@@ -235,7 +236,7 @@ public class HandlerMethodResolver {
   private Predicate<ResolvedMethod> onlyCovariantMethods(final Method methodToResolve) {
     return new Predicate<ResolvedMethod>() {
       @Override
-      public boolean apply(ResolvedMethod input) {
+      public boolean test(ResolvedMethod input) {
         for (int index = 0; index < input.getArgumentCount(); index++) {
           if (!covariant(input.getArgumentType(index), methodToResolve.getGenericParameterTypes()[index])) {
             return false;

@@ -19,11 +19,10 @@
 
 package springfox.petstore.repository;
 
-import com.google.common.base.Predicate;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 

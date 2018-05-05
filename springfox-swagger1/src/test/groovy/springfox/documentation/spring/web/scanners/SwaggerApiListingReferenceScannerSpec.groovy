@@ -54,7 +54,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
             .select()
-              .apis(not(withClassAnnotation(ApiIgnore)))
+              .apis(withClassAnnotation(ApiIgnore).negate())
               .paths(regex(".*?"))
               .build()
   }

@@ -22,7 +22,7 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.google.common.base.Predicate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +39,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Predicates.*;
@@ -80,7 +81,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   public Set<ResolvedType> dependentModels(ModelContext modelContext) {
     return Stream.concat(resolvedDependencies(modelContext).stream()
             .filter(ignorableTypes(modelContext))
-            .filter(not(baseTypes(modelContext))),
+            .filter(baseTypes(modelContext).negate()),
         schemaPluginsManager.dependencies(modelContext).stream())
         .collect(toSet());
   }
@@ -88,7 +89,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   private Predicate<ResolvedType> baseTypes(final ModelContext modelContext) {
     return new Predicate<ResolvedType>() {
       @Override
-      public boolean apply(ResolvedType resolvedType) {
+      public boolean test(ResolvedType resolvedType) {
         return isBaseType(ModelContext.fromParent(modelContext, resolvedType));
       }
     };
@@ -102,7 +103,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   private Predicate<ResolvedType> ignorableTypes(final ModelContext modelContext) {
     return new Predicate<ResolvedType>() {
       @Override
-      public boolean apply(ResolvedType input) {
+      public boolean test(ResolvedType input) {
         return !modelContext.hasSeenBefore(input);
       }
     };
@@ -189,13 +190,13 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
 
   private Collection<ModelProperty> nonTrivialProperties(ModelContext modelContext, ResolvedType resolvedType) {
     return propertiesFor(modelContext, resolvedType).stream()
-        .filter(not(baseProperty(modelContext))).collect(toList());
+        .filter(baseProperty(modelContext).negate()).collect(toList());
   }
 
   private Predicate<? super ModelProperty> baseProperty(final ModelContext modelContext) {
     return new Predicate<ModelProperty>() {
       @Override
-      public boolean apply(ModelProperty input) {
+      public boolean test(ModelProperty input) {
         return isBaseType(ModelContext.fromParent(modelContext, input.getType()));
       }
     };

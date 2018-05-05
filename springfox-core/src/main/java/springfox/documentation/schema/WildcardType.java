@@ -22,7 +22,7 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Predicate;
+
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 
 public class WildcardType {
@@ -78,7 +79,7 @@ public class WildcardType {
   private static Predicate<ResolvedType> thatAreWildcards() {
     return new Predicate<ResolvedType>() {
       @Override
-      public boolean apply(ResolvedType input) {
+      public boolean test(ResolvedType input) {
         return isWildcardType(input) || hasWildcards(input);
       }
     };
