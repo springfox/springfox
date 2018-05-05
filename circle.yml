@@ -42,7 +42,7 @@ deployment:
     branch: master
     owner: springfox
     commands:
-      - ./gradlew publishSnapshot
+      - ./gradlew publishSnapshot -x check
       - ./gradlew publishDocs -i
 notify:
   webhooks:
