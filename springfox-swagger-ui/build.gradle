@@ -29,7 +29,7 @@ plugins {
 }
 
 ext {
-  swaggerUiVersion = '3.13.6'
+  swaggerUiVersion = '3.14.0'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -53,8 +53,8 @@ node {
   nodeModulesDir = file("${project.projectDir}/src/web")
 }
 
-task swaggerUiDownload << {
-  if (!file(destinationZip)?.exists()) {
+task swaggerUiDownload {
+  doLast {
     download {
       src downloadUrl
       dest destinationZip

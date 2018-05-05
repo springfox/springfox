@@ -29,10 +29,14 @@ class BintrayCredentials {
   }
 
   String getUsername() {
-    return project.hasProperty('bintrayUsername') ? project.property('bintrayUsername') : 'admin'
+    project.hasProperty('bintrayUsername') ?
+        project.property('bintrayUsername') :
+        System.getenv('BINTRAY_USER_NAME')
   }
 
   String getPassword() {
-    return project.hasProperty('bintrayPassword') ? project.property('bintrayPassword') : 'password'
+    project.hasProperty('bintrayApiKey') ?
+        project.property('bintrayApiKey') :
+        System.getenv('BINTRAY_PASSWORD')
   }
 }

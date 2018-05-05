@@ -25,6 +25,7 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.Ordering;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.RequestHandler;
@@ -32,6 +33,7 @@ import springfox.documentation.spi.service.RequestHandlerCombiner;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -45,12 +47,15 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   public List<RequestHandler> combine(List<RequestHandler> source) {
     List<RequestHandler> combined = new ArrayList<RequestHandler>();
     Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
+    LOGGER.debug("Total number of request handlers {}", nullToEmptyList(source).size());
     for (RequestHandler each : nullToEmptyList(source)) {
+      LOGGER.debug("Adding key: {}, {}", patternsCondition(each).toString(), each.toString());
       byPath.put(patternsCondition(each).toString(), each);
     }
     for (String key : byPath.keySet()) {
       combined.addAll(combined(byPath.get(key)));
     }
+    LOGGER.debug("Combined number of request handlers {}", combined.size());
     return byPatternsCondition().sortedCopy(combined);
   }
 
@@ -61,21 +66,32 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     }
     ListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> groupByEquality = safeGroupBy(source);
     List<RequestHandler> combined = newArrayList();
-    for (Equivalence.Wrapper<RequestHandler> path : groupByEquality.keySet()) {
+    for (Equivalence.Wrapper<RequestHandler> path : wrapperComparator().sortedCopy(groupByEquality.keySet())) {
       List<RequestHandler> handlers = groupByEquality.get(path);
 
       RequestHandler toCombine = path.get();
       if (handlers.size() > 1) {
-        for (RequestHandler each : handlers) {
+        for (RequestHandler each : byPatternsCondition().sortedCopy(handlers)) {
           if (each.equals(toCombine)) {
             continue;
           }
+          //noinspection ConstantConditions
+          LOGGER.debug("Combining {} and {}", toCombine.toString(), each.toString());
           toCombine = combine(toCombine, each);
         }
       }
       combined.add(toCombine);
     }
     return combined;
+  }
+
+  private Ordering<Equivalence.Wrapper<RequestHandler>> wrapperComparator() {
+    return Ordering.from(new Comparator<Equivalence.Wrapper<RequestHandler>>() {
+      @Override
+      public int compare(Equivalence.Wrapper<RequestHandler> first, Equivalence.Wrapper<RequestHandler> second) {
+        return byPatternsCondition().compare(first.get(), second.get());
+      }
+    });
   }
 
   private ImmutableListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> safeGroupBy(
@@ -105,11 +121,11 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   private Function<RequestHandler, Equivalence.Wrapper<RequestHandler>> equivalenceAsKey() {
     return new
         Function<RequestHandler, Equivalence.Wrapper<RequestHandler>>() {
-      @Override
-      public Equivalence.Wrapper<RequestHandler> apply(RequestHandler input) {
-        return EQUIVALENCE.wrap(input);
-      }
-    };
+          @Override
+          public Equivalence.Wrapper<RequestHandler> apply(RequestHandler input) {
+            return EQUIVALENCE.wrap(input);
+          }
+        };
   }
 
   private RequestHandler combine(RequestHandler first, RequestHandler second) {
