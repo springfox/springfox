@@ -120,8 +120,8 @@ Recommend using [autoenv](https://github.com/kennethreitz/autoenv) with a `.env`
 [source,]
 [subs="verbatim,attributes"]
 ----
-    ./gradlew release publishDocs
-    -PreleaseType=<MAJOR|MINOR|PATCH> -i
+    ./gradlew release -PreleaseType=<MAJOR|MINOR|PATCH> -i
+    ./gradlew publishDocs
 ----
 
 The release steps are as follows:
@@ -141,7 +141,7 @@ This is normally done by the CI server
 [source,]
 [subs="verbatim,attributes"]
 ----
-./gradlew artifactoryPublish
+./gradlew publishSnapshot
 ----
 
 ==== Override deploy
