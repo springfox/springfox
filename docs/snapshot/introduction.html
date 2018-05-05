@@ -706,16 +706,22 @@ or <a href="https://github.com/springfox/springfox/blob/master/springfox-spring-
 <ul>
 <li>
 <p>Execute the the release commands:
-The below properties are required to run a release:</p>
+The below environment variables are required to run a release:</p>
 </li>
 <li>
 <p><code>GITHUB_TOKEN</code></p>
 </li>
 <li>
-<p><code>BINTRAY_USERNAME</code></p>
+<p><code>BINTRAY_USER_NAME</code></p>
 </li>
 <li>
 <p><code>BINTRAY_PASSWORD</code></p>
+</li>
+<li>
+<p><code>SONATYPE_USER_NAME</code></p>
+</li>
+<li>
+<p><code>SONATYPE_PASSWORD</code></p>
 </li>
 </ul>
 </div>
@@ -724,7 +730,7 @@ The below properties are required to run a release:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
+<pre class="CodeRay highlight"><code>    ./gradlew release publishDocs
     -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt; -i</code></pre>
 </div>
 </div>
@@ -747,7 +753,7 @@ The below properties are required to run a release:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>./gradlew snapshot -PbintrayUsername=&lt;bintrayUsername&gt; -PbintrayPassword=&lt;bintrayPassword&gt;</code></pre>
+<pre class="CodeRay highlight"><code>./gradlew artifactoryPublish</code></pre>
 </div>
 </div>
 </div>
@@ -759,7 +765,7 @@ The below properties are required to run a release:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>./gradlew clean build bintrayUpload -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt;
+<pre class="CodeRay highlight"><code>./gradlew clean build bintrayUpload -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt;
  --stacktrace</code></pre>
 </div>
 </div>
@@ -793,7 +799,7 @@ The below properties are required to run a release:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-04-25 00:03:03 CDT
+Last updated 2018-05-05 02:12:39 +00:00
 </div>
 </div>
 </body>
