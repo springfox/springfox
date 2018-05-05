@@ -56,10 +56,16 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
       project.logger.warn("[RELEASE] [DRYRUN] Will execute command: $commitChanges")
       return
     }
-    def proc = commitChanges.execute();
-    proc.waitFor();
+    def proc = commitChanges.execute()
+    def err = new StringBuilder()
+    def out = new StringBuilder()
+    proc.consumeProcessOutput(out, err)
+    proc.waitFor()
     if (proc.exitValue() != 0) {
       project.logger.error("[RELEASE] Unable to save the file and commit changes to repo!")
+      project.logger.error("[ERROR] $err")
+    } else {
+      project.logger.lifecycle("[RELEASE] $out")
     }
   }
 

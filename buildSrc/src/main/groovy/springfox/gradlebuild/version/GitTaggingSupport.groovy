@@ -7,13 +7,13 @@ trait GitTaggingSupport {
 
   String lastAnnotatedTag() {
     def proc = "git describe --exact-match".execute();
-    proc.waitFor ( );
-    if ( proc.exitValue ( ) == 0 ) {
+    proc.waitFor();
+    if (proc.exitValue() == 0) {
       return proc.text.trim()
     }
-    proc = "git describe".execute ( );
-    proc.waitFor ( );
-    if ( proc.exitValue ( ) == 0 ) {
+    proc = "git describe".execute()
+    proc.waitFor()
+    if (proc.exitValue() == 0) {
       return proc.text.trim()
     }
     return ""
@@ -21,14 +21,23 @@ trait GitTaggingSupport {
 
   def createAnnotatedTag(Project project, BuildInfo buildInfo) {
     project.logger.lifecycle("[RELEASE] Annotating ${buildInfo.releaseType} release with tag ${buildInfo.releaseTag}")
+    def tagCommand = "git tag -a ${buildInfo.releaseTag} -m 'Release of ${buildInfo.releaseTag}'"
     if (buildInfo.dryRun) {
       project.logger.warn(
-          "[RELEASE] [DRYRUN] Would have executed -> git tag -a ${buildInfo.releaseTag} " +
-              "-m \"Release of ${buildInfo.releaseTag}\"")
+          "[RELEASE] [DRYRUN] Would have executed -> $tagCommand")
       return
     }
-    project.exec {
-      commandLine 'git', 'tag', '-a', "${buildInfo.releaseTag}", '-m', "Release of ${buildInfo.releaseTag}"
-    }.assertNormalExitValue()
+    def proc = tagCommand.execute()
+    proc.waitFor()
+    def err = new StringBuilder()
+    def out = new StringBuilder()
+    proc.consumeProcessOutput(out, err)
+    proc.waitFor()
+    if (proc.exitValue() != 0) {
+      project.logger.error("[RELEASE] Unable to save the file and commit changes to repo!")
+      project.logger.error("[ERROR] $err")
+    } else {
+      project.logger.lifecycle("[RELEASE] $out")
+    }
   }
 }
