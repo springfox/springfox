@@ -47,15 +47,15 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   public List<RequestHandler> combine(List<RequestHandler> source) {
     List<RequestHandler> combined = new ArrayList<RequestHandler>();
     Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
-    LOGGER.info("Total number of request handlers {}", nullToEmptyList(source).size());
+    LOGGER.debug("Total number of request handlers {}", nullToEmptyList(source).size());
     for (RequestHandler each : nullToEmptyList(source)) {
-      LOGGER.info("Adding key: {}, {}", patternsCondition(each).toString(), each.toString());
+      LOGGER.debug("Adding key: {}, {}", patternsCondition(each).toString(), each.toString());
       byPath.put(patternsCondition(each).toString(), each);
     }
     for (String key : byPath.keySet()) {
       combined.addAll(combined(byPath.get(key)));
     }
-    LOGGER.info("Combined number of request handlers {}", combined.size());
+    LOGGER.debug("Combined number of request handlers {}", combined.size());
     return byPatternsCondition().sortedCopy(combined);
   }
 
@@ -75,6 +75,8 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
           if (each.equals(toCombine)) {
             continue;
           }
+          //noinspection ConstantConditions
+          LOGGER.debug("Combining {} and {}", toCombine.toString(), each.toString());
           toCombine = combine(toCombine, each);
         }
       }
