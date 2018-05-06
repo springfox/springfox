@@ -50,8 +50,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Functions.*;
-
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
@@ -82,9 +80,7 @@ class Properties {
 
   public static Property property(final String typeName) {
     String safeTypeName = Optional.ofNullable(typeName).orElse("");
-    Function<String, Function<String, ? extends Property>> propertyLookup
-        = forMap(typeFactory, voidOrRef(safeTypeName));
-    return propertyLookup.apply(safeTypeName.toLowerCase()).apply(safeTypeName);
+    return typeFactory.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
   }
 
   public static Property property(final ModelReference modelRef) {

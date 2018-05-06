@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.google.common.base.Predicates.*;
-
 /**
  * A class to represent a default set of authorizations to apply to each api operation
  * To customize which request mappings the list of authorizations are applied to Specify the custom includePatterns
@@ -46,7 +44,7 @@ public class SecurityContext {
 
     this.securityReferences = securityReferences;
     this.selector = selector;
-    this.methodSelector = alwaysTrue();
+    this.methodSelector = (item) -> true;
   }
 
   public SecurityContext(

@@ -47,10 +47,12 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 
-import static com.google.common.base.Predicates.*
 import static com.google.common.collect.Lists.*
+
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
+
+import static java.util.function.Predicate.isEqual;
 
 @Configuration
 @EnableSwagger2
@@ -189,7 +191,7 @@ class Swagger2TestConfig {
         [SecurityContext.builder()
              .securityReferences([new SecurityReference("petstore_auth", scopes)])
              .forPaths(regex("/bugs/2268"))
-             .forHttpMethods(equalTo(HttpMethod.GET))
+             .forHttpMethods(isEqual(HttpMethod.GET))
              .build()
         ])
         .alternateTypeRules(

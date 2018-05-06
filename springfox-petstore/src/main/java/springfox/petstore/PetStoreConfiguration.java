@@ -27,8 +27,6 @@ import springfox.documentation.spring.web.plugins.Docket;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Predicates.*;
-
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.PathSelectors.*;
 

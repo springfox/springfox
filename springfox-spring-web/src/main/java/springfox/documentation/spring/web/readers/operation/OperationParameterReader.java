@@ -48,8 +48,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static com.google.common.base.Predicates.*;
-
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;

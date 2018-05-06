@@ -37,8 +37,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Functions.*;
-
 import static java.util.stream.Collectors.toMap;
 import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
@@ -61,9 +59,9 @@ public class SerializableParameterFactories {
   }
 
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
-    SerializableParameterFactory factory = forMap(SerializableParameterFactories.factory,
-        new NullSerializableParameterFactory())
-        .apply(Optional.ofNullable(source.getParamType()).map(String::toLowerCase).orElse(""));
+    String safeSourceParamType = Optional.ofNullable(source.getParamType()).map(String::toLowerCase).orElse("");
+    SerializableParameterFactory factory = SerializableParameterFactories.factory.getOrDefault(safeSourceParamType,
+        new NullSerializableParameterFactory());
 
     SerializableParameter toReturn = factory.create(source);
     if (toReturn == null) {

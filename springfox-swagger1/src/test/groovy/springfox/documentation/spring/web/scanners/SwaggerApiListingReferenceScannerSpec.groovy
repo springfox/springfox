@@ -35,7 +35,6 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
-import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 

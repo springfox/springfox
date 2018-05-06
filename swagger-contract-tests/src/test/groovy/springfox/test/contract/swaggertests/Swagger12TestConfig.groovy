@@ -10,7 +10,6 @@ import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
 
-import static com.google.common.base.Predicates.*
 import static java.util.Collections.singletonList
 import static springfox.documentation.builders.PathSelectors.*
 

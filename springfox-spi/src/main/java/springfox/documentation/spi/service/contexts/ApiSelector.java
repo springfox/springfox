@@ -26,7 +26,6 @@ import springfox.documentation.builders.PathSelectors;
 
 import java.util.function.Predicate;
 
-import static com.google.common.base.Predicates.*;
 import static springfox.documentation.builders.RequestHandlerSelectors.*;
 
 public class ApiSelector {

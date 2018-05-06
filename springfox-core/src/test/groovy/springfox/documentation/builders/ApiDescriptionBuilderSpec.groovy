@@ -19,9 +19,10 @@
 
 package springfox.documentation.builders
 
-import com.google.common.base.Function
 import spock.lang.Specification
 import springfox.documentation.service.Operation
+
+import java.util.function.Function
 
 class ApiDescriptionBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {

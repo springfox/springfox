@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.ResolvedType
-import com.google.common.collect.Ordering
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean

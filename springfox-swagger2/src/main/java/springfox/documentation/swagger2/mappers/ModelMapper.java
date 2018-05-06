@@ -47,8 +47,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.google.common.base.Predicates.*;
-
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;

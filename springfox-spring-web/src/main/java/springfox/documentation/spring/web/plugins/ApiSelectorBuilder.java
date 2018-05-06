@@ -25,8 +25,6 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 
 import java.util.function.Predicate;
 
-import static com.google.common.base.Predicates.*;
-
 public class ApiSelectorBuilder {
   private final Docket parent;
   private Predicate<RequestHandler> requestHandlerSelector = ApiSelector.DEFAULT.getRequestHandlerSelector();
