@@ -18,7 +18,6 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Equivalence;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -37,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 @Qualifier("cachedOperations")
 public class CachingOperationReader implements OperationReader {
 
-  private final LoadingCache<Equivalence.Wrapper<RequestMappingContext>, List<Operation>> cache;
+  private final LoadingCache<OperationCachingEquivalence.Wrapper, List<Operation>> cache;
 
   @Autowired
   public CachingOperationReader(@Qualifier("default") final OperationReader delegate) {
@@ -45,8 +44,8 @@ public class CachingOperationReader implements OperationReader {
         .maximumSize(1000)
         .expireAfterWrite(24, TimeUnit.HOURS)
         .build(
-            new CacheLoader<Equivalence.Wrapper<RequestMappingContext>, List<Operation>>() {
-              public List<Operation> load(Equivalence.Wrapper<RequestMappingContext> key) {
+            new CacheLoader<OperationCachingEquivalence.Wrapper, List<Operation>>() {
+              public List<Operation> load(OperationCachingEquivalence.Wrapper key) {
                 return delegate.read(key.get());
               }
             });

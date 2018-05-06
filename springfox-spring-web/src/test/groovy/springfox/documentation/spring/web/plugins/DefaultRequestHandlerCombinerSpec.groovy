@@ -64,10 +64,10 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
     def combined = sut.combine(input)
 
     then:
-    combined.size() == expected.size()
-    expected.eachWithIndex { handler, index ->
-      assert equality.equivalent(handler, combined.get(index))
-    }
+      combined.size() == expected.size()
+      expected.eachWithIndex { handler, index ->
+        assert equality.test(handler, combined.get(index))
+      }
   }
 
   @Unroll

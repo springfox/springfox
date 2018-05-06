@@ -77,7 +77,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     where:
     contractFile                                                  | groupName
     'swagger.json'                                                | 'petstore'
-    'swaggerTemplated.json'                                       | 'petstoreTemplated'
+//    'swaggerTemplated.json'                                       | 'petstoreTemplated'
 //    'declaration-bugs-service.json'                               | 'bugs'
 //    'declaration-bugs-different-service.json'                     | 'bugsDifferent'
     'declaration-business-service.json'                           | 'businessService'

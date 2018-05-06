@@ -30,7 +30,7 @@ class SimpleMethodSignatureEqualitySpec extends Specification {
             String.class.equals(m.parameterTypes[0])}
       def m2 = SwaggerBugIF.methods.find { m -> "setInvisibleField".equals(m.name)  }
     expect:
-      sut.equivalent(m1, m2)
+      sut.test(m1, m2)
   }
 
   def "detects method inequality on different classes"() {
@@ -39,7 +39,7 @@ class SimpleMethodSignatureEqualitySpec extends Specification {
       def m1 = SwaggerBugRequest.methods.find { m -> "setVisibleField".equals(m.name) }
       def m2 = SwaggerBugIF.methods.find { m -> "setInvisibleField".equals(m.name) }
     expect:
-      !sut.equivalent(m1, m2)
+      !sut.test(m1, m2)
   }
 
   def "detects method inequality on different classes when parameter count differs"() {
@@ -48,7 +48,7 @@ class SimpleMethodSignatureEqualitySpec extends Specification {
       def m1 = SwaggerBugRequest.methods.find { m -> "setInvisibleField".equals(m.name) && 1 == m.parameterTypes.length }
       def m2 = SwaggerBugExtended.methods.find { m -> "setInvisibleField".equals(m.name) && 2 == m.parameterTypes.length }
     expect:
-      !sut.equivalent(m1, m2)
+      !sut.test(m1, m2)
   }
 
   def "detects method inequality when parameter type differs"() {
@@ -63,7 +63,7 @@ class SimpleMethodSignatureEqualitySpec extends Specification {
           1 == m.parameterTypes.length &&
         Boolean.class.equals(m.parameterTypes[0])}
     expect:
-      !sut.equivalent(m1, m2)
+      !sut.test(m1, m2)
   }
 
   def "Computes hashcode"() {
@@ -74,7 +74,7 @@ class SimpleMethodSignatureEqualitySpec extends Specification {
             1 == m.parameterTypes.length &&
             String.class.equals(m.parameterTypes[0])}
     expect:
-      sut.hash(m1) > 0
+      sut.doHash(m1) > 0
   }
 
 

@@ -18,8 +18,6 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Equivalence;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.RequestHandler;
@@ -59,7 +57,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;
     }
-    Map<Equivalence.Wrapper<RequestHandler>, List<RequestHandler>> groupByEquality = safeGroupBy(source);
+    Map<PathAndParametersEquivalence.Wrapper, List<RequestHandler>> groupByEquality = safeGroupBy(source);
     List<RequestHandler> combined = new ArrayList();
     groupByEquality.keySet().stream().sorted(wrapperComparator()).forEachOrdered(path -> {
       List<RequestHandler> handlers = groupByEquality.get(path);
@@ -86,18 +84,18 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
             .collect(toList());
   }
 
-  private Comparator<Equivalence.Wrapper<RequestHandler>> wrapperComparator() {
-    return new Comparator<Equivalence.Wrapper<RequestHandler>>() {
+  private Comparator<PathAndParametersEquivalence.Wrapper> wrapperComparator() {
+    return new Comparator<PathAndParametersEquivalence.Wrapper>() {
       @Override
-      public int compare(Equivalence.Wrapper<RequestHandler> first, Equivalence.Wrapper<RequestHandler> second) {
-        return byPatternsCondition()
-            .thenComparing(byOperationName())
-            .compare(first.get(), second.get());
+      public int compare(PathAndParametersEquivalence.Wrapper first, PathAndParametersEquivalence.Wrapper second) {
+          return byPatternsCondition()
+                  .thenComparing(byOperationName())
+                  .compare(first.get(), second.get());
       }
     };
   }
 
-  private Map<Equivalence.Wrapper<RequestHandler>, List<RequestHandler>> safeGroupBy(
+  private Map<PathAndParametersEquivalence.Wrapper, List<RequestHandler>> safeGroupBy(
       List<RequestHandler> source) {
     try {
       return source.stream().collect(groupingBy(equivalenceAsKey()));
@@ -121,14 +119,14 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     return sb.toString();
   }
 
-  private Function<RequestHandler, Equivalence.Wrapper<RequestHandler>> equivalenceAsKey() {
+  private Function<RequestHandler, PathAndParametersEquivalence.Wrapper> equivalenceAsKey() {
     return new
-        Function<RequestHandler, Equivalence.Wrapper<RequestHandler>>() {
-          @Override
-          public Equivalence.Wrapper<RequestHandler> apply(RequestHandler input) {
-            return EQUIVALENCE.wrap(input);
-          }
-        };
+        Function<RequestHandler, PathAndParametersEquivalence.Wrapper>() {
+      @Override
+      public PathAndParametersEquivalence.Wrapper apply(RequestHandler input) {
+        return EQUIVALENCE.wrap(input);
+      }
+    };
   }
 
   private RequestHandler combine(RequestHandler first, RequestHandler second) {

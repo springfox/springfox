@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-
 public class ResolvedMethodParameter {
   private final int parameterIndex;
   private final List<Annotation> annotations;

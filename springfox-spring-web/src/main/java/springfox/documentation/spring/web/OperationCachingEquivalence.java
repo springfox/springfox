@@ -18,15 +18,15 @@
  */
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Equivalence;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import java.util.Objects;
+import java.util.function.BiPredicate;
 
 
-public class OperationCachingEquivalence extends Equivalence<RequestMappingContext> {
+public class OperationCachingEquivalence implements BiPredicate<RequestMappingContext, RequestMappingContext> {
   @Override
-  protected boolean doEquivalent(RequestMappingContext first, RequestMappingContext second) {
+  public boolean test(RequestMappingContext first, RequestMappingContext second) {
     if (bothAreNull(first, second)) {
       return true;
     }
@@ -45,10 +45,38 @@ public class OperationCachingEquivalence extends Equivalence<RequestMappingConte
     return first.key() == null && second.key() == null;
   }
 
-  @Override
-  protected int doHash(RequestMappingContext requestMappingContext) {
-    return Objects.hash(requestMappingContext.key(),
+  public OperationCachingEquivalence.Wrapper wrap(RequestMappingContext outerContext) {
+    return new Wrapper(outerContext, this);
+  }
+
+  public int doHash(RequestMappingContext requestMappingContext) {
+    return Objects.hash(
+        requestMappingContext.key(),
         requestMappingContext.getRequestMappingPattern(),
         requestMappingContext.getGenericsNamingStrategy());
+}
+
+    public static class Wrapper {
+    private final RequestMappingContext requestMappingContext;
+    private final OperationCachingEquivalence equivalence;
+
+    public Wrapper(RequestMappingContext requestMappingContext, OperationCachingEquivalence equivalence) {
+      this.requestMappingContext = requestMappingContext;
+      this.equivalence = equivalence;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      return equivalence.test(requestMappingContext, ((Wrapper)other).requestMappingContext);
+    }
+    @Override
+    public int hashCode() {
+      return equivalence.doHash(requestMappingContext);
+    }
+
+    public RequestMappingContext get() {
+      return requestMappingContext;
+    }
   }
+
 }

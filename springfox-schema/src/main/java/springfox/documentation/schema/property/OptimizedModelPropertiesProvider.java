@@ -382,7 +382,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return StreamSupport.stream(accessors.in(resolvedType).spliterator(), false).filter(new Predicate<ResolvedMethod>() {
       public boolean test(ResolvedMethod accessorMethod) {
         SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
-        return methodComparer.equivalent(accessorMethod.getRawMember(), (Method) member.getMember());
+        return methodComparer.test(accessorMethod.getRawMember(), (Method) member.getMember());
       }
     }).findFirst();
   }

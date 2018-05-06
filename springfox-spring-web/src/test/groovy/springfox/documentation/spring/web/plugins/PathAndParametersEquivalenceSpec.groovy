@@ -21,7 +21,7 @@ class PathAndParametersEquivalenceSpec extends Specification {
     given:
       def sut = new PathAndParametersEquivalence()
     expect:
-      sut.equivalent(first, second) == areSame
+      sut.test(first, second) == areSame
       (sut.doHash(first) == sut.doHash(second)) == sameHash
     where:
       first                                                | second                                                       | sameHash | areSame
