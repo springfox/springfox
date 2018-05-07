@@ -2,15 +2,17 @@ package springfox.documentation.swagger2.mappers
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Functions
-import com.google.common.base.Suppliers
+import com.fasterxml.classmate.types.ResolvedObjectType
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.builders.*
 import springfox.documentation.schema.ModelRef
+import springfox.documentation.schema.ModelReference
 import springfox.documentation.service.*
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+
+import java.util.function.Function
 
 import static java.util.Collections.singleton
 
@@ -219,7 +221,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .required(true)
         .type(resolved)
         .build()
-    modelProperty.updateModelRef(Functions.forSupplier(Suppliers.ofInstance(new ModelRef("string"))))
+    modelProperty.updateModelRef(createFactory(new ModelRef("string")))
     new ApiListingBuilder(defaults.apiDescriptionOrdering())
         .apis([description])
         .apiVersion("1.0")
@@ -245,6 +247,15 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .resourcePath("/resource-path")
         .protocols(null)
         .build()
+  }
+
+  Function createFactory(ModelRef modelRef) {
+    new Function<ResolvedObjectType, ModelReference>() {
+      @Override
+      ModelReference apply(ResolvedObjectType type) {
+        return modelRef
+      }
+    }
   }
 
 }

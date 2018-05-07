@@ -18,7 +18,8 @@
  */
 package springfox.documentation.swagger2.mappers
 
-
+import com.fasterxml.classmate.ResolvedType
+import com.fasterxml.classmate.types.ResolvedObjectType
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
@@ -31,14 +32,14 @@ import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.ModelRef
+import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.SimpleType
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 
-import static com.google.common.base.Functions.*
-import static com.google.common.base.Suppliers.*
+import java.util.function.Function
 
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -338,7 +339,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .example(modelProperty.example)
         .xml(modelProperty.xml)
         .build()
-    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+    newModel.updateModelRef(createFactory(modelProperty))
   }
 
 
@@ -390,7 +391,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .position(modelProperty.position)
         .type(modelProperty.type)
         .build()
-    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+    newModel.updateModelRef(createFactory(modelProperty))
   }
 
   def "model property positions affect the serialization order"() {
@@ -472,4 +473,12 @@ class ModelMapperSpec extends SchemaSpecification {
     model
   }
 
+  Function createFactory(ModelProperty modelProperty) {
+    new Function<ResolvedObjectType, ModelReference>() {
+      @Override
+      ModelReference apply(ResolvedObjectType type) {
+        return modelProperty.getModelRef()
+      }
+    }
+  }
 }
