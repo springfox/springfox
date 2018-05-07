@@ -123,7 +123,6 @@ class SpringDataRestRequestHandler implements RequestHandler {
     return actionSpecification.getReturnType();
   }
 
-  @SuppressWarnings("Guava")
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     if (getHandlerMethod() != null) {

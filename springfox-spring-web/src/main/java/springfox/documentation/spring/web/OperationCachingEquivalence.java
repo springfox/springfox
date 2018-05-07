@@ -23,7 +23,6 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 
-
 public class OperationCachingEquivalence implements BiPredicate<RequestMappingContext, RequestMappingContext> {
   @Override
   public boolean test(RequestMappingContext first, RequestMappingContext second) {
