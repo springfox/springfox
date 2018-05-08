@@ -41,7 +41,7 @@ class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
             ]
         )
     OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo, RequestMethod.POST)
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo, RequestMethod.POST)
     operationContext.operationBuilder().method(HttpMethod.POST)
 
     when:

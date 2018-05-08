@@ -29,7 +29,7 @@ class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec {
   def "should have correct tags"() {
     given:
       OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
     and:
       SwaggerOperationTagsReader sut = new SwaggerOperationTagsReader(new DefaultTagsProvider())
 

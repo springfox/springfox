@@ -35,7 +35,7 @@ class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
           [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )
       RequestMappingContext requestContext = new RequestMappingContext(
-          context(),
+          documentationContext(),
           new WebMvcRequestHandler(methodResolver,
               requestMappingInfo,
               dummyHandlerMethod(operationName)))

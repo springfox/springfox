@@ -55,7 +55,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       ParameterContext parameterContext = new ParameterContext(
           resolvedMethodParameter,
           new ParameterBuilder(),
-          context(),
+          documentationContext(),
           Mock(GenericTypeNamingStrategy),
           Mock(OperationContext))
 

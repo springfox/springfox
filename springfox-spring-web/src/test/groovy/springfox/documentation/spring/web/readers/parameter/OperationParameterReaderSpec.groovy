@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
+import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
 import spock.lang.Unroll
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.bean.AccessorsProvider
@@ -77,7 +78,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should ignore ignorables"() {
     given:
     OperationContext operationContext = operationContext(
-        context(),
+        documentationContext(),
         handlerMethod,
         0,
         requestMappingInfo("/somePath"))
@@ -101,7 +102,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     given:
     contextBuilder.rules([newRule(ToReplaceWithString, String)])
     OperationContext operationContext = operationContext(
-        context(),
+        documentationContext(),
         handlerMethod,
         0,
         requestMappingInfo("/somePath"))
@@ -120,12 +121,52 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     dummyHandlerMethod('methodWithAlternateType', AlternateTypeContainer.class) | 1
   }
 
-  def "Should expand ModelAttribute request params"() {
+  def matchesEmptyExample(List<Parameter> parameters) {
+    assert parameters.size() == 10
+
+    Parameter annotatedFooParam = parameters.find { it.name == "foo" }
+    assert annotatedFooParam != null
+    assert annotatedFooParam.getDescription() == null
+    assert !annotatedFooParam.required
+    assert annotatedFooParam.allowableValues == null
+
+    Parameter annotatedBarParam = parameters.find { it.name == "bar" }
+    assert annotatedBarParam.getDescription() == null
+    assert !annotatedBarParam.required
+    assert annotatedBarParam.allowableValues == null
+
+    Parameter unannotatedEnumTypeParam = parameters.find { it.name == "enumType" }
+    assert unannotatedEnumTypeParam.getDescription() == null
+    assert unannotatedEnumTypeParam.allowableValues != null
+
+    Parameter annotatedEnumTypeParam = parameters.find { it.name == "annotatedEnumType" }
+    assert annotatedEnumTypeParam.getDescription() == null
+    assert annotatedEnumTypeParam.allowableValues != null
+
+    Parameter unannotatedNestedTypeNameParam = parameters.find { it.name == "nestedType.name" }
+    assert unannotatedNestedTypeNameParam != null
+    assert unannotatedNestedTypeNameParam.getDescription() == null
+
+    Parameter annotatedAllCapsSetParam = parameters.find { it.name == "allCapsSet" }
+    assert annotatedAllCapsSetParam.getDescription() == null
+    assert !annotatedAllCapsSetParam.required
+    assert annotatedAllCapsSetParam.allowableValues == null
+
+    Parameter unannotatedParentBeanParam = parameters.find { it.name == "parentBeanProperty" }
+    assert unannotatedParentBeanParam.getDescription() == null
+
+    Parameter localDateTime = parameters.find { it.name == "localDateTime" }
+    assert !localDateTime.required
+    assert localDateTime.getDescription() == null
+    true
+  }
+
+  def "Should expand ModelAttribute request params as type query"() {
     given:
     plugin.directModelSubstitute(LocalDateTime, String)
     OperationContext operationContext =
         operationContext(
-            context(),
+            documentationContext(),
             dummyHandlerMethod('methodWithModelAttribute', Example.class),
             0,
             requestMappingInfo("/somePath"))
@@ -135,49 +176,40 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     def operation = operationContext.operationBuilder().build()
 
     then:
-    operation.parameters.size() == 10
+    matchesEmptyExample(operation.parameters)
 
-    Parameter annotatedFooParam = operation.parameters.find { it.name == "foo" }
-    annotatedFooParam != null
-    annotatedFooParam.getDescription() == null
-    !annotatedFooParam.required
-    annotatedFooParam.allowableValues == null
+    operation.parameters.every {
+      it.paramType == "query"
+    }
+  }
 
-    Parameter annotatedBarParam = operation.parameters.find { it.name == "bar" }
-    annotatedBarParam.getDescription() == null
-    !annotatedBarParam.required
-    annotatedBarParam.allowableValues == null
+  def "Should expand multipart ModelAttribute request params as formData"() {
+    given:
+    plugin.directModelSubstitute(LocalDateTime, String)
+    OperationContext operationContext =
+            operationContext(
+                    documentationContext(),
+                    dummyHandlerMethod('methodWithModelAttribute', Example.class),
+                    0,
+                    requestMappingInfo("/somePath", ["consumesRequestCondition": new ConsumesRequestCondition("multipart/form-data")]))
 
-    Parameter unannotatedEnumTypeParam = operation.parameters.find { it.name == "enumType" }
-    unannotatedEnumTypeParam.getDescription() == null
-    unannotatedEnumTypeParam.allowableValues != null
+    when:
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
-    Parameter annotatedEnumTypeParam = operation.parameters.find { it.name == "annotatedEnumType" }
-    annotatedEnumTypeParam.getDescription() == null
-    annotatedEnumTypeParam.allowableValues != null
+    then:
+    matchesEmptyExample(operation.parameters)
 
-    Parameter unannotatedNestedTypeNameParam = operation.parameters.find { it.name == "nestedType.name" }
-    unannotatedNestedTypeNameParam != null
-    unannotatedNestedTypeNameParam.getDescription() == null
-
-    Parameter annotatedAllCapsSetParam = operation.parameters.find { it.name == "allCapsSet" }
-    annotatedAllCapsSetParam.getDescription() == null
-    !annotatedAllCapsSetParam.required
-    annotatedAllCapsSetParam.allowableValues == null
-
-    Parameter unannotatedParentBeanParam = operation.parameters.find { it.name == "parentBeanProperty" }
-    unannotatedParentBeanParam.getDescription() == null
-
-    Parameter localDateTime = operation.parameters.find { it.name == "localDateTime" }
-    !localDateTime.required
-    localDateTime.getDescription() == null
+    operation.parameters.every {
+      it.paramType == "formData"
+    }
   }
 
   def "Should expand ModelAttribute request param if param has treeish field"() {
     given:
     OperationContext operationContext =
         operationContext(
-            context(),
+            documentationContext(),
             dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class),
             0,
             requestMappingInfo("/somePath"))
@@ -197,7 +229,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should not expand unannotated request params"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo("/somePath"))
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo("/somePath"))
 
     when:
     sut.apply(operationContext)
@@ -214,7 +246,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should not expand @RequestParam or @PathVariable annotated params"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo("/somePath"))
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo("/somePath"))
 
     when:
     sut.apply(operationContext)

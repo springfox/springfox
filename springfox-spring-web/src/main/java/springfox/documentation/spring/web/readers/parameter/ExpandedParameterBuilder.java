@@ -94,7 +94,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .type(resolved)
         .modelRef(new ModelRef(typeName, itemModel))
         .allowableValues(allowable)
-        .parameterType("query")
+        .parameterType(context.getParameterType())
         .order(DEFAULT_PRECEDENCE)
         .parameterAccess(null);
   }

@@ -33,6 +33,7 @@ public class ParameterExpansionContext {
 
   private final String dataTypeName;
   private final String parentName;
+  private final String parameterType;
   private final ParameterMetadataAccessor metadataAccessor;
   private final DocumentationType documentationType;
   private final ParameterBuilder parameterBuilder;
@@ -40,12 +41,14 @@ public class ParameterExpansionContext {
   public ParameterExpansionContext(
       String dataTypeName,
       String parentName,
+      String parameterType,
       ParameterMetadataAccessor metadataAccessor,
       DocumentationType documentationType,
       ParameterBuilder parameterBuilder) {
 
     this.dataTypeName = dataTypeName;
     this.parentName = parentName;
+    this.parameterType = parameterType;
     this.metadataAccessor = metadataAccessor;
     this.documentationType = documentationType;
     this.parameterBuilder = parameterBuilder;
@@ -57,6 +60,10 @@ public class ParameterExpansionContext {
 
   public String getParentName() {
     return parentName;
+  }
+
+  public String getParameterType() {
+    return parameterType;
   }
 
   /**

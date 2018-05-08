@@ -107,7 +107,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   def context(HandlerMethod handlerMethod) {
     return new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))
@@ -121,7 +121,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
         DummyModels.AnnotatedBusinessModel.class
     )
     RequestMappingContext context = new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))
@@ -169,7 +169,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
         DummyModels.AnnotatedBusinessModel
     )
     RequestMappingContext context = new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(
             methodResolver,
             requestMappingInfo('/somePath'),

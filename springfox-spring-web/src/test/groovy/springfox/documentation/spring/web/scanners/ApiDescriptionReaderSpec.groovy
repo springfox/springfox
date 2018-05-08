@@ -51,7 +51,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
     )
     RequestMappingContext mappingContext = new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo,
@@ -94,7 +94,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         "/doesNotMatterForThisTest",
         [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}')])
     RequestMappingContext mappingContext = new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo,

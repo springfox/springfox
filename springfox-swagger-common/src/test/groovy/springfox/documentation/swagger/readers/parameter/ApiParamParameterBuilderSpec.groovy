@@ -53,7 +53,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
         new ParameterBuilder(),
-        context(),
+        documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
 
@@ -86,7 +86,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
         new ParameterContext(
             resolvedMethodParameter,
             new ParameterBuilder(),
-            context(),
+            documentationContext(),
             genericNamingStrategy,
             Mock(OperationContext))
 
@@ -115,7 +115,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
         new ParameterBuilder(),
-        context(),
+        documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
 

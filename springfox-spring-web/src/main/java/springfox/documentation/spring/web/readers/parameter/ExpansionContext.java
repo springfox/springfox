@@ -22,33 +22,34 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.collect.Sets;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
+import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.Set;
 
-import static com.google.common.base.Objects.*;
-import static com.google.common.collect.Sets.*;
+import static com.google.common.base.Objects.equal;
+import static com.google.common.collect.Sets.newHashSet;
 
 public class ExpansionContext {
     private final String parentName;
     private final ResolvedType paramType;
-    private final DocumentationContext documentationContext;
+    private final OperationContext operationContext;
     private final Set<ResolvedType> seenTypes;
 
     public ExpansionContext(
             String parentName,
             ResolvedType paramType,
-            DocumentationContext documentationContext) {
-        this(parentName, paramType, documentationContext, Sets.<ResolvedType>newHashSet());
+            OperationContext operationContext) {
+        this(parentName, paramType, operationContext, Sets.<ResolvedType>newHashSet());
     }
 
     private ExpansionContext(
             String parentName,
             ResolvedType paramType,
-            DocumentationContext documentationContext,
+            OperationContext operationContext,
             Set<ResolvedType> seenTypes) {
         this.parentName = parentName;
         this.paramType = paramType;
-        this.documentationContext = documentationContext;
+        this.operationContext = operationContext;
         this.seenTypes = newHashSet(seenTypes);
     }
 
@@ -60,8 +61,12 @@ public class ExpansionContext {
         return paramType;
     }
 
+    public OperationContext getOperationContext() {
+        return operationContext;
+    }
+
     public DocumentationContext getDocumentationContext() {
-        return documentationContext;
+        return operationContext.getDocumentationContext();
     }
 
     public boolean hasSeenType(ResolvedType type) {
@@ -72,9 +77,9 @@ public class ExpansionContext {
     public ExpansionContext childContext(
             String parentName,
             ResolvedType childType,
-            DocumentationContext documentationContext) {
+            OperationContext operationContext) {
         Set<ResolvedType> childSeenTypes = newHashSet(seenTypes);
         childSeenTypes.add(childType);
-        return new ExpansionContext(parentName, childType, documentationContext, childSeenTypes);
+        return new ExpansionContext(parentName, childType, operationContext, childSeenTypes);
     }
 }

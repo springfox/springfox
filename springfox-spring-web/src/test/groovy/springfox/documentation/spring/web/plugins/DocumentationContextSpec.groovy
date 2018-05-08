@@ -24,12 +24,13 @@ import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
-import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
+import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import javax.servlet.ServletContext
 
-import static springfox.documentation.spi.service.contexts.Orderings.*
+import static springfox.documentation.spi.service.contexts.Orderings.nickNameComparator
 
 class DocumentationContextSpec extends Specification {
   DocumentationContextBuilder contextBuilder
@@ -47,7 +48,14 @@ class DocumentationContextSpec extends Specification {
     operationReader = Mock(ApiOperationReader)
   }
 
-  def context() {
+  def documentationContext() {
     plugin.configure(contextBuilder)
+  }
+
+  def context() {
+    OperationContext context = Mock()
+    context.documentationContext >> documentationContext()
+    context.consumes() >> []
+    return context
   }
 }

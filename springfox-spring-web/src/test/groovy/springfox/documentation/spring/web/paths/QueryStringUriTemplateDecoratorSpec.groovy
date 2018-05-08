@@ -23,7 +23,7 @@ class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
       def requestMappingContext = Mock(RequestMappingContext)
       PathContext ctx = new PathContext(requestMappingContext, operation(params, allowedValues))
     and:
-      requestMappingContext.getDocumentationContext() >> context()
+      requestMappingContext.getDocumentationContext() >> documentationContext()
     and:
       def sut = new QueryStringUriTemplateDecorator()
     when:

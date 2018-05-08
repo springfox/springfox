@@ -72,7 +72,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
           new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
                   Mock(OperationContext))
 
     when:
@@ -129,7 +129,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
           new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-          new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+          new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
               Mock(OperationContext))
 
     when:
@@ -148,7 +148,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
           new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
                   Mock(OperationContext))
 
     when:

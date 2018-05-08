@@ -11,7 +11,7 @@ class OperationPathDecoratorSpec extends DocumentationContextSpec {
       def requestMappingContext = Mock(RequestMappingContext)
       PathContext ctx = new PathContext(requestMappingContext, Optional.absent())
     and:
-      requestMappingContext.getDocumentationContext() >> context()
+      requestMappingContext.getDocumentationContext() >> documentationContext()
     and:
       def sut = new OperationPathDecorator()
     when:

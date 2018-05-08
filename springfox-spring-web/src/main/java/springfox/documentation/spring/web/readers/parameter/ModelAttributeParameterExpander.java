@@ -30,6 +30,7 @@ import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import springfox.documentation.builders.ParameterBuilder;
@@ -40,7 +41,6 @@ import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
@@ -54,14 +54,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.base.Objects.*;
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Predicates.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Types.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Types.isVoid;
+import static springfox.documentation.schema.Types.typeNameFor;
 
 @Component
 public class ModelAttributeParameterExpander {
@@ -116,7 +118,7 @@ public class ModelAttributeParameterExpander {
               context.childContext(
                   nestedParentName(context.getParentName(), each),
                   each.getFieldType(),
-                  context.getDocumentationContext())));
+                  context.getOperationContext())));
     }
 
     FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
@@ -126,12 +128,12 @@ public class ModelAttributeParameterExpander {
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
       if (Types.isBaseType(itemType) || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
-        parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
+        parameters.add(simpleFields(context.getParentName(), context, each));
       } else {
         ExpansionContext childContext = context.childContext(
             nestedParentName(context.getParentName(), each),
             itemType,
-            context.getDocumentationContext());
+            context.getOperationContext());
         if (!context.hasSeenType(itemType)) {
           parameters.addAll(expand(childContext));
         }
@@ -140,7 +142,7 @@ public class ModelAttributeParameterExpander {
 
     FluentIterable<ModelAttributeField> simpleFields = modelAttributes.filter(simpleType());
     for (ModelAttributeField each : simpleFields) {
-      parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
+      parameters.add(simpleFields(context.getParentName(), context, each));
     }
     return FluentIterable.from(parameters)
         .filter(not(hiddenParameters()))
@@ -177,7 +179,7 @@ public class ModelAttributeParameterExpander {
 
   private Parameter simpleFields(
       String parentName,
-      DocumentationContext documentationContext,
+      ExpansionContext context,
       ModelAttributeField each) {
     LOG.debug("Attempting to expand field: {}", each);
     String dataTypeName = Optional.fromNullable(typeNameFor(each.getFieldType().getErasedType()))
@@ -186,13 +188,24 @@ public class ModelAttributeParameterExpander {
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,
         parentName,
+        determineParameterType(context),
         new ModelAttributeParameterMetadataAccessor(
             each.annotatedElements(),
             each.getFieldType(),
             each.getName()),
-        documentationContext.getDocumentationType(),
+        context.getDocumentationContext().getDocumentationType(),
         new ParameterBuilder());
     return pluginsManager.expandParameter(parameterExpansionContext);
+  }
+
+  private String determineParameterType(final ExpansionContext context) {
+    String parameterType = "query";
+
+    if(context.getOperationContext().consumes().contains(MediaType.MULTIPART_FORM_DATA)) {
+      parameterType = "formData";
+    }
+
+    return parameterType;
   }
 
 

@@ -45,7 +45,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
     listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
-    Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(documentationContext())
 
     then: "I should should have the correct defaults"
     ResourceListing resourceListing = scanned.resourceListing
@@ -74,7 +74,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
     listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
-    Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(documentationContext())
     then:
     ApiInfo actual = scanned.getResourceListing().getInfo()
     actual.getTitle() == expected.getTitle()
@@ -100,7 +100,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
     listingScanner.scan(_) >> LinkedListMultimap.create()
     and:
-    Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(documentationContext())
     then:
     ResourceListing resourceListing = scanned.resourceListing
     def authorizationTypes = resourceListing.getSecuritySchemes()
@@ -137,7 +137,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
 
 
     when:
-    Documentation scanned = docScanner.scan(context())
+    Documentation scanned = docScanner.scan(documentationContext())
 
     then:
     def firstResouceListingApi = scanned.resourceListing.apis.get(0)

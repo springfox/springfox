@@ -38,7 +38,7 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
 
   def "Should add implicit parameters"() {
     given:
-    OperationContext operationContext = operationContext(context(), handlerMethod, 0)
+    OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0)
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = defaultWebPlugins()

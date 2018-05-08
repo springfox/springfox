@@ -29,7 +29,7 @@ class OperationPositionReaderSpec extends DocumentationContextSpec {
    def "should have correct api position using default reader"() {
     given:
       OperationContext operationContext =
-        operationContext(context(), handlerMethod, contextCount)
+        operationContext(documentationContext(), handlerMethod, contextCount)
 
       def operationPositionReader = new DefaultOperationReader();
     when:

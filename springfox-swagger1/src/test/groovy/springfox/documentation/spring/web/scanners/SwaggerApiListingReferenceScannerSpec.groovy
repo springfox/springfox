@@ -70,7 +70,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
 
     then:
-      context().groupName == "default"
+      documentationContext().groupName == "default"
     where:
       handlerMappings              | resourceGroupingStrategy                   | groupName | message
       [requestMappingInfo("path")] | null                                       | null      | "resourceGroupingStrategy is required"
@@ -91,7 +91,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.requestHandlers(requestHandlers)
       plugin.groupName('groupName').configure(contextBuilder)
 
-      ApiListingReferenceScanResult result = sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.keySet().size() == 1
@@ -119,7 +119,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result= sut.scan(context())
+      ApiListingReferenceScanResult result= sut.scan(documentationContext())
     then:
       result.resourceGroupRequestMappings.size() == 2
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", DummyController)].size() == 1
@@ -141,7 +141,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.requestHandlers(requestHandlers)
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result= sut.scan(context())
+      ApiListingReferenceScanResult result= sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.size() == 2

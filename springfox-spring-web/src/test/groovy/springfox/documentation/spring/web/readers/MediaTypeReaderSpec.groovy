@@ -52,7 +52,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
             ]
         )
     OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo, httpMethod)
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo, httpMethod)
     operationContext.operationBuilder().method(HttpMethod.valueOf(httpMethod.toString()))
 
     when:
@@ -88,7 +88,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
         )
     OperationContext operationContext =
         operationContext(
-            context(),
+            documentationContext(),
             dummyHandlerMethod(),
             0,
             requestMappingInfo,
@@ -123,7 +123,7 @@ class MediaTypeReaderSpec extends DocumentationContextSpec {
             ]
         )
     OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod(), 0, requestMappingInfo)
+        operationContext(documentationContext(), dummyHandlerMethod(), 0, requestMappingInfo)
 
     when:
     sut.apply(operationContext)
