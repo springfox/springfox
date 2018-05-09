@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
@@ -81,12 +82,12 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<? extends MediaType> produces() {
-    return Sets.union(first.produces(), second.produces());
+    return Sets.union(nullToEmptySet(first.produces()), nullToEmptySet(second.produces()));
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return Sets.union(first.consumes(), second.consumes());
+    return Sets.union(nullToEmptySet(first.consumes()), nullToEmptySet(second.consumes()));
   }
 
   @Override
@@ -106,11 +107,11 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public RequestHandlerKey key() {
-      return new RequestHandlerKey(
-          getPatternsCondition().getPatterns(),
-          supportedMethods(),
-          consumes(),
-          produces());
+    return new RequestHandlerKey(
+        getPatternsCondition().getPatterns(),
+        supportedMethods(),
+        consumes(),
+        produces());
   }
 
   @Override
@@ -125,7 +126,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return first.findControllerAnnotation(annotation).or(second.findControllerAnnotation(annotation)) ;
+    return first.findControllerAnnotation(annotation).or(second.findControllerAnnotation(annotation));
   }
 
   @Override

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,6 +21,10 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
+import org.springframework.core.Ordered;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
@@ -47,6 +51,9 @@ public class ParameterBuilder {
   private List<VendorExtension> vendorExtensions = newArrayList();
   private String collectionFormat = null;
   private Boolean allowEmptyValue;
+  private int order = Ordered.LOWEST_PRECEDENCE;
+  private Object scalarExample;
+  private Multimap<String, Example> examples = LinkedListMultimap.create();
 
   /**
    * Copy builder
@@ -67,6 +74,7 @@ public class ParameterBuilder {
         .type(other.getType().orNull())
         .hidden(other.isHidden())
         .allowEmptyValue(other.isAllowEmptyValue())
+        .order(other.getOrder())
         .vendorExtensions(other.getVendorExtentions());
   }
 
@@ -227,6 +235,41 @@ public class ParameterBuilder {
     return this;
   }
 
+  /**
+   * Updates default order of precedence of parameters
+   * @param order - between {@link Ordered#HIGHEST_PRECEDENCE}, {@link Ordered#LOWEST_PRECEDENCE}
+   * @return this
+   * @since 2.8.1
+   */
+  public ParameterBuilder order(int order) {
+    this.order = order;
+    return this;
+  }
+
+  public ParameterBuilder pattern(String pattern) {
+    this.pattern = defaultIfAbsent(pattern, this.pattern);
+    return this;
+  }
+
+  /**
+   * @since 2.8.1
+   * @param scalarExample example for non-body parameters
+   * @return this
+   */
+  public ParameterBuilder scalarExample(Object scalarExample) {
+    this.scalarExample = defaultIfAbsent(scalarExample, this.scalarExample);
+    return this;
+  }
+  /**
+   * @since 2.8.1
+   * @param examples example for body parameters
+   * @return this
+   */
+  public ParameterBuilder complexExamples(Multimap<String, Example> examples) {
+    this.examples.putAll(examples);
+    return this;
+  }
+
   public Parameter build() {
     return new Parameter(
         name,
@@ -243,12 +286,9 @@ public class ParameterBuilder {
         hidden,
         pattern,
         collectionFormat,
+        order,
+        scalarExample,
+        examples,
         vendorExtensions);
   }
-
-  public ParameterBuilder pattern(String pattern) {
-    this.pattern = defaultIfAbsent(pattern, this.pattern);
-    return this;
-  }
-
 }

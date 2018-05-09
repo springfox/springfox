@@ -31,7 +31,7 @@ class CheckGitBranchTask extends DefaultTask {
   void check() {
     String requiredBranch = "master"
     if (dryRun(project)) {
-      project.logger.warn("Would have checked the branch is master!")
+      project.logger.warn("[RELEASE] [DRYRUN] Would have checked the branch is master!")
       return
     }
     project.exec {

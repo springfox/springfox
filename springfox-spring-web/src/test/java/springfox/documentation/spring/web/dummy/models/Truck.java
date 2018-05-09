@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,20 +16,24 @@
  *
  *
  */
+package springfox.documentation.spring.web.dummy.models;
 
+public class Truck extends Vehicle {
+  private double payloadCapacity;
 
-package springfox.gradlebuild.tasks
-
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
-
-class SnapshotTask extends DefaultTask {
-  public static final String TASK_NAME = 'snapshot'
-  String description = 'snapshot release flow'
-  String group = 'release'
-
-  @TaskAction
-  void exec() {
+  public Truck() {
   }
 
+  public Truck(String make, String model, double payloadCapacity) {
+    super(make, model);
+    this.payloadCapacity = payloadCapacity;
+  }
+
+  public double getPayloadCapacity() {
+    return payloadCapacity;
+  }
+
+  public void setPayloadCapacity(double payloadCapacity) {
+    this.payloadCapacity = payloadCapacity;
+  }
 }

@@ -53,7 +53,7 @@ public class ResponseMessageBuilder {
    * Updates the response message
    *
    * @param message - message
-   * @return
+   * @return this
    */
   public ResponseMessageBuilder message(String message) {
     this.message = defaultIfAbsent(message, this.message);
@@ -74,7 +74,7 @@ public class ResponseMessageBuilder {
   /**
    * Updates the response headers
    *
-   * @param headers
+   * @param headers header responses
    * @return this
    * @deprecated Use the {@link ResponseMessageBuilder#headersWithDescription} instead
    * @since 2.5.0
@@ -98,7 +98,7 @@ public class ResponseMessageBuilder {
   /**
    * Updates the response headers
    *
-   * @param headers
+   * @param headers headers with description
    * @return this
    * @since 2.5.0
    */

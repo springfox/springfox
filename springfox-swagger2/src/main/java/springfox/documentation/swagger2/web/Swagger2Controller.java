@@ -22,6 +22,8 @@ package springfox.documentation.swagger2.web;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -52,6 +54,7 @@ import static springfox.documentation.swagger2.web.HostNameProvider.*;
 public class Swagger2Controller {
 
   public static final String DEFAULT_URL = "/v2/api-docs";
+  private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2Controller.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
   private final String hostNameOverride;
@@ -66,7 +69,10 @@ public class Swagger2Controller {
       ServiceModelToSwagger2Mapper mapper,
       JsonSerializer jsonSerializer) {
 
-    this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
+    this.hostNameOverride =
+        environment.getProperty(
+            "springfox.documentation.swagger.v2.host",
+            "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
@@ -87,6 +93,7 @@ public class Swagger2Controller {
     String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
+      LOGGER.warn("Unable to find specification for group {}", groupName);
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);

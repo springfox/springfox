@@ -87,6 +87,15 @@ public class DefaultModelProvider implements ModelProvider {
           + "been handled", resolvedTypeSignature(propertiesHost).or("<null>"));
       return Optional.absent();
     }
+
+    Optional<Model> syntheticModel = schemaPluginsManager.syntheticModel(modelContext);
+    if (syntheticModel.isPresent()) {
+      return Optional.of(schemaPluginsManager.model(modelContext));
+    }
+    return reflectionBasedModel(modelContext, propertiesHost);
+  }
+
+  private Optional<Model> reflectionBasedModel(ModelContext modelContext, ResolvedType propertiesHost) {
     ImmutableMap<String, ModelProperty> propertiesIndex
         = uniqueIndex(properties(modelContext, propertiesHost), byPropertyName());
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
@@ -109,7 +118,7 @@ public class DefaultModelProvider implements ModelProvider {
         .description("")
         .baseModel("")
         .discriminator("")
-        .subTypes(new ArrayList<String>());
+        .subTypes(new ArrayList<ModelReference>());
     return schemaPluginsManager.model(modelContext);
   }
 
@@ -138,7 +147,7 @@ public class DefaultModelProvider implements ModelProvider {
           .description("")
           .baseModel("")
           .discriminator("")
-          .subTypes(new ArrayList<String>())
+          .subTypes(new ArrayList<ModelReference>())
           .build());
     }
     return Optional.absent();

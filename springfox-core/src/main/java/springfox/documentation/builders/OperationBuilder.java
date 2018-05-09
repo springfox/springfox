@@ -179,7 +179,7 @@ public class OperationBuilder {
    * @param securityReferences - authorization that reference security definitions
    * @return this
    */
-  public OperationBuilder authorizations(List<SecurityReference> securityReferences) {
+  public OperationBuilder authorizations(Collection<SecurityReference> securityReferences) {
     this.securityReferences.addAll(nullToEmptyList(securityReferences));
     return this;
   }

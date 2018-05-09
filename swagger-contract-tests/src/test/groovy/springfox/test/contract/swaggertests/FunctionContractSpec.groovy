@@ -69,6 +69,9 @@ class FunctionContractSpec extends Specification implements FileAccess {
     response.statusCode == HttpStatus.OK
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+    maybeWriteToFile(
+        "/contract/swagger2/$contractFile",
+        raw.replace("localhost:$port", "localhost:__PORT__"))
     JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
 
     where:
@@ -91,6 +94,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     'declaration-spring-data-rest.json'                           | 'spring-data-rest'
     'declaration-consumes-produces-not-on-document-context.json'  | 'consumesProducesNotOnDocumentContext'
     'declaration-consumes-produces-on-document-context.json'      | 'consumesProducesOnDocumentContext'
+    'declaration-different-group.json'                            | 'different-group'
   }
 
   def "should list swagger resources for swagger 2.0"() {
@@ -155,6 +159,9 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     String raw = response.body
     response.statusCode == HttpStatus.OK
+    maybeWriteToFile(
+        "/contract/swagger/$contractFile",
+        raw.replace("localhost:$port", "localhost:__PORT__"))
     JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
     where:

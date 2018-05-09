@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.paths;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Ordering;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -85,14 +86,14 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
     return from(context.getParameters())
         .filter(and(queryStringParams(), not(onlyOneAllowableValue())))
         .transform(paramName())
-        .toSet();
+        .toSortedSet(Ordering.natural());
   }
 
   private String prefilledQueryParams(PathContext context) {
     return Joiner.on("&").join(from(context.getParameters())
         .filter(onlyOneAllowableValue())
         .transform(queryStringWithValue())
-        .toSet())
+        .toSortedSet(Ordering.natural()))
         .trim();
   }
 

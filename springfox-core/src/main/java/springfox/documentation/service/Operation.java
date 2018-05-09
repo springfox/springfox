@@ -20,11 +20,13 @@
 package springfox.documentation.service;
 
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,7 +82,8 @@ public class Operation {
     this.protocol = protocol;
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
-    this.parameters = parameters;
+    this.parameters = FluentIterable.from(parameters)
+        .toSortedList(byParameterName());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
     this.vendorExtensions = newArrayList(vendorExtensions);
@@ -168,9 +171,16 @@ public class Operation {
     return deprecated;
   }
 
-
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
   }
 
+  private Comparator<Parameter> byParameterName() {
+    return new Comparator<Parameter>() {
+      @Override
+      public int compare(Parameter first, Parameter second) {
+        return first.getName().compareTo(second.getName());
+      }
+    };
+  }
 }

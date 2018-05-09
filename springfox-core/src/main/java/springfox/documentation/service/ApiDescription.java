@@ -19,15 +19,42 @@
 
 package springfox.documentation.service;
 
+import com.google.common.base.Optional;
+
 import java.util.List;
 
 public class ApiDescription {
+  private final String groupName;
   private final String path;
   private final String description;
   private final List<Operation> operations;
   private final Boolean hidden;
 
-  public ApiDescription(String path, String description, List<Operation> operations, Boolean hidden) {
+  /**
+   * For backwards compatibility. Please use the builder instead.
+   * @see springfox.documentation.builders.ApiDescriptionBuilder
+   * @deprecated @since 2.8.1
+   * @param path
+   * @param description
+   * @param operations
+   * @param hidden
+   */
+  @Deprecated
+  public ApiDescription(
+      String path,
+      String description,
+      List<Operation> operations,
+      Boolean hidden) {
+    this(null, path, description, operations, hidden);
+  }
+
+  public ApiDescription(
+      String groupName,
+      String path,
+      String description,
+      List<Operation> operations,
+      Boolean hidden) {
+    this.groupName = groupName;
     this.path = path;
     this.description = description;
     this.operations = operations;
@@ -48,5 +75,9 @@ public class ApiDescription {
 
   public Boolean isHidden() {
     return hidden;
+  }
+
+  public Optional<String> getGroupName() {
+    return Optional.fromNullable(groupName);
   }
 }

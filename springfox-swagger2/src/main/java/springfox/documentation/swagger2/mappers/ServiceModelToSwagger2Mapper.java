@@ -54,8 +54,13 @@ import static com.google.common.collect.Maps.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
-@Mapper(uses = { ModelMapper.class, ParameterMapper.class, SecurityMapper.class, LicenseMapper.class,
-    VendorExtensionsMapper.class })
+@Mapper(uses = {
+    ModelMapper.class,
+    ParameterMapper.class,
+    SecurityMapper.class,
+    LicenseMapper.class,
+    VendorExtensionsMapper.class
+})
 public abstract class ServiceModelToSwagger2Mapper {
 
   @Mappings({
@@ -99,7 +104,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   @Mappings({
       @Mapping(target = "externalDocs", ignore = true),
-      @Mapping(target = "vendorExtensions", ignore = true)
+      @Mapping(target = "vendorExtensions", source = "vendorExtensions")
   })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 

@@ -30,6 +30,7 @@ import java.util.List;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiDescriptionBuilder {
+  private String groupName;
   private String path;
   private String description;
   private List<Operation> operations;
@@ -92,7 +93,24 @@ public class ApiDescriptionBuilder {
     return this;
   }
 
+  /**
+   * Updates the group name the api operation belongs to
+   *
+   * @param groupName -  group this api description belongs to
+   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   * @since 2.8.1
+   */
+  public ApiDescriptionBuilder groupName(String groupName) {
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
+    return this;
+  }
+
   public ApiDescription build() {
-    return new ApiDescription(pathDecorator.apply(path), description, operations, hidden);
+    return new ApiDescription(
+        groupName,
+        pathDecorator.apply(path),
+        description,
+        operations,
+        hidden);
   }
 }

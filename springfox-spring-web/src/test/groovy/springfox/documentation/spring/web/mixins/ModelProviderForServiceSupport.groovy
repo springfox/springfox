@@ -18,12 +18,18 @@
  */
 
 package springfox.documentation.spring.web.mixins
+
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
-import springfox.documentation.schema.*
+import springfox.documentation.schema.DefaultModelDependencyProvider
+import springfox.documentation.schema.DefaultModelProvider
+import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.ModelProvider
+import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.schema.plugins.SchemaPluginsManager
@@ -51,7 +57,7 @@ class ModelProviderForServiceSupport {
   ModelProvider modelProvider(
       SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
       TypeResolver typeResolver = new TypeResolver(),
-      EnumTypeDeterminer enumTypeDeterminer= new JacksonEnumTypeDeterminer()) {
+      EnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer()) {
 
     def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
@@ -70,7 +76,8 @@ class ModelProviderForServiceSupport {
             typeResolver,
             modelPropertiesProvider,
             typeNameExtractor,
-            enumTypeDeterminer)
+            enumTypeDeterminer,
+            defaultSchemaPlugins())
     new DefaultModelProvider(
         typeResolver,
         modelPropertiesProvider,
@@ -102,7 +109,8 @@ class ModelProviderForServiceSupport {
             typeResolver,
             modelPropertiesProvider,
             typeNameExtractor,
-            enumTypeDeterminer)
+            enumTypeDeterminer,
+            defaultSchemaPlugins())
     new DefaultModelProvider(
         typeResolver,
         modelPropertiesProvider,

@@ -18,6 +18,8 @@
  */
 package springfox.bean.validators.plugins.parameter
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
@@ -25,12 +27,15 @@ import springfox.bean.validators.plugins.ReflectionSupport
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
+import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterMetadataAccessor
 
 import javax.validation.constraints.Pattern
 
 class ExpandedParameterPatternAnnotationPluginSpec
     extends Specification
     implements AnnotationsSupport, ReflectionSupport {
+  @Shared
+  def resolver = new TypeResolver()
 
   def "Always supported"() {
     expect:
@@ -47,7 +52,10 @@ class ExpandedParameterPatternAnnotationPluginSpec
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
-        named(Subject, fieldName),
+        new ModelAttributeParameterMetadataAccessor(
+            [named(Subject, fieldName).rawMember],
+            resolver.resolve(Subject),
+            fieldName),
         DocumentationType.SWAGGER_12,
         new ParameterBuilder())
 

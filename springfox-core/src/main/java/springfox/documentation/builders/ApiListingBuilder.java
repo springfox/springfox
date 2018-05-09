@@ -188,7 +188,7 @@ public class ApiListingBuilder {
    * Updates the apis
    *
    * @param apis - apis
-   * @return
+   * @return this
    */
   public ApiListingBuilder apis(List<ApiDescription> apis) {
     if (apis != null) {
@@ -234,7 +234,7 @@ public class ApiListingBuilder {
    * Updates the tags
    *
    * @param tagNames - just the tag names
-   * @return
+   * @return this
    */
   public ApiListingBuilder tagNames(Set<String> tagNames) {
     this.tagNames.addAll(nullToEmptySet(tagNames));

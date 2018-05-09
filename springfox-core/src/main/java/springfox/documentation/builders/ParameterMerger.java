@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -67,14 +67,19 @@ class ParameterMerger {
     return parameters;
   }
 
-  private List<Parameter> mergedParameters(SetView<String> paramsToMerge,
-                                           List<Parameter> existingParameters,
-                                           List<Parameter> newParams) {
+  private List<Parameter> mergedParameters(
+      SetView<String> paramsToMerge,
+      List<Parameter> existingParameters,
+      List<Parameter> newParams) {
     List<Parameter> parameters = newArrayList();
     for (Parameter newParam : newParams) {
       Optional<Parameter> original = from(existingParameters).firstMatch(withName(newParam.getName()));
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
-        parameters.add(merged(original.get(), newParam));
+        if (newParam.getOrder() > original.get().getOrder()){
+          parameters.add(merged(newParam, original.get()));
+        } else {
+          parameters.add(merged(original.get(), newParam));
+        }
       }
     }
     return parameters;
@@ -93,6 +98,9 @@ class ParameterMerger {
         .parameterType(source.getParamType())
         .required(source.isRequired())
         .type(source.getType().orNull())
+        .order(source.getOrder())
+        .scalarExample(source.getScalarExample())
+        .complexExamples(source.getExamples())
         .build();
   }
 

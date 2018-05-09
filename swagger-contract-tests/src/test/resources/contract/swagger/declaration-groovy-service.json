@@ -1,110 +1,118 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "groovyModel",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "GET",
-          "summary": "groovyModel",
-          "nickname": "groovyModelUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "GroovyModel"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "GroovyModel"
+            "description": "groovyModel",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "groovyModel",
+                    "nickname": "groovyModelUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "GroovyModel"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "GroovyModel"
+                }
+            ],
+            "path": "/groovy/groovyModel"
+        },
+        {
+            "description": "updateGroovyModel",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "updateGroovyModel",
+                    "nickname": "updateGroovyModelUsingPUT",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "model",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "GroovyModel",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ],
+            "path": "/groovy/groovyModel"
         }
-      ],
-      "path": "/groovy/groovyModel"
+    ],
+    "basePath": "/",
+    "consumes": [
+        
+    ],
+    "models": {
+        "GroovyModel": {
+            "description": "",
+            "id": "GroovyModel",
+            "properties": {
+                "stringProp": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        }
     },
-    {
-      "description": "updateGroovyModel",
-      "operations": [
-        {
-          "method": "PUT",
-          "summary": "updateGroovyModel",
-          "nickname": "updateGroovyModelUsingPUT",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "model",
-              "name": "body",
-              "paramType": "body",
-              "type": "GroovyModel",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK"
-            },
-            {
-              "code": 201,
-              "message": "Created"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "void"
-        }
-      ],
-      "path": "/groovy/groovyModel"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [],
-  "models": {
-    "GroovyModel": {
-      "description": "",
-      "id": "GroovyModel",
-      "properties": {
-        "stringProp": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    }
-  },
-  "produces": [],
-  "resourcePath": "/groovy",
-  "swaggerVersion": "1.2"
+    "produces": [
+        
+    ],
+    "resourcePath": "/groovy",
+    "swaggerVersion": "1.2"
 }

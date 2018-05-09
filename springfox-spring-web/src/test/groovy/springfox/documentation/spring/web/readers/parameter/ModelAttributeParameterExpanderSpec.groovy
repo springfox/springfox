@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spring.web.dummy.models.Example
@@ -46,7 +47,10 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     typeResolver = new TypeResolver()
     enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), enumTypeDeterminer)
+    sut = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new AccessorsProvider(typeResolver),
+        enumTypeDeterminer)
     sut.pluginsManager = defaultWebPlugins()
   }
 
@@ -133,7 +137,10 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   def "Should return empty set when there is an exception"() {
     given:
     ModelAttributeParameterExpander expander =
-        new ModelAttributeParameterExpander(new FieldProvider(typeResolver), enumTypeDeterminer) {
+        new ModelAttributeParameterExpander(
+            new FieldProvider(typeResolver),
+            new AccessorsProvider(typeResolver),
+            enumTypeDeterminer) {
           @Override
           BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
             throw new IntrospectionException("Fail")

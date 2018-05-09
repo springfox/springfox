@@ -388,6 +388,32 @@ configure a request mapping to allow specific origins.
         };
 ----
 
+If that doesn't work, most likely the cors registration is happening earlier than the SpringFox beans are registered.
+ To fix this, we can register a CORS filter registration bean, that registers our endpoints. In the example below,
+ we've registered it for all endpoints.
+
+[source,java]
+----
+@Configuration
+public class WebConfig extends WebMvcConfigurerAdapter {
+
+    //https://stackoverflow.com/questions/31724994/spring-data-rest-and-cors
+    @Bean
+    public FilterRegistrationBean corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+        config.setAllowCredentials(false);
+        source.registerCorsConfiguration("/**", config);
+
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(0);
+
+        return bean;
+    }
+}
+----
+
 [[q22]]*22. How to configure the docket when using https://immutables.github.io[Immutables]? (thanks https://github
 .com/kevinm416[@kevinm416])
 

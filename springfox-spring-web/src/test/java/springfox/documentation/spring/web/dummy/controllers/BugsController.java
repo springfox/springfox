@@ -50,6 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
+import springfox.documentation.spring.web.dummy.models.EHDTOApplicatorUnits;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.LanguageResponse;
@@ -426,6 +427,109 @@ public class BugsController {
   @ApiOperation("/bug2282")
   public String bug2282(User user){
     return "";
+  }
+
+  @PostMapping(value = "/bug2230", consumes = MediaType.APPLICATION_ATOM_XML_VALUE)
+  @ApiOperation("/bug2230")
+  public String bug2230(
+      @RequestBody EHDTOApplicatorUnits applicatorUnits){
+    return "";
+  }
+
+  @GetMapping(value = "/bug2182")
+  @ApiOperation("/bug2182")
+  public ProductVO bug2182(){
+    return null;
+  }
+
+  @GetMapping({"/bug2220", "/bug2220/{bar}"})
+  public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
+  }
+
+  @ApiResponses({
+      @ApiResponse(code = 404, message = "No object was found with the given ID"),
+      @ApiResponse(code = 200, message = "The object was deleted successfully.",
+          response = void.class)
+  })
+  @GetMapping("/bug1944")
+  public void bug1944() {
+  }
+
+  @RequestMapping(value = "/2368", method = RequestMethod.GET)
+  public ResponseEntity<Void> bug2368(@ModelAttribute @Valid GenericRequest<Void> voidRequest) {
+    return ResponseEntity.ok(null);
+  }
+
+  public class GenericRequest<T> {
+
+    @NotNull
+    private T parameters;
+
+    public T getParameters() {
+      return parameters;
+    }
+
+    public void setParameters(T parameters) {
+      this.parameters = parameters;
+    }
+
+  }
+
+  public class ProductVO {
+    private String name;
+
+    @JsonUnwrapped(prefix = "specification_")
+    private Specification specification;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public Specification getSpecification() {
+      return specification;
+    }
+
+    public void setSpecification(Specification specification) {
+      this.specification = specification;
+    }
+  }
+
+  public class Specification {
+    private String name;
+    @JsonUnwrapped(prefix = "child_")
+    private SpecificationChild child;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public SpecificationChild getChild() {
+      return child;
+    }
+
+    public void setChild(SpecificationChild child) {
+      this.child = child;
+    }
+  }
+
+  public class SpecificationChild {
+    private String name;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
   }
 
   public class User {

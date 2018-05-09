@@ -89,8 +89,10 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
         .replaceAll("/", "");
   }
 
-  private Function<String, ResourceGroup> toResourceGroup(final RequestMappingInfo requestMappingInfo,
-                                                          final HandlerMethod handlerMethod) {
+  private Function<String, ResourceGroup> toResourceGroup(
+      final RequestMappingInfo requestMappingInfo,
+      final HandlerMethod handlerMethod) {
+
     return new Function<String, ResourceGroup>() {
       @Override
       public ResourceGroup apply(String group) {

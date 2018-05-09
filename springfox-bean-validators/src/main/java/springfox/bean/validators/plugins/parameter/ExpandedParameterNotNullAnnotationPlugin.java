@@ -30,8 +30,6 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.NotNull;
 
-import static springfox.bean.validators.plugins.Validators.*;
-
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParameterBuilderPlugin {
@@ -46,7 +44,8 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<NotNull> notNull = validatorFromExpandedParameter(context, NotNull.class);
+
+    Optional<NotNull> notNull = context.findAnnotation(NotNull.class);
 
     if (notNull.isPresent()) {
       LOG.debug("Setting parameter to required because of @NotNull attribute");

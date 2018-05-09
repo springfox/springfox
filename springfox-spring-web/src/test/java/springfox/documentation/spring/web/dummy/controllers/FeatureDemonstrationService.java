@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ExampleProperty;
 import io.swagger.annotations.Extension;
 import io.swagger.annotations.ExtensionProperty;
 import org.joda.time.LocalDate;
@@ -31,6 +32,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,8 +55,10 @@ import springfox.documentation.spring.web.dummy.models.ModelWithObjectNode;
 import springfox.documentation.spring.web.dummy.models.NestedType;
 import springfox.documentation.spring.web.dummy.models.Pet;
 import springfox.documentation.spring.web.dummy.models.PetWithSerializer;
+import springfox.documentation.spring.web.dummy.models.Vehicle;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +80,11 @@ public class FeatureDemonstrationService {
       }
   )
   public Pet getPetById(
-      @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]", required = true)
+      @ApiParam(
+          value = "ID of pet that needs to be fetched",
+          allowableValues = "range[1,5]",
+          required = true,
+          example = "3")
       @PathVariable("petId") String petId) {
     throw new RuntimeException("NotImplementedException");
   }
@@ -240,17 +248,28 @@ public class FeatureDemonstrationService {
   public void updateSerializablePet(@PathVariable String itemId, @RequestBody PetWithSerializer pet) {
   }
 
+  @GetMapping(value = "/inheritance")
+  public List<Vehicle> findVehicles(@RequestParam("type") String type) {
+    return new ArrayList<Vehicle>();
+  }
+
   // tag::question-27[]
   @RequestMapping(value = "/2031", method = RequestMethod.POST)
   @ResponseBody
   @ApiOperation(value = "/2031")
   @ApiImplicitParams({
-      @ApiImplicitParam(name="contents", dataType = "CustomTypeFor2031") //<1>
+      @ApiImplicitParam(
+          name = "contents",
+          dataType = "CustomTypeFor2031",
+          examples = @io.swagger.annotations.Example(
+              value = {
+                  @ExampleProperty(value = "{'property': 'test'}", mediaType = "application/json")
+              })) //<1>
   })
   public void save(@PathVariable("keyId") String keyId,
-                    @PathVariable("id") String id,
-                    @RequestBody String contents //<2>
-                  ) {
+                   @PathVariable("id") String id,
+                   @RequestBody String contents //<2>
+  ) {
   }
 
   public static class CustomTypeFor2031 { //<3>

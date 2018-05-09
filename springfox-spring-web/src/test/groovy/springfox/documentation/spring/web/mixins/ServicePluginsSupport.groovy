@@ -18,10 +18,16 @@
  */
 
 package springfox.documentation.spring.web.mixins
+
 import com.fasterxml.classmate.TypeResolver
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.PathDecorator
-import springfox.documentation.spi.service.*
+import springfox.documentation.spi.service.ApiListingScannerPlugin
+import springfox.documentation.spi.service.DefaultsProviderPlugin
+import springfox.documentation.spi.service.DocumentationPlugin
+import springfox.documentation.spi.service.OperationBuilderPlugin
+import springfox.documentation.spi.service.ParameterBuilderPlugin
+import springfox.documentation.spi.service.ResourceGroupingStrategy
 import springfox.documentation.spring.web.paths.OperationPathDecorator
 import springfox.documentation.spring.web.paths.PathMappingDecorator
 import springfox.documentation.spring.web.paths.PathSanitizer
@@ -60,20 +66,22 @@ class ServicePluginsSupport {
     return plugins
   }
 
-  DocumentationPluginsManager customWebPlugins(List<DocumentationPlugin> documentationPlugins = [],
-       List<ResourceGroupingStrategy> groupingStrategyPlugins = [],
-       List<OperationBuilderPlugin> operationPlugins = [],
-       List<ParameterBuilderPlugin> paramPlugins = [],
-       List<DefaultsProviderPlugin> defaultProviderPlugins = [],
-       List<PathDecorator> pathDecorators = [new OperationPathDecorator(),
-                                             new PathSanitizer(),
-                                             new PathMappingDecorator(),
-                                             new QueryStringUriTemplateDecorator()]) {
+  DocumentationPluginsManager customWebPlugins(
+      List<DocumentationPlugin> documentationPlugins = [],
+      List<ResourceGroupingStrategy> groupingStrategyPlugins = [],
+      List<OperationBuilderPlugin> operationPlugins = [],
+      List<ParameterBuilderPlugin> paramPlugins = [],
+      List<DefaultsProviderPlugin> defaultProviderPlugins = [],
+      List<PathDecorator> pathDecorators = [new OperationPathDecorator(),
+                                            new PathSanitizer(),
+                                            new PathMappingDecorator(),
+                                            new QueryStringUriTemplateDecorator()],
+      List<ApiListingScannerPlugin> listingScanners = []) {
 
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader()))
+    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new ApiListingReader()))
     plugins.documentationPlugins = create(documentationPlugins)
     plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
     plugins.parameterPlugins = create(paramPlugins)
@@ -82,7 +90,7 @@ class ServicePluginsSupport {
     plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
     plugins.defaultsProviders = create(defaultProviderPlugins)
     plugins.pathDecorators = create(pathDecorators)
-    plugins.apiListingScanners = create([])
+    plugins.apiListingScanners = create(listingScanners)
     return plugins
   }
 

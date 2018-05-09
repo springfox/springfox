@@ -45,28 +45,34 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
       updateVersionFile(project, buildInfo)
       commitToRepository(project, buildInfo)
     } else {
-      project.logger.warn("Should never be called when its a snapshot build")
+      project.logger.warn("[RELEASE] Should never be called when its a snapshot build")
     }
   }
 
   def commitToRepository(Project project, BuildInfo buildInfo) {
-    def commitChanges = """git commit -i '${versionFile.absolutePath}' \
--m 'Releasing version (${buildInfo.nextVersion}) tagging project with tag ${buildInfo.releaseTag}'"""
+    def commitChanges = """git commit -am \
+ 'Preparing for next version ${buildInfo.nextVersion}.'"""
     if (buildInfo.dryRun) {
-      project.logger.warn("Will execute command: $commitChanges")
+      project.logger.warn("[RELEASE] [DRYRUN] Will execute command: $commitChanges")
       return
     }
-    def proc = commitChanges.execute();
-    proc.waitFor();
+    def proc = commitChanges.execute()
+    def err = new StringBuilder()
+    def out = new StringBuilder()
+    proc.consumeProcessOutput(out, err)
+    proc.waitFor()
     if (proc.exitValue() != 0) {
-      project.logger.error("Unable to save the file and commit changes to repo!")
+      project.logger.error("[RELEASE] Unable to save the file and commit changes to repo!")
+      project.logger.error("[ERROR] $err")
+    } else {
+      project.logger.lifecycle("[RELEASE] $out")
     }
   }
 
   def updateVersionFile(project, buildInfo) {
     if (buildInfo.dryRun) {
-      project.logger.warn(
-          "Would have saved ${buildInfo.nextVersion.asText()} to the version file (${versionFile.absolutePath})")
+      project.logger.warn("[RELEASE] [DRYRUN] Would have saved ${buildInfo.nextVersion.asText()} " +
+          "to the version file (${versionFile.absolutePath})")
       return
     }
     versionFile.withOutputStream {

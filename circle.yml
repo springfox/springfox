@@ -5,7 +5,7 @@ general:
 
 machine:
   java:
-    version: oraclejdk8
+    version: openjdk8
   environment:
     TERM: dumb
     CI_NAME: Circle-CI
@@ -33,6 +33,8 @@ test:
   - bash <(curl -s https://codecov.io/bash)
   - mkdir -p $CIRCLE_TEST_REPORTS/junit/
   - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+  - mkdir -p $CIRCLE_TEST_REPORTS/reports/
+  - find . -type d -regex ".*/build/reports" -exec cp -Rp {} $CIRCLE_TEST_REPORTS/ \;
 
 
 deployment:
@@ -40,7 +42,7 @@ deployment:
     branch: master
     owner: springfox
     commands:
-      - ./gradlew snapshot -PbintrayUsername=${bintrayUsername} -PbintrayPassword=${bintrayPassword} -i -x check
+      - ./gradlew publishSnapshot -x check
       - ./gradlew publishDocs -i
 notify:
   webhooks:

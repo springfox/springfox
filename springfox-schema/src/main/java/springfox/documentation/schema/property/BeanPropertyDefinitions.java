@@ -41,11 +41,14 @@ public class BeanPropertyDefinitions {
 
   public static String name(
       BeanPropertyDefinition beanPropertyDefinition,
-      boolean forSerialization, BeanPropertyNamingStrategy namingStrategy) {
+      boolean forSerialization,
+      BeanPropertyNamingStrategy namingStrategy,
+      String prefix) {
 
-    return forSerialization
-           ? namingStrategy.nameForSerialization(beanPropertyDefinition)
-           : namingStrategy.nameForDeserialization(beanPropertyDefinition);
+    String name = forSerialization
+                  ? namingStrategy.nameForSerialization(beanPropertyDefinition)
+                  : namingStrategy.nameForDeserialization(beanPropertyDefinition);
+    return String.format("%s%s", prefix, name);
   }
 
   public static Function<PropertyNamingStrategy, String> overTheWireName(

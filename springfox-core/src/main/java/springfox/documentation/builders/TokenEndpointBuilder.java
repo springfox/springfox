@@ -29,7 +29,7 @@ public class TokenEndpointBuilder {
    * Updates the token endpoint url
    *
    * @param url - url
-   * @return
+   * @return this
    */
   public TokenEndpointBuilder url(String url) {
     this.url = BuilderDefaults.defaultIfAbsent(url, this.url);
@@ -40,7 +40,7 @@ public class TokenEndpointBuilder {
    * Updates the token name
    *
    * @param tokenName - token name
-   * @return
+   * @return this
    */
   public TokenEndpointBuilder tokenName(String tokenName) {
     this.tokenName = BuilderDefaults.defaultIfAbsent(tokenName, this.tokenName);

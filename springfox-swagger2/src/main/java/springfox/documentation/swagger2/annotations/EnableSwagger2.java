@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger2.annotations;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Import;
 import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
 
@@ -39,5 +40,6 @@ import java.lang.annotation.Target;
 @Target(value = { java.lang.annotation.ElementType.TYPE })
 @Documented
 @Import({Swagger2DocumentationConfiguration.class})
+@ConditionalOnWebApplication
 public @interface EnableSwagger2 {
 }

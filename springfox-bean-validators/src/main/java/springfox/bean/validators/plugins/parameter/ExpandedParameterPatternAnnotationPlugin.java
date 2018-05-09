@@ -30,8 +30,6 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Pattern;
 
-import static springfox.bean.validators.plugins.Validators.*;
-
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class ExpandedParameterPatternAnnotationPlugin implements ExpandedParameterBuilderPlugin {
@@ -46,7 +44,8 @@ public class ExpandedParameterPatternAnnotationPlugin implements ExpandedParamet
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<Pattern> pattern = validatorFromExpandedParameter(context, Pattern.class);
+
+    Optional<Pattern> pattern = context.findAnnotation(Pattern.class);
 
     if (pattern.isPresent()) {
       LOG.debug("@Pattern present: {}", pattern.get().regexp());
