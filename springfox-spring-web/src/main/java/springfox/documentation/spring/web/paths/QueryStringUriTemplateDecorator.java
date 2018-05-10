@@ -18,9 +18,6 @@
  */
 package springfox.documentation.spring.web.paths;
 
-
-
-
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -31,15 +28,14 @@ import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 
-import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static java.util.Comparator.naturalOrder;
 import static java.util.stream.Collectors.toCollection;
 import static org.springframework.util.StringUtils.isEmpty;
-
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 60)
@@ -89,14 +85,14 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
     return context.getParameters().stream()
         .filter(queryStringParams().and(onlyOneAllowableValue().negate()))
         .map(paramName())
-        .sorted(Comparator.naturalOrder()).collect(toCollection(TreeSet::new));
+        .collect(toCollection(() -> new TreeSet(naturalOrder())));
   }
 
   private String prefilledQueryParams(PathContext context) {
     return String.join("&", context.getParameters().stream()
         .filter(onlyOneAllowableValue())
         .map(queryStringWithValue())
-        .sorted(Comparator.naturalOrder()).collect(toCollection(TreeSet::new)))
+        .collect(toCollection(() -> new TreeSet(naturalOrder()))))
         .trim();
   }
 

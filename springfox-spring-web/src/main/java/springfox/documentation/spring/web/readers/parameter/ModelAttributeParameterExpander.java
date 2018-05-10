@@ -121,7 +121,7 @@ public class ModelAttributeParameterExpander {
 
     Stream<ModelAttributeField> collectionTypes = attributes.stream()
         .filter(isCollection().and(recursiveCollectionItemType(context.getParamType()).negate()));
-    collectionTypes.forEach((each) -> {
+    collectionTypes.forEachOrdered((each) -> {
       LOG.debug("Attempting to expand collection/array field: {}", each.getName());
 
       ResolvedType itemType = collectionElementType(each.getFieldType());

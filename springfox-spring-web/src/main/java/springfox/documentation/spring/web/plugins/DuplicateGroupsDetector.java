@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.plugins;
 
 import springfox.documentation.spi.service.DocumentationPlugin;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +39,7 @@ class DuplicateGroupsDetector {
   }
 
   public static void ensureNoDuplicateGroups(List<DocumentationPlugin> allPlugins) throws IllegalStateException {
-    Map<String, List<DocumentationPlugin>> plugins = allPlugins.stream().collect(groupingBy(byGroupName()));
+    Map<String, List<DocumentationPlugin>> plugins = allPlugins.stream().collect(groupingBy(byGroupName(), LinkedHashMap::new, toList()));
     Iterable<String> duplicateGroups = plugins.entrySet().stream().filter(duplicates()).map(toGroupNames()).collect(toList());
     if (StreamSupport.stream(duplicateGroups.spliterator(), false).count() > 0) {
       throw new IllegalStateException(String.format("Multiple Dockets with the same group name are not supported. "

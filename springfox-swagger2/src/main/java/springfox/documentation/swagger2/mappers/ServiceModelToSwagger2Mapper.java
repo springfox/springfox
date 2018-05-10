@@ -151,7 +151,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   protected Map<String, Path> mapApiListings(Map<String, List<ApiListing>> apiListings) {
     Map<String, Path> paths = new TreeMap();
-    apiListings.values().stream().flatMap(l -> l.stream()).forEach(each -> {
+    apiListings.values().stream().flatMap(l -> l.stream()).forEachOrdered(each -> {
       for (ApiDescription api : each.getApis()) {
         paths.put(api.getPath(), mapOperations(api, Optional.ofNullable(paths.get(api.getPath()))));
       }

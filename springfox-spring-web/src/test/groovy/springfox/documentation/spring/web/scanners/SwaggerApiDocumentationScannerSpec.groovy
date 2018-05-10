@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import spock.lang.Ignore
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
 import springfox.documentation.service.*

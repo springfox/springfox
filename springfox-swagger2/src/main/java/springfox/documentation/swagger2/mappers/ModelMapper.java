@@ -123,7 +123,7 @@ public abstract class ModelMapper {
   private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<String, Property>();
     properties.entrySet().stream().filter(voidProperties().negate())
-    .forEach(propertyEntry -> {
+    .forEachOrdered(propertyEntry -> {
       mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
     });
     return mappedProperties;
@@ -251,7 +251,7 @@ public abstract class ModelMapper {
 
   Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
     Map<String, springfox.documentation.schema.Model> definitions = new TreeMap();
-    apiListings.values().stream().flatMap(l -> l.stream()).forEach(each -> {
+    apiListings.values().stream().flatMap(l -> l.stream()).forEachOrdered(each -> {
       definitions.putAll(each.getModels());
     });
     return mapModels(definitions);

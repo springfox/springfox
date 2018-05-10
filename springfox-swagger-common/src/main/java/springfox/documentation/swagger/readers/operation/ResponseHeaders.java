@@ -50,7 +50,7 @@ public class ResponseHeaders {
 
   public static Map<String, Header> headers(ResponseHeader[] responseHeaders) {
     Map<String, Header> headers = new HashMap();
-    Stream.of(responseHeaders).filter(emptyOrVoid().negate()).forEach(each -> {
+    Stream.of(responseHeaders).filter(emptyOrVoid().negate()).forEachOrdered(each -> {
       headers.put(each.name(), new Header(each.name(), each.description(), headerModel(each)));
     });
     return headers;

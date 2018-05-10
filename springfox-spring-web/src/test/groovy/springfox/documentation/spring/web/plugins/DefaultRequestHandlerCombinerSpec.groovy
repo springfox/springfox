@@ -3,10 +3,10 @@ package springfox.documentation.spring.web.plugins
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.RequestHandler
+import springfox.documentation.RequestHandlerKey
 import springfox.documentation.service.ResolvedMethodParameter
 
 import java.util.stream.Stream
@@ -17,7 +17,6 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
   def equality = new PathAndParametersEquivalence()
 
   @Unroll
-  @Ignore
   def "Combines request handlers effectively" () {
     given:
     def sut = new DefaultRequestHandlerCombiner()
@@ -45,7 +44,7 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
     combined.size() == expected.size()
     expected.eachWithIndex { handler, index ->
       verifyAll {
-        equality.equivalent(handler, combined.get(index))
+        equality.test(handler, combined.get(index))
       }
     }
   }
@@ -108,12 +107,15 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
       List<String> produces,
       ResolvedMethodParameter parameter) {
     def handler = Mock(RequestHandler)
+    def key = Mock(RequestHandlerKey)
     handler.patternsCondition >> new PatternsRequestCondition(path)
     handler.getName() >> name
     handler.produces() >> Stream.of(produces).collect(toSet())
     handler.parameters >> [parameter]
     handler.supportedMethods() >> [RequestMethod.GET]
     handler.params() >> []
+    handler.key() >> key
+    key.toString() >> "mock of: " + path
     handler
   }
 

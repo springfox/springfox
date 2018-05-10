@@ -64,7 +64,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
     Reflections reflections = new Reflections(packagePrefix);
     Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
     Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);
-    Stream.concat(serialized.stream(), deserialized.stream()).forEach(type -> {
+    Stream.concat(serialized.stream(), deserialized.stream()).forEachOrdered(type -> {
       Optional<Type> found = findAlternate(type);
       if (found.isPresent()) {
         rules.add(newRule(

@@ -150,8 +150,8 @@ public class CombinedRequestHandler implements RequestHandler {
   @Override
   public String toString() {
     final StringBuffer sb = new StringBuffer("CombinedRequestHandler{");
-    sb.append("first key=").append(first.key());
-    sb.append("second key=").append(second.key());
+    sb.append("first key=").append(first == null ? "No key" : first.key());
+    sb.append("second key=").append(second == null ? "No key" : second.key());
     sb.append("combined key=").append(key());
     sb.append('}');
     return sb.toString();

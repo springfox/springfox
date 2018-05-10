@@ -83,7 +83,7 @@ class PathAndParametersEquivalence implements BiPredicate<RequestHandler, Reques
 
     @Override
     public boolean equals(Object other) {
-      return equivalence.test(requestHandler, ((Wrapper)other).requestHandler);
+      return equivalence.equals(((Wrapper) other).equivalence) && equivalence.test(requestHandler, ((Wrapper)other).requestHandler);
     }
 
     public RequestHandler get() {

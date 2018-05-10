@@ -98,7 +98,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   private Map<PathAndParametersEquivalence.Wrapper, List<RequestHandler>> safeGroupBy(
       List<RequestHandler> source) {
     try {
-      return source.stream().collect(groupingBy(equivalenceAsKey()));
+      return source.stream().collect(groupingBy(equivalenceAsKey(), LinkedHashMap::new, toList()));
     } catch (Exception e) {
       LOGGER.error("Unable to index request handlers {}. Request handlers with issues{}",
           e.getMessage(),

@@ -66,7 +66,8 @@ public class OperationCachingEquivalence implements BiPredicate<RequestMappingCo
 
     @Override
     public boolean equals(Object other) {
-      return equivalence.test(requestMappingContext, ((Wrapper)other).requestMappingContext);
+      return equivalence.equals(((Wrapper) other).equivalence)
+              && equivalence.test(requestMappingContext, ((Wrapper)other).requestMappingContext);
     }
     @Override
     public int hashCode() {
