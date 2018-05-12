@@ -16,14 +16,14 @@
  *
  *
  */
+
 package springfox.documentation.swagger.web;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Optional;
-
+import static java.util.Optional.ofNullable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UiConfiguration {
@@ -434,7 +434,7 @@ public class UiConfiguration {
 
   @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
-    return Optional.ofNullable(validatorUrl).orElse("");
+    return ofNullable(validatorUrl).orElse("");
   }
 
   public static class Constants {

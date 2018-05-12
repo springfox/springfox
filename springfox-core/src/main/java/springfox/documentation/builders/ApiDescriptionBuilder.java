@@ -27,6 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -37,7 +38,7 @@ public class ApiDescriptionBuilder {
   private List<Operation> operations;
   private Comparator<Operation> operationOrdering;
   private Boolean hidden;
-  private Function<String, String> pathDecorator = Function.identity();
+  private Function<String, String> pathDecorator = identity();
 
   public ApiDescriptionBuilder(Comparator<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;

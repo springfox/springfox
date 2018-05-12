@@ -18,19 +18,16 @@
  */
 package springfox.documentation.service;
 
-
-
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -90,7 +87,7 @@ public class Tags {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return Optional.ofNullable(tagLookup.get(input))
+        return ofNullable(tagLookup.get(input))
             .map(toTagDescription())
             .orElse(defaultDescription);
       }

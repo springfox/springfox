@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.toMap;
 import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
@@ -59,7 +60,7 @@ public class SerializableParameterFactories {
   }
 
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
-    String safeSourceParamType = Optional.ofNullable(source.getParamType()).map(String::toLowerCase).orElse("");
+    String safeSourceParamType = ofNullable(source.getParamType()).map(String::toLowerCase).orElse("");
     SerializableParameterFactory factory = SerializableParameterFactories.factory.getOrDefault(safeSourceParamType,
         new NullSerializableParameterFactory());
 
@@ -106,7 +107,7 @@ public class SerializableParameterFactories {
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
-    return Optional.of((io.swagger.models.parameters.Parameter) toReturn);
+    return of((io.swagger.models.parameters.Parameter) toReturn);
   }
 
   private static String collectionFormat(Parameter source) {

@@ -38,8 +38,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.util.Optional;
-
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -102,7 +101,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         context.getIgnorableParameterTypes());
     context.parameterBuilder()
         .type(parameterType)
-        .modelRef(Optional.ofNullable(modelRef)
+        .modelRef(ofNullable(modelRef)
             .orElse(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
   }
 

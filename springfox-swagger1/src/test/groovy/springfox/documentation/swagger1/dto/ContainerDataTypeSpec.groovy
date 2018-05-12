@@ -68,6 +68,6 @@ class ContainerDataTypeSpec extends InternalJsonSerializationSpec {
     when:
       new ContainerDataType(null, false)
     then:
-      thrown(NullPointerException)
+      thrown(IllegalArgumentException)
   }
 }

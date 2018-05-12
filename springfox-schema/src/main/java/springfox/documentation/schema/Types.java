@@ -32,12 +32,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
-
 public class Types {
-  private Types() {
-    throw new UnsupportedOperationException();
-  }
-
   private static final Set<String> baseTypes = Stream.of(
       "int",
       "date",
@@ -81,6 +76,9 @@ public class Types {
       new AbstractMap.SimpleEntry<>(MultipartFile.class, "__file"))
       .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
+  private Types() {
+    throw new UnsupportedOperationException();
+  }
 
   public static String typeNameFor(Type type) {
     return typeNameLookup.get(type);

@@ -20,6 +20,9 @@ package springfox.documentation.schema;
 
 import java.util.Optional;
 
+import static java.util.Optional.of;
+import static java.util.Optional.empty;
+
 public class ClassSupport {
   private ClassSupport() {
     throw new UnsupportedOperationException();
@@ -27,9 +30,9 @@ public class ClassSupport {
 
   public static Optional<? extends Class> classByName(String className) {
     try {
-      return Optional.of(Class.forName(className));
+      return of(Class.forName(className));
     } catch (ClassNotFoundException e) {
-      return Optional.empty();
+      return empty();
     }
   }
 }

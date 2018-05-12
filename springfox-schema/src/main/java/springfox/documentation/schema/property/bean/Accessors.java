@@ -28,8 +28,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Optional.ofNullable;
 import static org.springframework.util.StringUtils.isEmpty;
-
 
 public class Accessors {
   private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");
@@ -84,11 +84,11 @@ public class Accessors {
   }
 
   private static Optional<JsonGetter> getterAnnotation(Method method) {
-    return Optional.ofNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
+    return ofNullable(AnnotationUtils.findAnnotation(method, JsonGetter.class));
   }
 
   private static Optional<JsonSetter> setterAnnotation(Method method) {
-    return Optional.ofNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
+    return ofNullable(AnnotationUtils.findAnnotation(method, JsonSetter.class));
   }
 
   private static boolean isSetterMethod(Method method) {

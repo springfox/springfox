@@ -42,6 +42,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -73,7 +74,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
     return new Function<Extension, VendorExtension>() {
       @Override
       public VendorExtension apply(Extension input) {
-        return Optional.ofNullable(input.name()).filter(((Predicate<String>)String::isEmpty).negate())
+        return ofNullable(input.name()).filter(((Predicate<String>)String::isEmpty).negate())
             .map(propertyExtension(input))
             .orElse(objectExtension(input));
       }
@@ -81,7 +82,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private VendorExtension objectExtension(Extension each) {
-    ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(Optional.ofNullable(each.name()).orElse("")));
+    ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(ofNullable(each.name()).orElse("")));
     for (ExtensionProperty property : each.properties()) {
       if (!isEmpty(property.name()) && !isEmpty(property.value())) {
         extension.addProperty(new StringVendorExtension(property.name(), property.value()));

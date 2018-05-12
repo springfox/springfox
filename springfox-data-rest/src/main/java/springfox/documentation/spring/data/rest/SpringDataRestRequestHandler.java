@@ -35,9 +35,9 @@ import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-
 
 class SpringDataRestRequestHandler implements RequestHandler {
   private final EntityContext entityContext;
@@ -103,9 +103,9 @@ class SpringDataRestRequestHandler implements RequestHandler {
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
     if (getHandlerMethod() != null) {
-      return Optional.ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
+      return ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
     }
-    return Optional.empty();
+    return empty();
   }
 
   @Override
@@ -126,9 +126,9 @@ class SpringDataRestRequestHandler implements RequestHandler {
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     if (getHandlerMethod() != null) {
-      return Optional.ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
+      return ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
     }
-    return Optional.empty();
+    return empty();
   }
 
   @Override

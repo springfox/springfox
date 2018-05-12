@@ -19,7 +19,6 @@
 
 package springfox.documentation.spi.service.contexts;
 
-
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
@@ -29,8 +28,8 @@ import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
-import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 
 public class Orderings {
   private Orderings() {
@@ -41,7 +40,7 @@ public class Orderings {
     return new Comparator<Operation>() {
       @Override
       public int compare(Operation first, Operation second) {
-        return Optional.ofNullable(first.getUniqueId()).orElse("").compareTo(Optional.ofNullable(second.getUniqueId()).orElse(""));
+        return ofNullable(first.getUniqueId()).orElse("").compareTo(ofNullable(second.getUniqueId()).orElse(""));
       }
     };
   }

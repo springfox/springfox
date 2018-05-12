@@ -22,6 +22,8 @@ package springfox.documentation.service;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 public class ApiDescription {
   private final String groupName;
   private final String path;
@@ -77,6 +79,6 @@ public class ApiDescription {
   }
 
   public Optional<String> getGroupName() {
-    return Optional.ofNullable(groupName);
+    return ofNullable(groupName);
   }
 }

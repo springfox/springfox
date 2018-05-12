@@ -46,6 +46,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 
@@ -66,12 +68,12 @@ public class HandlerMethodResolver {
 
   public static Optional<Class> useType(Class beanType) {
     if (Proxy.class.isAssignableFrom(beanType)) {
-      return Optional.empty();
+      return empty();
     }
     if (Class.class.getName().equals(beanType.getName())) {
-      return Optional.empty();
+      return empty();
     }
-    return Optional.ofNullable(beanType);
+    return ofNullable(beanType);
   }
 
   public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
@@ -131,7 +133,7 @@ public class HandlerMethodResolver {
 
   private Optional<ResolvedMethod> resolvedMethod(HandlerMethod handlerMethod) {
     if (handlerMethod == null) {
-      return Optional.empty();
+      return empty();
     }
     Class hostClass = useType(handlerMethod.getBeanType())
         .orElse(handlerMethod.getMethod().getDeclaringClass());
@@ -156,7 +158,7 @@ public class HandlerMethodResolver {
     return new Function<ResolvedMethod, ResolvedType>() {
       @Override
       public ResolvedType apply(ResolvedMethod input) {
-        return Optional.ofNullable(input.getReturnType()).orElse(resolver.resolve(Void.TYPE));
+        return ofNullable(input.getReturnType()).orElse(resolver.resolve(Void.TYPE));
       }
     };
   }
@@ -260,10 +262,10 @@ public class HandlerMethodResolver {
 
   private Optional<String> discoveredName(MethodParameter methodParameter) {
     String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
-    int discoveredNameCount = Optional.ofNullable(discoveredNames).orElse(new String[0]).length;
+    int discoveredNameCount = ofNullable(discoveredNames).orElse(new String[0]).length;
     return methodParameter.getParameterIndex() < discoveredNameCount
-           ? Optional.ofNullable(discoveredNames[methodParameter.getParameterIndex()]).filter(((Predicate<String>)String::isEmpty).negate())
-           : Optional.ofNullable(methodParameter.getParameterName());
+           ? ofNullable(discoveredNames[methodParameter.getParameterIndex()]).filter(((Predicate<String>)String::isEmpty).negate())
+           : ofNullable(methodParameter.getParameterName());
   }
 
 

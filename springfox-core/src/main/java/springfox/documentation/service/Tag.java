@@ -19,15 +19,14 @@
 
 package springfox.documentation.service;
 
-
 import org.springframework.core.Ordered;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Predicate;
 
+import static java.util.Optional.of;
 
 public class Tag implements Ordered {
   private final String name;
@@ -48,7 +47,7 @@ public class Tag implements Ordered {
   }
 
   public Tag(String name, String description, int order, List<VendorExtension> vendorExtensions) {
-    this.name = Optional.of(name).filter(((Predicate<String>)String::isEmpty).negate()).get();
+    this.name = of(name).filter(((Predicate<String>)String::isEmpty).negate()).get();
     this.description = description;
     this.order = order;
     this.vendorExtensions = new ArrayList(vendorExtensions);

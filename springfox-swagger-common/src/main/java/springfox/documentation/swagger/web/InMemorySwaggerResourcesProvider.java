@@ -16,9 +16,8 @@
  *
  *
  */
+
 package springfox.documentation.swagger.web;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -31,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import static java.util.Optional.of;
 import static springfox.documentation.schema.ClassSupport.*;
 
 @Component
@@ -86,7 +85,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   }
 
   private String swaggerLocation(String swaggerUrl, String swaggerGroup) {
-    String base = Optional.of(swaggerUrl).get();
+    String base = of(swaggerUrl).get();
     if (Docket.DEFAULT_GROUP_NAME.equals(swaggerGroup)) {
       return base;
     }

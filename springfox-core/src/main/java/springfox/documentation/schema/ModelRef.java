@@ -25,6 +25,8 @@ import springfox.documentation.service.AllowableValues;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Optional.ofNullable;
+
 public class ModelRef implements ModelReference {
   private final String type;
   private final boolean isMap;
@@ -54,8 +56,8 @@ public class ModelRef implements ModelReference {
   public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap) {
     this.type = type;
     this.isMap = isMap;
-    this.allowableValues = Optional.ofNullable(allowableValues);
-    this.itemModel = Optional.ofNullable(itemModel);
+    this.allowableValues = ofNullable(allowableValues);
+    this.itemModel = ofNullable(itemModel);
   }
 
   @Override

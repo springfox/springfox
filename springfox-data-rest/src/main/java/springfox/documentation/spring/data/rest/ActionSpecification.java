@@ -32,6 +32,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
+import static java.util.Optional.ofNullable;
+
 class ActionSpecification {
   private final Collection<RequestMethod> supportedMethods;
   private final Set<MediaType> produces;
@@ -90,7 +92,7 @@ class ActionSpecification {
   }
 
   public Optional<HandlerMethod> getHandlerMethod() {
-    return Optional.ofNullable(handlerMethod);
+    return ofNullable(handlerMethod);
   }
 
   public Optional<Class<?>> getDeclaringClass() {

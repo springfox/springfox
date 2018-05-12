@@ -22,8 +22,6 @@ package springfox.documentation.swagger.annotations;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
-
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -37,8 +35,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 public class Annotations {
@@ -127,14 +124,14 @@ public class Annotations {
       String responseContainer) {
     if (isNotVoid(response)) {
       if ("List".compareToIgnoreCase(responseContainer) == 0) {
-        return Optional.of(resolver.resolve(List.class, response));
+        return of(resolver.resolve(List.class, response));
       } else if ("Set".compareToIgnoreCase(responseContainer) == 0) {
-        return Optional.of(resolver.resolve(Set.class, response));
+        return of(resolver.resolve(Set.class, response));
       } else {
-        return Optional.of(resolver.resolve(response));
+        return of(resolver.resolve(response));
       }
     }
-    return Optional.empty();
+    return empty();
   }
 
   private static boolean isNotVoid(Class<?> response) {

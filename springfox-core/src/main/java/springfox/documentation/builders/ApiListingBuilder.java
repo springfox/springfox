@@ -27,9 +27,8 @@ import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 
 import java.util.*;
-import java.util.function.Function;
 
-
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
@@ -258,7 +257,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
-    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(toTagName(), Function.identity())));
+    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(toTagName(), identity())));
     return this;
   }
 

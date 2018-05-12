@@ -19,11 +19,11 @@
 
 package springfox.documentation.service;
 
-
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+
+import static java.util.Optional.ofNullable;
 
 public class ResourceGroup {
   private final String groupName;
@@ -49,7 +49,7 @@ public class ResourceGroup {
   }
 
   public Optional<? extends Class<?>> getControllerClass() {
-    return Optional.ofNullable(controllerClazz);
+    return ofNullable(controllerClazz);
   }
 
   @Override

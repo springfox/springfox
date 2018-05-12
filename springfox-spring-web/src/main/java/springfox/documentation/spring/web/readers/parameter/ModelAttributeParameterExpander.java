@@ -51,6 +51,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.Collections.emptySet;
+
+import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -223,7 +225,7 @@ public class ModelAttributeParameterExpander {
       ExpansionContext context,
       ModelAttributeField each) {
     LOG.debug("Attempting to expand field: {}", each);
-    String dataTypeName = Optional.ofNullable(typeNameFor(each.getFieldType().getErasedType()))
+    String dataTypeName = ofNullable(typeNameFor(each.getFieldType().getErasedType()))
         .orElse(each.getFieldType().getErasedType().getSimpleName());
     LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
@@ -373,7 +375,7 @@ public class ModelAttributeParameterExpander {
           public Method apply(PropertyDescriptor input) {
             return input.getReadMethod();
           }
-        }, Function.identity()));
+        }, identity()));
 
   }
 

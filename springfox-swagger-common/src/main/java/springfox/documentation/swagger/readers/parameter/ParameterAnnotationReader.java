@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class ParameterAnnotationReader {
 
@@ -51,9 +51,9 @@ public class ParameterAnnotationReader {
 
   private static Optional<Method> interfaceMethod(Class<?> iface, Method method) {
     try {
-      return Optional.of(iface.getMethod(method.getName(), method.getParameterTypes()));
+      return of(iface.getMethod(method.getName(), method.getParameterTypes()));
     } catch (NoSuchMethodException ex) {
-      return Optional.empty();
+      return empty();
     }
   }
 

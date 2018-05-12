@@ -18,7 +18,6 @@
  */
 package springfox.documentation.spring.web;
 
-
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
@@ -34,8 +33,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
+
+import static java.util.Optional.ofNullable;
 
 public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
@@ -79,7 +79,7 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
   private String mappingPath(final PropertySourcedMapping mapper) {
     final String key = mapper.propertyKey();
     final String target = mapper.value();
-    return Optional.ofNullable(environment.getProperty(key))
+    return ofNullable(environment.getProperty(key))
         .map(new Function<String, String>() {
           @Override
           public String apply(String input) {

@@ -8,6 +8,8 @@ import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
+import static java.util.Optional.of;
+
 class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
   def "Is active only when the uri template is enabled" () {
     given:
@@ -70,7 +72,7 @@ class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
           .parameterType("query")
           .allowableValues(allowableValue(allowableValueLookup[it]))
           .build() }
-    Optional.of(operation)
+    of(operation)
   }
 
   AllowableValues allowableValue(values) {

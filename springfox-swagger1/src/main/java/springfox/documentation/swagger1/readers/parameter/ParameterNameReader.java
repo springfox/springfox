@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.spring.web.readers.parameter.ParameterTypeReader.*;
 
 @Component("swagger1ParameterNameReader")
@@ -43,7 +44,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     String paramType = findParameterType(context);
     String name = null;
     if (apiParam.isPresent()) {
-      name = Optional.ofNullable(apiParam.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
+      name = ofNullable(apiParam.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     }
     context.parameterBuilder().name(maybeOverrideName(name, paramType));
   }

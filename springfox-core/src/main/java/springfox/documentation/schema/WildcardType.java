@@ -29,9 +29,9 @@ import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
+import static java.util.Optional.ofNullable;
 
 public class WildcardType {
   private WildcardType() {
@@ -121,7 +121,7 @@ public class WildcardType {
     List<ResolvedType> bindings = new ArrayList();
     int index = 0;
     for (TypeVariable each : replacingType.getErasedType().getTypeParameters()) {
-      ResolvedType boundType = Optional.ofNullable(replacingBindings.findBoundType(each.getName()))
+      ResolvedType boundType = ofNullable(replacingBindings.findBoundType(each.getName()))
           .orElse(new TypeResolver().resolve(Object.class));
       if (isWildcardType(wildcardTypeBindings.getBoundType(index))) {
         bindings.add(boundType);

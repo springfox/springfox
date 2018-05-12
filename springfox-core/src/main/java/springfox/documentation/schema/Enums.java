@@ -31,6 +31,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -85,10 +86,10 @@ public class Enums {
     for (Method each : enumConstant.getClass().getMethods()) {
       JsonValue jsonValue = AnnotationUtils.findAnnotation(each, JsonValue.class);
       if (jsonValue != null && jsonValue.value()) {
-        return Optional.of(each);
+        return of(each);
       }
     }
-    return Optional.empty();
+    return empty();
   }
 
   public static AllowableValues emptyListValuesToNull(AllowableListValues values) {

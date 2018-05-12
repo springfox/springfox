@@ -26,6 +26,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -62,7 +63,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), true));
+      return of(new ModelRef(typeName, apply(mapValueType), true));
     }
     return Optional.empty();
   }
@@ -71,12 +72,12 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (isContainerType(type)) {
       ResolvedType collectionElementType = collectionElementType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(
+      return of(
           new ModelRef(
               typeName,
               apply(collectionElementType),
               allowableValues(collectionElementType)));
     }
-    return Optional.empty();
+    return empty();
   }
 }

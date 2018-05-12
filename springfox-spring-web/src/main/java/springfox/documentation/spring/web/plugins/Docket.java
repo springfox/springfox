@@ -52,8 +52,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 
-
-
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -91,7 +91,7 @@ public class Docket implements DocumentationPlugin {
   private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
   private String host = "";
-  private Optional<String> pathMapping = Optional.empty();
+  private Optional<String> pathMapping = empty();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
   private List<VendorExtension> vendorExtensions = new ArrayList();
@@ -377,7 +377,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket pathMapping(String path) {
-    this.pathMapping = Optional.ofNullable(path);
+    this.pathMapping = ofNullable(path);
     return this;
   }
 

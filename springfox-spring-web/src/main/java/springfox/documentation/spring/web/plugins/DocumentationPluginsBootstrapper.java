@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +42,12 @@ import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
 
 import javax.servlet.ServletContext;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
@@ -132,7 +131,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   }
 
   private RequestHandlerCombiner combiner() {
-    return Optional.ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
+    return ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {

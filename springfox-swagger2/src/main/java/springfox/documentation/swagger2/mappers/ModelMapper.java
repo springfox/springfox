@@ -47,6 +47,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
@@ -147,15 +148,15 @@ public abstract class ModelMapper {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {
       if (mapInterface.get().getTypeParameters().size() == 2) {
-        return Optional.of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
+        return of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
       }
-      return Optional.of((Class) Object.class);
+      return of((Class) Object.class);
     }
-    return Optional.empty();
+    return empty();
   }
 
   private Optional<ResolvedType> findMapInterface(ResolvedType type) {
-    return Optional.ofNullable(type.findSupertype(Map.class));
+    return ofNullable(type.findSupertype(Map.class));
   }
 
   private Property mapProperty(ModelProperty source) {

@@ -19,9 +19,6 @@
 
 package springfox.documentation.spring.web.scanners;
 
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -43,6 +40,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -69,7 +67,7 @@ public class ApiListingScanner {
   static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
     List<String> commons = new ArrayList();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
-      return Optional.empty();
+      return empty();
     }
     List<String> firstWords = urlParts(apiDescriptions.get(0));
 
@@ -87,7 +85,7 @@ public class ApiListingScanner {
         commons.add(word);
       }
     }
-    return Optional.of("/" + String.join("/", commons.stream().filter(Objects::nonNull).collect(toList())));
+    return of("/" + String.join("/", commons.stream().filter(Objects::nonNull).collect(toList())));
   }
 
   static List<String> urlParts(ApiDescription apiDescription) {

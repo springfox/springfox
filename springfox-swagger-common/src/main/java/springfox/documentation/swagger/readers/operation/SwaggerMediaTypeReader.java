@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 
 @Component
@@ -41,8 +42,8 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
   public void apply(OperationContext context) {
     Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
     if (annotation.isPresent()) {
-      context.operationBuilder().consumes(asSet(Optional.ofNullable(annotation.get().consumes()).orElse("")));
-      context.operationBuilder().produces(asSet(Optional.ofNullable(annotation.get().produces()).orElse("")));
+      context.operationBuilder().consumes(asSet(ofNullable(annotation.get().consumes()).orElse("")));
+      context.operationBuilder().produces(asSet(ofNullable(annotation.get().produces()).orElse("")));
     }
   }
 

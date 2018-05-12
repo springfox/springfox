@@ -29,6 +29,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static java.util.Optional.ofNullable;
+
 class ResourcePathProvider {
   private final ResourceGroup resourceGroup;
 
@@ -37,7 +39,7 @@ class ResourcePathProvider {
   }
 
   public Optional<String> resourcePath() {
-    return Optional.ofNullable(
+    return ofNullable(
         controllerClass()
             .map(resourcePathExtractor())
             .filter(((Predicate<String>)String::isEmpty).negate())

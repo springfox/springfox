@@ -50,6 +50,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
@@ -79,7 +80,7 @@ class Properties {
   }
 
   public static Property property(final String typeName) {
-    String safeTypeName = Optional.ofNullable(typeName).orElse("");
+    String safeTypeName = ofNullable(typeName).orElse("");
     return typeFactory.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
   }
 

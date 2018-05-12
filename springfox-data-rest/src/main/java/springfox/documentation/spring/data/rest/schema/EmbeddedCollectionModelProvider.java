@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 
-
+import static java.util.function.Function.identity;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toMap;
@@ -72,7 +72,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
         .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(properties(context).stream().collect(toMap(byName(), Function.identity())))
+        .properties(properties(context).stream().collect(toMap(byName(), identity())))
         .xml(new Xml()
             .wrapped(true)
             .name("content")

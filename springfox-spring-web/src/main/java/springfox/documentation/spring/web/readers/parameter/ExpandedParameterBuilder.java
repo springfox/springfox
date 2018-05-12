@@ -42,6 +42,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 
+import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.schema.Collections.*;
@@ -102,7 +103,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {
-    return Optional.of(context.getFieldType());
+    return of(context.getFieldType());
   }
 
   @Override

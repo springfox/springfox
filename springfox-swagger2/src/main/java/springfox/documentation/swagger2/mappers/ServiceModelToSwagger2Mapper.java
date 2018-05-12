@@ -44,6 +44,7 @@ import springfox.documentation.service.ResponseMessage;
 import java.util.*;
 import java.util.function.Function;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -153,7 +154,7 @@ public abstract class ServiceModelToSwagger2Mapper {
     Map<String, Path> paths = new TreeMap();
     apiListings.values().stream().flatMap(l -> l.stream()).forEachOrdered(each -> {
       for (ApiDescription api : each.getApis()) {
-        paths.put(api.getPath(), mapOperations(api, Optional.ofNullable(paths.get(api.getPath()))));
+        paths.put(api.getPath(), mapOperations(api, ofNullable(paths.get(api.getPath()))));
       }
     });
     return paths;

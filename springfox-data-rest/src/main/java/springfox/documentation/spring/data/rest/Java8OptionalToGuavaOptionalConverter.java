@@ -18,7 +18,6 @@
  */
 package springfox.documentation.spring.data.rest;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
@@ -26,6 +25,8 @@ import org.springframework.core.convert.converter.Converter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
+
+import static java.util.Optional.*;
 
 class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optional<?>> {
   private static final Logger LOGGER = LoggerFactory.getLogger(Java8OptionalToGuavaOptionalConverter.class);
@@ -40,7 +41,7 @@ class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optiona
           Method optionalGet = source.getClass().getDeclaredMethod("get");
           optionalGet.setAccessible(true);
           if ((Boolean) optionalIsPresent.invoke(source)) {
-            return Optional.of(optionalGet.invoke(source));
+            return of(optionalGet.invoke(source));
           }
         } catch (NoSuchMethodException e) {
           LOGGER.warn(e.getMessage());
@@ -50,11 +51,11 @@ class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optiona
           LOGGER.warn(e.getMessage());
         }
       } else {
-        return Optional.of(source);
+        return of(source);
       }
-      return Optional.empty();
+      return empty();
     }
-    return Optional.ofNullable(source);
+    return ofNullable(source);
   }
 
   boolean isJdk8Optional(Object source) {

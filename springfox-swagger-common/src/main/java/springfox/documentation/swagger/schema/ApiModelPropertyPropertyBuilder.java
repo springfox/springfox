@@ -31,6 +31,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Optional;
 
+import static java.util.Optional.empty;
 import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
@@ -46,7 +47,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
   
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<ApiModelProperty> annotation = Optional.empty();
+    Optional<ApiModelProperty> annotation = empty();
 
     if (context.getAnnotatedElement().isPresent()) {
       annotation = annotation.map(Optional::of).orElse(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));

@@ -16,14 +16,15 @@
  *
  *
  */
-package springfox.documentation.schema
 
+package springfox.documentation.schema
 
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
+import static java.util.Optional.of;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)
@@ -38,7 +39,7 @@ class CachingModelProviderSpec extends Specification {
           java.util.Collections.emptySet())
       def model = aModel()
       def mock = Mock(ModelProvider) {
-        modelFor(context) >> Optional.of(model)
+        modelFor(context) >> of(model)
       }
     when:
       def sut = new CachingModelProvider(mock)

@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.Optional.ofNullable;
+
 public class WebMvcRequestHandler implements RequestHandler {
   private final HandlerMethodResolver methodResolver;
   private final RequestMappingInfo requestMapping;
@@ -112,7 +114,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return Optional.ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
+    return ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
   }
 
   @Override
@@ -136,7 +138,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return Optional.ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), annotation));
+    return ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), annotation));
   }
 
   @Override

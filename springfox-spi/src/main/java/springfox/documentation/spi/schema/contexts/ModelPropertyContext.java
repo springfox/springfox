@@ -27,6 +27,8 @@ import springfox.documentation.spi.DocumentationType;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Optional;
 
+import static java.util.Optional.*;
+
 public class ModelPropertyContext {
   private final ModelPropertyBuilder builder;
   private final TypeResolver resolver;
@@ -42,8 +44,8 @@ public class ModelPropertyContext {
 
     this.builder = builder;
     this.resolver = resolver;
-    this.annotatedElement = Optional.ofNullable(annotatedElement);
-    this.beanPropertyDefinition = Optional.empty();
+    this.annotatedElement = ofNullable(annotatedElement);
+    this.beanPropertyDefinition = empty();
     this.documentationType = documentationType;
   }
 
@@ -55,9 +57,9 @@ public class ModelPropertyContext {
 
     this.builder = builder;
     this.resolver = resolver;
-    this.beanPropertyDefinition = Optional.ofNullable(beanPropertyDefinition);
+    this.beanPropertyDefinition = ofNullable(beanPropertyDefinition);
     this.documentationType = documentationType;
-    annotatedElement = Optional.empty();
+    annotatedElement = empty();
   }
 
   /**

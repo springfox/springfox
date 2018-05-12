@@ -23,6 +23,8 @@ import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.service.ResourceGroup
 
+import static java.util.Optional.ofNullable
+
 class ResourceGroupSpec extends Specification {
   @Shared
   def reference = new ResourceGroup("group", String) //Doesnt matter what the controller class is!
@@ -57,7 +59,7 @@ class ResourceGroupSpec extends Specification {
     when:
       def group = new ResourceGroup("group", String)
     then:
-      group.controllerClass == Optional.ofNullable(String)
+      group.controllerClass == ofNullable(String)
       group.groupName == "group"
       group.position == 0
   }
@@ -66,7 +68,7 @@ class ResourceGroupSpec extends Specification {
     when:
       def group = new ResourceGroup("group", String, 1)
     then:
-      group.controllerClass == Optional.ofNullable(String)
+      group.controllerClass == ofNullable(String)
       group.groupName == "group"
       group.position == 1
   }

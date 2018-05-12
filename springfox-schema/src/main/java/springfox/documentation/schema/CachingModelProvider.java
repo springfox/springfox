@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Optional.empty;
+
 @Component
 @Qualifier("cachedModels")
 public class CachingModelProvider implements ModelProvider {
@@ -51,7 +53,7 @@ public class CachingModelProvider implements ModelProvider {
       return cache.computeIfAbsent(modelContext, lookup);
     } catch (Exception e) {
       LOGGER.warn("Failed to get the model for -> {}. {}", modelContext.description(), e.getMessage());
-      return Optional.empty();
+      return empty();
     }
   }
 

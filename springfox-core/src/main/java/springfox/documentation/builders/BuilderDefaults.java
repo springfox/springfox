@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Enums.*;
 
@@ -47,8 +48,8 @@ public class BuilderDefaults {
    * @return Coalesces the newValue and defaultValue to return a non-null value
    */
   public static <T> T defaultIfAbsent(T newValue, T defaultValue) {
-    return Optional.ofNullable(newValue)
-        .orElse(Optional.ofNullable(defaultValue)
+    return ofNullable(newValue)
+        .orElse(ofNullable(defaultValue)
         .orElse(null));
   }
 

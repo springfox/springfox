@@ -80,7 +80,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
-    String allowableProperty = Optional.ofNullable(apiParam.allowableValues()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
+    String allowableProperty = ofNullable(apiParam.allowableValues()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     AllowableValues allowable = allowableValues(
         ofNullable(allowableProperty),
         context.getFieldType().getErasedType());
@@ -100,7 +100,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
-    String allowableProperty = Optional.ofNullable(apiModelProperty.allowableValues())
+    String allowableProperty = ofNullable(apiModelProperty.allowableValues())
             .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     AllowableValues allowable = allowableValues(
         ofNullable(allowableProperty),

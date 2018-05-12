@@ -27,6 +27,8 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.*;
+
 public class ModelAttributeParameterMetadataAccessor implements ParameterMetadataAccessor {
   private final List<AnnotatedElement> annotatedElements;
   private final ResolvedType fieldType;
@@ -56,9 +58,9 @@ public class ModelAttributeParameterMetadataAccessor implements ParameterMetadat
     for (AnnotatedElement each: annotatedElements) {
       A annotation = AnnotationUtils.findAnnotation(each, annotationType);
       if (annotation != null) {
-        return Optional.of(annotation);
+        return of(annotation);
       }
     }
-    return Optional.empty();
+    return empty();
   }
 }

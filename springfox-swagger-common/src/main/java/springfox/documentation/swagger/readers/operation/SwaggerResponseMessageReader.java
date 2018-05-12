@@ -41,9 +41,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.*;
 
-
-
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
@@ -102,13 +100,13 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context.getAlternateTypeProvider(),
               context.getGenericsNamingStrategy(),
               context.getIgnorableParameterTypes());
-          Optional<ModelReference> responseModel = Optional.empty();
+          Optional<ModelReference> responseModel = empty();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
           if (isSuccessful(apiResponse.code())) {
             type = type.map(Optional::of).orElse(operationResponse);
           }
           if (type.isPresent()) {
-            responseModel = Optional.of(
+            responseModel = of(
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }

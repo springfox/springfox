@@ -28,6 +28,9 @@ import java.lang.annotation.Annotation;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
+
 public class Annotations {
 
   private Annotations() {
@@ -56,7 +59,7 @@ public class Annotations {
     if (member == null) {
       return false;
     }
-    return Optional.ofNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
+    return ofNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
   }
 
   public static String unwrappedPrefix(AnnotatedMember member) {
@@ -64,7 +67,7 @@ public class Annotations {
       return "";
     }
 
-    return Optional.ofNullable(member.getAnnotation(JsonUnwrapped.class))
+    return ofNullable(member.getAnnotation(JsonUnwrapped.class))
         .map(new Function<JsonUnwrapped,
                     String>() {
           @Override
@@ -80,9 +83,9 @@ public class Annotations {
       Class<A> annotationClass) {
 
     if (beanPropertyDefinition.hasGetter()) {
-      return Optional.ofNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
+      return ofNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
     }
-    return Optional.empty();
+    return empty();
   }
 
   @SuppressWarnings("PMD")
@@ -91,9 +94,9 @@ public class Annotations {
       Class<A> annotationClass) {
 
     if (beanPropertyDefinition.hasSetter()) {
-      return Optional.ofNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
+      return ofNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
     }
-    return Optional.empty();
+    return empty();
   }
 
   @SuppressWarnings("PMD")
@@ -102,9 +105,9 @@ public class Annotations {
       Class<A> annotationClass) {
     
     if (beanPropertyDefinition.hasField()) {
-      return Optional.ofNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
+      return ofNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
     }
-    return Optional.empty();
+    return empty();
   }
 
   public static String memberName(AnnotatedMember member) {

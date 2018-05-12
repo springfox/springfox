@@ -16,8 +16,8 @@
  *
  *
  */
-package springfox.documentation.swagger2.mappers;
 
+package springfox.documentation.swagger2.mappers;
 
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
@@ -37,7 +37,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 
 public class EnumMapper {
@@ -141,17 +142,17 @@ public class EnumMapper {
       public Optional<T> apply(String input) {
         try {
           if (Integer.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Integer.valueOf(input));
+            return (Optional<T>) of(Integer.valueOf(input));
           } else if (Long.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Long.valueOf(input));
+            return (Optional<T>) of(Long.valueOf(input));
           } else if (Double.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Double.valueOf(input));
+            return (Optional<T>) of(Double.valueOf(input));
           } else if (Float.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Float.valueOf(input));
+            return (Optional<T>) of(Float.valueOf(input));
           }
         } catch (NumberFormatException ignored) {
         }
-        return Optional.empty();
+        return empty();
       }
     };
   }

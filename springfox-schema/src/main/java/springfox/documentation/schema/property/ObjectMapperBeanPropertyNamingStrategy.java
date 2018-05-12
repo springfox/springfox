@@ -32,6 +32,8 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 /**
  * BeanPropertyNamingStrategy based on ObjectMapper naming strategy.
  * Uses {@link com.fasterxml.jackson.databind.PropertyNamingStrategy} to name.
@@ -50,7 +52,7 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
 
     Optional<PropertyNamingStrategy> namingStrategy
-            = Optional.ofNullable(serializationConfig.getPropertyNamingStrategy());
+            = ofNullable(serializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
             .map(BeanPropertyDefinitions.overTheWireName(beanProperty, serializationConfig))
             .orElse(beanProperty.getName());
@@ -66,7 +68,7 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
 
     Optional<PropertyNamingStrategy> namingStrategy
-            = Optional.ofNullable(deserializationConfig.getPropertyNamingStrategy());
+            = ofNullable(deserializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
             .map(BeanPropertyDefinitions.overTheWireName(beanProperty, deserializationConfig))
             .orElse(beanProperty.getName());

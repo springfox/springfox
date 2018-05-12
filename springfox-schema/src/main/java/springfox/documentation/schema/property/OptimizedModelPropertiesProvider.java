@@ -66,6 +66,8 @@ import java.util.stream.StreamSupport;
 
 
 import static java.util.Collections.singletonList;
+import static java.util.Optional.ofNullable;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.Annotations.*;
@@ -127,12 +129,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     Set<ModelProperty> properties = new TreeSet<>(byPropertyName());
     BeanDescription beanDescription = beanDescription(type, givenContext);
     Map<String, BeanPropertyDefinition> propertyLookup = beanDescription.findProperties().stream().collect(toMap(
-        BeanPropertyDefinitions.beanPropertyByInternalName(), Function.identity()));
+        BeanPropertyDefinitions.beanPropertyByInternalName(), identity()));
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
       Optional<AnnotatedMember> annotatedMember
-          = Optional.ofNullable(safeGetPrimaryMember(jacksonProperty));
+          = ofNullable(safeGetPrimaryMember(jacksonProperty));
       if (annotatedMember.isPresent()) {
         properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext, namePrefix));
       }

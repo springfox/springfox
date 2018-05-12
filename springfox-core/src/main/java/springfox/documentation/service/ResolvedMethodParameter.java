@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 public class ResolvedMethodParameter {
@@ -72,7 +73,7 @@ public class ResolvedMethodParameter {
   }
 
   public Optional<String> defaultName() {
-    return Optional.ofNullable(defaultName);
+    return ofNullable(defaultName);
   }
 
   public ResolvedMethodParameter replaceResolvedParameterType(ResolvedType parameterType) {

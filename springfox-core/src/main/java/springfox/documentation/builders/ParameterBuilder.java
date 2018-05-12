@@ -30,6 +30,7 @@ import springfox.documentation.service.VendorExtension;
 import java.util.*;
 
 
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
@@ -281,7 +282,7 @@ public class ParameterBuilder {
         allowMultiple,
         allowEmptyValue,
         modelRef,
-        Optional.ofNullable(type),
+        ofNullable(type),
         allowableValues,
         paramType,
         paramAccess,

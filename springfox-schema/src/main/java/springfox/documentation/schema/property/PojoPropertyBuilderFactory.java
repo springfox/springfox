@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 
+import static java.util.Optional.*;
+
 class PojoPropertyBuilderFactory {
   private static final Logger LOG = LoggerFactory.getLogger(POJOPropertyBuilder.class);
 
@@ -98,14 +100,14 @@ class PojoPropertyBuilderFactory {
           AnnotationIntrospector.class,
           Boolean.TYPE);
 
-      return Optional.of(constructor.newInstance(
+      return of(constructor.newInstance(
           new PropertyName(beanProperty.getName()),
           annotationIntrospector,
           forSerialization));
     } catch (Exception e) {
       LOG.debug("Unable to instantiate jackson 2.6 object. Using higher version of jackson.");
     }
-    return Optional.empty();
+    return empty();
   }
 
   private Constructor<POJOPropertyBuilder> constructorWithParams(Class<?>... clazzes)

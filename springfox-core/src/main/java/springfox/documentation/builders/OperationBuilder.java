@@ -33,6 +33,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.Optional.ofNullable;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.http.MediaType.*;
@@ -292,17 +294,17 @@ public class OperationBuilder {
 
   private String uniqueOperationIdStem() {
     String defaultStem = String.format("%sUsing%s", uniqueId, method);
-    return Optional.ofNullable(codeGenMethodNameStem).filter(((Predicate<String>)String::isEmpty).negate()).orElse(defaultStem);
+    return ofNullable(codeGenMethodNameStem).filter(((Predicate<String>)String::isEmpty).negate()).orElse(defaultStem);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
-    Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream().collect(toMap(byStatusCode(), Function.identity()));
+    Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream().collect(toMap(byStatusCode(), identity()));
     Set<ResponseMessage> merged = this.responseMessages.stream().collect(toSet());
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
-        String message = defaultIfAbsent(Optional.ofNullable(each.getMessage())
+        String message = defaultIfAbsent(ofNullable(each.getMessage())
                 .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null), responseMessage.getMessage());
         ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
         merged.remove(responseMessage);

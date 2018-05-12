@@ -41,6 +41,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**
@@ -79,7 +80,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
   }
 
   private Optional<Type> findAlternate(Class<?> type) {
-    Class serializer = Optional.ofNullable(type.getAnnotation(JsonSerialize.class))
+    Class serializer = ofNullable(type.getAnnotation(JsonSerialize.class))
         .map(new Function<JsonSerialize, Class>() {
           @Override
           public Class apply(JsonSerialize input) {
@@ -87,7 +88,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
           }
         })
         .orElse(Void.class);
-    Class deserializer = Optional.ofNullable(type.getAnnotation(JsonDeserialize.class))
+    Class deserializer = ofNullable(type.getAnnotation(JsonDeserialize.class))
         .map(new Function<JsonDeserialize, Class>() {
           @Override
           public Class apply(JsonDeserialize input) {
@@ -108,7 +109,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
     } else {
       toUse = deserializer;
     }
-    return Optional.ofNullable(toUse);
+    return ofNullable(toUse);
   }
 
   @Override

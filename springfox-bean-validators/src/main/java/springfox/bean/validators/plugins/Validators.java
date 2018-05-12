@@ -31,6 +31,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
+
 /**
  * Utility methods for Validators
  */
@@ -53,7 +56,7 @@ public class Validators {
       Class<T> annotationType) {
 
     Optional<BeanPropertyDefinition> propertyDefinition = context.getBeanPropertyDefinition();
-    Optional<T> notNull = Optional.empty();
+    Optional<T> notNull = empty();
     if (propertyDefinition.isPresent()) {
       Optional<Method> getter = extractGetterFromPropertyDefinition(propertyDefinition.get());
       Optional<Field> field = extractFieldFromPropertyDefinition(propertyDefinition.get());
@@ -79,25 +82,25 @@ public class Validators {
 
   private static Optional<Field> extractFieldFromPropertyDefinition(BeanPropertyDefinition propertyDefinition) {
     if (propertyDefinition.getField() != null) {
-      return Optional.ofNullable(propertyDefinition.getField().getAnnotated());
+      return ofNullable(propertyDefinition.getField().getAnnotated());
     }
-    return Optional.empty();
+    return empty();
   }
 
   private static Optional<Method> extractGetterFromPropertyDefinition(BeanPropertyDefinition propertyDefinition) {
     if (propertyDefinition.getGetter() != null) {
-      return Optional.ofNullable(propertyDefinition.getGetter().getMember());
+      return ofNullable(propertyDefinition.getGetter().getMember());
     }
-    return Optional.empty();
+    return empty();
   }
 
   private static <T extends Annotation> Optional<T> findAnnotation(
       Optional<? extends AnnotatedElement> annotatedElement,
       Class<T> annotationType) {
     if (annotatedElement.isPresent()) {
-      return Optional.ofNullable(AnnotationUtils.findAnnotation(annotatedElement.get(), annotationType));
+      return ofNullable(AnnotationUtils.findAnnotation(annotatedElement.get(), annotationType));
     } else {
-      return Optional.empty();
+      return empty();
     }
   }
 }

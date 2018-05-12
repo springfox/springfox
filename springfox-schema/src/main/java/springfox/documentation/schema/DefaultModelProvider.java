@@ -35,11 +35,12 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.*;
 import java.util.function.Function;
 
-
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
+import static java.util.Optional.*;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 
@@ -81,24 +82,24 @@ public class DefaultModelProvider implements ModelProvider {
         || modelContext.hasSeenBefore(propertiesHost)) {
       LOG.debug("Skipping model of type {} as its either a container type, map, enum or base type, or its already "
           + "been handled", resolvedTypeSignature(propertiesHost).orElse("<null>"));
-      return Optional.empty();
+      return empty();
     }
 
     Optional<Model> syntheticModel = schemaPluginsManager.syntheticModel(modelContext);
     if (syntheticModel.isPresent()) {
-      return Optional.of(schemaPluginsManager.model(modelContext));
+      return of(schemaPluginsManager.model(modelContext));
     }
     return reflectionBasedModel(modelContext, propertiesHost);
   }
 
   private Optional<Model> reflectionBasedModel(ModelContext modelContext, ResolvedType propertiesHost) {
     Map<String, ModelProperty> propertiesIndex
-        = properties(modelContext, propertiesHost).stream().collect(toMap(byPropertyName(), Function.identity()));
+        = properties(modelContext, propertiesHost).stream().collect(toMap(byPropertyName(), identity()));
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
         String.join(", ", propertiesIndex.keySet()));
     Map<String, ModelProperty> properties = new TreeMap();
     properties.putAll(propertiesIndex);
-    return Optional.of(modelBuilder(propertiesHost, properties, modelContext));
+    return of(modelBuilder(propertiesHost, properties, modelContext));
   }
 
   private Model modelBuilder(ResolvedType propertiesHost,
@@ -134,7 +135,7 @@ public class DefaultModelProvider implements ModelProvider {
   private Optional<Model> mapModel(ModelContext parentContext, ResolvedType resolvedType) {
     if (isMapType(resolvedType) && !parentContext.hasSeenBefore(resolvedType)) {
       String typeName = typeNameExtractor.typeName(parentContext);
-      return Optional.of(parentContext.getBuilder()
+      return of(parentContext.getBuilder()
           .id(typeName)
           .type(resolvedType)
           .name(typeName)
@@ -146,7 +147,7 @@ public class DefaultModelProvider implements ModelProvider {
           .subTypes(new ArrayList<ModelReference>())
           .build());
     }
-    return Optional.empty();
+    return empty();
   }
 
   private Function<ModelProperty, String> byPropertyName() {

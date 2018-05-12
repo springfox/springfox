@@ -30,8 +30,7 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 
 import java.util.Optional;
 
-import static springfox.documentation.schema.ResolvedTypes.*;
-
+import static springfox.documentation.schema.ResolvedTypes.simpleQualifiedTypeName;
 import static java.util.Optional.*;
 
 public abstract class BaseModelProperty implements ModelProperty {
@@ -53,9 +52,9 @@ public abstract class BaseModelProperty implements ModelProperty {
     this.jacksonProperty = jacksonProperty;
     AnnotatedMember primaryMember = jacksonProperty.getPrimaryMember();
     if (primaryMember != null) {
-      jsonFormatAnnotation = Optional.ofNullable(primaryMember.getAnnotation(JsonFormat.class));
+      jsonFormatAnnotation = ofNullable(primaryMember.getAnnotation(JsonFormat.class));
     } else {
-      jsonFormatAnnotation = Optional.empty();
+      jsonFormatAnnotation = empty();
     }
   }
 

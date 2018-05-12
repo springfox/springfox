@@ -3,6 +3,7 @@ package springfox.gradlebuild.version
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
+import static java.util.Optional.ofNullable
 import static java.util.stream.Collectors.toList;
 
 // Lifted from plugin 'com.cinnober.gradle:semver-git:2.2.0'
@@ -22,7 +23,7 @@ trait GitVersionParser {
           "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: $versionPart")
     }
     Integer patch = patchComponents[1].toInteger()
-    Integer count = Optional.ofNullable(patchComponents[3]).orElse("0").toInteger()
+    Integer count = ofNullable(patchComponents[3]).orElse("0").toInteger()
     String sha = patchComponents[4]
     String build = patchComponents[2]?.substring(1)
     [patch, build, count, sha]
@@ -44,7 +45,7 @@ trait GitVersionParser {
       suffix = ""
     } else {
       suffix = suffix.replaceAll("<count>", "$count")
-      suffix = suffix.replaceAll("<sha>", Optional.ofNullable(sha).orElse(""))
+      suffix = suffix.replaceAll("<sha>", ofNullable(sha).orElse(""))
     }
     return new SemanticVersion(parsedVersion.major, parsedVersion.minor, patch, suffix)
   }

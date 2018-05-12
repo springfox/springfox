@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Collections.emptySet;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 
 public class CombinedRequestHandler implements RequestHandler {
@@ -83,14 +84,14 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<? extends MediaType> produces() {
-    return Stream.concat(Optional.ofNullable(first.produces()).orElse(emptySet()).stream(),
-            Optional.ofNullable(second.produces()).orElse(emptySet()).stream()).collect(toSet());
+    return Stream.concat(ofNullable(first.produces()).orElse(emptySet()).stream(),
+            ofNullable(second.produces()).orElse(emptySet()).stream()).collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return Stream.concat(Optional.ofNullable(first.consumes()).orElse(emptySet()).stream(),
-            Optional.ofNullable(second.consumes()).orElse(emptySet()).stream()).collect(toSet());
+    return Stream.concat(ofNullable(first.consumes()).orElse(emptySet()).stream(),
+            ofNullable(second.consumes()).orElse(emptySet()).stream()).collect(toSet());
   }
 
   @Override

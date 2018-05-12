@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.Optional.*;
+
 @Component
 public class SchemaPluginsManager {
   private final PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers;
@@ -74,9 +76,9 @@ public class SchemaPluginsManager {
 
   public Optional<Model> syntheticModel(ModelContext context) {
     if (syntheticModelProviders.hasPluginFor(context)) {
-      return Optional.of(syntheticModelProviders.getPluginFor(context).create(context));
+      return of(syntheticModelProviders.getPluginFor(context).create(context));
     }
-    return Optional.empty();
+    return empty();
   }
 
   public List<ModelProperty> syntheticProperties(ModelContext context) {

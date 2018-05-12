@@ -36,6 +36,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 import static springfox.documentation.schema.Annotations.*;
 
 @Component
@@ -44,8 +46,8 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<XmlElement> elementAnnotation = Optional.empty();
-    Optional<XmlAttribute> attributeAnnotation = Optional.empty();
+    Optional<XmlElement> elementAnnotation = empty();
+    Optional<XmlAttribute> attributeAnnotation = empty();
 
     if (context.getAnnotatedElement().isPresent()) {
       elementAnnotation = elementAnnotation.map(Optional::of).orElse(findAnnotation(
@@ -89,14 +91,14 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   public static <T extends Annotation> Optional<T> findAnnotation(
       AnnotatedElement annotated,
       Class<T> annotation) {
-    return Optional.ofNullable(AnnotationUtils.getAnnotation(annotated, annotation));
+    return ofNullable(AnnotationUtils.getAnnotation(annotated, annotation));
   }
 
   private String wrapperName(Optional<XmlElementWrapper> wrapper, Optional<XmlElement> element) {
     if (wrapper.isPresent()) {
-      return Optional.ofNullable(defaultToNull(Optional.ofNullable(wrapper.get().name())
+      return ofNullable(defaultToNull(ofNullable(wrapper.get().name())
               .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null)))
-          .orElse(Optional.ofNullable(elementName(element))
+          .orElse(ofNullable(elementName(element))
           .orElse(null));
     }
     return elementName(element);
@@ -104,14 +106,14 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
 
   private String elementName(Optional<XmlElement> element) {
     if (element.isPresent()) {
-      return defaultToNull(Optional.ofNullable(element.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
+      return defaultToNull(ofNullable(element.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
     }
     return null;
   }
 
   private String attributeName(Optional<XmlAttribute> attribute) {
     if (attribute.isPresent()) {
-      return defaultToNull(Optional.ofNullable(attribute.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
+      return defaultToNull(ofNullable(attribute.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
     }
     return null;
   }

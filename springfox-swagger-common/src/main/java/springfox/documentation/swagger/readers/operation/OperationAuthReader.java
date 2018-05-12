@@ -39,8 +39,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-
-
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -61,7 +60,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
           each.securityForOperation(context).stream()
-          .collect(toMap(byReferenceName(), Function.identity())));
+          .collect(toMap(byReferenceName(), identity())));
     }
 
     Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
@@ -97,7 +96,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
         securityReferenceOverrides.add(securityReference);
       }
       securityReferences.putAll(securityReferenceOverrides.stream()
-          .collect(toMap(byReferenceName(), Function.identity())));
+          .collect(toMap(byReferenceName(), identity())));
     }
     LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
     context.operationBuilder().authorizations(securityReferences.values());

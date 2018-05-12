@@ -45,6 +45,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.*;
 
@@ -156,14 +158,14 @@ public final class ApiModelProperties {
   }
 
   public static Optional<ApiModelProperty> findApiModePropertyAnnotation(AnnotatedElement annotated) {
-    Optional<ApiModelProperty> annotation = Optional.empty();
+    Optional<ApiModelProperty> annotation = empty();
 
     if (annotated instanceof Method) {
       // If the annotated element is a method we can use this information to check superclasses as well
-      annotation = Optional.ofNullable(AnnotationUtils.findAnnotation(((Method) annotated), ApiModelProperty.class));
+      annotation = ofNullable(AnnotationUtils.findAnnotation(((Method) annotated), ApiModelProperty.class));
     }
 
-    return annotation.map(Optional::of).orElse(Optional.ofNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class)));
+    return annotation.map(Optional::of).orElse(ofNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class)));
   }
 
   static Function<ApiModelProperty, Boolean> toHidden() {

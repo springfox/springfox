@@ -16,8 +16,8 @@
  *
  *
  */
-package springfox.documentation.swagger.web;
 
+package springfox.documentation.swagger.web;
 
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -36,8 +36,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.util.Collections.singleton;
-import static java.util.Optional.of;
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static org.springframework.util.StringUtils.*;
@@ -78,7 +77,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
     String apiValue = ofNullable(findAnnotation(controllerClass, Api.class))
         .map(toApiValue()).orElse("");
-    return singleton(normalize(Optional.ofNullable(apiValue).filter(((Predicate<String>)String::isEmpty).negate()).orElse(group)));
+    return singleton(normalize(ofNullable(apiValue).filter(((Predicate<String>)String::isEmpty).negate()).orElse(group)));
   }
 
   private String normalize(String tag) {
@@ -139,7 +138,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
         if (null != input) {
           return of(input.description()).filter(((Predicate<String>)String::isEmpty).negate());
         }
-        return Optional.empty();
+        return empty();
       }
     };
   }
@@ -151,7 +150,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
         if (null != input) {
           return of(input.value()).filter(((Predicate<String>)String::isEmpty).negate());
         }
-        return Optional.empty();
+        return empty();
       }
     };
   }

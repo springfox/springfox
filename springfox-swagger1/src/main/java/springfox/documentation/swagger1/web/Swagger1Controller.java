@@ -16,8 +16,8 @@
  *
  *
  */
-package springfox.documentation.swagger1.web;
 
+package springfox.documentation.swagger1.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,9 +43,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.swagger1.mappers.Mappers.*;
 import static springfox.documentation.swagger1.web.ApiListingMerger.*;
@@ -98,7 +98,7 @@ public class Swagger1Controller {
       String apiDeclaration,
       HttpServletRequest servletRequest) {
 
-    String groupName = Optional.ofNullable(swaggerGroup).orElse("default");
+    String groupName = ofNullable(swaggerGroup).orElse("default");
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
@@ -125,7 +125,7 @@ public class Swagger1Controller {
   }
 
   private ResponseEntity<Json> getSwaggerResourceListing(String swaggerGroup) {
-    String groupName = Optional.ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
+    String groupName = ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
@@ -133,7 +133,7 @@ public class Swagger1Controller {
     springfox.documentation.service.ResourceListing listing = documentation.getResourceListing();
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
 
-    return Optional.ofNullable(jsonSerializer.toJson(resourceListing))
+    return ofNullable(jsonSerializer.toJson(resourceListing))
         .map(toResponseEntity(Json.class))
         .orElse(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
   }

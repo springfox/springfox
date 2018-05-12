@@ -33,7 +33,7 @@ public class ContainerDataType implements SwaggerDataType {
 
   public ContainerDataType(String innerType, boolean uniqueItems) {
     if (innerType == null) {
-      throw new NullPointerException(("innerType may not be null"));
+      throw new IllegalArgumentException(("innerType may not be null"));
     }
     if (innerType.equalsIgnoreCase("array")) {
       throw new IllegalArgumentException("Nested arrays not supported");

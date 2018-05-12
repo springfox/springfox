@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -42,6 +41,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import static java.util.Optional.ofNullable;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -87,7 +87,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
-      String paramName = Optional.ofNullable(pathVariable.get().name()).filter(((Predicate<String>)String::isEmpty).negate())
+      String paramName = ofNullable(pathVariable.get().name()).filter(((Predicate<String>)String::isEmpty).negate())
           .orElse(methodParameter.defaultName().orElse(null));
 
       if (pathVariable.get().required() ||

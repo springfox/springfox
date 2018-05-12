@@ -25,6 +25,7 @@ import springfox.documentation.schema.Example;
 import java.util.*;
 import java.util.function.Predicate;
 
+import static java.util.Optional.ofNullable;
 import static org.springframework.util.StringUtils.isEmpty;
 
 public class Examples {
@@ -37,7 +38,7 @@ public class Examples {
     for (ExampleProperty each: example.value()) {
       if (!isEmpty(each.value())) {
         examples.putIfAbsent(each.mediaType(), new LinkedList());
-        examples.get(each.mediaType()).add(new Example(Optional.ofNullable(each.mediaType())
+        examples.get(each.mediaType()).add(new Example(ofNullable(each.mediaType())
                 .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null), each.value()));
       }
     }

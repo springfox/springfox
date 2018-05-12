@@ -25,6 +25,8 @@ import spock.lang.Unroll
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
 
+import static java.util.Optional.of;
+
 class ParameterBuilderSpec extends Specification {
   @Unroll
   def "Setting properties on the builder with non-null values"() {
@@ -38,11 +40,11 @@ class ParameterBuilderSpec extends Specification {
     def built = sut.build()
 
     then:
-    if (built."$property" instanceof Optional) {
-      assert built."$property" == Optional.of(value)
-    } else {
-      assert built."$property" == value
-    }
+      if (built."$property" instanceof Optional) {
+        assert built."$property" == of(value)
+      } else {
+        assert built."$property" == value
+      }
 
     where:
     builderMethod     | value                                  | property
@@ -72,11 +74,11 @@ class ParameterBuilderSpec extends Specification {
     def built = sut.build()
 
     then:
-    if (built."$property" instanceof Optional) {
-      assert built."$property" == Optional.of(value)
-    } else {
-      assert built."$property" == value
-    }
+      if (built."$property" instanceof Optional) {
+        assert built."$property" == of(value)
+      } else {
+        assert built."$property" == value
+      }
 
     where:
     builderMethod     | value                                  | property

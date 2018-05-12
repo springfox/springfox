@@ -19,9 +19,6 @@
 
 package springfox.documentation.builders;
 
-
-
-
 import org.springframework.util.ClassUtils;
 import springfox.documentation.RequestHandler;
 
@@ -29,6 +26,8 @@ import java.lang.annotation.Annotation;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import static java.util.Optional.ofNullable;
 
 public class RequestHandlerSelectors {
   private RequestHandlerSelectors() {
@@ -119,7 +118,7 @@ public class RequestHandlerSelectors {
   }
 
   private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
-    return Optional.ofNullable(input.declaringClass());
+    return ofNullable(input.declaringClass());
   }
 
 }

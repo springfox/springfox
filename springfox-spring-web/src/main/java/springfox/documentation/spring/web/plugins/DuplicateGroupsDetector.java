@@ -18,20 +18,17 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-
-
 import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-
 
 class DuplicateGroupsDetector {
   private DuplicateGroupsDetector() {
@@ -70,7 +67,7 @@ class DuplicateGroupsDetector {
     return new Function<DocumentationPlugin, String>() {
       @Override
       public String apply(DocumentationPlugin input) {
-        return Optional.ofNullable(input.getGroupName()).orElse("default");
+        return ofNullable(input.getGroupName()).orElse("default");
       }
     };
   }
