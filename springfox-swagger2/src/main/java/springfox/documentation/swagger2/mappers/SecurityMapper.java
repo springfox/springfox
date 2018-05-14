@@ -27,12 +27,13 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static java.util.Collections.unmodifiableMap;
 import static java.util.stream.Collectors.toMap;
 
 
 @Mapper
 public class SecurityMapper {
-  private Map<String, SecuritySchemeFactory> factories = Collections.unmodifiableMap(Stream.of(
+  private Map<String, SecuritySchemeFactory> factories = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>("oauth2", new OAuth2AuthFactory()),
       new AbstractMap.SimpleEntry<>("apiKey", new ApiKeyAuthFactory()),
       new AbstractMap.SimpleEntry<>("basicAuth", new BasicAuthFactory()))

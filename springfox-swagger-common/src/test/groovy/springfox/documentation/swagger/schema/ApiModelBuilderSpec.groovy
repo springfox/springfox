@@ -50,7 +50,7 @@ class ApiModelBuilderSpec extends Specification {
           DocumentationType.SWAGGER_12,
           new AlternateTypeProvider([]),
           new DefaultGenericTypeNamingStrategy(),
-          Collections.emptySet())
+          emptySet())
     when:
       sut.apply(context)
     then:

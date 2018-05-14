@@ -21,6 +21,7 @@ package springfox.documentation.schema
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.emptySet
 import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -38,13 +39,13 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        java.util.Collections.emptySet())
+        emptySet())
     def returnContext = returnValue("group",
         modelType,
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        java.util.Collections.emptySet())
+        emptySet())
     def propertyLookup = ["GenericType": "genericField", "Resource": "links"]
 
     when:
@@ -83,13 +84,13 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        java.util.Collections.emptySet())
+        jemptySet())
     def returnContext = returnValue("group",
         modelType,
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        java.util.Collections.emptySet())
+        emptySet())
 
     when:
     Model asInput = modelProvider.modelFor(inputContext).get()
@@ -117,7 +118,7 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        java.util.Collections.emptySet())
+        emptySet())
     Model asInput = modelProvider.modelFor(inputContext).get()
 
     def returnContext = returnValue("group",
@@ -125,7 +126,7 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        java.util.Collections.emptySet())
+        emptySet())
     Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:

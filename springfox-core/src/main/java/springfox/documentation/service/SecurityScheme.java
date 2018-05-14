@@ -16,15 +16,14 @@
  *
  *
  */
+
 package springfox.documentation.service;
 
-
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 
@@ -47,7 +46,7 @@ public abstract class SecurityScheme {
   }
 
   public List<VendorExtension> getVendorExtensions() {
-    return Collections.unmodifiableList(vendorExtensions);
+    return unmodifiableList(vendorExtensions);
   }
 
   protected void addValidVendorExtensions(List<VendorExtension> vendorExtensions) {

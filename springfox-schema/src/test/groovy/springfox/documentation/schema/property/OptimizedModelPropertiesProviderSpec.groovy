@@ -80,7 +80,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            Collections.emptySet()))
+            emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
@@ -88,7 +88,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            Collections.emptySet()))
+            emptySet()))
 
     then:
     inputValue.collect { it.name }.containsAll(['property'])
@@ -130,7 +130,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            Collections.emptySet()))
+            emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
@@ -138,7 +138,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            Collections.emptySet()))
+            emptySet()))
 
     then:
     inputValue.collect { it.name }.containsAll(['name'])
@@ -179,13 +179,13 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         SPRING_WEB,
         new AlternateTypeProvider(new ArrayList()),
         new DefaultGenericTypeNamingStrategy(),
-        Collections.emptySet())
+        emptySet())
     def returnContext = returnValue("group",
         type,
         SPRING_WEB,
         new AlternateTypeProvider(new ArrayList()),
         new DefaultGenericTypeNamingStrategy(),
-        Collections.emptySet())
+        emptySet())
 
     when:
     inputContext.seen(typeResolver.resolve(Category))
@@ -235,7 +235,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            Collections.emptySet()))
+            emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
@@ -243,7 +243,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList()),
             new DefaultGenericTypeNamingStrategy(),
-            Collections.emptySet()))
+            emptySet()))
 
     then:
     def inputProp = inputValue.find({ it.name == "localDate" })

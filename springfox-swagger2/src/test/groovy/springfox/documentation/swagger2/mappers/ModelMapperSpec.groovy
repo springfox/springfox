@@ -18,7 +18,6 @@
  */
 package springfox.documentation.swagger2.mappers
 
-import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.types.ResolvedObjectType
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
@@ -41,6 +40,7 @@ import springfox.documentation.spi.DocumentationType
 
 import java.util.function.Function
 
+import static java.util.Collections.emptySet
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 import static springfox.documentation.swagger2.mappers.ModelMapper.*
@@ -59,7 +59,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet())).get()
+            emptySet())).get()
     def modelMap = new HashMap()
 
     and:
@@ -88,7 +88,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet()))
+            emptySet()))
         .get()
     def modelMap = new HashMap()
 
@@ -113,7 +113,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -135,7 +135,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -157,7 +157,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -180,7 +180,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -198,7 +198,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet())).get()
+            emptySet())).get()
     def modelMap = new HashMap()
 
     and:
@@ -236,7 +236,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet())).get()
+            emptySet())).get()
     def modelMap = new HashMap()
 
     and:
@@ -352,7 +352,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            Collections.emptySet())).get()
+            emptySet())).get()
     def modelMap = new HashMap()
 
     and:

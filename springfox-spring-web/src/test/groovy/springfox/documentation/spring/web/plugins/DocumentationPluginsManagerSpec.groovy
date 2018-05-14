@@ -36,6 +36,8 @@ import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
+import static java.util.Optional.empty;
+
 import javax.servlet.ServletContext
 
 @Mixin(ServicePluginsSupport)
@@ -139,7 +141,7 @@ class DocumentationPluginsManagerSpec extends Specification {
     and:
       pathContext.pathProvider() >> new RelativePathProvider(Mock(ServletContext))
       pathContext.documentationContext() >> context
-      context.getPathMapping() >> Optional.empty()
+      context.getPathMapping() >> empty()
       pathContext.parameters >> []
     when:
       def sut = defaultWebPlugins()

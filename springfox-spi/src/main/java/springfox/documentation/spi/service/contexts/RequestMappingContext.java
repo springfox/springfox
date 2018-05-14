@@ -35,6 +35,7 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import static java.util.Collections.unmodifiableMap;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -98,7 +99,7 @@ public class RequestMappingContext {
   }
 
   public Map<String, Model> getModelMap() {
-    return Collections.unmodifiableMap(modelMap);
+    return unmodifiableMap(modelMap);
   }
 
   public OperationModelContextsBuilder operationModelsBuilder() {

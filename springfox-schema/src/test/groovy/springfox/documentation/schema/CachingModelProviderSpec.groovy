@@ -24,6 +24,7 @@ import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
+import static java.util.Collections.emptySet
 import static java.util.Optional.of;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -36,7 +37,7 @@ class CachingModelProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
       def model = aModel()
       def mock = Mock(ModelProvider) {
         modelFor(context) >> of(model)
@@ -54,7 +55,7 @@ class CachingModelProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
       def mock = Mock(ModelProvider) {
         modelFor(context) >> { throw new NullPointerException() }
       }

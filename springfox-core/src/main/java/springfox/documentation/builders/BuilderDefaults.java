@@ -24,11 +24,10 @@ import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.util.*;
-import java.util.stream.Stream;
-
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 import static springfox.documentation.schema.Enums.*;
 
 /**
@@ -140,7 +139,7 @@ public class BuilderDefaults {
     if (args == null) {
       return new ArrayList();
     }
-    return Stream.of(args).collect(toList());
+    return of(args).collect(toList());
   }
 
   private static boolean isNotObject(ResolvedType defaultValue) {

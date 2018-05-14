@@ -26,10 +26,10 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 
 public class ResolvedMethodParameter {
   private final int parameterIndex;
@@ -40,7 +40,7 @@ public class ResolvedMethodParameter {
   public ResolvedMethodParameter(String paramName, MethodParameter methodParameter, ResolvedType parameterType) {
     this(methodParameter.getParameterIndex(),
         paramName,
-        Stream.of(methodParameter.getParameterAnnotations()).collect(toList()),
+        of(methodParameter.getParameterAnnotations()).collect(toList()),
         parameterType);
   }
 

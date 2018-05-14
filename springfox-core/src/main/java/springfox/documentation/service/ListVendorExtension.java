@@ -19,10 +19,10 @@
 package springfox.documentation.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
+import static java.util.Collections.unmodifiableList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ListVendorExtension<T> implements VendorExtension<List<T>> {
@@ -41,6 +41,6 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
 
   @Override
   public List<T> getValue() {
-    return Collections.unmodifiableList(values);
+    return unmodifiableList(values);
   }
 }

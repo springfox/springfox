@@ -47,6 +47,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.Collections.singletonList;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Maps.*;
@@ -78,7 +79,7 @@ public abstract class ModelMapper {
 
   private Model mapComposedModel(RefModel parent, springfox.documentation.schema.Model source) {
     ComposedModel model = new ComposedModel()
-        .interfaces(Collections.singletonList(parent))
+        .interfaces(singletonList(parent))
         .child(mapModel(source));
 
     model.setDescription(source.getDescription());

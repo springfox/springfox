@@ -25,6 +25,7 @@ import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
+import static java.util.Collections.emptySet
 import static java.util.Collections.singleton
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -37,7 +38,7 @@ class CachingModelDependencyProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
       def mock = Mock(ModelDependencyProvider) {
         dependentModels(context) >> singleton(aResolvedType())
       }
@@ -54,7 +55,7 @@ class CachingModelDependencyProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
       def mock = Mock(ModelDependencyProvider) {
         dependentModels(context) >> { throw new NullPointerException() }
       }

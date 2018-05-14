@@ -33,6 +33,7 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.overTheWireName;
 
 /**
  * BeanPropertyNamingStrategy based on ObjectMapper naming strategy.
@@ -54,7 +55,7 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     Optional<PropertyNamingStrategy> namingStrategy
             = ofNullable(serializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
-            .map(BeanPropertyDefinitions.overTheWireName(beanProperty, serializationConfig))
+            .map(overTheWireName(beanProperty, serializationConfig))
             .orElse(beanProperty.getName());
 
     LOG.debug("Name '{}' renamed to '{}'", beanProperty.getName(), newName);
@@ -70,7 +71,7 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     Optional<PropertyNamingStrategy> namingStrategy
             = ofNullable(deserializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
-            .map(BeanPropertyDefinitions.overTheWireName(beanProperty, deserializationConfig))
+            .map(overTheWireName(beanProperty, deserializationConfig))
             .orElse(beanProperty.getName());
 
     LOG.debug("Name '{}' renamed to '{}'", beanProperty.getName(), newName);

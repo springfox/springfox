@@ -44,7 +44,7 @@ class ModelContextSpec extends Specification {
           SWAGGER_12,
           provider,
           namingStrategy,
-          Collections.emptySet())
+          emptySet())
     expect:
       context.equals(test) == expectedEquality
       context.equals(context)
@@ -62,7 +62,7 @@ class ModelContextSpec extends Specification {
         SWAGGER_12,
         provider,
         namingStrategy,
-        Collections.emptySet())
+        emptySet())
   }
 
   def returnValue(Class ofType) {
@@ -71,7 +71,7 @@ class ModelContextSpec extends Specification {
         SWAGGER_12,
         provider,
         namingStrategy,
-        Collections.emptySet())
+        emptySet())
   }
 
   def "ModelContext hashcode generated takes into account immutable values"() {
@@ -81,19 +81,19 @@ class ModelContextSpec extends Specification {
           SWAGGER_12,
           provider,
           namingStrategy,
-          Collections.emptySet())
+          emptySet())
       ModelContext other = inputParam("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
-          Collections.emptySet())
+          emptySet())
       ModelContext otherReturn = returnValue("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
-          Collections.emptySet())
+          emptySet())
     expect:
       context.hashCode() == other.hashCode()
       context.hashCode() != otherReturn.hashCode()

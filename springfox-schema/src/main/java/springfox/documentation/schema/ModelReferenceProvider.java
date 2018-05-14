@@ -65,7 +65,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
       return of(new ModelRef(typeName, apply(mapValueType), true));
     }
-    return Optional.empty();
+    return empty();
   }
 
   private Optional<ModelReference> collectionReference(ResolvedType type) {

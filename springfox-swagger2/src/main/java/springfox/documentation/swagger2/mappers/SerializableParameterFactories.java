@@ -32,11 +32,11 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Parameter;
 
 import java.util.AbstractMap;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.toMap;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -44,7 +44,7 @@ import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
 public class SerializableParameterFactories {
-  public static final Map<String, SerializableParameterFactory> factory = Collections.unmodifiableMap(Stream.of(
+  public static final Map<String, SerializableParameterFactory> factory = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>("header", new HeaderSerializableParameterFactory()),
       new AbstractMap.SimpleEntry<>("form", new FormSerializableParameterFactory()),
       new AbstractMap.SimpleEntry<>("path", new PathSerializableParameterFactory()),
@@ -66,7 +66,7 @@ public class SerializableParameterFactories {
 
     SerializableParameter toReturn = factory.create(source);
     if (toReturn == null) {
-      return Optional.empty();
+      return empty();
     }
     ModelReference paramModel = source.getModelRef();
     toReturn.setName(source.getName());

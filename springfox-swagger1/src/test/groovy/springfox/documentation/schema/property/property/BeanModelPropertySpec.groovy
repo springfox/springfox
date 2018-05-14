@@ -35,7 +35,7 @@ import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.bean.BeanModelProperty
 
-
+import static java.util.Collections.emptySet
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -53,7 +53,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          Collections.emptySet())
+          emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -95,7 +95,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          Collections.emptySet())
+          emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -141,7 +141,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          Collections.emptySet())
+          emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 

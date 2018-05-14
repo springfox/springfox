@@ -44,6 +44,7 @@ import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
 import static java.util.Collections.singletonList
+import static java.util.Optional.*;
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -225,8 +226,8 @@ class DocketSpec extends DocumentationContextSpec {
 
     where:
     builderMethod | object  | path
-    'pathMapping' | "/test" | Optional.of("/test")
-    'pathMapping' | null    | Optional.empty()
+    'pathMapping' | "/test" | of("/test")
+    'pathMapping' | null    | empty()
   }
 
   Comparator<ApiDescription> apiDescriptionOrdering() {

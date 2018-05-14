@@ -38,7 +38,7 @@ class CachingModelPropertiesProviderSpec extends Specification {
         DocumentationType.SWAGGER_2,
         new AlternateTypeProvider([]),
         new CodeGenGenericTypeNamingStrategy(),
-        Collections.emptySet())
+        emptySet())
     def property = aProperty()
     def mock = Mock(ModelPropertiesProvider) {
       propertiesFor(_, context) >> [property]
@@ -58,7 +58,7 @@ class CachingModelPropertiesProviderSpec extends Specification {
         DocumentationType.SWAGGER_2,
         new AlternateTypeProvider([]),
         new CodeGenGenericTypeNamingStrategy(),
-        Collections.emptySet())
+        emptySet())
     def mock = Mock(ModelPropertiesProvider) {
       propertiesFor(_, context) >> { throw new NullPointerException("") }
     }

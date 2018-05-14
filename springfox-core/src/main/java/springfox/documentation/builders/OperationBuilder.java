@@ -31,18 +31,18 @@ import springfox.documentation.service.VendorExtension;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.of;
 import static org.springframework.http.MediaType.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationBuilder {
   private static final Collection<String> REQUEST_BODY_MEDIA_TYPES
-      = Stream.of(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE).collect(toSet());
+      = of(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE).collect(toSet());
   private final OperationNameGenerator nameGenerator;
   private HttpMethod method = HttpMethod.GET;
   private String summary;
@@ -286,7 +286,7 @@ public class OperationBuilder {
 
   private Set<String> adjustConsumableMediaTypes() {
     Set<String> adjustedConsumes = consumes.stream().collect(toSet());
-    if (Stream.of(HttpMethod.GET, HttpMethod.DELETE).anyMatch(Predicate.isEqual(method))) {
+    if (of(HttpMethod.GET, HttpMethod.DELETE).anyMatch(Predicate.isEqual(method))) {
       adjustedConsumes.removeAll(REQUEST_BODY_MEDIA_TYPES);
     }
     return adjustedConsumes;

@@ -4,11 +4,13 @@ import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
+import static java.util.Optional.empty;
+
 class OperationPathDecoratorSpec extends DocumentationContextSpec {
   def "Creates path adjustment in relation to servlet mapping" () {
     given:
       def requestMappingContext = Mock(RequestMappingContext)
-      PathContext ctx = new PathContext(requestMappingContext, Optional.empty())
+      PathContext ctx = new PathContext(requestMappingContext, empty())
     and:
       requestMappingContext.getDocumentationContext() >> documentationContext()
     and:

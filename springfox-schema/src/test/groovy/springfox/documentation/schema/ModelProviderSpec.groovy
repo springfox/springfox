@@ -26,6 +26,7 @@ import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.emptySet
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -42,7 +43,7 @@ class ModelProviderSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          java.util.Collections.emptySet())
+          emptySet())
       context.seen(new TypeResolver().resolve(HttpHeaders))
       def dependentTypeNames = sut.dependencies(context).keySet().sort()
 
@@ -65,7 +66,7 @@ class ModelProviderSpec extends Specification {
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            java.util.Collections.emptySet())).keySet().sort()
+            emptySet())).keySet().sort()
 
     expect:
       dependencies == dependentTypeNames

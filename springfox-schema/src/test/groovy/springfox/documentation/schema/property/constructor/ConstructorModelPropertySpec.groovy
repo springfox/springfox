@@ -47,7 +47,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           genericNamingStrategy,
-          Collections.emptySet())
+          emptySet())
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()

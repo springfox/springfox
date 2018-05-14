@@ -36,6 +36,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import java.lang.reflect.AnnotatedElement
 
+import static java.util.Collections.emptySet
 import static java.util.Collections.singletonList
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -92,7 +93,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           new AlternateTypeProvider([]),
           namingStrategy,
-          java.util.Collections.emptySet())
+          emptySet())
     and:
       context.documentationType >> SPRING_WEB
     when:
@@ -109,7 +110,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
     and:
       context.documentationType >> SPRING_WEB
     when:

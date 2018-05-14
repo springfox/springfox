@@ -22,8 +22,6 @@ package springfox.documentation.swagger.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 
-
-
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +34,6 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -45,6 +42,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 
+import static java.util.Collections.singletonList;
 import static java.util.Optional.empty;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -85,7 +83,7 @@ public final class ApiModelProperties {
       List<String> split = Stream.of(trimmed.split(",")).map(String::trim).filter(item -> !item.isEmpty()).collect(toList());
       allowableValues = new AllowableListValues(split, "LIST");
     } else if (hasText(trimmed)) {
-      List<String> singleVal = Collections.singletonList(trimmed);
+      List<String> singleVal = singletonList(trimmed);
       allowableValues = new AllowableListValues(singleVal, "LIST");
     }
     return allowableValues;

@@ -50,6 +50,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.schema.Collections.*;
@@ -58,7 +59,7 @@ import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
 class Properties {
   private static final Map<String, Function<String, ? extends Property>> typeFactory
-      = Collections.unmodifiableMap(Stream.of(
+      = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>("int", newInstanceOf(IntegerProperty.class)),
       new AbstractMap.SimpleEntry<>("long", newInstanceOf(LongProperty.class)),
       new AbstractMap.SimpleEntry<>("float", newInstanceOf(FloatProperty.class)),

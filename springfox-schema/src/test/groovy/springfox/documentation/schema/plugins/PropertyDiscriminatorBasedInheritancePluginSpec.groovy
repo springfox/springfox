@@ -154,7 +154,7 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
         DocumentationType.SWAGGER_2,
         new AlternateTypeProvider([]),
         new DefaultGenericTypeNamingStrategy(),
-        Collections.emptySet()
+        emptySet()
     )
   }
 

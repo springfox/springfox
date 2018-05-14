@@ -129,7 +129,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     Set<ModelProperty> properties = new TreeSet<>(byPropertyName());
     BeanDescription beanDescription = beanDescription(type, givenContext);
     Map<String, BeanPropertyDefinition> propertyLookup = beanDescription.findProperties().stream().collect(toMap(
-        BeanPropertyDefinitions.beanPropertyByInternalName(), identity()));
+        beanPropertyByInternalName(), identity()));
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();

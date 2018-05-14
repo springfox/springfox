@@ -16,12 +16,13 @@
  *
  *
  */
-package springfox.documentation.schema
 
+package springfox.documentation.schema
 
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.emptySet
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
@@ -36,14 +37,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
@@ -76,14 +77,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
@@ -116,14 +117,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          java.util.Collections.emptySet())
+          emptySet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]

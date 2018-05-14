@@ -23,6 +23,7 @@ import spock.lang.Ignore
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.emptySet
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -39,14 +40,14 @@ class SimpleTypeSpec extends SchemaSpecification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue("group",
               simpleType(),
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
 
     expect:
       asInput.getName() == "SimpleType"
@@ -102,7 +103,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
               "group",
@@ -110,7 +111,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
 
     expect:
       asInput.getName() == "TypeWithConstructor"
@@ -140,7 +141,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
               "group",
@@ -148,7 +149,7 @@ class SimpleTypeSpec extends SchemaSpecification {
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
 
     expect:
       asInput.getName() == "TypeWithJsonProperty"

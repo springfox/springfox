@@ -24,6 +24,8 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
+import static java.util.Collections.unmodifiableList;
+
 
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
   private final List<VendorExtension> properties = new ArrayList();
@@ -39,7 +41,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
 
   @Override
   public List<VendorExtension> getValue() {
-    return Collections.unmodifiableList(properties);
+    return unmodifiableList(properties);
   }
 
 

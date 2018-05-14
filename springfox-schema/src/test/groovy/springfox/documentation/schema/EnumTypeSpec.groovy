@@ -26,6 +26,7 @@ import springfox.documentation.spi.DocumentationType
 
 import java.util.stream.Stream
 
+import static java.util.Collections.emptySet
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -42,14 +43,14 @@ class EnumTypeSpec extends Specification {
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
               enumType(),
               DocumentationType.SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              java.util.Collections.emptySet())).get()
+              emptySet())).get()
 
     expect:
       asInput.getName() == "ExampleWithEnums"

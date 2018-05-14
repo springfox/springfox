@@ -63,7 +63,7 @@ class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
 
   Optional<Operation> operation(List<String> paramNames, allowableValueLookup) {
     if (paramNames == null) {
-      return Optional.empty()
+      return empty()
     }
     def operation = Mock(Operation)
     operation.getParameters() >> paramNames.collect {

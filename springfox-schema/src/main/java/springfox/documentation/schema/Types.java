@@ -26,9 +26,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.Collections;
 import java.util.stream.Stream;
 
+import static java.util.Collections.unmodifiableMap;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
@@ -48,7 +48,7 @@ public class Types {
       "biginteger",
       "bigdecimal",
       "uuid").collect(toSet());
-  private static final Map<Type, String> typeNameLookup = Collections.unmodifiableMap(Stream.of(
+  private static final Map<Type, String> typeNameLookup = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>(Long.TYPE, "long"),
       new AbstractMap.SimpleEntry<>(Short.TYPE, "int"),
       new AbstractMap.SimpleEntry<>(Integer.TYPE, "int"),
