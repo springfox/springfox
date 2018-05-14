@@ -30,7 +30,7 @@ import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.field.FieldModelProperty
 
-
+import static java.util.Collections.emptySet
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 

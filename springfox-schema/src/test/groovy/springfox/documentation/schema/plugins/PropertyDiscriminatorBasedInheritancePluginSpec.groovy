@@ -20,6 +20,8 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 
 import java.lang.reflect.Type
 
+import static java.util.Collections.emptySet
+
 class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
   def resolver = new TypeResolver()
 

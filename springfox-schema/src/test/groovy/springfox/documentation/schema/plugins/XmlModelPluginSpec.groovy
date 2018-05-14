@@ -12,6 +12,8 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlType
 
+import static java.util.Collections.emptySet
+
 class XmlModelPluginSpec extends Specification {
   def "Should support all swagger documentation types"() {
     given:

@@ -84,7 +84,7 @@ class GenericTypeSpec extends SchemaSpecification {
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        jemptySet())
+        emptySet())
     def returnContext = returnValue("group",
         modelType,
         documentationType,

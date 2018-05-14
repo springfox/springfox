@@ -29,6 +29,8 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
 
+import static java.util.Collections.emptySet
+
 class ApiModelBuilderSpec extends Specification {
   @Shared def resolver = new TypeResolver()
 
