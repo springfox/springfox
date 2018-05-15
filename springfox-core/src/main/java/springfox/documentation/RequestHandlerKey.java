@@ -16,8 +16,8 @@
  *
  *
  */
-package springfox.documentation;
 
+package springfox.documentation;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;

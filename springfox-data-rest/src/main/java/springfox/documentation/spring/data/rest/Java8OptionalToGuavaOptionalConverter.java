@@ -22,8 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Optional;
 
 import static java.util.Optional.*;
@@ -35,27 +33,12 @@ class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optiona
   public Optional<?> convert(Object source) {
     if (source != null) {
       if (isJdk8Optional(source)) {
-        try {
-          Method optionalIsPresent = source.getClass().getDeclaredMethod("isPresent");
-          optionalIsPresent.setAccessible(true);
-          Method optionalGet = source.getClass().getDeclaredMethod("get");
-          optionalGet.setAccessible(true);
-          if ((Boolean) optionalIsPresent.invoke(source)) {
-            return of(optionalGet.invoke(source));
-          }
-        } catch (NoSuchMethodException e) {
-          LOGGER.warn(e.getMessage());
-        } catch (IllegalAccessException e) {
-          LOGGER.warn(e.getMessage());
-        } catch (InvocationTargetException e) {
-          LOGGER.warn(e.getMessage());
-        }
+        return (Optional<?>) source;
       } else {
         return of(source);
       }
-      return empty();
     }
-    return ofNullable(source);
+    return empty();
   }
 
   boolean isJdk8Optional(Object source) {

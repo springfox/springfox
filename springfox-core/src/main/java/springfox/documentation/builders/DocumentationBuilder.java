@@ -32,7 +32,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
-  private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());//, byListingPosition());
+  private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());
   private ResourceListing resourceListing;
   private Set<Tag> tags = new LinkedHashSet();
   private String basePath;
@@ -61,7 +61,17 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder apiListingsByResourceGroupName(Map<String, List<ApiListing>> apiListings) {
-    this.apiListings.putAll(nullToEmptyMultimap(apiListings));
+    nullToEmptyMultimap(apiListings).entrySet().stream().forEachOrdered(entry -> {
+      List<ApiListing> list = null;
+      if (this.apiListings.containsKey(entry.getKey())) {
+        list = this.apiListings.get(entry.getKey());
+        list.addAll(entry.getValue());
+      } else {
+        list = new ArrayList<>(entry.getValue());
+        this.apiListings.put(entry.getKey(), list);
+      }
+      Collections.sort(list, byListingPosition());
+    });
     return this;
   }
 

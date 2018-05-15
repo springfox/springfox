@@ -118,7 +118,8 @@ class DocumentationBuilderSpec extends Specification {
 
   Map<String, List<ApiListing>> multiMap() {
     Map<String, List<ApiListing>> multiMap = new HashMap()
-    multiMap.putIfAbsent("group1", new LinkedList<ApiListing>()); multiMap.put("group1", Mock(ApiListing))
+    multiMap.putIfAbsent("group1", new LinkedList<ApiListing>())
+    multiMap.get("group1").add(Mock(ApiListing))
     return multiMap
   }
 
