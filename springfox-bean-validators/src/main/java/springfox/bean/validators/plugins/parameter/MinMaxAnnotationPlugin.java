@@ -52,11 +52,6 @@ public class MinMaxAnnotationPlugin implements ParameterBuilderPlugin {
       AllowableRangeValues values = allowableRange(min, max);
       LOG.debug("adding allowable Values: " + values.getMin() + " - " + values.getMax());
       context.parameterBuilder().allowableValues(values);
-
-      // TODO Additionally show @Min/@Max in the description until
-      // https://github.com/springfox/springfox/issues/1244 gets fixed
-      context.parameterBuilder()
-          .description(String.format("@Min: %s - @Max: %s (until #1244 gets fixed)", values.getMin(), values.getMax()));
     }
   }
 
