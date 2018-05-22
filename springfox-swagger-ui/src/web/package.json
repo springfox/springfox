@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Automated JSON API documentation for API's built with Spring",
   "scripts": {
+    "test": "jest",
     "dev": "webpack --mode development --config webpack.config.js --progress --watch",
     "build": "webpack --mode production --config webpack.config.js --progress",
     "browserslist": "browserslist 'last 2 versions'"
@@ -19,6 +20,9 @@
     "babel-loader": "^7.1.4",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "fetch-mock": "^6.4.2",
+    "jest": "^22.4.4",
+    "node-fetch": "^2.1.2",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.14"
   }

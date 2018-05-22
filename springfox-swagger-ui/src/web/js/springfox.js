@@ -1,3 +1,5 @@
+import csrfSupport from './csrf';
+
 window.onload = () => {
 
   const buildSystemAsync = async (baseUrl) => {
@@ -106,6 +108,7 @@ window.onload = () => {
   /* Entry Point */
   (async () => {
     await buildSystemAsync(getBaseURL());
+    await csrfSupport(getBaseURL());
   })();
 
 };

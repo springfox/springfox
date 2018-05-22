@@ -70,6 +70,10 @@ task unzip(type: Copy) {
   into file("${buildDir}")
 }
 
+task npmTest(type: NpmTask) {
+  args = ['run', 'test']
+}
+
 task npmBuild(type: NpmTask) {
   args = ['run', 'build']
 }
@@ -125,6 +129,7 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-npmBuild.dependsOn(npm_install)
+npmTest.dependsOn(npm_install)
+npmBuild.dependsOn(npm_install, npmTest)
 customizeSwaggerUi.dependsOn(unzip, npmBuild)
 jar.dependsOn(customizeSwaggerUi)
