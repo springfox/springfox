@@ -27,8 +27,7 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.ArrayList; 
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +74,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
         resources.add(swaggerResource);
       }
     }
-    Collections.sort(resources);
+    //Collections.sort(resources);
     return resources;
   }
 
