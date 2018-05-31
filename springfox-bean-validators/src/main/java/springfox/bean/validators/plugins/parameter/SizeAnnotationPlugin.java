@@ -54,14 +54,6 @@ public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
       AllowableRangeValues values = stringLengthRange(size.get());
       LOG.debug("Adding allowable Values @Size: {} - {}", values.getMin(), values.getMax());
       context.parameterBuilder().allowableValues(values);
-
-      // TODO Additionally show @Size in the description until https://github.com/springfox/springfox/issues/1244
-      // gets fixed
-      context.parameterBuilder()
-          .description(
-              String.format("@Size: %s - %s (until #1244 gets fixed)",
-                  values.getMin(),
-                  values.getMax()));
     }
   }
 }
