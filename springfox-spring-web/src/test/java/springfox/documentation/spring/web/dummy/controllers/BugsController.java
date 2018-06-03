@@ -340,6 +340,11 @@ public class BugsController {
     return ResponseEntity.ok(null);
   }
 
+  @PostMapping(path = "/1965-form-data", consumes = "multipart/form-data")
+  public ResponseEntity<Example> bug1965FormData(Example sfData) {
+    return ResponseEntity.ok(null);
+  }
+
   @PostMapping(path = "/1965", consumes = "multipart/form-data")
   public ResponseEntity<Example> bug1965(
       @Valid @RequestPart(name = "sfParamMap") @RequestParam Map<String, String> paramMap,

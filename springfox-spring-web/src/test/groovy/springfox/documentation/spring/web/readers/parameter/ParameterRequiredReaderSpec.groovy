@@ -67,7 +67,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
         new ParameterContext(
             resolvedMethodParameter,
             new ParameterBuilder(),
-            context(),
+            documentationContext(),
             Mock(GenericTypeNamingStrategy),
             operation)
 
@@ -126,7 +126,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
         new ParameterBuilder(),
-        context(),
+        documentationContext(),
         Mock(GenericTypeNamingStrategy),
         Mock(OperationContext))
 

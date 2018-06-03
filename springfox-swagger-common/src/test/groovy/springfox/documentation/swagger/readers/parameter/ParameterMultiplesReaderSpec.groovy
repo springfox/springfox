@@ -51,7 +51,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
     ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        context(), genericNamingStrategy, Mock(OperationContext))
+        documentationContext(), genericNamingStrategy, Mock(OperationContext))
 
     when:
     def operationCommand = stubbedParamBuilder();

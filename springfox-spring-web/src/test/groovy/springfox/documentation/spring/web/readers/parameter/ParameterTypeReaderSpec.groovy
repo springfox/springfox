@@ -56,7 +56,7 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
     operationContext.consumes() >> consumes
     operationContext.httpMethod() >> httpMethod
     ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        context(), Mock(GenericTypeNamingStrategy), operationContext)
+        documentationContext(), Mock(GenericTypeNamingStrategy), operationContext)
 
     when:
     def operationCommand = new ParameterTypeReader()

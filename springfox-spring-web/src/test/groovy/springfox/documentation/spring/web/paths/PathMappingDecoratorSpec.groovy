@@ -11,7 +11,7 @@ class PathMappingDecoratorSpec extends DocumentationContextSpec {
       PathContext ctx = new PathContext(requestMappingContext, Optional.absent())
     and:
       plugin.pathMapping(pathMapping)
-      requestMappingContext.getDocumentationContext() >> context()
+      requestMappingContext.getDocumentationContext() >> documentationContext()
     and:
       def sut = new PathMappingDecorator()
     when:

@@ -40,7 +40,6 @@ import springfox.documentation.schema.property.field.FieldProvider;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
@@ -62,6 +61,7 @@ import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.spring.web.readers.parameter.ParameterTypeDeterminer.*;
 
 @Component
 public class ModelAttributeParameterExpander {
@@ -116,7 +116,7 @@ public class ModelAttributeParameterExpander {
               context.childContext(
                   nestedParentName(context.getParentName(), each),
                   each.getFieldType(),
-                  context.getDocumentationContext())));
+                  context.getOperationContext())));
     }
 
     FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
@@ -126,12 +126,12 @@ public class ModelAttributeParameterExpander {
 
       ResolvedType itemType = collectionElementType(each.getFieldType());
       if (Types.isBaseType(itemType) || enumTypeDeterminer.isEnum(itemType.getErasedType())) {
-        parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
+        parameters.add(simpleFields(context.getParentName(), context, each));
       } else {
         ExpansionContext childContext = context.childContext(
             nestedParentName(context.getParentName(), each),
             itemType,
-            context.getDocumentationContext());
+            context.getOperationContext());
         if (!context.hasSeenType(itemType)) {
           parameters.addAll(expand(childContext));
         }
@@ -140,7 +140,7 @@ public class ModelAttributeParameterExpander {
 
     FluentIterable<ModelAttributeField> simpleFields = modelAttributes.filter(simpleType());
     for (ModelAttributeField each : simpleFields) {
-      parameters.add(simpleFields(context.getParentName(), context.getDocumentationContext(), each));
+      parameters.add(simpleFields(context.getParentName(), context, each));
     }
     return FluentIterable.from(parameters)
         .filter(not(hiddenParameters()))
@@ -177,7 +177,7 @@ public class ModelAttributeParameterExpander {
 
   private Parameter simpleFields(
       String parentName,
-      DocumentationContext documentationContext,
+      ExpansionContext context,
       ModelAttributeField each) {
     LOG.debug("Attempting to expand field: {}", each);
     String dataTypeName = Optional.fromNullable(typeNameFor(each.getFieldType().getErasedType()))
@@ -186,15 +186,17 @@ public class ModelAttributeParameterExpander {
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,
         parentName,
+        determineScalarParameterType(
+            context.getOperationContext().consumes(),
+            context.getOperationContext().httpMethod()),
         new ModelAttributeParameterMetadataAccessor(
             each.annotatedElements(),
             each.getFieldType(),
             each.getName()),
-        documentationContext.getDocumentationType(),
+        context.getDocumentationContext().getDocumentationType(),
         new ParameterBuilder());
     return pluginsManager.expandParameter(parameterExpansionContext);
   }
-
 
   private Predicate<ModelAttributeField> recursiveType(final ExpansionContext context) {
     return new Predicate<ModelAttributeField>() {

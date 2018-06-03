@@ -153,7 +153,7 @@ class DocketSpec extends DocumentationContextSpec {
         .configure(contextBuilder)
 
     expect:
-    context().alternateTypeProvider.rules.contains(rule)
+    documentationContext().alternateTypeProvider.rules.contains(rule)
   }
 
   def "Model substitution registers new rules"() {
@@ -165,7 +165,7 @@ class DocketSpec extends DocumentationContextSpec {
         .configure(contextBuilder)
 
     then:
-    context().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
+    documentationContext().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
 
     where:
     method                    | args                               | expectedSize
@@ -179,7 +179,7 @@ class DocketSpec extends DocumentationContextSpec {
     plugin."$builderMethod"(object)
 
     then:
-    context()."$property" == object || (context()."$property" == [object] as Set)
+    documentationContext()."$property" == object || (documentationContext()."$property" == [object] as Set)
 
     where:
     builderMethod               | object                                         | property
@@ -210,7 +210,7 @@ class DocketSpec extends DocumentationContextSpec {
     plugin."$builderMethod"(object)
 
     then:
-    context().genericsNamingStrategy.getClass() == strategy
+    documentationContext().genericsNamingStrategy.getClass() == strategy
 
     where:
     builderMethod       | object | strategy
@@ -223,7 +223,7 @@ class DocketSpec extends DocumentationContextSpec {
     plugin."$builderMethod"(object)
 
     then:
-    context().pathMapping == path
+    documentationContext().pathMapping == path
 
     where:
     builderMethod | object  | path

@@ -67,7 +67,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
 
     then:
-      context().groupName == "default"
+      documentationContext().groupName == "default"
     where:
       handlerMappings              | resourceGroupingStrategy     | groupName | message
       [requestMappingInfo("path")] | null                         | null      | "resourceGroupingStrategy is required"
@@ -95,7 +95,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result = sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.size() == 2
@@ -119,7 +119,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.requestHandlers(requestHandlers)
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result = sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.size() == 2

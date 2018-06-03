@@ -73,7 +73,7 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
   def "should return #expectedStatus.value() for #group"() {
     given:
       ApiDocumentationScanner scanner = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      sut.documentationCache.addDocumentation(scanner.scan(context()))
+      sut.documentationCache.addDocumentation(scanner.scan(documentationContext()))
     when:
       def result = sut.getResourceListing(group)
     then:

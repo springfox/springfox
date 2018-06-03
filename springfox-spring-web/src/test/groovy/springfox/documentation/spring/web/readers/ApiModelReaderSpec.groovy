@@ -88,7 +88,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def requestMappingContext(HandlerMethod handlerMethod) {
     return new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(methodResolver, requestMappingInfo('/somePath'),
             handlerMethod))
   }

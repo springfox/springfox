@@ -59,7 +59,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
 
   def "should have correct response class"() {
     given:
-      OperationContext operationContext = operationContext(context(), handlerMethod)
+      OperationContext operationContext = operationContext(documentationContext(), handlerMethod)
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()

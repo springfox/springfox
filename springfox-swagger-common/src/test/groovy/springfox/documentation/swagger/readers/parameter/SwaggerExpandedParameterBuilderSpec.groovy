@@ -52,6 +52,7 @@ class SwaggerExpandedParameterBuilderSpec extends Specification {
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
+        "",
         new ModelAttributeParameterMetadataAccessor(
             [field.rawMember],
             field.type,

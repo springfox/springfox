@@ -32,7 +32,7 @@ class OperationHttpMethodReaderSpec extends DocumentationContextSpec {
 
     given:
       OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
 
       OperationHttpMethodReader sut = new OperationHttpMethodReader();
     when:

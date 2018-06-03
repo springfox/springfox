@@ -39,7 +39,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
   def "ApiResponse annotation should override when using swagger reader"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod('methodWithApiResponses'))
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithApiResponses'))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
@@ -70,7 +70,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
   def "ApiOperation annotation should provide response"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod('methodApiResponseClass'))
+        operationContext(documentationContext(), dummyHandlerMethod('methodApiResponseClass'))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
@@ -102,7 +102,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
   def "ApiOperation#responseHeaders and ApiResponse#responseHeader are merged for method #methodName"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), handlerMethodIn(ResponseHeaderTestController, methodName))
+        operationContext(documentationContext(), handlerMethodIn(ResponseHeaderTestController, methodName))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
