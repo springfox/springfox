@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
 import spock.lang.Unroll
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
@@ -187,11 +188,14 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     given:
     plugin.directModelSubstitute(LocalDateTime, String)
     OperationContext operationContext =
-            operationContext(
-                    documentationContext(),
-                    dummyHandlerMethod('methodWithModelAttribute', Example.class),
-                    0,
-                    requestMappingInfo("/somePath", ["consumesRequestCondition": new ConsumesRequestCondition("multipart/form-data")]))
+        operationContext(
+            documentationContext(),
+            dummyHandlerMethod('methodWithModelAttribute', Example.class),
+            0,
+            requestMappingInfo(
+                "/somePath",
+                ["consumesRequestCondition": new ConsumesRequestCondition("multipart/form-data")]),
+            RequestMethod.POST)
 
     when:
     sut.apply(operationContext)
@@ -229,7 +233,11 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should not expand unannotated request params"() {
     given:
     OperationContext operationContext =
-        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo("/somePath"))
+        operationContext(
+            documentationContext(),
+            handlerMethod,
+            0,
+            requestMappingInfo("/somePath"))
 
     when:
     sut.apply(operationContext)
@@ -246,7 +254,11 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should not expand @RequestParam or @PathVariable annotated params"() {
     given:
     OperationContext operationContext =
-        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo("/somePath"))
+        operationContext(
+            documentationContext(),
+            handlerMethod,
+            0,
+            requestMappingInfo("/somePath"))
 
     when:
     sut.apply(operationContext)

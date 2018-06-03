@@ -186,7 +186,9 @@ public class ModelAttributeParameterExpander {
     ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(
         dataTypeName,
         parentName,
-        determineParameterType(context),
+        determineScalarParameterType(
+            context.getOperationContext().consumes(),
+            context.getOperationContext().httpMethod()),
         new ModelAttributeParameterMetadataAccessor(
             each.annotatedElements(),
             each.getFieldType(),
@@ -195,17 +197,6 @@ public class ModelAttributeParameterExpander {
         new ParameterBuilder());
     return pluginsManager.expandParameter(parameterExpansionContext);
   }
-
-  private String determineParameterType(final ExpansionContext context) {
-    String parameterType = "query";
-
-    if(context.getOperationContext().consumes().contains(MediaType.MULTIPART_FORM_DATA)) {
-      parameterType = "formData";
-    }
-
-    return parameterType;
-  }
-
 
   private Predicate<ModelAttributeField> recursiveType(final ExpansionContext context) {
     return new Predicate<ModelAttributeField>() {
