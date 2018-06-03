@@ -30,7 +30,6 @@ import com.google.common.collect.FluentIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import springfox.documentation.builders.ParameterBuilder;
@@ -54,16 +53,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.*;
 import static com.google.common.base.Predicates.*;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
-import static springfox.documentation.schema.Collections.collectionElementType;
-import static springfox.documentation.schema.Collections.isContainerType;
-import static springfox.documentation.schema.Types.isVoid;
-import static springfox.documentation.schema.Types.typeNameFor;
+import static com.google.common.base.Strings.*;
+import static com.google.common.collect.FluentIterable.*;
+import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Sets.*;
+import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.spring.web.readers.parameter.ParameterTypeDeterminer.*;
 
 @Component
 public class ModelAttributeParameterExpander {

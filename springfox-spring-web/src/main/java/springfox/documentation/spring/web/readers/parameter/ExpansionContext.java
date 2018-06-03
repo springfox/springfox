@@ -26,60 +26,60 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.Set;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.base.Objects.*;
+import static com.google.common.collect.Sets.*;
 
 public class ExpansionContext {
-    private final String parentName;
-    private final ResolvedType paramType;
-    private final OperationContext operationContext;
-    private final Set<ResolvedType> seenTypes;
+  private final String parentName;
+  private final ResolvedType paramType;
+  private final OperationContext operationContext;
+  private final Set<ResolvedType> seenTypes;
 
-    public ExpansionContext(
-            String parentName,
-            ResolvedType paramType,
-            OperationContext operationContext) {
-        this(parentName, paramType, operationContext, Sets.<ResolvedType>newHashSet());
-    }
+  public ExpansionContext(
+      String parentName,
+      ResolvedType paramType,
+      OperationContext operationContext) {
+    this(parentName, paramType, operationContext, Sets.<ResolvedType>newHashSet());
+  }
 
-    private ExpansionContext(
-            String parentName,
-            ResolvedType paramType,
-            OperationContext operationContext,
-            Set<ResolvedType> seenTypes) {
-        this.parentName = parentName;
-        this.paramType = paramType;
-        this.operationContext = operationContext;
-        this.seenTypes = newHashSet(seenTypes);
-    }
+  private ExpansionContext(
+      String parentName,
+      ResolvedType paramType,
+      OperationContext operationContext,
+      Set<ResolvedType> seenTypes) {
+    this.parentName = parentName;
+    this.paramType = paramType;
+    this.operationContext = operationContext;
+    this.seenTypes = newHashSet(seenTypes);
+  }
 
-    public String getParentName() {
-        return parentName;
-    }
+  public String getParentName() {
+    return parentName;
+  }
 
-    public ResolvedType getParamType() {
-        return paramType;
-    }
+  public ResolvedType getParamType() {
+    return paramType;
+  }
 
-    public OperationContext getOperationContext() {
-        return operationContext;
-    }
+  public OperationContext getOperationContext() {
+    return operationContext;
+  }
 
-    public DocumentationContext getDocumentationContext() {
-        return operationContext.getDocumentationContext();
-    }
+  public DocumentationContext getDocumentationContext() {
+    return operationContext.getDocumentationContext();
+  }
 
-    public boolean hasSeenType(ResolvedType type) {
-        return seenTypes.contains(type)
-                || equal(type, paramType);
-    }
+  public boolean hasSeenType(ResolvedType type) {
+    return seenTypes.contains(type)
+        || equal(type, paramType);
+  }
 
-    public ExpansionContext childContext(
-            String parentName,
-            ResolvedType childType,
-            OperationContext operationContext) {
-        Set<ResolvedType> childSeenTypes = newHashSet(seenTypes);
-        childSeenTypes.add(childType);
-        return new ExpansionContext(parentName, childType, operationContext, childSeenTypes);
-    }
+  public ExpansionContext childContext(
+      String parentName,
+      ResolvedType childType,
+      OperationContext operationContext) {
+    Set<ResolvedType> childSeenTypes = newHashSet(seenTypes);
+    childSeenTypes.add(childType);
+    return new ExpansionContext(parentName, childType, operationContext, childSeenTypes);
+  }
 }

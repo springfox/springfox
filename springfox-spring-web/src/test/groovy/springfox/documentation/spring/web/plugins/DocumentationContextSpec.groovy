@@ -30,7 +30,7 @@ import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import javax.servlet.ServletContext
 
-import static springfox.documentation.spi.service.contexts.Orderings.nickNameComparator
+import static springfox.documentation.spi.service.contexts.Orderings.*
 
 class DocumentationContextSpec extends Specification {
   DocumentationContextBuilder contextBuilder
@@ -42,8 +42,8 @@ class DocumentationContextSpec extends Specification {
     defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), Mock(ServletContext))
 
     contextBuilder = this.defaultConfiguration.create(DocumentationType.SWAGGER_12)
-            .requestHandlers([])
-            .operationOrdering(Ordering.from(nickNameComparator()))
+        .requestHandlers([])
+        .operationOrdering(Ordering.from(nickNameComparator()))
     plugin = new Docket(DocumentationType.SWAGGER_12)
     operationReader = Mock(ApiOperationReader)
   }
