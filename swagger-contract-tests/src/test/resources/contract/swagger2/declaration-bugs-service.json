@@ -1110,6 +1110,119 @@
                 }
             }
         },
+        "/bugs/1965-form-data": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug1965FormData",
+                "operationId": "bug1965FormDataUsingPOST_1",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "allCapsSet",
+                        "description": "description of allCapsSet",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "annotatedEnumType",
+                        "description": "description of annotatedEnumType",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bar",
+                        "description": "description of bar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "enumType",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "foo",
+                        "description": "description of foo",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "localDateTime",
+                        "description": "local date time desc dd-MM-yyyy hh:mm:ss",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "nestedType.name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "parentBeanProperty",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "propertyWithNoSetterMethod",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "readOnlyString",
+                        "description": "A read only string",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Example"
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/2029{?name}": {
             "get": {
                 "tags": [
@@ -1352,14 +1465,14 @@
                 },
                 "security": [
                     {
-                        "user_auth": [
-                            "ADMIN",
-                            "USER"
+                        "petstore_auth": [
+                            "read"
                         ]
                     },
                     {
-                        "petstore_auth": [
-                            "read"
+                        "user_auth": [
+                            "ADMIN",
+                            "USER"
                         ]
                     }
                 ]
