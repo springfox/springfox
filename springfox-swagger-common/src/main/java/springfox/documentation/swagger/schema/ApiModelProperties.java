@@ -64,7 +64,7 @@ public final class ApiModelProperties {
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
     AllowableValues allowableValues = new AllowableListValues(Lists.<String>newArrayList(), "LIST");
-    String trimmed = allowableValueString.trim().replaceAll(" ", "");
+    String trimmed = allowableValueString.trim();
     Matcher matcher = RANGE_PATTERN.matcher(trimmed);
     if (matcher.matches()) {
       if (matcher.groupCount() != 4) {
