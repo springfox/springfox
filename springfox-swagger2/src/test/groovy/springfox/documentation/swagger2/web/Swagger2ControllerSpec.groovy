@@ -99,7 +99,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
     where:
       prefix        | expectedPath
-      "/fooservice" | "/fooservice/contextPath/servletPath"
+      "/fooservice" | "/fooservice/servletPath"
       "/"           | "/contextPath/servletPath"
       ""            | "/contextPath/servletPath"
   }

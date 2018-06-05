@@ -1,4 +1,4 @@
-package springfox.documentation.swagger2.web
+package springfox.documentation.swagger1.web
 
 import spock.lang.Specification
 
