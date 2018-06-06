@@ -18,10 +18,12 @@ class HostNameProviderSpec extends Specification {
         "4.2.20.RELEASE"  | true
         "4.3.14.RELEASE"  | true
         "4.3.15.RELEASE"  | false
+        "4.4.16.RELEASE"  | false
         "5.0.0.RELEASE"   | true
         "5.0.5.RELEASE"   | false
         "5.1.0.RELEASE"   | false
         "5.1.5.RELEASE"   | false
+        "6.1.6.RELEASE"   | false
     }
 
     def "should prefix path with x-forwarded-prefix"() {
@@ -34,5 +36,13 @@ class HostNameProviderSpec extends Specification {
 
         then:
         result == "/prefix"
+    }
+
+    def "should not be allowed to create object from utility class"() {
+        when:
+        new HostNameProvider()
+
+        then:
+        thrown UnsupportedOperationException
     }
 }
