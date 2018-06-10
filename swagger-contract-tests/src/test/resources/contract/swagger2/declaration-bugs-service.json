@@ -1,17 +1,10 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Api Documentation",
+        "description": "bugs API",
         "version": "1.0",
-        "title": "Api Documentation",
-        "termsOfService": "urn:tos",
-        "contact": {
-            
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0"
-        }
+        "title": "bugs API",
+        "test": "testValue"
     },
     "host": "localhost:__PORT__",
     "basePath": "/",
