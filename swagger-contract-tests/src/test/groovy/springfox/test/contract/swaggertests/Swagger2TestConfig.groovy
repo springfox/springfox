@@ -26,10 +26,12 @@ import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
 import org.springframework.http.HttpMethod
+import springfox.documentation.builders.ApiInfoBuilder
 import springfox.documentation.builders.AuthorizationScopeBuilder
 import springfox.documentation.service.AuthorizationScope
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.SecurityScheme
+import springfox.documentation.service.StringVendorExtension
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
@@ -46,6 +48,7 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 import java.nio.ByteBuffer
 
 import static com.google.common.base.Predicates.*
+import static com.google.common.collect.Lists.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
@@ -170,6 +173,13 @@ class Swagger2TestConfig {
                                        .build()]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugs")
+        .apiInfo(new ApiInfoBuilder().version("1.0")
+          .title("bugs API")
+          .description("bugs API")
+          .extensions(
+            newArrayList(
+                new StringVendorExtension("test", "testValue")))
+          .build())
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
         .tags(new Tag("foo", "Foo Description"))
@@ -183,13 +193,13 @@ class Swagger2TestConfig {
              .build()
         ])
         .alternateTypeRules(
-        newRule(URL.class, String.class),
-        newRule(
+          newRule(URL.class, String.class),
+          newRule(
             resolver.resolve(List.class, Link.class),
             resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .directModelSubstitute(ByteBuffer.class, String.class)
         .select()
-        .paths(regex("/bugs/.*"))
+          .paths(regex("/bugs/.*"))
         .build()
   }
 
