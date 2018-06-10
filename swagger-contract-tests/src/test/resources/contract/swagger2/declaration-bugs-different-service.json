@@ -1504,6 +1504,32 @@
                 }
             }
         },
+        "/bugs/2391{?from_country_id}": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2391",
+                "operationId": "bug2391UsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "from_country_id",
+                        "in": "query",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
