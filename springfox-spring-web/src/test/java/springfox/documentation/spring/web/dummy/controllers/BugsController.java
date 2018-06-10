@@ -464,6 +464,10 @@ public class BugsController {
   public void upperCaseField(@RequestBody UpperCasedField input) {
   }
 
+  @PostMapping("/2391")
+  public void bug2391(@ModelAttribute Bug2391 input) {
+  }
+
   @RequestMapping(value = "/2368", method = RequestMethod.GET)
   public ResponseEntity<Void> bug2368(@ModelAttribute @Valid GenericRequest<Void> voidRequest) {
     return ResponseEntity.ok(null);
@@ -986,4 +990,19 @@ public class BugsController {
       this.AGE = AGE;
     }
   }
+
+  public class Bug2391 {
+    @ApiModelProperty(name = "from_country_id", position = 1, required = true)
+    private Long fromCountryId;
+
+    @ModelAttribute("from_country_id")
+    public Long getFromCountryId() {
+      return fromCountryId;
+    }
+
+    public void setFromCountryId(Long fromCountryId) {
+      this.fromCountryId = fromCountryId;
+    }
+  }
+
 }
