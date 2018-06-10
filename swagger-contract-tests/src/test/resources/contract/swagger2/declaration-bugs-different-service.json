@@ -1476,6 +1476,34 @@
                 }
             }
         },
+        "/bugs/2378": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "upperCaseField",
+                "operationId": "upperCaseFieldUsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "input",
+                        "description": "input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UpperCasedField"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
@@ -2209,6 +2237,20 @@
                 }
             },
             "title": "Status"
+        },
+        "UpperCasedField": {
+            "type": "object",
+            "properties": {
+                "YEAR": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            },
+            "title": "UpperCasedField"
         }
     }
 }

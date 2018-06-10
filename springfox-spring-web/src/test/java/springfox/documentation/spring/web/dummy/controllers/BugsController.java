@@ -460,6 +460,10 @@ public class BugsController {
   public void bug1944() {
   }
 
+  @PostMapping("/2378")
+  public void upperCaseField(@RequestBody UpperCasedField input) {
+  }
+
   @RequestMapping(value = "/2368", method = RequestMethod.GET)
   public ResponseEntity<Void> bug2368(@ModelAttribute @Valid GenericRequest<Void> voidRequest) {
     return ResponseEntity.ok(null);
@@ -965,6 +969,21 @@ public class BugsController {
       public String getInnerValue() {
         return innerValue;
       }
+    }
+  }
+
+  private class UpperCasedField {
+    @ApiModelProperty(name="AGE",value="the age of person")
+    private Integer AGE;
+
+    public Integer YEAR;
+
+    public Integer getAGE() {
+      return AGE;
+    }
+
+    public void setAGE(Integer AGE) {
+      this.AGE = AGE;
     }
   }
 }
