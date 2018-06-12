@@ -430,24 +430,24 @@ public class BugsController {
 
   @GetMapping("/bug2282")
   @ApiOperation("/bug2282")
-  public String bug2282(User user){
+  public String bug2282(User user) {
     return "";
   }
 
   @PostMapping(value = "/bug2230", consumes = MediaType.APPLICATION_ATOM_XML_VALUE)
   @ApiOperation("/bug2230")
   public String bug2230(
-      @RequestBody EHDTOApplicatorUnits applicatorUnits){
+      @RequestBody EHDTOApplicatorUnits applicatorUnits) {
     return "";
   }
 
   @GetMapping(value = "/bug2182")
   @ApiOperation("/bug2182")
-  public ProductVO bug2182(){
+  public ProductVO bug2182() {
     return null;
   }
 
-  @GetMapping({"/bug2220", "/bug2220/{bar}"})
+  @GetMapping({ "/bug2220", "/bug2220/{bar}" })
   public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
   }
 
@@ -977,7 +977,7 @@ public class BugsController {
   }
 
   private class UpperCasedField {
-    @ApiModelProperty(name="AGE",value="the age of person")
+    @ApiModelProperty(name = "AGE", value = "the age of person")
     private Integer AGE;
 
     public Integer YEAR;
