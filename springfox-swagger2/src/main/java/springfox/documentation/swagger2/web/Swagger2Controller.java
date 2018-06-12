@@ -47,7 +47,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.*;
 import static org.springframework.util.MimeTypeUtils.*;
-import static springfox.documentation.swagger2.web.HostNameProvider.*;
+import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 @Controller
 @ApiIgnore

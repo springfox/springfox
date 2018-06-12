@@ -25,15 +25,15 @@ import springfox.documentation.swagger1.dto.ApiListing;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static springfox.documentation.swagger1.web.HostNameProvider.componentsFrom;
+import static com.google.common.base.Strings.*;
+import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 public class Mappers {
   public static Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>
-    toApiListingDto(
-        final HttpServletRequest servletRequest,
-        final String host,
-        final ServiceModelToSwaggerMapper mapper) {
+  toApiListingDto(
+      final HttpServletRequest servletRequest,
+      final String host,
+      final ServiceModelToSwaggerMapper mapper) {
 
     return new Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>() {
       @Override
