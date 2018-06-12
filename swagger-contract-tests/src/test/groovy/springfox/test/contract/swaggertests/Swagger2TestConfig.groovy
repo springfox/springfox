@@ -47,11 +47,10 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 
-import static com.google.common.collect.Lists.*
-
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
+import static java.util.Collections.singletonList;
 import static java.util.function.Predicate.isEqual;
 
 @Configuration
@@ -179,7 +178,7 @@ class Swagger2TestConfig {
           .title("bugs API")
           .description("bugs API")
           .extensions(
-            newArrayList(
+             singletonList(
                 new StringVendorExtension("test", "testValue")))
           .build())
         .useDefaultResponseMessages(false)
