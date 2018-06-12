@@ -430,24 +430,24 @@ public class BugsController {
 
   @GetMapping("/bug2282")
   @ApiOperation("/bug2282")
-  public String bug2282(User user){
+  public String bug2282(User user) {
     return "";
   }
 
   @PostMapping(value = "/bug2230", consumes = MediaType.APPLICATION_ATOM_XML_VALUE)
   @ApiOperation("/bug2230")
   public String bug2230(
-      @RequestBody EHDTOApplicatorUnits applicatorUnits){
+      @RequestBody EHDTOApplicatorUnits applicatorUnits) {
     return "";
   }
 
   @GetMapping(value = "/bug2182")
   @ApiOperation("/bug2182")
-  public ProductVO bug2182(){
+  public ProductVO bug2182() {
     return null;
   }
 
-  @GetMapping({"/bug2220", "/bug2220/{bar}"})
+  @GetMapping({ "/bug2220", "/bug2220/{bar}" })
   public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
   }
 
@@ -471,6 +471,10 @@ public class BugsController {
   @RequestMapping(value = "/2368", method = RequestMethod.GET)
   public ResponseEntity<Void> bug2368(@ModelAttribute @Valid GenericRequest<Void> voidRequest) {
     return ResponseEntity.ok(null);
+  }
+
+  @PostMapping("/2479")
+  public void bug2479(@RequestBody Bug2479 input) {
   }
 
   public class GenericRequest<T> {
@@ -977,7 +981,7 @@ public class BugsController {
   }
 
   private class UpperCasedField {
-    @ApiModelProperty(name="AGE",value="the age of person")
+    @ApiModelProperty(name = "AGE", value = "the age of person")
     private Integer AGE;
 
     public Integer YEAR;
@@ -1005,4 +1009,27 @@ public class BugsController {
     }
   }
 
+  private class Bug2479 {
+    @ApiModelProperty("First")
+    private Example first;
+
+    @ApiModelProperty("Second")
+    private Example second;
+
+    public Example getFirst() {
+      return first;
+    }
+
+    public void setFirst(Example first) {
+      this.first = first;
+    }
+
+    public Example getSecond() {
+      return second;
+    }
+
+    public void setSecond(Example second) {
+      this.second = second;
+    }
+  }
 }
