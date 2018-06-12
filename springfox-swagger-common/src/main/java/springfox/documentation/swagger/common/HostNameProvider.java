@@ -16,9 +16,8 @@
  *
  *
  */
-package springfox.documentation.swagger1.web;
+package springfox.documentation.swagger.common;
 
-import org.springframework.core.SpringVersion;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
@@ -31,8 +30,6 @@ import static org.springframework.util.StringUtils.*;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.*;
 
 public class HostNameProvider {
-
-  static final String X_FORWARDED_PREFIX = "X-Forwarded-Prefix";
 
   public HostNameProvider() {
     throw new UnsupportedOperationException();
@@ -65,36 +62,12 @@ public class HostNameProvider {
 
     ServletUriComponentsBuilder builder = fromContextPath(request);
 
-    builder.replacePath(prependForwardedPrefix(request, basePath));
+    XForwardPrefixPathAdjuster adjuster = new XForwardPrefixPathAdjuster(request);
+    builder.replacePath(adjuster.adjustedPath(basePath));
     if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
       builder.path(request.getServletPath());
     }
 
     return builder;
-  }
-
-  private static String prependForwardedPrefix(
-      HttpServletRequest request,
-      String path) {
-
-    String prefix = request.getHeader(X_FORWARDED_PREFIX);
-    if (prefix != null) {
-      if (isPreservePath(SpringVersion.getVersion())) {
-        return prefix + path;
-      } else {
-        return prefix;
-      }
-    } else {
-      return path;
-    }
-  }
-
-  private static boolean isPreservePath(String version) {
-    String[] versionComponents = version.split("\\.");
-    int major = Integer.parseInt(versionComponents[0]);
-    int minor = Integer.parseInt(versionComponents[1]);
-    int micro = Integer.parseInt(versionComponents[2]);
-    return major < 4 || (major == 4 && (minor < 3 || minor == 3 && micro < 15))
-            || (major == 5 && minor == 0 && micro < 5);
   }
 }
