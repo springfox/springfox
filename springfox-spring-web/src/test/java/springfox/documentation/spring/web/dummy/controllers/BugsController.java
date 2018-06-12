@@ -473,6 +473,10 @@ public class BugsController {
     return ResponseEntity.ok(null);
   }
 
+  @PostMapping("/2479")
+  public void bug2479(@RequestBody Bug2479 input) {
+  }
+
   public class GenericRequest<T> {
 
     @NotNull
@@ -1005,4 +1009,27 @@ public class BugsController {
     }
   }
 
+  private class Bug2479 {
+    @ApiModelProperty("First")
+    private Example first;
+
+    @ApiModelProperty("Second")
+    private Example second;
+
+    public Example getFirst() {
+      return first;
+    }
+
+    public void setFirst(Example first) {
+      this.first = first;
+    }
+
+    public Example getSecond() {
+      return second;
+    }
+
+    public void setSecond(Example second) {
+      this.second = second;
+    }
+  }
 }

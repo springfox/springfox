@@ -1530,6 +1530,34 @@
                 }
             }
         },
+        "/bugs/2479": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2479",
+                "operationId": "bug2479UsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "input",
+                        "description": "input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Bug2479"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
@@ -1929,6 +1957,20 @@
                 }
             },
             "title": "Bug1881"
+        },
+        "Bug2479": {
+            "type": "object",
+            "properties": {
+                "first": {
+                    "description": "First",
+                    "$ref": "#/definitions/Example"
+                },
+                "second": {
+                    "description": "Second",
+                    "$ref": "#/definitions/Example"
+                }
+            },
+            "title": "Bug2479"
         },
         "EHDTOApplicatorUnits": {
             "type": "object",
