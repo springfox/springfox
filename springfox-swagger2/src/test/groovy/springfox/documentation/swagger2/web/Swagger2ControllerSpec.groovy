@@ -99,9 +99,9 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
     where:
       prefix        | expectedPath
-      "/fooservice" | "/fooservice/contextPath/servletPath"
-      "/"           | "/contextPath/servletPath"
-      ""            | "/contextPath/servletPath"
+      "/fooservice" | "/fooservice/servletPath"
+      "/"           | "/servletPath"
+      ""            | "/servletPath"
   }
 
   def "should respect custom basePath even a custom host is not set"() {

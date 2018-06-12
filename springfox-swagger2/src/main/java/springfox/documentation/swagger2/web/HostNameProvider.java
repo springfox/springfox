@@ -18,6 +18,7 @@
  */
 package springfox.documentation.swagger2.web;
 
+import org.springframework.core.SpringVersion;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
@@ -26,59 +27,74 @@ import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.springframework.util.StringUtils.*;
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.*;
+import static org.springframework.util.StringUtils.hasText;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromContextPath;
 
 public class HostNameProvider {
 
-  public HostNameProvider() {
-    throw new UnsupportedOperationException();
-  }
+    static final String X_FORWARDED_PREFIX = "X-Forwarded-Prefix";
 
-  static UriComponents componentsFrom(
-      HttpServletRequest request,
-      String basePath) {
-
-    ServletUriComponentsBuilder builder = fromServletMapping(request, basePath);
-
-    UriComponents components = UriComponentsBuilder.fromHttpRequest(
-        new ServletServerHttpRequest(request))
-        .build();
-
-    String host = components.getHost();
-    if (!hasText(host)) {
-      return builder.build();
+    public HostNameProvider() {
+        throw new UnsupportedOperationException();
     }
 
-    builder.host(host);
-    builder.port(components.getPort());
+    static UriComponents componentsFrom(
+            HttpServletRequest request,
+            String basePath) {
 
-    return builder.build();
-  }
+        ServletUriComponentsBuilder builder = fromServletMapping(request, basePath);
 
-  private static ServletUriComponentsBuilder fromServletMapping(
-      HttpServletRequest request,
-      String basePath) {
+        UriComponents components = UriComponentsBuilder.fromHttpRequest(
+                new ServletServerHttpRequest(request))
+                .build();
 
-    ServletUriComponentsBuilder builder = fromContextPath(request);
+        String host = components.getHost();
+        if (!hasText(host)) {
+            return builder.build();
+        }
 
-    builder.replacePath(prependForwardedPrefix(request, basePath));
-    if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
-      builder.path(request.getServletPath());
+        builder.host(host);
+        builder.port(components.getPort());
+
+        return builder.build();
     }
 
-    return builder;
-  }
+    private static ServletUriComponentsBuilder fromServletMapping(
+            HttpServletRequest request,
+            String basePath) {
 
-  private static String prependForwardedPrefix(
-      HttpServletRequest request,
-      String path) {
+        ServletUriComponentsBuilder builder = fromContextPath(request);
 
-    String prefix = request.getHeader("X-Forwarded-Prefix");
-    if (prefix != null) {
-      return prefix + path;
-    } else {
-      return path;
+        builder.replacePath(prependForwardedPrefix(request, basePath));
+        if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
+            builder.path(request.getServletPath());
+        }
+
+        return builder;
     }
-  }
+
+    private static String prependForwardedPrefix(
+            HttpServletRequest request,
+            String path) {
+
+        String prefix = request.getHeader(X_FORWARDED_PREFIX);
+        if (prefix != null) {
+            if (isPreservePath(SpringVersion.getVersion())) {
+                return prefix + path;
+            } else {
+                return prefix;
+            }
+        } else {
+            return path;
+        }
+    }
+
+    private static boolean isPreservePath(String version) {
+        String[] versionComponents = version.split("\\.");
+        int major = Integer.parseInt(versionComponents[0]);
+        int minor = Integer.parseInt(versionComponents[1]);
+        int micro = Integer.parseInt(versionComponents[2]);
+        return major < 4 || (major == 4 && (minor < 3 || minor == 3 && micro < 15))
+                || (major == 5 && minor == 0 && micro < 5);
+    }
 }
