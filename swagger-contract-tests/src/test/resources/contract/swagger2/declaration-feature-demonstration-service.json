@@ -1020,10 +1020,8 @@
                         "description": "ID of pet that needs to be fetched",
                         "required": true,
                         "type": "string",
-                        "maximum": 5,
-                        "exclusiveMaximum": false,
-                        "minimum": 1,
-                        "exclusiveMinimum": false,
+                        "maxLength": 5,
+                        "minLength": 1,
                         "allowEmptyValue": false,
                         "x-example": "3"
                     }

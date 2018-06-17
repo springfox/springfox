@@ -59,6 +59,8 @@ import springfox.documentation.spring.web.dummy.models.Response;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -475,6 +477,33 @@ public class BugsController {
 
   @PostMapping("/2479")
   public void bug2479(@RequestBody Bug2479 input) {
+  }
+
+
+  @PostMapping("/2415")
+  public void bug2415(@RequestBody Bug2415 input) {
+  }
+
+  @GetMapping("/2415")
+  public ResponseEntity<String> bug2415(
+      @Pattern(regexp = "^[A-Za-z0-9]{8,16}$")
+      @Size(min = 8, max = 16)
+      @RequestParam String input) {
+    return ResponseEntity.ok("test");
+  }
+
+  public class Bug2415 {
+    private String test;
+    
+    @Pattern(regexp = "^[A-Za-z0-9]{8,16}$")
+    @Size(min = 8, max = 16)
+    public String getTest() {
+      return test;
+    }
+
+    public void setTest(String test) {
+      this.test = test;
+    }
   }
 
   public class GenericRequest<T> {

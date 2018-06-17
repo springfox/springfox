@@ -75,7 +75,8 @@ public class SerializableParameterFactories {
     toReturn.setAllowEmptyValue(source.isAllowEmptyValue());
     toReturn.getVendorExtensions()
         .putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
-    maybeAddAllowableValuesToParameter(toReturn, source.getAllowableValues());
+    Property property = property(paramModel.getType());
+    maybeAddAllowableValuesToParameter(toReturn, property, source.getAllowableValues());
     if (paramModel.isCollection()) {
       if (paramModel.getItemType().equals("byte")) {
         toReturn.setType("string");
@@ -89,7 +90,7 @@ public class SerializableParameterFactories {
                 itemTypeProperty(paramItemModelRef),
                 paramItemModelRef.getAllowableValues());
         toReturn.setItems(itemProperty);
-        maybeAddAllowableValuesToParameter(toReturn, paramItemModelRef.getAllowableValues());
+        maybeAddAllowableValuesToParameter(toReturn, itemProperty, paramItemModelRef.getAllowableValues());
       }
     } else if (paramModel.isMap()) {
       ModelReference paramItemModelRef = paramModel.itemModel().get();
@@ -101,7 +102,6 @@ public class SerializableParameterFactories {
       if (source.getScalarExample() != null) {
         ((AbstractSerializableParameter) toReturn).setExample(String.valueOf(source.getScalarExample()));
       }
-      Property property = property(paramModel.getType());
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
