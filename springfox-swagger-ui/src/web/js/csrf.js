@@ -9,11 +9,8 @@ export default async function patchRequestInterceptor(baseUrl) {
 
     if (result) {
       window.ui.getConfigs().requestInterceptor = request => {
+        request.headers[result.headerName] = result.token;
         // console.debug(request);
-        request.headers = {
-          ...request.headers,
-          [result.headerName]: result.token
-        };
         return request;
       };
       console.debug('Successfully added csrf header for all requests');
