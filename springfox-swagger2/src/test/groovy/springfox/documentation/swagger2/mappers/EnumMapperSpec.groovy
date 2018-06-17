@@ -93,13 +93,17 @@ class EnumMapperSpec extends Specification {
       assert parameter.enum.size() == expectedSize
     } else if (allowableValues instanceof AllowableRangeValues) {
       if (property instanceof StringProperty) {
-        assert parameter.minLength  == safeInteger(allowableValues.min)
-        assert parameter.maxLength == safeInteger(allowableValues.max)
+        verifyAll {
+          parameter.minLength  == safeInteger(allowableValues.min)
+          parameter.maxLength == safeInteger(allowableValues.max)
+        }
       } else {
-        assert parameter.minimum == safeBigDecimal(allowableValues.min)
-        assert parameter.exclusiveMinimum == allowableValues.exclusiveMin
-        assert parameter.maximum == safeBigDecimal(allowableValues.max)
-        assert parameter.exclusiveMaximum == allowableValues.exclusiveMax
+        verifyAll {
+          parameter.minimum == safeBigDecimal(allowableValues.min)
+          parameter.exclusiveMinimum == allowableValues.exclusiveMin
+          parameter.maximum == safeBigDecimal(allowableValues.max)
+          parameter.exclusiveMaximum == allowableValues.exclusiveMax
+        }
       }
     } else {
       assert parameter.enum == null
