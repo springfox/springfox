@@ -1400,8 +1400,8 @@
                 "tags": [
                     "Bugs"
                 ],
-                "summary": "bug2161And2249",
-                "operationId": "bug2161And2249UsingGET_1",
+                "summary": "bug2161And2249and2469",
+                "operationId": "bug2161And2249and2469UsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -2425,6 +2425,10 @@
                 "bug_1964"
             ],
             "properties": {
+                "bug2469": {
+                    "type": "string",
+                    "example": "[test] n/a"
+                },
                 "bug_1964": {
                     "type": "boolean"
                 },

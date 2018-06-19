@@ -388,7 +388,7 @@ public class BugsController {
   }
 
   @GetMapping(path = "/2161")
-  ResponseEntity<String> bug2161And2249(@RequestBody Status status) {
+  ResponseEntity<String> bug2161And2249and2469(@RequestBody Status status) {
     return ResponseEntity.ok("");
   }
 
@@ -757,6 +757,8 @@ public class BugsController {
     private final Boolean enabled;
     @ApiModelProperty(example = "'1235'")
     private final String integerString;
+    @ApiModelProperty(example = "'[test] n/a'")
+    private final String bug2469;
 
     @JsonProperty("bug_1964")
     @ApiModelProperty(required = true)
@@ -765,9 +767,11 @@ public class BugsController {
     @JsonCreator
     Status(
         @JsonProperty("enabled") Boolean enabled,
-        @JsonProperty("integerString") String integerString) {
+        @JsonProperty("integerString") String integerString,
+        @JsonProperty("bug2469") String bug2469) {
       this.enabled = enabled;
       this.integerString = integerString;
+      this.bug2469 = bug2469;
     }
 
     @JsonProperty("enabled")
@@ -784,6 +788,10 @@ public class BugsController {
     @ApiModelProperty(required = true)
     public boolean isBug1964() {
       return bug1964;
+    }
+
+    public String getBug2469() {
+      return bug2469;
     }
   }
 
