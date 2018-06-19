@@ -27,6 +27,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,12 +102,16 @@ public class ModelAttributeParameterExpander {
 
 
     LOG.debug("Expanding parameter type: {}", context.getParamType());
-    AlternateTypeProvider alternateTypeProvider = context.getDocumentationContext().getAlternateTypeProvider();
+    final AlternateTypeProvider alternateTypeProvider = context.getDocumentationContext().getAlternateTypeProvider();
 
-    FluentIterable<ModelAttributeField> modelAttributes = from(getters)
-        .transform(toModelAttributeField(fieldsByName, propertyLookupByGetter, alternateTypeProvider));
+    FluentIterable<ModelAttributeField> attributes =
+        allModelAttributes(
+            propertyLookupByGetter,
+            getters,
+            fieldsByName,
+            alternateTypeProvider);
 
-    FluentIterable<ModelAttributeField> expendables = modelAttributes
+    FluentIterable<ModelAttributeField> expendables = attributes
         .filter(not(simpleType()))
         .filter(not(recursiveType(context)));
     for (ModelAttributeField each : expendables) {
@@ -119,7 +124,7 @@ public class ModelAttributeParameterExpander {
                   context.getOperationContext())));
     }
 
-    FluentIterable<ModelAttributeField> collectionTypes = modelAttributes
+    FluentIterable<ModelAttributeField> collectionTypes = attributes
         .filter(and(isCollection(), not(recursiveCollectionItemType(context.getParamType()))));
     for (ModelAttributeField each : collectionTypes) {
       LOG.debug("Attempting to expand collection/array field: {}", each.getName());
@@ -138,7 +143,7 @@ public class ModelAttributeParameterExpander {
       }
     }
 
-    FluentIterable<ModelAttributeField> simpleFields = modelAttributes.filter(simpleType());
+    FluentIterable<ModelAttributeField> simpleFields = attributes.filter(simpleType());
     for (ModelAttributeField each : simpleFields) {
       parameters.add(simpleFields(context.getParentName(), context, each));
     }
@@ -146,6 +151,48 @@ public class ModelAttributeParameterExpander {
         .filter(not(hiddenParameters()))
         .filter(not(voidParameters()))
         .toList();
+  }
+
+  private FluentIterable<ModelAttributeField> allModelAttributes(
+      Map<Method, PropertyDescriptor> propertyLookupByGetter,
+      Iterable<ResolvedMethod> getters,
+      Map<String, ResolvedField> fieldsByName,
+      AlternateTypeProvider alternateTypeProvider) {
+
+    FluentIterable<ModelAttributeField> modelAttributesFromGetters = from(getters)
+        .transform(toModelAttributeField(fieldsByName, propertyLookupByGetter, alternateTypeProvider));
+
+    FluentIterable<ModelAttributeField> modelAttributesFromFields = from(fieldsByName.values())
+        .filter(publicFields())
+        .transform(toModelAttributeField(alternateTypeProvider));
+
+    return FluentIterable.from(Sets.union(
+        modelAttributesFromFields.toSet(),
+        modelAttributesFromGetters.toSet()));
+  }
+
+  private Function<ResolvedField, ModelAttributeField> toModelAttributeField(
+      final AlternateTypeProvider alternateTypeProvider) {
+
+    return new Function<ResolvedField, ModelAttributeField>() {
+      @Override
+      public ModelAttributeField apply(ResolvedField input) {
+        return new ModelAttributeField(
+            alternateTypeProvider.alternateFor(input.getType()),
+            input.getName(),
+            input,
+            input);
+      }
+    };
+  }
+
+  private Predicate<ResolvedField> publicFields() {
+    return new Predicate<ResolvedField>() {
+      @Override
+      public boolean apply(ResolvedField input) {
+        return input.isPublic();
+      }
+    };
   }
 
   private Predicate<Parameter> voidParameters() {

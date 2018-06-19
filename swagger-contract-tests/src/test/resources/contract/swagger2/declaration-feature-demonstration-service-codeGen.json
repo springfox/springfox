@@ -31,8 +31,8 @@
                 "tags": [
                     "feature-demonstration-service"
                 ],
-                "summary": "findIdentityById",
-                "operationId": "findIdentityByIdUsingGET_2",
+                "summary": "findById",
+                "operationId": "findByIdUsingGET_2",
                 "produces": [
                     "application/vnd.com.pet+json",
                     "application/vnd.com.fancy-pet+json"
@@ -50,7 +50,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/FancyPet"
                         }
                     }
                 }
@@ -1086,6 +1086,15 @@
                 }
             ]
         },
+        "Category": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Category"
+        },
         "CustomTypeFor2031": {
             "type": "object",
             "properties": {
@@ -1162,6 +1171,28 @@
                 }
             },
             "title": "Example"
+        },
+        "FancyPet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "FancyPet"
         },
         "MapOfstringAndExample": {
             "type": "object",

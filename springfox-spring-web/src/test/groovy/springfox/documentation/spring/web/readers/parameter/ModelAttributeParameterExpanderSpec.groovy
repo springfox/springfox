@@ -171,6 +171,26 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     parameters.find { it.name == 'authors[0].books[0].id' }
   }
 
+
+  def "should handle expansion item with public fields"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(Bug2423),
+            context()))
+
+    expect:
+    parameters.size() == 2
+    parameters.find { it.name == 'from' }
+    parameters.find { it.name == 'to' }
+  }
+
+  class Bug2423 {
+    public String from
+    public String to
+  }
+
   class Book {
     private Long id
     private Set<Author> authors

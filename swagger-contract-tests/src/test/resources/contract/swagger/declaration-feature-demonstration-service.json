@@ -296,12 +296,12 @@
             "path": "/features"
         },
         {
-            "description": "findIdentityById",
+            "description": "findById",
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "findIdentityById",
-                    "nickname": "findIdentityByIdUsingGET",
+                    "summary": "findById",
+                    "nickname": "findByIdUsingGET",
                     "produces": [
                         "application/vnd.com.pet+json",
                         "application/vnd.com.fancy-pet+json"
@@ -323,7 +323,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "Pet"
+                            "responseModel": "FancyPet"
                         },
                         {
                             "code": 401,
@@ -339,7 +339,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "Pet"
+                    "type": "FancyPet"
                 }
             ],
             "path": "/features/1367/{itemId}"
@@ -1974,6 +1974,16 @@
                 }
             }
         },
+        "Category": {
+            "description": "",
+            "id": "Category",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
         "ModelWithMapProperty": {
             "description": "Describes model with map property",
             "id": "ModelWithMapProperty",
@@ -2155,6 +2165,32 @@
             "id": "EnumObjectType",
             "properties": {
                 "description": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "FancyPet": {
+            "description": "",
+            "id": "FancyPet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "categories": {
+                    "required": false,
+                    "items": {
+                        "type": "Category"
+                    },
+                    "type": "array"
+                },
+                "id": {
                     "required": false,
                     "type": "string"
                 },

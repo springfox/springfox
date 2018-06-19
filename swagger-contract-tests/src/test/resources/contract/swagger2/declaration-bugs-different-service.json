@@ -1587,6 +1587,34 @@
                 }
             }
         },
+        "/bugs/2423{?from,to}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2423",
+                "operationId": "bug2423UsingGET_2",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/bugs/2479": {
             "post": {
                 "tags": [

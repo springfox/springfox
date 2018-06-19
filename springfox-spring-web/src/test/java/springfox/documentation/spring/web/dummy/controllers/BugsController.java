@@ -492,6 +492,15 @@ public class BugsController {
     return ResponseEntity.ok("test");
   }
 
+  @GetMapping("/2423")
+  public void bug2423(Bug2423 input) {
+  }
+
+  public class Bug2423 {
+    public String from;
+    public String to;
+  }
+
   public class Bug2415 {
     private String test;
     
