@@ -105,7 +105,6 @@ public class Orderings {
     return String.format("%s.%s", context.getGroupName(), context.getName());
   }
 
-
   public static Ordering<RequestHandler> byPatternsCondition() {
     return Ordering.from(new Comparator<RequestHandler>() {
       @Override

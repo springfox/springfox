@@ -8,15 +8,14 @@ import spock.lang.Unroll
 import springfox.documentation.RequestHandler
 import springfox.documentation.service.ResolvedMethodParameter
 
-import static com.google.common.collect.Sets.newHashSet
+import static com.google.common.collect.Sets.*
 
 class DefaultRequestHandlerCombinerSpec extends Specification {
   def equality = new PathAndParametersEquivalence()
 
-  @Unroll
-  def "Combines request handlers effectively" () {
+  def "Combines request handlers effectively"() {
     given:
-      def sut = new DefaultRequestHandlerCombiner()
+    def sut = new DefaultRequestHandlerCombiner()
     and:
      def input  = [
         handler("/a", ["vendor/a"], param("a", String)),
@@ -34,55 +33,66 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
           handler("/c", ["vendor/c"], param("c", String))
       ]
     when:
-      def combined = sut.combine(input)
+    def combined = sut.combine(input)
+
     then:
-      combined.size() == expected.size()
-      expected.eachWithIndex { handler, index ->
-          assert equality.equivalent(handler, combined.get(index))
-       }
+    combined.size() == expected.size()
+    expected.eachWithIndex { handler, index ->
+      verifyAll {
+        equality.equivalent(handler, combined.get(index))
+      }
+    }
   }
 
 
   @Unroll
-  def "Combines request handlers when there is only one" () {
+  def "Combines request handlers when there is only one"() {
     given:
-      def sut = new DefaultRequestHandlerCombiner()
+    def sut = new DefaultRequestHandlerCombiner()
+
     and:
       def input  = [ handler("/a", ["vendor/a"], param("a", String)) ]
       def expected = [ handler("/a", ["vendor/a"], param("a", String)) ]
     when:
-      def combined = sut.combine(input)
+    def combined = sut.combine(input)
+
     then:
-      combined.size() == expected.size()
-      expected.eachWithIndex { handler, index ->
-        assert equality.equivalent(handler, combined.get(index))
-      }
+    combined.size() == expected.size()
+    expected.eachWithIndex { handler, index ->
+      assert equality.equivalent(handler, combined.get(index))
+    }
   }
 
   @Unroll
-  def "Combines request handlers when there is none" () {
+  def "Combines request handlers when there is none"() {
     given:
-      def sut = new DefaultRequestHandlerCombiner()
+    def sut = new DefaultRequestHandlerCombiner()
+
     and:
-      def input  = []
-      def expected = []
+    def input = []
+    def expected = []
+
     when:
-      def combined = sut.combine(input)
+    def combined = sut.combine(input)
+
     then:
-      combined.size() == expected.size()
+    combined.size() == expected.size()
   }
 
   @Unroll
-  def "Combines request handlers when input is null" () {
+  def "Combines request handlers when input is null"() {
     given:
-      def sut = new DefaultRequestHandlerCombiner()
+    def sut = new DefaultRequestHandlerCombiner()
+
     and:
-      def input  = null
-      def expected = []
+    def input = null
+    def expected = []
+
     when:
-      def combined = sut.combine(input)
+    def combined = sut.combine(input)
+
     then:
-      combined.size() == expected.size()
+    combined.size() == expected.size()
   }
 
   RequestHandler handler(
