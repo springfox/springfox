@@ -34,8 +34,8 @@
                 "summary": "findIdentityById",
                 "operationId": "findIdentityByIdUsingGET_2",
                 "produces": [
-                    "application/vnd.com.fancy-pet+json",
-                    "application/vnd.com.pet+json"
+                    "application/vnd.com.pet+json",
+                    "application/vnd.com.fancy-pet+json"
                 ],
                 "parameters": [
                     {
