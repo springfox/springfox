@@ -115,15 +115,24 @@ public class Orderings {
     });
   }
 
+  public static Ordering<RequestHandler> byOperationName() {
+    return Ordering.from(new Comparator<RequestHandler>() {
+      @Override
+      public int compare(RequestHandler first, RequestHandler second) {
+        return first.getName().compareTo(second.getName());
+      }
+    });
+  }
+
   public static PatternsRequestCondition patternsCondition(RequestHandler handler) {
     return handler.getPatternsCondition();
   }
 
-  public static Ordering<? super DocumentationPlugin> pluginOrdering() {
+  public static Ordering<DocumentationPlugin> pluginOrdering() {
     return Ordering.from(byPluginType()).compound(byPluginName());
   }
 
-  public static Comparator<? super DocumentationPlugin> byPluginType() {
+  public static Comparator<DocumentationPlugin> byPluginType() {
     return new Comparator<DocumentationPlugin>() {
       @Override
       public int compare(DocumentationPlugin first, DocumentationPlugin second) {
@@ -132,7 +141,7 @@ public class Orderings {
     };
   }
 
-  public static Comparator<? super DocumentationPlugin> byPluginName() {
+  public static Comparator<DocumentationPlugin> byPluginName() {
     return new Comparator<DocumentationPlugin>() {
       @Override
       public int compare(DocumentationPlugin first, DocumentationPlugin second) {

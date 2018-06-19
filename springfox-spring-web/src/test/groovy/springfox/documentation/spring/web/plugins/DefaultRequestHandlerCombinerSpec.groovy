@@ -17,21 +17,22 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
     given:
     def sut = new DefaultRequestHandlerCombiner()
     and:
-     def input  = [
-        handler("/a", ["vendor/a"], param("a", String)),
-        handler("/a", ["vendor/a", "vendor/b"], param("a", String)),
-        handler("/a", ["vendor/a", "vendor/c"], param("a", String)),
-        handler("/b", ["vendor/a"], param("b", String)),
-        handler("/b", ["vendor/b"], param("b", String)),
-        handler("/c", ["vendor/c"], param("b", String)),
-        handler("/c", ["vendor/c"], param("c", String))
-      ]
-      def expected = [
-          handler("/a", ["vendor/a", "vendor/b", "vendor/c"], param("a", String)),
-          handler("/b", ["vendor/a", "vendor/b"], param("b", String)),
-          handler("/c", ["vendor/c"], param("b", String)),
-          handler("/c", ["vendor/c"], param("c", String))
-      ]
+    def input = [
+        handler("/a", "a2", ["vendor/a"], param("a", String)),
+        handler("/a", "a3", ["vendor/a", "vendor/b"], param("a", String)),
+        handler("/a", "a1", ["vendor/a", "vendor/c"], param("a", String)),
+        handler("/b", "b1", ["vendor/a"], param("b", String)),
+        handler("/b", "b1", ["vendor/b"], param("b", String)),
+        handler("/c", "c1a", ["vendor/c"], param("b", String)),
+        handler("/c", "a1c", ["vendor/c"], param("c", String))
+    ]
+    def expected = [
+        handler("/a", "a1", ["vendor/a", "vendor/b", "vendor/c"], param("a", String)),
+        handler("/b", "b1", ["vendor/a", "vendor/b"], param("b", String)),
+        handler("/c", "a1c", ["vendor/c"], param("c", String)),
+        handler("/c", "c1a", ["vendor/c"], param("b", String))
+    ]
+
     when:
     def combined = sut.combine(input)
 
@@ -51,8 +52,9 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
     def sut = new DefaultRequestHandlerCombiner()
 
     and:
-      def input  = [ handler("/a", ["vendor/a"], param("a", String)) ]
-      def expected = [ handler("/a", ["vendor/a"], param("a", String)) ]
+    def input = [handler("/a", "a", ["vendor/a"], param("a", String))]
+    def expected = [handler("/a", "a", ["vendor/a"], param("a", String))]
+
     when:
     def combined = sut.combine(input)
 
@@ -97,10 +99,12 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
 
   RequestHandler handler(
       String path,
+      String name,
       List<String> produces,
       ResolvedMethodParameter parameter) {
     def handler = Mock(RequestHandler)
     handler.patternsCondition >> new PatternsRequestCondition(path)
+    handler.getName() >> name
     handler.produces() >> newHashSet(produces)
     handler.parameters >> [parameter]
     handler.supportedMethods() >> [RequestMethod.GET]
