@@ -35,6 +35,7 @@ class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
 
   @Override
   protected boolean doEquivalent(RequestHandler a, RequestHandler b) {
+
     return a.getPatternsCondition().equals(b.getPatternsCondition())
         && !Sets.intersection(a.supportedMethods(), b.supportedMethods()).isEmpty()
         && a.params().equals(b.params())

@@ -1539,6 +1539,63 @@
                 }
             }
         },
+        "/bugs/2415": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2415",
+                "operationId": "bug2415UsingPOST_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "input",
+                        "description": "input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Bug2415"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/bugs/2415{?input}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2415",
+                "operationId": "bug2415UsingGET_1",
+                "parameters": [
+                    {
+                        "name": "input",
+                        "in": "query",
+                        "description": "input",
+                        "required": true,
+                        "type": "string",
+                        "maxLength": 16,
+                        "minLength": 8,
+                        "pattern": "^[A-Za-z0-9]{8,16}$"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/bugs/2479": {
             "post": {
                 "tags": [
@@ -1975,6 +2032,18 @@
                 }
             },
             "title": "Bug1881"
+        },
+        "Bug2415": {
+            "type": "object",
+            "properties": {
+                "test": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 16,
+                    "pattern": "^[A-Za-z0-9]{8,16}$"
+                }
+            },
+            "title": "Bug2415"
         },
         "Bug2479": {
             "type": "object",

@@ -71,7 +71,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
 
       RequestHandler toCombine = path.get();
       if (handlers.size() > 1) {
-        for (RequestHandler each : byPatternsCondition().sortedCopy(handlers)) {
+        for (RequestHandler each : sortedByPathAndName(handlers)) {
           if (each.equals(toCombine)) {
             continue;
           }
@@ -85,11 +85,19 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     return combined;
   }
 
+  private List<RequestHandler> sortedByPathAndName(List<RequestHandler> handlers) {
+    return byPatternsCondition()
+        .compound(byOperationName())
+        .sortedCopy(handlers);
+  }
+
   private Ordering<Equivalence.Wrapper<RequestHandler>> wrapperComparator() {
     return Ordering.from(new Comparator<Equivalence.Wrapper<RequestHandler>>() {
       @Override
       public int compare(Equivalence.Wrapper<RequestHandler> first, Equivalence.Wrapper<RequestHandler> second) {
-        return byPatternsCondition().compare(first.get(), second.get());
+        return byPatternsCondition()
+            .compound(byOperationName())
+            .compare(first.get(), second.get());
       }
     });
   }
