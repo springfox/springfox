@@ -185,9 +185,7 @@ public class Docket implements DocumentationPlugin {
    * @param requestMethod    - http request method for which to apply the message
    * @param responseMessages - the message
    * @return this Docket
-   * @see io.swagger.annotations.ApiResponse
-   * and
-   * @see io.swagger.annotations.ApiResponses
+   * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
    */
   public Docket globalResponseMessage(RequestMethod requestMethod,
