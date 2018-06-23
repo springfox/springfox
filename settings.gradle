@@ -9,8 +9,8 @@ include 'springfox-swagger2'
 include 'springfox-bean-validators'
 include 'springfox-data-rest'
 include 'springfox-swagger-ui'
+include 'springfox-petstore'
 
 // Auxiliary projects that are not published
 include 'springfox-spring-config'
-include 'springfox-petstore'
 include 'swagger-contract-tests'
