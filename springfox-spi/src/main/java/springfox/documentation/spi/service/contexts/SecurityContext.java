@@ -23,6 +23,7 @@ import com.google.common.base.Predicate;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.service.SecurityReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Predicates.*;
@@ -58,7 +59,7 @@ public class SecurityContext {
   }
 
   /**
-   * Use securitForOperation instead
+   * Use securityForOperation instead
    * @since 2.8.1
    * @param path path to secure
    * @return list of applicable security references
@@ -69,7 +70,7 @@ public class SecurityContext {
     if (selector.apply(path)) {
       return securityReferences;
     }
-    return null;
+    return new ArrayList<SecurityReference>();
   }
 
   public List<SecurityReference> securityForOperation(OperationContext operationContext) {
@@ -77,7 +78,7 @@ public class SecurityContext {
         && methodSelector.apply(operationContext.httpMethod())) {
       return securityReferences;
     }
-    return null;
+    return new ArrayList<SecurityReference>();
   }
 
   public List<SecurityReference> getSecurityReferences() {

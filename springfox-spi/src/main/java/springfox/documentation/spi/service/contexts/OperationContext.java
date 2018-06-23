@@ -94,7 +94,7 @@ public class OperationContext {
     return new Predicate<SecurityContext>() {
       @Override
       public boolean apply(SecurityContext input) {
-        return input.securityForPath(requestMappingPattern()) != null;
+        return input.securityForOperation(OperationContext.this) != null;
       }
     };
   }
