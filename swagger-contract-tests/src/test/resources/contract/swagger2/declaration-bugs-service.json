@@ -1295,8 +1295,7 @@
                         "description": "This is the description",
                         "required": true,
                         "type": "string",
-                        "default": "1f1f1f",
-                        "allowEmptyValue": false
+                        "default": "1f1f1f"
                     }
                 ],
                 "responses": {
@@ -1918,16 +1917,14 @@
                         "in": "path",
                         "description": "Key of the environment",
                         "required": false,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     },
                     {
                         "name": "propertyKey",
                         "in": "path",
                         "description": "Key of the property",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {

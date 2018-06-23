@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.core.Ordered;
@@ -30,12 +31,15 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
+  private static final Collection<String> PARAMETER_TYPES_ALLOWING_EMPTY_VALUE =
+      ImmutableList.of("query", "formData");
   private String name;
   private String description;
   private String defaultValue;
@@ -271,6 +275,9 @@ public class ParameterBuilder {
   }
 
   public Parameter build() {
+    if (!PARAMETER_TYPES_ALLOWING_EMPTY_VALUE.contains(paramType)) {
+      allowEmptyValue = null;
+    }
     return new Parameter(
         name,
         description,
