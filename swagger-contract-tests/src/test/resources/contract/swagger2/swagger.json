@@ -85,7 +85,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -135,7 +136,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/api/pet/findByStatus": {
@@ -187,7 +189,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/api/pet/findByTags": {
@@ -308,7 +311,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/api/store/order": {
@@ -389,7 +393,8 @@
                     "400": {
                         "description": "Invalid Order"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/store/order/{orderId}": {
@@ -427,7 +432,8 @@
                     "404": {
                         "description": "Order not found"
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -462,7 +468,8 @@
                     "404": {
                         "description": "Order not found"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user": {
@@ -497,7 +504,8 @@
                             "$ref": "#/definitions/User"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/createWithArray": {
@@ -534,7 +542,8 @@
                             "$ref": "#/definitions/User"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/createWithList": {
@@ -571,7 +580,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/login": {
@@ -612,7 +622,8 @@
                     "400": {
                         "description": "Invalid username/password supplied"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/logout": {
@@ -632,7 +643,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/{username}": {
@@ -667,7 +679,8 @@
                     "404": {
                         "description": "User not found"
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -766,7 +779,8 @@
                     "404": {
                         "description": "User not found"
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -800,7 +814,8 @@
                     "404": {
                         "description": "User not found"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/generic/pets/test": {
@@ -820,7 +835,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },

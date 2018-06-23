@@ -50,7 +50,8 @@
                     "200": {
                         "description": "Just testing"
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },
