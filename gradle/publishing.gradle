@@ -201,6 +201,7 @@ bintray {
         sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
         user = project.sonatypeUser
         password = project.sonatypePassword
+        close = '1'
       }
     }
   }
