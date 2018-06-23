@@ -22,6 +22,9 @@ ext {
   sonatypePassword = project.hasProperty('ossPassword') ?
       project.property('ossPassword') :
       System.getenv('SONATYPE_PASSWORD')
+  shouldSyncWithMavenCentral = project.hasProperty('ossSync') ?
+      project.property('ossSync') :
+      System.getenv('SONATYPE_SYNC')
 
   pomMetaData = {
     resolveStrategy = Closure.DELEGATE_FIRST
@@ -198,7 +201,7 @@ bintray {
         passphrase = project.passphrase
       }
       mavenCentralSync {
-        sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+        sync = ("true" == project.shouldSyncWithMavenCentral)
         user = project.sonatypeUser
         password = project.sonatypePassword
         close = '1'
