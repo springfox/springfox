@@ -1022,7 +1022,6 @@
                         "type": "string",
                         "maxLength": 5,
                         "minLength": 1,
-                        "allowEmptyValue": false,
                         "x-example": "3"
                     }
                 ],

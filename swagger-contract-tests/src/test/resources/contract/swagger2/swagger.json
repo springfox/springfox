@@ -257,8 +257,7 @@
                         "required": true,
                         "type": "string",
                         "maxLength": 5,
-                        "minLength": 1,
-                        "allowEmptyValue": false
+                        "minLength": 1
                     }
                 ],
                 "responses": {
@@ -412,8 +411,7 @@
                         "required": true,
                         "type": "string",
                         "maxLength": 5,
-                        "minLength": 1,
-                        "allowEmptyValue": false
+                        "minLength": 1
                     }
                 ],
                 "responses": {
@@ -448,8 +446,7 @@
                         "description": "ID of the order that needs to be deleted",
                         "required": true,
                         "type": "string",
-                        "minLength": 1,
-                        "allowEmptyValue": false
+                        "minLength": 1
                     }
                 ],
                 "responses": {
@@ -654,8 +651,7 @@
                         "in": "path",
                         "description": "The name that needs to be fetched. Use user1 for testing. ",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -748,8 +744,7 @@
                         "in": "path",
                         "description": "name that need to be deleted",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     },
                     {
                         "name": "username",
@@ -789,8 +784,7 @@
                         "in": "path",
                         "description": "The name that needs to be deleted",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
