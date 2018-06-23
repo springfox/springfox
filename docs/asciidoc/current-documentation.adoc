@@ -315,7 +315,7 @@ Below are examples of how it would work
 ----
 
 <1> Example of `@ApiOperation#notes()`
-<2> Example of `@ApiParam#value()
+<2> Example of `@ApiParam#value()`
 <3> Example of `@RequestParam#defaultValue()`
 <4> Example of `@ApiOperation#value()`
 <5> Example of `@ApiImplicitParams#value()`
