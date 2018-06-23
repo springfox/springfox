@@ -59,7 +59,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/echo": {
@@ -96,7 +97,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/findByAge{?age}": {
@@ -127,7 +129,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/findByLegs{?legs}": {
@@ -159,7 +162,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/findByStamina{?stamina}": {
@@ -190,7 +194,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/findByStatus{?status}": {
@@ -226,7 +231,8 @@
                     "400": {
                         "description": "Invalid status value"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/findByTags{?tags}": {
@@ -285,7 +291,8 @@
                     "200": {
                         "description": "Just testing"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/grooming{?type}": {
@@ -311,7 +318,8 @@
                             "type": "boolean"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/nameToNickNamesMap": {
@@ -337,7 +345,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/siblings{?age,id,name}": {
@@ -381,7 +390,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/transformPetNameToPetMapToAny": {
@@ -415,7 +425,8 @@
                             "type": "object"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/transformPetNameToPetMapToGenericOpenMap": {
@@ -449,7 +460,8 @@
                             "type": "object"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/transformPetNameToPetMapToOpenMap": {
@@ -483,7 +495,8 @@
                             "type": "object"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/voidMethod/{input}": {
@@ -510,7 +523,8 @@
                     "200": {
                         "description": "Just testing"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/{a}/{b}": {
@@ -540,7 +554,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/{name}": {
@@ -569,7 +584,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/{petId}": {
@@ -598,7 +614,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/{petId}/pic": {
@@ -631,7 +648,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/pets/{petId}/pic/{picId}": {
@@ -661,7 +679,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },

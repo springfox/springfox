@@ -20,6 +20,7 @@
 package springfox.documentation.swagger2.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +74,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
     context.setMixInAnnotations(Model.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Operation.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Path.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Response.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(Response.class, ResponseSerializer.class);
     context.setMixInAnnotations(Parameter.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(ExternalDocs.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Xml.class, CustomizedSwaggerSerializer.class);
@@ -86,6 +87,12 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
   @JsonAutoDetect
   @JsonInclude(value = Include.NON_EMPTY)
   private class CustomizedSwaggerSerializer {
+  }
+
+  @JsonAutoDetect
+  @JsonInclude(value = Include.NON_EMPTY)
+  @JsonIgnoreProperties("responseSchema")
+  private class ResponseSerializer {
   }
 
   @JsonAutoDetect

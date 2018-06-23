@@ -53,7 +53,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/businesses/byTypes": {
@@ -97,7 +98,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/businesses/demonstratesApiModelName": {
@@ -120,7 +122,8 @@
                             "$ref": "#/definitions/Biz"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/businesses/non-aliased/{businessId}": {
@@ -157,7 +160,8 @@
                             "scope"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/businesses/responseEntity/{businessId}": {
@@ -187,7 +191,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/businesses/typeEcho": {
@@ -229,7 +234,8 @@
                             ]
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/businesses/vanilla/{businessId}": {
@@ -259,7 +265,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },
