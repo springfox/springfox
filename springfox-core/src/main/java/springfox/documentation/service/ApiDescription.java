@@ -34,10 +34,10 @@ public class ApiDescription {
    * For backwards compatibility. Please use the builder instead.
    * @see springfox.documentation.builders.ApiDescriptionBuilder
    * @deprecated @since 2.8.1
-   * @param path
-   * @param description
-   * @param operations
-   * @param hidden
+   * @param path path
+   * @param description description
+   * @param operations operations
+   * @param hidden true if hidden
    */
   @Deprecated
   public ApiDescription(

@@ -46,7 +46,7 @@ public class ModelContext {
   private final GenericTypeNamingStrategy genericNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
 
-  ModelContext(
+  private ModelContext(
       String groupName,
       Type type,
       boolean returnType,
@@ -65,7 +65,7 @@ public class ModelContext {
     this.modelBuilder = new ModelBuilder();
   }
 
-  ModelContext(ModelContext parentContext, ResolvedType input) {
+  private ModelContext(ModelContext parentContext, ResolvedType input) {
     this.parentContext = parentContext;
     this.type = input;
     this.groupName = parentContext.groupName;
@@ -183,6 +183,7 @@ public class ModelContext {
   /**
    * Convenience method to provide an new context for an input parameter
    *
+   * @param context - parent context
    * @param input - context for given input
    * @return new context based on parent context for a given input
    */

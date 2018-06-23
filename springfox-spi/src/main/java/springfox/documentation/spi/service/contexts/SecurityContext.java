@@ -63,7 +63,7 @@ public class SecurityContext {
    * @since 2.8.1
    * @param path path to secure
    * @return list of applicable security references
-   * @deprecated @see {@link SecurityContext#securityForOperation}
+   * @deprecated {@link SecurityContext#securityForOperation}
    */
   @Deprecated
   public List<SecurityReference> securityForPath(String path) {

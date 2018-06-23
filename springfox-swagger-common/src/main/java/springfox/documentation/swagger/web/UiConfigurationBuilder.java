@@ -73,6 +73,7 @@ public class UiConfigurationBuilder {
   /**
    * @param deepLinking If set to true, enables deep linking for tags and operations. See the Deep Linking documentation
    *                    for more information.
+   * @return this
    */
   public UiConfigurationBuilder deepLinking(Boolean deepLinking) {
     this.deepLinking = deepLinking;
@@ -81,6 +82,7 @@ public class UiConfigurationBuilder {
 
   /**
    * @param displayOperationId Controls the display of operationId in operations list. The default is false.
+   * @return this
    */
   public UiConfigurationBuilder displayOperationId(Boolean displayOperationId) {
     this.displayOperationId = displayOperationId;
@@ -89,6 +91,7 @@ public class UiConfigurationBuilder {
 
   /**
    * @param defaultModelsExpandDepth The default expansion depth for models (set to -1 completely hide the models).
+   * @return this
    */
   public UiConfigurationBuilder defaultModelsExpandDepth(Integer defaultModelsExpandDepth) {
     this.defaultModelsExpandDepth = defaultModelsExpandDepth;
@@ -97,6 +100,7 @@ public class UiConfigurationBuilder {
 
   /**
    * @param defaultModelExpandDepth The default expansion depth for the model on the model-example section.
+   * @return this
    */
   public UiConfigurationBuilder defaultModelExpandDepth(Integer defaultModelExpandDepth) {
     this.defaultModelExpandDepth = defaultModelExpandDepth;
@@ -107,6 +111,7 @@ public class UiConfigurationBuilder {
    * @param defaultModelRendering Controls how the model is shown when the API is first rendered. (The user can always
    *                              switch the rendering for a given model by clicking the 'Model' and 'Example Value'
    *                              links.)
+   * @return this
    */
   public UiConfigurationBuilder defaultModelRendering(ModelRendering defaultModelRendering) {
     this.defaultModelRendering = defaultModelRendering;
@@ -116,6 +121,7 @@ public class UiConfigurationBuilder {
   /**
    * @param displayRequestDuration Controls the display of the request duration (in milliseconds) for Try-It-Out
    *                               requests.
+   * @return this
    */
   public UiConfigurationBuilder displayRequestDuration(Boolean displayRequestDuration) {
     this.displayRequestDuration = displayRequestDuration;
@@ -125,6 +131,7 @@ public class UiConfigurationBuilder {
   /**
    * @param docExpansion Controls the default expansion setting for the operations and tags. It can be 'list' (expands
    *                     only the tags), 'full' (expands the tags and operations) or 'none' (expands nothing).
+   * @return this
    */
   public UiConfigurationBuilder docExpansion(DocExpansion docExpansion) {
     this.docExpansion = docExpansion;
@@ -136,6 +143,7 @@ public class UiConfigurationBuilder {
    *               operations that are shown. Can be Boolean to enable or disable, or a string, in which case filtering
    *               will be enabled using that string as the filter expression. Filtering is case sensitive matching the
    *               filter expression anywhere inside the tag.
+   * @return this
    */
   public UiConfigurationBuilder filter(Object filter) {
     this.filter = filter;
@@ -145,6 +153,7 @@ public class UiConfigurationBuilder {
   /**
    * @param maxDisplayedTags If set, limits the number of tagged operations displayed to at most this many. The default
    *                         is to show all operations.
+   * @return this
    */
   public UiConfigurationBuilder maxDisplayedTags(Integer maxDisplayedTags) {
     this.maxDisplayedTags = maxDisplayedTags;
@@ -155,6 +164,7 @@ public class UiConfigurationBuilder {
    * @param operationsSorter Apply a sort to the operation list of each API. It can be 'alpha' (sort by paths
    *                         alphanumerically), 'method' (sort by HTTP method) or a function (see Array.prototype.sort()
    *                         to know how sort function works). Default is the order returned by the server unchanged.
+   * @return this
    */
   public UiConfigurationBuilder operationsSorter(OperationsSorter operationsSorter) {
     this.operationsSorter = operationsSorter;
@@ -164,6 +174,7 @@ public class UiConfigurationBuilder {
   /**
    * @param showExtensions Controls the display of vendor extension (x-) fields and values for Operations, Parameters,
    *                       and Schema.
+   * @return this
    */
   public UiConfigurationBuilder showExtensions(Boolean showExtensions) {
     this.showExtensions = showExtensions;
@@ -174,6 +185,7 @@ public class UiConfigurationBuilder {
    * @param tagsSorter Apply a sort to the tag list of each API. It can be 'alpha' (sort by paths alphanumerically) or a
    *                   function (see Array.prototype.sort() to learn how to write a sort function). Two tag name strings
    *                   are passed to the sorter for each pass. Default is the order determined by Swagger-UI.
+   * @return this
    */
   public UiConfigurationBuilder tagsSorter(TagsSorter tagsSorter) {
     this.tagsSorter = tagsSorter;
@@ -184,6 +196,7 @@ public class UiConfigurationBuilder {
    * @param supportedSubmitMethods List of HTTP methods that have the Try it out feature enabled. An empty array
    *                               disables Try it out for all operations. This does not filter the operations from the
    *                               display.
+   * @return this
    */
   public UiConfigurationBuilder supportedSubmitMethods(String[] supportedSubmitMethods) {
     this.supportedSubmitMethods = supportedSubmitMethods;
@@ -195,6 +208,7 @@ public class UiConfigurationBuilder {
    *                     can use this parameter to set a different validator URL, for example for locally deployed
    *                     validators (Validator Badge). Setting it to null will disable validation. This parameter is
    *                     relevant for Swagger 2.0 specs only.
+   * @return this
    */
   public UiConfigurationBuilder validatorUrl(String validatorUrl) {
     this.validatorUrl = validatorUrl;

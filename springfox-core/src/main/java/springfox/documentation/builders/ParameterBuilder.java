@@ -186,7 +186,7 @@ public class ParameterBuilder {
    * Represents the convenience method to infer the model reference
    * Consolidate or figure out whats can be rolled into the other.
    *
-   * @param modelRef
+   * @param modelRef model reference
    * @return this
    */
   public ParameterBuilder modelRef(ModelReference modelRef) {

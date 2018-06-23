@@ -85,7 +85,7 @@ public class Version implements Comparable<Version> {
    * Parses the given string representation of a version into a {@link Version} object.
    *
    * @param version must not be {@literal null} or empty.
-   * @return
+   * @return returns version
    */
   public static Version parse(String version) {
 
@@ -113,8 +113,8 @@ public class Version implements Comparable<Version> {
   /**
    * Returns whether the current {@link Version} is greater (newer) than the given one.
    *
-   * @param version
-   * @return
+   * @param version - candidate version
+   * @return true or false based on version comparison
    */
   public boolean isGreaterThan(Version version) {
     return compareTo(version) > 0;
@@ -123,8 +123,8 @@ public class Version implements Comparable<Version> {
   /**
    * Returns whether the current {@link Version} is greater (newer) or the same as the given one.
    *
-   * @param version
-   * @return
+   * @param version - candidate version
+   * @return true or false based on version comparison
    */
   public boolean isGreaterThanOrEqualTo(Version version) {
     return compareTo(version) >= 0;
@@ -133,8 +133,8 @@ public class Version implements Comparable<Version> {
   /**
    * Returns whether the current {@link Version} is the same as the given one.
    *
-   * @param version
-   * @return
+   * @param version  - candidate version
+   * @return true or false based on version comparison
    */
   public boolean is(Version version) {
     return equals(version);
@@ -143,8 +143,8 @@ public class Version implements Comparable<Version> {
   /**
    * Returns whether the current {@link Version} is less (older) than the given one.
    *
-   * @param version
-   * @return
+   * @param version - candidate version
+   * @return true or false based on version comparison
    */
   public boolean isLessThan(Version version) {
     return compareTo(version) < 0;
@@ -153,8 +153,8 @@ public class Version implements Comparable<Version> {
   /**
    * Returns whether the current {@link Version} is less (older) or equal to the current one.
    *
-   * @param version
-   * @return
+   * @param version - candidate version
+   * @return true or false based on version comparison
    */
   public boolean isLessThanOrEqualTo(Version version) {
     return compareTo(version) <= 0;

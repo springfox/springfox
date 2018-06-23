@@ -74,6 +74,8 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   *
+   * @param validatorUrl - validator url
    */
   public UiConfiguration(String validatorUrl) {
     this(validatorUrl, "none", "alpha", "schema", Constants.DEFAULT_SUBMIT_METHODS, false, true, null);
@@ -81,6 +83,9 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   *
+   * @param validatorUrl - validator url
+   * @param supportedSubmitMethods - supported http methods (get,post etc.)
    */
   public UiConfiguration(String validatorUrl, String[] supportedSubmitMethods) {
     this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true, null);
@@ -332,6 +337,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apisSorter
    */
   @Deprecated
   @JsonProperty("apisSorter")
@@ -341,6 +347,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return jsonEditor
    */
   @Deprecated
   @JsonProperty("jsonEditor")
@@ -350,6 +357,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return showRequestHeaders
    */
   @Deprecated
   @JsonProperty("showRequestHeaders")
@@ -359,6 +367,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return requestTimeout
    */
   @Deprecated
   @JsonIgnore

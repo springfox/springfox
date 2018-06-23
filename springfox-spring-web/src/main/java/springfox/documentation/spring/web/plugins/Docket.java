@@ -126,7 +126,7 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Configures the global com.wordnik.swagger.model.SecurityScheme's applicable to all or some of the api
+   * Configures the global io.swagger.model.SecurityScheme's applicable to all or some of the api
    * operations. The configuration of which operations have associated SecuritySchemes is configured with
    * springfox.swagger.plugins.Docket#securityContexts
    *
@@ -167,7 +167,7 @@ public class Docket implements DocumentationPlugin {
    * By default, relative urls are generated. If absolute urls are required, supply an implementation of
    * AbsoluteSwaggerPathProvider
    *
-   * @param pathProvider
+   * @param pathProvider - provides an alternate implementation of path provider
    * @return this Docket
    * @see springfox.documentation.spring.web.paths.AbstractPathProvider
    */
@@ -246,7 +246,7 @@ public class Docket implements DocumentationPlugin {
   /**
    * Adds model substitution rules (alternateTypeRules)
    *
-   * @param alternateTypeRules
+   * @param alternateTypeRules - rules to be applied
    * @return this Docket
    * @see springfox.documentation.schema.AlternateTypeRules#newRule(java.lang.reflect.Type,
    * java.lang.reflect.Type)
@@ -262,7 +262,7 @@ public class Docket implements DocumentationPlugin {
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
-   * @param operationOrdering
+   * @param operationOrdering - ordering of the operations
    * @return this Docket
    */
   public Docket operationOrdering(Ordering<Operation> operationOrdering) {
@@ -322,7 +322,7 @@ public class Docket implements DocumentationPlugin {
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
-   * @param apiListingReferenceOrdering
+   * @param apiListingReferenceOrdering - ordering of the api listing references
    * @return this Docket
    */
   public Docket apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
@@ -331,13 +331,13 @@ public class Docket implements DocumentationPlugin {
   }
 
   /**
-   * Controls how <code>com.wordnik.swagger.model.ApiDescription</code>'s are ordered.
+   * Controls how <code>io.swagger.model.ApiDescription</code>'s are ordered.
    * The default sort is Lexicographically by the ApiDescription's path.
    *
    * NOTE: @see <a href="https://github.com/springfox/springfox/issues/732">#732</a> in case you're wondering why
    * specifying position might not work.
    *
-   * @param apiDescriptionOrdering
+   * @param apiDescriptionOrdering - ordering of the api descriptions
    * @return this Docket
    * @see springfox.documentation.spring.web.scanners.ApiListingScanner
    */
@@ -389,7 +389,7 @@ public class Docket implements DocumentationPlugin {
    * This is an incubating feature that may not continue to be supported after the swagger specification is modified
    * to accommodate the use case as described in issue #711
    *
-   * @param enabled
+   * @param enabled - when true it enables rfc6570 url templates
    * @return this Docket
    */
   @Incubating("2.1.0")

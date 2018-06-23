@@ -29,6 +29,7 @@ public interface DefaultsProviderPlugin extends Plugin<DocumentationType> {
    * .DocumentationContextBuilder
    *
    * @param documentationType - creates a default DocumentationContextBuilder based on documentation type
+   * @return - returns the documentation context builder
    */
   DocumentationContextBuilder create(DocumentationType documentationType);
 }

@@ -133,6 +133,7 @@ public class ModelPropertyBuilder {
   
   /***
    * Support for isAllowEmpty value
+   * @param allowEmptyValue true or false
    * @return true if supported
    * @since 2.8.0
    */

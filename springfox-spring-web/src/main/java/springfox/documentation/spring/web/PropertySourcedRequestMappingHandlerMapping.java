@@ -102,10 +102,9 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
    * @param urlPath the path to match.
    * @param request the http servlet request.
    * @return The HandlerMethod if one was found.
-   * @throws Exception
    */
   @Override
-  protected HandlerMethod lookupHandlerMethod(String urlPath, HttpServletRequest request) throws Exception {
+  protected HandlerMethod lookupHandlerMethod(String urlPath, HttpServletRequest request) {
     logger.debug("looking up handler for path: " + urlPath);
     HandlerMethod handlerMethod = handlerMethods.get(urlPath);
     if (handlerMethod != null) {

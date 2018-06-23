@@ -29,6 +29,7 @@ public class ObjectMapperConfigured extends ApplicationEvent {
    * Create a new ApplicationEvent.
    *
    * @param source the component that published the event (never {@code null})
+   * @param objectMapper object mapper to send to event consumers
    */
   public ObjectMapperConfigured(Object source, ObjectMapper objectMapper) {
     super(source);

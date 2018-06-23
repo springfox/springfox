@@ -39,6 +39,7 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
   /**
    * Use url going forward rather than location
    * @since 2.8.0
+   * @return url
    */
   @JsonProperty("url")
   public String getUrl() {
@@ -51,6 +52,7 @@ public class SwaggerResource implements Comparable<SwaggerResource> {
 
   /**
    * @deprecated @since 2.8.0 - Use url going forward
+   * @return location
    */
   @Deprecated
   @JsonProperty("location")

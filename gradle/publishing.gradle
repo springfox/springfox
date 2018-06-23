@@ -181,7 +181,7 @@ bintray {
   publications = ['mavenJava']
   pkg {
     repo = 'maven-repo'
-    name = "${project.name}"
+    name = "springfox"
     userOrg = "springfox"
     websiteUrl = "${project.projectUrl}"
     issueTrackerUrl = "${project.projectUrl}/issues"
