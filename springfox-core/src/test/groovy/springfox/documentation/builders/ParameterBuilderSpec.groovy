@@ -111,4 +111,45 @@ class ParameterBuilderSpec extends Specification {
     new AllowableListValues([], "LIST") | new AllowableListValues(['a'], "LIST")
     null                                | new AllowableListValues(['a'], "LIST")
   }
+
+  @Unroll
+  def "Setting builder allowEmptyValue to #allowEmptyValue when parameter type is #parameterType"() {
+    given:
+    def sut = new ParameterBuilder()
+
+    when:
+    sut.allowEmptyValue(allowEmptyValue)
+    sut.parameterType(parameterType)
+
+    and:
+    def built = sut.build()
+
+    then:
+    built.allowEmptyValue == expectedAllowEmptyValue
+
+    where:
+    parameterType |allowEmptyValue |  expectedAllowEmptyValue
+    "query"       |true            |  true
+    "query"       |false           |  false
+    "query"       |null            |  null
+    "formData"    |true            |  true
+    "formData"    |false           |  false
+    "formData"    |null            |  null
+    "form"        |true            |  null
+    "form"        |false           |  null
+    "form"        |null            |  null
+    "header"      |true            |  null
+    "header"      |false           |  null
+    "header"      |null            |  null
+    "cookie"      |true            |  null
+    "cookie"      |false           |  null
+    "cookie"      |null            |  null
+    "path"        |true            |  null
+    "path"        |false           |  null
+    "path"        |null            |  null
+    "body"        |true            |  null
+    "body"        |false           |  null
+    "body"        |null            |  null
+
+  }
 }
