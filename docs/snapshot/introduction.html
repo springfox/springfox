@@ -659,7 +659,7 @@ and building will NOT work!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">./gradlew publishDocs</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">./gradlew releaseDocs</code></pre>
 </div>
 </div>
 </div>
@@ -709,13 +709,13 @@ or <a href="https://github.com/springfox/springfox/blob/master/springfox-spring-
 The below environment variables are required to run a release:</p>
 </li>
 <li>
-<p><code>GITHUB_TOKEN</code></p>
+<p><code>GITHUB_TOKEN</code> - this is the github token</p>
 </li>
 <li>
-<p><code>BINTRAY_USER_NAME</code></p>
+<p><code>BINTRAY_USER_NAME</code> - this is your bintray user</p>
 </li>
 <li>
-<p><code>BINTRAY_PASSWORD</code></p>
+<p><code>BINTRAY_PASSWORD</code> - this is your bintray token</p>
 </li>
 <li>
 <p><code>SONATYPE_USER_NAME</code></p>
@@ -723,15 +723,31 @@ The below environment variables are required to run a release:</p>
 <li>
 <p><code>SONATYPE_PASSWORD</code></p>
 </li>
+<li>
+<p><code>GPG_PASSPHRASE</code> - if your gpg key has a passphrase or ''</p>
+</li>
+<li>
+<p><code>SONATYPE_SYNC</code> - automatically sync to maven central</p>
+</li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Alternatively you could set the following gradle/project properties (-Pproperty)
+    - <code>githubToken</code> - this is the github token
+    - <code>bintrayUsername</code> - this is your bintray user
+    - <code>bintrayApiKey</code> - this is your bintray token
+    - <code>gpgPassphrase</code> - if your gpg key has a passphrase or ''
+    - <code>ossUser</code>
+    - <code>ossPassword</code>
+    - <code>ossSync</code> - automatically sync to maven central</p>
 </div>
 <div class="paragraph">
 <p>Recommend using [autoenv](<a href="https://github.com/kennethreitz/autoenv" class="bare">https://github.com/kennethreitz/autoenv</a>) with a <code>.env</code> file at the root of the repo.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>    ./gradlew release -PreleaseType=&lt;MAJOR|MINOR|PATCH&gt; -i
-    ./gradlew publishDocs</code></pre>
+<pre class="CodeRay highlight"><code>    ./gradlew clean build release [-PreleaseType=&lt;MAJOR|MINOR|PATCH&gt;]
+    ./gradlew releaseDocs</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -799,7 +815,7 @@ The below environment variables are required to run a release:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-06-23 23:36:57 +00:00
+Last updated 2018-06-24 02:05:08 +00:00
 </div>
 </div>
 </body>
