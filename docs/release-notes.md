@@ -1,4 +1,44 @@
-#2.9.0 Release Notes
+# 2.9.2 Release Notes
+This is mostly a service release. Predominantly to publish the repository to maven along with minor improvements
+
+## Pull requests and contributions
+- (#2492) Added missing backtick   @TwinProduction
+- (#2465) X-Forwarded-Prefix should replace basePath in newer spring versions   @rainoko
+- (#2464) Remove replaceAll with trim   @ctruzzi
+- (#2434) Add csrf token support   @olOwOlo
+- (#2429) Remove output related to fixed issue (#1244) #2428   @haelduksf
+- (#2404) Using media type to determine correct param type when expanding param…   @andyRokit
+
+## Bugs
+- (#2502) OperationContext only finds SecurityContext's by path ignoring methods 
+@robinsonmark 
+- (#2481) ConditionalOnWebApplication not found after upgrading to 2.9.0  `duplicate` @gionn
+- (#2461) 2.8.0 /swagger-resource/configuration/ui does not set Accept header properly  @OverDrone
+- (#2446) ApiParam allowableValues string with spaces is not supported  @uriparush
+- (#2438) Upgrade to SpringFox 2.9.0 causes failures in Spring Boot 2.0.2.RELEASE  @james
+- (#2428) description = "@Size: Min - Max (until #1244 gets fixed)" when param annotated with @Min and/or @Max but #1244 is already fixed  @haelduksf
+- (#2423) Query Parameter extracted from Object doesn't recognize public field without getter  @kintomiko
+- (#2415) JSR-303: Size annotation on Path Param generates maximum/minimum, but on Model generates maxLength/minLength  @retinaburn
+- (#2401) Present multipart object attributes as "formData"  `duplicate` @andyRokit
+- (#2376) Model attribute expansion should respect form/query parameter type 
+@dilipkrish
+- (#2498) Path Parameter generated having unsupported properties `duplicate` @FossilBlade
+- (#2481) ConditionalOnWebApplication not found after upgrading to 2.9.0  `duplicate` @gionn
+- (#2466) There is no jar in maven repo.Why? `duplicate` @litttlefisher
+- (#2441) Upgrading from 2.8.0 to 2.9.0 causes SpringBootTest to stop working `duplicate` @maraswrona
+- (#2401) Present multipart object attributes as "formData"  `duplicate` @andyRokit
+- (#755) o.s.data.domain.Pageable - automatically add @ApiImplicitParams? can-use-for-docs `duplicate`  @steve
+
+## Feature
+- (#2180) Is it possible to document OAuth 2 scopes for different HTTP methods? feature @Beontra
+
+
+## Maintenance
+- (#2503) Upgrade libraries and patch versions  @dilipkrish
+- (#2448) X-Forwarded-prefix not work as expected since spring version 4.3.15  @rainoko
+
+
+# 2.9.0 Release Notes
 This is the last release supporting jdk 6 and spring 4.x. The next planned release is 3.0 which will have jdk 8 as a pre-requisite. There was a large effort to ensure a stable release before moving to the next major release. A big thank you again for the numerous feature/bug requests for making this product better and supporting this library. 
 
 A special thank you to @kasecato, @MaksimOrlov, @neumaennl, @rgoers and @Fyro-Ing for working on some much requested features.
@@ -100,7 +140,7 @@ NOTE: All deprecations will be removed when we move to 3.0
 - (#1680) HAL `Resources` not rendered correctly `duplicate` @raffaelschmid
 - (#1657) Parameter vendor extension support @zidanluo
 
-#2.8.0 Release Notes
+# 2.8.0 Release Notes
 
 ## Pull Requests
 - (#2178) Change regex in Paths.java to handle expressions/constraints correctly @nobe0716
