@@ -22,6 +22,7 @@ public class SpringVersionCapability {
 
   private static final Version FIVE_ZERO_ZERO = Version.parse("5.0.0.RELEASE");
   private static final Version FIVE_ZERO_FIVE = Version.parse("5.0.5.RELEASE");
+  private static final Version FOUR_THREE_THREE = Version.parse("4.3.3.RELEASE");
   private static final Version FOUR_THREE_FIFTEEN = Version.parse("4.3.15.RELEASE");
 
   public SpringVersionCapability() {
@@ -34,5 +35,10 @@ public class SpringVersionCapability {
     return (parsed.isGreaterThanOrEqualTo(FOUR_THREE_FIFTEEN)
                 && parsed.isLessThan(FIVE_ZERO_ZERO)) || 
         parsed.isGreaterThanOrEqualTo(FIVE_ZERO_FIVE);
+  }
+
+  public static boolean supportsExtendedPathVariableAnnotation(String version) {
+    Version parsed = Version.parse(version);
+    return parsed.isGreaterThanOrEqualTo(FOUR_THREE_THREE);
   }
 }

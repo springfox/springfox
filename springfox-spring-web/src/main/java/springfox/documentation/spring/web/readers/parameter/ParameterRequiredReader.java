@@ -24,6 +24,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map;
 
 import static com.google.common.base.Strings.*;
 
@@ -88,12 +90,14 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
+      Map<String, Object> attributes = AnnotationUtils.getAnnotationAttributes(pathVariable.get());
       String paramName = MoreObjects.firstNonNull(
           emptyToNull(pathVariable.get().name()),
           methodParameter.defaultName().orNull());
 
-      if (pathVariable.get().required() ||
-          optionalButPresentInThePath(operationContext, pathVariable.get(), paramName)) {
+      boolean required = !attributes.containsKey("required") || (Boolean) attributes.get("required");
+      if (required ||
+          optionalButPresentInThePath(operationContext, paramName)) {
         requiredSet.add(true);
       }
     }
@@ -112,11 +116,9 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   private boolean optionalButPresentInThePath(
       OperationContext operationContext,
-      PathVariable pathVariable,
       String paramName) {
 
-    return !pathVariable.required()
-         && operationContext.requestMappingPattern().contains("{" + paramName + "}");
+    return operationContext.requestMappingPattern().contains("{" + paramName + "}");
   }
 
   @VisibleForTesting
