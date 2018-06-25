@@ -20,7 +20,8 @@ trait ParameterAnnotationSupport {
     [
         value   : { -> value },
         name    : { -> value },
-        required: { -> required }
+        required: { -> required },
+        annotationType: { PathVariable.class }
     ] as PathVariable
   }
 
