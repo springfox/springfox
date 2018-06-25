@@ -170,6 +170,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
               documentationType.getName(), documentationType.getVersion());
         }
       }
+      //TODO Entry point for Swagger files upload
     }
   }
 
