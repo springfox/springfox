@@ -30,18 +30,21 @@ public class ResponseMessage {
   private final ModelReference responseModel;
   private final Map<String, Header> headers;
   private final List<VendorExtension> vendorExtensions;
+  private final Map<String, Object> examples;
 
   public ResponseMessage(
       int code,
       String message,
       ModelReference responseModel,
       Map<String, Header> headers,
-      List<VendorExtension> vendorExtensions) {
+      List<VendorExtension> vendorExtensions,
+      Map<String, Object> examples) {
     this.code = code;
     this.message = message;
     this.responseModel = responseModel;
     this.headers = headers;
     this.vendorExtensions = vendorExtensions;
+    this.examples = examples;
   }
 
   public int getCode() {
@@ -62,6 +65,10 @@ public class ResponseMessage {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  public Map<String, Object> getExamples() {
+    return examples;
   }
 
   @Override

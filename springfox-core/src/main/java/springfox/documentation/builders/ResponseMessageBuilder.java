@@ -37,6 +37,7 @@ public class ResponseMessageBuilder {
   private ModelReference responseModel;
   private Map<String, Header> headers = newTreeMap();
   private List<VendorExtension> vendorExtensions = newArrayList();
+  private Map<String, Object> examples = newHashMap();
 
   /**
    * Updates the http response code
@@ -119,7 +120,18 @@ public class ResponseMessageBuilder {
     return this;
   }
 
+  /**
+   * Updates the response message examples
+   *
+   * @param examples - response message examples
+   * @return this
+   */
+  public ResponseMessageBuilder examples(Map<String, Object> examples) {
+    this.examples.putAll(nullToEmptyMap(examples));
+    return this;
+  }
+
   public ResponseMessage build() {
-    return new ResponseMessage(code, message, responseModel, headers, vendorExtensions);
+    return new ResponseMessage(code, message, responseModel, headers, vendorExtensions, examples);
   }
 }
