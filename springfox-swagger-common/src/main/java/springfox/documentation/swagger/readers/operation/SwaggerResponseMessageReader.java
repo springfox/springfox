@@ -24,12 +24,14 @@ import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ExampleProperty;
 import io.swagger.annotations.ResponseHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Header;
@@ -45,6 +47,9 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Optional.*;
+import static com.google.common.base.Strings.emptyToNull;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.*;
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -115,6 +120,12 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
+          List<Example> examples = newArrayList();
+          for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
+            if (!isNullOrEmpty(exampleProperty.value())) {
+              examples.add(new Example(emptyToNull(exampleProperty.mediaType()), exampleProperty.value()));
+            }
+          }
           Map<String, Header> headers = newHashMap(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
@@ -122,6 +133,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               .code(apiResponse.code())
               .message(apiResponse.message())
               .responseModel(responseModel.orNull())
+              .examples(examples)
               .headersWithDescription(headers)
               .build());
         }

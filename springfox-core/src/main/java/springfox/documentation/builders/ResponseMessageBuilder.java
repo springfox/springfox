@@ -19,6 +19,7 @@
 
 package springfox.documentation.builders;
 
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
@@ -35,6 +36,7 @@ public class ResponseMessageBuilder {
   private int code;
   private String message;
   private ModelReference responseModel;
+  private List<Example> examples = newArrayList();
   private Map<String, Header> headers = newTreeMap();
   private List<VendorExtension> vendorExtensions = newArrayList();
 
@@ -68,6 +70,18 @@ public class ResponseMessageBuilder {
    */
   public ResponseMessageBuilder responseModel(ModelReference responseModel) {
     this.responseModel = defaultIfAbsent(responseModel, this.responseModel);
+    return this;
+  }
+
+  /**
+   * Updates the response examples
+   *
+   * @param examples response examples
+   * @return this
+   * @since 2.9.4
+   */
+  public ResponseMessageBuilder examples(List<Example> examples) {
+    this.examples.addAll(nullToEmptyList(examples));
     return this;
   }
 
@@ -120,6 +134,6 @@ public class ResponseMessageBuilder {
   }
 
   public ResponseMessage build() {
-    return new ResponseMessage(code, message, responseModel, headers, vendorExtensions);
+    return new ResponseMessage(code, message, responseModel, examples, headers, vendorExtensions);
   }
 }

@@ -77,6 +77,7 @@ class DocketSpec extends DocumentationContextSpec {
         OK.value(),
         "blah",
         null,
+        [],
         [] as Map,
         [])])
         .useDefaultResponseMessages(true)
@@ -113,6 +114,7 @@ class DocketSpec extends DocumentationContextSpec {
         OK.value(),
         "blah",
         null,
+        [],
         [] as Map,
         [])])
         .useDefaultResponseMessages(false)
