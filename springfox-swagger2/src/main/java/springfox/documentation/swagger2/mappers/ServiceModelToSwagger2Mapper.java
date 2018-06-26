@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.mappers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import io.swagger.models.Contact;
 import io.swagger.models.Info;
@@ -132,7 +131,9 @@ public abstract class ServiceModelToSwagger2Mapper {
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
-      response.setExamples(Maps.<String, Object>newHashMap());
+      Map<String, Object> examples = new ExamplesMapper()
+              .mapExamples(responseMessage.getExamples());
+      response.setExamples(examples);
       response.setHeaders(transformEntries(responseMessage.getHeaders(), toPropertyEntry()));
       Map<String, Object> extensions = new VendorExtensionsMapper()
           .mapExtensions(responseMessage.getVendorExtensions());

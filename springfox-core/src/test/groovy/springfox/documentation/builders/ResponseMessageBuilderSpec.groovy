@@ -20,9 +20,11 @@
 package springfox.documentation.builders
 
 import spock.lang.Specification
+import springfox.documentation.schema.Example
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.Header
 
+import static com.google.common.collect.Lists.newArrayList
 import static com.google.common.collect.Maps.*
 
 class ResponseMessageBuilderSpec extends Specification {
@@ -37,10 +39,11 @@ class ResponseMessageBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value                  | property
-      'code'            | 200                    | 'code'
-      'message'         | 'OK'                   | 'message'
-      'responseModel'   | new ModelRef('String') | 'responseModel'
+      builderMethod   | value                                               | property
+      'code'          | 200                                                 | 'code'
+      'message'       | 'OK'                                                | 'message'
+      'responseModel' | new ModelRef('String')                              | 'responseModel'
+      'examples'      | newArrayList(new Example("mediaType", "value"))     | 'examples'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -55,9 +58,10 @@ class ResponseMessageBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value                  | property
-      'message'         | 'OK'                   | 'message'
-      'responseModel'   | new ModelRef('String') | 'responseModel'
+      builderMethod     | value                  							| property
+      'message'         | 'OK'                   							| 'message'
+      'responseModel'   | new ModelRef('String') 							| 'responseModel'
+      'examples'      	| newArrayList(new Example("mediaType", "value"))   | 'examples'
   }
 
 
