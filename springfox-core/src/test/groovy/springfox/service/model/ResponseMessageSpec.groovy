@@ -26,21 +26,24 @@ import springfox.documentation.schema.ModelRef
 class ResponseMessageSpec extends Specification {
   def "ResponseMessage equals only takes the code into account" () {
     given:
-      def sut = responseMessage(200, "message", "String")
+      def sut = responseMessage(200, "message", "String", ["plain/text":"result"])
     expect:
       sut.equals(test) == expectedEquality
       sut.equals(sut)
     where:
-      test                                        | expectedEquality
-      responseMessage(200, "message", "String")   | true
-      responseMessage(200, "", "String")          | true
-      responseMessage(200, "message", "")         | true
-      responseMessage(201, "message", "string")   | false
+      test                                                                | expectedEquality
+      responseMessage(200, "message", "String", ["plain/text": "result"]) | true
+      responseMessage(200, "", "String", ["plain/text": "result"])        | true
+      responseMessage(200, "message", "", ["plain/text": "result"])       | true
+      responseMessage(200, "message", "String", [:])                      | true
+      responseMessage(201, "message", "string", ["plain/text": "result"]) | false
   }
 
-  def responseMessage(code, message, responseModel) {
+  def responseMessage(code, message, responseModel, examples) {
     new ResponseMessageBuilder().code(code)
             .message(message)
-            .responseModel(new ModelRef(responseModel)).build()
+            .responseModel(new ModelRef(responseModel))
+            .examples(examples)
+            .build()
   }
 }

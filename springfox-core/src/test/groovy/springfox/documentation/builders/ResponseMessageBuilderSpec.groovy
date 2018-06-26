@@ -36,10 +36,11 @@ class ResponseMessageBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value                  | property
-      'code'            | 200                    | 'code'
-      'message'         | 'OK'                   | 'message'
-      'responseModel'   | new ModelRef('String') | 'responseModel'
+      builderMethod   | value                                 | property
+      'code'          | 200                                   | 'code'
+      'message'       | 'OK'                                  | 'message'
+      'responseModel' | new ModelRef('String')                | 'responseModel'
+      'examples'      | ['application/json': '{"foo":"bar"}'] | 'examples'
   }
 
   def "Setting builder properties to null values preserves existing values"() {
@@ -54,9 +55,10 @@ class ResponseMessageBuilderSpec extends Specification {
       built."$property" == value
 
     where:
-      builderMethod     | value                  | property
-      'message'         | 'OK'                   | 'message'
-      'responseModel'   | new ModelRef('String') | 'responseModel'
+      builderMethod     | value                                     | property
+      'message'         | 'OK'                                      | 'message'
+      'responseModel'   | new ModelRef('String')                    | 'responseModel'
+      'examples'        | ['application/json': '{"foo":"bar"}']     | 'examples'
   }
 
 
