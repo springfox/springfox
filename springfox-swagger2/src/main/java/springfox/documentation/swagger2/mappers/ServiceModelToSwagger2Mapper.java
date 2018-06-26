@@ -135,7 +135,7 @@ public abstract class ServiceModelToSwagger2Mapper {
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
-      response.setExamples(new HashMap<>());
+      response.setExamples(responseMessage.getExamples());
       response.setHeaders(responseMessage.getHeaders().entrySet().stream().map(toPropertyEntry())
           .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
       Map<String, Object> extensions = new VendorExtensionsMapper()
