@@ -24,7 +24,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ValueConstants;
+import springfox.documentation.common.SpringVersion;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -42,19 +42,27 @@ import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Map;
 
 import static com.google.common.base.Strings.*;
+import static springfox.documentation.common.SpringVersionCapability.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
+  private final SpringVersion springVersion;
   private final DescriptionResolver descriptions;
 
   @Autowired
   public ParameterRequiredReader(DescriptionResolver descriptions) {
-    this.descriptions = descriptions;
+    this(descriptions, new SpringVersion());
   }
+
+  @VisibleForTesting
+  ParameterRequiredReader(DescriptionResolver descriptions, SpringVersion springVersion) {
+    this.descriptions = descriptions;
+    this.springVersion = springVersion;
+  }
+
 
   @Override
   public void apply(ParameterContext context) {
@@ -90,14 +98,16 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
-      Map<String, Object> attributes = AnnotationUtils.getAnnotationAttributes(pathVariable.get());
-      String paramName = MoreObjects.firstNonNull(
-          emptyToNull(pathVariable.get().name()),
-          methodParameter.defaultName().orNull());
+      if(supportsExtendedPathVariableAnnotation(springVersion.getVersion())) {
+        String paramName = MoreObjects.firstNonNull(
+                emptyToNull(pathVariable.get().name()),
+                methodParameter.defaultName().orNull());
 
-      boolean required = !attributes.containsKey("required") || (Boolean) attributes.get("required");
-      if (required ||
-          optionalButPresentInThePath(operationContext, paramName)) {
+        if (pathVariable.get().required() ||
+                optionalButPresentInThePath(operationContext, pathVariable.get(), paramName)) {
+          requiredSet.add(true);
+        }
+      } else {
         requiredSet.add(true);
       }
     }
@@ -116,9 +126,11 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   private boolean optionalButPresentInThePath(
       OperationContext operationContext,
+      PathVariable pathVariable,
       String paramName) {
 
-    return operationContext.requestMappingPattern().contains("{" + paramName + "}");
+    return !pathVariable.required()
+         && operationContext.requestMappingPattern().contains("{" + paramName + "}");
   }
 
   @VisibleForTesting

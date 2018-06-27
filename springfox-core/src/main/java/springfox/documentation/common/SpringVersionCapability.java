@@ -16,23 +16,26 @@
  *
  *
  */
-package springfox.documentation.swagger.common;
+package springfox.documentation.common;
 
 public class SpringVersionCapability {
 
   private static final Version FIVE_ZERO_ZERO = Version.parse("5.0.0.RELEASE");
   private static final Version FIVE_ZERO_FIVE = Version.parse("5.0.5.RELEASE");
+  private static final Version FOUR_THREE_THREE = Version.parse("4.3.3.RELEASE");
   private static final Version FOUR_THREE_FIFTEEN = Version.parse("4.3.15.RELEASE");
 
   public SpringVersionCapability() {
     throw new UnsupportedOperationException();
   }
 
-  public static boolean supportsXForwardPrefixHeader(String version) {
-    Version parsed = Version.parse(version);
+  public static boolean supportsXForwardPrefixHeader(Version version) {
+    return (version.isGreaterThanOrEqualTo(FOUR_THREE_FIFTEEN)
+                && version.isLessThan(FIVE_ZERO_ZERO)) ||
+            version.isGreaterThanOrEqualTo(FIVE_ZERO_FIVE);
+  }
 
-    return (parsed.isGreaterThanOrEqualTo(FOUR_THREE_FIFTEEN)
-                && parsed.isLessThan(FIVE_ZERO_ZERO)) || 
-        parsed.isGreaterThanOrEqualTo(FIVE_ZERO_FIVE);
+  public static boolean supportsExtendedPathVariableAnnotation(Version version) {
+    return version.isGreaterThanOrEqualTo(FOUR_THREE_THREE);
   }
 }
