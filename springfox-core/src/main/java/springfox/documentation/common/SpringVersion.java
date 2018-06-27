@@ -3,6 +3,7 @@ package springfox.documentation.common;
 /**
  * Class providing a proxy for @{@link org.springframework.core.SpringVersion}
  * This enable mocking and testing of specific situations
+ * @author dbaje
  */
 public class SpringVersion {
     /**
