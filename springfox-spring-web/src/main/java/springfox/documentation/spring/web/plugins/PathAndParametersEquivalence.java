@@ -33,12 +33,12 @@ class PathAndParametersEquivalence extends Equivalence<RequestHandler> {
       = new ResolvedMethodParameterEquivalence();
 
   @Override
-  protected boolean doEquivalent(RequestHandler a, RequestHandler b) {
+  protected boolean doEquivalent(RequestHandler first, RequestHandler second) {
 
-    return a.getPatternsCondition().equals(b.getPatternsCondition())
-        && !Sets.intersection(a.supportedMethods(), b.supportedMethods()).isEmpty()
-        && a.params().equals(b.params())
-        && Sets.symmetricDifference(wrapped(a.getParameters()), wrapped(b.getParameters())).isEmpty();
+    return first.getPatternsCondition().equals(second.getPatternsCondition())
+        && !Sets.intersection(first.supportedMethods(), second.supportedMethods()).isEmpty()
+        && first.params().equals(second.params())
+        && Sets.symmetricDifference(wrapped(first.getParameters()), wrapped(second.getParameters())).isEmpty();
   }
 
   private Set<Wrapper<ResolvedMethodParameter>> wrapped(List<ResolvedMethodParameter> parameters) {

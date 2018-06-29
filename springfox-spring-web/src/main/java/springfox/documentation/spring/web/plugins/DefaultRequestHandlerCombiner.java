@@ -49,8 +49,8 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
     LOGGER.debug("Total number of request handlers {}", nullToEmptyList(source).size());
     for (RequestHandler each : nullToEmptyList(source)) {
-      LOGGER.debug("Adding key: {}, {}", patternsCondition(each).toString(), each.toString());
-      byPath.put(patternsCondition(each).toString(), each);
+      LOGGER.debug("Adding key: {}, {}", sortedPaths(each.getPatternsCondition()), each.toString());
+      byPath.put(sortedPaths(each.getPatternsCondition()), each);
     }
     for (String key : byPath.keySet()) {
       combined.addAll(combined(byPath.get(key)));
@@ -122,6 +122,9 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   }
 
   private RequestHandler combine(RequestHandler first, RequestHandler second) {
-    return new CombinedRequestHandler(first, second);
+    if (first.compareTo(second) < 0) {
+      return new CombinedRequestHandler(first, second);
+    }
+    return new CombinedRequestHandler(second, first);
   }
 }
