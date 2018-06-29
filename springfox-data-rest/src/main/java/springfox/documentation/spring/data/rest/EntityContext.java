@@ -20,6 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -71,11 +72,15 @@ public class EntityContext {
     return resource.getDomainType().getSimpleName();
   }
 
-  public PersistentEntity<?, ?> entity() {
+  public PersistentEntity<?, ? extends PersistentProperty<?>> entity() {
     Object domainType = resource.getDomainType();
     Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
-    Class actualDomainType = (Class) converter.convert(domainType).orNull();
-    return entities.getPersistentEntity(actualDomainType);
+    com.google.common.base.Optional<?> actualDomainType = converter.convert(domainType);
+    if (actualDomainType.isPresent()) {
+      return entities.getPersistentEntity((Class<?>) actualDomainType.get())
+          .orElse(null);
+    }
+    return null;
   }
 
   public CrudMethods crudMethods() {

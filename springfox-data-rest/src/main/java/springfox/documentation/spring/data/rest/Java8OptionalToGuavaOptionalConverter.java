@@ -42,11 +42,9 @@ class Java8OptionalToGuavaOptionalConverter implements Converter<Object, Optiona
           if ((Boolean) optionalIsPresent.invoke(source)) {
             return Optional.of(optionalGet.invoke(source));
           }
-        } catch (NoSuchMethodException e) {
-          LOGGER.warn(e.getMessage());
-        } catch (IllegalAccessException e) {
-          LOGGER.warn(e.getMessage());
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException |
+                InvocationTargetException |
+                IllegalAccessException e) {
           LOGGER.warn(e.getMessage());
         }
       } else {

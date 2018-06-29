@@ -96,10 +96,11 @@ class ActionSpecification {
     return getHandlerMethod().transform(new Function<HandlerMethod, Class<?>>() {
       @Override
       public Class<?> apply(HandlerMethod input) {
-        if (AopUtils.isAopProxy(handlerMethod.getBean())) {
-          return AopUtils.getTargetClass(handlerMethod.getBean());
+        Object bean = new OptionalDeferencer<>().convert(handlerMethod.getBean());
+        if (AopUtils.isAopProxy(bean)) {
+          return AopUtils.getTargetClass(bean);
         }
-        return handlerMethod.getBeanType();
+        return (Class<?>) bean;
       }
     });
   }

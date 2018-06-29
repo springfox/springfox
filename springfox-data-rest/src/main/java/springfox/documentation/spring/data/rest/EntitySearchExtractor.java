@@ -53,7 +53,7 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
     SearchResourceMappings searchMappings = context.searchMappings();
     for (MethodResourceMapping mapping : searchMappings.getExportedMappings()) {
       HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(),
+          new OptionalDeferencer<>().convert(context.getRepositoryInstance()),
           mapping.getMethod());
       ActionSpecification spec = new ActionSpecification(
           actionName(entity, mapping.getMethod()),
