@@ -45,7 +45,6 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
     }
   }
 
-
   @Unroll
   def "Combines request handlers when there is only one"() {
     given:

@@ -20,7 +20,9 @@
 package springfox.documentation;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
+import com.google.common.collect.Ordering;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -31,10 +33,12 @@ import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
-public interface RequestHandler {
+public interface RequestHandler extends Comparable<RequestHandler> {
 
   /**
    * @deprecated @since 2.7.0 This is introduced to preserve backwards compat with groups
@@ -93,4 +97,25 @@ public interface RequestHandler {
    */
   @Incubating
   RequestHandler combine(RequestHandler other);
+
+  @Override
+  default int compareTo(RequestHandler other) {
+    return byPatternsCondition()
+        .compound(byOperationName())
+        .compare(this, other);
+  }
+
+  static String sortedPaths(PatternsRequestCondition patternsCondition) {
+    TreeSet<String> paths = new TreeSet<>(patternsCondition.getPatterns());
+    return Joiner.on(",").skipNulls().join(paths);
+  }
+
+  static Ordering<RequestHandler> byPatternsCondition() {
+    return Ordering.from(
+        Comparator.comparing(requestHandler -> sortedPaths(requestHandler.getPatternsCondition())));
+  }
+
+  static Ordering<RequestHandler> byOperationName() {
+    return Ordering.from(Comparator.comparing(RequestHandler::getName));
+  }
 }

@@ -1,9 +1,10 @@
 ext {
+  aptIdeaVersion = 0.17
   byteBuddyVersion = "1.8.12"
   cglib = "3.2.6"
   classmate = "1.4.0"
   equalsverifierVersion = '2.4.7'
-  groovy = "2.4.15"
+  groovy = "2.5.0"
   guava = "20.0"
   jacocoVersion = '0.8.1'
   jackson = '2.9.6'
@@ -18,15 +19,15 @@ ext {
   slf4j = "1.7.25"
   snakeyaml = '1.21'
   spock = "1.1-groovy-2.4"
-  spring = "4.3.18.RELEASE"
+  spring = "5.0.7.RELEASE"
   springHateoas = "0.24.0.RELEASE"
-  springDataRest = "2.6.13.RELEASE"
+  springDataRest = "3.0.8.RELEASE"
   springPluginVersion = "1.2.0.RELEASE"
   swagger2Core = "1.5.20"
-  springBoot = "1.5.14.RELEASE"
+  springBoot = "2.0.3.RELEASE"
   springfoxRfc6570Version = "1.0.0"
   undercouch = "3.4.3"
-  validationApiVersion = '1.1.0.Final'
+  validationApiVersion = '2.0.1.Final'
 
   libs = [
 
