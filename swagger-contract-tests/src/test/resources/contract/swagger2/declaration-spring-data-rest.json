@@ -75,8 +75,8 @@
                 "tags": [
                     "Address Entity"
                 ],
-                "summary": "findOneAddress",
-                "operationId": "findOneAddressUsingGET_2",
+                "summary": "findByIdAddress",
+                "operationId": "findByIdAddressUsingGET_2",
                 "parameters": [
                     {
                         "name": "id",
@@ -558,8 +558,8 @@
                 "tags": [
                     "Person Entity"
                 ],
-                "summary": "findOnePerson",
-                "operationId": "findOnePersonUsingGET_2",
+                "summary": "findByIdPerson",
+                "operationId": "findByIdPersonUsingGET_2",
                 "parameters": [
                     {
                         "name": "id",
@@ -861,7 +861,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_5",
+                "operationId": "personTagsUsingGET_4",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -974,7 +974,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_5",
+                "operationId": "personTagsUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1045,7 +1045,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_4",
+                "operationId": "personTagsUsingGET_5",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1081,7 +1081,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_4",
+                "operationId": "personTagsUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1224,8 +1224,8 @@
                 "tags": [
                     "Tag Entity"
                 ],
-                "summary": "findOneTag",
-                "operationId": "findOneTagUsingGET_2",
+                "summary": "findByIdTag",
+                "operationId": "findByIdTagUsingGET_2",
                 "parameters": [
                     {
                         "name": "id",
@@ -1352,7 +1352,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_5",
+                "operationId": "tagPeopleUsingGET_4",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -1465,7 +1465,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_5",
+                "operationId": "tagPeopleUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1536,7 +1536,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_4",
+                "operationId": "tagPeopleUsingGET_5",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1572,7 +1572,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_4",
+                "operationId": "tagPeopleUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
