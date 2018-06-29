@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.google.common.base.Equivalence;
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -33,19 +32,20 @@ import springfox.documentation.spi.service.RequestHandlerCombiner;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
+import static springfox.documentation.RequestHandler.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spi.service.contexts.Orderings.byOperationName;
+import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
 
 class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRequestHandlerCombiner.class);
   private static final PathAndParametersEquivalence EQUIVALENCE = new PathAndParametersEquivalence();
 
   public List<RequestHandler> combine(List<RequestHandler> source) {
-    List<RequestHandler> combined = new ArrayList<RequestHandler>();
+    List<RequestHandler> combined = new ArrayList<>();
     Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
     LOGGER.debug("Total number of request handlers {}", nullToEmptyList(source).size());
     for (RequestHandler each : nullToEmptyList(source)) {
@@ -92,20 +92,15 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   }
 
   private Ordering<Equivalence.Wrapper<RequestHandler>> wrapperComparator() {
-    return Ordering.from(new Comparator<Equivalence.Wrapper<RequestHandler>>() {
-      @Override
-      public int compare(Equivalence.Wrapper<RequestHandler> first, Equivalence.Wrapper<RequestHandler> second) {
-        return byPatternsCondition()
-            .compound(byOperationName())
-            .compare(first.get(), second.get());
-      }
-    });
+    return Ordering.from((first, second) -> byPatternsCondition()
+        .compound(byOperationName())
+        .compare(first.get(), second.get()));
   }
 
   private ImmutableListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> safeGroupBy(
       List<RequestHandler> source) {
     try {
-      return Multimaps.index(source, equivalenceAsKey());
+      return Multimaps.index(source, EQUIVALENCE::wrap);
     } catch (Exception e) {
       LOGGER.error("Unable to index request handlers {}. Request handlers with issues{}",
           e.getMessage(),
@@ -124,16 +119,6 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     }
     sb.append('}');
     return sb.toString();
-  }
-
-  private Function<RequestHandler, Equivalence.Wrapper<RequestHandler>> equivalenceAsKey() {
-    return new
-        Function<RequestHandler, Equivalence.Wrapper<RequestHandler>>() {
-          @Override
-          public Equivalence.Wrapper<RequestHandler> apply(RequestHandler input) {
-            return EQUIVALENCE.wrap(input);
-          }
-        };
   }
 
   private RequestHandler combine(RequestHandler first, RequestHandler second) {
