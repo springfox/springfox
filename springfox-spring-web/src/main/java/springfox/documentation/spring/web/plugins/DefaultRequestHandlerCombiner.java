@@ -110,7 +110,7 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   }
 
   private String keys(List<RequestHandler> source) {
-    final StringBuffer sb = new StringBuffer("Request Handlers with duplicate keys {");
+    final StringBuilder sb = new StringBuilder("Request Handlers with duplicate keys {");
     for (int i = 0; i < source.size(); i++) {
       sb.append('\t')
           .append(i)
