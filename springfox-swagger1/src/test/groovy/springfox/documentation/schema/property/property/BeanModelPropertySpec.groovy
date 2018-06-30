@@ -20,7 +20,7 @@ package springfox.documentation.schema.property.property
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Ignore
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -35,7 +35,7 @@ import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.bean.BeanModelProperty
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.emptySet
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -53,7 +53,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -95,7 +95,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
@@ -126,10 +126,10 @@ class BeanModelPropertySpec extends SchemaSpecification {
       methodName    | description              | required | allowableValues                                             | typeName  | qualifiedTypeName
       "getIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
       "isBoolProp"  | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
+      "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
       "setIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
       "setBoolProp" | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(newArrayList("ONE", "TWO"), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
+      "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
   }
 
   def "Respects JsonGetter annotations"() {
@@ -141,7 +141,7 @@ class BeanModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       def method = accessorMethod(typeToTest, methodName)
       def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 

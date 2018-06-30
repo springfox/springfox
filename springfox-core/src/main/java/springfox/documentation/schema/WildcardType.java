@@ -22,16 +22,16 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
+
 
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
+import static java.util.Optional.ofNullable;
 
 public class WildcardType {
   private WildcardType() {
@@ -39,7 +39,7 @@ public class WildcardType {
   }
 
   public static boolean hasWildcards(ResolvedType type) {
-    return any(type.getTypeBindings().getTypeParameters(), thatAreWildcards());
+    return type.getTypeBindings().getTypeParameters().stream().anyMatch(thatAreWildcards());
   }
 
   public static boolean exactMatch(ResolvedType first, ResolvedType second) {
@@ -79,7 +79,7 @@ public class WildcardType {
   private static Predicate<ResolvedType> thatAreWildcards() {
     return new Predicate<ResolvedType>() {
       @Override
-      public boolean apply(ResolvedType input) {
+      public boolean test(ResolvedType input) {
         return isWildcardType(input) || hasWildcards(input);
       }
     };
@@ -99,7 +99,7 @@ public class WildcardType {
       }
     }
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
-    List<Type> bindings = newArrayList();
+    List<Type> bindings = new ArrayList();
     for (int index = 0; index < wildcardTypeBindings.size(); index++) {
       if (isWildcardType(wildcardTypeBindings.getBoundType(index))) {
         if (replaceableIterator.hasNext()) {
@@ -111,18 +111,18 @@ public class WildcardType {
         bindings.add(breadthFirstReplace(replaceableIterator, wildcardTypeBindings.getBoundType(index)));
       }
     }
-    return new TypeResolver().resolve(wildcardType.getErasedType(), toArray(bindings, Type.class));
+    return new TypeResolver().resolve(wildcardType.getErasedType(), bindings.toArray(new Type[0]));
   }
 
   private static List<ResolvedType> breadthFirstSearch(ResolvedType replacingType, ResolvedType wildcardType) {
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
     TypeBindings replacingBindings = replacingType.getTypeBindings();
 
-    List<ResolvedType> bindings = newArrayList();
+    List<ResolvedType> bindings = new ArrayList();
     int index = 0;
     for (TypeVariable each : replacingType.getErasedType().getTypeParameters()) {
-      ResolvedType boundType = Optional.fromNullable(replacingBindings.findBoundType(each.getName()))
-          .or(new TypeResolver().resolve(Object.class));
+      ResolvedType boundType = ofNullable(replacingBindings.findBoundType(each.getName()))
+          .orElse(new TypeResolver().resolve(Object.class));
       if (isWildcardType(wildcardTypeBindings.getBoundType(index))) {
         bindings.add(boundType);
       } else {

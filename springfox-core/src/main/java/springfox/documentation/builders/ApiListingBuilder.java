@@ -19,26 +19,24 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.collect.Ordering;
+
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.service.Tags.*;
 
 public class ApiListingBuilder {
-  private final Ordering<ApiDescription> descriptionOrdering;
+  private final Comparator<ApiDescription> descriptionOrdering;
   private String apiVersion;
   private String basePath;
   private String resourcePath;
@@ -46,23 +44,23 @@ public class ApiListingBuilder {
   private String host;
   private int position;
 
-  private Set<String> produces = newHashSet();
-  private Set<String> consumes = newHashSet();
-  private Set<String> protocol = newHashSet();
-  private List<SecurityReference> securityReferences = newArrayList();
-  private List<ApiDescription> apis = newArrayList();
+  private Set<String> produces = new HashSet();
+  private Set<String> consumes = new HashSet();
+  private Set<String> protocol = new HashSet();
+  private List<SecurityReference> securityReferences = new ArrayList();
+  private List<ApiDescription> apis = new ArrayList();
 
-  private final Set<Tag> tags = newTreeSet(tagComparator());
-  private final Set<String> tagNames = newHashSet();
-  private final Map<String, Model> models = newHashMap();
-  private final Map<String, Tag> tagLookup = newHashMap();
+  private final Set<Tag> tags = new TreeSet(tagComparator());
+  private final Set<String> tagNames = new HashSet();
+  private final Map<String, Model> models = new HashMap();
+  private final Map<String, Tag> tagLookup = new HashMap();
 
   /**
    * Update the sorting order for api descriptions
    *
    * @param descriptionOrdering - ordering for the api descriptions
    */
-  public ApiListingBuilder(Ordering<ApiDescription> descriptionOrdering) {
+  public ApiListingBuilder(Comparator<ApiDescription> descriptionOrdering) {
     this.descriptionOrdering = descriptionOrdering;
   }
 
@@ -107,7 +105,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder produces(Set<String> mediaTypes) {
     if (mediaTypes != null) {
-      this.produces = newHashSet(mediaTypes);
+      this.produces = mediaTypes.stream().collect(toSet());
     }
     return this;
   }
@@ -120,7 +118,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder consumes(Set<String> mediaTypes) {
     if (mediaTypes != null) {
-      this.consumes = newHashSet(mediaTypes);
+      this.consumes = mediaTypes.stream().collect(toSet());
     }
     return this;
   }
@@ -179,7 +177,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder securityReferences(List<SecurityReference> securityReferences) {
     if (securityReferences != null) {
-      this.securityReferences = newArrayList(securityReferences);
+      this.securityReferences = new ArrayList(securityReferences);
     }
     return this;
   }
@@ -192,7 +190,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder apis(List<ApiDescription> apis) {
     if (apis != null) {
-      this.apis = descriptionOrdering.sortedCopy(apis);
+      this.apis = apis.stream().sorted(descriptionOrdering).collect(toList());
     }
     return this;
   }
@@ -259,15 +257,15 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
-    this.tagLookup.putAll(uniqueIndex(nullToEmptySet(availableTags), toTagName()));
+    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(toTagName(), identity())));
     return this;
   }
 
   public ApiListing build() {
-    this.tags.addAll(from(tagNames)
+    this.tags.addAll(tagNames.stream()
         .filter(emptyTags())
-        .transform(toTag(descriptor(tagLookup, description)))
-        .toSet());
+        .map(toTag(descriptor(tagLookup, description)))
+        .collect(toSet()));
     return new ApiListing(
         apiVersion,
         basePath,

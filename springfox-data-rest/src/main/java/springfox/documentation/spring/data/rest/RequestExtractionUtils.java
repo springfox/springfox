@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.CaseFormat;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
@@ -41,11 +40,11 @@ class RequestExtractionUtils {
   }
 
   public static String lowerCamelCaseName(String stringValue) {
-    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, stringValue);
+    return Character.toLowerCase(stringValue.charAt(0)) + stringValue.substring(1);
   }
 
   public static String upperCamelCaseName(String stringValue) {
-    return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, stringValue);
+    return Character.toUpperCase(stringValue.charAt(0)) + stringValue.substring(1);
   }
 
   public static String actionName(PersistentEntity<?, ?> entity, Method method) {

@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.plugins
 
-import com.google.common.base.Optional
 import spock.lang.Specification
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
@@ -36,6 +35,8 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+
+import static java.util.Optional.empty;
 
 import javax.servlet.ServletContext
 
@@ -140,7 +141,7 @@ class DocumentationPluginsManagerSpec extends Specification {
     and:
       pathContext.pathProvider() >> new RelativePathProvider(Mock(ServletContext))
       pathContext.documentationContext() >> context
-      context.getPathMapping() >> Optional.absent()
+      context.getPathMapping() >> empty()
       pathContext.parameters >> []
     when:
       def sut = defaultWebPlugins()

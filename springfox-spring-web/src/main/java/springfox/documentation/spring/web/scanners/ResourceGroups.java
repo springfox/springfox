@@ -18,16 +18,19 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
+
+
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static com.google.common.collect.FluentIterable.*;
+
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 class ResourceGroups {
@@ -36,18 +39,18 @@ class ResourceGroups {
   }
 
   static Iterable<ResourceGroup> collectResourceGroups(Collection<ApiDescription> apiDescriptions) {
-    return from(apiDescriptions)
-        .transform(toResourceGroups());
+    return apiDescriptions.stream()
+        .map(toResourceGroups()).collect(toList());
   }
 
   static Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
-    return from(resourceGroups).toSortedList(resourceGroupComparator());
+    return resourceGroups.stream().sorted(resourceGroupComparator()).collect(toList());
   }
 
   static Predicate<ApiDescription> belongsTo(final String groupName) {
     return new Predicate<ApiDescription>() {
       @Override
-      public boolean apply(ApiDescription input) {
+      public boolean test(ApiDescription input) {
         return !input.getGroupName().isPresent()
             || groupName.equals(input.getGroupName().get());
       }
@@ -59,7 +62,7 @@ class ResourceGroups {
       @Override
       public ResourceGroup apply(ApiDescription input) {
         return new ResourceGroup(
-            input.getGroupName().or(Docket.DEFAULT_GROUP_NAME),
+            input.getGroupName().orElse(Docket.DEFAULT_GROUP_NAME),
             null);
       }
     };

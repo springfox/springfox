@@ -18,7 +18,6 @@
  */
 package springfox.documentation.spring.web.plugins
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -26,13 +25,15 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spring.web.dummy.models.Example
 
+import static java.util.Collections.emptySet
+
 class OperationModelsBuilderSpec extends Specification {
   OperationModelContextsBuilder sut =
       new OperationModelContextsBuilder("group",
           DocumentationType.SWAGGER_12,
           Mock(AlternateTypeProvider),
           Mock(GenericTypeNamingStrategy),
-          ImmutableSet.builder().build())
+          emptySet())
 
   def "Manages a unique set of model contexts" () {
     given:

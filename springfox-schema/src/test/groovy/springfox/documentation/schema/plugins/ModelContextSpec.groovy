@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema.plugins
 
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -27,6 +27,7 @@ import springfox.documentation.schema.ExampleWithEnums
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
 
+import static java.util.Collections.emptySet
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -44,7 +45,7 @@ class ModelContextSpec extends Specification {
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
     expect:
       context.equals(test) == expectedEquality
       context.equals(context)
@@ -62,7 +63,7 @@ class ModelContextSpec extends Specification {
         SWAGGER_12,
         provider,
         namingStrategy,
-        ImmutableSet.builder().build())
+        emptySet())
   }
 
   def returnValue(Class ofType) {
@@ -71,7 +72,7 @@ class ModelContextSpec extends Specification {
         SWAGGER_12,
         provider,
         namingStrategy,
-        ImmutableSet.builder().build())
+        emptySet())
   }
 
   def "ModelContext hashcode generated takes into account immutable values"() {
@@ -81,19 +82,19 @@ class ModelContextSpec extends Specification {
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       ModelContext other = inputParam("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       ModelContext otherReturn = returnValue("group",
           ExampleEnum,
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
     expect:
       context.hashCode() == other.hashCode()
       context.hashCode() != otherReturn.hashCode()

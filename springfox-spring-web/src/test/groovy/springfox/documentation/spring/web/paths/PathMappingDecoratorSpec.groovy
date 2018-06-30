@@ -1,14 +1,16 @@
 package springfox.documentation.spring.web.paths
-import com.google.common.base.Optional
+
 import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+
+import static java.util.Optional.empty;
 
 class PathMappingDecoratorSpec extends DocumentationContextSpec {
   def "Creates path adjustment in relation to servlet mapping" () {
     given:
       def requestMappingContext = Mock(RequestMappingContext)
-      PathContext ctx = new PathContext(requestMappingContext, Optional.absent())
+      PathContext ctx = new PathContext(requestMappingContext, empty())
     and:
       plugin.pathMapping(pathMapping)
       requestMappingContext.getDocumentationContext() >> documentationContext()

@@ -1,8 +1,6 @@
 package springfox.documentation.swagger2.web
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.LinkedListMultimap
-import com.google.common.collect.Ordering
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.web.util.WebUtils
 import spock.lang.Unroll
@@ -27,7 +25,7 @@ import springfox.documentation.swagger2.mappers.MapperSupport
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletRequest
 
-import static com.google.common.collect.Maps.*
+import static java.util.Collections.enumeration
 import static springfox.documentation.spi.service.contexts.Orderings.nickNameComparator
 
 @Mixin([ApiListingSupport, AuthSupport])
@@ -46,9 +44,9 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
   def setup() {
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
     listingScanner = Mock(ApiListingScanner)
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingScanner.scan(_) >> new HashMap()
 
     request = servletRequest()
   }
@@ -86,7 +84,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), req.servletContext)
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
-          .operationOrdering(Ordering.from(nickNameComparator()))
+          .operationOrdering(nickNameComparator())
 
       ApiDocumentationScanner swaggerApiResourceListing =
           new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
@@ -125,7 +123,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
           .pathProvider(pathProvider)
-          .operationOrdering(Ordering.from(nickNameComparator()))
+          .operationOrdering(nickNameComparator())
 
       ApiDocumentationScanner swaggerApiResourceListing =
           new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
@@ -167,7 +165,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     request.servletPath >> "/servletPath"
     request.getAttribute(WebUtils.INCLUDE_REQUEST_URI_ATTRIBUTE) >> "http://localhost:8080/api-docs"
     request.requestURL >> new StringBuffer("http://localhost/api-docs")
-    request.headerNames >> Collections.enumeration([])
+    request.headerNames >> enumeration([])
     request.servletContext >> servletContext(contextPath)
 
     request
@@ -181,12 +179,12 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     request.servletPath >> "/servletPath"
     request.getAttribute(WebUtils.INCLUDE_REQUEST_URI_ATTRIBUTE) >> "http://localhost:8080/api-docs"
     request.requestURL >> new StringBuffer("http://localhost/api-docs")
-    request.headerNames >>> [Collections.enumeration(["X-Forwarded-Host", "X-Forwarded-Prefix"]),
-                             Collections.enumeration(["X-Forwarded-Host", "X-Forwarded-Prefix"])]
+    request.headerNames >>> [enumeration(["X-Forwarded-Host", "X-Forwarded-Prefix"]),
+                             enumeration(["X-Forwarded-Host", "X-Forwarded-Prefix"])]
     request.getHeader("X-Forwarded-Host") >> "myhost:6060"
     request.getHeader("X-Forwarded-Prefix") >> prefix
-    request.getHeaders("X-Forwarded-Host") >> Collections.enumeration(["myhost:6060"])
-    request.getHeaders("X-Forwarded-Prefix") >> Collections.enumeration([prefix])
+    request.getHeaders("X-Forwarded-Host") >> enumeration(["myhost:6060"])
+    request.getHeaders("X-Forwarded-Prefix") >> enumeration([prefix])
     request.servletContext >> servletContext(contextPath)
 
     request

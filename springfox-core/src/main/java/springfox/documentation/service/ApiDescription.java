@@ -19,9 +19,10 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Optional;
-
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 public class ApiDescription {
   private final String groupName;
@@ -78,6 +79,6 @@ public class ApiDescription {
   }
 
   public Optional<String> getGroupName() {
-    return Optional.fromNullable(groupName);
+    return ofNullable(groupName);
   }
 }

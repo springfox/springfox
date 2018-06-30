@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.builders
-import com.google.common.collect.Ordering
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.Model
@@ -31,7 +30,7 @@ import static springfox.documentation.builders.BuilderDefaults.nullToEmptySet
 class ApiListingBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
-      def orderingMock = Mock(Ordering)
+      def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
     and:
       orderingMock.sortedCopy(value) >> value
@@ -61,7 +60,7 @@ class ApiListingBuilderSpec extends Specification {
 
   def "Setting properties on the builder with null values preserves existing values"() {
     given:
-      def orderingMock = Mock(Ordering)
+      def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
     and:
       orderingMock.sortedCopy(value) >> value
@@ -93,7 +92,7 @@ class ApiListingBuilderSpec extends Specification {
   @Unroll
   def "Appending to properties on the builder"() {
     given:
-      def orderingMock = Mock(Ordering)
+      def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
     and:
       orderingMock.sortedCopy(value) >> value
@@ -122,7 +121,7 @@ class ApiListingBuilderSpec extends Specification {
   @Unroll
   def "Available tags only uses unique values"() {
     given:
-      def sut = new ApiListingBuilder(Mock(Ordering))
+      def sut = new ApiListingBuilder(Mock(Comparator))
     when:
       sut.availableTags(tags)
           .tagNames(["test"] as Set)
@@ -156,7 +155,7 @@ class ApiListingBuilderSpec extends Specification {
   @Unroll
   def "Tag names are converted to tags"() {
     given:
-      def orderingMock = Mock(Ordering)
+      def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock).description("Some Description")
     and:
       orderingMock.sortedCopy(value) >> value

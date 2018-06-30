@@ -18,15 +18,14 @@
  */
 
 package springfox.documentation.swagger.readers.parameter
-import com.google.common.base.Optional
+
 import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import spock.lang.Specification
-import springfox.documentation.swagger.readers.parameter.ParameterAnnotationReader
 
 import java.lang.reflect.Method
 
-import static com.google.common.base.Strings.*
+import static org.springframework.util.StringUtils.isEmpty;
 
 class ParameterAnnotationReaderSpec extends Specification {
 
@@ -65,7 +64,7 @@ class ParameterAnnotationReaderSpec extends Specification {
     when:
       Optional<ApiParam> annotation = annotations.fromHierarchy(methodParameter, ApiParam.class)
     then:
-      annotation.isPresent() == !isNullOrEmpty(expected)
+      annotation.isPresent() == !isEmpty(expected)
       !annotation.isPresent() || annotation.get().name() == expected
     where:
       methodName  | expected

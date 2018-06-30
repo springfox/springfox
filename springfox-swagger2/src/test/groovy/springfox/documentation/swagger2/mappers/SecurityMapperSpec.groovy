@@ -1,4 +1,5 @@
 package springfox.documentation.swagger2.mappers
+
 import io.swagger.models.auth.ApiKeyAuthDefinition
 import io.swagger.models.auth.BasicAuthDefinition
 import io.swagger.models.auth.OAuth2Definition
@@ -7,7 +8,11 @@ import springfox.documentation.builders.ImplicitGrantBuilder
 import springfox.documentation.builders.OAuthBuilder
 import springfox.documentation.service.*
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.Collections.singletonList
+import static java.util.stream.Collectors.toList;
+
 
 class SecurityMapperSpec extends Specification {
   def "creates apiKey authentication based on provided security scheme" () {
@@ -81,12 +86,12 @@ class SecurityMapperSpec extends Specification {
   }
 
   List<AuthorizationScope> scopes() {
-    newArrayList(new AuthorizationScope("write:pets", "modify pets in your account"),
-        new AuthorizationScope("read:pets", "read your pets"))
+    Stream.of(new AuthorizationScope("write:pets", "modify pets in your account"),
+        new AuthorizationScope("read:pets", "read your pets")).collect(toList())
   }
 
   List<GrantType> grantTypes() {
-    newArrayList(new ImplicitGrantBuilder()
+    singletonList(new ImplicitGrantBuilder()
         .loginEndpoint(new LoginEndpoint("http://petstore.swagger.io/api/oauth/dialog"))
         .build())
   }

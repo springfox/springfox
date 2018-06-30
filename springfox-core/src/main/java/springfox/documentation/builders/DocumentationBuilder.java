@@ -19,33 +19,27 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.TreeMultimap;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static com.google.common.collect.Sets.*;
+
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
-  private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Ordering.natural(), byListingPosition());
+  private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());
   private ResourceListing resourceListing;
-  private Set<Tag> tags = newLinkedHashSet();
+  private Set<Tag> tags = new LinkedHashSet();
   private String basePath;
-  private Set<String> produces = newLinkedHashSet();
-  private Set<String> consumes = newLinkedHashSet();
+  private Set<String> produces = new LinkedHashSet();
+  private Set<String> consumes = new LinkedHashSet();
   private String host;
-  private Set<String> schemes = newLinkedHashSet();
+  private Set<String> schemes = new LinkedHashSet();
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
 
@@ -66,8 +60,18 @@ public class DocumentationBuilder {
    * @param apiListings - entries to add to the existing documentation
    * @return this
    */
-  public DocumentationBuilder apiListingsByResourceGroupName(Multimap<String, ApiListing> apiListings) {
-    this.apiListings.putAll(nullToEmptyMultimap(apiListings));
+  public DocumentationBuilder apiListingsByResourceGroupName(Map<String, List<ApiListing>> apiListings) {
+    nullToEmptyMultimap(apiListings).entrySet().stream().forEachOrdered(entry -> {
+      List<ApiListing> list = null;
+      if (this.apiListings.containsKey(entry.getKey())) {
+        list = this.apiListings.get(entry.getKey());
+        list.addAll(entry.getValue());
+      } else {
+        list = new ArrayList<>(entry.getValue());
+        this.apiListings.put(entry.getKey(), list);
+      }
+      Collections.sort(list, byListingPosition());
+    });
     return this;
   }
 

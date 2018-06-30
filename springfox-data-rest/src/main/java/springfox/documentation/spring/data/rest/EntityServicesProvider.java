@@ -19,8 +19,8 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -35,9 +35,12 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {
@@ -76,15 +79,15 @@ class EntityServicesProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    List<EntityContext> contexts = newArrayList();
+    List<EntityContext> contexts = new ArrayList<>();
     for (Class each : repositories) {
       Object repositoryInformation = repositories.getRepositoryInformationFor(each);
       Object repositoryInstance = repositories.getRepositoryFor(each);
       ResourceMetadata resource = mappings.getMetadataFor(each);
       if (resource.isExported()) {
-        Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
+        OptionalDeferencer<RepositoryInformation> converter = new OptionalDeferencer<>();
         RepositoryInformation repositoryInfo =
-            (RepositoryInformation) converter.convert(repositoryInformation).orNull();
+            converter.convert(repositoryInformation);
         contexts.add(new EntityContext(
             typeResolver,
             configuration,
@@ -100,20 +103,16 @@ class EntityServicesProvider implements RequestHandlerProvider {
 
     List<RequestHandler> handlers = new ArrayList<RequestHandler>();
     for (EntityContext each : contexts) {
-      handlers.addAll(FluentIterable.from(extractorConfiguration.getEntityExtractors())
-          .transformAndConcat(extractFromContext(each))
-          .toList());
+      handlers.addAll(extractorConfiguration.getEntityExtractors().stream()
+          .map(extractFromContext(each))
+          .flatMap(Collection::stream)
+          .collect(toList()));
     }
     return handlers;
   }
 
   private Function<EntityOperationsExtractor, List<RequestHandler>> extractFromContext(final EntityContext context) {
-    return new Function<EntityOperationsExtractor, List<RequestHandler>>() {
-      @Override
-      public List<RequestHandler> apply(EntityOperationsExtractor input) {
-        return input.extract(context);
-      }
-    };
+    return input -> input.extract(context);
   }
 
 }

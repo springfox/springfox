@@ -20,9 +20,8 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Ordering;
+
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
@@ -43,8 +42,12 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.List;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 public class DocumentationContext {
   private final DocumentationType documentationType;
@@ -60,9 +63,9 @@ public class DocumentationContext {
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
   private final List<? extends SecurityScheme> securitySchemes;
-  private final Ordering<ApiListingReference> listingReferenceOrdering;
-  private final Ordering<ApiDescription> apiDescriptionOrdering;
-  private final Ordering<Operation> operationOrdering;
+  private final Comparator<ApiListingReference> listingReferenceOrdering;
+  private final Comparator<ApiDescription> apiDescriptionOrdering;
+  private final Comparator<Operation> operationOrdering;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final Optional<String> pathMapping;
   private final Set<ResolvedType> additionalModels;
@@ -87,9 +90,9 @@ public class DocumentationContext {
       List<SecurityContext> securityContexts,
       List<? extends SecurityScheme> securitySchemes,
       List<AlternateTypeRule> alternateTypeRules,
-      Ordering<ApiListingReference> listingReferenceOrdering,
-      Ordering<ApiDescription> apiDescriptionOrdering,
-      Ordering<Operation> operationOrdering,
+      Comparator<ApiListingReference> listingReferenceOrdering,
+      Comparator<ApiDescription> apiDescriptionOrdering,
+      Comparator<Operation> operationOrdering,
       Set<String> produces,
       Set<String> consumes,
       String host,
@@ -149,8 +152,8 @@ public class DocumentationContext {
     return apiSelector;
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
-    return ImmutableSet.copyOf(ignorableParameterTypes);
+  public Set<Class> getIgnorableParameterTypes() {
+    return ignorableParameterTypes.stream().collect(toSet());
   }
 
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
@@ -182,11 +185,11 @@ public class DocumentationContext {
     return securitySchemes;
   }
 
-  public Ordering<ApiListingReference> getListingReferenceOrdering() {
+  public Comparator<ApiListingReference> getListingReferenceOrdering() {
     return listingReferenceOrdering;
   }
 
-  public Ordering<ApiDescription> getApiDescriptionOrdering() {
+  public Comparator<ApiDescription> getApiDescriptionOrdering() {
     return apiDescriptionOrdering;
   }
 
@@ -194,7 +197,7 @@ public class DocumentationContext {
     return alternateTypeProvider;
   }
 
-  public Ordering<Operation> operationOrdering() {
+  public Comparator<Operation> operationOrdering() {
     return operationOrdering;
   }
 

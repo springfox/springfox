@@ -19,9 +19,10 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import springfox.documentation.service.Parameter;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Parameters {
   private Parameters() {
@@ -31,7 +32,7 @@ public class Parameters {
   public static Predicate<Parameter> withName(final String name) {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         return name.equals(input.getName());
       }
     };

@@ -24,13 +24,19 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.google.common.collect.Lists.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.property.bean.Accessors.*;
 
 @Component
@@ -46,21 +52,21 @@ public class AccessorsProvider {
   private Predicate<ResolvedMethod> onlyGettersAndSetters() {
     return new Predicate<ResolvedMethod>() {
       @Override
-      public boolean apply(ResolvedMethod input) {
+      public boolean test(ResolvedMethod input) {
         return maybeAGetter(input.getRawMember()) || maybeASetter(input.getRawMember());
       }
     };
   }
 
-  public com.google.common.collect.ImmutableList<ResolvedMethod> in(ResolvedType resolvedType) {
+  public List<ResolvedMethod> in(ResolvedType resolvedType) {
     MemberResolver resolver = new MemberResolver(typeResolver);
     resolver.setIncludeLangObject(false);
     if (resolvedType.getErasedType() == Object.class) {
-      return ImmutableList.of();
+      return Collections.emptyList();
     }
     ResolvedTypeWithMembers typeWithMembers = resolver.resolve(resolvedType, null, null);
-    return FluentIterable
-        .from(newArrayList(typeWithMembers.getMemberMethods()))
-        .filter(onlyGettersAndSetters()).toList();
+    return
+        Stream.of(typeWithMembers.getMemberMethods())
+        .filter(onlyGettersAndSetters()).collect(collectingAndThen(toList(), Collections::unmodifiableList));
   }
 }

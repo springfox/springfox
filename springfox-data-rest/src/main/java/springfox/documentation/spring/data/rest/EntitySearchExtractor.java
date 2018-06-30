@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.mapping.MethodResourceMapping;
@@ -36,18 +35,17 @@ import springfox.documentation.schema.Types;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+
+import static java.util.Collections.singleton;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntitySearchExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList();
     final PersistentEntity<?, ?> entity = context.entity();
     HandlerMethodResolver methodResolver = new HandlerMethodResolver(context.getTypeResolver());
     SearchResourceMappings searchMappings = context.searchMappings();
@@ -61,7 +59,7 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
               context.basePath(),
               context.resourcePath(),
               mapping.getPath()),
-          newHashSet(RequestMethod.GET),
+          singleton(RequestMethod.GET),
           new HashSet<MediaType>(),
           new HashSet<MediaType>(),
           handler,

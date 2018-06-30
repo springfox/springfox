@@ -19,8 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,9 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
@@ -60,7 +61,7 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
   private List<Parameter> readParameters(OperationContext context) {
     Optional<ApiImplicitParams> annotation = context.findAnnotation(ApiImplicitParams.class);
 
-    List<Parameter> parameters = Lists.newArrayList();
+    List<Parameter> parameters = new ArrayList();
     if (annotation.isPresent()) {
       for (ApiImplicitParam param : annotation.get().value()) {
         parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, param));

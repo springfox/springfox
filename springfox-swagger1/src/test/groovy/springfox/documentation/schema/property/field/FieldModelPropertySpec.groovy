@@ -19,7 +19,6 @@
 
 package springfox.documentation.schema.property.field
 
-import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
@@ -28,7 +27,7 @@ import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableListValues
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.emptySet
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -43,7 +42,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       def field = field(TypeWithGettersAndSetters, fieldName)
       def jacksonProperty = beanPropertyDefinitionByField(TypeWithGettersAndSetters, fieldName)
       def sut = new FieldModelProperty(
@@ -59,7 +58,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
       typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
-        def values = newArrayList(allowableValues)
+        def values = new ArrayList(allowableValues)
         sut.allowableValues() == new AllowableListValues(values, "string")
       } else {
         sut.allowableValues() == null
@@ -85,7 +84,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       def field = field(typeToTest, fieldName)
       def jacksonProperty = beanPropertyDefinitionByField(TypeWithGettersAndSetters, fieldName)
       def sut = new FieldModelProperty(

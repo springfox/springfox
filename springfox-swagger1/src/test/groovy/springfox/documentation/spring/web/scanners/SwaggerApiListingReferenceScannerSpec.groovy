@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
@@ -36,7 +35,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
-import static com.google.common.base.Predicates.*
+import static java.util.Optional.ofNullable
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 
@@ -55,7 +54,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
             .select()
-              .apis(not(withClassAnnotation(ApiIgnore)))
+              .apis(withClassAnnotation(ApiIgnore).negate())
               .paths(regex(".*?"))
               .build()
   }
@@ -98,7 +97,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     and:
       def resourceGroup = result.resourceGroupRequestMappings.keySet().first()
       resourceGroup.groupName == "dummy-class"
-      resourceGroup.controllerClass == Optional.fromNullable(DummyClass)
+      resourceGroup.controllerClass == ofNullable(DummyClass)
       resourceGroup.position == 0
   }
 

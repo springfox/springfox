@@ -24,7 +24,10 @@ import springfox.documentation.builders.ImplicitGrantBuilder
 import springfox.documentation.builders.OAuthBuilder
 import springfox.documentation.service.*
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.Collections.singletonList
+import static java.util.stream.Collectors.toList;
 
 @Configuration
 public class SecuritySupport {
@@ -43,13 +46,13 @@ public class SecuritySupport {
   }
 
   List<AuthorizationScope> scopes() {
-    newArrayList(
+    Stream.of(
       new AuthorizationScope("write:pets", "modify pets in your account"),
-      new AuthorizationScope("read:pets", "read your pets"))
+      new AuthorizationScope("read:pets", "read your pets")).collect(toList())
   }
 
   List<GrantType> grantTypes() {
-    newArrayList(new ImplicitGrantBuilder()
+    singletonList(new ImplicitGrantBuilder()
             .loginEndpoint(new LoginEndpoint("http://petstore.swagger.io/api/oauth/dialog"))
             .build())
   }

@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -33,8 +33,11 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
+
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -54,13 +57,13 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    return byPatternsCondition().sortedCopy(from(nullToEmptyList(handlerMappings))
-        .transformAndConcat(toMappingEntries())
-        .transform(toRequestHandler()));
+    return nullToEmptyList(handlerMappings).stream()
+        .map(toMappingEntries()).flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+        .map(toRequestHandler()).sorted(byPatternsCondition()).collect(toList());
   }
 
   private Function<? super RequestMappingInfoHandlerMapping,
-      Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+        Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
     return new Function<RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>>() {
       @Override
       public Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>> apply(RequestMappingInfoHandlerMapping input) {

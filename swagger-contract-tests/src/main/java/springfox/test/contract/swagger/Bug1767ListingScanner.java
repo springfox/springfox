@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Collections.singleton;
 
 public class Bug1767ListingScanner implements ApiListingScannerPlugin {
 
@@ -112,7 +112,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
    * @return Set of response messages that overide the default/global response messages
    */
   private Set<ResponseMessage> responseMessages() { //<8>
-    return newHashSet(new ResponseMessageBuilder()
+    return singleton(new ResponseMessageBuilder()
         .code(200)
         .message("Successfully received bug 1767 or 2219 response")
         .responseModel(new ModelRef("string"))

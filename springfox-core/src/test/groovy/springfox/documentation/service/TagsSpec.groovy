@@ -1,7 +1,5 @@
 package springfox.documentation.service
 
-import com.google.common.collect.FluentIterable
-import com.google.common.collect.LinkedListMultimap
 import spock.lang.Specification
 
 import static springfox.documentation.service.Tags.emptyTags
@@ -18,7 +16,7 @@ class TagsSpec extends Specification {
 
   def "Inspects a class with no ApiListings" () {
     given:
-      def listings = LinkedListMultimap.create()
+      def listings = new HashMap()
     expect:
       toTags(listings).isEmpty()
   }
@@ -27,7 +25,7 @@ class TagsSpec extends Specification {
     given:
       def tags = ["", null, "test"]
     expect:
-      FluentIterable.from(tags).filter(emptyTags()).size() == 1
+      tags.stream().filter(emptyTags()).count() == 1
   }
 
   def "Comparator uses tag order" (Tag tag1, Tag tag2, expected) {

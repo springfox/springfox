@@ -29,9 +29,10 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+
 import static org.junit.Assert.*;
 
 public class ObjectMapperConfigurerIntegrationTest {
@@ -97,7 +98,7 @@ public class ObjectMapperConfigurerIntegrationTest {
     @Bean
     public RequestMappingHandlerAdapter multipleMCRmh() {
       RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
-      List<HttpMessageConverter<?>> messageConverters = newArrayList();
+      List<HttpMessageConverter<?>> messageConverters = new ArrayList();
       messageConverters.add(new MappingJackson2HttpMessageConverter());
       messageConverters.add(new MappingJackson2HttpMessageConverter());
       adapter.setMessageConverters(messageConverters);

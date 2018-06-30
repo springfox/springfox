@@ -20,23 +20,24 @@
 package springfox.documentation.spring.web.mixins
 import springfox.documentation.service.*
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.singletonList
+
 
 class AuthSupport {
   def defaultAuth() {
     AuthorizationScope authorizationScope =
             new AuthorizationScope("global", "accessEverything")
     AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
-    newArrayList(new SecurityReference("oauth2", authorizationScopes))
+    singletonList(new SecurityReference("oauth2", authorizationScopes))
   }
 
   def authorizationTypes() {
 
-    List<AuthorizationScope> authorizationScopeList = newArrayList();
+    List<AuthorizationScope> authorizationScopeList = new ArrayList();
     authorizationScopeList.add(new AuthorizationScope("global", "access all"));
 
 
-    List<GrantType> grantTypes = newArrayList();
+    List<GrantType> grantTypes = new ArrayList();
 
     LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.io/oauth/dialog");
     grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));

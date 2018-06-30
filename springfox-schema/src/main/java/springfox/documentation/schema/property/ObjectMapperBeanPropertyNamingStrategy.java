@@ -24,12 +24,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
+
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.overTheWireName;
 
 /**
  * BeanPropertyNamingStrategy based on ObjectMapper naming strategy.
@@ -49,10 +53,10 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
 
     Optional<PropertyNamingStrategy> namingStrategy
-            = Optional.fromNullable(serializationConfig.getPropertyNamingStrategy());
+            = ofNullable(serializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
-            .transform(BeanPropertyDefinitions.overTheWireName(beanProperty, serializationConfig))
-            .or(beanProperty.getName());
+            .map(overTheWireName(beanProperty, serializationConfig))
+            .orElse(beanProperty.getName());
 
     LOG.debug("Name '{}' renamed to '{}'", beanProperty.getName(), newName);
 
@@ -65,10 +69,10 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
 
     Optional<PropertyNamingStrategy> namingStrategy
-            = Optional.fromNullable(deserializationConfig.getPropertyNamingStrategy());
+            = ofNullable(deserializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
-            .transform(BeanPropertyDefinitions.overTheWireName(beanProperty, deserializationConfig))
-            .or(beanProperty.getName());
+            .map(overTheWireName(beanProperty, deserializationConfig))
+            .orElse(beanProperty.getName());
 
     LOG.debug("Name '{}' renamed to '{}'", beanProperty.getName(), newName);
 

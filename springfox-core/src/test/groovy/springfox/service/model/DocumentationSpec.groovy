@@ -18,7 +18,7 @@
  */
 
 package springfox.service.model
-import com.google.common.collect.LinkedListMultimap
+
 import spock.lang.Specification
 import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.builders.ResourceListingBuilder
@@ -36,7 +36,7 @@ class DocumentationSpec extends Specification {
                 .securitySchemes(authorizations)
                 .apis([Mock(ApiListingReference)])
                 .build())
-              .apiListingsByResourceGroupName(LinkedListMultimap.create())
+              .apiListingsByResourceGroupName(new HashMap())
               .build()
     expect:
       built.apiListings.size() == 0

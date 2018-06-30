@@ -19,7 +19,7 @@
 package springfox.documentation.swagger.schema
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
+
 import io.swagger.annotations.ApiModel
 import spock.lang.Shared
 import spock.lang.Specification
@@ -28,6 +28,8 @@ import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
+
+import static java.util.Collections.emptySet
 
 class ApiModelBuilderSpec extends Specification {
   @Shared def resolver = new TypeResolver()
@@ -50,7 +52,7 @@ class ApiModelBuilderSpec extends Specification {
           DocumentationType.SWAGGER_12,
           new AlternateTypeProvider([]),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
     when:
       sut.apply(context)
     then:

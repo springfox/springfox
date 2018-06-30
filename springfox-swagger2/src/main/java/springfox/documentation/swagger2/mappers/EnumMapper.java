@@ -16,10 +16,9 @@
  *
  *
  */
+
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.AbstractNumericProperty;
@@ -35,10 +34,12 @@ import springfox.documentation.service.AllowableValues;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.stream.Collectors.toList;
 
 public class EnumMapper {
   static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {
@@ -131,7 +132,7 @@ public class EnumMapper {
   }
 
   private static <T extends Number> List<T> convert(List<String> values, Class<T> toType) {
-    return newArrayList(presentInstances(from(values).transform(converterOfType(toType))));
+    return values.stream().map(converterOfType(toType)).filter(Optional::isPresent).map(Optional::get).collect(toList());
   }
 
   private static <T extends Number> Function<? super String, Optional<T>> converterOfType(final Class<T> toType) {
@@ -141,17 +142,17 @@ public class EnumMapper {
       public Optional<T> apply(String input) {
         try {
           if (Integer.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Integer.valueOf(input));
+            return (Optional<T>) of(Integer.valueOf(input));
           } else if (Long.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Long.valueOf(input));
+            return (Optional<T>) of(Long.valueOf(input));
           } else if (Double.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Double.valueOf(input));
+            return (Optional<T>) of(Double.valueOf(input));
           } else if (Float.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Float.valueOf(input));
+            return (Optional<T>) of(Float.valueOf(input));
           }
         } catch (NumberFormatException ignored) {
         }
-        return Optional.absent();
+        return empty();
       }
     };
   }

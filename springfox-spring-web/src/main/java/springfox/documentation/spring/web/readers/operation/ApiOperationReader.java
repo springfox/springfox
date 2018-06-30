@@ -30,12 +30,9 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static com.google.common.collect.Lists.*;
+
 import static java.util.Arrays.asList;
 
 @Component
@@ -57,7 +54,7 @@ public class ApiOperationReader implements OperationReader {
 //  @Cacheable(value = "operations", keyGenerator = OperationsKeyGenerator.class)
   public List<Operation> read(RequestMappingContext outerContext) {
 
-    List<Operation> operations = newArrayList();
+    List<Operation> operations = new ArrayList();
 
     Set<RequestMethod> requestMethods = outerContext.getMethodsCondition();
     Set<RequestMethod> supportedMethods = supportedMethods(requestMethods);

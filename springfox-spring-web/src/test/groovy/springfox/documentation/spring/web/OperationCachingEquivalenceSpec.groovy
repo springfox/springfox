@@ -20,7 +20,6 @@ package springfox.documentation.spring.web
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
@@ -73,7 +72,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
           documentationContext,
           new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
     then:
-      sut.doEquivalent(first, second)
+      sut.test(first, second)
   }
 
   def "One or the other is null" () {
@@ -86,7 +85,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
           Mock(DocumentationContext),
           requestHandler(secondKey))
     expect:
-      sut.doEquivalent(first, second) == outcome
+      sut.test(first, second) == outcome
     where:
       firstKey  | secondKey | outcome
       null      | null      | true
@@ -119,7 +118,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
         documentationContext,
         new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
     then:
-      !sut.doEquivalent(first, second)
+      !sut.test(first, second)
   }
 
   def paths(String ... paths) {

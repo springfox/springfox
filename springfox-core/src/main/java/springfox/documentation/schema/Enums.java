@@ -20,21 +20,20 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static java.util.Arrays.asList;
+
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 
 public class Enums {
 
@@ -55,8 +54,8 @@ public class Enums {
       @Override
       public String apply(Object input) {
         Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
-                .transform(evaluateJsonValue(input));
-        if (jsonValue.isPresent() && !isNullOrEmpty(jsonValue.get())) {
+                .map(evaluateJsonValue(input));
+        if (jsonValue.isPresent() && !isEmpty(jsonValue.get())) {
           return jsonValue.get();
         }
         return input.toString();
@@ -78,7 +77,7 @@ public class Enums {
   }
 
   private static <E> List<String> transformUnique(E[] values, Function<E, String> mapper) {
-    List<String> nonUniqueValues = transform(asList(values), mapper);
+    List<String> nonUniqueValues = Stream.of(values).map( mapper).collect(toList());
     Set<String> uniqueValues = new LinkedHashSet<String>(nonUniqueValues);
     return new ArrayList<String>(uniqueValues);
   }
@@ -87,10 +86,10 @@ public class Enums {
     for (Method each : enumConstant.getClass().getMethods()) {
       JsonValue jsonValue = AnnotationUtils.findAnnotation(each, JsonValue.class);
       if (jsonValue != null && jsonValue.value()) {
-        return Optional.of(each);
+        return of(each);
       }
     }
-    return Optional.absent();
+    return empty();
   }
 
   public static AllowableValues emptyListValuesToNull(AllowableListValues values) {

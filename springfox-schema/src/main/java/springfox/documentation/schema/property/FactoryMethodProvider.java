@@ -27,16 +27,17 @@ import com.fasterxml.classmate.members.ResolvedConstructor;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Iterables.concat;
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
+
 
 @Component
 public class FactoryMethodProvider {
@@ -50,13 +51,13 @@ public class FactoryMethodProvider {
   public Optional<? extends ResolvedParameterizedMember> in(
       ResolvedType resolvedType,
       Predicate<ResolvedParameterizedMember> predicate) {
-    return from(concat(constructors(resolvedType), delegatedFactoryMethods(resolvedType))).firstMatch(predicate);
+    return Stream.concat(constructors(resolvedType).stream(), delegatedFactoryMethods(resolvedType).stream()).filter(predicate).findFirst();
   }
 
   static Predicate<ResolvedParameterizedMember> factoryMethodOf(final AnnotatedParameter parameter) {
     return new Predicate<ResolvedParameterizedMember>() {
       @Override
-      public boolean apply(ResolvedParameterizedMember input) {
+      public boolean test(ResolvedParameterizedMember input) {
         return input.getRawMember().equals(parameter.getOwner().getMember());
       }
     };
@@ -64,11 +65,11 @@ public class FactoryMethodProvider {
 
   public Collection<ResolvedConstructor> constructors(ResolvedType resolvedType) {
     ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(resolvedType, null, null);
-    return newArrayList(typeWithMembers.getConstructors());
+    return Stream.of(typeWithMembers.getConstructors()).collect(toList());
   }
 
   public Collection<ResolvedMethod> delegatedFactoryMethods(ResolvedType resolvedType) {
     ResolvedTypeWithMembers typeWithMembers = memberResolver.resolve(resolvedType, null, null);
-    return newArrayList(typeWithMembers.getStaticMethods());
+    return Stream.of(typeWithMembers.getStaticMethods()).collect(toList());
   }
 }

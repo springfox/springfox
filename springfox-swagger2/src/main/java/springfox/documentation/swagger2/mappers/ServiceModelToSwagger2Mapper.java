@@ -19,10 +19,7 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+
 import io.swagger.models.Contact;
 import io.swagger.models.Info;
 import io.swagger.models.Operation;
@@ -44,13 +41,12 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
@@ -109,22 +105,22 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
-    return from(from).transform(toScheme()).toList();
+    return from.stream().map(toScheme()).collect(toList());
   }
 
   protected List<Map<String, List<String>>> mapAuthorizations(
       Map<String, List<AuthorizationScope>> from) {
-    List<Map<String, List<String>>> security = newArrayList();
+    List<Map<String, List<String>>> security = new ArrayList();
     for (Map.Entry<String, List<AuthorizationScope>> each : from.entrySet()) {
-      Map<String, List<String>> newEntry = newHashMap();
-      newEntry.put(each.getKey(), from(each.getValue()).transform(scopeToString()).toList());
+      Map<String, List<String>> newEntry = new HashMap();
+      newEntry.put(each.getKey(), each.getValue().stream().map(scopeToString()).collect(toList()));
       security.add(newEntry);
     }
     return security;
   }
 
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
-    Map<String, Response> responses = newTreeMap();
+    Map<String, Response> responses = new TreeMap();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
       ModelReference modelRef = responseMessage.getResponseModel();
@@ -132,8 +128,9 @@ public abstract class ServiceModelToSwagger2Mapper {
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
-      response.setExamples(Maps.<String, Object>newHashMap());
-      response.setHeaders(transformEntries(responseMessage.getHeaders(), toPropertyEntry()));
+      response.setExamples(new HashMap<String, Object>());
+      response.setHeaders(responseMessage.getHeaders().entrySet().stream().map(toPropertyEntry())
+              .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
       Map<String, Object> extensions = new VendorExtensionsMapper()
           .mapExtensions(responseMessage.getVendorExtensions());
       response.getVendorExtensions().putAll(extensions);
@@ -142,24 +139,24 @@ public abstract class ServiceModelToSwagger2Mapper {
     return responses;
   }
 
-  private EntryTransformer<String, Header, Property> toPropertyEntry() {
-    return new EntryTransformer<String, Header, Property>() {
+  private Function<Map.Entry<String, Header>, Map.Entry<String, Property>> toPropertyEntry() {
+    return new Function<Map.Entry<String, Header>, Map.Entry<String, Property>>() {
       @Override
-      public Property transformEntry(String key, Header value) {
-        Property property = modelRefToProperty(value.getModelReference());
-        property.setDescription(value.getDescription());
-        return property;
+      public Map.Entry<String, Property> apply(Map.Entry<String, Header> entry) {
+        Property property = modelRefToProperty(entry.getValue().getModelReference());
+        property.setDescription(entry.getValue().getDescription());
+        return new AbstractMap.SimpleEntry<>(entry.getKey(), property);
       }
     };
   }
 
-  protected Map<String, Path> mapApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, Path> paths = newTreeMap();
-    for (ApiListing each : apiListings.values()) {
+  protected Map<String, Path> mapApiListings(Map<String, List<ApiListing>> apiListings) {
+    Map<String, Path> paths = new TreeMap();
+    apiListings.values().stream().flatMap(l -> l.stream()).forEachOrdered(each -> {
       for (ApiDescription api : each.getApis()) {
-        paths.put(api.getPath(), mapOperations(api, Optional.fromNullable(paths.get(api.getPath()))));
+        paths.put(api.getPath(), mapOperations(api, ofNullable(paths.get(api.getPath()))));
       }
-    }
+    });
     return paths;
   }
 
@@ -173,7 +170,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
-    Path path = existingPath.or(new Path());
+    Path path = existingPath.orElse(new Path());
     for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
       Operation operation = mapOperation(each);
       path.set(each.getMethod().toString().toLowerCase(), operation);

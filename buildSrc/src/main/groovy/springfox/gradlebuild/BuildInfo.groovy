@@ -1,6 +1,5 @@
 package springfox.gradlebuild
 
-import com.google.common.base.MoreObjects
 import springfox.gradlebuild.version.ReleaseType
 import springfox.gradlebuild.version.SemanticVersion
 import springfox.gradlebuild.version.VersioningStrategy
@@ -66,13 +65,14 @@ class BuildInfo {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("releaseVersion", currentVersion)
-        .add("buildVersion", buildVersion)
-        .add("nextVersion", nextVersion)
-        .add("releaseType", releaseType)
-        .add("releaseTag", releaseTag)
-        .add("dryRun", dryRun)
-        .toString();
+    return new StringBuffer(this.getClass().getSimpleName())
+        .append("{")
+        .append("releaseVersion=").append(currentVersion).append(", ")
+        .append("buildVersion=").append(buildVersion).append(", ")
+        .append("nextVersion=").append(nextVersion).append(", ")
+        .append("releaseType=").append(releaseType).append(", ")
+        .append("releaseTag=").append(releaseTag).append(", ")
+        .append("dryRun=").append(dryRun)
+        .append("}").toString();
   }
 }

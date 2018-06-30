@@ -19,11 +19,11 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
-import static com.google.common.base.Objects.*;
+import static java.util.Optional.ofNullable;
 
 public class ResourceGroup {
   private final String groupName;
@@ -49,7 +49,7 @@ public class ResourceGroup {
   }
 
   public Optional<? extends Class<?>> getControllerClass() {
-    return Optional.fromNullable(controllerClazz);
+    return ofNullable(controllerClazz);
   }
 
   @Override
@@ -66,14 +66,14 @@ public class ResourceGroup {
     }
     final ResourceGroup rhs = (ResourceGroup) obj;
 
-    return equal(this.groupName, rhs.groupName)
-        && equal(this.position, rhs.position)
-        && equal(this.controllerClazz, rhs.controllerClazz);
+    return Objects.equals(this.groupName, rhs.groupName)
+        && Objects.equals(this.position, rhs.position)
+        && Objects.equals(this.controllerClazz, rhs.controllerClazz);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(groupName, controllerClazz, position);
+    return Objects.hash(groupName, controllerClazz, position);
   }
 
   @Override
@@ -82,7 +82,7 @@ public class ResourceGroup {
         "ResourceGroup{groupName='%s', position=%d, controller=%s}",
         groupName,
         position,
-        getControllerClass().transform(toName()).or(""));
+        getControllerClass().map(toName()).orElse(""));
   }
 
   private Function<Class<?>, String> toName() {

@@ -38,4 +38,19 @@ class CollectionsSpec extends Specification {
     then:
       type == null
   }
+
+  def "Container element type is null when its passed a Map"() {
+    when:
+    def type  = collectionElementType(new TypeResolver().resolve(Map))
+    then:
+    type == null
+  }
+
+  def "Container element type is Object when its passed a Collection<Object>"() {
+    when:
+    def type  = collectionElementType(new TypeResolver().resolve(Collection))
+    then:
+    type instanceof Object
+  }
+
 }

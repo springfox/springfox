@@ -19,13 +19,14 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
+
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
-import static com.google.common.collect.Sets.*
+import static java.util.Collections.emptySet
+import static java.util.Collections.singleton
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)
@@ -37,9 +38,9 @@ class CachingModelDependencyProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
       def mock = Mock(ModelDependencyProvider) {
-        dependentModels(context) >> newHashSet(aResolvedType())
+        dependentModels(context) >> singleton(aResolvedType())
       }
     when:
       def sut = new CachingModelDependencyProvider(mock)
@@ -54,7 +55,7 @@ class CachingModelDependencyProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
       def mock = Mock(ModelDependencyProvider) {
         dependentModels(context) >> { throw new NullPointerException() }
       }

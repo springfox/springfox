@@ -21,8 +21,7 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -36,11 +35,11 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
@@ -72,9 +71,9 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     ResolvedType returnType = context.getReturnType();
     returnType = context.alternateFor(returnType);
     Optional<ResolvedType> returnParameter = context.findAnnotation(ApiOperation.class)
-        .transform(resolvedTypeFromOperation(typeResolver, returnType));
+        .map(resolvedTypeFromOperation(typeResolver, returnType));
     if (returnParameter.isPresent() && returnParameter.get() != returnType) {
-      LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(returnParameter.get()).or("<null>"));
+      LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(returnParameter.get()).orElse("<null>"));
       context.operationModelsBuilder().addReturn(returnParameter.get());
     }
   }
@@ -82,7 +81,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   private void collectApiResponses(RequestMappingContext context) {
     List<ApiResponses> allApiResponses = context.findAnnotations(ApiResponses.class);
     LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
-    Set<ResolvedType> seenTypes = newHashSet();
+    Set<ResolvedType> seenTypes = new HashSet();
     for (ApiResponses apiResponses : allApiResponses) {
       List<ResolvedType> modelTypes = toResolvedTypes(context).apply(apiResponses);
       for (ResolvedType modelType : modelTypes) {
@@ -98,10 +97,10 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
     return new Function<ApiResponses, List<ResolvedType>>() {
       @Override
       public List<ResolvedType> apply(ApiResponses input) {
-        List<ResolvedType> resolvedTypes = newArrayList();
+        List<ResolvedType> resolvedTypes = new ArrayList();
         for (ApiResponse response : input.value()) {
           ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
-          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
+          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));
           resolvedTypes.add(modelType);
         }
         return resolvedTypes;

@@ -24,15 +24,16 @@ import springfox.documentation.service.ApiListingReference;
 import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.ResourceListing;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ResourceListingBuilder {
   private String apiVersion;
-  private List<ApiListingReference> apis = newArrayList();
-  private List<SecurityScheme> securitySchemes = newArrayList();
+  private List<ApiListingReference> apis = new ArrayList();
+  private List<SecurityScheme> securitySchemes = new ArrayList();
   private ApiInfo info;
 
   /**

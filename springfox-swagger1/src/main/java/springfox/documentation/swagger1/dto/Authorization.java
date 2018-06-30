@@ -19,9 +19,12 @@
 
 package springfox.documentation.swagger1.dto;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
+
 
 public class Authorization {
   private String type;
@@ -31,7 +34,7 @@ public class Authorization {
   }
 
   public Authorization(String type, AuthorizationScope[] scopes) {
-    this.scopes = newArrayList(scopes);
+    this.scopes = Stream.of(scopes).collect(toList());
     this.type = type;
   }
 
@@ -48,6 +51,6 @@ public class Authorization {
   }
 
   public void setScopes(List<AuthorizationScope> scopes) {
-    this.scopes = newArrayList(scopes);
+    this.scopes = new ArrayList(scopes);
   }
 }

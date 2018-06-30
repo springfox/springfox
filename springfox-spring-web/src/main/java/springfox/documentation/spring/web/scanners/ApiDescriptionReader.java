@@ -33,11 +33,12 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Ordering.*;
+
+import static java.util.Comparator.naturalOrder;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class ApiDescriptionReader {
@@ -61,7 +62,7 @@ public class ApiDescriptionReader {
     PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
 
-    List<ApiDescription> apiDescriptionList = newArrayList();
+    List<ApiDescription> apiDescriptionList = new ArrayList();
     for (String path : matchingPaths(selector, patternsCondition)) {
       String methodName = outerContext.getName();
       try {
@@ -72,7 +73,7 @@ public class ApiDescriptionReader {
           operationContext.apiDescriptionBuilder()
               .groupName(outerContext.getGroupName())
               .operations(operations)
-              .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
+              .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, operations.stream().findFirst())))
               .path(path)
               .description(methodName)
               .hidden(false);
@@ -89,8 +90,8 @@ public class ApiDescriptionReader {
   }
 
   private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
-    return natural().sortedCopy(from(patternsCondition.getPatterns())
-        .filter(selector.getPathSelector()));
+    return patternsCondition.getPatterns().stream()
+        .filter(selector.getPathSelector()).sorted(naturalOrder()).collect(toList());
   }
 
 }

@@ -27,9 +27,7 @@ public class OptionalDeferencer<T> implements Converter<Object, T> {
   @Override
   public T convert(Object source) {
     if (source instanceof Optional) {
-      if (((Optional<T>)source).isPresent()) {
-        return ((Optional<T>)source).get();
-      }
+      return ((Optional<T>) source).orElse(null);
     }
     return (T) source;
   }

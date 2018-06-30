@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
@@ -43,7 +42,7 @@ class DocumentationContextSpec extends Specification {
 
     contextBuilder = this.defaultConfiguration.create(DocumentationType.SWAGGER_12)
         .requestHandlers([])
-        .operationOrdering(Ordering.from(nickNameComparator()))
+        .operationOrdering(nickNameComparator())
     plugin = new Docket(DocumentationType.SWAGGER_12)
     operationReader = Mock(ApiOperationReader)
   }

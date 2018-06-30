@@ -34,8 +34,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
@@ -60,11 +62,11 @@ public class EntityAssociationGetExtractor implements EntityAssociationOperation
             entityContext.basePath(),
             entityContext.resourcePath(),
             mapping.getPath()),
-        newHashSet(RequestMethod.GET),
-        newHashSet(HAL_JSON),
+            singleton(RequestMethod.GET),
+            singleton(HAL_JSON),
         new HashSet<MediaType>(),
         null,
-        newArrayList(new ResolvedMethodParameter(
+        singletonList(new ResolvedMethodParameter(
             0,
             "id",
             pathAnnotations("id"),

@@ -19,14 +19,15 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import org.springframework.util.ClassUtils;
 import springfox.documentation.RequestHandler;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static java.util.Optional.ofNullable;
 
 public class RequestHandlerSelectors {
   private RequestHandlerSelectors() {
@@ -39,7 +40,7 @@ public class RequestHandlerSelectors {
    * @return predicate that is always true
    */
   public static Predicate<RequestHandler> any() {
-    return Predicates.alwaysTrue();
+    return (each) -> true;
   }
 
   /**
@@ -48,7 +49,7 @@ public class RequestHandlerSelectors {
    * @return predicate that is always false
    */
   public static Predicate<RequestHandler> none() {
-    return Predicates.alwaysFalse();
+    return (each) -> false;
   }
 
   /**
@@ -60,7 +61,7 @@ public class RequestHandlerSelectors {
   public static Predicate<RequestHandler> withMethodAnnotation(final Class<? extends Annotation> annotation) {
     return new Predicate<RequestHandler>() {
       @Override
-      public boolean apply(RequestHandler input) {
+      public boolean test(RequestHandler input) {
         return input.isAnnotatedWith(annotation);
       }
     };
@@ -75,8 +76,8 @@ public class RequestHandlerSelectors {
   public static Predicate<RequestHandler> withClassAnnotation(final Class<? extends Annotation> annotation) {
     return new Predicate<RequestHandler>() {
       @Override
-      public boolean apply(RequestHandler input) {
-        return declaringClass(input).transform(annotationPresent(annotation)).or(false);
+      public boolean test(RequestHandler input) {
+        return declaringClass(input).map(annotationPresent(annotation)).orElse(false);
       }
     };
   }
@@ -110,14 +111,14 @@ public class RequestHandlerSelectors {
   public static Predicate<RequestHandler> basePackage(final String basePackage) {
     return new Predicate<RequestHandler>() {
       @Override
-      public boolean apply(RequestHandler input) {
-        return declaringClass(input).transform(handlerPackage(basePackage)).or(true);
+      public boolean test(RequestHandler input) {
+        return declaringClass(input).map(handlerPackage(basePackage)).orElse(true);
       }
     };
   }
 
   private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
-    return Optional.fromNullable(input.declaringClass());
+    return ofNullable(input.declaringClass());
   }
 
 }

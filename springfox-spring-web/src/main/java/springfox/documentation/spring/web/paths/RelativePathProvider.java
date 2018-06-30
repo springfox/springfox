@@ -21,7 +21,8 @@ package springfox.documentation.spring.web.paths;
 
 import javax.servlet.ServletContext;
 
-import static com.google.common.base.Strings.*;
+import static org.springframework.util.StringUtils.isEmpty;
+
 
 public class RelativePathProvider extends AbstractPathProvider {
   public static final String ROOT = "/";
@@ -34,7 +35,7 @@ public class RelativePathProvider extends AbstractPathProvider {
 
   @Override
   protected String applicationPath() {
-    return isNullOrEmpty(servletContext.getContextPath()) ? ROOT : servletContext.getContextPath();
+    return isEmpty(servletContext.getContextPath()) ? ROOT : servletContext.getContextPath();
   }
 
   @Override

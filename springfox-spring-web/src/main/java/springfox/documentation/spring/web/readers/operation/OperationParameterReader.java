@@ -20,8 +20,8 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -43,11 +43,12 @@ import springfox.documentation.spring.web.readers.parameter.ExpansionContext;
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.Types.*;
@@ -83,7 +84,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private List<Parameter> readParameters(final OperationContext context) {
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
-    List<Parameter> parameters = newArrayList();
+    List<Parameter> parameters = new ArrayList();
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
@@ -104,13 +105,13 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         }
       }
     }
-    return FluentIterable.from(parameters).filter(not(hiddenParams())).toList();
+    return parameters.stream().filter(hiddenParams().negate()).collect(toList());
   }
 
   private Predicate<Parameter> hiddenParams() {
     return new Predicate<Parameter>() {
       @Override
-      public boolean apply(Parameter input) {
+      public boolean test(Parameter input) {
         return input.isHidden();
       }
     };
@@ -124,16 +125,16 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     if (ignorableParamTypes.contains(resolvedParameterType.getErasedType())) {
       return true;
     }
-    return FluentIterable.from(ignorableParamTypes)
+    return ignorableParamTypes.stream()
         .filter(isAnnotation())
-        .filter(parameterIsAnnotatedWithIt(parameter)).size() > 0;
+        .anyMatch(parameterIsAnnotatedWithIt(parameter));
 
   }
 
   private Predicate<Class> parameterIsAnnotatedWithIt(final ResolvedMethodParameter parameter) {
     return new Predicate<Class>() {
       @Override
-      public boolean apply(Class input) {
+      public boolean test(Class input) {
         return parameter.hasParameterAnnotation(input);
       }
     };
@@ -142,7 +143,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private Predicate<Class> isAnnotation() {
     return new Predicate<Class>() {
       @Override
-      public boolean apply(Class input) {
+      public boolean test(Class input) {
         return Annotation.class.isAssignableFrom(input);
       }
     };

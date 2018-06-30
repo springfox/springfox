@@ -22,7 +22,8 @@ package springfox.documentation.spring.web.paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Strings.*;
+import static org.springframework.util.StringUtils.isEmpty;
+
 
 public class Paths {
   private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-\\.]+[/]?)");
@@ -32,7 +33,7 @@ public class Paths {
   }
 
   public static String splitCamelCase(String s, String separator) {
-    if (isNullOrEmpty(s)) {
+    if (isEmpty(s)) {
       return "";
     }
     return s.replaceAll(
@@ -50,14 +51,14 @@ public class Paths {
   }
 
   public static String maybeChompLeadingSlash(String path) {
-    if (isNullOrEmpty(path) || !path.startsWith("/")) {
+    if (isEmpty(path) || !path.startsWith("/")) {
       return path;
     }
     return path.replaceFirst("^/", "");
   }
 
   public static String maybeChompTrailingSlash(String path) {
-    if (isNullOrEmpty(path) || !path.endsWith("/")) {
+    if (isEmpty(path) || !path.endsWith("/")) {
       return path;
     }
     return path.replaceFirst("/$", "");
@@ -65,7 +66,7 @@ public class Paths {
 
 
   public static String firstPathSegment(String path) {
-    if (isNullOrEmpty(path)) {
+    if (isEmpty(path)) {
       return path;
     }
     Matcher matcher = FIRST_PATH_FRAGMENT_REGEX.matcher(path);

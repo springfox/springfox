@@ -19,13 +19,14 @@
 
 package springfox.documentation.schema.alternates
 
-import com.google.common.collect.ImmutableSet
+
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import springfox.documentation.schema.*
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.emptySet
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -41,7 +42,7 @@ class AlternatePropertiesSpec extends Specification {
           SWAGGER_12,
           provider,
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
     expect:
       model.getName() == "TypeWithAlternateProperty"
       model.getProperties().containsKey("localDate")
@@ -64,7 +65,7 @@ class AlternatePropertiesSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
     expect:
       model.getName() == "GenericType«ResponseEntity«Void»»"
       model.getProperties().containsKey("genericField")

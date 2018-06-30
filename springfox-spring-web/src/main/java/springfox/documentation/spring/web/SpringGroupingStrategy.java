@@ -27,7 +27,8 @@ import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 /**
@@ -61,7 +62,7 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
   private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
     Class<?> controllerClazz = handlerMethod.getBeanType();
     String controllerAsGroup = splitCamelCase(controllerClazz.getSimpleName(), "-").toLowerCase();
-    return newHashSet(new ResourceGroup(controllerAsGroup, controllerClazz));
+    return singleton(new ResourceGroup(controllerAsGroup, controllerClazz));
   }
 
   private String getDescription(Class<?> controllerClass) {

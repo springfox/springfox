@@ -24,19 +24,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.primitives.Ints;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.ImmutableSortedSet.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @JsonPropertyOrder({
         "method", "summary", "notes", "type", "nickname", "produces",
@@ -91,9 +85,9 @@ public class Operation {
     this.consumes = consumes;
     this.protocol = protocol;
     this.authorizations = toAuthorizationsMap(authorizations);
-    this.parameters = FluentIterable.from(parameters)
-        .toSortedList(byName());
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.parameters = parameters.stream()
+        .sorted(byName()).collect(toList());
+    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(() -> new TreeSet<>(responseMessageOrdering())));
     this.deprecated = deprecated;
   }
 
@@ -101,20 +95,20 @@ public class Operation {
     return new Comparator<ResponseMessage>() {
       @Override
       public int compare(ResponseMessage first, ResponseMessage second) {
-        return Ints.compare(first.getCode(), second.getCode());
+        return Integer.compare(first.getCode(), second.getCode());
       }
     };
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
-    return transformEntries(uniqueIndex(authorizations, byType()), toScopes());
+    return authorizations.stream().collect(toMap(byType(), toScopes()));
   }
 
-  private EntryTransformer<? super String, ? super Authorization, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, Authorization, List<AuthorizationScope>>() {
+  private Function<? super Authorization, List<AuthorizationScope>> toScopes() {
+    return new Function<Authorization, List<AuthorizationScope>>() {
       @Override
-      public List<AuthorizationScope> transformEntry(String key, Authorization value) {
-        return newArrayList(value.getScopes());
+      public List<AuthorizationScope> apply(Authorization value) {
+        return new ArrayList(value.getScopes());
       }
     };
   }
@@ -214,7 +208,7 @@ public class Operation {
   }
 
   public void setResponseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(()->new TreeSet<>(responseMessageOrdering())));
   }
 
   public String getDeprecated() {

@@ -33,9 +33,11 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+import static java.util.Collections.singleton;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
@@ -62,11 +64,11 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
               entityContext.resourcePath(),
               mapping.getPath(),
               propertyIdentifier),
-          newHashSet(RequestMethod.GET),
+              singleton(RequestMethod.GET),
           new HashSet<MediaType>(),
-          newHashSet(HAL_JSON),
+              singleton(HAL_JSON),
           null,
-          newArrayList(new ResolvedMethodParameter(
+          Stream.of(new ResolvedMethodParameter(
                   0,
                   "id",
                   pathAnnotations("id"),
@@ -75,7 +77,7 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
                   1,
                   propertyIdentifier,
                   pathAnnotations(propertyIdentifier),
-                  resolver.resolve(String.class))),
+                  resolver.resolve(String.class))).collect(toList()),
           propertyItemResponse(property, resolver));
       handlers.add(new SpringDataRestRequestHandler(entityContext, getPropertyItem));
     }

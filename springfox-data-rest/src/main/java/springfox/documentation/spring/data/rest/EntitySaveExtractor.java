@@ -30,38 +30,44 @@ import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+
+
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntitySaveExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList<>();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
     Object getSaveMethod = crudMethods.getSaveMethod();
-    Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
+    OptionalDeferencer<Method> converter = new OptionalDeferencer<>();
     if (crudMethods.hasSaveMethod()) {
-      Method actualSaveMethod = (Method) converter.convert(getSaveMethod).orNull();
+      Method actualSaveMethod = converter.convert(getSaveMethod);
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
           actualSaveMethod);
       RepositoryMetadata resource = context.getRepositoryMetadata();
       ActionSpecification put = saveActionSpecification(
           entity,
-          newHashSet(PUT, PATCH),
+          Stream.of(PUT, PATCH).collect(toSet()),
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
           handler,
           context.getTypeResolver(),
-          resource, newArrayList(
+          resource, Stream.of(
               new ResolvedMethodParameter(
                   0,
                   "id",
@@ -71,14 +77,14 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
                   0,
                   "body",
                   bodyAnnotations(handler),
-                  context.getTypeResolver().resolve(resource.getDomainType()))));
+                  context.getTypeResolver().resolve(resource.getDomainType()))).collect(toList()));
       handlers.add(new SpringDataRestRequestHandler(context, put));
       ActionSpecification post = saveActionSpecification(
           entity,
-          newHashSet(POST),
+          singleton(POST),
           String.format("%s%s", context.basePath(), context.resourcePath()),
           handler,
-          context.getTypeResolver(), resource, newArrayList(
+          context.getTypeResolver(), resource, singletonList(
               new ResolvedMethodParameter(
                   0,
                   "body",

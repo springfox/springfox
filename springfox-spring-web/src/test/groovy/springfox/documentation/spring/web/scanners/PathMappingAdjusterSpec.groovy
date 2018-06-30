@@ -19,17 +19,18 @@
 
 package springfox.documentation.spring.web.scanners
 
-import com.google.common.base.Optional
 import spock.lang.Specification
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spring.web.paths.PathMappingAdjuster
+
+import static java.util.Optional.ofNullable;
 
 class PathMappingAdjusterSpec extends Specification {
   def "Adjust path mapping according to servlet registration" () {
     given:
       def context = Mock(DocumentationContext)
     and:
-      context.pathMapping >> Optional.fromNullable(pathMapping)
+      context.pathMapping >> ofNullable(pathMapping)
     when:
       def sut = new PathMappingAdjuster(context)
     then:

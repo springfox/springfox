@@ -21,8 +21,7 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -37,11 +36,15 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+
+import static java.util.Optional.of;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.service.Parameter.*;
@@ -64,7 +67,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   public void apply(ParameterExpansionContext context) {
     AllowableValues allowable = allowableValues(context.getFieldType().getErasedType());
 
-    String name = isNullOrEmpty(context.getParentName())
+    String name = isEmpty(context.getParentName())
                   ? context.getFieldName()
                   : String.format("%s.%s", context.getParentName(), context.getFieldName());
 
@@ -72,7 +75,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     ModelReference itemModel = null;
     ResolvedType resolved = resolver.resolve(context.getFieldType());
     if (isContainerType(resolved)) {
-      resolved = fieldType(context).or(resolved);
+      resolved = fieldType(context).orElse(resolved);
       ResolvedType elementType = collectionElementType(resolved);
       String itemTypeName = typeNameFor(elementType.getErasedType());
       AllowableValues itemAllowables = null;
@@ -100,7 +103,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {
-    return Optional.of(context.getFieldType());
+    return of(context.getFieldType());
   }
 
   @Override
@@ -119,11 +122,11 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
+    return Stream.of(subject.getEnumConstants()).map(new Function<Object, String>() {
       @Override
       public String apply(final Object input) {
         return input.toString();
       }
-    });
+    }).collect(toList());
   }
 }

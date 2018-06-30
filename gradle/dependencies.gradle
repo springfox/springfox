@@ -5,7 +5,6 @@ ext {
   classmate = "1.4.0"
   equalsverifierVersion = '2.4.7'
   groovy = "2.5.0"
-  guava = "20.0"
   jacocoVersion = '0.8.1'
   jackson = '2.9.6'
   joda = "2.10"
@@ -69,7 +68,6 @@ ext {
                   "joda-time:joda-time:$joda"
           ],
           core          : [
-                  "com.google.guava:guava:${guava}",
                   "com.fasterxml:classmate:${classmate}",
                   "org.slf4j:slf4j-api:${slf4j}",
           ]

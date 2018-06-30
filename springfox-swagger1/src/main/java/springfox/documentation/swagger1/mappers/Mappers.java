@@ -19,38 +19,48 @@
 
 package springfox.documentation.swagger1.mappers;
 
-import com.google.common.collect.Maps;
 import org.springframework.web.util.UriComponents;
 import springfox.documentation.swagger1.dto.ApiListing;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.google.common.base.Strings.*;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 public class Mappers {
-  public static Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>
-  toApiListingDto(
-      final HttpServletRequest servletRequest,
-      final String host,
-      final ServiceModelToSwaggerMapper mapper) {
+  public static Function<Map.Entry<String, List<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>
+    toApiListingDto(
+        final HttpServletRequest servletRequest,
+        final String host,
+        final ServiceModelToSwaggerMapper mapper) {
 
-    return new Maps.EntryTransformer<String, springfox.documentation.service.ApiListing, ApiListing>() {
+    return new Function<Map.Entry<String, List<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>() {
       @Override
-      public ApiListing transformEntry(String key, springfox.documentation.service.ApiListing value) {
-        ApiListing apiListing = mapper.toSwaggerApiListing(value);
-        UriComponents uriComponents = componentsFrom(servletRequest, apiListing.getBasePath());
-        apiListing.setBasePath(adjustedBasePath(uriComponents, host, apiListing.getBasePath()));
-        return apiListing;
+      public Map.Entry<String, List<ApiListing>> apply(Map.Entry<String, List<springfox.documentation.service.ApiListing>> entry) {
+        List<ApiListing> newApiListings = entry.getValue().stream().map(value -> {
+          ApiListing apiListing = mapper.toSwaggerApiListing(value);
+          UriComponents uriComponents = componentsFrom(servletRequest, apiListing.getBasePath());
+          apiListing.setBasePath(adjustedBasePath(uriComponents, host, apiListing.getBasePath()));
+          return apiListing;
+        }).collect(toList());
+        return new AbstractMap.SimpleEntry<>(entry.getKey(), newApiListings);
       }
     };
   }
+
+
 
   private static String adjustedBasePath(
       UriComponents uriComponents,
       String hostNameOverride,
       String basePath) {
-    if (!isNullOrEmpty(hostNameOverride)) {
+    if (!isEmpty(hostNameOverride)) {
       int port = uriComponents.getPort();
       if (port > -1) {
         return String.format("%s://%s:%d%s", uriComponents.getScheme(), hostNameOverride, port, basePath);

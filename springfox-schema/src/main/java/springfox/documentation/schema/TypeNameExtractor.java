@@ -36,9 +36,10 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
 
-import static com.google.common.base.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
+
+import static java.util.Optional.*;
 
 @Component
 public class TypeNameExtractor {
@@ -74,7 +75,7 @@ public class TypeNameExtractor {
     Class<?> erasedType = resolvedType.getErasedType();
     GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
     ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), context.getDocumentationType());
-    String simpleName = fromNullable(typeNameFor(erasedType)).or(typeName(nameContext));
+    String simpleName = ofNullable(typeNameFor(erasedType)).orElse(typeName(nameContext));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {

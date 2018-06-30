@@ -19,18 +19,13 @@
 
 package springfox.documentation.service;
 
-import com.google.common.collect.Multimap;
+import java.util.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.collect.Lists.*;
 
 public class Documentation {
   private final String groupName;
   private final String basePath;
-  private final Multimap<String, ApiListing> apiListings;
+  private final Map<String, List<ApiListing>> apiListings;
   private final Set<Tag> tags;
   private final ResourceListing resourceListing;
   private final Set<String> produces;
@@ -43,7 +38,7 @@ public class Documentation {
       String groupName,
       String basePath,
       Set<Tag> tags,
-      Multimap<String, ApiListing> apiListings,
+      Map<String, List<ApiListing>> apiListings,
       ResourceListing resourceListing,
       Set<String> produces,
       Set<String> consumes,
@@ -60,14 +55,14 @@ public class Documentation {
     this.consumes = consumes;
     this.host = host;
     this.schemes = schemes;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public String getGroupName() {
     return groupName;
   }
 
-  public Multimap<String, ApiListing> getApiListings() {
+  public Map<String, List<ApiListing>> getApiListings() {
     return apiListings;
   }
 
@@ -84,7 +79,7 @@ public class Documentation {
   }
 
   public List<String> getProduces() {
-    return newArrayList(produces);
+    return new ArrayList(produces);
   }
 
   public String getHost() {
@@ -92,11 +87,11 @@ public class Documentation {
   }
 
   public List<String> getSchemes() {
-    return newArrayList(schemes);
+    return new ArrayList(schemes);
   }
 
   public List<String> getConsumes() {
-    return newArrayList(consumes);
+    return new ArrayList(consumes);
   }
 
   public List<VendorExtension> getVendorExtensions() {

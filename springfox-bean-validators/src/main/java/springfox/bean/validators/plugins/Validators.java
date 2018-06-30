@@ -19,7 +19,6 @@
 package springfox.bean.validators.plugins;
 
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Optional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -30,6 +29,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Optional;
+
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 
 /**
  * Utility methods for Validators
@@ -45,7 +48,7 @@ public class Validators {
       ModelPropertyContext context,
       Class<T> annotationType) {
     return annotationFromBean(context, annotationType)
-        .or(annotationFromField(context, annotationType));
+       .map(Optional::of).orElse(annotationFromField(context, annotationType));
   }
 
   public static <T extends Annotation> Optional<T> annotationFromBean(
@@ -53,11 +56,11 @@ public class Validators {
       Class<T> annotationType) {
 
     Optional<BeanPropertyDefinition> propertyDefinition = context.getBeanPropertyDefinition();
-    Optional<T> notNull = Optional.absent();
+    Optional<T> notNull = empty();
     if (propertyDefinition.isPresent()) {
       Optional<Method> getter = extractGetterFromPropertyDefinition(propertyDefinition.get());
       Optional<Field> field = extractFieldFromPropertyDefinition(propertyDefinition.get());
-      notNull = findAnnotation(getter, annotationType).or(findAnnotation(field, annotationType));
+      notNull = findAnnotation(getter, annotationType).map(Optional::of).orElse(findAnnotation(field, annotationType));
     }
 
     return notNull;
@@ -79,25 +82,25 @@ public class Validators {
 
   private static Optional<Field> extractFieldFromPropertyDefinition(BeanPropertyDefinition propertyDefinition) {
     if (propertyDefinition.getField() != null) {
-      return Optional.fromNullable(propertyDefinition.getField().getAnnotated());
+      return ofNullable(propertyDefinition.getField().getAnnotated());
     }
-    return Optional.absent();
+    return empty();
   }
 
   private static Optional<Method> extractGetterFromPropertyDefinition(BeanPropertyDefinition propertyDefinition) {
     if (propertyDefinition.getGetter() != null) {
-      return Optional.fromNullable(propertyDefinition.getGetter().getMember());
+      return ofNullable(propertyDefinition.getGetter().getMember());
     }
-    return Optional.absent();
+    return empty();
   }
 
   private static <T extends Annotation> Optional<T> findAnnotation(
       Optional<? extends AnnotatedElement> annotatedElement,
       Class<T> annotationType) {
     if (annotatedElement.isPresent()) {
-      return Optional.fromNullable(AnnotationUtils.findAnnotation(annotatedElement.get(), annotationType));
+      return ofNullable(AnnotationUtils.findAnnotation(annotatedElement.get(), annotationType));
     } else {
-      return Optional.absent();
+      return empty();
     }
   }
 }

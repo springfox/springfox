@@ -19,8 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
 import org.springframework.aop.support.AopUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,7 +28,11 @@ import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+
+import static java.util.Optional.ofNullable;
 
 class ActionSpecification {
   private final Collection<RequestMethod> supportedMethods;
@@ -89,11 +92,11 @@ class ActionSpecification {
   }
 
   public Optional<HandlerMethod> getHandlerMethod() {
-    return Optional.fromNullable(handlerMethod);
+    return ofNullable(handlerMethod);
   }
 
   public Optional<Class<?>> getDeclaringClass() {
-    return getHandlerMethod().transform(new Function<HandlerMethod, Class<?>>() {
+    return getHandlerMethod().map(new Function<HandlerMethod, Class<?>>() {
       @Override
       public Class<?> apply(HandlerMethod input) {
         Object bean = new OptionalDeferencer<>().convert(handlerMethod.getBean());

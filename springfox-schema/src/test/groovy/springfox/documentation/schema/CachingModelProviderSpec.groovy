@@ -16,15 +16,16 @@
  *
  *
  */
+
 package springfox.documentation.schema
 
-import com.google.common.base.Optional
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
+import static java.util.Collections.emptySet
+import static java.util.Optional.of;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)
@@ -36,10 +37,10 @@ class CachingModelProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
       def model = aModel()
       def mock = Mock(ModelProvider) {
-        modelFor(context) >> Optional.of(model)
+        modelFor(context) >> of(model)
       }
     when:
       def sut = new CachingModelProvider(mock)
@@ -54,7 +55,7 @@ class CachingModelProviderSpec extends Specification {
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
       def mock = Mock(ModelProvider) {
         modelFor(context) >> { throw new NullPointerException() }
       }

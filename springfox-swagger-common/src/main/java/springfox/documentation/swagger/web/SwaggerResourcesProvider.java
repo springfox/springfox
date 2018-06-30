@@ -18,9 +18,8 @@
  */
 package springfox.documentation.swagger.web;
 
-import com.google.common.base.Supplier;
-
 import java.util.List;
+import java.util.function.Supplier;
 
 public interface SwaggerResourcesProvider extends Supplier<List<SwaggerResource>> {
 }

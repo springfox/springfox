@@ -19,20 +19,16 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Maps;
+
 import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelReference;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class Operation {
   private final HttpMethod method;
@@ -82,11 +78,11 @@ public class Operation {
     this.protocol = protocol;
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
-    this.parameters = FluentIterable.from(parameters)
-        .toSortedList(byParameterName());
+    this.parameters = parameters.stream()
+        .sorted(byParameterName()).collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public boolean isHidden() {
@@ -102,14 +98,14 @@ public class Operation {
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
-    return Maps.transformEntries(Maps.uniqueIndex(securityReferences, byType()), toScopes());
+    return securityReferences.stream().collect(toMap(byType(), toScopes()));
   }
 
-  private EntryTransformer<? super String, ? super SecurityReference, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, SecurityReference, List<AuthorizationScope>>() {
+  private Function<? super SecurityReference, List<AuthorizationScope>> toScopes() {
+    return new Function<SecurityReference, List<AuthorizationScope>>() {
       @Override
-      public List<AuthorizationScope> transformEntry(String key, SecurityReference value) {
-        return newArrayList(value.getScopes());
+      public List<AuthorizationScope> apply(SecurityReference value) {
+        return new ArrayList(value.getScopes());
       }
     };
   }

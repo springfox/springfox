@@ -19,8 +19,8 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -34,8 +34,12 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import static com.google.common.base.Strings.*;
+import java.util.Optional;
+import java.util.function.Function;
+
+
 import static java.lang.String.*;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -44,7 +48,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     String name = findParameterNameFromAnnotations(context.resolvedMethodParameter());
-    if (isNullOrEmpty(name)) {
+    if (isEmpty(name)) {
       Optional<String> discoveredName = context.resolvedMethodParameter().defaultName();
       name = discoveredName.isPresent()
              ? discoveredName.get()
@@ -61,12 +65,12 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   }
 
   private String findParameterNameFromAnnotations(ResolvedMethodParameter methodParameter) {
-    return methodParameter.findAnnotation(PathVariable.class).transform(pathVariableValue())
-        .or(methodParameter.findAnnotation(ModelAttribute.class).transform(modelAttributeValue()))
-        .or(methodParameter.findAnnotation(RequestParam.class).transform(requestParamValue()))
-        .or(methodParameter.findAnnotation(RequestHeader.class).transform(requestHeaderValue()))
-        .or(methodParameter.findAnnotation(RequestPart.class).transform(requestPartValue()))
-        .orNull();
+    return methodParameter.findAnnotation(PathVariable.class).map(pathVariableValue())
+        .orElse(methodParameter.findAnnotation(ModelAttribute.class).map(modelAttributeValue())
+        .orElse(methodParameter.findAnnotation(RequestParam.class).map(requestParamValue())
+        .orElse(methodParameter.findAnnotation(RequestHeader.class).map(requestHeaderValue())
+        .orElse(methodParameter.findAnnotation(RequestPart.class).map(requestPartValue())
+        .orElse(null)))));
   }
 
 

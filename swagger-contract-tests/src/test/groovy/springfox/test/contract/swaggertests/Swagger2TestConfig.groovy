@@ -47,10 +47,11 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 
-import static com.google.common.base.Predicates.*
-import static com.google.common.collect.Lists.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
+
+import static java.util.Collections.singletonList;
+import static java.util.function.Predicate.isEqual;
 
 @Configuration
 @EnableSwagger2
@@ -177,7 +178,7 @@ class Swagger2TestConfig {
           .title("bugs API")
           .description("bugs API")
           .extensions(
-            newArrayList(
+             singletonList(
                 new StringVendorExtension("test", "testValue")))
           .build())
         .useDefaultResponseMessages(false)
@@ -189,7 +190,7 @@ class Swagger2TestConfig {
         [SecurityContext.builder()
              .securityReferences([new SecurityReference("petstore_auth", scopes)])
              .forPaths(regex("/bugs/2268"))
-             .forHttpMethods(equalTo(HttpMethod.GET))
+             .forHttpMethods(isEqual(HttpMethod.GET))
              .build()
         ])
         .alternateTypeRules(
@@ -347,11 +348,11 @@ class Swagger2TestConfig {
         .forCodeGeneration(true)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-        .paths(or(
-          regex("/rest/people.*"),
-          regex("/rest/tags.*"),
-          regex("/rest/categories.*"),
-          regex("/rest/addresses.*")))
+        .paths(
+          regex("/rest/people.*")
+          .or(regex("/rest/tags.*"))
+          .or(regex("/rest/categories.*"))
+          .or(regex("/rest/addresses.*")))
         .build()
   }
 }

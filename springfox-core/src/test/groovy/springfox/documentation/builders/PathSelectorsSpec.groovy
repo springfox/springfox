@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.builders
+
 import spock.lang.Specification
 
 import static PathSelectors.*
@@ -33,17 +34,17 @@ class PathSelectorsSpec extends Specification {
 
   def "any predicate matches all RequestHandlers" () {
     expect:
-      PathSelectors.any().apply("asdasdas")
+      PathSelectors.any().test("asdasdas")
   }
 
   def "none predicate matches no RequestHandlers" () {
     expect:
-      !none().apply("asdasdasdasd")
+      !none().test("asdasdasdasd")
   }
 
   def "matches ant expressions"() {
     expect:
-    shouldMatch == ant(included).apply(pathToMatch)
+    shouldMatch == ant(included).test(pathToMatch)
 
     where:
     included               | pathToMatch                    | shouldMatch
@@ -74,7 +75,7 @@ class PathSelectorsSpec extends Specification {
   def "matches regex expressions"() {
     given:
     expect:
-    shouldMatch == regex(included).apply(patternConditions)
+    shouldMatch == regex(included).test(patternConditions)
 
     where:
     patternConditions | included      | shouldMatch

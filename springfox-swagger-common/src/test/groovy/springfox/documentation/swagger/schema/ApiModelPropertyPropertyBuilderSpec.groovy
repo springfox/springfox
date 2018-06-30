@@ -23,7 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
-import com.google.common.collect.ImmutableSet
+
 import org.joda.time.LocalDate
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -39,6 +39,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 import springfox.documentation.spring.web.DescriptionResolver
 
+import static java.util.Collections.emptySet;
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -167,7 +168,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(
@@ -211,7 +212,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(

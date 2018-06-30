@@ -18,22 +18,18 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.util.StringUtils.isEmpty;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class Tags {
@@ -41,19 +37,20 @@ public class Tags {
     throw new UnsupportedOperationException();
   }
 
-  public static Set<Tag> toTags(Multimap<String, ApiListing> apiListings) {
-    Iterable<ApiListing> allListings = Iterables.concat(nullToEmptyMultimap(apiListings).asMap().values());
-    List<Tag> tags = from(allListings)
-        .transformAndConcat(collectTags())
-        .toList();
-    TreeSet<Tag> tagSet = newTreeSet(tagComparator());
+  public static Set<Tag> toTags(Map<String, List<ApiListing>> apiListings) {
+    Iterable<ApiListing> allListings = nullToEmptyMultimap(apiListings).values().stream().flatMap(l -> l.stream()).collect(toList());
+    List<Tag> tags =
+        StreamSupport.stream(allListings.spliterator(), false)
+            .map(collectTags()).flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))
+            .collect(toList());
+    TreeSet<Tag> tagSet = new TreeSet(tagComparator());
     tagSet.addAll(tags);
     return tagSet;
   }
 
   public static Comparator<Tag> tagComparator() {
-    return Ordering.from(byOrder())
-        .compound(thenByName());
+    return byOrder()
+        .thenComparing(thenByName());
   }
 
   private static Comparator<Tag> thenByName() {
@@ -90,9 +87,9 @@ public class Tags {
     return new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return Optional.fromNullable(tagLookup.get(input))
-            .transform(toTagDescription())
-            .or(defaultDescription);
+        return ofNullable(tagLookup.get(input))
+            .map(toTagDescription())
+            .orElse(defaultDescription);
       }
     };
   }
@@ -127,8 +124,8 @@ public class Tags {
   public static Predicate<String> emptyTags() {
     return new Predicate<String>() {
       @Override
-      public boolean apply(String input) {
-        return !Strings.isNullOrEmpty(input);
+      public boolean test(String input) {
+        return !isEmpty(input);
       }
     };
   }
