@@ -933,9 +933,7 @@ use one of the base types specified in the Types class &#8658;
 14
 15
 </pre></td>
-  <td class="code"><pre>  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">Set</span>&lt;<span class="predefined-type">String</span>&gt; baseTypes = newHashSet(
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">date</span><span class="delimiter">&quot;</span></span>,
+  <td class="code"><pre>      <span class="string"><span class="delimiter">&quot;</span><span class="content">date</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">double</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">float</span><span class="delimiter">&quot;</span></span>,
@@ -947,7 +945,9 @@ use one of the base types specified in the Types class &#8658;
       <span class="string"><span class="delimiter">&quot;</span><span class="content">__file</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">biginteger</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">bigdecimal</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">uuid</span><span class="delimiter">&quot;</span></span>);</pre></td>
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">uuid</span><span class="delimiter">&quot;</span></span>).collect(toSet());
+  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">Map</span>&lt;<span class="predefined-type">Type</span>, <span class="predefined-type">String</span>&gt; typeNameLookup = unmodifiableMap(Stream.of(
+      <span class="keyword">new</span> <span class="predefined-type">AbstractMap</span>.SimpleEntry&lt;&gt;(<span class="predefined-type">Long</span>.TYPE, <span class="string"><span class="delimiter">&quot;</span><span class="content">long</span><span class="delimiter">&quot;</span></span>),</pre></td>
 </tr></table></code></pre>
 </div>
 </div>
@@ -1441,7 +1441,7 @@ this is based on swagger-ui pre 3.x
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-06-29 23:40:27 UTC
+Last updated 2018-06-30 20:58:17 UTC
 </div>
 </div>
 </body>

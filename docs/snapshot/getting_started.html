@@ -865,7 +865,6 @@ dependencies {
 <span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.boot.SpringApplication</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.boot.autoconfigure.SpringBootApplication</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.context.ApplicationContext</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.context.annotation.Bean</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.context.annotation.ComponentScan</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.http.ResponseEntity</span>;
@@ -897,8 +896,9 @@ dependencies {
 
 <span class="keyword">import</span> <span class="include">java.util.List</span>;
 
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.collect.Lists</span>.*;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">java.util.Collections</span>.*;
 <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.schema.AlternateTypeRules</span>.*;
+
 
 <span class="annotation">@SpringBootApplication</span>
 <span class="annotation">@EnableSwagger2</span><i class="conum" data-value="1"></i><b>(1)</b>
@@ -908,7 +908,7 @@ dependencies {
 <span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2SpringBoot</span> {
 
   <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
-    ApplicationContext ctx = SpringApplication.run(Swagger2SpringBoot.class, args);
+    SpringApplication.run(Swagger2SpringBoot.class, args);
   }
 
 
@@ -928,16 +928,16 @@ dependencies {
                 typeResolver.resolve(<span class="predefined-type">WildcardType</span>.class)))<i class="conum" data-value="10"></i><b>(10)</b>
         .useDefaultResponseMessages(<span class="predefined-constant">false</span>)<i class="conum" data-value="11"></i><b>(11)</b>
         .globalResponseMessage(RequestMethod.GET,<i class="conum" data-value="12"></i><b>(12)</b>
-            newArrayList(<span class="keyword">new</span> ResponseMessageBuilder()
+            singletonList(<span class="keyword">new</span> ResponseMessageBuilder()
                 .code(<span class="integer">500</span>)
                 .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">500 message</span><span class="delimiter">&quot;</span></span>)
                 .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error</span><span class="delimiter">&quot;</span></span>))<i class="conum" data-value="13"></i><b>(13)</b>
                 .build()))
-        .securitySchemes(newArrayList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
-        .securityContexts(newArrayList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
+        .securitySchemes(singletonList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
+        .securityContexts(singletonList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
         .enableUrlTemplating(<span class="predefined-constant">true</span>)<i class="conum" data-value="21"></i><b>(21)</b>
         .globalOperationParameters(<i class="conum" data-value="22"></i><b>(22)</b>
-            newArrayList(<span class="keyword">new</span> ParameterBuilder()
+            singletonList(<span class="keyword">new</span> ParameterBuilder()
                 .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
                 .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Description of someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
                 .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
@@ -968,7 +968,7 @@ dependencies {
         = <span class="keyword">new</span> AuthorizationScope(<span class="string"><span class="delimiter">&quot;</span><span class="content">global</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">accessEverything</span><span class="delimiter">&quot;</span></span>);
     AuthorizationScope<span class="type">[]</span> authorizationScopes = <span class="keyword">new</span> AuthorizationScope[<span class="integer">1</span>];
     authorizationScopes[<span class="integer">0</span>] = authorizationScope;
-    <span class="keyword">return</span> newArrayList(
+    <span class="keyword">return</span> singletonList(
         <span class="keyword">new</span> SecurityReference(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, authorizationScopes));<i class="conum" data-value="18"></i><b>(18)</b>
   }
 
@@ -1562,7 +1562,7 @@ cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-06-29 23:40:27 UTC
+Last updated 2018-06-30 20:58:17 UTC
 </div>
 </div>
 </body>

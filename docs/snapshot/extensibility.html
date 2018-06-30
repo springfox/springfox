@@ -920,20 +920,20 @@ is applied to the parameter.</td>
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> <span class="predefined-type">List</span>&lt;ApiDescription&gt; apply(DocumentationContext context) {
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;ApiDescription&gt;(
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;(
         <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="1"></i><b>(1)</b>
             <span class="keyword">new</span> ApiDescription(
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">/bugs/1767</span><span class="delimiter">&quot;</span></span>,
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
-                <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="2"></i><b>(2)</b>
+                <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="2"></i><b>(2)</b>
                     <span class="keyword">new</span> OperationBuilder(
                         operationNames)
-                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
+                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
                         .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug1767GET</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
                         .method(HttpMethod.GET)
                         .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
                         .parameters(
-                            <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="4"></i><b>(4)</b>
+                            <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="4"></i><b>(4)</b>
                                 <span class="keyword">new</span> ParameterBuilder()
                                     .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">search by description</span><span class="delimiter">&quot;</span></span>)
                                     .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
@@ -951,15 +951,15 @@ is applied to the parameter.</td>
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">different-group</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="8"></i><b>(8)</b>
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">/different/2219</span><span class="delimiter">&quot;</span></span>,
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
-                <span class="predefined-type">Arrays</span>.asList(
+                <span class="predefined-type">Collections</span>.singletonList(
                     <span class="keyword">new</span> OperationBuilder(
                         operationNames)
-                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
+                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
                         .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug2219GET</span><span class="delimiter">&quot;</span></span>)
                         .method(HttpMethod.GET)
                         .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
                         .parameters(
-                            <span class="predefined-type">Arrays</span>.asList(
+                            <span class="predefined-type">Collections</span>.singletonList(
                                 <span class="keyword">new</span> ParameterBuilder()
                                     .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">description of bug 2219</span><span class="delimiter">&quot;</span></span>)
                                     .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
@@ -979,7 +979,7 @@ is applied to the parameter.</td>
    * @return Set of response messages that overide the default/global response messages
    */</span>
   <span class="directive">private</span> <span class="predefined-type">Set</span>&lt;ResponseMessage&gt; responseMessages() { <i class="conum" data-value="8"></i><b>(8)</b>
-    <span class="keyword">return</span> newHashSet(<span class="keyword">new</span> ResponseMessageBuilder()
+    <span class="keyword">return</span> singleton(<span class="keyword">new</span> ResponseMessageBuilder()
         .code(<span class="integer">200</span>)
         .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully received bug 1767 or 2219 response</span><span class="delimiter">&quot;</span></span>)
         .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
@@ -1204,7 +1204,7 @@ this feature requires the <a href="https://mvnrepository.com/artifact/org.reflec
 
       <span class="annotation">@Override</span>
       <span class="directive">public</span> <span class="predefined-type">List</span>&lt;AlternateTypeRule&gt; rules() {
-        <span class="keyword">return</span> newArrayList(
+        <span class="keyword">return</span> singletonList(
             newRule(resolver.resolve(<span class="predefined-type">Pageable</span>.class), resolver.resolve(pageableMixin(restConfiguration)))
         );
       }
@@ -1217,11 +1217,11 @@ this feature requires the <a href="https://mvnrepository.com/artifact/org.reflec
             <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s.generated.%s</span><span class="delimiter">&quot;</span></span>,
                 <span class="predefined-type">Pageable</span>.class.getPackage().getName(),
                 <span class="predefined-type">Pageable</span>.class.getSimpleName()))
-        .withProperties(newArrayList(
+        .withProperties(Stream.of(
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getPageParamName()),
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getLimitParamName()),
             property(<span class="predefined-type">String</span>.class, restConfiguration.getSortParamName())
-        ))
+        ).collect(toList()))
         .build();
   }
 
@@ -1275,11 +1275,11 @@ instead of <code>Pageable</code>.</p>
             <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s.generated.%s</span><span class="delimiter">&quot;</span></span>,
                 <span class="predefined-type">Pageable</span>.class.getPackage().getName(),
                 <span class="predefined-type">Pageable</span>.class.getSimpleName()))
-        .withProperties(newArrayList(
+        .withProperties(Stream.of(
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getPageParamName()),
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getLimitParamName()),
             property(<span class="predefined-type">String</span>.class, restConfiguration.getSortParamName())
-        ))
+        ).collect(toList()))
         .build();
   }
 
@@ -1417,7 +1417,7 @@ customized, the library uses the <code>DefaultExtractorConfiguration</code>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-06-29 23:40:27 UTC
+Last updated 2018-06-30 20:58:17 UTC
 </div>
 </div>
 </body>

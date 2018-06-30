@@ -1261,7 +1261,6 @@ dependencies {
 <span class="keyword">import</span> <span class="include">org.springframework.beans.factory.annotation.Autowired</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.boot.SpringApplication</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.boot.autoconfigure.SpringBootApplication</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.context.ApplicationContext</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.context.annotation.Bean</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.context.annotation.ComponentScan</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.http.ResponseEntity</span>;
@@ -1293,8 +1292,9 @@ dependencies {
 
 <span class="keyword">import</span> <span class="include">java.util.List</span>;
 
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">com.google.common.collect.Lists</span>.*;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">java.util.Collections</span>.*;
 <span class="keyword">import</span> <span class="include">static</span> <span class="include">springfox.documentation.schema.AlternateTypeRules</span>.*;
+
 
 <span class="annotation">@SpringBootApplication</span>
 <span class="annotation">@EnableSwagger2</span><i class="conum" data-value="1"></i><b>(1)</b>
@@ -1304,7 +1304,7 @@ dependencies {
 <span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2SpringBoot</span> {
 
   <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
-    ApplicationContext ctx = SpringApplication.run(Swagger2SpringBoot.class, args);
+    SpringApplication.run(Swagger2SpringBoot.class, args);
   }
 
 
@@ -1324,16 +1324,16 @@ dependencies {
                 typeResolver.resolve(<span class="predefined-type">WildcardType</span>.class)))<i class="conum" data-value="10"></i><b>(10)</b>
         .useDefaultResponseMessages(<span class="predefined-constant">false</span>)<i class="conum" data-value="11"></i><b>(11)</b>
         .globalResponseMessage(RequestMethod.GET,<i class="conum" data-value="12"></i><b>(12)</b>
-            newArrayList(<span class="keyword">new</span> ResponseMessageBuilder()
+            singletonList(<span class="keyword">new</span> ResponseMessageBuilder()
                 .code(<span class="integer">500</span>)
                 .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">500 message</span><span class="delimiter">&quot;</span></span>)
                 .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error</span><span class="delimiter">&quot;</span></span>))<i class="conum" data-value="13"></i><b>(13)</b>
                 .build()))
-        .securitySchemes(newArrayList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
-        .securityContexts(newArrayList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
+        .securitySchemes(singletonList(apiKey()))<i class="conum" data-value="14"></i><b>(14)</b>
+        .securityContexts(singletonList(securityContext()))<i class="conum" data-value="15"></i><b>(15)</b>
         .enableUrlTemplating(<span class="predefined-constant">true</span>)<i class="conum" data-value="21"></i><b>(21)</b>
         .globalOperationParameters(<i class="conum" data-value="22"></i><b>(22)</b>
-            newArrayList(<span class="keyword">new</span> ParameterBuilder()
+            singletonList(<span class="keyword">new</span> ParameterBuilder()
                 .name(<span class="string"><span class="delimiter">&quot;</span><span class="content">someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
                 .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">Description of someGlobalParameter</span><span class="delimiter">&quot;</span></span>)
                 .modelRef(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
@@ -1364,7 +1364,7 @@ dependencies {
         = <span class="keyword">new</span> AuthorizationScope(<span class="string"><span class="delimiter">&quot;</span><span class="content">global</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">accessEverything</span><span class="delimiter">&quot;</span></span>);
     AuthorizationScope<span class="type">[]</span> authorizationScopes = <span class="keyword">new</span> AuthorizationScope[<span class="integer">1</span>];
     authorizationScopes[<span class="integer">0</span>] = authorizationScope;
-    <span class="keyword">return</span> newArrayList(
+    <span class="keyword">return</span> singletonList(
         <span class="keyword">new</span> SecurityReference(<span class="string"><span class="delimiter">&quot;</span><span class="content">mykey</span><span class="delimiter">&quot;</span></span>, authorizationScopes));<i class="conum" data-value="18"></i><b>(18)</b>
   }
 
@@ -2457,9 +2457,7 @@ use one of the base types specified in the Types class &#8658;
 14
 15
 </pre></td>
-  <td class="code"><pre>  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">Set</span>&lt;<span class="predefined-type">String</span>&gt; baseTypes = newHashSet(
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">int</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">date</span><span class="delimiter">&quot;</span></span>,
+  <td class="code"><pre>      <span class="string"><span class="delimiter">&quot;</span><span class="content">date</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">double</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">float</span><span class="delimiter">&quot;</span></span>,
@@ -2471,7 +2469,9 @@ use one of the base types specified in the Types class &#8658;
       <span class="string"><span class="delimiter">&quot;</span><span class="content">__file</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">biginteger</span><span class="delimiter">&quot;</span></span>,
       <span class="string"><span class="delimiter">&quot;</span><span class="content">bigdecimal</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">uuid</span><span class="delimiter">&quot;</span></span>);</pre></td>
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">uuid</span><span class="delimiter">&quot;</span></span>).collect(toSet());
+  <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">Map</span>&lt;<span class="predefined-type">Type</span>, <span class="predefined-type">String</span>&gt; typeNameLookup = unmodifiableMap(Stream.of(
+      <span class="keyword">new</span> <span class="predefined-type">AbstractMap</span>.SimpleEntry&lt;&gt;(<span class="predefined-type">Long</span>.TYPE, <span class="string"><span class="delimiter">&quot;</span><span class="content">long</span><span class="delimiter">&quot;</span></span>),</pre></td>
 </tr></table></code></pre>
 </div>
 </div>
@@ -3342,20 +3342,20 @@ is applied to the parameter.</td>
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> <span class="predefined-type">List</span>&lt;ApiDescription&gt; apply(DocumentationContext context) {
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;ApiDescription&gt;(
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;(
         <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="1"></i><b>(1)</b>
             <span class="keyword">new</span> ApiDescription(
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">/bugs/1767</span><span class="delimiter">&quot;</span></span>,
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
-                <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="2"></i><b>(2)</b>
+                <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="2"></i><b>(2)</b>
                     <span class="keyword">new</span> OperationBuilder(
                         operationNames)
-                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
+                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
                         .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug1767GET</span><span class="delimiter">&quot;</span></span>) <i class="conum" data-value="3"></i><b>(3)</b>
                         .method(HttpMethod.GET)
                         .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
                         .parameters(
-                            <span class="predefined-type">Arrays</span>.asList( <i class="conum" data-value="4"></i><b>(4)</b>
+                            <span class="predefined-type">Collections</span>.singletonList( <i class="conum" data-value="4"></i><b>(4)</b>
                                 <span class="keyword">new</span> ParameterBuilder()
                                     .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">search by description</span><span class="delimiter">&quot;</span></span>)
                                     .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
@@ -3373,15 +3373,15 @@ is applied to the parameter.</td>
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">different-group</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="8"></i><b>(8)</b>
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">/different/2219</span><span class="delimiter">&quot;</span></span>,
                 <span class="string"><span class="delimiter">&quot;</span><span class="content">This is a bug</span><span class="delimiter">&quot;</span></span>,
-                <span class="predefined-type">Arrays</span>.asList(
+                <span class="predefined-type">Collections</span>.singletonList(
                     <span class="keyword">new</span> OperationBuilder(
                         operationNames)
-                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>())
+                        .authorizations(<span class="keyword">new</span> <span class="predefined-type">ArrayList</span>&lt;&gt;())
                         .codegenMethodNameStem(<span class="string"><span class="delimiter">&quot;</span><span class="content">bug2219GET</span><span class="delimiter">&quot;</span></span>)
                         .method(HttpMethod.GET)
                         .notes(<span class="string"><span class="delimiter">&quot;</span><span class="content">This is a test method</span><span class="delimiter">&quot;</span></span>)
                         .parameters(
-                            <span class="predefined-type">Arrays</span>.asList(
+                            <span class="predefined-type">Collections</span>.singletonList(
                                 <span class="keyword">new</span> ParameterBuilder()
                                     .description(<span class="string"><span class="delimiter">&quot;</span><span class="content">description of bug 2219</span><span class="delimiter">&quot;</span></span>)
                                     .type(<span class="keyword">new</span> TypeResolver().resolve(<span class="predefined-type">String</span>.class))
@@ -3401,7 +3401,7 @@ is applied to the parameter.</td>
    * @return Set of response messages that overide the default/global response messages
    */</span>
   <span class="directive">private</span> <span class="predefined-type">Set</span>&lt;ResponseMessage&gt; responseMessages() { <i class="conum" data-value="8"></i><b>(8)</b>
-    <span class="keyword">return</span> newHashSet(<span class="keyword">new</span> ResponseMessageBuilder()
+    <span class="keyword">return</span> singleton(<span class="keyword">new</span> ResponseMessageBuilder()
         .code(<span class="integer">200</span>)
         .message(<span class="string"><span class="delimiter">&quot;</span><span class="content">Successfully received bug 1767 or 2219 response</span><span class="delimiter">&quot;</span></span>)
         .responseModel(<span class="keyword">new</span> ModelRef(<span class="string"><span class="delimiter">&quot;</span><span class="content">string</span><span class="delimiter">&quot;</span></span>))
@@ -3626,7 +3626,7 @@ this feature requires the <a href="https://mvnrepository.com/artifact/org.reflec
 
       <span class="annotation">@Override</span>
       <span class="directive">public</span> <span class="predefined-type">List</span>&lt;AlternateTypeRule&gt; rules() {
-        <span class="keyword">return</span> newArrayList(
+        <span class="keyword">return</span> singletonList(
             newRule(resolver.resolve(<span class="predefined-type">Pageable</span>.class), resolver.resolve(pageableMixin(restConfiguration)))
         );
       }
@@ -3639,11 +3639,11 @@ this feature requires the <a href="https://mvnrepository.com/artifact/org.reflec
             <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s.generated.%s</span><span class="delimiter">&quot;</span></span>,
                 <span class="predefined-type">Pageable</span>.class.getPackage().getName(),
                 <span class="predefined-type">Pageable</span>.class.getSimpleName()))
-        .withProperties(newArrayList(
+        .withProperties(Stream.of(
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getPageParamName()),
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getLimitParamName()),
             property(<span class="predefined-type">String</span>.class, restConfiguration.getSortParamName())
-        ))
+        ).collect(toList()))
         .build();
   }
 
@@ -3697,11 +3697,11 @@ instead of <code>Pageable</code>.</p>
             <span class="predefined-type">String</span>.format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s.generated.%s</span><span class="delimiter">&quot;</span></span>,
                 <span class="predefined-type">Pageable</span>.class.getPackage().getName(),
                 <span class="predefined-type">Pageable</span>.class.getSimpleName()))
-        .withProperties(newArrayList(
+        .withProperties(Stream.of(
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getPageParamName()),
             property(<span class="predefined-type">Integer</span>.class, restConfiguration.getLimitParamName()),
             property(<span class="predefined-type">String</span>.class, restConfiguration.getSortParamName())
-        ))
+        ).collect(toList()))
         .build();
   }
 
@@ -4812,7 +4812,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2018-06-29 23:40:27 UTC
+Last updated 2018-06-30 20:58:17 UTC
 </div>
 </div>
 </body>
