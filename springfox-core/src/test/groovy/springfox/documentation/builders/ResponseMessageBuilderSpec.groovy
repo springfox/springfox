@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ class ResponseMessageBuilderSpec extends Specification {
   }
 
   def headers(String ... names) {
-    def map = new HashMap()
+    def map = new HashMap<>()
     names.collect({map.put(it, new ModelRef("string"))})
     map
   }
@@ -93,7 +93,7 @@ class ResponseMessageBuilderSpec extends Specification {
   }
 
   def headersWithDescription(String description, String ... names) {
-    def map = new HashMap()
+    def map = new HashMap<>()
     names.collect({map.put(it, new Header(it, description, new ModelRef("string")))})
     map
   }
