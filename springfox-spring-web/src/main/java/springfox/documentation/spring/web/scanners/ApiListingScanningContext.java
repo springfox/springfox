@@ -19,13 +19,14 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.collect.Ordering;
+
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class ApiListingScanningContext {
     return documentationContext;
   }
 
-  public Ordering<ApiDescription> apiDescriptionOrdering() {
+  public Comparator<ApiDescription> apiDescriptionOrdering() {
     return documentationContext.getApiDescriptionOrdering();
   }
 

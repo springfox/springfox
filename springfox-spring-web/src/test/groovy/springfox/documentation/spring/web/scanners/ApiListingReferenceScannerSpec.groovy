@@ -33,7 +33,6 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 
@@ -52,7 +51,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
             .select()
-              .apis((not(withClassAnnotation(ApiIgnore))))
+              .apis(withClassAnnotation(ApiIgnore).negate())
               .paths(regex(".*?"))
               .build()
   }

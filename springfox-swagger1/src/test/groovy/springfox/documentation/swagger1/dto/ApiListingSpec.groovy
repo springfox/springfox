@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ package springfox.documentation.swagger1.dto
 
 import org.springframework.http.MediaType
 
-import static com.google.common.collect.Maps.newHashMap
-import static com.google.common.collect.Sets.newHashSet
+import static java.util.Collections.*
 
 class ApiListingSpec extends InternalJsonSerializationSpec {
 
@@ -53,9 +52,9 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
   def appendApiListing() {
     when:
       ApiListing apiListing = new ApiListing()
-      apiListing.appendConsumes(newHashSet(MediaType.APPLICATION_JSON_VALUE))
-      apiListing.appendProduces(newHashSet(MediaType.APPLICATION_JSON_VALUE))
-      apiListing.appendProtocols(newHashSet("http"))
+      apiListing.appendConsumes(singleton(MediaType.APPLICATION_JSON_VALUE))
+      apiListing.appendProduces(singleton(MediaType.APPLICATION_JSON_VALUE))
+      apiListing.appendProtocols(singleton("http"))
       apiListing.appendAuthorizations([Mock(Authorization)])
       apiListing.appendApis([Mock(ApiDescription)])
       apiListing.appendModels(
@@ -76,12 +75,12 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
   def appendEmptyApiListingValues() {
     when:
       ApiListing apiListing = new ApiListing()
-      apiListing.appendConsumes(newHashSet())
-      apiListing.appendProduces(newHashSet())
-      apiListing.appendProtocols(newHashSet())
+      apiListing.appendConsumes(new HashSet<>())
+      apiListing.appendProduces(new HashSet<>())
+      apiListing.appendProtocols(new HashSet<>())
       apiListing.appendAuthorizations([])
       apiListing.appendApis([])
-      apiListing.appendModels(newHashMap())
+      apiListing.appendModels(new HashMap<>())
     then:
       apiListing.consumes == null
       apiListing.produces == null

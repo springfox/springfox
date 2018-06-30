@@ -20,13 +20,13 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.Multimap;
 import org.springframework.core.Ordered;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class Parameter implements Ordered {
   public static final int DEFAULT_PRECEDENCE = 0;
@@ -46,7 +46,7 @@ public class Parameter implements Ordered {
   private final String collectionFormat;
   private final int order;
   private final Object scalarExample;
-  private final Multimap<String, Example> examples;
+  private final Map<String, List<Example>> examples;
   private final List<VendorExtension> vendorExtensions;
   private final Boolean allowEmptyValue;
 
@@ -67,7 +67,7 @@ public class Parameter implements Ordered {
       String collectionFormat,
       int order,
       Object scalarExample,
-      Multimap<String, Example> examples,
+      Map<String, List<Example>> examples,
       List<VendorExtension> vendorExtensions) {
 
     this.description = description;
@@ -154,7 +154,7 @@ public class Parameter implements Ordered {
     return scalarExample;
   }
 
-  public Multimap<String, Example> getExamples() {
+  public Map<String, List<Example>> getExamples() {
     return examples;
   }
 

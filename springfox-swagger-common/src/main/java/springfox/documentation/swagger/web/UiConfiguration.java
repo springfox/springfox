@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
  *
  *
  */
+
 package springfox.documentation.swagger.web;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static com.google.common.base.Strings.*;
+import static java.util.Optional.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UiConfiguration {
@@ -442,7 +443,7 @@ public class UiConfiguration {
 
   @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
-    return nullToEmpty(validatorUrl);
+    return ofNullable(validatorUrl).orElse("");
   }
 
   public static class Constants {

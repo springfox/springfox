@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,9 +21,6 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
@@ -48,15 +45,20 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
@@ -69,22 +71,22 @@ public class Docket implements DocumentationPlugin {
   public static final String DEFAULT_GROUP_NAME = "default";
 
   private final DocumentationType documentationType;
-  private final List<SecurityContext> securityContexts = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
-  private final List<Parameter> globalOperationParameters = newArrayList();
-  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
-  private final Set<ResolvedType> additionalModels = newHashSet();
-  private final Set<Tag> tags = newHashSet();
+  private final List<SecurityContext> securityContexts = new ArrayList<>();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
+  private final List<Parameter> globalOperationParameters = new ArrayList<>();
+  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList<>();
+  private final Set<Class> ignorableParameterTypes = new HashSet<>();
+  private final Set<String> protocols = new HashSet<>();
+  private final Set<String> produces = new HashSet<>();
+  private final Set<String> consumes = new HashSet<>();
+  private final Set<ResolvedType> additionalModels = new HashSet<>();
+  private final Set<Tag> tags = new HashSet<>();
 
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
-  private Ordering<ApiListingReference> apiListingReferenceOrdering;
-  private Ordering<ApiDescription> apiDescriptionOrdering;
-  private Ordering<Operation> operationOrdering;
+  private Comparator<ApiListingReference> apiListingReferenceOrdering;
+  private Comparator<ApiDescription> apiDescriptionOrdering;
+  private Comparator<Operation> operationOrdering;
 
   private ApiInfo apiInfo = ApiInfo.DEFAULT;
   private String groupName = DEFAULT_GROUP_NAME;
@@ -92,10 +94,10 @@ public class Docket implements DocumentationPlugin {
   private GenericTypeNamingStrategy genericsNamingStrategy = new DefaultGenericTypeNamingStrategy();
   private boolean applyDefaultResponseMessages = true;
   private String host = "";
-  private Optional<String> pathMapping = Optional.absent();
+  private Optional<String> pathMapping = empty();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
 
   public Docket(DocumentationType documentationType) {
@@ -250,7 +252,7 @@ public class Docket implements DocumentationPlugin {
    * java.lang.reflect.Type)
    */
   public Docket alternateTypeRules(AlternateTypeRule... alternateTypeRules) {
-    this.ruleBuilders.addAll(from(newArrayList(alternateTypeRules)).transform(identityRuleBuilder()).toList());
+    this.ruleBuilders.addAll(Stream.of(alternateTypeRules).map(identityRuleBuilder()).collect(toList()));
     return this;
   }
 
@@ -263,7 +265,7 @@ public class Docket implements DocumentationPlugin {
    * @param operationOrdering - ordering of the operations
    * @return this Docket
    */
-  public Docket operationOrdering(Ordering<Operation> operationOrdering) {
+  public Docket operationOrdering(Comparator<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
     return this;
   }
@@ -323,7 +325,7 @@ public class Docket implements DocumentationPlugin {
    * @param apiListingReferenceOrdering - ordering of the api listing references
    * @return this Docket
    */
-  public Docket apiListingReferenceOrdering(Ordering<ApiListingReference> apiListingReferenceOrdering) {
+  public Docket apiListingReferenceOrdering(Comparator<ApiListingReference> apiListingReferenceOrdering) {
     this.apiListingReferenceOrdering = apiListingReferenceOrdering;
     return this;
   }
@@ -339,7 +341,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    * @see springfox.documentation.spring.web.scanners.ApiListingScanner
    */
-  public Docket apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
+  public Docket apiDescriptionOrdering(Comparator<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = apiDescriptionOrdering;
     return this;
   }
@@ -376,7 +378,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    */
   public Docket pathMapping(String path) {
-    this.pathMapping = Optional.fromNullable(path);
+    this.pathMapping = ofNullable(path);
     return this;
   }
 
@@ -406,7 +408,7 @@ public class Docket implements DocumentationPlugin {
    */
   public Docket additionalModels(ResolvedType first, ResolvedType... remaining) {
     additionalModels.add(first);
-    additionalModels.addAll(newHashSet(remaining));
+    additionalModels.addAll(Arrays.stream(remaining).collect(toSet()));
     return this;
   }
 
@@ -419,7 +421,7 @@ public class Docket implements DocumentationPlugin {
    */
   public Docket tags(Tag first, Tag... remaining) {
     tags.add(first);
-    tags.addAll(newHashSet(remaining));
+    tags.addAll(Arrays.stream(remaining).collect(toSet()));
     return this;
   }
 
@@ -489,21 +491,11 @@ public class Docket implements DocumentationPlugin {
   }
 
   private Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>> identityRuleBuilder() {
-    return new Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>>() {
-      @Override
-      public Function<TypeResolver, AlternateTypeRule> apply(AlternateTypeRule rule) {
-        return identityFunction(rule);
-      }
-    };
+    return this::identityFunction;
   }
 
   private Function<TypeResolver, AlternateTypeRule> identityFunction(final AlternateTypeRule rule) {
-    return new Function<TypeResolver, AlternateTypeRule>() {
-      @Override
-      public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return rule;
-      }
-    };
+    return typeResolver -> rule;
   }
 
   Docket selector(ApiSelector apiSelector) {
@@ -512,27 +504,16 @@ public class Docket implements DocumentationPlugin {
   }
 
   private Function<TypeResolver, AlternateTypeRule> newSubstitutionFunction(final Class clazz, final Class with) {
-    return new Function<TypeResolver, AlternateTypeRule>() {
-
-      @Override
-      public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return newRule(
-            typeResolver.resolve(clazz),
-            typeResolver.resolve(with),
-            DIRECT_SUBSTITUTION_RULE_ORDER);
-      }
-    };
+    return typeResolver -> newRule(
+        typeResolver.resolve(clazz),
+        typeResolver.resolve(with),
+        DIRECT_SUBSTITUTION_RULE_ORDER);
   }
 
   private Function<TypeResolver, AlternateTypeRule> newGenericSubstitutionFunction(final Class clz) {
-    return new Function<TypeResolver, AlternateTypeRule>() {
-      @Override
-      public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return newRule(
-            typeResolver.resolve(clz, WildcardType.class),
-            typeResolver.resolve(WildcardType.class),
-            GENERIC_SUBSTITUTION_RULE_ORDER);
-      }
-    };
+    return typeResolver -> newRule(
+        typeResolver.resolve(clz, WildcardType.class),
+        typeResolver.resolve(WildcardType.class),
+        GENERIC_SUBSTITUTION_RULE_ORDER);
   }
 }

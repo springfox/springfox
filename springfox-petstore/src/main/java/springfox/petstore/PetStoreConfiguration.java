@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.PathSelectors.*;
 
 @Configuration
@@ -39,15 +39,14 @@ public class PetStoreConfiguration {
         .groupName("petstore")
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
-        .produces(newHashSet("application/xml", "application/json"))
+        .produces(Stream.of("application/xml", "application/json").collect(toSet()))
         .select()
-        .paths(or(
-            and(
-                regex("/api/.*"),
-                not(regex("/api/store/search.*"))),
-            regex("/generic/.*")))
+        .paths((
+            regex("/api/.*")
+            .and(regex("/api/store/search.*").negate())
+            .or(regex("/generic/.*"))))
         .build()
         .host("petstore.swagger.io")
-        .protocols(newHashSet("http", "https"));
+        .protocols(Stream.of("http", "https").collect(toSet()));
   }
 }

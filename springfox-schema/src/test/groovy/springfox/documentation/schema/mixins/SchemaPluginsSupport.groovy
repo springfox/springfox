@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,19 +27,19 @@ import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 
-import static com.google.common.collect.Lists.*
+
 
 class SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList())
+            OrderAwarePluginRegistry.create(new ArrayList<>())
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList())
+            OrderAwarePluginRegistry.create(new ArrayList<>())
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        OrderAwarePluginRegistry.create(newArrayList())
+        OrderAwarePluginRegistry.create(new ArrayList<>())
 
     new SchemaPluginsManager(propRegistry, modelRegistry, syntheticModelRegistry)
   }

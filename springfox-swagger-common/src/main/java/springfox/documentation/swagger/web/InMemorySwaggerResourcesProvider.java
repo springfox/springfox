@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
  *
  *
  */
+
 package springfox.documentation.swagger.web;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -32,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Optional.*;
 import static springfox.documentation.schema.ClassSupport.*;
 
 @Component
@@ -39,9 +39,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   private final String swagger1Url;
   private final String swagger2Url;
 
-  @VisibleForTesting
   boolean swagger1Available;
-  @VisibleForTesting
   boolean swagger2Available;
 
   private final DocumentationCache documentationCache;
@@ -59,7 +57,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
 
   @Override
   public List<SwaggerResource> get() {
-    List<SwaggerResource> resources = new ArrayList<SwaggerResource>();
+    List<SwaggerResource> resources = new ArrayList<>();
 
     for (Map.Entry<String, Documentation> entry : documentationCache.all().entrySet()) {
       String swaggerGroup = entry.getKey();
@@ -87,7 +85,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   }
 
   private String swaggerLocation(String swaggerUrl, String swaggerGroup) {
-    String base = Optional.of(swaggerUrl).get();
+    String base = of(swaggerUrl).get();
     if (Docket.DEFAULT_GROUP_NAME.equals(swaggerGroup)) {
       return base;
     }

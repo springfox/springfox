@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,21 +20,19 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static java.util.Arrays.asList;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 
 public class Enums {
 
@@ -51,46 +49,41 @@ public class Enums {
   }
 
   static List<String> getEnumValues(final Class<?> subject) {
-    return transformUnique(subject.getEnumConstants(), new Function<Object, String>() {
-      @Override
-      public String apply(Object input) {
-        Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
-                .transform(evaluateJsonValue(input));
-        if (jsonValue.isPresent() && !isNullOrEmpty(jsonValue.get())) {
-          return jsonValue.get();
-        }
-        return input.toString();
+    return transformUnique(subject.getEnumConstants(), (Function<Object, String>) input -> {
+      Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
+              .map(evaluateJsonValue(input));
+      if (jsonValue.isPresent() && !isEmpty(jsonValue.get())) {
+        return jsonValue.get();
       }
+      return input.toString();
     });
   }
   @SuppressWarnings("PMD")
   private static Function<Method, String> evaluateJsonValue(final Object enumConstant) {
-    return new Function<Method, String>() {
-      @Override
-      public String apply(Method input) {
-        try {
-            return input.invoke(enumConstant).toString();
-        } catch (Exception ignored) {
-        }
-        return "";
+    return input -> {
+      try {
+          return input.invoke(enumConstant).toString();
+      } catch (Exception ignored) {
       }
+      return "";
     };
   }
 
   private static <E> List<String> transformUnique(E[] values, Function<E, String> mapper) {
-    List<String> nonUniqueValues = transform(asList(values), mapper);
-    Set<String> uniqueValues = new LinkedHashSet<String>(nonUniqueValues);
-    return new ArrayList<String>(uniqueValues);
+    return Stream.of(values)
+        .map(mapper)
+        .distinct()
+        .collect(toList());
   }
 
   private static Optional<Method> findJsonValueAnnotatedMethod(Object enumConstant) {
     for (Method each : enumConstant.getClass().getMethods()) {
       JsonValue jsonValue = AnnotationUtils.findAnnotation(each, JsonValue.class);
       if (jsonValue != null && jsonValue.value()) {
-        return Optional.of(each);
+        return of(each);
       }
     }
-    return Optional.absent();
+    return empty();
   }
 
   public static AllowableValues emptyListValuesToNull(AllowableListValues values) {

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static java.util.Arrays.asList;
+import static java.util.Arrays.*;
 
 @Component
 @Qualifier("default")
@@ -57,7 +57,7 @@ public class ApiOperationReader implements OperationReader {
 //  @Cacheable(value = "operations", keyGenerator = OperationsKeyGenerator.class)
   public List<Operation> read(RequestMappingContext outerContext) {
 
-    List<Operation> operations = newArrayList();
+    List<Operation> operations = new ArrayList<>();
 
     Set<RequestMethod> requestMethods = outerContext.getMethodsCondition();
     Set<RequestMethod> supportedMethods = supportedMethods(requestMethods);

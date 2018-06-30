@@ -20,8 +20,6 @@ package springfox.documentation.spring.data.rest.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -37,9 +35,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 class ResourcesModelProvider implements SyntheticModelProviderPlugin {
@@ -68,7 +67,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
         .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(Maps.uniqueIndex(properties(context), byName()))
+        .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
         .xml(new Xml()
             .name("entities")
             .wrapped(false)
@@ -84,7 +83,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     ResolvedType embedded = resolver.resolve(EmbeddedCollection.class, type);
     ResolvedType mapOfLinks = resolver.resolve(Map.class, String.class, Link.class);
-    return newArrayList(
+    return Stream.of(
         new ModelPropertyBuilder()
             .name("_embedded")
             .type(embedded)
@@ -104,7 +103,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
             .description("Link collection")
             .build()
             .updateModelRef(modelRefFactory(context, typeNameExtractor))
-    );
+    ).collect(toList());
   }
 
   @Override
@@ -113,25 +112,16 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
 
-    return newHashSet(
+    return Stream.of(
         resolver.resolve(EmbeddedCollection.class, type),
         resolver.resolve(Link.class)
-    );
+    ).collect(toSet());
   }
 
   @Override
   public boolean supports(ModelContext delimiter) {
     return Resources.class.equals(resourceType(delimiter.getType()).getErasedType())
         && delimiter.getDocumentationType() == DocumentationType.SWAGGER_2;
-  }
-
-  private Function<ModelProperty, String> byName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
   }
 
   private ResolvedType resourceType(Type type) {

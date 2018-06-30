@@ -19,8 +19,7 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
@@ -30,7 +29,7 @@ import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
 
-import static com.google.common.base.Strings.*;
+import static java.util.Optional.*;
 import static springfox.documentation.RequestHandler.*;
 
 public class Orderings {
@@ -39,11 +38,11 @@ public class Orderings {
   }
 
   public static Comparator<Operation> nickNameComparator() {
-    return Comparator.comparing(operation -> nullToEmpty(operation.getUniqueId()));
+    return Comparator.comparing(operation -> ofNullable(operation.getUniqueId()).orElse(""));
   }
 
   public static Comparator<Operation> positionComparator() {
-    return (first, second) -> Ints.compare(first.getPosition(), second.getPosition());
+    return Comparator.comparingInt(Operation::getPosition);
   }
 
   public static Comparator<ApiListingReference> listingReferencePathComparator() {
@@ -51,7 +50,7 @@ public class Orderings {
   }
 
   public static Comparator<ApiListingReference> listingPositionComparator() {
-    return (first, second) -> Ints.compare(first.getPosition(), second.getPosition());
+    return Comparator.comparingInt(ApiListingReference::getPosition);
   }
 
   public static Comparator<ApiDescription> apiPathCompatator() {
@@ -70,23 +69,20 @@ public class Orderings {
     return String.format("%s.%s", context.getGroupName(), context.getName());
   }
 
-  public static Ordering<RequestHandler> byPatternsCondition() {
-    return Ordering.from(
-        Comparator.comparing(requestHandler -> sortedPaths(requestHandler.getPatternsCondition())));
+  public static Comparator<RequestHandler> byPatternsCondition() {
+    return Comparator.comparing(requestHandler -> sortedPaths(requestHandler.getPatternsCondition()));
   }
 
-  public static Ordering<RequestHandler> byOperationName() {
-    return Ordering.from(Comparator.comparing(RequestHandler::getName));
+  public static Comparator<RequestHandler> byOperationName() {
+    return Comparator.comparing(RequestHandler::getName);
   }
 
-  public static Ordering<DocumentationPlugin> pluginOrdering() {
-    return Ordering.from(byPluginType()).compound(byPluginName());
+  public static Comparator<? super DocumentationPlugin> pluginOrdering() {
+    return byPluginType().thenComparing(byPluginName());
   }
 
   public static Comparator<DocumentationPlugin> byPluginType() {
-    return (first, second) -> Ints.compare(
-        first.getDocumentationType().hashCode(),
-        second.getDocumentationType().hashCode());
+    return Comparator.comparingInt(documentationPlugin -> documentationPlugin.getDocumentationType().hashCode());
   }
 
   public static Comparator<DocumentationPlugin> byPluginName() {

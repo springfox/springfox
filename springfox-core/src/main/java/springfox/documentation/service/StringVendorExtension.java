@@ -18,8 +18,7 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 public class StringVendorExtension implements VendorExtension<String> {
   private String name;
@@ -49,20 +48,21 @@ public class StringVendorExtension implements VendorExtension<String> {
       return false;
     }
     StringVendorExtension that = (StringVendorExtension) o;
-    return Objects.equal(name, that.name) &&
-        Objects.equal(value, that.value);
+    return Objects.equals(name, that.name) &&
+        Objects.equals(value, that.value);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, value);
+    return Objects.hash(name, value);
   }
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("name", name)
-        .add("value", value)
-        .toString();
+    return new StringBuffer(this.getClass().getSimpleName())
+        .append("{")
+        .append("name").append(name).append(", ")
+        .append("value").append(value).append(", ")
+        .append("}").toString();
   }
 }

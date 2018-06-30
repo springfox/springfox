@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -61,7 +61,7 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              emptySet()))
           .get()
       Model asReturn = provider.modelFor(
           returnValue("group",
@@ -69,7 +69,7 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              emptySet()))
           .get()
 
     then:
@@ -110,7 +110,7 @@ class UnwrappedTypeSpec extends Specification {
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
         .get()
     Model asReturn = provider.modelFor(
         returnValue("group",
@@ -118,7 +118,7 @@ class UnwrappedTypeSpec extends Specification {
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
         .get()
 
     then:
@@ -159,14 +159,14 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              emptySet())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
               UnwrappedTypeForGetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              emptySet())).get()
 
     then:
       asInput.getName() == UnwrappedTypeForGetter.simpleName
@@ -206,14 +206,14 @@ class UnwrappedTypeSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              emptySet())).get()
       Model asReturn = provider.modelFor(
           returnValue("group",
               UnwrappedTypeForSetter,
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build())).get()
+              emptySet())).get()
 
     then:
       asInput.getName() == UnwrappedTypeForSetter.simpleName

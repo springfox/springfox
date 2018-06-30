@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,12 +22,14 @@ package springfox.documentation.schema
 import spock.lang.Specification
 import springfox.documentation.service.AllowableListValues
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.stream.Collectors.*
 
 class EnumsSpec extends Specification {
   def "enums support @JsonValue annotation"() {
     given:
-      def expected = new AllowableListValues(newArrayList("One", "Two"), "LIST")
+      def expected = new AllowableListValues(Stream.of("One", "Two").collect(toList()), "LIST")
     expect:
       expected.getValues() == Enums.allowableValues(JsonValuedEnum).getValues()
 
@@ -35,14 +37,14 @@ class EnumsSpec extends Specification {
 
   def "enums support regular enums"() {
     given:
-      def expected = new AllowableListValues(newArrayList("ONE", "TWO"), "LIST")
+      def expected = new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST")
     expect:
       expected.getValues() == Enums.allowableValues(ExampleEnum).getValues()
   }
 
   def "enums work with incorrectly annotated enums"() {
     given:
-      def expected = new AllowableListValues(newArrayList("ONE", "TWO"), "LIST")
+      def expected = new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST")
     expect:
       expected.getValues() == Enums.allowableValues(IncorrectlyJsonValuedEnum).getValues()
   }

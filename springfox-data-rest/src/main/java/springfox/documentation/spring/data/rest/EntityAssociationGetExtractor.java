@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -34,15 +33,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 public class EntityAssociationGetExtractor implements EntityAssociationOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
-    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
+    List<RequestHandler> handlers = new ArrayList<>();
     ResourceMetadata metadata = context.associationMetadata();
     Association<? extends PersistentProperty<?>> association = context.getAssociation();
     PersistentProperty<?> property = association.getInverse();
@@ -60,11 +58,11 @@ public class EntityAssociationGetExtractor implements EntityAssociationOperation
             entityContext.basePath(),
             entityContext.resourcePath(),
             mapping.getPath()),
-        newHashSet(RequestMethod.GET),
-        newHashSet(HAL_JSON),
-        new HashSet<MediaType>(),
+            singleton(RequestMethod.GET),
+            singleton(HAL_JSON),
+        new HashSet<>(),
         null,
-        newArrayList(new ResolvedMethodParameter(
+        singletonList(new ResolvedMethodParameter(
             0,
             "id",
             pathAnnotations("id"),

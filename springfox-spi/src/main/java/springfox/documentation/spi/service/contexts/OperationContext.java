@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,10 +20,6 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableSet;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,10 +33,14 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class OperationContext {
@@ -77,7 +77,7 @@ public class OperationContext {
     if (documentationContext.getGlobalResponseMessages().containsKey(RequestMethod.valueOf(forHttpMethod))) {
       return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
     }
-    return newArrayList();
+    return new ArrayList<>();
   }
 
   public List<Parameter> getGlobalOperationParameters() {
@@ -85,18 +85,13 @@ public class OperationContext {
   }
 
   public List<SecurityContext> securityContext() {
-    return FluentIterable.from(getDocumentationContext().getSecurityContexts())
+    return getDocumentationContext().getSecurityContexts().stream()
         .filter(pathMatches())
-        .toList();
+        .collect(toList());
   }
 
   private Predicate<SecurityContext> pathMatches() {
-    return new Predicate<SecurityContext>() {
-      @Override
-      public boolean apply(SecurityContext input) {
-        return input.securityForOperation(OperationContext.this) != null;
-      }
-    };
+    return input -> input.securityForOperation(OperationContext.this) != null;
   }
 
   public String requestMappingPattern() {
@@ -127,8 +122,8 @@ public class OperationContext {
     return requestContext.consumes();
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
-    return ImmutableSet.copyOf(getDocumentationContext().getIgnorableParameterTypes());
+  public Set<Class> getIgnorableParameterTypes() {
+    return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
   }
 
   public GenericTypeNamingStrategy getGenericsNamingStrategy() {

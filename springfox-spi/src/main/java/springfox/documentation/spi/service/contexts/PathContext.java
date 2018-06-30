@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,15 +18,16 @@
  */
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.base.Optional;
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
+
 
 @Incubating("2.1.0")
 public class PathContext {
@@ -51,6 +52,6 @@ public class PathContext {
     if (operation.isPresent()) {
       return operation.get().getParameters();
     }
-    return newArrayList();
+    return new ArrayList<>();
   }
 }

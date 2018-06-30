@@ -74,13 +74,9 @@ public class EntityContext {
 
   public PersistentEntity<?, ? extends PersistentProperty<?>> entity() {
     Object domainType = resource.getDomainType();
-    Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
-    com.google.common.base.Optional<?> actualDomainType = converter.convert(domainType);
-    if (actualDomainType.isPresent()) {
-      return entities.getPersistentEntity((Class<?>) actualDomainType.get())
-          .orElse(null);
-    }
-    return null;
+    OptionalDeferencer<Class<?>> converter = new OptionalDeferencer<>();
+    Class actualDomainType = converter.convert(domainType);
+    return entities.getPersistentEntity(actualDomainType).orElse(null);
   }
 
   public CrudMethods crudMethods() {

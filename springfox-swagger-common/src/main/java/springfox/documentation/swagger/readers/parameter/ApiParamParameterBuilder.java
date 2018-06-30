@@ -20,8 +20,6 @@
 package springfox.documentation.swagger.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -37,7 +35,11 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
-import static com.google.common.base.Strings.*;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import static java.util.Optional.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
@@ -61,13 +63,15 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     context.parameterBuilder()
         .allowableValues(allowableValues(
             context.alternateFor(context.resolvedMethodParameter().getParameterType()),
-            apiParam.transform(toAllowableValue()).or("")));
+            apiParam.map(ApiParam::allowableValues).orElse("")));
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
-      context.parameterBuilder().name(emptyToNull(annotation.name()))
-          .description(emptyToNull(descriptions.resolve(annotation.value())))
-          .parameterAccess(emptyToNull(annotation.access()))
-          .defaultValue(emptyToNull(annotation.defaultValue()))
+      context.parameterBuilder().name(ofNullable(annotation.name())
+              .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
+          .description(ofNullable(descriptions.resolve(annotation.value()))
+                  .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
+          .parameterAccess(ofNullable(annotation.access()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
+          .defaultValue(ofNullable(annotation.defaultValue()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
           .allowMultiple(annotation.allowMultiple())
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
@@ -79,18 +83,9 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     }
   }
 
-  private Function<ApiParam, String> toAllowableValue() {
-    return new Function<ApiParam, String>() {
-      @Override
-      public String apply(ApiParam input) {
-        return input.allowableValues();
-      }
-    };
-  }
-
   private AllowableValues allowableValues(ResolvedType parameterType, String allowableValueString) {
     AllowableValues allowableValues = null;
-    if (!isNullOrEmpty(allowableValueString)) {
+    if (!isEmpty(allowableValueString)) {
       allowableValues = ApiModelProperties.allowableValueFromString(allowableValueString);
     } else {
       if (enumTypeDeterminer.isEnum(parameterType.getErasedType())) {

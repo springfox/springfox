@@ -19,9 +19,6 @@
 
 package springfox.documentation.swagger.readers.parameter;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +35,15 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
 
@@ -64,13 +64,9 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   @Override
   public void apply(ParameterExpansionContext context) {
     Optional<ApiModelProperty> apiModelPropertyOptional = context.findAnnotation(ApiModelProperty.class);
-    if (apiModelPropertyOptional.isPresent()) {
-      fromApiModelProperty(context, apiModelPropertyOptional.get());
-    }
+    apiModelPropertyOptional.ifPresent(apiModelProperty -> fromApiModelProperty(context, apiModelProperty));
     Optional<ApiParam> apiParamOptional = context.findAnnotation(ApiParam.class);
-    if (apiParamOptional.isPresent()) {
-      fromApiParam(context, apiParamOptional.get());
-    }
+    apiParamOptional.ifPresent(apiParam -> fromApiParam(context, apiParam));
   }
 
   @Override
@@ -79,9 +75,9 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiParam(ParameterExpansionContext context, ApiParam apiParam) {
-    String allowableProperty = emptyToNull(apiParam.allowableValues());
+    String allowableProperty = ofNullable(apiParam.allowableValues()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     AllowableValues allowable = allowableValues(
-        fromNullable(allowableProperty),
+        ofNullable(allowableProperty),
         context.getFieldType().getErasedType());
 
     maybeSetParameterName(context, apiParam.name())
@@ -99,9 +95,10 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private void fromApiModelProperty(ParameterExpansionContext context, ApiModelProperty apiModelProperty) {
-    String allowableProperty = emptyToNull(apiModelProperty.allowableValues());
+    String allowableProperty = ofNullable(apiModelProperty.allowableValues())
+            .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     AllowableValues allowable = allowableValues(
-        fromNullable(allowableProperty),
+        ofNullable(allowableProperty),
         context.getFieldType().getErasedType());
 
     maybeSetParameterName(context, apiModelProperty.name())
@@ -116,7 +113,7 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private ParameterBuilder maybeSetParameterName(ParameterExpansionContext context, String parameterName) {
-    if (!Strings.isNullOrEmpty(parameterName)) {
+    if (!isEmpty(parameterName)) {
       context.getParameterBuilder().name(parameterName);
     }
     return context.getParameterBuilder();
@@ -134,11 +131,8 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return transform(Arrays.asList(subject.getEnumConstants()), new Function<Object, String>() {
-      @Override
-      public String apply(final Object input) {
-        return input.toString();
-      }
-    });
+    return Stream.of(subject.getEnumConstants())
+        .map((Function<Object, String>) Object::toString)
+        .collect(toList());
   }
 }

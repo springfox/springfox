@@ -18,9 +18,9 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import springfox.documentation.schema.ModelReference;
+
+import java.util.Objects;
 
 public class Header {
   private final String name;
@@ -54,22 +54,23 @@ public class Header {
       return false;
     }
     Header header = (Header) o;
-    return Objects.equal(name, header.name) &&
-        Objects.equal(modelReference, header.modelReference) &&
-        Objects.equal(description, header.description);
+    return Objects.equals(name, header.name) &&
+        Objects.equals(modelReference, header.modelReference) &&
+        Objects.equals(description, header.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, modelReference, description);
+    return Objects.hash(name, modelReference, description);
   }
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("name", name)
-        .add("modelReference", modelReference)
-        .add("description", description)
-        .toString();
+    return new StringBuffer(this.getClass().getSimpleName())
+        .append("{")
+        .append("name=").append(name).append(", ")
+        .append("modelReference=").append(modelReference).append(", ")
+        .append("description=").append(description)
+        .append("}").toString();
   }
 }
