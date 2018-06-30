@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.toList;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public abstract class SecurityScheme {
   protected final String name;

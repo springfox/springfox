@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 
 @Component

@@ -27,8 +27,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiDescriptionBuilder {

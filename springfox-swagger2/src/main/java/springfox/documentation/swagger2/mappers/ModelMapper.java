@@ -20,10 +20,6 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
-
-
-
-
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
@@ -42,14 +38,19 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;

@@ -19,7 +19,6 @@
 package springfox.documentation.swagger.readers.operation;
 
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +37,7 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-
-
-
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.service.Tags.*;
 
 @Component

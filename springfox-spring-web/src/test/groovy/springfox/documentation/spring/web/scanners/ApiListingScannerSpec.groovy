@@ -42,8 +42,7 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-
-import static java.util.Collections.singletonList
+import static java.util.Collections.*
 import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.*

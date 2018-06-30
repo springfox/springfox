@@ -18,10 +18,18 @@
  */
 
 package springfox.documentation.spring.web.mixins
-import springfox.documentation.service.*
 
-import static java.util.Collections.singletonList
+import springfox.documentation.service.AuthorizationCodeGrant
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.GrantType
+import springfox.documentation.service.ImplicitGrant
+import springfox.documentation.service.LoginEndpoint
+import springfox.documentation.service.OAuth
+import springfox.documentation.service.SecurityReference
+import springfox.documentation.service.TokenEndpoint
+import springfox.documentation.service.TokenRequestEndpoint
 
+import static java.util.Collections.*
 
 class AuthSupport {
   def defaultAuth() {

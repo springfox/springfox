@@ -6,8 +6,7 @@ import springfox.documentation.swagger1.dto.ApiListing
 import springfox.documentation.swagger1.dto.ModelDto
 import springfox.documentation.swagger1.dto.ModelPropertyDto
 
-import static java.util.Collections.singletonList
-
+import static java.util.Collections.*
 
 class ApiListingMergerSpec extends Specification {
 

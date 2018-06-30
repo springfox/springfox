@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.Stream.of;
 
 public class ResolvedMethodParameter {

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static java.util.Optional.of;
+import static java.util.Optional.*;
 
 public class Tag implements Ordered {
   private final String name;

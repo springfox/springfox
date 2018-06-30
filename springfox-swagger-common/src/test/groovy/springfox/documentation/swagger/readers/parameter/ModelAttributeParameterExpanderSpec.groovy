@@ -40,7 +40,6 @@ import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
 import javax.servlet.ServletContext
 
-
 import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Mixin([SwaggerPluginsSupport])

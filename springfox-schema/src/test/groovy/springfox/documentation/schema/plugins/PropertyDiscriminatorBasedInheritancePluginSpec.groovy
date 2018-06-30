@@ -4,7 +4,6 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -20,7 +19,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 
 import java.lang.reflect.Type
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 
 class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
   def resolver = new TypeResolver()

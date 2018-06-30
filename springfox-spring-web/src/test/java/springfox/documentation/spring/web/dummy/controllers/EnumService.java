@@ -33,8 +33,8 @@ import springfox.documentation.spring.web.dummy.models.EnumType;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static java.util.Collections.singleton;
-import static java.util.stream.Collectors.toSet;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 @Controller
 @RequestMapping("/enums")

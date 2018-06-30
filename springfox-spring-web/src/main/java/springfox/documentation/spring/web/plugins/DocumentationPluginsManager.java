@@ -57,9 +57,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-
-import static java.util.Collections.singleton;
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
 @Component

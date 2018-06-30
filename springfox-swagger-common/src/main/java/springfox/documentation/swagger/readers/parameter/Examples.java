@@ -22,11 +22,14 @@ package springfox.documentation.swagger.readers.parameter;
 import io.swagger.annotations.ExampleProperty;
 import springfox.documentation.schema.Example;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.Optional.*;
+import static org.springframework.util.StringUtils.*;
 
 public class Examples {
   private Examples() {

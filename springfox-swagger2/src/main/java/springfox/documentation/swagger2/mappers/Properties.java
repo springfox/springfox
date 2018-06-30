@@ -20,9 +20,6 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
-
-
-
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BaseIntegerProperty;
 import io.swagger.models.properties.BooleanProperty;
@@ -45,14 +42,16 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static java.util.Collections.unmodifiableMap;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toMap;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;

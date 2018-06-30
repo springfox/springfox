@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class ResourceGroup {
   private final String groupName;

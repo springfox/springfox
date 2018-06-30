@@ -41,7 +41,6 @@ import springfox.documentation.spring.web.dummy.models.Business;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;

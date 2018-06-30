@@ -22,14 +22,12 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedMember;
 
-
-
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class ModelAttributeField {
   private final ResolvedType fieldType;

@@ -30,8 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelBuilder {

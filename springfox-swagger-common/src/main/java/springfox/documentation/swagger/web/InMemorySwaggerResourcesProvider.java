@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Optional.of;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.ClassSupport.*;
 
 @Component

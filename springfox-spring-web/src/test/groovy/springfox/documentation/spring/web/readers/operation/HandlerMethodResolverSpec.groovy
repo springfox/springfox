@@ -37,8 +37,8 @@ import java.lang.reflect.Type
 import java.util.function.Predicate
 import java.util.stream.Stream
 
-import static HandlerMethodResolver.*
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*
+import static springfox.documentation.spring.web.readers.operation.HandlerMethodResolver.*;
 
 class HandlerMethodResolverSpec extends Specification implements HandlerMethodsSupport{
   def "Methods with same name are distinguished based on variance of parameters and return types" () {

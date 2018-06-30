@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -41,10 +40,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toList;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.service.Parameter.*;

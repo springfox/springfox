@@ -12,7 +12,7 @@ import springfox.documentation.service.ResolvedMethodParameter
 
 import java.util.stream.Stream
 
-import static java.util.stream.Collectors.toSet
+import static java.util.stream.Collectors.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 class PathAndParametersEquivalenceSpec extends Specification {

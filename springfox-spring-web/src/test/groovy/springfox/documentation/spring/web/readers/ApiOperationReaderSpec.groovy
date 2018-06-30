@@ -37,7 +37,7 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 import springfox.documentation.spring.web.readers.operation.DefaultOperationReader
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static java.util.Collections.singletonList
+import static java.util.Collections.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin([RequestMappingSupport, AuthSupport, ServicePluginsSupport])

@@ -19,12 +19,14 @@
 package springfox.documentation.service;
 
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
-import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.*;
 
 
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {

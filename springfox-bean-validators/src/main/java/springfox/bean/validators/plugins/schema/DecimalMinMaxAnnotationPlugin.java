@@ -32,7 +32,6 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-
 import java.util.Optional;
 
 import static springfox.bean.validators.plugins.Validators.*;

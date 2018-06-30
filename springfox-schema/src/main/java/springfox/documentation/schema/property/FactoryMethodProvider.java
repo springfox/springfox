@@ -27,7 +27,6 @@ import com.fasterxml.classmate.members.ResolvedConstructor;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +35,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 
 @Component

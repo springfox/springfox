@@ -32,8 +32,8 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-import static springfox.documentation.schema.property.BeanPropertyDefinitions.overTheWireName;
+import static java.util.Optional.*;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 
 /**
  * BeanPropertyNamingStrategy based on ObjectMapper naming strategy.

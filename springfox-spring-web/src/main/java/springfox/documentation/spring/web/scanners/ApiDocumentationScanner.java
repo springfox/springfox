@@ -33,12 +33,15 @@ import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 

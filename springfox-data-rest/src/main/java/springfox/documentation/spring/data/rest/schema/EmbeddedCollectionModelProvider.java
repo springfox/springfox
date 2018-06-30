@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-
 import org.springframework.hateoas.RelProvider;
 import org.springframework.hateoas.Resources;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -36,11 +35,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-
-import static java.util.function.Function.identity;
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.Collections.*;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {

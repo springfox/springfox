@@ -47,11 +47,10 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 
+import static java.util.Collections.*
+import static java.util.function.Predicate.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
-
-import static java.util.Collections.singletonList;
-import static java.util.function.Predicate.isEqual;
 
 @Configuration
 @EnableSwagger2

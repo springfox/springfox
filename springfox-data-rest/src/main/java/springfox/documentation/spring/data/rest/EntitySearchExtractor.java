@@ -35,11 +35,12 @@ import springfox.documentation.schema.Types;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
-
-
-import static java.util.Collections.singleton;
+import static java.util.Collections.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntitySearchExtractor implements EntityOperationsExtractor {

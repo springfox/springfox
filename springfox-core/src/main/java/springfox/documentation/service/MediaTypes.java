@@ -19,8 +19,6 @@
 package springfox.documentation.service;
 
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -29,7 +27,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 public class MediaTypes {
   private static final Logger LOGGER = LoggerFactory.getLogger(MediaTypes.class);

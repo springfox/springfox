@@ -21,8 +21,7 @@ package springfox.documentation.service;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ListVendorExtension<T> implements VendorExtension<List<T>> {

@@ -21,7 +21,6 @@ package springfox.documentation.swagger.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-
 import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +40,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-
-import static java.util.Collections.singletonList;
-import static java.util.Optional.empty;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 
 public final class ApiModelProperties {

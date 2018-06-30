@@ -30,8 +30,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static springfox.documentation.spring.web.readers.parameter.ParameterTypeReader.*;
 
 @Component("swagger1ParameterNameReader")

@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 import org.springframework.http.MediaType
 
-import static java.util.Collections.singleton
+import static java.util.Collections.*
 
 class ApiListingSpec extends InternalJsonSerializationSpec {
 

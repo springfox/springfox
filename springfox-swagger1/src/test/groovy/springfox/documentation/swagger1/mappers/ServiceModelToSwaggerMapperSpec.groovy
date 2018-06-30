@@ -40,8 +40,7 @@ import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger1.mixins.MapperSupport
 
-import static java.util.Collections.singleton
-
+import static java.util.Collections.*
 
 class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSupport {
   def "Maps the api description correctly"() {

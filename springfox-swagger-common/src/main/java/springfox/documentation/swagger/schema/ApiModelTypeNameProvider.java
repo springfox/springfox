@@ -26,10 +26,9 @@ import springfox.documentation.schema.DefaultTypeNameProvider;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 
 @Component

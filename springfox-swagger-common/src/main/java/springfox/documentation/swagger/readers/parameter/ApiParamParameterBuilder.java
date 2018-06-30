@@ -20,8 +20,6 @@
 package springfox.documentation.swagger.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-
-
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -41,9 +39,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-
-import static java.util.Optional.ofNullable;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.Optional.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
 

@@ -116,7 +116,6 @@ public interface RequestHandler extends Comparable<RequestHandler> {
   static Comparator<RequestHandler> byPatternsCondition() {
     return Comparator.comparing(requestHandler -> sortedPaths(requestHandler.getPatternsCondition()));
   }
-
   static Comparator<RequestHandler> byOperationName() {
     return Comparator.comparing(RequestHandler::getName);
   }

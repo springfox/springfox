@@ -21,12 +21,11 @@ package springfox.documentation.builders;
 
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.ResourceListing;
+import springfox.documentation.service.SecurityScheme;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 import static springfox.documentation.builders.BuilderDefaults.*;
 

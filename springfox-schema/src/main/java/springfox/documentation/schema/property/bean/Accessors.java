@@ -28,8 +28,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.util.Optional.ofNullable;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.Optional.*;
+import static org.springframework.util.StringUtils.*;
 
 public class Accessors {
   private static Pattern getter = Pattern.compile("^get([a-zA-Z_0-9].*)");

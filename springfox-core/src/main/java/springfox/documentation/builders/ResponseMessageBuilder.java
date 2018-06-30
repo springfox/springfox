@@ -24,11 +24,14 @@ import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 
-
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ResponseMessageBuilder {

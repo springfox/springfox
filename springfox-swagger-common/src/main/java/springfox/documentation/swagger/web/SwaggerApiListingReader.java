@@ -33,8 +33,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toCollection;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;

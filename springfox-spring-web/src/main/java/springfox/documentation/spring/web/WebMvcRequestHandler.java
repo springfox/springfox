@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class WebMvcRequestHandler implements RequestHandler {
   private final HandlerMethodResolver methodResolver;

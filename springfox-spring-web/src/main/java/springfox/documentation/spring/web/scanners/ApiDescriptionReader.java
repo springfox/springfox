@@ -36,9 +36,8 @@ import springfox.documentation.spring.web.readers.operation.OperationReader;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static java.util.Comparator.naturalOrder;
-import static java.util.stream.Collectors.toList;
+import static java.util.Comparator.*;
+import static java.util.stream.Collectors.*;
 
 @Component
 public class ApiDescriptionReader {

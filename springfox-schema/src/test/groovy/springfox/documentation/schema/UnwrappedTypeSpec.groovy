@@ -18,14 +18,13 @@
  */
 package springfox.documentation.schema
 
-
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 

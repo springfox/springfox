@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -39,10 +38,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toSet;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 class ResourcesModelProvider implements SyntheticModelProviderPlugin {

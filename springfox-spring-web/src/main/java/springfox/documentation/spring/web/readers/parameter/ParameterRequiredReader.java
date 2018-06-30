@@ -41,7 +41,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

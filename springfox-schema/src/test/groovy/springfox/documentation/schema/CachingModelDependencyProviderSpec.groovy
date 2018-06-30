@@ -19,14 +19,12 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
-import static java.util.Collections.emptySet
-import static java.util.Collections.singleton
+import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)

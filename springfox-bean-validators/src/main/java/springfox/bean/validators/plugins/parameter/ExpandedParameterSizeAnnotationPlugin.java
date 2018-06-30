@@ -29,7 +29,6 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Size;
-
 import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;

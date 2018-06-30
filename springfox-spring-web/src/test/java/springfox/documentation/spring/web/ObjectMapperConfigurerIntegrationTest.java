@@ -32,7 +32,6 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import static org.junit.Assert.*;
 
 public class ObjectMapperConfigurerIntegrationTest {

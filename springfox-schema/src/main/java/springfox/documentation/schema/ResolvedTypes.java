@@ -22,7 +22,6 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -31,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 

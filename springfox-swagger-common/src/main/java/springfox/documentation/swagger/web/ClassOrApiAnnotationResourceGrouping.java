@@ -35,9 +35,9 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static java.util.Collections.singleton;
+import static java.util.Collections.*;
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.spring.web.paths.Paths.*;

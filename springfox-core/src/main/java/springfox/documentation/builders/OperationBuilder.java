@@ -28,14 +28,19 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toSet;
+import static java.util.Optional.*;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.Stream.of;
 import static org.springframework.http.MediaType.*;
 import static springfox.documentation.builders.BuilderDefaults.*;

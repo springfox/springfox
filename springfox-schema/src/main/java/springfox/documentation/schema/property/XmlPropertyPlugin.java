@@ -35,9 +35,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-
-import static java.util.Optional.empty;
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Annotations.*;
 
 @Component

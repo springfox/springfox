@@ -4,7 +4,7 @@ import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static java.util.Optional.empty;
+import static java.util.Optional.*
 
 class PathMappingDecoratorSpec extends DocumentationContextSpec {
   def "Creates path adjustment in relation to servlet mapping" () {

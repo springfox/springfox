@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 
 @Component

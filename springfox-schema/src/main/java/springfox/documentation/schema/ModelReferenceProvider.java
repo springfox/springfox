@@ -19,7 +19,6 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 

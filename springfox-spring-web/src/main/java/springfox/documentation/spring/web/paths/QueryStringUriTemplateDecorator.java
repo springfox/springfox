@@ -33,9 +33,9 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static java.util.Comparator.naturalOrder;
-import static java.util.stream.Collectors.toCollection;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.Comparator.*;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 60)

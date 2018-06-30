@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class RequestHandlerSelectors {
   private RequestHandlerSelectors() {

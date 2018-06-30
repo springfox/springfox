@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UiConfiguration {

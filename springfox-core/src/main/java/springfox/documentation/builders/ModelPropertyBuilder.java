@@ -28,8 +28,7 @@ import springfox.documentation.service.VendorExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelPropertyBuilder {

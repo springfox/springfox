@@ -19,7 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 
-
 import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
@@ -32,8 +31,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class EntityAssociationsExtractor implements EntityOperationsExtractor {
 

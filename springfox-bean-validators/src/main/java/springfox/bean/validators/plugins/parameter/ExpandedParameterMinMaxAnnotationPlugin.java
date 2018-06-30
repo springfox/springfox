@@ -30,7 +30,6 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-
 import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;

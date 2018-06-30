@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*;
 
 
 public class Paths {

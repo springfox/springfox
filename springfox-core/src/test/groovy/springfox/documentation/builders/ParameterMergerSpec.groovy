@@ -21,7 +21,6 @@ package springfox.documentation.builders
 import spock.lang.Specification
 import spock.lang.Unroll
 
-
 import static org.springframework.core.Ordered.*
 
 class ParameterMergerSpec extends Specification {

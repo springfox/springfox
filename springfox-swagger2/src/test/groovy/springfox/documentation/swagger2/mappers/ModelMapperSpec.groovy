@@ -40,7 +40,7 @@ import springfox.documentation.spi.DocumentationType
 
 import java.util.function.Function
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 import static springfox.documentation.swagger2.mappers.ModelMapper.*

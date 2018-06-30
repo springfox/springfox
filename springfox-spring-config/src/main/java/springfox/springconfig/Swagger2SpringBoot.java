@@ -56,8 +56,7 @@ import springfox.petstore.controller.PetController;
 
 import java.util.List;
 
-
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 

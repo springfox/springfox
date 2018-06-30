@@ -18,10 +18,9 @@
  */
 package springfox.documentation.schema
 
-
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 

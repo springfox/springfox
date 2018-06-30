@@ -21,7 +21,6 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -35,10 +34,12 @@ import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
-
-
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;

@@ -20,20 +20,22 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.toList;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 
 public class Enums {
 

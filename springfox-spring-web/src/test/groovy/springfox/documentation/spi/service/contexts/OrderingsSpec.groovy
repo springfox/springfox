@@ -4,7 +4,7 @@ import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*
 
 class OrderingsSpec extends Specification {
   def "Orderings dont crash when docket group names are null" () {

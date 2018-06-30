@@ -19,8 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -39,8 +37,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {

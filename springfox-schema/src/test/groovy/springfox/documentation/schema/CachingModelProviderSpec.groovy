@@ -24,8 +24,8 @@ import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
-import static java.util.Collections.emptySet
-import static java.util.Optional.of;
+import static java.util.Collections.*
+import static java.util.Optional.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)

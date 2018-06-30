@@ -45,8 +45,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toMap;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.swagger1.mappers.Mappers.*;
 import static springfox.documentation.swagger1.web.ApiListingMerger.*;
 

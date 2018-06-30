@@ -5,17 +5,31 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.types.ResolvedObjectType
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
-import springfox.documentation.builders.*
+import springfox.documentation.builders.ApiDescriptionBuilder
+import springfox.documentation.builders.ApiListingBuilder
+import springfox.documentation.builders.AuthorizationScopeBuilder
+import springfox.documentation.builders.DocumentationBuilder
+import springfox.documentation.builders.ModelBuilder
+import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.builders.ResourceListingBuilder
+import springfox.documentation.builders.ResponseMessageBuilder
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.ModelReference
-import springfox.documentation.service.*
+import springfox.documentation.service.AllowableListValues
+import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.Documentation
+import springfox.documentation.service.ObjectVendorExtension
+import springfox.documentation.service.SecurityReference
+import springfox.documentation.service.StringVendorExtension
+import springfox.documentation.service.Tag
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 import java.util.function.Function
 
-import static java.util.Collections.singleton
-
+import static java.util.Collections.*
 
 class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSupport {
   def "Maps the api operation correctly"() {

@@ -19,7 +19,6 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-
 import org.springframework.core.MethodParameter;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.ResolvedMethodParameter;

@@ -23,9 +23,9 @@ import springfox.documentation.swagger1.dto.ApiListing;
 import java.util.Collection;
 import java.util.Optional;
 
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toSet;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiListingMerger {
   public static Optional<ApiListing> mergedApiListing(Collection<ApiListing> apiListings) {

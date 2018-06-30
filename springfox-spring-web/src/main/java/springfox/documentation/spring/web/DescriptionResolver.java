@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*;
 
 public class DescriptionResolver {
   private static final Pattern pattern = Pattern.compile("\\Q${\\E(.+?)\\Q}\\E");

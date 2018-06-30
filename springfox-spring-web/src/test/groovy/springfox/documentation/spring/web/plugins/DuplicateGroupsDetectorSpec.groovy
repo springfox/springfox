@@ -24,8 +24,8 @@ import springfox.documentation.spi.service.DocumentationPlugin
 
 import java.util.stream.Stream
 
-import static java.util.Collections.singletonList
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.*
+import static java.util.stream.Collectors.*
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*
 
 class DuplicateGroupsDetectorSpec extends Specification {

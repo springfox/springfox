@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.paths;
 
 import javax.servlet.ServletContext;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*;
 
 
 public class RelativePathProvider extends AbstractPathProvider {

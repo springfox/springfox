@@ -3,8 +3,8 @@ package springfox.gradlebuild.version
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
-import static java.util.Optional.ofNullable
-import static java.util.stream.Collectors.toList;
+import static java.util.Optional.*
+import static java.util.stream.Collectors.*
 
 // Lifted from plugin 'com.cinnober.gradle:semver-git:2.2.0'
 // https://github.com/cinnober/semver-git

@@ -22,8 +22,6 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +38,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**

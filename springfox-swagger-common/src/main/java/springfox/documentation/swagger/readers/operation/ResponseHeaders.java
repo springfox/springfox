@@ -30,9 +30,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static java.util.Optional.ofNullable;
-import static org.springframework.util.StringUtils.isEmpty;
-import static springfox.documentation.schema.Types.typeNameFor;
+import static java.util.Optional.*;
+import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.schema.Types.*;
 
 public class ResponseHeaders {
   private ResponseHeaders() {

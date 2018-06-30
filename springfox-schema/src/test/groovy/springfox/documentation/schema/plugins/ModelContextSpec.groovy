@@ -18,7 +18,6 @@
  */
 package springfox.documentation.schema.plugins
 
-
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -27,7 +26,7 @@ import springfox.documentation.schema.ExampleWithEnums
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 

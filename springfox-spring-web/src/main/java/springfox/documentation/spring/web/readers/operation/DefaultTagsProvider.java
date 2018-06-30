@@ -23,7 +23,7 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 
 import java.util.Set;
 
-import static java.util.Collections.singleton;
+import static java.util.Collections.*;
 
 @Component
 public class DefaultTagsProvider {

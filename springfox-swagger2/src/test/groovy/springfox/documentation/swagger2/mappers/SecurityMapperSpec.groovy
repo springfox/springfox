@@ -6,13 +6,17 @@ import io.swagger.models.auth.OAuth2Definition
 import spock.lang.Specification
 import springfox.documentation.builders.ImplicitGrantBuilder
 import springfox.documentation.builders.OAuthBuilder
-import springfox.documentation.service.*
+import springfox.documentation.service.ApiKey
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.BasicAuth
+import springfox.documentation.service.GrantType
+import springfox.documentation.service.LoginEndpoint
+import springfox.documentation.service.ResourceListing
 
 import java.util.stream.Stream
 
-import static java.util.Collections.singletonList
-import static java.util.stream.Collectors.toList;
-
+import static java.util.Collections.*
+import static java.util.stream.Collectors.*
 
 class SecurityMapperSpec extends Specification {
   def "creates apiKey authentication based on provided security scheme" () {

@@ -27,8 +27,7 @@ import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.Set;
 
-
-import static java.util.Collections.singleton;
+import static java.util.Collections.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 /**

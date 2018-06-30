@@ -12,8 +12,7 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.TokenEndpoint
 import springfox.documentation.service.TokenRequestEndpoint
 
-import static java.util.Collections.singletonList
-
+import static java.util.Collections.*
 
 class OAuth2AuthFactorySpec extends Specification {
   def "Maps authorization code grants" () {

@@ -2,9 +2,7 @@ package springfox.documentation.service
 
 import spock.lang.Specification
 
-import static springfox.documentation.service.Tags.emptyTags
-import static springfox.documentation.service.Tags.tagComparator
-import static springfox.documentation.service.Tags.toTags
+import static springfox.documentation.service.Tags.*
 
 class TagsSpec extends Specification {
   def "Cannot instantiate Tags" () {

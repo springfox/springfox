@@ -24,8 +24,7 @@ import springfox.documentation.service.AllowableListValues
 
 import java.util.stream.Stream
 
-import static java.util.stream.Collectors.toList;
-
+import static java.util.stream.Collectors.*
 
 class EnumsSpec extends Specification {
   def "enums support @JsonValue annotation"() {

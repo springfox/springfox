@@ -38,7 +38,7 @@ import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static java.util.Collections.singletonList
+import static java.util.Collections.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*

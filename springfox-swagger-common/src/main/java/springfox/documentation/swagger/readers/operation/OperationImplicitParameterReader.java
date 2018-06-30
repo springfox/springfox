@@ -39,8 +39,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;

@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.scanners;
 
 
-
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -29,8 +28,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 class ResourceGroups {

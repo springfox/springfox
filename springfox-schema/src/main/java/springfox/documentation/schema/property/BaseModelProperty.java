@@ -30,8 +30,8 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 
 import java.util.Optional;
 
-import static springfox.documentation.schema.ResolvedTypes.simpleQualifiedTypeName;
 import static java.util.Optional.*;
+import static springfox.documentation.schema.ResolvedTypes.*;
 
 public abstract class BaseModelProperty implements ModelProperty {
 

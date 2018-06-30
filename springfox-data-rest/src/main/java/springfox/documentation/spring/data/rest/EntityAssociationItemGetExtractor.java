@@ -35,9 +35,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-
-import static java.util.Collections.singleton;
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 

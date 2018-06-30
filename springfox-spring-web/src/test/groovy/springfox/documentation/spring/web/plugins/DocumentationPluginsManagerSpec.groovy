@@ -31,14 +31,14 @@ import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spi.service.contexts.PathContext
-import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
-import static java.util.Optional.empty;
-
 import javax.servlet.ServletContext
+
+import static java.util.Optional.*
 
 @Mixin(ServicePluginsSupport)
 class DocumentationPluginsManagerSpec extends Specification {

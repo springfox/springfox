@@ -44,8 +44,7 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 
 import java.util.stream.Stream
 
-import static java.util.stream.Collectors.toList;
-
+import static java.util.stream.Collectors.*
 
 class AuthorizationTypesMapperSpec extends Specification implements MapperSupport {
   AuthorizationTypesMapper sut = authMapper()

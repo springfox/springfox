@@ -23,13 +23,11 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
-
 import java.lang.annotation.Annotation;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class Annotations {
 

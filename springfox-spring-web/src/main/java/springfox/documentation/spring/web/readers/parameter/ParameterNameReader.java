@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 
-
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -37,9 +36,8 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import java.util.Optional;
 import java.util.function.Function;
 
-
 import static java.lang.String.*;
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

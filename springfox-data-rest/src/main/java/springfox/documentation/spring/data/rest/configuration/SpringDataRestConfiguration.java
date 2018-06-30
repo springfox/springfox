@@ -35,9 +35,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Stream;
 
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @Configuration

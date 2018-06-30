@@ -20,7 +20,7 @@ package springfox.documentation.schema;
 
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class Example {
   private final Object value;

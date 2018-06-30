@@ -26,9 +26,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 class DuplicateGroupsDetector {
   private DuplicateGroupsDetector() {

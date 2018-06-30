@@ -41,8 +41,8 @@ import springfox.documentation.spring.web.scanners.MediaTypeReader
 
 import java.util.stream.Stream
 
+import static java.util.stream.Collectors.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
-import static java.util.stream.Collectors.toList;
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class ServicePluginsSupport {

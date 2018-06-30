@@ -35,7 +35,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
-import static java.util.Optional.ofNullable
+import static java.util.Optional.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 

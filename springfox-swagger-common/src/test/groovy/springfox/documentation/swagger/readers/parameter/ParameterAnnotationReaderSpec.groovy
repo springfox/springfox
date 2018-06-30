@@ -25,7 +25,7 @@ import spock.lang.Specification
 
 import java.lang.reflect.Method
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*
 
 class ParameterAnnotationReaderSpec extends Specification {
 

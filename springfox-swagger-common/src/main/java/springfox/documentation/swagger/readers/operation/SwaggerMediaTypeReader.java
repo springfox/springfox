@@ -31,9 +31,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toSet;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)

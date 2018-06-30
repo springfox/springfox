@@ -23,12 +23,15 @@ package springfox.documentation.service;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelReference;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 public class Operation {
   private final HttpMethod method;

@@ -27,10 +27,14 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.VendorExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {

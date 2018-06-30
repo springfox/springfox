@@ -37,9 +37,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toList;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 public class EnumMapper {
   static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {

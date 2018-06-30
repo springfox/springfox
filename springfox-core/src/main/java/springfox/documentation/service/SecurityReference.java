@@ -22,9 +22,8 @@ package springfox.documentation.service;
 import java.util.List;
 import java.util.stream.Stream;
 
-
-import static java.util.stream.Collectors.toList;
-import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class SecurityReference {
   private final String reference;

@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
-
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -36,9 +35,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static java.util.Collections.emptySet;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toSet;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;

@@ -23,14 +23,13 @@ import org.springframework.web.util.UriComponents;
 import springfox.documentation.swagger1.dto.ApiListing;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toList;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 public class Mappers {

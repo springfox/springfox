@@ -20,8 +20,7 @@ package springfox.documentation.schema;
 
 import java.util.Optional;
 
-import static java.util.Optional.of;
-import static java.util.Optional.empty;
+import static java.util.Optional.*;
 
 public class ClassSupport {
   private ClassSupport() {

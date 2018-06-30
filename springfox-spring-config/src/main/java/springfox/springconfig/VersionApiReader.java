@@ -19,7 +19,6 @@
 package springfox.springconfig;
 
 import com.fasterxml.classmate.TypeResolver;
-
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.ResolvedMethodParameter;

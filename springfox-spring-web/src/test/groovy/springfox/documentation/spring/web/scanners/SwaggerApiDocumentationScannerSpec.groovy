@@ -22,7 +22,11 @@ package springfox.documentation.spring.web.scanners
 import com.fasterxml.classmate.TypeResolver
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
-import springfox.documentation.service.*
+import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.ApiKey
+import springfox.documentation.service.ApiListingReference
+import springfox.documentation.service.Documentation
+import springfox.documentation.service.ResourceListing
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -31,7 +35,6 @@ import springfox.documentation.spring.web.paths.AbstractPathProvider
 import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
-
 
 import static springfox.documentation.builders.PathSelectors.*
 

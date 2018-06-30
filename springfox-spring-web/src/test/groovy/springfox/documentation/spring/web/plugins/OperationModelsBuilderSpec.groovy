@@ -25,7 +25,7 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spring.web.dummy.models.Example
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 
 class OperationModelsBuilderSpec extends Specification {
   OperationModelContextsBuilder sut =

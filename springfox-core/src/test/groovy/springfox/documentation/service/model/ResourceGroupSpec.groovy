@@ -23,7 +23,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.service.ResourceGroup
 
-import static java.util.Optional.ofNullable
+import static java.util.Optional.*
 
 class ResourceGroupSpec extends Specification {
   @Shared

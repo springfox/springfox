@@ -43,9 +43,9 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 import static org.springframework.util.MimeTypeUtils.*;
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 @Controller

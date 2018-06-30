@@ -21,8 +21,8 @@ package springfox.documentation.schema
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
-import static java.util.Collections.emptySet
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.Collections.*
+import static org.springframework.util.StringUtils.*
 import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 

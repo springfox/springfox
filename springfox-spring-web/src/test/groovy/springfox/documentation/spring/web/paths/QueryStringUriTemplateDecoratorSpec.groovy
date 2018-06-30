@@ -8,7 +8,7 @@ import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static java.util.Optional.of;
+import static java.util.Optional.*
 
 class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
   def "Is active only when the uri template is enabled" () {

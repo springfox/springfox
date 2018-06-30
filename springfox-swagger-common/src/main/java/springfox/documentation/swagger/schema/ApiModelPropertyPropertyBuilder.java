@@ -31,7 +31,7 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.Optional;
 
-import static java.util.Optional.empty;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 

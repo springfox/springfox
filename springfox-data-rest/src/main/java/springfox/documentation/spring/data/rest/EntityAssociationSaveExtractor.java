@@ -36,9 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 public class EntityAssociationSaveExtractor implements EntityAssociationOperationsExtractor {

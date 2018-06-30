@@ -36,10 +36,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.*;
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.toMap;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 

@@ -31,8 +31,7 @@ import springfox.documentation.spring.web.scanners.MediaTypeReader
 
 import java.util.stream.Stream
 
-import static java.util.stream.Collectors.toSet
-
+import static java.util.stream.Collectors.*
 
 @Mixin([RequestMappingSupport])
 class MediaTypeReaderSpec extends DocumentationContextSpec {

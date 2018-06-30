@@ -23,7 +23,6 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeBindings;
 import com.fasterxml.classmate.TypeResolver;
 
-
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class WildcardType {
   private WildcardType() {

@@ -20,22 +20,21 @@ package springfox.documentation.schema.property.property
 
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-
 import spock.lang.Ignore
 import spock.lang.Unroll
-import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.configuration.ObjectMapperConfigured
-import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import springfox.documentation.schema.TypeWithGettersAndSetters
+import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.bean.BeanModelProperty
+import springfox.documentation.service.AllowableListValues
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*

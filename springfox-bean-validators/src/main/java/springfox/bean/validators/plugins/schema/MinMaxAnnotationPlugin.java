@@ -28,7 +28,6 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-
 import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;

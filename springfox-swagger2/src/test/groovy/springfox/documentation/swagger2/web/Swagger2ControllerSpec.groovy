@@ -25,8 +25,8 @@ import springfox.documentation.swagger2.mappers.MapperSupport
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletRequest
 
-import static java.util.Collections.enumeration
-import static springfox.documentation.spi.service.contexts.Orderings.nickNameComparator
+import static java.util.Collections.*
+import static springfox.documentation.spi.service.contexts.Orderings.*
 
 @Mixin([ApiListingSupport, AuthSupport])
 class Swagger2ControllerSpec extends DocumentationContextSpec

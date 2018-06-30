@@ -19,7 +19,6 @@
 package springfox.documentation.swagger.schema
 
 import com.fasterxml.classmate.TypeResolver
-
 import io.swagger.annotations.ApiModel
 import spock.lang.Shared
 import spock.lang.Specification
@@ -29,7 +28,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
 
-import static java.util.Collections.emptySet
+import static java.util.Collections.*
 
 class ApiModelBuilderSpec extends Specification {
   @Shared def resolver = new TypeResolver()

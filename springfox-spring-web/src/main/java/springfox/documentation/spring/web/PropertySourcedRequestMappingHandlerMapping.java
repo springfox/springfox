@@ -35,7 +35,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 

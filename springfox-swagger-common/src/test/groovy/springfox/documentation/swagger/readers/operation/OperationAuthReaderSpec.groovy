@@ -28,8 +28,7 @@ import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static java.util.Collections.singletonList
-
+import static java.util.Collections.*
 
 @Mixin([RequestMappingSupport, AuthSupport])
 class OperationAuthReaderSpec extends DocumentationContextSpec {

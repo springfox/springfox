@@ -23,7 +23,7 @@ import spock.lang.Specification
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spring.web.paths.PathMappingAdjuster
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*
 
 class PathMappingAdjusterSpec extends Specification {
   def "Adjust path mapping according to servlet registration" () {

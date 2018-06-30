@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import static java.util.Collections.singleton;
+import static java.util.Collections.*;
 
 public class Bug1767ListingScanner implements ApiListingScannerPlugin {
 

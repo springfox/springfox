@@ -19,7 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
-
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -38,10 +37,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
-
-
-import static java.util.Collections.singleton;
-import static java.util.stream.Collectors.toSet;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.http.MediaType.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;

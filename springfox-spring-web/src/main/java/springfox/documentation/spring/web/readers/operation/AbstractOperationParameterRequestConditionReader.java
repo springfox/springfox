@@ -32,10 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
-
-import static java.util.Collections.singletonList;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.Collections.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.Parameters.*;
 import static springfox.documentation.service.Parameter.*;
 

@@ -30,9 +30,8 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import java.util.stream.Stream
 
-import static java.util.Collections.singleton
-import static java.util.stream.Collectors.toSet
-
+import static java.util.Collections.*
+import static java.util.stream.Collectors.*
 
 @Mixin([RequestMappingSupport])
 class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {

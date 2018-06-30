@@ -23,12 +23,15 @@ import org.mapstruct.Mapper;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.SecurityScheme;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static java.util.Collections.unmodifiableMap;
-import static java.util.stream.Collectors.toMap;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 
 @Mapper

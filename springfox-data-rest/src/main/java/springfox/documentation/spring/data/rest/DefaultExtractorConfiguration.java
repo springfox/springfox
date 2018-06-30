@@ -21,7 +21,7 @@ package springfox.documentation.spring.data.rest;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 
 class DefaultExtractorConfiguration implements RequestHandlerExtractorConfiguration {

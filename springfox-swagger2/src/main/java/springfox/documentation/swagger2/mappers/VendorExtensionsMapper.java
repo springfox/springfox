@@ -31,11 +31,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
 
-
-
-
-import static java.util.stream.Collectors.toList;
-import static org.springframework.util.StringUtils.isEmpty;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 
 @Mapper
 public class VendorExtensionsMapper {

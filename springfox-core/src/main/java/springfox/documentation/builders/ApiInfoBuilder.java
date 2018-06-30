@@ -26,8 +26,7 @@ import springfox.documentation.service.VendorExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 /**
  * Builds the api information

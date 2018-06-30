@@ -25,7 +25,7 @@ import spock.lang.Unroll
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
 
-import static java.util.Optional.of;
+import static java.util.Optional.*
 
 class ParameterBuilderSpec extends Specification {
   @Unroll

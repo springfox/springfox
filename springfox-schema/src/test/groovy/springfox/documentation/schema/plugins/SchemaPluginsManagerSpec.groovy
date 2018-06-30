@@ -19,12 +19,16 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
-
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.*
+import springfox.documentation.schema.AlternateTypesSupport
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.ExampleWithEnums
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.TypeForTestingPropertyNames
+import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.ModelBuilderPlugin
@@ -36,8 +40,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import java.lang.reflect.AnnotatedElement
 
-import static java.util.Collections.emptySet
-import static java.util.Collections.singletonList
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 

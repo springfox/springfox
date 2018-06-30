@@ -30,8 +30,7 @@ import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.VendorExtension
 
-import static java.util.Collections.singleton
-
+import static java.util.Collections.*
 
 class OperationBuilderSpec extends Specification {
   def nameGenerator = Mock(OperationNameGenerator)

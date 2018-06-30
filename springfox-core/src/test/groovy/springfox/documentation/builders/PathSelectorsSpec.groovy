@@ -21,8 +21,7 @@ package springfox.documentation.builders
 
 import spock.lang.Specification
 
-import static PathSelectors.*
-import static RequestHandlerSelectors.*
+import static springfox.documentation.builders.PathSelectors.*
 
 class PathSelectorsSpec extends Specification {
   def "Static types cannot be instantiated" () {

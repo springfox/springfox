@@ -20,7 +20,6 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 

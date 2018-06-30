@@ -22,7 +22,7 @@ package springfox.documentation.service;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class ApiDescription {
   private final String groupName;

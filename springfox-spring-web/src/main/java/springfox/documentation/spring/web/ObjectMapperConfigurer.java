@@ -34,8 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
 

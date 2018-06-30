@@ -29,7 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 @Controller
 @ApiIgnore

@@ -25,7 +25,7 @@ import springfox.documentation.service.AllowableValues;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 public class ModelRef implements ModelReference {
   private final String type;

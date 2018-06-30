@@ -18,6 +18,7 @@
  */
 
 package springfox.documentation.builders
+
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.Model
@@ -25,7 +26,7 @@ import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.Tag
 
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptySet
+import static springfox.documentation.builders.BuilderDefaults.*
 
 class ApiListingBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {

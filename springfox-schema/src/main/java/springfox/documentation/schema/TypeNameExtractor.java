@@ -36,10 +36,9 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
 
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
-
-import static java.util.Optional.*;
 
 @Component
 public class TypeNameExtractor {
