@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.reflections.Reflections;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -32,6 +32,7 @@ import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -59,20 +60,24 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
   @Override
   public List<AlternateTypeRule> rules() {
     List<AlternateTypeRule> rules = new ArrayList<>();
-    Reflections reflections = new Reflections(packagePrefix);
-    Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
-    Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);
-    Stream.concat(serialized.stream(), deserialized.stream()).forEachOrdered(type -> {
-      Optional<Type> found = findAlternate(type);
-      if (found.isPresent()) {
-        rules.add(newRule(
-            resolver.resolve(type),
-            resolver.resolve(found.get()), getOrder()));
-        rules.add(newRule(
-            resolver.resolve(ResponseEntity.class, type),
-            resolver.resolve(found.get()), getOrder()));
-      }
-    });
+    Set<Class<?>> serialized = new HashSet<>();
+    Set<Class<?>> deserialized = new HashSet<>();
+    new FastClasspathScanner(packagePrefix)
+        .matchClassesWithAnnotation(JsonSerialize.class, serialized::add)
+        .matchClassesWithAnnotation(JsonDeserialize.class, deserialized::add)
+        .scan();
+    Stream.concat(serialized.stream(), deserialized.stream())
+        .forEachOrdered(type -> {
+          Optional<Type> found = findAlternate(type);
+          if (found.isPresent()) {
+            rules.add(newRule(
+                resolver.resolve(type),
+                resolver.resolve(found.get()), getOrder()));
+            rules.add(newRule(
+                resolver.resolve(ResponseEntity.class, type),
+                resolver.resolve(found.get()), getOrder()));
+          }
+        });
     return rules;
   }
 
