@@ -44,9 +44,9 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
   def setup() {
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
     listingScanner = Mock(ApiListingScanner)
-    listingScanner.scan(_) >> new HashMap()
+    listingScanner.scan(_) >> new HashMap<>()
 
     request = servletRequest()
   }

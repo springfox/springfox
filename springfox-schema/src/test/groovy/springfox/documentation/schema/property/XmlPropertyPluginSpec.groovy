@@ -68,7 +68,7 @@ class XmlPropertyPluginSpec extends Specification {
 
     List<String> getStrings() {
       if (this.strings == null) {
-        this.strings = new ArrayList()
+        this.strings = new ArrayList<>()
       }
       return this.strings
     }

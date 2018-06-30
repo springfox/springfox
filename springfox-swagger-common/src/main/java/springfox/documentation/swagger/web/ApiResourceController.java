@@ -52,20 +52,20 @@ public class ApiResourceController {
   @RequestMapping(value = "/configuration/security")
   @ResponseBody
   public ResponseEntity<SecurityConfiguration> securityConfiguration() {
-    return new ResponseEntity<SecurityConfiguration>(
+    return new ResponseEntity<>(
         ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/configuration/ui")
   @ResponseBody
   public ResponseEntity<UiConfiguration> uiConfiguration() {
-    return new ResponseEntity<UiConfiguration>(
+    return new ResponseEntity<>(
         ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping
   @ResponseBody
   public ResponseEntity<List<SwaggerResource>> swaggerResources() {
-    return new ResponseEntity<List<SwaggerResource>>(swaggerResources.get(), HttpStatus.OK);
+    return new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK);
   }
 }

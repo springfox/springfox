@@ -44,7 +44,7 @@ public class CachingModelProvider implements ModelProvider {
   public CachingModelProvider(@Qualifier("default") final ModelProvider delegate) {
     this.delegate = delegate;
     cache = new HashMap<>();
-    lookup = (key) -> delegate.modelFor(key);
+    lookup = delegate::modelFor;
   }
 
   @Override

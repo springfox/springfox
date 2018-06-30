@@ -57,7 +57,7 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
 
   @Override
   public List<SwaggerResource> get() {
-    List<SwaggerResource> resources = new ArrayList<SwaggerResource>();
+    List<SwaggerResource> resources = new ArrayList<>();
 
     for (Map.Entry<String, Documentation> entry : documentationCache.all().entrySet()) {
       String swaggerGroup = entry.getKey();

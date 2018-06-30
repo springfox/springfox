@@ -76,12 +76,7 @@ public class WildcardType {
   }
 
   private static Predicate<ResolvedType> thatAreWildcards() {
-    return new Predicate<ResolvedType>() {
-      @Override
-      public boolean test(ResolvedType input) {
-        return isWildcardType(input) || hasWildcards(input);
-      }
-    };
+    return input -> isWildcardType(input) || hasWildcards(input);
   }
 
   private static boolean isWildcardType(ResolvedType input) {
@@ -98,7 +93,7 @@ public class WildcardType {
       }
     }
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
-    List<Type> bindings = new ArrayList();
+    List<Type> bindings = new ArrayList<>();
     for (int index = 0; index < wildcardTypeBindings.size(); index++) {
       if (isWildcardType(wildcardTypeBindings.getBoundType(index))) {
         if (replaceableIterator.hasNext()) {
@@ -117,7 +112,7 @@ public class WildcardType {
     TypeBindings wildcardTypeBindings = wildcardType.getTypeBindings();
     TypeBindings replacingBindings = replacingType.getTypeBindings();
 
-    List<ResolvedType> bindings = new ArrayList();
+    List<ResolvedType> bindings = new ArrayList<>();
     int index = 0;
     for (TypeVariable each : replacingType.getErasedType().getTypeParameters()) {
       ResolvedType boundType = ofNullable(replacingBindings.findBoundType(each.getName()))

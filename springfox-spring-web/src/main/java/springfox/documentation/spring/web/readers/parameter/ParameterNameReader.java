@@ -34,7 +34,6 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import static java.lang.String.*;
 import static org.springframework.util.StringUtils.*;
@@ -48,9 +47,8 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     String name = findParameterNameFromAnnotations(context.resolvedMethodParameter());
     if (isEmpty(name)) {
       Optional<String> discoveredName = context.resolvedMethodParameter().defaultName();
-      name = discoveredName.isPresent()
-             ? discoveredName.get()
-             : format("param%s", context.resolvedMethodParameter().getParameterIndex());
+      name = discoveredName
+          .orElseGet(() -> format("param%s", context.resolvedMethodParameter().getParameterIndex()));
     }
     context.parameterBuilder()
         .name(name)
@@ -63,58 +61,12 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
   }
 
   private String findParameterNameFromAnnotations(ResolvedMethodParameter methodParameter) {
-    return methodParameter.findAnnotation(PathVariable.class).map(pathVariableValue())
-        .orElse(methodParameter.findAnnotation(ModelAttribute.class).map(modelAttributeValue())
-        .orElse(methodParameter.findAnnotation(RequestParam.class).map(requestParamValue())
-        .orElse(methodParameter.findAnnotation(RequestHeader.class).map(requestHeaderValue())
-        .orElse(methodParameter.findAnnotation(RequestPart.class).map(requestPartValue())
+    return methodParameter.findAnnotation(PathVariable.class).map(PathVariable::value)
+        .orElse(methodParameter.findAnnotation(ModelAttribute.class).map(ModelAttribute::value)
+        .orElse(methodParameter.findAnnotation(RequestParam.class).map(RequestParam::value)
+        .orElse(methodParameter.findAnnotation(RequestHeader.class).map(RequestHeader::value)
+        .orElse(methodParameter.findAnnotation(RequestPart.class).map(RequestPart::value)
         .orElse(null)))));
-  }
-
-
-  private Function<RequestHeader, String> requestHeaderValue() {
-    return new Function<RequestHeader, String>() {
-      @Override
-      public String apply(RequestHeader input) {
-        return input.value();
-      }
-    };
-  }
-
-  private Function<RequestParam, String> requestParamValue() {
-    return new Function<RequestParam, String>() {
-      @Override
-      public String apply(RequestParam input) {
-        return input.value();
-      }
-    };
-  }
-
-  private Function<ModelAttribute, String> modelAttributeValue() {
-    return new Function<ModelAttribute, String>() {
-      @Override
-      public String apply(ModelAttribute input) {
-        return input.value();
-      }
-    };
-  }
-
-  private Function<PathVariable, String> pathVariableValue() {
-    return new Function<PathVariable, String>() {
-      @Override
-      public String apply(PathVariable input) {
-        return input.value();
-      }
-    };
-  }
-
-  private Function<RequestPart, String> requestPartValue() {
-    return new Function<RequestPart, String>() {
-      @Override
-      public String apply(RequestPart input) {
-        return input.value();
-      }
-    };
   }
 
 }

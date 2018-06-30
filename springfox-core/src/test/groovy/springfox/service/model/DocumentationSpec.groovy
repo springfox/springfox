@@ -36,7 +36,7 @@ class DocumentationSpec extends Specification {
                 .securitySchemes(authorizations)
                 .apis([Mock(ApiListingReference)])
                 .build())
-              .apiListingsByResourceGroupName(new HashMap())
+              .apiListingsByResourceGroupName(new HashMap<>())
               .build()
     expect:
       built.apiListings.size() == 0

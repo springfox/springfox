@@ -23,7 +23,6 @@ import springfox.documentation.spi.service.DocumentationPlugin;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 import static java.util.Optional.*;
@@ -35,39 +34,22 @@ class DuplicateGroupsDetector {
   }
 
   public static void ensureNoDuplicateGroups(List<DocumentationPlugin> allPlugins) throws IllegalStateException {
-    Map<String, List<DocumentationPlugin>> plugins = allPlugins.stream().collect(groupingBy(byGroupName(), LinkedHashMap::new, toList()));
-    Iterable<String> duplicateGroups = plugins.entrySet().stream().filter(duplicates()).map(toGroupNames()).collect(toList());
+    Map<String, List<DocumentationPlugin>> plugins = allPlugins.stream()
+        .collect(groupingBy(
+            input -> ofNullable(input.getGroupName()).orElse("default"),
+            LinkedHashMap::new,
+            toList()));
+
+
+    Iterable<String> duplicateGroups = plugins.entrySet().stream()
+        .filter(input -> input.getValue().size() > 1)
+        .map(Map.Entry::getKey)
+        .collect(toList());
     if (StreamSupport.stream(duplicateGroups.spliterator(), false).count() > 0) {
       throw new IllegalStateException(String.format("Multiple Dockets with the same group name are not supported. "
               + "The following duplicate groups were discovered. %s", String.join(",", duplicateGroups)));
     }
   }
 
-  private static Function<? super Map.Entry<String, List<DocumentationPlugin>>, String> toGroupNames() {
-    return new Function<Map.Entry<String, List<DocumentationPlugin>>, String>() {
-      @Override
-      public String apply(Map.Entry<String, List<DocumentationPlugin>> input) {
-        return input.getKey();
-      }
-    };
-  }
 
-  private static java.util.function.Predicate<? super Map.Entry<String, List<DocumentationPlugin>>> duplicates() {
-    return new java.util.function.Predicate<Map.Entry<String, List<DocumentationPlugin>>>() {
-      @Override
-      public boolean test(Map.Entry<String, List<DocumentationPlugin>> input) {
-        return input.getValue().size() > 1;
-      }
-    };
-  }
-
-
-  private static Function<? super DocumentationPlugin, String> byGroupName() {
-    return new Function<DocumentationPlugin, String>() {
-      @Override
-      public String apply(DocumentationPlugin input) {
-        return ofNullable(input.getGroupName()).orElse("default");
-      }
-    };
-  }
 }

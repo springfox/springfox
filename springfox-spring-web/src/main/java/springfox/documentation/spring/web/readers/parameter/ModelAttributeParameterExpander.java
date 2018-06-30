@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
+import com.fasterxml.classmate.members.ResolvedMember;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +87,7 @@ public class ModelAttributeParameterExpander {
   }
 
   public List<Parameter> expand(ExpansionContext context) {
-    List<Parameter> parameters = new ArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     Set<PropertyDescriptor> propertyDescriptors = propertyDescriptors(context.getParamType().getErasedType());
     Map<Method, PropertyDescriptor> propertyLookupByGetter
         = propertyDescriptorsByMethod(context.getParamType().getErasedType(), propertyDescriptors);
@@ -94,12 +95,7 @@ public class ModelAttributeParameterExpander {
         .filter(onlyValidGetters(propertyLookupByGetter.keySet())).collect(toList());
 
     Map<String, ResolvedField> fieldsByName = StreamSupport.stream(this.fields.in(context.getParamType()).spliterator(),false)
-        .collect(toMap((new Function<ResolvedField, String>() {
-          @Override
-          public String apply(ResolvedField input) {
-            return input.getName();
-          }
-        }), identity()));
+        .collect(toMap((ResolvedMember::getName), identity()));
 
 
     LOG.debug("Expanding parameter type: {}", context.getParamType());
@@ -149,7 +145,7 @@ public class ModelAttributeParameterExpander {
       parameters.add(simpleFields(context.getParentName(), context, each));
     });
     return parameters.stream()
-        .filter(hiddenParameters().negate())
+        .filter(((Predicate<Parameter>) Parameter::isHidden).negate())
         .filter(voidParameters().negate())
         .collect(toList());
   }
@@ -164,7 +160,7 @@ public class ModelAttributeParameterExpander {
         .map(toModelAttributeField(fieldsByName, propertyLookupByGetter, alternateTypeProvider));
 
     Stream<ModelAttributeField> modelAttributesFromFields = fieldsByName.values().stream()
-        .filter(publicFields())
+        .filter(ResolvedMember::isPublic)
         .map(toModelAttributeField(alternateTypeProvider));
 
     return Stream.concat(
@@ -176,52 +172,19 @@ public class ModelAttributeParameterExpander {
   private Function<ResolvedField, ModelAttributeField> toModelAttributeField(
       final AlternateTypeProvider alternateTypeProvider) {
 
-    return new Function<ResolvedField, ModelAttributeField>() {
-      @Override
-      public ModelAttributeField apply(ResolvedField input) {
-        return new ModelAttributeField(
-            alternateTypeProvider.alternateFor(input.getType()),
-            input.getName(),
-            input,
-            input);
-      }
-    };
-  }
-
-  private Predicate<ResolvedField> publicFields() {
-    return new Predicate<ResolvedField>() {
-      @Override
-      public boolean test(ResolvedField input) {
-        return input.isPublic();
-      }
-    };
+    return input -> new ModelAttributeField(
+        alternateTypeProvider.alternateFor(input.getType()),
+        input.getName(),
+        input,
+        input);
   }
 
   private Predicate<Parameter> voidParameters() {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean test(Parameter input) {
-        return isVoid(input.getType().orElse(null));
-      }
-    };
+    return input -> isVoid(input.getType().orElse(null));
   }
 
   private Predicate<ModelAttributeField> recursiveCollectionItemType(final ResolvedType paramType) {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean test(ModelAttributeField input) {
-        return Objects.equals(collectionElementType(input.getFieldType()), paramType);
-      }
-    };
-  }
-
-  private Predicate<Parameter> hiddenParameters() {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean test(Parameter input) {
-        return input.isHidden();
-      }
-    };
+    return input -> Objects.equals(collectionElementType(input.getFieldType()), paramType);
   }
 
   private Parameter simpleFields(
@@ -248,12 +211,7 @@ public class ModelAttributeParameterExpander {
   }
 
   private Predicate<ModelAttributeField> recursiveType(final ExpansionContext context) {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean test(ModelAttributeField input) {
-        return context.hasSeenType(input.getFieldType());
-      }
-    };
+    return input -> context.hasSeenType(input.getFieldType());
   }
 
   private Predicate<ModelAttributeField> simpleType() {
@@ -265,75 +223,42 @@ public class ModelAttributeParameterExpander {
   }
 
   private Predicate<ModelAttributeField> isCollection() {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean test(ModelAttributeField input) {
-        return isContainerType(input.getFieldType());
-      }
-    };
+    return input -> isContainerType(input.getFieldType());
   }
 
   private Predicate<ModelAttributeField> isMap() {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean test(ModelAttributeField input) {
-        return Maps.isMapType(input.getFieldType());
-      }
-    };
+    return input -> Maps.isMapType(input.getFieldType());
   }
 
   private Predicate<ModelAttributeField> isEnum() {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean test(ModelAttributeField input) {
-        return enumTypeDeterminer.isEnum(input.getFieldType().getErasedType());
-      }
-    };
+    return input -> enumTypeDeterminer.isEnum(input.getFieldType().getErasedType());
   }
 
   private Predicate<ModelAttributeField> belongsToJavaPackage() {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean test(ModelAttributeField input) {
-        return ClassUtils.getPackageName(input.getFieldType().getErasedType()).startsWith("java.lang");
-      }
-    };
+    return input -> ClassUtils.getPackageName(input.getFieldType().getErasedType()).startsWith("java.lang");
   }
 
   private Predicate<ModelAttributeField> isBaseType() {
-    return new Predicate<ModelAttributeField>() {
-      @Override
-      public boolean test(ModelAttributeField input) {
-        return Types.isBaseType(input.getFieldType())
-            || input.getFieldType().isPrimitive();
-      }
-    };
+    return input -> Types.isBaseType(input.getFieldType())
+        || input.getFieldType().isPrimitive();
   }
 
   private Function<ResolvedMethod, ModelAttributeField> toModelAttributeField(
       final Map<String, ResolvedField> fieldsByName,
       final Map<Method, PropertyDescriptor> propertyLookupByGetter,
       final AlternateTypeProvider alternateTypeProvider) {
-    return new Function<ResolvedMethod, ModelAttributeField>() {
-      @Override
-      public ModelAttributeField apply(ResolvedMethod input) {
-        String name = propertyLookupByGetter.get(input.getRawMember()).getName();
-        return new ModelAttributeField(
-            fieldType(alternateTypeProvider, input),
-            name,
-            input,
-            fieldsByName.get(name));
-      }
+    return input -> {
+      String name = propertyLookupByGetter.get(input.getRawMember()).getName();
+      return new ModelAttributeField(
+          fieldType(alternateTypeProvider, input),
+          name,
+          input,
+          fieldsByName.get(name));
     };
   }
 
   private Predicate<ResolvedMethod> onlyValidGetters(final Set<Method> methods) {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean test(ResolvedMethod input) {
-        return methods.contains(input.getRawMember());
-      }
-    };
+    return input -> methods.contains(input.getRawMember());
   }
 
   private String nestedParentName(String parentName, ModelAttributeField attribute) {
@@ -355,7 +280,7 @@ public class ModelAttributeParameterExpander {
 
   private Set<PropertyDescriptor> propertyDescriptors(final Class<?> clazz) {
     try {
-      return new HashSet(Arrays.asList(getBeanInfo(clazz).getPropertyDescriptors()));
+      return new HashSet<>(Arrays.asList(getBeanInfo(clazz).getPropertyDescriptors()));
     } catch (IntrospectionException e) {
       LOG.warn(String.format("Failed to get bean properties on (%s)", clazz), e);
     }
@@ -366,20 +291,10 @@ public class ModelAttributeParameterExpander {
       final Class<?> clazz,
       Set<PropertyDescriptor> propertyDescriptors) {
     return propertyDescriptors.stream()
-        .filter(new Predicate<PropertyDescriptor>() {
-          @Override
-          public boolean test(PropertyDescriptor input) {
-            return input.getReadMethod() != null
-                && !clazz.isAssignableFrom(Collection.class)
-                && !"isEmpty".equals(input.getReadMethod().getName());
-          }
-        })
-        .collect(toMap(new Function<PropertyDescriptor, Method>() {
-          @Override
-          public Method apply(PropertyDescriptor input) {
-            return input.getReadMethod();
-          }
-        }, identity()));
+        .filter(input -> input.getReadMethod() != null
+            && !clazz.isAssignableFrom(Collection.class)
+            && !"isEmpty".equals(input.getReadMethod().getName()))
+        .collect(toMap(PropertyDescriptor::getReadMethod, identity()));
 
   }
 

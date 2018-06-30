@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 import static java.util.stream.Collectors.*;
 
 public class MapBackedRepository<K, V extends Identifiable<K>> {
-  Map<K, V> service = new HashMap<K, V>();
+  Map<K, V> service = new HashMap<>();
 
   public void delete(K key) {
     service.remove(key);

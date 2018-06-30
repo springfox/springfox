@@ -52,13 +52,13 @@ public class EnumService {
     @RequestMapping(value = "/entity", method = RequestMethod.GET)
     @ApiOperation(value = "Example with response entity single value")
     public ResponseEntity<EnumType> getResponseEntityValue() {
-        return new ResponseEntity<EnumType>(EnumType.ONE, HttpStatus.OK);
+        return new ResponseEntity<>(EnumType.ONE, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/collection", method = RequestMethod.GET)
     @ApiOperation(value = "Example with response entity collection")
     public ResponseEntity<Set<EnumType>> getResponseEntityCollection() {
-        return new ResponseEntity<Set<EnumType>>(singleton(EnumType.ONE), HttpStatus.OK);
+        return new ResponseEntity<>(singleton(EnumType.ONE), HttpStatus.OK);
     }
 
 }

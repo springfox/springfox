@@ -35,7 +35,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.function.Function.*;
@@ -68,7 +67,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
         .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(properties(context).stream().collect(toMap(byName(), identity())))
+        .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
         .xml(new Xml()
             .name("entities")
             .wrapped(false)
@@ -123,15 +122,6 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
   public boolean supports(ModelContext delimiter) {
     return Resources.class.equals(resourceType(delimiter.getType()).getErasedType())
         && delimiter.getDocumentationType() == DocumentationType.SWAGGER_2;
-  }
-
-  private Function<ModelProperty, String> byName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
   }
 
   private ResolvedType resourceType(Type type) {

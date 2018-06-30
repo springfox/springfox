@@ -134,25 +134,22 @@ public class EnumMapper {
     return values.stream().map(converterOfType(toType)).filter(Optional::isPresent).map(Optional::get).collect(toList());
   }
 
+  @SuppressWarnings("unchecked")
   private static <T extends Number> Function<? super String, Optional<T>> converterOfType(final Class<T> toType) {
-    return new Function<String, Optional<T>>() {
-      @SuppressWarnings("unchecked")
-      @Override
-      public Optional<T> apply(String input) {
-        try {
-          if (Integer.class.equals(toType)) {
-            return (Optional<T>) of(Integer.valueOf(input));
-          } else if (Long.class.equals(toType)) {
-            return (Optional<T>) of(Long.valueOf(input));
-          } else if (Double.class.equals(toType)) {
-            return (Optional<T>) of(Double.valueOf(input));
-          } else if (Float.class.equals(toType)) {
-            return (Optional<T>) of(Float.valueOf(input));
-          }
-        } catch (NumberFormatException ignored) {
+    return (Function<String, Optional<T>>) input -> {
+      try {
+        if (Integer.class.equals(toType)) {
+          return (Optional<T>) of(Integer.valueOf(input));
+        } else if (Long.class.equals(toType)) {
+          return (Optional<T>) of(Long.valueOf(input));
+        } else if (Double.class.equals(toType)) {
+          return (Optional<T>) of(Double.valueOf(input));
+        } else if (Float.class.equals(toType)) {
+          return (Optional<T>) of(Float.valueOf(input));
         }
-        return empty();
+      } catch (NumberFormatException ignored) {
       }
+      return empty();
     };
   }
 }

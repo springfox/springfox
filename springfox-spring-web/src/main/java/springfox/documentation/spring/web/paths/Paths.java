@@ -26,7 +26,7 @@ import static org.springframework.util.StringUtils.*;
 
 
 public class Paths {
-  private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-\\.]+[/]?)");
+  private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-.]+[/]?)");
 
   private Paths() {
     throw new UnsupportedOperationException();

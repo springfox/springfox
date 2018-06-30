@@ -34,7 +34,7 @@ class ApiListingMergerSpec extends Specification {
     then:
       !merged.isPresent()
     where:
-      apiListings << [new ArrayList(), null]
+      apiListings << [new ArrayList<>(), null]
   }
 
   def "it returns api listing absent when collection has one element"(){

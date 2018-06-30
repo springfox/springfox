@@ -52,6 +52,6 @@ public class PathContext {
     if (operation.isPresent()) {
       return operation.get().getParameters();
     }
-    return new ArrayList();
+    return new ArrayList<>();
   }
 }

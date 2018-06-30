@@ -33,13 +33,13 @@ class SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(new ArrayList())
+            OrderAwarePluginRegistry.create(new ArrayList<>())
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(new ArrayList())
+            OrderAwarePluginRegistry.create(new ArrayList<>())
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        OrderAwarePluginRegistry.create(new ArrayList())
+        OrderAwarePluginRegistry.create(new ArrayList<>())
 
     new SchemaPluginsManager(propRegistry, modelRegistry, syntheticModelRegistry)
   }

@@ -31,7 +31,7 @@ class ParameterMergerSpec extends Specification {
 
     when:
     def merged = merger.merged()
-    def expected = new HashSet()
+    def expected = new HashSet<>()
     expected.addAll(destination.collect { it.name })
     expected.addAll(source.collect { it.name })
 

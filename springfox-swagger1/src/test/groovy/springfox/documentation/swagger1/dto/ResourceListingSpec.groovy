@@ -119,10 +119,10 @@ class ResourceListingSpec extends InternalJsonSerializationSpec {
 
 
   def resourceListing() {
-    List<AuthorizationScope> authorizationScopeList = new ArrayList();
+    List<AuthorizationScope> authorizationScopeList = new ArrayList<>();
     authorizationScopeList.add(new AuthorizationScope("global", "access all"));
 
-    List<GrantType> grantTypes = new ArrayList();
+    List<GrantType> grantTypes = new ArrayList<>();
 
     LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.io/oauth/dialog")
     grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"))

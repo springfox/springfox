@@ -111,7 +111,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
         .map(handlers()).flatMap((handle) -> StreamSupport.stream(handle.spliterator(), false))
         .collect(toList());
     List<AlternateTypeRule> rules = nullToEmptyList(typeConventions).stream()
-          .map(toRules()).flatMap((rule) -> StreamSupport.stream(rule.spliterator(), false))
+          .map(AlternateTypeRuleConvention::rules).flatMap((rule) -> StreamSupport.stream(rule.spliterator(), false))
           .collect(toList());
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
@@ -119,26 +119,12 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
         .requestHandlers(combiner().combine(requestHandlers));
   }
 
-  private Function<AlternateTypeRuleConvention, List<AlternateTypeRule>> toRules() {
-    return new Function<AlternateTypeRuleConvention, List<AlternateTypeRule>>() {
-      @Override
-      public List<AlternateTypeRule> apply(AlternateTypeRuleConvention input) {
-        return input.rules();
-      }
-    };
-  }
-
   private RequestHandlerCombiner combiner() {
     return ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
-    return new Function<RequestHandlerProvider, Iterable<RequestHandler>>() {
-      @Override
-      public Iterable<RequestHandler> apply(RequestHandlerProvider input) {
-        return input.requestHandlers();
-      }
-    };
+    return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) RequestHandlerProvider::requestHandlers;
   }
 
   @Override

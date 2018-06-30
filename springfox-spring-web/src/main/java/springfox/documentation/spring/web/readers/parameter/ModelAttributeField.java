@@ -25,7 +25,6 @@ import com.fasterxml.classmate.members.ResolvedMember;
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
 
@@ -41,7 +40,7 @@ public class ModelAttributeField {
       ResolvedMember<?> secondary) {
     this.fieldType = fieldType;
     this.name = name;
-    this.resolvedMembers = new ArrayList<ResolvedMember<?>>();
+    this.resolvedMembers = new ArrayList<>();
     resolvedMembers.add(primary);
     if (secondary != null) {
       resolvedMembers.add(secondary);
@@ -58,12 +57,7 @@ public class ModelAttributeField {
 
   public List<AnnotatedElement> annotatedElements() {
     return resolvedMembers.stream()
-        .map(new Function<ResolvedMember<?>, AnnotatedElement>() {
-          @Override
-          public AnnotatedElement apply(ResolvedMember<?> input) {
-            return (AnnotatedElement) input.getRawMember();
-          }
-        })
+        .map(input -> (AnnotatedElement) input.getRawMember())
         .collect(toList());
   }
 

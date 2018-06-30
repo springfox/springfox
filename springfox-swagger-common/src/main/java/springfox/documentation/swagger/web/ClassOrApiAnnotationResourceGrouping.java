@@ -90,13 +90,10 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
       final RequestMappingInfo requestMappingInfo,
       final HandlerMethod handlerMethod) {
 
-    return new Function<String, ResourceGroup>() {
-      @Override
-      public ResourceGroup apply(String group) {
-        LOG.info("Group for method {} was {}", handlerMethod.getMethod().getName(), group);
-        Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
-        return new ResourceGroup(group, handlerMethod.getBeanType(), position);
-      }
+    return group -> {
+      LOG.info("Group for method {} was {}", handlerMethod.getMethod().getName(), group);
+      Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
+      return new ResourceGroup(group, handlerMethod.getBeanType(), position);
     };
   }
 
@@ -113,45 +110,31 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
   }
 
   private Function<Api, Optional<String>> descriptionOrValueExtractor() {
-    return new Function<Api, Optional<String>>() {
-      @Override
-      public Optional<String> apply(Api input) {
-        //noinspection ConstantConditions
-        return descriptionExtractor().apply(input).map(Optional::of).orElse(valueExtractor().apply(input));
-      }
+    return input -> {
+      //noinspection ConstantConditions
+      return descriptionExtractor().apply(input).map(Optional::of).orElse(valueExtractor().apply(input));
     };
   }
 
   private Function<Api, String> toApiValue() {
-    return new Function<Api, String>() {
-      @Override
-      public String apply(Api input) {
-        return normalize(input.value());
-      }
-    };
+    return input -> normalize(input.value());
   }
 
   private Function<Api, Optional<String>> descriptionExtractor() {
-    return new Function<Api, Optional<String>>() {
-      @Override
-      public Optional<String> apply(Api input) {
-        if (null != input) {
-          return of(input.description()).filter(((Predicate<String>)String::isEmpty).negate());
-        }
-        return empty();
+    return input -> {
+      if (null != input) {
+        return of(input.description()).filter(((Predicate<String>)String::isEmpty).negate());
       }
+      return empty();
     };
   }
 
   private Function<Api, Optional<String>> valueExtractor() {
-    return new Function<Api, Optional<String>>() {
-      @Override
-      public Optional<String> apply(Api input) {
-        if (null != input) {
-          return of(input.value()).filter(((Predicate<String>)String::isEmpty).negate());
-        }
-        return empty();
+    return input -> {
+      if (null != input) {
+        return of(input.value()).filter(((Predicate<String>)String::isEmpty).negate());
       }
+      return empty();
     };
   }
 }

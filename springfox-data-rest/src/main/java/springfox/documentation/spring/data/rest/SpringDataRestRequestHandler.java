@@ -95,12 +95,12 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return new HashSet();
+    return new HashSet<>();
   }
 
   @Override
   public Set<NameValueExpression<String>> params() {
-    return new HashSet();
+    return new HashSet<>();
   }
 
   @Override
@@ -118,7 +118,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public List<ResolvedMethodParameter> getParameters() {
-    return new ArrayList<ResolvedMethodParameter>(actionSpecification.getParameters());
+    return new ArrayList<>(actionSpecification.getParameters());
   }
 
   @Override
@@ -151,7 +151,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("SpringDataRestRequestHandler{");
+    final StringBuilder sb = new StringBuilder("SpringDataRestRequestHandler{");
     sb.append("key=").append(key());
     sb.append('}');
     return sb.toString();

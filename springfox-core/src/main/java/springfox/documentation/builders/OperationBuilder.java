@@ -35,7 +35,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.util.Optional.*;
@@ -55,17 +54,17 @@ public class OperationBuilder {
   private String uniqueId;
   private String codeGenMethodNameStem;
   private int position;
-  private Set<String> produces = new LinkedHashSet();
-  private Set<String> consumes = new LinkedHashSet();
-  private Set<String> protocol = new LinkedHashSet();
-  private List<SecurityReference> securityReferences = new ArrayList();
-  private List<Parameter> parameters = new ArrayList();
-  private Set<ResponseMessage> responseMessages = new HashSet();
-  private Set<String> tags = new LinkedHashSet();
+  private Set<String> produces = new LinkedHashSet<>();
+  private Set<String> consumes = new LinkedHashSet<>();
+  private Set<String> protocol = new LinkedHashSet<>();
+  private List<SecurityReference> securityReferences = new ArrayList<>();
+  private List<Parameter> parameters = new ArrayList<>();
+  private Set<ResponseMessage> responseMessages = new HashSet<>();
+  private Set<String> tags = new LinkedHashSet<>();
   private String deprecated;
   private boolean isHidden;
   private ModelReference responseModel;
-  private List<VendorExtension> vendorExtensions = new ArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;
@@ -194,9 +193,9 @@ public class OperationBuilder {
    */
   public OperationBuilder parameters(final List<Parameter> parameters) {
     List<Parameter> source = nullToEmptyList(parameters);
-    List<Parameter> destination = new ArrayList(this.parameters);
+    List<Parameter> destination = new ArrayList<>(this.parameters);
     ParameterMerger merger = new ParameterMerger(destination, source);
-    this.parameters = new ArrayList(merger.merged());
+    this.parameters = new ArrayList<>(merger.merged());
     return this;
   }
 
@@ -208,7 +207,7 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = mergeResponseMessages(responseMessages).stream().collect(toSet());
+    this.responseMessages = new HashSet<>(mergeResponseMessages(responseMessages));
     return this;
   }
 
@@ -290,7 +289,7 @@ public class OperationBuilder {
   }
 
   private Set<String> adjustConsumableMediaTypes() {
-    Set<String> adjustedConsumes = consumes.stream().collect(toSet());
+    Set<String> adjustedConsumes = new HashSet<>(consumes);
     if (of(HttpMethod.GET, HttpMethod.DELETE).anyMatch(Predicate.isEqual(method))) {
       adjustedConsumes.removeAll(REQUEST_BODY_MEDIA_TYPES);
     }
@@ -304,8 +303,9 @@ public class OperationBuilder {
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
     //Add logic to consolidate the response messages
-    Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream().collect(toMap(byStatusCode(), identity()));
-    Set<ResponseMessage> merged = this.responseMessages.stream().collect(toSet());
+    Map<Integer, ResponseMessage> responsesByCode = this.responseMessages.stream()
+        .collect(toMap(ResponseMessage::getCode, identity()));
+    Set<ResponseMessage> merged = new HashSet<>(this.responseMessages);
     for (ResponseMessage each : responseMessages) {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
@@ -327,12 +327,4 @@ public class OperationBuilder {
     return merged;
   }
 
-  private Function<? super ResponseMessage, Integer> byStatusCode() {
-    return new Function<ResponseMessage, Integer>() {
-      @Override
-      public Integer apply(ResponseMessage input) {
-        return input.getCode();
-      }
-    };
-  }
 }

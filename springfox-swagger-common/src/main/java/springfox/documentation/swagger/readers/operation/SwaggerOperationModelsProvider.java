@@ -82,7 +82,7 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   private void collectApiResponses(RequestMappingContext context) {
     List<ApiResponses> allApiResponses = context.findAnnotations(ApiResponses.class);
     LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
-    Set<ResolvedType> seenTypes = new HashSet();
+    Set<ResolvedType> seenTypes = new HashSet<>();
     for (ApiResponses apiResponses : allApiResponses) {
       List<ResolvedType> modelTypes = toResolvedTypes(context).apply(apiResponses);
       for (ResolvedType modelType : modelTypes) {
@@ -95,17 +95,14 @@ public class SwaggerOperationModelsProvider implements OperationModelsProviderPl
   }
 
   private Function<ApiResponses, List<ResolvedType>> toResolvedTypes(final RequestMappingContext context) {
-    return new Function<ApiResponses, List<ResolvedType>>() {
-      @Override
-      public List<ResolvedType> apply(ApiResponses input) {
-        List<ResolvedType> resolvedTypes = new ArrayList();
-        for (ApiResponse response : input.value()) {
-          ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
-          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));
-          resolvedTypes.add(modelType);
-        }
-        return resolvedTypes;
+    return input -> {
+      List<ResolvedType> resolvedTypes = new ArrayList<>();
+      for (ApiResponse response : input.value()) {
+        ResolvedType modelType = context.alternateFor(typeResolver.resolve(response.response()));
+        LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));
+        resolvedTypes.add(modelType);
       }
+      return resolvedTypes;
     };
   }
 

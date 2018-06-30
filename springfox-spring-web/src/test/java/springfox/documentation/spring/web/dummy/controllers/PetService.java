@@ -146,7 +146,7 @@ public class PetService {
   public
   @ResponseBody
   List<Pet> listPets() {
-    return new ArrayList();
+    return new ArrayList<>();
   }
 
   @RequestMapping(value = "/{name}", method = RequestMethod.POST)

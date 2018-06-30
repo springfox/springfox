@@ -76,14 +76,10 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     boolean optional = isOptional(methodParameter);
 
     Optional<RequestParam> requestParam = methodParameter.findAnnotation(RequestParam.class);
-    if (requestParam.isPresent()) {
-      requiredSet.add(!optional && isRequired(requestParam.get()));
-    }
+    requestParam.ifPresent(param -> requiredSet.add(!optional && isRequired(param)));
 
     Optional<RequestHeader> requestHeader = methodParameter.findAnnotation(RequestHeader.class);
-    if (requestHeader.isPresent()) {
-      requiredSet.add(!optional && requestHeader.get().required());
-    }
+    requestHeader.ifPresent(header -> requiredSet.add(!optional && header.required()));
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
@@ -97,14 +93,10 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     }
 
     Optional<RequestBody> requestBody = methodParameter.findAnnotation(RequestBody.class);
-    if (requestBody.isPresent()) {
-      requiredSet.add(!optional && requestBody.get().required());
-    }
+    requestBody.ifPresent(body -> requiredSet.add(!optional && body.required()));
 
     Optional<RequestPart> requestPart = methodParameter.findAnnotation(RequestPart.class);
-    if (requestPart.isPresent()) {
-      requiredSet.add(!optional && requestPart.get().required());
-    }
+    requestPart.ifPresent(part -> requiredSet.add(!optional && part.required()));
     return requiredSet.contains(true);
   }
 

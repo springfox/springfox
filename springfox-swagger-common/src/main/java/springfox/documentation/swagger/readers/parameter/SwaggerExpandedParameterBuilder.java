@@ -64,13 +64,9 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   @Override
   public void apply(ParameterExpansionContext context) {
     Optional<ApiModelProperty> apiModelPropertyOptional = context.findAnnotation(ApiModelProperty.class);
-    if (apiModelPropertyOptional.isPresent()) {
-      fromApiModelProperty(context, apiModelPropertyOptional.get());
-    }
+    apiModelPropertyOptional.ifPresent(apiModelProperty -> fromApiModelProperty(context, apiModelProperty));
     Optional<ApiParam> apiParamOptional = context.findAnnotation(ApiParam.class);
-    if (apiParamOptional.isPresent()) {
-      fromApiParam(context, apiParamOptional.get());
-    }
+    apiParamOptional.ifPresent(apiParam -> fromApiParam(context, apiParam));
   }
 
   @Override
@@ -135,11 +131,8 @@ public class SwaggerExpandedParameterBuilder implements ExpandedParameterBuilder
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return Stream.of(subject.getEnumConstants()).map(new Function<Object, String>() {
-      @Override
-      public String apply(final Object input) {
-        return input.toString();
-      }
-    }).collect(toList());
+    return Stream.of(subject.getEnumConstants())
+        .map((Function<Object, String>) Object::toString)
+        .collect(toList());
   }
 }

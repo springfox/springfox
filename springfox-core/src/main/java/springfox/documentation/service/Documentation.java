@@ -59,7 +59,7 @@ public class Documentation {
     this.consumes = consumes;
     this.host = host;
     this.schemes = schemes;
-    this.vendorExtensions = new ArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public String getGroupName() {
@@ -83,7 +83,7 @@ public class Documentation {
   }
 
   public List<String> getProduces() {
-    return new ArrayList(produces);
+    return new ArrayList<>(produces);
   }
 
   public String getHost() {
@@ -91,11 +91,11 @@ public class Documentation {
   }
 
   public List<String> getSchemes() {
-    return new ArrayList(schemes);
+    return new ArrayList<>(schemes);
   }
 
   public List<String> getConsumes() {
-    return new ArrayList(consumes);
+    return new ArrayList<>(consumes);
   }
 
   public List<VendorExtension> getVendorExtensions() {

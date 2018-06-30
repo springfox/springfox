@@ -70,14 +70,9 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private Function<Extension, VendorExtension> toVendorExtension() {
-    return new Function<Extension, VendorExtension>() {
-      @Override
-      public VendorExtension apply(Extension input) {
-        return ofNullable(input.name()).filter(((Predicate<String>)String::isEmpty).negate())
-            .map(propertyExtension(input))
-            .orElse(objectExtension(input));
-      }
-    };
+    return input -> ofNullable(input.name()).filter(((Predicate<String>)String::isEmpty).negate())
+        .map(propertyExtension(input))
+        .orElse(objectExtension(input));
   }
 
   private VendorExtension objectExtension(Extension each) {
@@ -91,15 +86,12 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private Function<String, VendorExtension> propertyExtension(final Extension annotation) {
-    return new Function<String, VendorExtension>() {
-      @Override
-      public VendorExtension apply(String input) {
-        ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(input));
-        for (ExtensionProperty each : annotation.properties()) {
-          extension.addProperty(new StringVendorExtension(each.name(), each.value()));
-        }
-        return extension;
+    return input -> {
+      ObjectVendorExtension extension = new ObjectVendorExtension(ensurePrefixed(input));
+      for (ExtensionProperty each : annotation.properties()) {
+        extension.addProperty(new StringVendorExtension(each.name(), each.value()));
       }
+      return extension;
     };
   }
 

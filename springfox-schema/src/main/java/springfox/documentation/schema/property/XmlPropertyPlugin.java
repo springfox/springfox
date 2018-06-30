@@ -104,14 +104,18 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
 
   private String elementName(Optional<XmlElement> element) {
     if (element.isPresent()) {
-      return defaultToNull(ofNullable(element.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
+      return defaultToNull(ofNullable(element.get().name())
+          .filter(((Predicate<String>)String::isEmpty).negate())
+          .orElse(null));
     }
     return null;
   }
 
   private String attributeName(Optional<XmlAttribute> attribute) {
     if (attribute.isPresent()) {
-      return defaultToNull(ofNullable(attribute.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null));
+      return defaultToNull(ofNullable(attribute.get().name())
+          .filter(((Predicate<String>)String::isEmpty).negate())
+          .orElse(null));
     }
     return null;
   }

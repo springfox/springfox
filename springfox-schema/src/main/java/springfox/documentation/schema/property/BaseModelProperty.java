@@ -36,8 +36,8 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 public abstract class BaseModelProperty implements ModelProperty {
 
   private final String name;
-  protected final BeanPropertyDefinition jacksonProperty;
-  protected final Optional<JsonFormat> jsonFormatAnnotation;
+  private final BeanPropertyDefinition jacksonProperty;
+  private final Optional<JsonFormat> jsonFormatAnnotation;
   protected final TypeResolver resolver;
   protected final AlternateTypeProvider alternateTypeProvider;
 
@@ -87,10 +87,7 @@ public abstract class BaseModelProperty implements ModelProperty {
   public AllowableValues allowableValues() {
     Optional<AllowableValues> allowableValues = ofNullable(ResolvedTypes.allowableValues(getType()));
     //Preference to inferred allowable values over list values via ApiModelProperty
-    if (allowableValues.isPresent()) {
-      return allowableValues.get();
-    }
-    return null;
+    return allowableValues.orElse(null);
   }
 
   @Override

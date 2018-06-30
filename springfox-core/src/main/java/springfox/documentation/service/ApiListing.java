@@ -128,12 +128,7 @@ public class ApiListing {
   }
 
   private Comparator<ApiDescription> byPath() {
-    return new Comparator<ApiDescription>() {
-      @Override
-      public int compare(ApiDescription first, ApiDescription second) {
-        return first.getPath().compareTo(second.getPath());
-      }
-    };
+    return Comparator.comparing(ApiDescription::getPath);
   }
 
 }

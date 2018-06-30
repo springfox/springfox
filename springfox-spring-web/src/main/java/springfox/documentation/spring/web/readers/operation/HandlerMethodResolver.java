@@ -24,6 +24,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.ResolvedTypeWithMembers;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedMethod;
+import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -54,14 +55,16 @@ public class HandlerMethodResolver {
   private static final String SPRING4_DISCOVERER = "org.springframework.core.DefaultParameterNameDiscoverer";
   private final ParameterNameDiscoverer parameterNameDiscover = parameterNameDiscoverer();
   private final TypeResolver typeResolver;
-  private Map<Class, List<ResolvedMethod>> methodsResolvedForHostClasses = new HashMap<Class, List<ResolvedMethod>>();
+  private Map<Class, List<ResolvedMethod>> methodsResolvedForHostClasses = new HashMap<>();
 
   public HandlerMethodResolver(TypeResolver typeResolver) {
     this.typeResolver = typeResolver;
   }
 
   public ResolvedType methodReturnType(HandlerMethod handlerMethod) {
-    return resolvedMethod(handlerMethod).map(toReturnType(typeResolver)).orElse(typeResolver.resolve(Void.TYPE));
+    return resolvedMethod(handlerMethod)
+        .map(toReturnType(typeResolver))
+        .orElse(typeResolver.resolve(Void.TYPE));
   }
 
   public static Optional<Class> useType(Class beanType) {
@@ -77,22 +80,17 @@ public class HandlerMethodResolver {
   public List<ResolvedMethodParameter> methodParameters(final HandlerMethod methodToResolve) {
     return resolvedMethod(methodToResolve)
         .map(toParameters(methodToResolve))
-        .orElse(new ArrayList<ResolvedMethodParameter>());
+        .orElse(new ArrayList<>());
   }
 
-  boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
+  private boolean contravariant(ResolvedType candidateMethodReturnValue, Type returnValueOnMethod) {
     return isSubClass(candidateMethodReturnValue, returnValueOnMethod)
         || isGenericTypeSubclass(candidateMethodReturnValue, returnValueOnMethod);
   }
 
 
   static Comparator<ResolvedMethod> byArgumentCount() {
-    return new Comparator<ResolvedMethod>() {
-      @Override
-      public int compare(ResolvedMethod first, ResolvedMethod second) {
-        return Integer.compare(first.getArgumentCount(), second.getArgumentCount());
-      }
-    };
+    return Comparator.comparingInt(ResolvedParameterizedMember::getArgumentCount);
   }
 
   boolean bothAreVoids(ResolvedType candidateMethodReturnValue, Type returnType) {
@@ -146,35 +144,30 @@ public class HandlerMethodResolver {
       ResolvedType beanType = typeResolver.resolve(hostClass);
       MemberResolver resolver = new MemberResolver(typeResolver);
       resolver.setIncludeLangObject(false);
-      ResolvedTypeWithMembers typeWithMembers = resolver.resolve(beanType, null, null);
-      methodsResolvedForHostClasses.put(hostClass, Stream.of(typeWithMembers.getMemberMethods()).collect(toList()));
+      ResolvedTypeWithMembers typeWithMembers
+          = resolver.resolve(beanType, null, null);
+      methodsResolvedForHostClasses.put(
+          hostClass,
+          Stream.of(typeWithMembers.getMemberMethods()).collect(toList()));
     }
     return methodsResolvedForHostClasses.get(hostClass);
   }
 
   private static Function<ResolvedMethod, ResolvedType> toReturnType(final TypeResolver resolver) {
-    return new Function<ResolvedMethod, ResolvedType>() {
-      @Override
-      public ResolvedType apply(ResolvedMethod input) {
-        return ofNullable(input.getReturnType()).orElse(resolver.resolve(Void.TYPE));
-      }
-    };
+    return input -> ofNullable(input.getReturnType()).orElse(resolver.resolve(Void.TYPE));
   }
 
   private Function<ResolvedMethod, List<ResolvedMethodParameter>> toParameters(final HandlerMethod methodToResolve) {
-    return new Function<ResolvedMethod, List<ResolvedMethodParameter>>() {
-      @Override
-      public List<ResolvedMethodParameter> apply(ResolvedMethod input) {
-        List<ResolvedMethodParameter> parameters = new ArrayList();
-        MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
-        for (int i = 0; i < input.getArgumentCount(); i++) {
-          parameters.add(new ResolvedMethodParameter(
-              discoveredName(methodParameters[i]).orElse(String.format("param%s", i)),
-              methodParameters[i],
-              input.getArgumentType(i)));
-        }
-        return parameters;
+    return input -> {
+      List<ResolvedMethodParameter> parameters = new ArrayList<>();
+      MethodParameter[] methodParameters = methodToResolve.getMethodParameters();
+      for (int i = 0; i < input.getArgumentCount(); i++) {
+        parameters.add(new ResolvedMethodParameter(
+            discoveredName(methodParameters[i]).orElse(String.format("param%s", i)),
+            methodParameters[i],
+            input.getArgumentType(i)));
       }
+      return parameters;
     };
   }
 
@@ -182,21 +175,13 @@ public class HandlerMethodResolver {
       Iterable<ResolvedMethod> filtered,
       final Method methodToResolve) {
 
-    return StreamSupport.stream(filtered.spliterator(), false).filter(new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean test(ResolvedMethod input) {
-        return input.getArgumentCount() == methodToResolve.getParameterTypes().length;
-      }
-    }).collect(toList());
+    return StreamSupport.stream(filtered.spliterator(), false)
+        .filter(input -> input.getArgumentCount() == methodToResolve.getParameterTypes().length)
+        .collect(toList());
   }
 
   private static Predicate<ResolvedMethod> methodNamesAreSame(final Method methodToResolve) {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean test(ResolvedMethod input) {
-        return input.getRawMember().getName().equals(methodToResolve.getName());
-      }
-    };
+    return input -> input.getRawMember().getName().equals(methodToResolve.getName());
   }
 
   private Optional<ResolvedMethod> resolveToMethodWithMaxResolvedTypes(
@@ -217,12 +202,7 @@ public class HandlerMethodResolver {
   }
 
   private Predicate<ResolvedMethod> sameMethod(final Method methodToResolve) {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean test(ResolvedMethod input) {
-        return methodToResolve.equals(input.getRawMember());
-      }
-    };
+    return input -> methodToResolve.equals(input.getRawMember());
   }
 
   private Iterable<ResolvedMethod> covariantMethods(
@@ -230,22 +210,20 @@ public class HandlerMethodResolver {
       final Method methodToResolve) {
 
     return StreamSupport.stream(methodsWithSameNumberOfParams(filtered, methodToResolve).spliterator(), false)
-            .filter(onlyCovariantMethods(methodToResolve)).collect(toList());
+            .filter(onlyCovariantMethods(methodToResolve))
+        .collect(toList());
   }
 
   private Predicate<ResolvedMethod> onlyCovariantMethods(final Method methodToResolve) {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean test(ResolvedMethod input) {
-        for (int index = 0; index < input.getArgumentCount(); index++) {
-          if (!covariant(input.getArgumentType(index), methodToResolve.getGenericParameterTypes()[index])) {
-            return false;
-          }
+    return input -> {
+      for (int index = 0; index < input.getArgumentCount(); index++) {
+        if (!covariant(input.getArgumentType(index), methodToResolve.getGenericParameterTypes()[index])) {
+          return false;
         }
-        ResolvedType candidateMethodReturnValue = returnTypeOrVoid(input);
-        return bothAreVoids(candidateMethodReturnValue, methodToResolve.getGenericReturnType())
-            || contravariant(candidateMethodReturnValue, methodToResolve.getGenericReturnType());
       }
+      ResolvedType candidateMethodReturnValue = returnTypeOrVoid(input);
+      return bothAreVoids(candidateMethodReturnValue, methodToResolve.getGenericReturnType())
+          || contravariant(candidateMethodReturnValue, methodToResolve.getGenericReturnType());
     };
   }
 
@@ -262,7 +240,8 @@ public class HandlerMethodResolver {
     String[] discoveredNames = parameterNameDiscover.getParameterNames(methodParameter.getMethod());
     int discoveredNameCount = ofNullable(discoveredNames).orElse(new String[0]).length;
     return methodParameter.getParameterIndex() < discoveredNameCount
-           ? ofNullable(discoveredNames[methodParameter.getParameterIndex()]).filter(((Predicate<String>)String::isEmpty).negate())
+           ? ofNullable(discoveredNames[methodParameter.getParameterIndex()])
+               .filter(((Predicate<String>)String::isEmpty).negate())
            : ofNullable(methodParameter.getParameterName());
   }
 

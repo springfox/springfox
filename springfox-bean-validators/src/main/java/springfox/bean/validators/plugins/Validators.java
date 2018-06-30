@@ -96,10 +96,7 @@ public class Validators {
   private static <T extends Annotation> Optional<T> findAnnotation(
       Optional<? extends AnnotatedElement> annotatedElement,
       Class<T> annotationType) {
-    if (annotatedElement.isPresent()) {
-      return ofNullable(AnnotationUtils.findAnnotation(annotatedElement.get(), annotationType));
-    } else {
-      return empty();
-    }
+    return annotatedElement
+        .map(annotated -> AnnotationUtils.findAnnotation(annotated, annotationType));
   }
 }

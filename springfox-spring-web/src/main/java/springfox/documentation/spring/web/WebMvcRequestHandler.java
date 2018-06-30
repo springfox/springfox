@@ -148,7 +148,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("WebMvcRequestHandler{");
+    final StringBuilder sb = new StringBuilder("WebMvcRequestHandler{");
     sb.append("key=").append(key());
     sb.append('}');
     return sb.toString();

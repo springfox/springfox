@@ -25,11 +25,8 @@ import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -52,36 +49,31 @@ public class Enums {
   }
 
   static List<String> getEnumValues(final Class<?> subject) {
-    return transformUnique(subject.getEnumConstants(), new Function<Object, String>() {
-      @Override
-      public String apply(Object input) {
-        Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
-                .map(evaluateJsonValue(input));
-        if (jsonValue.isPresent() && !isEmpty(jsonValue.get())) {
-          return jsonValue.get();
-        }
-        return input.toString();
+    return transformUnique(subject.getEnumConstants(), (Function<Object, String>) input -> {
+      Optional<String> jsonValue = findJsonValueAnnotatedMethod(input)
+              .map(evaluateJsonValue(input));
+      if (jsonValue.isPresent() && !isEmpty(jsonValue.get())) {
+        return jsonValue.get();
       }
+      return input.toString();
     });
   }
   @SuppressWarnings("PMD")
   private static Function<Method, String> evaluateJsonValue(final Object enumConstant) {
-    return new Function<Method, String>() {
-      @Override
-      public String apply(Method input) {
-        try {
-            return input.invoke(enumConstant).toString();
-        } catch (Exception ignored) {
-        }
-        return "";
+    return input -> {
+      try {
+          return input.invoke(enumConstant).toString();
+      } catch (Exception ignored) {
       }
+      return "";
     };
   }
 
   private static <E> List<String> transformUnique(E[] values, Function<E, String> mapper) {
-    List<String> nonUniqueValues = Stream.of(values).map( mapper).collect(toList());
-    Set<String> uniqueValues = new LinkedHashSet<String>(nonUniqueValues);
-    return new ArrayList<String>(uniqueValues);
+    return Stream.of(values)
+        .map(mapper)
+        .distinct()
+        .collect(toList());
   }
 
   private static Optional<Method> findJsonValueAnnotatedMethod(Object enumConstant) {

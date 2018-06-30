@@ -25,7 +25,6 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -43,7 +42,7 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 public class EntityAssociationItemGetExtractor implements EntityAssociationOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
-    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
+    List<RequestHandler> handlers = new ArrayList<>();
     ResourceMetadata metadata = context.associationMetadata();
     Association<? extends PersistentProperty<?>> association = context.getAssociation();
     PersistentProperty<?> property = association.getInverse();
@@ -64,7 +63,7 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
               mapping.getPath(),
               propertyIdentifier),
               singleton(RequestMethod.GET),
-          new HashSet<MediaType>(),
+          new HashSet<>(),
               singleton(HAL_JSON),
           null,
           Stream.of(new ResolvedMethodParameter(

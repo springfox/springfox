@@ -60,7 +60,7 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()
-    def modelMap = new HashMap()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -90,7 +90,7 @@ class ModelMapperSpec extends SchemaSpecification {
             namingStrategy,
             emptySet()))
         .get()
-    def modelMap = new HashMap()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -199,7 +199,7 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()
-    def modelMap = new HashMap()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -237,7 +237,7 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()
-    def modelMap = new HashMap()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -353,7 +353,7 @@ class ModelMapperSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()
-    def modelMap = new HashMap()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)

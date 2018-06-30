@@ -25,7 +25,7 @@ import static java.util.Collections.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ListVendorExtension<T> implements VendorExtension<List<T>> {
-  private final List<T> values = new ArrayList();
+  private final List<T> values = new ArrayList<>();
   private final String name;
 
   public ListVendorExtension(String name, List<T> values) {

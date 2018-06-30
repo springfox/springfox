@@ -50,7 +50,7 @@ public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
 
   @Override
   public DocumentationContextBuilder create(DocumentationType documentationType) {
-    List<AlternateTypeRule> rules = new ArrayList();
+    List<AlternateTypeRule> rules = new ArrayList<>();
     rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
         typeResolver.resolve(Object.class)));
     rules.add(newMapRule(WildcardType.class, WildcardType.class));

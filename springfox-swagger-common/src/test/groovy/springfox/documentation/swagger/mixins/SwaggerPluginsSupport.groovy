@@ -70,7 +70,7 @@ class SwaggerPluginsSupport {
         create(singletonList(new ApiModelBuilder(resolver, typeNameExtractor)))
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        create(new ArrayList())
+        create(new ArrayList<>())
 
     new SchemaPluginsManager(propRegistry, modelRegistry, syntheticModelRegistry)
   }

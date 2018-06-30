@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 
 import static java.util.Optional.*;
 
@@ -95,15 +94,12 @@ class ActionSpecification {
   }
 
   public Optional<Class<?>> getDeclaringClass() {
-    return getHandlerMethod().map(new Function<HandlerMethod, Class<?>>() {
-      @Override
-      public Class<?> apply(HandlerMethod input) {
-        Object bean = new OptionalDeferencer<>().convert(handlerMethod.getBean());
-        if (AopUtils.isAopProxy(bean)) {
-          return AopUtils.getTargetClass(bean);
-        }
-        return (Class<?>) bean;
+    return getHandlerMethod().map(input -> {
+      Object bean = new OptionalDeferencer<>().convert(handlerMethod.getBean());
+      if (AopUtils.isAopProxy(bean)) {
+        return AopUtils.getTargetClass(bean);
       }
+      return (Class<?>) bean;
     });
   }
 }

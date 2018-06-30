@@ -136,19 +136,16 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
       }
 
       private boolean canConvertToString(Object value) {
-        if (value instanceof java.lang.Boolean
-            || value instanceof java.lang.Character
-            || value instanceof java.lang.String
-            || value instanceof java.lang.Byte
-            || value instanceof java.lang.Short
-            || value instanceof java.lang.Integer
-            || value instanceof java.lang.Long
-            || value instanceof java.lang.Float
-            || value instanceof java.lang.Double
-            || value instanceof java.lang.Void) {
-          return true;
-        }
-        return false;
+        return value instanceof Boolean
+            || value instanceof Character
+            || value instanceof String
+            || value instanceof Byte
+            || value instanceof Short
+            || value instanceof Integer
+            || value instanceof Long
+            || value instanceof Float
+            || value instanceof Double
+            || value instanceof Void;
       }
 
       boolean isStringLiteral(String value) {

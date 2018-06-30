@@ -44,8 +44,8 @@ public class ModelBuilder {
   private Object example;
   private Xml xml;
 
-  private Map<String, ModelProperty> properties = new HashMap();
-  private List<ModelReference> subTypes = new ArrayList();
+  private Map<String, ModelProperty> properties = new HashMap<>();
+  private List<ModelReference> subTypes = new ArrayList<>();
 
   /**
    * Updates the Id of the model, usually the type name

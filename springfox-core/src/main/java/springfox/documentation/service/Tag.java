@@ -39,7 +39,7 @@ public class Tag implements Ordered {
   }
 
   public Tag(String name, String description, int order) {
-    this(name, description, order, new ArrayList<VendorExtension>());
+    this(name, description, order, new ArrayList<>());
   }
 
   public Tag(String name, String description, List<VendorExtension> vendorExtensions) {
@@ -50,7 +50,7 @@ public class Tag implements Ordered {
     this.name = of(name).filter(((Predicate<String>)String::isEmpty).negate()).get();
     this.description = description;
     this.order = order;
-    this.vendorExtensions = new ArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public String getName() {

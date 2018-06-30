@@ -61,8 +61,8 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
   def setup() {
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingScanner = Mock(ApiListingScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
-    listingScanner.scan(_) >> new HashMap()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
   }
 
   @Unroll
@@ -96,7 +96,7 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
 
   def "should respond with api listing for a given resource group"() {
     given:
-      Map<String, List<ApiListing>> listings = new HashMap()
+      Map<String, List<ApiListing>> listings = new HashMap<>()
       listings.put('businesses', Arrays.asList(apiListing()))
     and:
       Documentation group = new DocumentationBuilder()

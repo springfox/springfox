@@ -21,7 +21,6 @@ package springfox.documentation.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
@@ -30,7 +29,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public abstract class SecurityScheme {
   protected final String name;
   protected final String type;
-  private final List<VendorExtension> vendorExtensions = new ArrayList();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   protected SecurityScheme(String name, String type) {
     this.type = type;
@@ -51,12 +50,7 @@ public abstract class SecurityScheme {
 
   protected void addValidVendorExtensions(List<VendorExtension> vendorExtensions) {
     this.vendorExtensions.addAll(nullToEmptyList(vendorExtensions).stream()
-        .filter(new Predicate<VendorExtension>() {
-          @Override
-          public boolean test(VendorExtension input) {
-            return input.getName().toLowerCase().startsWith("x-");
-          }
-        })
+        .filter(input -> input.getName().toLowerCase().startsWith("x-"))
         .collect(toList()));
   }
 }

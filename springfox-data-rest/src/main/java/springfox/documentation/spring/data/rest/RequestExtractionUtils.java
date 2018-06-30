@@ -71,7 +71,7 @@ class RequestExtractionUtils {
   }
 
   private static List<Annotation> handlerAnnotations(HandlerMethod handler) {
-    List<Annotation> annotations = new ArrayList<Annotation>();
+    List<Annotation> annotations = new ArrayList<>();
     if (handler != null) {
       annotations.addAll(Arrays.asList(AnnotationUtils.getAnnotations(handler.getMethod())));
     }

@@ -54,12 +54,7 @@ public class FactoryMethodProvider {
   }
 
   static Predicate<ResolvedParameterizedMember> factoryMethodOf(final AnnotatedParameter parameter) {
-    return new Predicate<ResolvedParameterizedMember>() {
-      @Override
-      public boolean test(ResolvedParameterizedMember input) {
-        return input.getRawMember().equals(parameter.getOwner().getMember());
-      }
-    };
+    return input -> input.getRawMember().equals(parameter.getOwner().getMember());
   }
 
   public Collection<ResolvedConstructor> constructors(ResolvedType resolvedType) {

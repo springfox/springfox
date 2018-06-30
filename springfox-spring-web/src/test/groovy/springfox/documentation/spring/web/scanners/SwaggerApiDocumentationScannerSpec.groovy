@@ -47,8 +47,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
-    listingScanner.scan(_) >> new HashMap()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
@@ -78,8 +78,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .apiInfo(expected)
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
-    listingScanner.scan(_) >> new HashMap()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
@@ -107,8 +107,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .securitySchemes([apiKey])
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
-    listingScanner.scan(_) >> new HashMap()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
@@ -147,7 +147,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     when:
     listingReferenceScanner.scan(_) >>
         new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
-    listingScanner.scan(_) >> new HashMap()
+    listingScanner.scan(_) >> new HashMap<>()
 
     and:
     Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
@@ -170,7 +170,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .apiListingReferenceOrdering(ordering)
         .configure(contextBuilder)
 
-    def listingsMap = new HashMap()
+    def listingsMap = new HashMap<>()
     def listings = [
         apiListing(defaults, 1, "/b"),
         apiListing(defaults, 2, "/c"),
@@ -180,7 +180,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
       listingsMap.putIfAbsent("test", new LinkedList())
       listingsMap.get("test").add(it)
     }
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
     listingScanner.scan(_) >> listingsMap
 
     when:

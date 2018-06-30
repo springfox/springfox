@@ -98,7 +98,7 @@ class EntityServicesProvider implements RequestHandlerProvider {
 
     }
 
-    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
+    List<RequestHandler> handlers = new ArrayList<>();
     for (EntityContext each : contexts) {
       handlers.addAll(extractorConfiguration.getEntityExtractors().stream()
           .map(extractFromContext(each))

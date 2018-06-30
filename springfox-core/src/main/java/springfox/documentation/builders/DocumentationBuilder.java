@@ -26,7 +26,6 @@ import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -40,13 +39,13 @@ public class DocumentationBuilder {
   private String groupName;
   private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());
   private ResourceListing resourceListing;
-  private Set<Tag> tags = new LinkedHashSet();
+  private Set<Tag> tags = new LinkedHashSet<>();
   private String basePath;
-  private Set<String> produces = new LinkedHashSet();
-  private Set<String> consumes = new LinkedHashSet();
+  private Set<String> produces = new LinkedHashSet<>();
+  private Set<String> consumes = new LinkedHashSet<>();
   private String host;
-  private Set<String> schemes = new LinkedHashSet();
-  private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
+  private Set<String> schemes = new LinkedHashSet<>();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
 
   /**
@@ -68,7 +67,7 @@ public class DocumentationBuilder {
    */
   public DocumentationBuilder apiListingsByResourceGroupName(Map<String, List<ApiListing>> apiListings) {
     nullToEmptyMultimap(apiListings).entrySet().stream().forEachOrdered(entry -> {
-      List<ApiListing> list = null;
+      List<ApiListing> list;
       if (this.apiListings.containsKey(entry.getKey())) {
         list = this.apiListings.get(entry.getKey());
         list.addAll(entry.getValue());
@@ -76,7 +75,7 @@ public class DocumentationBuilder {
         list = new ArrayList<>(entry.getValue());
         this.apiListings.put(entry.getKey(), list);
       }
-      Collections.sort(list, byListingPosition());
+      list.sort(byListingPosition());
     });
     return this;
   }
@@ -171,12 +170,7 @@ public class DocumentationBuilder {
 
 
   public static Comparator<ApiListing> byListingPosition() {
-    return new Comparator<ApiListing>() {
-      @Override
-      public int compare(ApiListing first, ApiListing second) {
-        return first.getPosition() - second.getPosition();
-      }
-    };
+    return Comparator.comparingInt(ApiListing::getPosition);
   }
 
   public Documentation build() {

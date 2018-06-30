@@ -42,24 +42,21 @@ import static org.springframework.util.StringUtils.*;
 class QueryStringUriTemplateDecorator implements PathDecorator {
   @Override
   public Function<String, String> decorator(final PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        StringBuilder sb = new StringBuilder(input);
-        String prefilled = prefilledQueryParams(context);
-        if (!isEmpty(prefilled)) {
-          sb.append(requiresContinuation(input) ? "&" : "?");
-          sb.append(prefilled);
-        }
-        Set<String> expressions = queryParamNames(context);
-        if (expressions.size() == 0) {
-          return sb.toString();
-        }
-        String prefix = queryTemplatePrefix(input, prefilled);
-        String queryTemplate = String.join(",", expressions);
-        sb.append(prefix).append(queryTemplate).append("}");
+    return input -> {
+      StringBuilder sb = new StringBuilder(input);
+      String prefilled = prefilledQueryParams(context);
+      if (!isEmpty(prefilled)) {
+        sb.append(requiresContinuation(input) ? "&" : "?");
+        sb.append(prefilled);
+      }
+      Set<String> expressions = queryParamNames(context);
+      if (expressions.size() == 0) {
         return sb.toString();
       }
+      String prefix = queryTemplatePrefix(input, prefilled);
+      String queryTemplate = String.join(",", expressions);
+      sb.append(prefix).append(queryTemplate).append("}");
+      return sb.toString();
     };
   }
 
@@ -81,13 +78,15 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
     return url.contains("?");
   }
 
+  @SuppressWarnings("unchecked")
   private Set<String> queryParamNames(PathContext context) {
     return context.getParameters().stream()
         .filter(queryStringParams().and(onlyOneAllowableValue().negate()))
-        .map(paramName())
+        .map(Parameter::getName)
         .collect(toCollection(() -> new TreeSet(naturalOrder())));
   }
 
+  @SuppressWarnings("unchecked")
   private String prefilledQueryParams(PathContext context) {
     return String.join("&", context.getParameters().stream()
         .filter(onlyOneAllowableValue())
@@ -97,43 +96,23 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   }
 
   private Predicate<Parameter> onlyOneAllowableValue() {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean test(Parameter input) {
-        AllowableValues allowableValues = input.getAllowableValues();
-        return allowableValues != null
-            && allowableValues instanceof AllowableListValues
-            && ((AllowableListValues) allowableValues).getValues().size() == 1;
-      }
+    return input -> {
+      AllowableValues allowableValues = input.getAllowableValues();
+      return allowableValues != null
+          && allowableValues instanceof AllowableListValues
+          && ((AllowableListValues) allowableValues).getValues().size() == 1;
     };
   }
 
   private Predicate<Parameter> queryStringParams() {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean test(Parameter input) {
-        return "query".equals(input.getParamType());
-      }
-    };
-  }
-
-  private Function<Parameter, String> paramName() {
-    return new Function<Parameter, String>() {
-      @Override
-      public String apply(Parameter input) {
-        return input.getName();
-      }
-    };
+    return input -> "query".equals(input.getParamType());
   }
 
 
   private Function<Parameter, String> queryStringWithValue() {
-    return new Function<Parameter, String>() {
-      @Override
-      public String apply(Parameter input) {
-        AllowableListValues allowableValues = (AllowableListValues) input.getAllowableValues();
-        return String.format("%s=%s", input.getName(), allowableValues.getValues().get(0).trim());
-      }
+    return input -> {
+      AllowableListValues allowableValues = (AllowableListValues) input.getAllowableValues();
+      return String.format("%s=%s", input.getName(), allowableValues.getValues().get(0).trim());
     };
   }
 

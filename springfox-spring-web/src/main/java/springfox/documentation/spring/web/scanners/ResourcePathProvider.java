@@ -47,18 +47,17 @@ class ResourcePathProvider {
   }
 
   private Function<Class<?>, String> resourcePathExtractor() {
-    return new Function<Class<?>, String>() {
-      @Override
-      public String apply(Class<?> input) {
-        Optional<String> path = Arrays.asList(paths(input)).stream().findFirst().filter(((Predicate<String>)String::isEmpty).negate());
-        if (!path.isPresent()) {
-          return "";
-        }
-        if (path.get().startsWith("/")) {
-          return path.get();
-        }
-        return "/" + path.get();
+    return input -> {
+      Optional<String> path = Arrays.stream(paths(input))
+          .findFirst().filter(((Predicate<String>)String::isEmpty)
+              .negate());
+      if (!path.isPresent()) {
+        return "";
       }
+      if (path.get().startsWith("/")) {
+        return path.get();
+      }
+      return "/" + path.get();
     };
   }
 

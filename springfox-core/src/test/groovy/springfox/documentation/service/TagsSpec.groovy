@@ -14,7 +14,7 @@ class TagsSpec extends Specification {
 
   def "Inspects a class with no ApiListings" () {
     given:
-      def listings = new HashMap()
+      def listings = new HashMap<>()
     expect:
       toTags(listings).isEmpty()
   }

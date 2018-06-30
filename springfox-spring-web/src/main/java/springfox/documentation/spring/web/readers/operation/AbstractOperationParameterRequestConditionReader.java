@@ -46,7 +46,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   public List<Parameter> getParameters(Set<NameValueExpression<String>> expressions, String parameterType) {
-    List<Parameter> parameters = new ArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     for (NameValueExpression<String> expression : expressions) {
       if (skipParameter(parameters, expression)) {
         continue;

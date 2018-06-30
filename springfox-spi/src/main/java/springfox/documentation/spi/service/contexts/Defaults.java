@@ -98,7 +98,7 @@ public class Defaults {
   }
 
   public List<AlternateTypeRule> defaultRules(TypeResolver typeResolver) {
-    List<AlternateTypeRule> rules = new ArrayList();
+    List<AlternateTypeRule> rules = new ArrayList<>();
     rules.add(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
     rules.add(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
             typeResolver.resolve(Object.class)));
@@ -141,11 +141,9 @@ public class Defaults {
   private void maybeAddRuleForClassName(TypeResolver typeResolver, List<AlternateTypeRule> rules, String className,
                                         Class clazz) {
     Optional<? extends Class> fromClazz = ClassSupport.classByName(className);
-    if (fromClazz.isPresent()) {
-      rules.add(newRule(
-          typeResolver.resolve(fromClazz.get()),
-          typeResolver.resolve(clazz)));
-    }
+    fromClazz.ifPresent(aClass -> rules.add(newRule(
+        typeResolver.resolve(aClass),
+        typeResolver.resolve(clazz))));
   }
 
   private void init() {
@@ -162,12 +160,12 @@ public class Defaults {
   }
 
   private void initExcludeAnnotations() {
-    annotations = new ArrayList<Class<? extends Annotation>>();
+    annotations = new ArrayList<>();
     annotations.add(ApiIgnore.class);
   }
 
   private void initIgnorableTypes() {
-    ignored = new HashSet();
+    ignored = new HashSet<>();
     ignored.add(ServletRequest.class);
     ignored.add(Class.class);
     ignored.add(Void.class);
@@ -182,7 +180,7 @@ public class Defaults {
   }
 
   private void initResponseMessages() {
-    responses = new LinkedHashMap();
+    responses = new LinkedHashMap<>();
     responses.put(GET, asList(
             new ResponseMessageBuilder()
                     .code(OK.value())

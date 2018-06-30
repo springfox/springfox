@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.function.Function;
 
 import static java.util.Optional.*;
 import static java.util.function.Function.*;
@@ -98,7 +97,7 @@ public class DefaultModelProvider implements ModelProvider {
 
   private Optional<Model> reflectionBasedModel(ModelContext modelContext, ResolvedType propertiesHost) {
     Map<String, ModelProperty> propertiesIndex
-        = properties(modelContext, propertiesHost).stream().collect(toMap(byPropertyName(), identity()));
+        = properties(modelContext, propertiesHost).stream().collect(toMap(ModelProperty::getName, identity()));
     LOG.debug("Inferred {} properties. Properties found {}", propertiesIndex.size(),
         String.join(", ", propertiesIndex.keySet()));
     Map<String, ModelProperty> properties = new TreeMap();
@@ -119,19 +118,17 @@ public class DefaultModelProvider implements ModelProvider {
         .description("")
         .baseModel("")
         .discriminator("")
-        .subTypes(new ArrayList<ModelReference>());
+        .subTypes(new ArrayList<>());
     return schemaPluginsManager.model(modelContext);
   }
 
   @Override
   public Map<String, Model> dependencies(ModelContext modelContext) {
-    Map<String, Model> models = new HashMap();
+    Map<String, Model> models = new HashMap<>();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
       Optional<Model> model = modelFor(parentContext).map(Optional::of).orElse(mapModel(parentContext, resolvedType));
-      if (model.isPresent()) {
-        models.put(model.get().getName(), model.get());
-      }
+      model.ifPresent(model1 -> models.put(model1.getName(), model1));
     }
     return models;
   }
@@ -144,23 +141,14 @@ public class DefaultModelProvider implements ModelProvider {
           .type(resolvedType)
           .name(typeName)
           .qualifiedType(simpleQualifiedTypeName(resolvedType))
-          .properties(new HashMap<String, ModelProperty>())
+          .properties(new HashMap<>())
           .description("")
           .baseModel("")
           .discriminator("")
-          .subTypes(new ArrayList<ModelReference>())
+          .subTypes(new ArrayList<>())
           .build());
     }
     return empty();
-  }
-
-  private Function<ModelProperty, String> byPropertyName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
   }
 
   private List<ModelProperty> properties(ModelContext context, ResolvedType propertiesHost) {

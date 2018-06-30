@@ -38,8 +38,8 @@ public class ResponseMessageBuilder {
   private int code;
   private String message;
   private ModelReference responseModel;
-  private Map<String, Header> headers = new TreeMap();
-  private List<VendorExtension> vendorExtensions = new ArrayList();
+  private Map<String, Header> headers = new TreeMap<>();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Updates the http response code
@@ -89,12 +89,12 @@ public class ResponseMessageBuilder {
   }
 
   private Function<Map.Entry<String, ModelReference>, Map.Entry<String, Header>> toHeaderEntry() {
-    return new Function<Map.Entry<String, ModelReference>, Map.Entry<String, Header>>() {
-      @Override
-      public Map.Entry<String, Header> apply(Map.Entry<String, ModelReference> entry) {
-        return new AbstractMap.SimpleEntry<>(entry.getKey(), new Header(entry.getKey(), "", entry.getValue()));
-      }
-    };
+    return entry -> new AbstractMap.SimpleEntry<>(
+        entry.getKey(),
+        new Header(
+            entry.getKey(),
+            "",
+            entry.getValue()));
   }
 
   /**

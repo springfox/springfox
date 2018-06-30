@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.function.Function.*;
@@ -58,7 +57,7 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     List<SecurityContext> securityContexts = context.securityContext();
 
-    Map<String, SecurityReference> securityReferences = new HashMap();
+    Map<String, SecurityReference> securityReferences = new HashMap<>();
 
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
@@ -70,11 +69,11 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     if (apiOperationAnnotation.isPresent()) {
 
-      List<SecurityReference> securityReferenceOverrides = new ArrayList();
+      List<SecurityReference> securityReferenceOverrides = new ArrayList<>();
       for (Authorization authorization : authorizationReferences(apiOperationAnnotation.get())) {
         String value = authorization.value();
         AuthorizationScope[] scopes = authorization.scopes();
-        List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = new ArrayList();
+        List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = new ArrayList<>();
         for (AuthorizationScope authorizationScope : scopes) {
           String description = authorizationScope.description();
           String scope = authorizationScope.scope();
@@ -106,22 +105,12 @@ public class OperationAuthReader implements OperationBuilderPlugin {
   }
 
   private Function<SecurityReference, String> byReferenceName() {
-    return new Function<SecurityReference, String>() {
-      @Override
-      public String apply(SecurityReference input) {
-        return input.getReference();
-      }
-    };
+    return SecurityReference::getReference;
   }
 
   private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
     return Stream.of(apiOperationAnnotation.authorizations())
-        .filter(new Predicate<Authorization>() {
-          @Override
-          public boolean test(Authorization input) {
-            return !isEmpty(input.value());
-          }
-        }).collect(toList());
+        .filter(input -> !isEmpty(input.value())).collect(toList());
   }
 
   @Override

@@ -157,33 +157,21 @@ public class DocumentationPluginsManager {
   }
 
   public Function<String, String> decorator(final PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        Iterable<Function<String, String>> decorators
-            = pathDecorators.getPluginsFor(context.documentationContext()).stream()
-            .map(toDecorator(context)).collect(toList());
-        String decorated = input;
-        for (Function<String, String> decorator : decorators) {
-          decorated = decorator.apply(decorated);
-        }
-        return decorated;
+    return input -> {
+      Iterable<Function<String, String>> decorators
+          = pathDecorators.getPluginsFor(context.documentationContext()).stream()
+          .map(each -> each.decorator(context)).collect(toList());
+      String decorated = input;
+      for (Function<String, String> decorator : decorators) {
+        decorated = decorator.apply(decorated);
       }
-    };
-  }
-
-  private Function<? super PathDecorator, Function<String, String>> toDecorator(final PathContext context) {
-    return new Function<PathDecorator, Function<String, String>>() {
-      @Override
-      public Function<String, String> apply(PathDecorator input) {
-        return input.decorator(context);
-      }
+      return decorated;
     };
   }
 
   public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {
     final DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
-    List<ApiDescription> additional = new ArrayList();
+    List<ApiDescription> additional = new ArrayList<>();
     for (ApiListingScannerPlugin each : apiListingScanners.getPluginsFor(documentationType)) {
       additional.addAll(each.apply(context.getDocumentationContext()));
     }

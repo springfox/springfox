@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class SecurityContextBuilder {
-  private List<SecurityReference> securityReferences = new ArrayList();
+  private List<SecurityReference> securityReferences = new ArrayList<>();
   private Predicate<String> pathSelector = (each) -> true;
   private Predicate<HttpMethod> methodSelector;
 
@@ -52,7 +52,7 @@ public class SecurityContextBuilder {
 
   public SecurityContext build() {
     if (securityReferences == null) {
-      securityReferences = new ArrayList();
+      securityReferences = new ArrayList<>();
     }
     if (methodSelector == null) {
       methodSelector = (each) -> true;

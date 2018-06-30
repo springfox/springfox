@@ -39,7 +39,7 @@ public class ModelContext {
   private final DocumentationType documentationType;
 
   private final ModelContext parentContext;
-  private final Set<ResolvedType> seenTypes = new HashSet();
+  private final Set<ResolvedType> seenTypes = new HashSet<>();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;

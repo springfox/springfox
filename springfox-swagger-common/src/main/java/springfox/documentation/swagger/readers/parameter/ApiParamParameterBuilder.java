@@ -36,7 +36,6 @@ import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.schema.ApiModelProperties;
 
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.util.Optional.*;
@@ -64,7 +63,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     context.parameterBuilder()
         .allowableValues(allowableValues(
             context.alternateFor(context.resolvedMethodParameter().getParameterType()),
-            apiParam.map(toAllowableValue()).orElse("")));
+            apiParam.map(ApiParam::allowableValues).orElse("")));
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
       context.parameterBuilder().name(ofNullable(annotation.name())
@@ -82,15 +81,6 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .collectionFormat(annotation.collectionFormat())
           .order(SWAGGER_PLUGIN_ORDER);
     }
-  }
-
-  private Function<ApiParam, String> toAllowableValue() {
-    return new Function<ApiParam, String>() {
-      @Override
-      public String apply(ApiParam input) {
-        return input.allowableValues();
-      }
-    };
   }
 
   private AllowableValues allowableValues(ResolvedType parameterType, String allowableValueString) {

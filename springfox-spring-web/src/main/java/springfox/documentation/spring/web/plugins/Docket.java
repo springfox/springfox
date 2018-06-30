@@ -71,16 +71,16 @@ public class Docket implements DocumentationPlugin {
   public static final String DEFAULT_GROUP_NAME = "default";
 
   private final DocumentationType documentationType;
-  private final List<SecurityContext> securityContexts = new ArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap();
-  private final List<Parameter> globalOperationParameters = new ArrayList();
-  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList();
-  private final Set<Class> ignorableParameterTypes = new HashSet();
-  private final Set<String> protocols = new HashSet();
-  private final Set<String> produces = new HashSet();
-  private final Set<String> consumes = new HashSet();
-  private final Set<ResolvedType> additionalModels = new HashSet();
-  private final Set<Tag> tags = new HashSet();
+  private final List<SecurityContext> securityContexts = new ArrayList<>();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
+  private final List<Parameter> globalOperationParameters = new ArrayList<>();
+  private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList<>();
+  private final Set<Class> ignorableParameterTypes = new HashSet<>();
+  private final Set<String> protocols = new HashSet<>();
+  private final Set<String> produces = new HashSet<>();
+  private final Set<String> consumes = new HashSet<>();
+  private final Set<ResolvedType> additionalModels = new HashSet<>();
+  private final Set<Tag> tags = new HashSet<>();
 
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
@@ -97,7 +97,7 @@ public class Docket implements DocumentationPlugin {
   private Optional<String> pathMapping = empty();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
-  private List<VendorExtension> vendorExtensions = new ArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
 
   public Docket(DocumentationType documentationType) {
@@ -491,21 +491,11 @@ public class Docket implements DocumentationPlugin {
   }
 
   private Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>> identityRuleBuilder() {
-    return new Function<AlternateTypeRule, Function<TypeResolver, AlternateTypeRule>>() {
-      @Override
-      public Function<TypeResolver, AlternateTypeRule> apply(AlternateTypeRule rule) {
-        return identityFunction(rule);
-      }
-    };
+    return this::identityFunction;
   }
 
   private Function<TypeResolver, AlternateTypeRule> identityFunction(final AlternateTypeRule rule) {
-    return new Function<TypeResolver, AlternateTypeRule>() {
-      @Override
-      public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return rule;
-      }
-    };
+    return typeResolver -> rule;
   }
 
   Docket selector(ApiSelector apiSelector) {
@@ -514,27 +504,16 @@ public class Docket implements DocumentationPlugin {
   }
 
   private Function<TypeResolver, AlternateTypeRule> newSubstitutionFunction(final Class clazz, final Class with) {
-    return new Function<TypeResolver, AlternateTypeRule>() {
-
-      @Override
-      public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return newRule(
-            typeResolver.resolve(clazz),
-            typeResolver.resolve(with),
-            DIRECT_SUBSTITUTION_RULE_ORDER);
-      }
-    };
+    return typeResolver -> newRule(
+        typeResolver.resolve(clazz),
+        typeResolver.resolve(with),
+        DIRECT_SUBSTITUTION_RULE_ORDER);
   }
 
   private Function<TypeResolver, AlternateTypeRule> newGenericSubstitutionFunction(final Class clz) {
-    return new Function<TypeResolver, AlternateTypeRule>() {
-      @Override
-      public AlternateTypeRule apply(TypeResolver typeResolver) {
-        return newRule(
-            typeResolver.resolve(clz, WildcardType.class),
-            typeResolver.resolve(WildcardType.class),
-            GENERIC_SUBSTITUTION_RULE_ORDER);
-      }
-    };
+    return typeResolver -> newRule(
+        typeResolver.resolve(clz, WildcardType.class),
+        typeResolver.resolve(WildcardType.class),
+        GENERIC_SUBSTITUTION_RULE_ORDER);
   }
 }

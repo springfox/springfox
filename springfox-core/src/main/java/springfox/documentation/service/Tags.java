@@ -18,6 +18,7 @@
  */
 package springfox.documentation.service;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +39,15 @@ public class Tags {
   }
 
   public static Set<Tag> toTags(Map<String, List<ApiListing>> apiListings) {
-    Iterable<ApiListing> allListings = nullToEmptyMultimap(apiListings).values().stream().flatMap(l -> l.stream()).collect(toList());
+    Iterable<ApiListing> allListings = nullToEmptyMultimap(apiListings).values().stream()
+        .flatMap(Collection::stream)
+        .collect(toList());
     List<Tag> tags =
         StreamSupport.stream(allListings.spliterator(), false)
-            .map(collectTags()).flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))
+            .map((Function<ApiListing,Iterable<Tag>>) ApiListing::getTags)
+            .flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))
             .collect(toList());
-    TreeSet<Tag> tagSet = new TreeSet(tagComparator());
+    TreeSet<Tag> tagSet = new TreeSet<>(tagComparator());
     tagSet.addAll(tags);
     return tagSet;
   }
@@ -54,79 +58,27 @@ public class Tags {
   }
 
   private static Comparator<Tag> thenByName() {
-    return new Comparator<Tag>() {
-      @Override
-      public int compare(Tag first, Tag second) {
-        return first.getName().compareTo(second.getName());
-      }
-    };
+    return Comparator.comparing(Tag::getName);
   }
 
   private static Comparator<Tag> byOrder() {
-    return new Comparator<Tag>() {
-      @Override
-      public int compare(Tag first, Tag second) {
-        return Integer.valueOf(first.getOrder()).compareTo(second.getOrder());
-      }
-    };
+    return Comparator.comparingInt(Tag::getOrder);
   }
 
   public static Function<String, Tag> toTag(final Function<String, String> descriptor) {
-    return new Function<String, Tag>() {
-      @Override
-      public Tag apply(String input) {
-        return new Tag(input, descriptor.apply(input));
-      }
-    };
+    return input -> new Tag(input, descriptor.apply(input));
   }
 
   public static Function<String, String> descriptor(
       final Map<String, Tag> tagLookup,
       final String defaultDescription) {
 
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        return ofNullable(tagLookup.get(input))
-            .map(toTagDescription())
-            .orElse(defaultDescription);
-      }
-    };
-  }
-
-  private static Function<Tag, String> toTagDescription() {
-    return new Function<Tag, String>() {
-      @Override
-      public String apply(Tag input) {
-        return input.getDescription();
-      }
-    };
-  }
-
-  public static Function<Tag, String> toTagName() {
-    return new Function<Tag, String>() {
-      @Override
-      public String apply(Tag input) {
-        return input.getName();
-      }
-    };
-  }
-
-  static Function<ApiListing, Iterable<Tag>> collectTags() {
-    return new Function<ApiListing, Iterable<Tag>>() {
-      @Override
-      public Iterable<Tag> apply(ApiListing input) {
-        return input.getTags();
-      }
-    };
+    return input -> ofNullable(tagLookup.get(input))
+        .map(Tag::getDescription)
+        .orElse(defaultDescription);
   }
 
   public static Predicate<String> emptyTags() {
-    return new Predicate<String>() {
-      @Override
-      public boolean test(String input) {
-        return !isEmpty(input);
-      }
-    };
+    return input -> !isEmpty(input);
   }
 }

@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 
 
 public class AlternateTypeProvider {
-  private List<AlternateTypeRule> rules = new ArrayList();
+  private List<AlternateTypeRule> rules = new ArrayList<>();
 
   public AlternateTypeProvider(List<AlternateTypeRule> alternateTypeRules) {
     rules.addAll(alternateTypeRules);
@@ -49,11 +49,6 @@ public class AlternateTypeProvider {
   }
 
   private Predicate<AlternateTypeRule> thatAppliesTo(final ResolvedType type) {
-    return new Predicate<AlternateTypeRule>() {
-      @Override
-      public boolean test(AlternateTypeRule input) {
-        return input.appliesTo(type);
-      }
-    };
+    return input -> input.appliesTo(type);
   }
 }

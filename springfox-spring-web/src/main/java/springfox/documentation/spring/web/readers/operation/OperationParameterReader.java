@@ -82,7 +82,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private List<Parameter> readParameters(final OperationContext context) {
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
-    List<Parameter> parameters = new ArrayList();
+    List<Parameter> parameters = new ArrayList<>();
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
@@ -103,16 +103,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         }
       }
     }
-    return parameters.stream().filter(hiddenParams().negate()).collect(toList());
-  }
-
-  private Predicate<Parameter> hiddenParams() {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean test(Parameter input) {
-        return input.isHidden();
-      }
-    };
+    return parameters.stream().filter(((Predicate<Parameter>) Parameter::isHidden).negate()).collect(toList());
   }
 
   private boolean shouldIgnore(
@@ -124,27 +115,9 @@ public class OperationParameterReader implements OperationBuilderPlugin {
       return true;
     }
     return ignorableParamTypes.stream()
-        .filter(isAnnotation())
-        .anyMatch(parameterIsAnnotatedWithIt(parameter));
+        .filter(Annotation.class::isAssignableFrom)
+        .anyMatch(parameter::hasParameterAnnotation);
 
-  }
-
-  private Predicate<Class> parameterIsAnnotatedWithIt(final ResolvedMethodParameter parameter) {
-    return new Predicate<Class>() {
-      @Override
-      public boolean test(Class input) {
-        return parameter.hasParameterAnnotation(input);
-      }
-    };
-  }
-
-  private Predicate<Class> isAnnotation() {
-    return new Predicate<Class>() {
-      @Override
-      public boolean test(Class input) {
-        return Annotation.class.isAssignableFrom(input);
-      }
-    };
   }
 
   private boolean shouldExpand(final ResolvedMethodParameter parameter, ResolvedType resolvedParamType) {

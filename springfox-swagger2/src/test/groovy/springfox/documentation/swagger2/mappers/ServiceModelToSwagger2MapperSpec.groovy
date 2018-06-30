@@ -37,8 +37,8 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       def built = apiListing()
       def sut = swagger2Mapper()
     when:
-      def apiListings = new HashMap()
-    apiListings.putIfAbsent("new", new ArrayList())
+      def apiListings = new HashMap<>()
+    apiListings.putIfAbsent("new", new ArrayList<>())
     apiListings.get("new").add(built)
       def mappedListing = sut.mapApiListings(apiListings)
     and:
@@ -118,7 +118,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
 
   def "Maps documentation with api listing to swagger models"() {
     given:
-      def listingLookup = new HashMap()
+      def listingLookup = new HashMap<>()
     listingLookup.putIfAbsent("test", new LinkedList<>())
     listingLookup.get("test").add(apiListing())
       Documentation documentation = new DocumentationBuilder()

@@ -47,10 +47,10 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
     Optional<? extends Class<?>> controller = apiListingContext.getResourceGroup().getControllerClass();
     if (controller.isPresent()) {
       Optional<Api> apiAnnotation = ofNullable(findAnnotation(controller.get(), Api.class));
-      String description = apiAnnotation.map(descriptionExtractor()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
+      String description = apiAnnotation.map(Api::description).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
 
       Set<String> tagSet = apiAnnotation.map(tags())
-          .orElse(new TreeSet<String>());
+          .orElse(new TreeSet<>());
       if (tagSet.isEmpty()) {
         tagSet.add(apiListingContext.getResourceGroup().getGroupName());
       }
@@ -60,22 +60,10 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
     }
   }
 
-  private Function<Api, String> descriptionExtractor() {
-    return new Function<Api, String>() {
-      @Override
-      public String apply(Api input) {
-        return input.description();
-      }
-    };
-  }
-
   private Function<Api, Set<String>> tags() {
-    return new Function<Api, Set<String>>() {
-      @Override
-      public Set<String> apply(Api input) {
-        return Stream.of(input.tags()).filter(emptyTags()).collect(toCollection(TreeSet::new));
-      }
-    };
+    return input -> Stream.of(input.tags())
+        .filter(emptyTags())
+        .collect(toCollection(TreeSet::new));
   }
 
   @Override

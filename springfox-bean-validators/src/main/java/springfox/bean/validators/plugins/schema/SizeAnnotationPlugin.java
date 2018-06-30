@@ -46,9 +46,7 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
   public void apply(ModelPropertyContext context) {
     Optional<Size> size = extractAnnotation(context);
 
-    if (size.isPresent()) {
-      context.getBuilder().allowableValues(stringLengthRange(size.get()));
-    }
+    size.ifPresent(size1 -> context.getBuilder().allowableValues(stringLengthRange(size1)));
   }
 
   Optional<Size> extractAnnotation(ModelPropertyContext context) {

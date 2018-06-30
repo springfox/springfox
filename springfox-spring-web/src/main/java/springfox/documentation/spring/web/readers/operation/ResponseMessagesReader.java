@@ -34,11 +34,11 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
@@ -56,7 +56,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
-    context.operationBuilder().responseMessages(responseMessages.stream().collect(toSet()));
+    context.operationBuilder().responseMessages(new HashSet<>(responseMessages));
     applyReturnTypeOverride(context);
   }
 

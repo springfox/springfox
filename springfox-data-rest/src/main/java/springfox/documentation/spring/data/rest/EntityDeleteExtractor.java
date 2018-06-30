@@ -22,7 +22,6 @@ import com.fasterxml.classmate.TypeResolver;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
@@ -57,8 +56,8 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
               context.basePath(),
               context.resourcePath()),
               singleton(RequestMethod.DELETE),
-          new HashSet<MediaType>(),
-          new HashSet<MediaType>(),
+          new HashSet<>(),
+          new HashSet<>(),
           handler,
           singletonList(new ResolvedMethodParameter(
               0,

@@ -43,6 +43,7 @@ import springfox.documentation.service.ResponseMessage;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,22 +112,22 @@ public abstract class ServiceModelToSwagger2Mapper {
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
-    return from.stream().map(toScheme()).collect(toList());
+    return from.stream().map(Scheme::forValue).collect(toList());
   }
 
   protected List<Map<String, List<String>>> mapAuthorizations(
       Map<String, List<AuthorizationScope>> from) {
-    List<Map<String, List<String>>> security = new ArrayList();
+    List<Map<String, List<String>>> security = new ArrayList<>();
     for (Map.Entry<String, List<AuthorizationScope>> each : from.entrySet()) {
-      Map<String, List<String>> newEntry = new HashMap();
-      newEntry.put(each.getKey(), each.getValue().stream().map(scopeToString()).collect(toList()));
+      Map<String, List<String>> newEntry = new HashMap<>();
+      newEntry.put(each.getKey(), each.getValue().stream().map(AuthorizationScope::getScope).collect(toList()));
       security.add(newEntry);
     }
     return security;
   }
 
   protected Map<String, Response> mapResponseMessages(Set<ResponseMessage> from) {
-    Map<String, Response> responses = new TreeMap();
+    Map<String, Response> responses = new TreeMap<>();
     for (ResponseMessage responseMessage : from) {
       Property responseProperty;
       ModelReference modelRef = responseMessage.getResponseModel();
@@ -134,9 +135,9 @@ public abstract class ServiceModelToSwagger2Mapper {
       Response response = new Response()
           .description(responseMessage.getMessage())
           .schema(responseProperty);
-      response.setExamples(new HashMap<String, Object>());
+      response.setExamples(new HashMap<>());
       response.setHeaders(responseMessage.getHeaders().entrySet().stream().map(toPropertyEntry())
-              .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
+          .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
       Map<String, Object> extensions = new VendorExtensionsMapper()
           .mapExtensions(responseMessage.getVendorExtensions());
       response.getVendorExtensions().putAll(extensions);
@@ -146,33 +147,23 @@ public abstract class ServiceModelToSwagger2Mapper {
   }
 
   private Function<Map.Entry<String, Header>, Map.Entry<String, Property>> toPropertyEntry() {
-    return new Function<Map.Entry<String, Header>, Map.Entry<String, Property>>() {
-      @Override
-      public Map.Entry<String, Property> apply(Map.Entry<String, Header> entry) {
-        Property property = modelRefToProperty(entry.getValue().getModelReference());
-        property.setDescription(entry.getValue().getDescription());
-        return new AbstractMap.SimpleEntry<>(entry.getKey(), property);
-      }
+    return entry -> {
+      Property property = modelRefToProperty(entry.getValue().getModelReference());
+      property.setDescription(entry.getValue().getDescription());
+      return new AbstractMap.SimpleEntry<>(entry.getKey(), property);
     };
   }
 
   protected Map<String, Path> mapApiListings(Map<String, List<ApiListing>> apiListings) {
-    Map<String, Path> paths = new TreeMap();
-    apiListings.values().stream().flatMap(l -> l.stream()).forEachOrdered(each -> {
-      for (ApiDescription api : each.getApis()) {
-        paths.put(api.getPath(), mapOperations(api, ofNullable(paths.get(api.getPath()))));
-      }
-    });
+    Map<String, Path> paths = new TreeMap<>();
+    apiListings.values().stream()
+        .flatMap(Collection::stream)
+        .forEachOrdered(each -> {
+          for (ApiDescription api : each.getApis()) {
+            paths.put(api.getPath(), mapOperations(api, ofNullable(paths.get(api.getPath()))));
+          }
+        });
     return paths;
-  }
-
-  private Function<AuthorizationScope, String> scopeToString() {
-    return new Function<AuthorizationScope, String>() {
-      @Override
-      public String apply(AuthorizationScope input) {
-        return input.getScope();
-      }
-    };
   }
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
@@ -184,14 +175,5 @@ public abstract class ServiceModelToSwagger2Mapper {
     return path;
   }
 
-
-  private Function<String, Scheme> toScheme() {
-    return new Function<String, Scheme>() {
-      @Override
-      public Scheme apply(String input) {
-        return Scheme.forValue(input);
-      }
-    };
-  }
 
 }

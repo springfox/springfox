@@ -33,7 +33,6 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 import static java.util.Collections.*;
 import static java.util.function.Function.*;
@@ -69,7 +68,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
         .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(properties(context).stream().collect(toMap(byName(), identity())))
+        .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
         .xml(new Xml()
             .wrapped(true)
             .name("content")
@@ -108,15 +107,6 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
   public boolean supports(ModelContext delimiter) {
     return EmbeddedCollection.class.equals(resolver.resolve(delimiter.getType()).getErasedType())
         && delimiter.getDocumentationType() == DocumentationType.SWAGGER_2;
-  }
-
-  private Function<ModelProperty, String> byName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
   }
 
 }

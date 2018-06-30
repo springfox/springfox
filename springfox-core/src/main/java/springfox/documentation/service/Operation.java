@@ -29,7 +29,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
 
@@ -85,7 +84,7 @@ public class Operation {
         .sorted(byParameterName()).collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
-    this.vendorExtensions = new ArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public boolean isHidden() {
@@ -101,25 +100,8 @@ public class Operation {
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<SecurityReference> securityReferences) {
-    return securityReferences.stream().collect(toMap(byType(), toScopes()));
-  }
-
-  private Function<? super SecurityReference, List<AuthorizationScope>> toScopes() {
-    return new Function<SecurityReference, List<AuthorizationScope>>() {
-      @Override
-      public List<AuthorizationScope> apply(SecurityReference value) {
-        return new ArrayList(value.getScopes());
-      }
-    };
-  }
-
-  private Function<? super SecurityReference, String> byType() {
-    return new Function<SecurityReference, String>() {
-      @Override
-      public String apply(SecurityReference input) {
-        return input.getReference();
-      }
-    };
+    return securityReferences.stream()
+        .collect(toMap(SecurityReference::getReference, value -> new ArrayList<>(value.getScopes())));
   }
 
   public HttpMethod getMethod() {
@@ -175,11 +157,6 @@ public class Operation {
   }
 
   private Comparator<Parameter> byParameterName() {
-    return new Comparator<Parameter>() {
-      @Override
-      public int compare(Parameter first, Parameter second) {
-        return first.getName().compareTo(second.getName());
-      }
-    };
+    return Comparator.comparing(Parameter::getName);
   }
 }

@@ -69,7 +69,7 @@ public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEve
     } else {
       converters.add(configuredMessageConverter());
     }
-    return new ArrayList(converters);
+    return new ArrayList<>(converters);
   }
 
   private Iterable<MappingJackson2HttpMessageConverter> jackson2Converters(

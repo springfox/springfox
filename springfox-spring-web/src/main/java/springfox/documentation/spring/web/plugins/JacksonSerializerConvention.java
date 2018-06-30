@@ -58,7 +58,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   @Override
   public List<AlternateTypeRule> rules() {
-    List<AlternateTypeRule> rules = new ArrayList();
+    List<AlternateTypeRule> rules = new ArrayList<>();
     Reflections reflections = new Reflections(packagePrefix);
     Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
     Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);
@@ -78,20 +78,10 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   private Optional<Type> findAlternate(Class<?> type) {
     Class serializer = ofNullable(type.getAnnotation(JsonSerialize.class))
-        .map(new Function<JsonSerialize, Class>() {
-          @Override
-          public Class apply(JsonSerialize input) {
-            return input.as();
-          }
-        })
+        .map((Function<JsonSerialize, Class>) JsonSerialize::as)
         .orElse(Void.class);
     Class deserializer = ofNullable(type.getAnnotation(JsonDeserialize.class))
-        .map(new Function<JsonDeserialize, Class>() {
-          @Override
-          public Class apply(JsonDeserialize input) {
-            return input.as();
-          }
-        })
+        .map((Function<JsonDeserialize, Class>) JsonDeserialize::as)
         .orElse(Void.class);
     Type toUse;
     if (serializer != deserializer) {

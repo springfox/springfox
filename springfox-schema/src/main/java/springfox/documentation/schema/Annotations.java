@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 
 import java.lang.annotation.Annotation;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static java.util.Optional.*;
 
@@ -66,13 +65,8 @@ public class Annotations {
     }
 
     return ofNullable(member.getAnnotation(JsonUnwrapped.class))
-        .map(new Function<JsonUnwrapped,
-                    String>() {
-          @Override
-          public String apply(JsonUnwrapped input) {
-            return input.prefix();
-          }
-        }).orElse("");
+        .map(JsonUnwrapped::prefix)
+        .orElse("");
   }
 
   @SuppressWarnings("PMD")

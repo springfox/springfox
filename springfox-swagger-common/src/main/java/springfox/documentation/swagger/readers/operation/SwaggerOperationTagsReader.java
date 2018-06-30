@@ -64,34 +64,26 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
 
   private Set<String> controllerTags(OperationContext context) {
     Optional<Api> controllerAnnotation = context.findControllerAnnotation(Api.class);
-    return controllerAnnotation.map(tagsFromController()).orElse(new HashSet());
+    return controllerAnnotation.map(tagsFromController()).orElse(new HashSet<>());
   }
 
   private Set<String> operationTags(OperationContext context) {
     Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
-    return annotation.map(tagsFromOperation()).orElse(new HashSet());
+    return annotation.map(tagsFromOperation()).orElse(new HashSet<>());
   }
 
   private Function<ApiOperation, Set<String>> tagsFromOperation() {
-    return new Function<ApiOperation, Set<String>>() {
-      @Override
-      public Set<String> apply(ApiOperation input) {
-        Set<String> tags = new TreeSet();
-        tags.addAll(Stream.of(input.tags()).filter(emptyTags()).collect(toSet()));
-        return tags;
-      }
-    };
+    return input -> Stream.of(input.tags())
+        .filter(emptyTags())
+        .distinct()
+        .collect(toCollection(TreeSet::new));
   }
 
   private Function<Api, Set<String>> tagsFromController() {
-    return new Function<Api, Set<String>>() {
-      @Override
-      public Set<String> apply(Api input) {
-        Set<String> tags = new TreeSet();
-        tags.addAll(Stream.of(input.tags()).filter(emptyTags()).collect(toSet()));
-        return tags;
-      }
-    };
+    return input -> Stream.of(input.tags())
+        .filter(emptyTags())
+        .distinct()
+        .collect(toCollection(TreeSet::new));
   }
 
   @Override

@@ -32,7 +32,7 @@ import java.util.List;
 @Incubating("2.7.0")
 public class AlternateTypeBuilder {
   private String fullyQualifiedClassName;
-  private List<AlternateTypePropertyBuilder> properties = new ArrayList();
+  private List<AlternateTypePropertyBuilder> properties = new ArrayList<>();
   private List<Annotation> annotations = new ArrayList<Annotation>();
 
   public AlternateTypeBuilder fullyQualifiedClassName(String fullyQualifiedClassName) {

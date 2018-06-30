@@ -40,12 +40,11 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import static java.util.stream.Collectors.*;
 
 public class DocumentationContext {
   private final DocumentationType documentationType;
@@ -151,7 +150,7 @@ public class DocumentationContext {
   }
 
   public Set<Class> getIgnorableParameterTypes() {
-    return ignorableParameterTypes.stream().collect(toSet());
+    return new HashSet<>(ignorableParameterTypes);
   }
 
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {

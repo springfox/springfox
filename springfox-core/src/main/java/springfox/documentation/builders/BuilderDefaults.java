@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
-import static java.util.stream.Stream.of;
 import static springfox.documentation.schema.Enums.*;
 
 /**
@@ -67,9 +65,9 @@ public class BuilderDefaults {
    */
   public static <T> List<T> nullToEmptyList(Collection<T> newValue) {
     if (newValue == null) {
-      return new ArrayList();
+      return new ArrayList<>();
     }
-    return new ArrayList(newValue);
+    return new ArrayList<>(newValue);
   }
 
   /**
@@ -82,7 +80,7 @@ public class BuilderDefaults {
    */
   public static <K, V> Map<K, V> nullToEmptyMap(Map<K, V> newValue) {
     if (newValue == null) {
-      return new HashMap<K, V>();
+      return new HashMap<>();
     }
     return newValue;
   }
@@ -111,7 +109,7 @@ public class BuilderDefaults {
    */
   public static <T> Set<T> nullToEmptySet(Set<T> newValue) {
     if (newValue == null) {
-      return new HashSet<T>();
+      return new HashSet<>();
     }
     return newValue;
   }
@@ -132,20 +130,6 @@ public class BuilderDefaults {
       return defaultValue;
     }
     return toReturn;
-  }
-
-  /**
-   * Returns an empty list if the newValue is null
-   *
-   * @param args - a list
-   * @param <T>      - any type
-   * @return non-null list
-   */
-  public static <T> List<T> nullVarArgsToEmptyList(T ... args) {
-    if (args == null) {
-      return new ArrayList();
-    }
-    return of(args).collect(toList());
   }
 
   private static boolean isNotObject(ResolvedType defaultValue) {

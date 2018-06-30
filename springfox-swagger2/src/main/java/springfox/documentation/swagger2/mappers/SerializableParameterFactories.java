@@ -107,7 +107,7 @@ public class SerializableParameterFactories {
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());
     }
-    return of((io.swagger.models.parameters.Parameter) toReturn);
+    return of(toReturn);
   }
 
   private static String collectionFormat(Parameter source) {

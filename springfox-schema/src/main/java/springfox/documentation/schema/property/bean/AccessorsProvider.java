@@ -46,12 +46,7 @@ public class AccessorsProvider {
   }
 
   private Predicate<ResolvedMethod> onlyGettersAndSetters() {
-    return new Predicate<ResolvedMethod>() {
-      @Override
-      public boolean test(ResolvedMethod input) {
-        return maybeAGetter(input.getRawMember()) || maybeASetter(input.getRawMember());
-      }
-    };
+    return input -> maybeAGetter(input.getRawMember()) || maybeASetter(input.getRawMember());
   }
 
   public List<ResolvedMethod> in(ResolvedType resolvedType) {

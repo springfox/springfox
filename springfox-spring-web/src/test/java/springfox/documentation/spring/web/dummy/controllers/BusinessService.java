@@ -97,6 +97,6 @@ public class BusinessService {
   @RequestMapping(value = {"/businesses/byTypes"}, method = GET, produces = APPLICATION_JSON_VALUE)
   @ResponseBody
   public List<Business> businessesByCategories(@RequestParam Business.BusinessType[] types) {
-    return new ArrayList();
+    return new ArrayList<>();
   }
 }

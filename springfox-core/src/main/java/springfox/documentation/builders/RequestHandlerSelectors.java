@@ -59,12 +59,7 @@ public class RequestHandlerSelectors {
    * @return this
    */
   public static Predicate<RequestHandler> withMethodAnnotation(final Class<? extends Annotation> annotation) {
-    return new Predicate<RequestHandler>() {
-      @Override
-      public boolean test(RequestHandler input) {
-        return input.isAnnotatedWith(annotation);
-      }
-    };
+    return input -> input.isAnnotatedWith(annotation);
   }
 
   /**
@@ -74,31 +69,16 @@ public class RequestHandlerSelectors {
    * @return this
    */
   public static Predicate<RequestHandler> withClassAnnotation(final Class<? extends Annotation> annotation) {
-    return new Predicate<RequestHandler>() {
-      @Override
-      public boolean test(RequestHandler input) {
-        return declaringClass(input).map(annotationPresent(annotation)).orElse(false);
-      }
-    };
+    return input -> declaringClass(input).map(annotationPresent(annotation)).orElse(false);
   }
 
   private static Function<Class<?>, Boolean> annotationPresent(final Class<? extends Annotation> annotation) {
-    return new Function<Class<?>, Boolean>() {
-      @Override
-      public Boolean apply(Class<?> input) {
-        return input.isAnnotationPresent(annotation);
-      }
-    };
+    return input -> input.isAnnotationPresent(annotation);
   }
 
 
   private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
-    return new Function<Class<?>, Boolean>() {
-      @Override
-      public Boolean apply(Class<?> input) {
-        return ClassUtils.getPackageName(input).startsWith(basePackage);
-      }
-    };
+    return input -> ClassUtils.getPackageName(input).startsWith(basePackage);
   }
 
   /**
@@ -109,12 +89,7 @@ public class RequestHandlerSelectors {
    * @return this
    */
   public static Predicate<RequestHandler> basePackage(final String basePackage) {
-    return new Predicate<RequestHandler>() {
-      @Override
-      public boolean test(RequestHandler input) {
-        return declaringClass(input).map(handlerPackage(basePackage)).orElse(true);
-      }
-    };
+    return input -> declaringClass(input).map(handlerPackage(basePackage)).orElse(true);
   }
 
   private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {

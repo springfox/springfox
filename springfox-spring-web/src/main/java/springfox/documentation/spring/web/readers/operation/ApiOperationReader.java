@@ -57,7 +57,7 @@ public class ApiOperationReader implements OperationReader {
 //  @Cacheable(value = "operations", keyGenerator = OperationsKeyGenerator.class)
   public List<Operation> read(RequestMappingContext outerContext) {
 
-    List<Operation> operations = new ArrayList();
+    List<Operation> operations = new ArrayList<>();
 
     Set<RequestMethod> requestMethods = outerContext.getMethodsCondition();
     Set<RequestMethod> supportedMethods = supportedMethods(requestMethods);

@@ -84,16 +84,14 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
         operationAnnotation.map(resolvedTypeFromOperation(typeResolver, defaultResponse));
-    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(responseHeaders());
-    Map<String, Header> defaultHeaders = new HashMap();
-    if (defaultResponseHeaders.isPresent()) {
-      defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
-    }
+    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(ApiOperation::responseHeaders);
+    Map<String, Header> defaultHeaders = new HashMap<>();
+    defaultResponseHeaders.ifPresent(responseHeaders -> defaultHeaders.putAll(headers(responseHeaders)));
 
     List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
-    Set<ResponseMessage> responseMessages = new HashSet();
+    Set<ResponseMessage> responseMessages = new HashSet<>();
 
-    Map<Integer, ApiResponse> seenResponsesByCode = new HashMap();
+    Map<Integer, ApiResponse> seenResponsesByCode = new HashMap<>();
     for (ApiResponses apiResponses : allApiResponses) {
       ApiResponse[] apiResponseAnnotations = apiResponses.value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
@@ -115,7 +113,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
-          Map<String, Header> headers = new HashMap(defaultHeaders);
+          Map<String, Header> headers = new HashMap<>(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
           responseMessages.add(new ResponseMessageBuilder()

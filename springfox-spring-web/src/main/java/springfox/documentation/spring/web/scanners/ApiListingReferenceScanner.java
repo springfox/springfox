@@ -44,7 +44,7 @@ public class ApiListingReferenceScanner {
     LOG.info("Scanning for api listing references");
 
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings
-        = new HashMap();
+        = new HashMap<>();
     ApiSelector selector = context.getApiSelector();
     Iterable<RequestHandler> matchingHandlers = context.getRequestHandlers().stream()
         .filter(selector.getRequestHandlerSelector()).collect(toList());

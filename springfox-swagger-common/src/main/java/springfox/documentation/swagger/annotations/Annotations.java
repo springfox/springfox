@@ -48,13 +48,13 @@ public class Annotations {
   }
 
   public static List<ApiResponses> findApiResponsesAnnotations(AnnotatedElement annotated) {
-    List<ApiResponses> results = new ArrayList();
+    List<ApiResponses> results = new ArrayList<>();
     ApiResponses currentLevel = getAnnotation(annotated, ApiResponses.class);
     if (currentLevel != null) {
       results.add(currentLevel);
     }
     if (annotated instanceof Method) {
-      ApiResponses parentLevel = findAnnotation(((Method)annotated).getDeclaringClass(), ApiResponses.class);
+      ApiResponses parentLevel = findAnnotation(((Method) annotated).getDeclaringClass(), ApiResponses.class);
       if (parentLevel != null) {
         results.add(parentLevel);
       }
@@ -62,27 +62,18 @@ public class Annotations {
     return results;
   }
 
-  public static Function<ApiOperation, ResolvedType> resolvedTypeFromOperation(final TypeResolver typeResolver,
-                                                                               final ResolvedType defaultType) {
+  public static Function<ApiOperation, ResolvedType> resolvedTypeFromOperation(
+      final TypeResolver typeResolver,
+      final ResolvedType defaultType) {
 
-    return new Function<ApiOperation, ResolvedType>() {
-      @Override
-      public ResolvedType apply(ApiOperation annotation) {
-        return getResolvedType(annotation, typeResolver, defaultType);
-      }
-    };
+    return annotation -> getResolvedType(annotation, typeResolver, defaultType);
   }
 
   public static Function<ApiResponse, ResolvedType> resolvedTypeFromResponse(
       final TypeResolver typeResolver,
       final ResolvedType defaultType) {
 
-    return new Function<ApiResponse, ResolvedType>() {
-      @Override
-      public ResolvedType apply(ApiResponse annotation) {
-        return getResolvedType(annotation, typeResolver, defaultType);
-      }
-    };
+    return annotation -> getResolvedType(annotation, typeResolver, defaultType);
   }
 
   @SuppressWarnings("Duplicates")

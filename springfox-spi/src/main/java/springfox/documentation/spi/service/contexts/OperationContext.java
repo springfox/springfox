@@ -77,7 +77,7 @@ public class OperationContext {
     if (documentationContext.getGlobalResponseMessages().containsKey(RequestMethod.valueOf(forHttpMethod))) {
       return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
     }
-    return new ArrayList();
+    return new ArrayList<>();
   }
 
   public List<Parameter> getGlobalOperationParameters() {
@@ -91,11 +91,7 @@ public class OperationContext {
   }
 
   private Predicate<SecurityContext> pathMatches() {
-    return new Predicate<SecurityContext>() {
-      public boolean test(SecurityContext input) {
-        return input.securityForOperation(OperationContext.this) != null;
-      }
-    };
+    return input -> input.securityForOperation(OperationContext.this) != null;
   }
 
   public String requestMappingPattern() {

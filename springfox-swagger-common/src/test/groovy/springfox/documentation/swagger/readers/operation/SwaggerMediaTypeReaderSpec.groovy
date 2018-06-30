@@ -63,8 +63,8 @@ class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
 
     where:
     expectedConsumes                                  | expectedProduces                                  | handlerMethod
-    singleton('application/xml')                     | new HashSet()                                    | dummyHandlerMethod('methodWithXmlConsumes')
-    new HashSet()                                    | singleton('application/xml')                     | dummyHandlerMethod('methodWithXmlProduces')
+    singleton('application/xml')                     | new HashSet<>()                                    | dummyHandlerMethod('methodWithXmlConsumes')
+    new HashSet<>()                                    | singleton('application/xml')                     | dummyHandlerMethod('methodWithXmlProduces')
     singleton('application/xml')                     | singleton('application/json')                    | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
     singleton('application/xml')                     | singleton('application/xml')                     | dummyHandlerMethod('methodWithBothXmlMediaTypes')
     Stream.of('application/xml', 'application/json').collect(toSet()) | Stream.of('application/xml', 'application/json').collect(toSet()) | dummyHandlerMethod('methodWithMultipleMediaTypes')

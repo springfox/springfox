@@ -31,8 +31,8 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ResourceListingBuilder {
   private String apiVersion;
-  private List<ApiListingReference> apis = new ArrayList();
-  private List<SecurityScheme> securitySchemes = new ArrayList();
+  private List<ApiListingReference> apis = new ArrayList<>();
+  private List<SecurityScheme> securitySchemes = new ArrayList<>();
   private ApiInfo info;
 
   /**

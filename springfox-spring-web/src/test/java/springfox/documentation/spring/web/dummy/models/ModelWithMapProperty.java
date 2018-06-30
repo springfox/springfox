@@ -30,7 +30,7 @@ import java.util.Map;
 @ApiModel(description = "Describes model with map property")
 public class ModelWithMapProperty {
   @ApiModelProperty(value = "Map of params to be sent")
-  private final Map<String, String> params = new HashMap();
+  private final Map<String, String> params = new HashMap<>();
 
   public Map<String, String> getParams() {
     return params;

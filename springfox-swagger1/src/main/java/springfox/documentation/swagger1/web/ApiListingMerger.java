@@ -21,10 +21,10 @@ package springfox.documentation.swagger1.web;
 import springfox.documentation.swagger1.dto.ApiListing;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiListingMerger {
@@ -40,10 +40,10 @@ public class ApiListingMerger {
         merged.setDescription(each.getDescription());
         merged.appendAuthorizations(each.getAuthorizations());
         merged.appendApis(each.getApis());
-        merged.appendProtocols(each.getProtocols().stream().collect(toSet()));
-        merged.appendConsumes(each.getConsumes().stream().collect(toSet()));
+        merged.appendProtocols(new HashSet<>(each.getProtocols()));
+        merged.appendConsumes(new HashSet<>(each.getConsumes()));
         merged.appendModels(each.getModels());
-        merged.appendProduces(each.getProduces().stream().collect(toSet()));
+        merged.appendProduces(new HashSet<>(each.getProduces()));
       }
       return of(merged);
     }

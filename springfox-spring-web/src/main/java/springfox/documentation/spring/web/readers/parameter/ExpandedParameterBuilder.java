@@ -120,11 +120,8 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
   }
 
   private List<String> getEnumValues(final Class<?> subject) {
-    return Stream.of(subject.getEnumConstants()).map(new Function<Object, String>() {
-      @Override
-      public String apply(final Object input) {
-        return input.toString();
-      }
-    }).collect(toList());
+    return Stream.of(subject.getEnumConstants())
+        .map((Function<Object, String>) Object::toString)
+        .collect(toList());
   }
 }

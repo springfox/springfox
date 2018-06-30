@@ -33,13 +33,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import static java.util.Optional.*;
 
 public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
-  private final Map<String, HandlerMethod> handlerMethods = new LinkedHashMap<String, HandlerMethod>();
+  private final Map<String, HandlerMethod> handlerMethods = new LinkedHashMap<>();
   private final Environment environment;
   private final Object handler;
 
@@ -80,12 +79,7 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
     final String key = mapper.propertyKey();
     final String target = mapper.value();
     return ofNullable(environment.getProperty(key))
-        .map(new Function<String, String>() {
-          @Override
-          public String apply(String input) {
-            return target.replace(String.format("${%s}", key), input);
-          }
-        })
+        .map(input -> target.replace(String.format("${%s}", key), input))
         .orElse(null);
   }
 

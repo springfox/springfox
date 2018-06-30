@@ -30,7 +30,7 @@ import static java.util.Collections.*;
 
 
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
-  private final List<VendorExtension> properties = new ArrayList();
+  private final List<VendorExtension> properties = new ArrayList<>();
   private final String name;
 
   public ObjectVendorExtension(String name) {
@@ -53,19 +53,13 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
 
   public void replaceProperty(VendorExtension property) {
     Optional<VendorExtension> vendorProperty = StreamSupport.stream(properties.spliterator(), false).filter(withName(property.getName())).findFirst();
-    if (vendorProperty.isPresent()) {
-      properties.remove(vendorProperty.get());
-    }
+
+    vendorProperty.ifPresent(properties::remove);
     properties.add(property);
   }
 
   private Predicate<VendorExtension> withName(final String name) {
-    return new Predicate<VendorExtension>() {
-      @Override
-      public boolean test(VendorExtension input) {
-        return input.getName().equals(name);
-      }
-    };
+    return input -> input.getName().equals(name);
   }
 
   @Override
@@ -87,7 +81,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
 
   @Override
   public String toString() {
-    return new StringBuffer(this.getClass().getSimpleName())
+    return new StringBuilder(this.getClass().getSimpleName())
         .append("{")
         .append("properties=").append(properties).append(", ")
         .append("name=").append(name)

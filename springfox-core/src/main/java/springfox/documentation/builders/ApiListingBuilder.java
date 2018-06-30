@@ -49,16 +49,16 @@ public class ApiListingBuilder {
   private String host;
   private int position;
 
-  private Set<String> produces = new HashSet();
-  private Set<String> consumes = new HashSet();
-  private Set<String> protocol = new HashSet();
-  private List<SecurityReference> securityReferences = new ArrayList();
-  private List<ApiDescription> apis = new ArrayList();
+  private Set<String> produces = new HashSet<>();
+  private Set<String> consumes = new HashSet<>();
+  private Set<String> protocol = new HashSet<>();
+  private List<SecurityReference> securityReferences = new ArrayList<>();
+  private List<ApiDescription> apis = new ArrayList<>();
 
-  private final Set<Tag> tags = new TreeSet(tagComparator());
-  private final Set<String> tagNames = new HashSet();
-  private final Map<String, Model> models = new HashMap();
-  private final Map<String, Tag> tagLookup = new HashMap();
+  private final Set<Tag> tags = new TreeSet<>(tagComparator());
+  private final Set<String> tagNames = new HashSet<>();
+  private final Map<String, Model> models = new HashMap<>();
+  private final Map<String, Tag> tagLookup = new HashMap<>();
 
   /**
    * Update the sorting order for api descriptions
@@ -110,7 +110,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder produces(Set<String> mediaTypes) {
     if (mediaTypes != null) {
-      this.produces = mediaTypes.stream().collect(toSet());
+      this.produces = new HashSet<>(mediaTypes);
     }
     return this;
   }
@@ -123,7 +123,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder consumes(Set<String> mediaTypes) {
     if (mediaTypes != null) {
-      this.consumes = mediaTypes.stream().collect(toSet());
+      this.consumes = new HashSet<>(mediaTypes);
     }
     return this;
   }
@@ -182,7 +182,7 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder securityReferences(List<SecurityReference> securityReferences) {
     if (securityReferences != null) {
-      this.securityReferences = new ArrayList(securityReferences);
+      this.securityReferences = new ArrayList<>(securityReferences);
     }
     return this;
   }
@@ -262,7 +262,7 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
-    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(toTagName(), identity())));
+    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(Tag::getName, identity())));
     return this;
   }
 

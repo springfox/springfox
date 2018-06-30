@@ -24,13 +24,11 @@ import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -69,7 +67,7 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
               HAL_JSON,
               SPRING_DATA_COMPACT_JSON,
               TEXT_URI_LIST).collect(toSet()),
-          new HashSet<MediaType>(),
+          new HashSet<>(),
           handler,
           findAllParameters(context.getConfiguration(), context.getTypeResolver()),
           resolver.resolve(Resources.class, repository.getReturnedDomainClass(handler.getMethod())));
@@ -81,21 +79,21 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
   private ArrayList<ResolvedMethodParameter> findAllParameters(
       RepositoryRestConfiguration configuration,
       TypeResolver resolver) {
-    ArrayList<ResolvedMethodParameter> parameters = new ArrayList<ResolvedMethodParameter>();
+    ArrayList<ResolvedMethodParameter> parameters = new ArrayList<>();
     parameters.add(new ResolvedMethodParameter(
         0,
         configuration.getPageParamName(),
-        new ArrayList<Annotation>(),
+        new ArrayList<>(),
         resolver.resolve(String.class)));
     parameters.add(new ResolvedMethodParameter(
         1,
         configuration.getLimitParamName(),
-        new ArrayList<Annotation>(),
+        new ArrayList<>(),
         resolver.resolve(String.class)));
     parameters.add(new ResolvedMethodParameter(
         2,
         configuration.getSortParamName(),
-        new ArrayList<Annotation>(),
+        new ArrayList<>(),
         resolver.resolve(String.class)));
     return parameters;
   }

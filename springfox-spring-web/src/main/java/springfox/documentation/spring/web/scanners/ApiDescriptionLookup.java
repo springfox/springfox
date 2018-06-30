@@ -34,7 +34,7 @@ import java.util.Map;
 @Component
 @Incubating("2.2.0")
 public class ApiDescriptionLookup {
-  private Map<RequestHandlerKey, ApiDescription> cache = new HashMap();
+  private Map<RequestHandlerKey, ApiDescription> cache = new HashMap<>();
 
   public void add(RequestHandlerKey key, ApiDescription value) {
     cache.put(key, value);

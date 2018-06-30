@@ -34,11 +34,10 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import static java.util.stream.Collectors.*;
 
 
 @Component
@@ -61,9 +60,9 @@ public class ApiModelReader {
 
   public Map<String, Model> read(RequestMappingContext context) {
 
-    Set<Class> ignorableTypes = context.getIgnorableParameterTypes().stream().collect(toSet());
+    Set<Class> ignorableTypes = new HashSet<>(context.getIgnorableParameterTypes());
     Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
-    Map<String, Model> modelMap = new HashMap(context.getModelMap());
+    Map<String, Model> modelMap = new HashMap<>(context.getModelMap());
     for (ModelContext each : modelContexts) {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
       Optional<Model> pModel = modelProvider.modelFor(each);
@@ -97,7 +96,7 @@ public class ApiModelReader {
       Map<String, ModelProperty> targetProperties = targetModelValue.getProperties();
       Map<String, ModelProperty> sourceProperties = source.getProperties();
 
-      Set<String> newSourcePropKeys = sourceProperties.keySet().stream().collect(toSet());
+      Set<String> newSourcePropKeys = new HashSet<>(sourceProperties.keySet());
       newSourcePropKeys.removeAll(targetProperties.keySet());
       Map<String, ModelProperty> mergedTargetProperties = new HashMap(targetProperties);
       for (String newProperty : newSourcePropKeys) {
@@ -138,5 +137,4 @@ public class ApiModelReader {
       mergeModelMap(modelMap, each);
     }
   }
-
 }

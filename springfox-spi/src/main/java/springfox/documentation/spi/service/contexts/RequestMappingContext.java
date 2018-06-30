@@ -51,7 +51,7 @@ public class RequestMappingContext {
   private final String requestMappingPattern;
   private final ApiDescriptionBuilder apiDescriptionBuilder;
 
-  private final Map<String, Model> modelMap = new HashMap();
+  private final Map<String, Model> modelMap = new HashMap<>();
 
   public RequestMappingContext(DocumentationContext context, RequestHandler handler) {
 
@@ -190,15 +190,11 @@ public class RequestMappingContext {
   }
 
   public <T extends Annotation> List<T> findAnnotations(Class<T> annotation) {
-    List<T> annotations = new ArrayList();
+    List<T> annotations = new ArrayList<>();
     Optional<T> methodAnnotation = findAnnotation(annotation);
     Optional<T> controllerAnnotation = findControllerAnnotation(annotation);
-    if (methodAnnotation.isPresent()) {
-      annotations.add(methodAnnotation.get());
-    }
-    if (controllerAnnotation.isPresent()) {
-      annotations.add(controllerAnnotation.get());
-    }
+    methodAnnotation.ifPresent(annotations::add);
+    controllerAnnotation.ifPresent(annotations::add);
     return annotations;
   }
 

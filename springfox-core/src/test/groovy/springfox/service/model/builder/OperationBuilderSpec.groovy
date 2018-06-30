@@ -142,7 +142,7 @@ class OperationBuilderSpec extends Specification {
       'produces'        | singleton('app/json') | 'produces'
       'consumes'        | singleton('app/json') | 'consumes'
       'protocols'       | singleton('https')    | 'protocol'
-      'tags'            | new HashSet()           | 'tags'
+      'tags'            | new HashSet<>()           | 'tags'
       'parameters'      | [new ParameterBuilder().name("p").build()] | 'parameters'
   }
 

@@ -26,7 +26,6 @@ import org.springframework.data.rest.core.mapping.MethodResourceMapping;
 import org.springframework.data.rest.core.mapping.SearchResourceMappings;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
@@ -46,7 +45,7 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 class EntitySearchExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = new ArrayList();
+    final List<RequestHandler> handlers = new ArrayList<>();
     final PersistentEntity<?, ?> entity = context.entity();
     HandlerMethodResolver methodResolver = new HandlerMethodResolver(context.getTypeResolver());
     SearchResourceMappings searchMappings = context.searchMappings();
@@ -61,8 +60,8 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
               context.resourcePath(),
               mapping.getPath()),
           singleton(RequestMethod.GET),
-          new HashSet<MediaType>(),
-          new HashSet<MediaType>(),
+          new HashSet<>(),
+          new HashSet<>(),
           handler,
           transferResolvedMethodParameterList(methodResolver.methodParameters(handler)),
           inferReturnType(methodResolver, handler, context.getTypeResolver()));

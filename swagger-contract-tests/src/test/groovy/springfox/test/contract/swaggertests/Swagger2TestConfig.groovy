@@ -19,6 +19,7 @@
 package springfox.test.contract.swaggertests
 
 import com.fasterxml.classmate.TypeResolver
+import org.joda.time.LocalDate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -134,7 +135,7 @@ class Swagger2TestConfig {
     // end::question-27-config[]
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
-        .alternateTypeRules(newRule(org.joda.time.LocalDate.class, String.class))
+        .alternateTypeRules(newRule(LocalDate.class, String.class))
         .select()
         .paths(regex("/features/.*"))
         .build()

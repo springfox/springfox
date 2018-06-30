@@ -33,6 +33,7 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -53,20 +54,20 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
 
   @Override
   public List<ApiDescription> apply(DocumentationContext context) {
-    return new ArrayList<ApiDescription>(
+    return new ArrayList<>(
         Arrays.asList( //<1>
             new ApiDescription(
                 "/bugs/1767",
                 "This is a bug",
-                Arrays.asList( //<2>
+                Collections.singletonList( //<2>
                     new OperationBuilder(
                         operationNames)
-                        .authorizations(new ArrayList())
+                        .authorizations(new ArrayList<>())
                         .codegenMethodNameStem("bug1767GET") //<3>
                         .method(HttpMethod.GET)
                         .notes("This is a test method")
                         .parameters(
-                            Arrays.asList( //<4>
+                            Collections.singletonList( //<4>
                                 new ParameterBuilder()
                                     .description("search by description")
                                     .type(new TypeResolver().resolve(String.class))
@@ -84,15 +85,15 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                 "different-group", //<8>
                 "/different/2219",
                 "This is a bug",
-                Arrays.asList(
+                Collections.singletonList(
                     new OperationBuilder(
                         operationNames)
-                        .authorizations(new ArrayList())
+                        .authorizations(new ArrayList<>())
                         .codegenMethodNameStem("bug2219GET")
                         .method(HttpMethod.GET)
                         .notes("This is a test method")
                         .parameters(
-                            Arrays.asList(
+                            Collections.singletonList(
                                 new ParameterBuilder()
                                     .description("description of bug 2219")
                                     .type(new TypeResolver().resolve(String.class))

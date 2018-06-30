@@ -61,7 +61,7 @@ public class ApiDescriptionReader {
     PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
 
-    List<ApiDescription> apiDescriptionList = new ArrayList();
+    List<ApiDescription> apiDescriptionList = new ArrayList<>();
     for (String path : matchingPaths(selector, patternsCondition)) {
       String methodName = outerContext.getName();
       try {

@@ -44,29 +44,17 @@ public class SecurityMapper {
 
   public Map<String, SecuritySchemeDefinition> toSecuritySchemeDefinitions(ResourceListing from) {
     if (from == null) {
-      return new HashMap();
+      return new HashMap<>();
     }
-    TreeMap<String, SecuritySchemeDefinition> result = new TreeMap();
-    result.putAll(from.getSecuritySchemes().stream().collect(toMap(schemeName(),
-        toSecuritySchemeDefinition())));
+    TreeMap<String, SecuritySchemeDefinition> result
+        = new TreeMap<>(from.getSecuritySchemes().stream()
+        .collect(toMap(
+            SecurityScheme::getName,
+            toSecuritySchemeDefinition())));
     return result;
   }
 
-  private Function<SecurityScheme, String> schemeName() {
-    return new Function<SecurityScheme, String>() {
-      @Override
-      public String apply(SecurityScheme input) {
-        return input.getName();
-      }
-    };
-  }
-
   private Function<SecurityScheme, SecuritySchemeDefinition> toSecuritySchemeDefinition() {
-    return new Function<SecurityScheme, SecuritySchemeDefinition>() {
-      @Override
-      public SecuritySchemeDefinition apply(SecurityScheme input) {
-        return factories.get(input.getType()).create(input);
-      }
-    };
+    return input -> factories.get(input.getType()).create(input);
   }
 }

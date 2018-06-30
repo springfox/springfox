@@ -60,10 +60,11 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    Set<String> patterns = Stream.concat(
+    return new PatternsRequestCondition(Stream.concat(
         first.getPatternsCondition().getPatterns().stream(),
-        second.getPatternsCondition().getPatterns().stream()).collect(toSet());
-    return new PatternsRequestCondition(patterns.toArray(new String[patterns.size()]));
+        second.getPatternsCondition().getPatterns().stream())
+        .distinct()
+        .toArray(String[]::new));
   }
 
   @Override
@@ -129,7 +130,9 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return first.findControllerAnnotation(annotation).map(Optional::of).orElse(second.findControllerAnnotation(annotation)) ;
+    return first.findControllerAnnotation(annotation)
+        .map(Optional::of)
+        .orElse(second.findControllerAnnotation(annotation)) ;
   }
 
   @Override
@@ -149,7 +152,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("CombinedRequestHandler{");
+    final StringBuilder sb = new StringBuilder("CombinedRequestHandler{");
     sb.append("first key=").append(first == null ? "No key" : first.key());
     sb.append("second key=").append(second == null ? "No key" : second.key());
     sb.append("combined key=").append(key());

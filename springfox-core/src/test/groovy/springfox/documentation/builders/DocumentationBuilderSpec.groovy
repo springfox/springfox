@@ -97,7 +97,7 @@ class DocumentationBuilderSpec extends Specification {
   def "Setting ordered tags should preserve ordering"() {
     given:
     def sut = new DocumentationBuilder()
-    def tags = new LinkedHashSet()
+    def tags = new LinkedHashSet<>()
     def firstTag = new Tag("First", "First")
     def secondTag = new Tag("Second", "Second")
     def thirdTag = new Tag("Third", "Third")
@@ -117,7 +117,7 @@ class DocumentationBuilderSpec extends Specification {
   }
 
   Map<String, List<ApiListing>> multiMap() {
-    Map<String, List<ApiListing>> multiMap = new HashMap()
+    Map<String, List<ApiListing>> multiMap = new HashMap<>()
     multiMap.putIfAbsent("group1", new LinkedList<ApiListing>())
     multiMap.get("group1").add(Mock(ApiListing))
     return multiMap

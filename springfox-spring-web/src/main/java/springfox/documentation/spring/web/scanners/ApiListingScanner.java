@@ -75,7 +75,7 @@ public class ApiListingScanner {
   }
 
   static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
-    List<String> commons = new ArrayList();
+    List<String> commons = new ArrayList<>();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
       return empty();
     }
@@ -116,7 +116,7 @@ public class ApiListingScanner {
         requestMappingsByResourceGroup.keySet().stream())
         .collect(toSet());
 
-    List<SecurityReference> securityReferences = new ArrayList();
+    List<SecurityReference> securityReferences = new ArrayList<>();
     for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
@@ -124,7 +124,7 @@ public class ApiListingScanner {
       Set<String> consumes = new LinkedHashSet<String>(documentationContext.getConsumes());
       String host = documentationContext.getHost();
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
-      Set<ApiDescription> apiDescriptions = new HashSet();
+      Set<ApiDescription> apiDescriptions = new HashSet<>();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
       List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));

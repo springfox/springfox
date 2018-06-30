@@ -38,7 +38,7 @@ public class OperationModelContextsBuilder {
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final Set<Class> ignorableTypes;
-  private final Set<ModelContext> contexts = new HashSet();
+  private final Set<ModelContext> contexts = new HashSet<>();
 
   public OperationModelContextsBuilder(
       String group,

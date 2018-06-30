@@ -46,7 +46,7 @@ public class ModelPropertyBuilder {
   private String defaultValue;
   private Xml xml;
   private Boolean allowEmptyValue;
-  private List<VendorExtension> vendorExtensions = new ArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);

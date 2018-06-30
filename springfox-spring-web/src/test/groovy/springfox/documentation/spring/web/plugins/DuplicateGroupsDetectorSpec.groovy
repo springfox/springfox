@@ -38,7 +38,7 @@ class DuplicateGroupsDetectorSpec extends Specification {
 
   def "The plugin list is empty"() {
     when:
-      def plugins = new ArrayList()
+      def plugins = new ArrayList<>()
     and:
       ensureNoDuplicateGroups(plugins)
     then:

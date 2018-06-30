@@ -21,7 +21,7 @@ class OAuth2AuthFactorySpec extends Specification {
           new AuthorizationCodeGrant(
               new TokenRequestEndpoint("tre:uri", "treClient", "tre"),
               new TokenEndpoint("te:uri", "treToken")))
-      List<AuthorizationScope> scopes = new ArrayList()
+      List<AuthorizationScope> scopes = new ArrayList<>()
       SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
@@ -37,7 +37,7 @@ class OAuth2AuthFactorySpec extends Specification {
   def "Maps application grant" () {
     given:
       List<GrantType> grants = singletonList(new ClientCredentialsGrant("token:uri"))
-      List<AuthorizationScope> scopes = new ArrayList()
+      List<AuthorizationScope> scopes = new ArrayList<>()
       SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
@@ -52,7 +52,7 @@ class OAuth2AuthFactorySpec extends Specification {
   def "Maps password grant" () {
     given:
       List<GrantType> grants = singletonList(new ResourceOwnerPasswordCredentialsGrant("token:uri"))
-      List<AuthorizationScope> scopes = new ArrayList()
+      List<AuthorizationScope> scopes = new ArrayList<>()
       SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
@@ -67,7 +67,7 @@ class OAuth2AuthFactorySpec extends Specification {
   def "Throws exception when it receives an unknown grant" () {
     given:
       List<GrantType> grants = singletonList(new GrantType("unknown"))
-      List<AuthorizationScope> scopes = new ArrayList()
+      List<AuthorizationScope> scopes = new ArrayList<>()
       SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()

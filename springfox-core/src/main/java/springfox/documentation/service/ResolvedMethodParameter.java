@@ -61,7 +61,7 @@ public class ResolvedMethodParameter {
   }
 
   public boolean hasParameterAnnotation(Class<? extends Annotation> annotation) {
-    return annotations.stream().filter(annotation::isInstance).count() > 0;
+    return annotations.stream().anyMatch(annotation::isInstance);
   }
 
   public <T extends Annotation> Optional<T> findAnnotation(final Class<T> annotation) {
@@ -85,7 +85,7 @@ public class ResolvedMethodParameter {
   }
 
   public ResolvedMethodParameter annotate(Annotation annotation) {
-    List<Annotation> annotations = new ArrayList(this.annotations);
+    List<Annotation> annotations = new ArrayList<>(this.annotations);
     annotations.add(annotation);
     return new ResolvedMethodParameter(parameterIndex, defaultName, annotations, parameterType);
   }

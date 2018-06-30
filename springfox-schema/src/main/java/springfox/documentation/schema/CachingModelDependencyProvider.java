@@ -54,7 +54,7 @@ public class CachingModelDependencyProvider implements ModelDependencyProvider {
           modelContext.description(),
           e.getMessage()
       );
-      return new HashSet();
+      return new HashSet<>();
     }
   }
 

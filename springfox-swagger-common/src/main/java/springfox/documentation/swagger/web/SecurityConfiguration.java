@@ -33,7 +33,6 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0. This field is unused
-   * @return
    */
   @Deprecated
   private String apiKey;

@@ -27,8 +27,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static java.util.stream.Collectors.*;
-
 
 public class ExpansionContext {
   private final String parentName;
@@ -40,7 +38,7 @@ public class ExpansionContext {
       String parentName,
       ResolvedType paramType,
       OperationContext operationContext) {
-    this(parentName, paramType, operationContext, new HashSet<ResolvedType>());
+    this(parentName, paramType, operationContext, new HashSet<>());
   }
 
   private ExpansionContext(
@@ -51,7 +49,7 @@ public class ExpansionContext {
     this.parentName = parentName;
     this.paramType = paramType;
     this.operationContext = operationContext;
-    this.seenTypes = seenTypes.stream().collect(toSet());
+    this.seenTypes = new HashSet<>(seenTypes);
   }
 
 
@@ -71,16 +69,16 @@ public class ExpansionContext {
     return operationContext.getDocumentationContext();
   }
 
-    public boolean hasSeenType(ResolvedType type) {
-        return seenTypes.contains(type)
-                || Objects.equals(type, paramType);
-    }
+  public boolean hasSeenType(ResolvedType type) {
+    return seenTypes.contains(type)
+        || Objects.equals(type, paramType);
+  }
 
   public ExpansionContext childContext(
       String parentName,
       ResolvedType childType,
       OperationContext operationContext) {
-    Set<ResolvedType> childSeenTypes = seenTypes.stream().collect(toSet());
+    Set<ResolvedType> childSeenTypes = new HashSet<>(seenTypes);
     childSeenTypes.add(childType);
     return new ExpansionContext(parentName, childType, operationContext, childSeenTypes);
   }

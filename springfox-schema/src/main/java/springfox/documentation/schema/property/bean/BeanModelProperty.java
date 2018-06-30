@@ -53,9 +53,12 @@ public class BeanModelProperty extends BaseModelProperty {
     this.typeResolver = typeResolver;
   }
 
-  private static ResolvedType adjustedToClassmateBug(TypeResolver typeResolver, ResolvedType resolvedType) {
+  private static ResolvedType adjustedToClassmateBug(
+      TypeResolver typeResolver,
+      ResolvedType resolvedType) {
+
     if (resolvedType.getErasedType().getTypeParameters().length > 0) {
-      List<ResolvedType> typeParms = new ArrayList();
+      List<ResolvedType> typeParms = new ArrayList<>();
       for (ResolvedType each : resolvedType.getTypeParameters()) {
         typeParms.add(adjustedToClassmateBug(typeResolver, each));
       }

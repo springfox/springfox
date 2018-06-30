@@ -25,7 +25,7 @@ import static org.springframework.util.StringUtils.*;
 
 
 public class RelativePathProvider extends AbstractPathProvider {
-  public static final String ROOT = "/";
+  private static final String ROOT = "/";
   private final ServletContext servletContext;
 
   public RelativePathProvider(ServletContext servletContext) {

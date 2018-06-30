@@ -45,7 +45,7 @@ public class FieldProvider {
   public Iterable<ResolvedField> in(ResolvedType resolvedType) {
     MemberResolver memberResolver = new MemberResolver(typeResolver);
     if (resolvedType.getErasedType() == Object.class) {
-      return new ArrayList();
+      return new ArrayList<>();
     }
     ResolvedTypeWithMembers resolvedMemberWithMembers = memberResolver.resolve(resolvedType, null, null);
     return Stream.of(resolvedMemberWithMembers.getMemberFields()).collect(toList());

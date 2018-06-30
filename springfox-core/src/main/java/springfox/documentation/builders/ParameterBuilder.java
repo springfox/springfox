@@ -52,7 +52,7 @@ public class ParameterBuilder {
   private ModelReference modelRef;
   private boolean hidden;
   private String pattern;
-  private List<VendorExtension> vendorExtensions = new ArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
   private String collectionFormat = null;
   private Boolean allowEmptyValue;
   private int order = Ordered.LOWEST_PRECEDENCE;

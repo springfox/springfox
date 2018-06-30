@@ -75,12 +75,12 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
   def appendEmptyApiListingValues() {
     when:
       ApiListing apiListing = new ApiListing()
-      apiListing.appendConsumes(new HashSet())
-      apiListing.appendProduces(new HashSet())
-      apiListing.appendProtocols(new HashSet())
+      apiListing.appendConsumes(new HashSet<>())
+      apiListing.appendProduces(new HashSet<>())
+      apiListing.appendProtocols(new HashSet<>())
       apiListing.appendAuthorizations([])
       apiListing.appendApis([])
-      apiListing.appendModels(new HashMap())
+      apiListing.appendModels(new HashMap<>())
     then:
       apiListing.consumes == null
       apiListing.produces == null

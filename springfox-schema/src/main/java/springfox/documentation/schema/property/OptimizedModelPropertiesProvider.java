@@ -131,20 +131,20 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       BeanPropertyDefinition jacksonProperty = each.getValue();
       Optional<AnnotatedMember> annotatedMember
           = ofNullable(safeGetPrimaryMember(jacksonProperty));
-      if (annotatedMember.isPresent()) {
-        properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext, namePrefix));
-      }
+      annotatedMember.ifPresent(
+          member -> properties.addAll(
+              candidateProperties(
+                  type,
+                  member,
+                  jacksonProperty,
+                  givenContext,
+                  namePrefix)));
     }
-    return properties.stream().collect(toList());
+    return new ArrayList<>(properties);
   }
 
   private Comparator<ModelProperty> byPropertyName() {
-    return new Comparator<ModelProperty>() {
-      @Override
-      public int compare(ModelProperty first, ModelProperty second) {
-        return first.getName().compareTo(second.getName());
-      }
-    };
+    return Comparator.comparing(ModelProperty::getName);
   }
 
   private AnnotatedMember safeGetPrimaryMember(BeanPropertyDefinition jacksonProperty) {
@@ -161,24 +161,21 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final BeanPropertyDefinition jacksonProperty,
       final String namePrefix) {
 
-    return new Function<ResolvedMethod, List<ModelProperty>>() {
-      @Override
-      public List<ModelProperty> apply(ResolvedMethod input) {
-        ResolvedType type = paramOrReturnType(typeResolver, input);
-        if (!givenContext.canIgnore(type)) {
-          if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
-            return propertiesFor(
-                type,
-                fromParent(givenContext, type),
-                String.format(
-                    "%s%s",
-                    namePrefix,
-                    unwrappedPrefix(jacksonProperty.getPrimaryMember())));
-          }
-          return singletonList(beanModelProperty(input, jacksonProperty, givenContext, namePrefix));
+    return input -> {
+      ResolvedType type = paramOrReturnType(typeResolver, input);
+      if (!givenContext.canIgnore(type)) {
+        if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
+          return propertiesFor(
+              type,
+              fromParent(givenContext, type),
+              String.format(
+                  "%s%s",
+                  namePrefix,
+                  unwrappedPrefix(jacksonProperty.getPrimaryMember())));
         }
-        return new ArrayList();
+        return singletonList(beanModelProperty(input, jacksonProperty, givenContext, namePrefix));
       }
+      return new ArrayList<>();
     };
   }
 
@@ -188,23 +185,20 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final BeanPropertyDefinition jacksonProperty,
       final String namePrefix) {
 
-    return new Function<ResolvedField, List<ModelProperty>>() {
-      @Override
-      public List<ModelProperty> apply(ResolvedField input) {
-        if (!givenContext.canIgnore(input.getType())) {
-          if (memberIsUnwrapped(jacksonProperty.getField())) {
-            return propertiesFor(
-                input.getType(),
-                ModelContext.fromParent(givenContext, input.getType()),
-                String.format(
-                    "%s%s",
-                    namePrefix,
-                    unwrappedPrefix(jacksonProperty.getPrimaryMember())));
-          }
-          return singletonList(fieldModelProperty(input, jacksonProperty, givenContext, namePrefix));
+    return input -> {
+      if (!givenContext.canIgnore(input.getType())) {
+        if (memberIsUnwrapped(jacksonProperty.getField())) {
+          return propertiesFor(
+              input.getType(),
+              ModelContext.fromParent(givenContext, input.getType()),
+              String.format(
+                  "%s%s",
+                  namePrefix,
+                  unwrappedPrefix(jacksonProperty.getPrimaryMember())));
         }
-        return new ArrayList();
+        return singletonList(fieldModelProperty(input, jacksonProperty, givenContext, namePrefix));
       }
+      return new ArrayList<>();
     };
   }
 
@@ -215,15 +209,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext givenContext,
       String namePrefix) {
 
-    List<ModelProperty> properties = new ArrayList();
+    List<ModelProperty> properties = new ArrayList<>();
     if (member instanceof AnnotatedMethod) {
       properties.addAll(findAccessorMethod(type, member)
           .map(propertyFromBean(givenContext, jacksonProperty, namePrefix))
-          .orElse(new ArrayList<ModelProperty>()));
+          .orElse(new ArrayList<>()));
     } else if (member instanceof AnnotatedField) {
       properties.addAll(findField(type, jacksonProperty.getInternalName())
           .map(propertyFromField(givenContext, jacksonProperty, namePrefix))
-          .orElse(new ArrayList<ModelProperty>()));
+          .orElse(new ArrayList<>()));
     } else if (member instanceof AnnotatedParameter) {
       ModelContext modelContext = ModelContext.fromParent(givenContext, type);
       properties.addAll(
@@ -240,23 +234,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
   private Predicate<? super ModelProperty> hiddenProperties() {
-    return new Predicate<ModelProperty>() {
-      @Override
-      public boolean test(ModelProperty input) {
-        return !input.isHidden();
-      }
-    };
+    return (Predicate<ModelProperty>) input -> !input.isHidden();
   }
 
   private Optional<ResolvedField> findField(
       ResolvedType resolvedType,
       final String fieldName) {
 
-    return StreamSupport.stream(fields.in(resolvedType).spliterator(), false).filter(new Predicate<ResolvedField>() {
-      public boolean test(ResolvedField input) {
-        return fieldName.equals(input.getName());
-      }
-    }).findFirst();
+    return StreamSupport.stream(fields.in(resolvedType).spliterator(), false)
+        .filter(input -> fieldName.equals(input.getName())).findFirst();
   }
 
   private ModelProperty fieldModelProperty(
@@ -377,12 +363,11 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
   private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
-    return StreamSupport.stream(accessors.in(resolvedType).spliterator(), false).filter(new Predicate<ResolvedMethod>() {
-      public boolean test(ResolvedMethod accessorMethod) {
-        SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
-        return methodComparer.test(accessorMethod.getRawMember(), (Method) member.getMember());
-      }
-    }).findFirst();
+    return accessors.in(resolvedType).stream()
+        .filter(accessorMethod -> {
+          SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
+          return methodComparer.test(accessorMethod.getRawMember(), (Method) member.getMember());
+        }).findFirst();
   }
 
   private List<ModelProperty> fromFactoryMethod(
@@ -393,16 +378,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final String namePrefix) {
 
     Optional<ModelProperty> property = factoryMethods.in(resolvedType, factoryMethodOf(member))
-        .map(new Function<ResolvedParameterizedMember, ModelProperty>() {
-          @Override
-          public ModelProperty apply(ResolvedParameterizedMember input) {
-            return paramModelProperty(input, beanProperty, member, givenContext, namePrefix);
-          }
-        });
+        .map((Function<ResolvedParameterizedMember, ModelProperty>) input ->
+            paramModelProperty(input, beanProperty, member, givenContext, namePrefix));
     if (property.isPresent()) {
       return singletonList(property.get());
     }
-    return new ArrayList();
+    return new ArrayList<>();
   }
 
   private BeanDescription beanDescription(ResolvedType type, ModelContext context) {

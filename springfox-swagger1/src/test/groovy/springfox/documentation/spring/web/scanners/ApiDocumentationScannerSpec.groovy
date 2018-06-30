@@ -40,8 +40,8 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
-    listingScanner.scan(_) >> new HashMap()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
     and:
     Documentation scanned = docScanner.scan(documentationContext())
 
@@ -69,8 +69,8 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .apiInfo(expected)
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
-    listingScanner.scan(_) >> new HashMap()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
     and:
     Documentation scanned = docScanner.scan(documentationContext())
     then:
@@ -95,8 +95,8 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
         .build()
         .securitySchemes([apiKey])
         .configure(contextBuilder)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
-    listingScanner.scan(_) >> new HashMap()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
     and:
     Documentation scanned = docScanner.scan(documentationContext())
     then:
@@ -121,7 +121,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
         .apiListingReferenceOrdering(ordering)
         .configure(contextBuilder)
 
-    def listingsMap = new HashMap()
+    def listingsMap = new HashMap<>()
     def listings = [
         apiListing(defaults, 1, "/b"),
         apiListing(defaults, 2, "/c"),
@@ -131,7 +131,7 @@ class ApiDocumentationScannerSpec extends DocumentationContextSpec {
       listingsMap.putIfAbsent("test", new LinkedList())
       listingsMap.get("test").add(it)
     }
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap())
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
     listingScanner.scan(_) >> listingsMap
 
 

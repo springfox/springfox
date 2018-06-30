@@ -19,7 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 
-import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimpleAssociationHandler;
@@ -38,35 +37,26 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
 
   @Override
   public List<RequestHandler> extract(final EntityContext context) {
-    final List<RequestHandler> handlers = new ArrayList();
+    final List<RequestHandler> handlers = new ArrayList<>();
     final PersistentEntity<?, ?> entity = context.entity();
     final Associations associations = context.getAssociations();
 
-    entity.doWithAssociations(new SimpleAssociationHandler() {
-
-      @Override
-      public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
-        PersistentProperty<?> property = association.getInverse();
-        if (!associations.isLinkableAssociation(property)) {
-          return;
-        }
-        final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
-        handlers.addAll(context.getAssociationExtractors().stream()
-            .map(extractHandlers(associationContext)).flatMap(each -> StreamSupport.stream(each.spliterator(), false))
-            .collect(toList()));
+    entity.doWithAssociations((SimpleAssociationHandler) association -> {
+      PersistentProperty<?> property = association.getInverse();
+      if (!associations.isLinkableAssociation(property)) {
+        return;
       }
+      final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
+      handlers.addAll(context.getAssociationExtractors().stream()
+          .map(extractHandlers(associationContext)).flatMap(each -> StreamSupport.stream(each.spliterator(), false))
+          .collect(toList()));
     });
     return handlers;
   }
 
   private Function<EntityAssociationOperationsExtractor, Iterable<RequestHandler>> extractHandlers(
       final EntityAssociationContext associationContext) {
-    return new Function<EntityAssociationOperationsExtractor, Iterable<RequestHandler>>() {
-      @Override
-      public Iterable<RequestHandler> apply(EntityAssociationOperationsExtractor input) {
-        return input.extract(associationContext);
-      }
-    };
+    return input -> input.extract(associationContext);
   }
 
 }

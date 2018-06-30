@@ -51,6 +51,6 @@ public class Authorization {
   }
 
   public void setScopes(List<AuthorizationScope> scopes) {
-    this.scopes = new ArrayList(scopes);
+    this.scopes = new ArrayList<>(scopes);
   }
 }

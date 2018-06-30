@@ -60,12 +60,12 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     if (annotation.isPresent()) {
       context.getBuilder()
           .allowableValues(annotation.map(toAllowableValues()).orElse(null))
-          .required(annotation.map(toIsRequired()).orElse(false))
-          .readOnly(annotation.map(toIsReadOnly()).orElse(false))
+          .required(annotation.map(ApiModelProperty::required).orElse(false))
+          .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
           .description(annotation.map(toDescription(descriptions)).orElse(null))
-          .isHidden(annotation.map(toHidden()).orElse(false))
+          .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
           .type(annotation.map(toType(context.getResolver())).orElse(null))
-          .position(annotation.map(toPosition()).orElse(0))
+          .position(annotation.map(ApiModelProperty::position).orElse(0))
           .example(annotation.map(toExample()).orElse(null));
     }
   }

@@ -79,12 +79,14 @@ public class ApiDocumentationScanner {
         .extensions(context.getVendorExtentions())
         .tags(tags);
 
-    Set<ApiListingReference> apiReferenceSet = new TreeSet(listingReferencePathComparator());
+    Set<ApiListingReference> apiReferenceSet = new TreeSet<>(listingReferencePathComparator());
     apiReferenceSet.addAll(apiListingReferences(apiListings, context));
 
     ResourceListing resourceListing = new ResourceListingBuilder()
         .apiVersion(context.getApiInfo().getVersion())
-        .apis(apiReferenceSet.stream().sorted(context.getListingReferenceOrdering()).collect(toList()))
+        .apis(apiReferenceSet.stream()
+            .sorted(context.getListingReferenceOrdering())
+            .collect(toList()))
         .securitySchemes(context.getSecuritySchemes())
         .info(context.getApiInfo())
         .build();
@@ -98,31 +100,23 @@ public class ApiDocumentationScanner {
     return apiListings.entrySet().stream().map(toApiListingReference(context)).collect(toSet());
   }
 
-  private Function<Map.Entry<String, List<ApiListing>>, ApiListingReference> toApiListingReference(final DocumentationContext context) {
-    return new Function<Map.Entry<String, List<ApiListing>>, ApiListingReference>() {
-      @Override
-      public ApiListingReference apply(Map.Entry<String, List<ApiListing>> input) {
-        String description = String.join(System.getProperty("line.separator"),
-            descriptions(input.getValue()));
-        PathAdjuster adjuster = new PathMappingAdjuster(context);
-        PathProvider pathProvider = context.getPathProvider();
-        String path = pathProvider.getResourceListingPath(context.getGroupName(), input.getKey());
-        return new ApiListingReference(adjuster.adjustedPath(path), description, 0);
-      }
+  private Function<Map.Entry<String, List<ApiListing>>, ApiListingReference> toApiListingReference(
+      final DocumentationContext context) {
+
+    return input -> {
+      String description = String.join(System.getProperty("line.separator"),
+          descriptions(input.getValue()));
+      PathAdjuster adjuster = new PathMappingAdjuster(context);
+      PathProvider pathProvider = context.getPathProvider();
+      String path = pathProvider.getResourceListingPath(context.getGroupName(), input.getKey());
+      return new ApiListingReference(adjuster.adjustedPath(path), description, 0);
     };
   }
 
   private Iterable<String> descriptions(Collection<ApiListing> apiListings) {
-    return apiListings.stream().map(toDescription()).sorted(Comparator.naturalOrder()).collect(toList());
-  }
-
-  private Function<ApiListing, String> toDescription() {
-    return new Function<ApiListing, String>() {
-      @Override
-      public String apply(ApiListing input) {
-        return input.getDescription();
-      }
-    };
+    return apiListings.stream()
+        .map(ApiListing::getDescription)
+        .sorted(Comparator.naturalOrder()).collect(toList());
   }
 
 }

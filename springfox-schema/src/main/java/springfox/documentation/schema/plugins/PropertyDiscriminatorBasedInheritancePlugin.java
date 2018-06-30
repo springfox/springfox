@@ -68,7 +68,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
 
   private List<ModelReference> modelRefs(ModelContext context) {
     JsonSubTypes subTypes = AnnotationUtils.getAnnotation(forClass(context), JsonSubTypes.class);
-    List<ModelReference> modelRefs = new ArrayList<ModelReference>();
+    List<ModelReference> modelRefs = new ArrayList<>();
     if (subTypes != null) {
       for (JsonSubTypes.Type each : subTypes.value()) {
         modelRefs.add(modelRefFactory(context, typeNameExtractor)

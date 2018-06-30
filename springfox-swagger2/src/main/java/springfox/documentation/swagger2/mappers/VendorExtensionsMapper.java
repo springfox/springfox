@@ -38,7 +38,7 @@ import static org.springframework.util.StringUtils.*;
 public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {
-    Map<String, Object> extensions = new TreeMap();
+    Map<String, Object> extensions = new TreeMap<>();
     Iterable<ListVendorExtension> listExtensions = from.stream()
         .filter(ListVendorExtension.class::isInstance).map(each -> (ListVendorExtension)each).collect(toList());
     for (ListVendorExtension each : listExtensions) {
@@ -59,21 +59,18 @@ public class VendorExtensionsMapper {
   }
 
   private Function<ObjectVendorExtension, Map<String, Object>> toExtensionMap() {
-    return new Function<ObjectVendorExtension, Map<String, Object>>() {
-      @Override
-      public Map<String, Object> apply(ObjectVendorExtension input) {
-        if (!isEmpty(input.getName())) {
-          Map<String, Object> map = new HashMap();
-          map.put(input.getName(), mapExtensions(input.getValue()));
-          return map;
-        }
-        return propertiesAsMap(input);
+    return input -> {
+      if (!isEmpty(input.getName())) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(input.getName(), mapExtensions(input.getValue()));
+        return map;
       }
+      return propertiesAsMap(input);
     };
   }
 
   private Map<String, Object> propertiesAsMap(ObjectVendorExtension input) {
-    Map<String, Object> properties = new HashMap();
+    Map<String, Object> properties = new HashMap<>();
     Iterable<StringVendorExtension> stringExtensions = input.getValue().stream().filter(StringVendorExtension.class::isInstance)
             .map(each -> (StringVendorExtension)each).collect(toList());
     for (StringVendorExtension property : stringExtensions) {

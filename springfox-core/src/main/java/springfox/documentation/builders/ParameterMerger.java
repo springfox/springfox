@@ -35,18 +35,21 @@ class ParameterMerger {
   private final List<Parameter> source;
 
   public ParameterMerger(List<Parameter> destination, List<Parameter> source) {
-    this.destination = new ArrayList(destination);
-    this.source = new ArrayList(source);
+    this.destination = new ArrayList<>(destination);
+    this.source = new ArrayList<>(source);
   }
 
   public List<Parameter> merged() {
     Set<String> existingParameterNames = destination.stream().map(toParameterName()).collect(toSet());
     Set<String> newParameterNames = source.stream().map(toParameterName()).collect(toSet());
-    List<Parameter> merged = new ArrayList();
+    List<Parameter> merged = new ArrayList<>();
 
-    Set<String> asIsParams = existingParameterNames.stream().filter(entry -> !newParameterNames.contains(entry)).collect(toSet());
-    Set<String> missingParamNames = newParameterNames.stream().filter(entry -> !existingParameterNames.contains(entry)).collect(toSet());
-    Set<String> paramsToMerge = newParameterNames.stream().filter(entry -> existingParameterNames.contains(entry)).collect(toSet());
+    Set<String> asIsParams = existingParameterNames.stream()
+        .filter(entry -> !newParameterNames.contains(entry)).collect(toSet());
+    Set<String> missingParamNames = newParameterNames.stream()
+        .filter(entry -> !existingParameterNames.contains(entry)).collect(toSet());
+    Set<String> paramsToMerge = newParameterNames.stream()
+        .filter(existingParameterNames::contains).collect(toSet());
 
     merged.addAll(asIsParameters(asIsParams, destination));
     merged.addAll(newParameters(missingParamNames, source));
@@ -55,7 +58,7 @@ class ParameterMerger {
   }
 
   private List<Parameter> asIsParameters(Set<String> asIsParams, List<Parameter> source) {
-    List<Parameter> parameters = new ArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     for (Parameter each : source) {
       if (asIsParams.contains(each.getName())) {
         parameters.add(each);
@@ -68,7 +71,7 @@ class ParameterMerger {
       Set<String> paramsToMerge,
       List<Parameter> existingParameters,
       List<Parameter> newParams) {
-    List<Parameter> parameters = new ArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     for (Parameter newParam : newParams) {
       Optional<Parameter> original = existingParameters.stream().filter(withName(newParam.getName())).findFirst();
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
@@ -102,7 +105,7 @@ class ParameterMerger {
   }
 
   private List<Parameter> newParameters(Set<String> missingParamNames, List<Parameter> newParams) {
-    List<Parameter> parameters = new ArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     for (Parameter each : newParams) {
       if (missingParamNames.contains(each.getName())) {
         parameters.add(each);

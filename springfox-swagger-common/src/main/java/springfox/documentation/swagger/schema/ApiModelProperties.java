@@ -54,12 +54,7 @@ public final class ApiModelProperties {
   }
 
   static Function<ApiModelProperty, AllowableValues> toAllowableValues() {
-    return new Function<ApiModelProperty, AllowableValues>() {
-      @Override
-      public AllowableValues apply(ApiModelProperty annotation) {
-        return allowableValueFromString(annotation.allowableValues());
-      }
-    };
+    return annotation -> allowableValueFromString(annotation.allowableValues());
   }
 
   public static AllowableValues allowableValueFromString(String allowableValueString) {
@@ -86,68 +81,26 @@ public final class ApiModelProperties {
     return allowableValues;
   }
 
-  static Function<ApiModelProperty, Boolean> toIsRequired() {
-    return new Function<ApiModelProperty, Boolean>() {
-      @Override
-      public Boolean apply(ApiModelProperty annotation) {
-        return annotation.required();
-      }
-    };
-  }
-
-  static Function<ApiModelProperty, Integer> toPosition() {
-    return new Function<ApiModelProperty, Integer>() {
-      @Override
-      public Integer apply(ApiModelProperty annotation) {
-        return annotation.position();
-      }
-    };
-  }
-
-  static Function<ApiModelProperty, Boolean> toIsReadOnly() {
-    return new Function<ApiModelProperty, Boolean>() {
-      @Override
-      public Boolean apply(ApiModelProperty annotation) {
-        return annotation.readOnly();
-      }
-    };
-  }
-
-  static Function<ApiModelProperty, Boolean> toAllowEmptyValue() {
-    return new Function<ApiModelProperty, Boolean>() {
-      @Override
-      public Boolean apply(ApiModelProperty annotation) {
-        return annotation.allowEmptyValue();
-      }
-    };
-  }
-
   static Function<ApiModelProperty, String> toDescription(
       final DescriptionResolver descriptions) {
 
-    return new Function<ApiModelProperty, String>() {
-      @Override
-      public String apply(ApiModelProperty annotation) {
-        String description = "";
-        if (!isEmpty(annotation.value())) {
-          description = annotation.value();
-        } else if (!isEmpty(annotation.notes())) {
-          description = annotation.notes();
-        }
-        return descriptions.resolve(description);
+    return annotation -> {
+      String description = "";
+      if (!isEmpty(annotation.value())) {
+        description = annotation.value();
+      } else if (!isEmpty(annotation.notes())) {
+        description = annotation.notes();
       }
+      return descriptions.resolve(description);
     };
   }
 
   static Function<ApiModelProperty, ResolvedType> toType(final TypeResolver resolver) {
-    return new Function<ApiModelProperty, ResolvedType>() {
-      @Override
-      public ResolvedType apply(ApiModelProperty annotation) {
-        try {
-          return resolver.resolve(Class.forName(annotation.dataType()));
-        } catch (ClassNotFoundException e) {
-          return resolver.resolve(Object.class);
-        }
+    return annotation -> {
+      try {
+        return resolver.resolve(Class.forName(annotation.dataType()));
+      } catch (ClassNotFoundException e) {
+        return resolver.resolve(Object.class);
       }
     };
   }
@@ -163,25 +116,13 @@ public final class ApiModelProperties {
     return annotation.map(Optional::of).orElse(ofNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class)));
   }
 
-  static Function<ApiModelProperty, Boolean> toHidden() {
-    return new Function<ApiModelProperty, Boolean>() {
-      @Override
-      public Boolean apply(ApiModelProperty annotation) {
-        return annotation.hidden();
-      }
-    };
-  }
-
   static Function<ApiModelProperty, String> toExample() {
-    return new Function<ApiModelProperty, String>() {
-      @Override
-      public String apply(ApiModelProperty annotation) {
-        String example = "";
-        if (!isEmpty(annotation.example())) {
-          example = annotation.example();
-        }
-        return example;
+    return annotation -> {
+      String example = "";
+      if (!isEmpty(annotation.example())) {
+        example = annotation.example();
       }
+      return example;
     };
   }
 }

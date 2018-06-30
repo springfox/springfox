@@ -57,17 +57,17 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 
-  private final List<SecurityContext> securityContexts = new ArrayList();
-  private final Set<Class> ignorableParameterTypes = new HashSet();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap();
-  private final List<Parameter> globalOperationParameters = new ArrayList();
-  private final List<AlternateTypeRule> rules = new ArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap();
-  private final Set<String> protocols = new HashSet();
-  private final Set<String> produces = new HashSet();
-  private final Set<String> consumes = new HashSet();
-  private final Set<ResolvedType> additionalModels = new HashSet();
-  private final Set<Tag> tags = new TreeSet(Tags.tagComparator());
+  private final List<SecurityContext> securityContexts = new ArrayList<>();
+  private final Set<Class> ignorableParameterTypes = new HashSet<>();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap<>();
+  private final List<Parameter> globalOperationParameters = new ArrayList<>();
+  private final List<AlternateTypeRule> rules = new ArrayList<>();
+  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap<>();
+  private final Set<String> protocols = new HashSet<>();
+  private final Set<String> produces = new HashSet<>();
+  private final Set<String> consumes = new HashSet<>();
+  private final Set<ResolvedType> additionalModels = new HashSet<>();
+  private final Set<Tag> tags = new TreeSet<>(Tags.tagComparator());
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
   private TypeResolver typeResolver;
@@ -162,7 +162,7 @@ public class DocumentationContextBuilder {
   }
 
   private Map<RequestMethod, List<ResponseMessage>> aggregateResponseMessages() {
-    Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap();
+    Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
     if (applyDefaultResponseMessages) {
       responseMessages.putAll(defaultResponseMessages);
     }
@@ -292,11 +292,6 @@ public class DocumentationContextBuilder {
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
       evaluator(final TypeResolver typeResolver) {
 
-    return new Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>() {
-      @Override
-      public AlternateTypeRule apply(Function<TypeResolver, AlternateTypeRule> input) {
-        return input.apply(typeResolver);
-      }
-    };
+    return input -> input.apply(typeResolver);
   }
 }

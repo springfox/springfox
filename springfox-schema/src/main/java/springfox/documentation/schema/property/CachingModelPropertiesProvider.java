@@ -58,7 +58,7 @@ public class CachingModelPropertiesProvider implements ModelPropertiesProvider {
     } catch (Exception e) {
       LOGGER.warn("Exception calculating properties for model({}) -> {}. {}",
           type, givenContext.description(), e.getMessage());
-      return new ArrayList();
+      return new ArrayList<>();
     }
   }
 

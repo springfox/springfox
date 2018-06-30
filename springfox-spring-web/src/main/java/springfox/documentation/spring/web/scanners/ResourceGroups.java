@@ -46,23 +46,13 @@ class ResourceGroups {
   }
 
   static Predicate<ApiDescription> belongsTo(final String groupName) {
-    return new Predicate<ApiDescription>() {
-      @Override
-      public boolean test(ApiDescription input) {
-        return !input.getGroupName().isPresent()
-            || groupName.equals(input.getGroupName().get());
-      }
-    };
+    return input -> !input.getGroupName().isPresent()
+        || groupName.equals(input.getGroupName().get());
   }
 
   private static Function<ApiDescription, ResourceGroup> toResourceGroups() {
-    return new Function<ApiDescription, ResourceGroup>() {
-      @Override
-      public ResourceGroup apply(ApiDescription input) {
-        return new ResourceGroup(
-            input.getGroupName().orElse(Docket.DEFAULT_GROUP_NAME),
-            null);
-      }
-    };
+    return input -> new ResourceGroup(
+        input.getGroupName().orElse(Docket.DEFAULT_GROUP_NAME),
+        null);
   }
 }

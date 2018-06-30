@@ -101,7 +101,7 @@ public class Swagger1Controller {
     String groupName = ofNullable(swaggerGroup).orElse("default");
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     Map<String, List<springfox.documentation.service.ApiListing>> apiListingMap = documentation.getApiListings();
     Map<String, Collection<ApiListing>> dtoApiListings
@@ -110,40 +110,26 @@ public class Swagger1Controller {
 
     Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);
     return mergedApiListing(apiListings)
-        .map(toJson())
-        .map(toResponseEntity(Json.class))
-        .orElse(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
-  }
-
-  private Function<ApiListing, Json> toJson() {
-    return new Function<ApiListing, Json>() {
-      @Override
-      public Json apply(ApiListing input) {
-        return jsonSerializer.toJson(input);
-      }
-    };
+        .map(jsonSerializer::toJson)
+        .map(toResponseEntity())
+        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   private ResponseEntity<Json> getSwaggerResourceListing(String swaggerGroup) {
     String groupName = ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     springfox.documentation.service.ResourceListing listing = documentation.getResourceListing();
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
 
     return ofNullable(jsonSerializer.toJson(resourceListing))
-        .map(toResponseEntity(Json.class))
-        .orElse(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
+        .map(toResponseEntity())
+        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  private <T> Function<T, ResponseEntity<T>> toResponseEntity(Class<T> clazz) {
-    return new Function<T, ResponseEntity<T>>() {
-      @Override
-      public ResponseEntity<T> apply(T input) {
-        return new ResponseEntity<T>(input, HttpStatus.OK);
-      }
-    };
+  private <T> Function<T, ResponseEntity<T>> toResponseEntity() {
+    return input -> new ResponseEntity<>(input, HttpStatus.OK);
   }
 }

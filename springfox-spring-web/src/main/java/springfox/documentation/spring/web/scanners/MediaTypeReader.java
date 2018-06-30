@@ -99,7 +99,7 @@ public class MediaTypeReader implements OperationBuilderPlugin, ApiListingBuilde
   }
 
   private Set<String> toSet(Set<? extends MediaType> mediaTypeSet) {
-    Set<String> mediaTypes = new HashSet();
+    Set<String> mediaTypes = new HashSet<>();
     for (MediaType mediaType : mediaTypeSet) {
       mediaTypes.add(mediaType.toString());
     }

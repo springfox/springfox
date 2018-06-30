@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
@@ -97,34 +96,12 @@ public class Operation {
   }
 
   private Comparator<ResponseMessage> responseMessageOrdering() {
-    return new Comparator<ResponseMessage>() {
-      @Override
-      public int compare(ResponseMessage first, ResponseMessage second) {
-        return Integer.compare(first.getCode(), second.getCode());
-      }
-    };
+    return Comparator.comparingInt(ResponseMessage::getCode);
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
-    return authorizations.stream().collect(toMap(byType(), toScopes()));
-  }
-
-  private Function<? super Authorization, List<AuthorizationScope>> toScopes() {
-    return new Function<Authorization, List<AuthorizationScope>>() {
-      @Override
-      public List<AuthorizationScope> apply(Authorization value) {
-        return new ArrayList(value.getScopes());
-      }
-    };
-  }
-
-  private Function<? super Authorization, String> byType() {
-    return new Function<Authorization, String>() {
-      @Override
-      public String apply(Authorization input) {
-        return input.getType();
-      }
-    };
+    return authorizations.stream()
+        .collect(toMap(Authorization::getType, value -> new ArrayList<>(value.getScopes())));
   }
 
   public String getMethod() {
@@ -229,11 +206,6 @@ public class Operation {
   }
 
   private Comparator<Parameter> byName() {
-    return new Comparator<Parameter>() {
-      @Override
-      public int compare(Parameter first, Parameter second) {
-        return first.getName().compareTo(second.getName());
-      }
-    };
+    return Comparator.comparing(Parameter::getName);
   }
 }

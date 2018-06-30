@@ -76,8 +76,7 @@ public class ObjectMapperConfigurerIntegrationTest {
 
     @Bean
     public RequestMappingHandlerAdapter defaultRmh() {
-      RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
-      return adapter;
+      return new RequestMappingHandlerAdapter();
     }
 
     @Bean
@@ -97,7 +96,7 @@ public class ObjectMapperConfigurerIntegrationTest {
     @Bean
     public RequestMappingHandlerAdapter multipleMCRmh() {
       RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
-      List<HttpMessageConverter<?>> messageConverters = new ArrayList();
+      List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
       messageConverters.add(new MappingJackson2HttpMessageConverter());
       messageConverters.add(new MappingJackson2HttpMessageConverter());
       adapter.setMessageConverters(messageConverters);
