@@ -13,7 +13,7 @@ ext {
   mapstruct = "1.2.0.Final"
   mockito = "1.10.19"
   objenesis = "2.6"
-  reflections = "0.9.11"
+  fastClasspathScanner = "3.0.3"
   servlet = "3.1.0"
   slf4j = "1.7.25"
   snakeyaml = '1.21'
