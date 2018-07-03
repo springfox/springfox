@@ -19,6 +19,7 @@
 
 package springfox.documentation.service;
 
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ResponseMessage {
   private final int code;
   private final String message;
   private final ModelReference responseModel;
+  private final List<Example> examples;
   private final Map<String, Header> headers;
   private final List<VendorExtension> vendorExtensions;
 
@@ -35,11 +37,13 @@ public class ResponseMessage {
       int code,
       String message,
       ModelReference responseModel,
+      List<Example> examples,
       Map<String, Header> headers,
       List<VendorExtension> vendorExtensions) {
     this.code = code;
     this.message = message;
     this.responseModel = responseModel;
+    this.examples = examples;
     this.headers = headers;
     this.vendorExtensions = vendorExtensions;
   }
@@ -54,6 +58,10 @@ public class ResponseMessage {
 
   public ModelReference getResponseModel() {
     return responseModel;
+  }
+
+  public List<Example> getExamples() {
+    return examples;
   }
 
   public Map<String, Header> getHeaders() {

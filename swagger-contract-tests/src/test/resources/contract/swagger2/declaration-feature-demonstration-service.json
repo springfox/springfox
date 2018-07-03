@@ -6,7 +6,7 @@
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
         "contact": {
-            
+
         },
         "license": {
             "name": "Apache 2.0",
@@ -201,6 +201,34 @@
                     }
                 },
                 "deprecated": false
+            }
+        },
+        "/features/1570": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "deprecated": false,
+                "operationId": "saveUserUsingPOST_1",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "405": {
+                        "description": "Validation exception",
+                        "examples": {
+                            "Example json": "{\"invalidField\": \"address\"}",
+                            "Example string": "The first name was invalid"
+                        }
+                    }
+                },
+                "summary": "Demo using examples",
+                "tags": [
+                    "feature-demonstration-service"
+                ]
             }
         },
         "/features/2031": {

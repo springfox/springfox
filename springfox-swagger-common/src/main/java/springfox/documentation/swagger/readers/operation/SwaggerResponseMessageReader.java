@@ -23,12 +23,14 @@ import com.fasterxml.classmate.TypeResolver;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ExampleProperty;
 import io.swagger.annotations.ResponseHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Header;
@@ -39,6 +41,7 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +50,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Optional.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
@@ -113,6 +117,13 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
+        List<Example> examples = new ArrayList<>();
+        for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
+            if (!isEmpty(exampleProperty.value())) {
+              final String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
+              examples.add(new Example(mediaType, exampleProperty.value()));
+            }
+        }
           Map<String, Header> headers = new HashMap<>(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
@@ -120,6 +131,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               .code(apiResponse.code())
               .message(apiResponse.message())
               .responseModel(responseModel.orElse(null))
+                  .examples(examples)
               .headersWithDescription(headers)
               .build());
         }
