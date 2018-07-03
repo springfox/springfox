@@ -1,0 +1,20 @@
+{
+  "groups": [
+    {
+      "name": "springfox.documentation.swaggerhub",
+      "description": "Configuration for Springfox integration with SwaggerHub"
+    }
+  ],
+  "properties": [
+    {
+      "name": "springfox.documentation.swaggerhub.api.key",
+      "type": "java.lang.String",
+      "description": "SwaggerHub API key"
+    },
+    {
+      "name": "springfox.documentation.swaggerhub.owner",
+      "type": "java.lang.String",
+      "description": "SWaggerHub account owner"
+    }
+  ]
+}
