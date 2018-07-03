@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Function;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -26,6 +26,8 @@ import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
+
+import java.util.function.Function;
 
 import static springfox.documentation.spring.web.paths.Paths.*;
 
@@ -36,8 +38,8 @@ public class ApiListingReader implements ApiListingBuilderPlugin {
   public void apply(ApiListingContext apiListingContext) {
     ResourceGroup group = apiListingContext.getResourceGroup();
     String description = group.getControllerClass()
-        .transform(description())
-        .or(group.getGroupName());
+        .map(description())
+        .orElse(group.getGroupName());
 
     apiListingContext.apiListingBuilder()
         .description(description);

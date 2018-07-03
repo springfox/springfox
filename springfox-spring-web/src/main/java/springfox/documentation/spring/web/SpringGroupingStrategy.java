@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 /**
@@ -61,7 +61,7 @@ public class SpringGroupingStrategy implements ResourceGroupingStrategy {
   private Set<ResourceGroup> groups(HandlerMethod handlerMethod) {
     Class<?> controllerClazz = handlerMethod.getBeanType();
     String controllerAsGroup = splitCamelCase(controllerClazz.getSimpleName(), "-").toLowerCase();
-    return newHashSet(new ResourceGroup(controllerAsGroup, controllerClazz));
+    return singleton(new ResourceGroup(controllerAsGroup, controllerClazz));
   }
 
   private String getDescription(Class<?> controllerClass) {

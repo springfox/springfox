@@ -20,10 +20,6 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import org.springframework.core.Ordered;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
@@ -31,15 +27,19 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Optional.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
   private static final Collection<String> PARAMETER_TYPES_ALLOWING_EMPTY_VALUE =
-      ImmutableList.of("query", "formData");
+      Arrays.asList("query", "formData");
   private String name;
   private String description;
   private String defaultValue;
@@ -52,12 +52,12 @@ public class ParameterBuilder {
   private ModelReference modelRef;
   private boolean hidden;
   private String pattern;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
   private String collectionFormat = null;
   private Boolean allowEmptyValue;
   private int order = Ordered.LOWEST_PRECEDENCE;
   private Object scalarExample;
-  private Multimap<String, Example> examples = LinkedListMultimap.create();
+  private Map<String, List<Example>> examples = new HashMap<>();
 
   /**
    * Copy builder
@@ -75,7 +75,7 @@ public class ParameterBuilder {
         .parameterAccess(other.getParamAccess())
         .parameterType(other.getParamType())
         .required(other.isRequired())
-        .type(other.getType().orNull())
+        .type(other.getType().orElse(null))
         .hidden(other.isHidden())
         .allowEmptyValue(other.isAllowEmptyValue())
         .order(other.getOrder())
@@ -269,7 +269,7 @@ public class ParameterBuilder {
    * @param examples example for body parameters
    * @return this
    */
-  public ParameterBuilder complexExamples(Multimap<String, Example> examples) {
+  public ParameterBuilder complexExamples(Map<String, List<Example>> examples) {
     this.examples.putAll(examples);
     return this;
   }
@@ -286,7 +286,7 @@ public class ParameterBuilder {
         allowMultiple,
         allowEmptyValue,
         modelRef,
-        Optional.fromNullable(type),
+        ofNullable(type),
         allowableValues,
         paramType,
         paramAccess,

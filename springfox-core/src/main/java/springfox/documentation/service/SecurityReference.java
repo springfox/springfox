@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,16 +20,17 @@
 package springfox.documentation.service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
-import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class SecurityReference {
   private final String reference;
   private final List<AuthorizationScope> scopes;
 
   public SecurityReference(String reference, AuthorizationScope[] scopes) {
-    this.scopes = newArrayList(scopes);
+    this.scopes = Stream.of(scopes).collect(toList());
     this.reference = reference;
   }
 

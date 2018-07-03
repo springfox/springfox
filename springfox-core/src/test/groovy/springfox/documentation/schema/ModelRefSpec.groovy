@@ -21,6 +21,7 @@ package springfox.documentation.schema
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.service.AllowableValues
 
 class ModelRefSpec extends Specification {
   @Unroll
@@ -37,5 +38,6 @@ class ModelRefSpec extends Specification {
       new ModelRef("string", new ModelRef("List"), false) | true         | false
       new ModelRef("string", new ModelRef("Map"), true)   | false        | true
       new ModelRef("string", new ModelRef("Map"), false)  | true         | false
+      new ModelRef("string", Mock(AllowableValues))       | false         | false
   }
 }

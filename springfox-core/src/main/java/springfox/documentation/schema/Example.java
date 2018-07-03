@@ -18,7 +18,9 @@
  */
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
+
+import static java.util.Optional.*;
 
 public class Example {
   private final Object value;
@@ -41,7 +43,7 @@ public class Example {
   }
 
   public Optional<String> getMediaType() {
-    return Optional.fromNullable(mediaType);
+    return ofNullable(mediaType);
   }
 
   @Override

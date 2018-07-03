@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.base.Function;
-import com.google.common.base.Functions;
-import com.google.common.collect.Ordering;
+
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.Operation;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiDescriptionBuilder {
@@ -34,11 +36,11 @@ public class ApiDescriptionBuilder {
   private String path;
   private String description;
   private List<Operation> operations;
-  private Ordering<Operation> operationOrdering;
+  private Comparator<Operation> operationOrdering;
   private Boolean hidden;
-  private Function<String, String> pathDecorator = Functions.identity();
+  private Function<String, String> pathDecorator = identity();
 
-  public ApiDescriptionBuilder(Ordering<Operation> operationOrdering) {
+  public ApiDescriptionBuilder(Comparator<Operation> operationOrdering) {
     this.operationOrdering = operationOrdering;
   }
 
@@ -72,7 +74,7 @@ public class ApiDescriptionBuilder {
    */
   public ApiDescriptionBuilder operations(List<Operation> operations) {
     if (operations != null) {
-      this.operations = operationOrdering.sortedCopy(operations);
+      this.operations = operations.stream().sorted(operationOrdering).collect(toList());
     }
     return this;
   }

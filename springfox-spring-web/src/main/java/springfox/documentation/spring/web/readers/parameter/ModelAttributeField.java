@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedMember;
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.*;
 
 public class ModelAttributeField {
   private final ResolvedType fieldType;
@@ -40,7 +40,7 @@ public class ModelAttributeField {
       ResolvedMember<?> secondary) {
     this.fieldType = fieldType;
     this.name = name;
-    this.resolvedMembers = new ArrayList<ResolvedMember<?>>();
+    this.resolvedMembers = new ArrayList<>();
     resolvedMembers.add(primary);
     if (secondary != null) {
       resolvedMembers.add(secondary);
@@ -56,14 +56,9 @@ public class ModelAttributeField {
   }
 
   public List<AnnotatedElement> annotatedElements() {
-    return FluentIterable.from(resolvedMembers)
-        .transform(new Function<ResolvedMember<?>, AnnotatedElement>() {
-          @Override
-          public AnnotatedElement apply(ResolvedMember<?> input) {
-            return (AnnotatedElement) input.getRawMember();
-          }
-        })
-        .toList();
+    return resolvedMembers.stream()
+        .map(input -> (AnnotatedElement) input.getRawMember())
+        .collect(toList());
   }
 
   public String getName() {

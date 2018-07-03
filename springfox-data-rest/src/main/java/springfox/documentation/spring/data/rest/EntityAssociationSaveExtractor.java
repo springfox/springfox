@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.webmvc.RestMediaTypes;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -34,15 +33,15 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 public class EntityAssociationSaveExtractor implements EntityAssociationOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
-    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
+    List<RequestHandler> handlers = new ArrayList<>();
     ResourceMetadata metadata = context.associationMetadata();
     Association<? extends PersistentProperty<?>> association = context.getAssociation();
     PersistentProperty<?> property = association.getInverse();
@@ -60,11 +59,11 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
               entityContext.basePath(),
               entityContext.resourcePath(),
               mapping.getPath()),
-          newHashSet(RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.POST),
-          new HashSet<MediaType>(),
-          newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
+          Stream.of(RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.POST).collect(toSet()),
+          new HashSet<>(),
+          Stream.of(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON).collect(toSet()),
           null,
-          newArrayList(new ResolvedMethodParameter(
+          Stream.of(new ResolvedMethodParameter(
                   0,
                   "id",
                   pathAnnotations("id"),
@@ -75,7 +74,7 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
                   bodyAnnotations(),
                   property.isCollectionLike()
                   ? resolver.resolve(List.class, String.class)
-                  : resolver.resolve(String.class))),
+                  : resolver.resolve(String.class))).collect(toList()),
           propertyResponse(property, resolver));
       handlers.add(new SpringDataRestRequestHandler(entityContext, update));
     }

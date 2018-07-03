@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -33,8 +33,10 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -54,30 +56,21 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   @Override
   public List<RequestHandler> requestHandlers() {
-    return byPatternsCondition().sortedCopy(from(nullToEmptyList(handlerMappings))
-        .transformAndConcat(toMappingEntries())
-        .transform(toRequestHandler()));
+    return nullToEmptyList(handlerMappings).stream()
+        .map(toMappingEntries()).flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+        .map(toRequestHandler()).sorted(byPatternsCondition()).collect(toList());
   }
 
   private Function<? super RequestMappingInfoHandlerMapping,
-      Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-    return new Function<RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>>() {
-      @Override
-      public Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>> apply(RequestMappingInfoHandlerMapping input) {
-        return input.getHandlerMethods().entrySet();
-      }
-    };
+        Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+    return (Function<RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>>)
+        input -> input.getHandlerMethods().entrySet();
   }
 
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
-    return new Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
-      @Override
-      public WebMvcRequestHandler apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
-        return new WebMvcRequestHandler(
-            methodResolver,
-            input.getKey(),
-            input.getValue());
-      }
-    };
+    return input -> new WebMvcRequestHandler(
+        methodResolver,
+        input.getKey(),
+        input.getValue());
   }
 }

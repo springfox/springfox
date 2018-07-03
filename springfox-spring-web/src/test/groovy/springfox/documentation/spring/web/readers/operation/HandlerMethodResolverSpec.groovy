@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.MemberResolver
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.members.ResolvedMethod
-import com.google.common.base.Predicate
-import com.google.common.collect.FluentIterable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.util.MultiValueMap
@@ -36,9 +34,11 @@ import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
+import java.util.function.Predicate
+import java.util.stream.Stream
 
-import static com.google.common.collect.Lists.*
-import static HandlerMethodResolver.*
+import static java.util.stream.Collectors.*
+import static springfox.documentation.spring.web.readers.operation.HandlerMethodResolver.*;
 
 class HandlerMethodResolverSpec extends Specification implements HandlerMethodsSupport{
   def "Methods with same name are distinguished based on variance of parameters and return types" () {
@@ -105,11 +105,11 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
       def resolver = new TypeResolver()
       def memberResolver = new MemberResolver(resolver)
       def dummyClass = memberResolver.resolve(resolver.resolve(DummyClass), null, null)
-      def allMethods = newArrayList(dummyClass.memberMethods)
+      def allMethods = Stream.of(dummyClass.memberMethods).collect(toList())
 
     when:
-      def list = FluentIterable.from(allMethods).filter(subset())
-      def sorted = byArgumentCount().sortedCopy(list)
+      def list = allMethods.stream().filter(subset()).collect(toList())
+      def sorted = list.stream().sorted(byArgumentCount()).collect(toList())
 
     then:
       sorted.get(0).name == 'methodWithNoArgs'
@@ -126,7 +126,7 @@ class HandlerMethodResolverSpec extends Specification implements HandlerMethodsS
   private Predicate<ResolvedMethod> subset() {
     new Predicate<ResolvedMethod>() {
       @Override
-      boolean apply(ResolvedMethod input) {
+      boolean test(ResolvedMethod input) {
         return ['methodWithNoArgs', 'methodWithOneArgs', 'methodWithTwoArgs'].contains(input.name)
       }
     }

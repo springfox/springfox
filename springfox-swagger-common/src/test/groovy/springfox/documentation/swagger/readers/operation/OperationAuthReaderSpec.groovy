@@ -28,7 +28,7 @@ import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 
 @Mixin([RequestMappingSupport, AuthSupport])
 class OperationAuthReaderSpec extends DocumentationContextSpec {
@@ -61,7 +61,7 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
               .securityReferences(defaultAuth())
               .forPaths(PathSelectors.any())
               .build()
-      plugin.securityContexts(newArrayList(securityContext))
+      plugin.securityContexts(singletonList(securityContext))
       OperationContext operationContext =
         operationContext(documentationContext(), dummyHandlerMethod())
 
@@ -82,7 +82,7 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
               .securityReferences(defaultAuth())
               .forPaths(PathSelectors.any())
               .build()
-      plugin.securityContexts(newArrayList(securityContext))
+      plugin.securityContexts(singletonList(securityContext))
       OperationContext operationContext =
         operationContext(documentationContext(), dummyHandlerMethod('methodWithHttpGETMethod'))
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
+
 import io.swagger.models.ArrayModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
@@ -33,8 +32,9 @@ import org.mapstruct.Mapper;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
@@ -47,7 +47,7 @@ public class ParameterMapper {
 
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
     Parameter bodyParameter = bodyParameter(source);
-    return SerializableParameterFactories.create(source).or(bodyParameter);
+    return SerializableParameterFactories.create(source).orElse(bodyParameter);
   }
 
   private Parameter bodyParameter(springfox.documentation.service.Parameter source) {
@@ -60,8 +60,8 @@ public class ParameterMapper {
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
     parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
-    for (Entry<String, Collection<Example>> each : source.getExamples().asMap().entrySet()) {
-      Optional<Example> example = FluentIterable.from(each.getValue()).first();
+    for (Entry<String, List<Example>> each : source.getExamples().entrySet()) {
+      Optional<Example> example = each.getValue().stream().findFirst();
       if (example.isPresent() && example.get().getValue() != null) {
         parameter.addExample(each.getKey(), String.valueOf(example.get().getValue()));
       }

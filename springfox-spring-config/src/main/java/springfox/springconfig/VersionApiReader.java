@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 package springfox.springconfig;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -27,6 +26,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
+
+import java.util.Optional;
 
 // tag::parameter-builder-plugin[]
 @Component

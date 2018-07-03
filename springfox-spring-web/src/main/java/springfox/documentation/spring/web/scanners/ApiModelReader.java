@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +33,12 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
 
 @Component
 public class ApiModelReader {
@@ -61,9 +60,9 @@ public class ApiModelReader {
 
   public Map<String, Model> read(RequestMappingContext context) {
 
-    Set<Class> ignorableTypes = newHashSet(context.getIgnorableParameterTypes());
+    Set<Class> ignorableTypes = new HashSet<>(context.getIgnorableParameterTypes());
     Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
-    Map<String, Model> modelMap = newHashMap(context.getModelMap());
+    Map<String, Model> modelMap = new HashMap<>(context.getModelMap());
     for (ModelContext each : modelContexts) {
       markIgnorablesAsHasSeen(typeResolver, ignorableTypes, each);
       Optional<Model> pModel = modelProvider.modelFor(each);
@@ -97,9 +96,9 @@ public class ApiModelReader {
       Map<String, ModelProperty> targetProperties = targetModelValue.getProperties();
       Map<String, ModelProperty> sourceProperties = source.getProperties();
 
-      Set<String> newSourcePropKeys = newHashSet(sourceProperties.keySet());
+      Set<String> newSourcePropKeys = new HashSet<>(sourceProperties.keySet());
       newSourcePropKeys.removeAll(targetProperties.keySet());
-      Map<String, ModelProperty> mergedTargetProperties = Maps.newHashMap(targetProperties);
+      Map<String, ModelProperty> mergedTargetProperties = new HashMap(targetProperties);
       for (String newProperty : newSourcePropKeys) {
         LOG.debug("Adding a missing property {} to model {}", newProperty, sourceModelKey);
         mergedTargetProperties.put(newProperty, sourceProperties.get(newProperty));
@@ -138,5 +137,4 @@ public class ApiModelReader {
       mergeModelMap(modelMap, each);
     }
   }
-
 }

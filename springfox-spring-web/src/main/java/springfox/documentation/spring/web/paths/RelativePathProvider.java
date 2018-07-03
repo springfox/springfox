@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@ package springfox.documentation.spring.web.paths;
 
 import javax.servlet.ServletContext;
 
-import static com.google.common.base.Strings.*;
+import static org.springframework.util.StringUtils.*;
+
 
 public class RelativePathProvider extends AbstractPathProvider {
-  public static final String ROOT = "/";
+  private static final String ROOT = "/";
   private final ServletContext servletContext;
 
   public RelativePathProvider(ServletContext servletContext) {
@@ -34,7 +35,7 @@ public class RelativePathProvider extends AbstractPathProvider {
 
   @Override
   protected String applicationPath() {
-    return isNullOrEmpty(servletContext.getContextPath()) ? ROOT : servletContext.getContextPath();
+    return isEmpty(servletContext.getContextPath()) ? ROOT : servletContext.getContextPath();
   }
 
   @Override

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,27 +19,29 @@
 package springfox.documentation.spring.data.rest;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static java.util.stream.Collectors.*;
+
 
 class DefaultExtractorConfiguration implements RequestHandlerExtractorConfiguration {
-  private final List<EntityOperationsExtractor> defaultEntityExtractors  = newArrayList(
+  private final List<EntityOperationsExtractor> defaultEntityExtractors  = Stream.of(
       new EntitySaveExtractor(),
       new EntityDeleteExtractor(),
       new EntityFindOneExtractor(),
       new EntityFindAllExtractor(),
       new EntitySearchExtractor(),
       new EntityAssociationsExtractor()
-  );
+  ).collect(toList());
 
 
-  private final List<EntityAssociationOperationsExtractor> defaultAssociationExtractors = newArrayList(
+  private final List<EntityAssociationOperationsExtractor> defaultAssociationExtractors = Stream.of(
       new EntityAssociationSaveExtractor(),
       new EntityAssociationDeleteExtractor(),
       new EntityAssociationGetExtractor(),
       new EntityAssociationItemGetExtractor(),
       new EntityAssociationItemDeleteExtractor()
-  );
+  ).collect(toList());
 
   @Override
   public List<EntityOperationsExtractor> getEntityExtractors() {

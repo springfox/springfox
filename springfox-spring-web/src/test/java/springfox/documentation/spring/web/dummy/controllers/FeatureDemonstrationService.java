@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016-2018 the original author or authors.
+ *  Copyright 2016-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -62,7 +62,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Collections.*;
+
 
 @Controller
 @RequestMapping("/features")
@@ -104,7 +105,7 @@ public class FeatureDemonstrationService {
   //Returns nested generic types
   @RequestMapping(value = "/effectives", method = RequestMethod.GET)
   private ResponseEntity<List<Example>> getEffectives() {
-    return new ResponseEntity<List<Example>>(newArrayList(new Example("Hello", 1, EnumType.ONE,
+    return new ResponseEntity<List<Example>>(singletonList(new Example("Hello", 1, EnumType.ONE,
         new NestedType("test"))),
         HttpStatus.OK);
   }

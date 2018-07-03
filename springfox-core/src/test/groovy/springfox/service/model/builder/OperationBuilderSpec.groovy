@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  */
 
 package springfox.service.model.builder
+
 import org.springframework.http.HttpMethod
 import spock.lang.Specification
 import springfox.documentation.OperationNameGenerator
@@ -29,7 +30,7 @@ import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.VendorExtension
 
-import static com.google.common.collect.Sets.*
+import static java.util.Collections.*
 
 class OperationBuilderSpec extends Specification {
   def nameGenerator = Mock(OperationNameGenerator)
@@ -47,10 +48,10 @@ class OperationBuilderSpec extends Specification {
 
   def "Merges response messages when new response messages are applied" () {
     given:
-      sut.responseMessages(newHashSet(partialOk))
+      sut.responseMessages(singleton(partialOk))
     when:
       nameGenerator.startingWith(_) >> _
-      sut.responseMessages(newHashSet(fullOk))
+      sut.responseMessages(singleton(fullOk))
     and:
       def operation = sut.build()
     then:
@@ -63,9 +64,9 @@ class OperationBuilderSpec extends Specification {
 
   def "Response message builder is non-destructive" () {
     given:
-      sut.responseMessages(newHashSet(fullOk))
+      sut.responseMessages(singleton(fullOk))
     when:
-      sut.responseMessages(newHashSet(partialOk))
+      sut.responseMessages(singleton(partialOk))
     and:
       def operation = sut.build()
     then:
@@ -95,10 +96,10 @@ class OperationBuilderSpec extends Specification {
       'responseModel'   | new ModelRef('string')                     | 'responseModel'
       'deprecated'      | 'deprecated'                               | 'deprecated'
       'uniqueId'        | 'method1'                                  | 'uniqueId'
-      'produces'        | newHashSet('app/json')                     | 'produces'
-      'consumes'        | newHashSet('app/json')                     | 'consumes'
-      'protocols'       | newHashSet('https')                        | 'protocol'
-      'tags'            | newHashSet('tag')                          | 'tags'
+      'produces'        | singleton('app/json')                     | 'produces'
+      'consumes'        | singleton('app/json')                     | 'consumes'
+      'protocols'       | singleton('https')                        | 'protocol'
+      'tags'            | singleton('tag')                          | 'tags'
       'position'        | 1                                          | 'position'
       'hidden'          | true                                       | 'hidden'
       'extensions'      | [Mock(VendorExtension)]                    | 'vendorExtensions'
@@ -138,10 +139,10 @@ class OperationBuilderSpec extends Specification {
       'responseModel'   | new ModelRef('string') | 'responseModel'
       'deprecated'      | 'deprecated'           | 'deprecated'
       'uniqueId'        | 'method1'              | 'uniqueId'
-      'produces'        | newHashSet('app/json') | 'produces'
-      'consumes'        | newHashSet('app/json') | 'consumes'
-      'protocols'       | newHashSet('https')    | 'protocol'
-      'tags'            | newHashSet()           | 'tags'
+      'produces'        | singleton('app/json') | 'produces'
+      'consumes'        | singleton('app/json') | 'consumes'
+      'protocols'       | singleton('https')    | 'protocol'
+      'tags'            | new HashSet<>()           | 'tags'
       'parameters'      | [new ParameterBuilder().name("p").build()] | 'parameters'
   }
 

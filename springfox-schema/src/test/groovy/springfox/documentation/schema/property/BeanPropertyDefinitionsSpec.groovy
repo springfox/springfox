@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
+
 class BeanPropertyDefinitionsSpec extends Specification {
   def "Cannot instantiate static type"() {
     when:
@@ -38,7 +40,7 @@ class BeanPropertyDefinitionsSpec extends Specification {
     BeanPropertyDefinition beanPropertyDefinition = Mock(BeanPropertyDefinition)
 
     when:
-    def name = BeanPropertyDefinitions.beanPropertyByInternalName().apply(beanPropertyDefinition)
+    def name = beanPropertyByInternalName().apply(beanPropertyDefinition)
 
     then:
     1 * beanPropertyDefinition.getInternalName() >> "aName"
@@ -54,7 +56,7 @@ class BeanPropertyDefinitionsSpec extends Specification {
 
     when:
     beanDefinition.name >> "property"
-    def name = BeanPropertyDefinitions.name(
+    def name = name(
         beanDefinition,
         true,
         strategy,

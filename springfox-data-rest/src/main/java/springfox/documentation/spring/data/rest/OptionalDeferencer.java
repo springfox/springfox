@@ -16,30 +16,19 @@
  *
  *
  */
-package springfox.documentation.service;
+package springfox.documentation.spring.data.rest;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.core.convert.converter.Converter;
 
-import static java.util.Collections.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import java.util.Optional;
 
-public class ListVendorExtension<T> implements VendorExtension<List<T>> {
-  private final List<T> values = new ArrayList<>();
-  private final String name;
-
-  public ListVendorExtension(String name, List<T> values) {
-    this.name = name;
-    this.values.addAll(nullToEmptyList(values));
-  }
-
+public class OptionalDeferencer<T> implements Converter<Object, T> {
+  @SuppressWarnings("unchecked")
   @Override
-  public String getName() {
-    return name;
-  }
-
-  @Override
-  public List<T> getValue() {
-    return unmodifiableList(values);
+  public T convert(Object source) {
+    if (source instanceof Optional) {
+      return ((Optional<T>) source).orElse(null);
+    }
+    return (T) source;
   }
 }

@@ -16,11 +16,8 @@
  *
  *
  */
-
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Splitter;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -29,10 +26,13 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -41,8 +41,8 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
   public void apply(OperationContext context) {
     Optional<ApiOperation> annotation = context.findAnnotation(ApiOperation.class);
     if (annotation.isPresent()) {
-      context.operationBuilder().consumes(asSet(nullToEmpty(annotation.get().consumes())));
-      context.operationBuilder().produces(asSet(nullToEmpty(annotation.get().produces())));
+      context.operationBuilder().consumes(asSet(ofNullable(annotation.get().consumes()).orElse("")));
+      context.operationBuilder().produces(asSet(ofNullable(annotation.get().produces()).orElse("")));
     }
   }
 
@@ -53,10 +53,10 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
 
 
   private Set<String> asSet(String mediaTypes) {
-    return newHashSet(Splitter.on(',')
-            .trimResults()
-            .omitEmptyStrings()
-            .splitToList(mediaTypes));
+    return Stream.of(mediaTypes.split(","))
+            .map(String::trim)
+            .filter(((Predicate<String>)String::isEmpty).negate())
+            .collect(toSet());
   }
 
 

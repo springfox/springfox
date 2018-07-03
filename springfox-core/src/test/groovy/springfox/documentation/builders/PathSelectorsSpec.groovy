@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@
  */
 
 package springfox.documentation.builders
+
 import spock.lang.Specification
 
-import static PathSelectors.*
-import static RequestHandlerSelectors.*
+import static springfox.documentation.builders.PathSelectors.*
 
 class PathSelectorsSpec extends Specification {
   def "Static types cannot be instantiated" () {
@@ -33,17 +33,17 @@ class PathSelectorsSpec extends Specification {
 
   def "any predicate matches all RequestHandlers" () {
     expect:
-      PathSelectors.any().apply("asdasdas")
+      PathSelectors.any().test("asdasdas")
   }
 
   def "none predicate matches no RequestHandlers" () {
     expect:
-      !none().apply("asdasdasdasd")
+      !none().test("asdasdasdasd")
   }
 
   def "matches ant expressions"() {
     expect:
-    shouldMatch == ant(included).apply(pathToMatch)
+    shouldMatch == ant(included).test(pathToMatch)
 
     where:
     included               | pathToMatch                    | shouldMatch
@@ -74,7 +74,7 @@ class PathSelectorsSpec extends Specification {
   def "matches regex expressions"() {
     given:
     expect:
-    shouldMatch == regex(included).apply(patternConditions)
+    shouldMatch == regex(included).test(patternConditions)
 
     where:
     patternConditions | included      | shouldMatch

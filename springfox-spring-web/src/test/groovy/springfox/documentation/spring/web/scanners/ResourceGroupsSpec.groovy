@@ -13,7 +13,7 @@ class ResourceGroupsSpec extends Specification {
     def sut = ResourceGroups.belongsTo("test")
 
     expect:
-    sut.apply(api) == matches
+    sut.test(api) == matches
 
     where:
     api                                | matches

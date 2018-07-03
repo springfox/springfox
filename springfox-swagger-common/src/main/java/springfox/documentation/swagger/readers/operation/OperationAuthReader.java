@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,11 +19,6 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
@@ -39,12 +34,17 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.newHashMap;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -57,29 +57,29 @@ public class OperationAuthReader implements OperationBuilderPlugin {
 
     List<SecurityContext> securityContexts = context.securityContext();
 
-    Map<String, SecurityReference> securityReferences = newHashMap();
+    Map<String, SecurityReference> securityReferences = new HashMap<>();
 
     for (SecurityContext each : securityContexts) {
       securityReferences.putAll(
-          FluentIterable.from(each.securityForOperation(context))
-          .uniqueIndex(byReferenceName()));
+          each.securityForOperation(context).stream()
+          .collect(toMap(byReferenceName(), identity())));
     }
 
     Optional<ApiOperation> apiOperationAnnotation = context.findAnnotation(ApiOperation.class);
 
     if (apiOperationAnnotation.isPresent()) {
 
-      List<SecurityReference> securityReferenceOverrides = newArrayList();
+      List<SecurityReference> securityReferenceOverrides = new ArrayList<>();
       for (Authorization authorization : authorizationReferences(apiOperationAnnotation.get())) {
         String value = authorization.value();
         AuthorizationScope[] scopes = authorization.scopes();
-        List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = newArrayList();
+        List<springfox.documentation.service.AuthorizationScope> authorizationScopeList = new ArrayList<>();
         for (AuthorizationScope authorizationScope : scopes) {
           String description = authorizationScope.description();
           String scope = authorizationScope.scope();
           // @Authorization has a default blank authorization scope, which we need to
           // ignore in the case of api keys.
-          if (!isNullOrEmpty(scope)) {
+          if (!isEmpty(scope)) {
             authorizationScopeList.add(
                 new AuthorizationScopeBuilder()
                     .scope(scope)
@@ -97,30 +97,20 @@ public class OperationAuthReader implements OperationBuilderPlugin {
                 .build();
         securityReferenceOverrides.add(securityReference);
       }
-      securityReferences.putAll(FluentIterable.from(securityReferenceOverrides)
-          .uniqueIndex(byReferenceName()));
+      securityReferences.putAll(securityReferenceOverrides.stream()
+          .collect(toMap(byReferenceName(), identity())));
     }
     LOG.debug("Authorization count {} for method {}", securityReferences.size(), context.getName());
     context.operationBuilder().authorizations(securityReferences.values());
   }
 
   private Function<SecurityReference, String> byReferenceName() {
-    return new Function<SecurityReference, String>() {
-      @Override
-      public String apply(SecurityReference input) {
-        return input.getReference();
-      }
-    };
+    return SecurityReference::getReference;
   }
 
   private Iterable<Authorization> authorizationReferences(ApiOperation apiOperationAnnotation) {
-    return FluentIterable.from(apiOperationAnnotation.authorizations())
-        .filter(new Predicate<Authorization>() {
-          @Override
-          public boolean apply(Authorization input) {
-            return !Strings.isNullOrEmpty(input.value());
-          }
-        });
+    return Stream.of(apiOperationAnnotation.authorizations())
+        .filter(input -> !isEmpty(input.value())).collect(toList());
   }
 
   @Override

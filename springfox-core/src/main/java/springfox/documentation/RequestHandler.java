@@ -20,7 +20,6 @@
 package springfox.documentation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -31,14 +30,19 @@ import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.annotation.Annotation;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
-public interface RequestHandler {
+public interface RequestHandler extends Comparable<RequestHandler> {
 
   /**
-   * @deprecated @since 2.7.0 This is introduced to preserve backwards compat with groups
    * @return declaring class
+   * @deprecated @since 2.7.0 This is introduced to preserve backwards compat with groups
    */
   @Deprecated
   Class<?> declaringClass();
@@ -72,25 +76,48 @@ public interface RequestHandler {
   <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation);
 
   /**
-   * @deprecated This is introduced to preserve backwards compat
    * @return request mapping info
+   * @deprecated This is introduced to preserve backwards compat
    */
   @Deprecated
   RequestMappingInfo getRequestMapping();
 
   /**
-   * @deprecated This is introduced to preserve backwards compat
    * @return handler method
+   * @deprecated This is introduced to preserve backwards compat
    */
   @Deprecated
   HandlerMethod getHandlerMethod();
 
   /**
    * This is to merge two request handlers that are indistinguishable other than the media types supported
+   *
    * @param other handler
-   * @since 2.5.0
    * @return combined request handler
+   * @since 2.5.0
    */
   @Incubating
   RequestHandler combine(RequestHandler other);
+
+  @Override
+  default int compareTo(RequestHandler other) {
+    return byPatternsCondition()
+        .thenComparing(byOperationName())
+        .compare(this, other);
+  }
+
+  static String sortedPaths(PatternsRequestCondition patternsCondition) {
+    TreeSet<String> paths = new TreeSet<>(patternsCondition.getPatterns());
+    return paths.stream()
+        .filter(Objects::nonNull)
+        .collect(Collectors.joining(","));
+  }
+
+  static Comparator<RequestHandler> byPatternsCondition() {
+    return Comparator.comparing(requestHandler -> sortedPaths(requestHandler.getPatternsCondition()));
+  }
+
+  static Comparator<RequestHandler> byOperationName() {
+    return Comparator.comparing(RequestHandler::getName);
+  }
 }

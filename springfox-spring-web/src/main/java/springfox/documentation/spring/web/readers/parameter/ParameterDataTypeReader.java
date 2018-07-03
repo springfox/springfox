@@ -20,7 +20,6 @@ package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -101,8 +101,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         context.getIgnorableParameterTypes());
     context.parameterBuilder()
         .type(parameterType)
-        .modelRef(Optional.fromNullable(modelRef)
-            .or(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
+        .modelRef(ofNullable(modelRef)
+            .orElse(modelRefFactory(modelContext, nameExtractor).apply(parameterType)));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {

@@ -23,32 +23,31 @@ import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.hateoas.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 class EntityFindOneExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
+    final List<RequestHandler> handlers = new ArrayList<>();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
     TypeResolver resolver = context.getTypeResolver();
     RepositoryMetadata repository = context.getRepositoryMetadata();
     Object getFindOneMethod = crudMethods.getFindOneMethod();
     if (crudMethods.hasFindOneMethod()) {
-      Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
-      Method actualFindOneMethod = (Method) converter.convert(getFindOneMethod).orNull();
+      OptionalDeferencer<Method> converter = new OptionalDeferencer<>();
+      Method actualFindOneMethod = converter.convert(getFindOneMethod);
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
           actualFindOneMethod);
@@ -57,11 +56,11 @@ class EntityFindOneExtractor implements EntityOperationsExtractor {
           String.format("%s%s/{id}",
               context.basePath(),
               context.resourcePath()),
-          newHashSet(RequestMethod.GET),
-          new HashSet<MediaType>(),
-          new HashSet<MediaType>(),
+          singleton(RequestMethod.GET),
+          new HashSet<>(),
+          new HashSet<>(),
           handler,
-          newArrayList(new ResolvedMethodParameter(
+          singletonList(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id", handler),

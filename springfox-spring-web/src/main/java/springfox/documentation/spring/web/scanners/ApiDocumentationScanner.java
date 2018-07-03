@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,12 +19,6 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Ordering;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -40,11 +34,14 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -68,7 +65,7 @@ public class ApiDocumentationScanner {
     ApiListingScanningContext listingContext = new ApiListingScanningContext(context,
         result.getResourceGroupRequestMappings());
 
-    Multimap<String, ApiListing> apiListings = apiListingScanner.scan(listingContext);
+    Map<String, List<ApiListing>> apiListings = apiListingScanner.scan(listingContext);
     Set<Tag> tags = toTags(apiListings);
     tags.addAll(context.getTags());
     DocumentationBuilder group = new DocumentationBuilder()
@@ -82,12 +79,14 @@ public class ApiDocumentationScanner {
         .extensions(context.getVendorExtentions())
         .tags(tags);
 
-    Set<ApiListingReference> apiReferenceSet = newTreeSet(listingReferencePathComparator());
+    Set<ApiListingReference> apiReferenceSet = new TreeSet<>(listingReferencePathComparator());
     apiReferenceSet.addAll(apiListingReferences(apiListings, context));
 
     ResourceListing resourceListing = new ResourceListingBuilder()
         .apiVersion(context.getApiInfo().getVersion())
-        .apis(from(apiReferenceSet).toSortedList(context.getListingReferenceOrdering()))
+        .apis(apiReferenceSet.stream()
+            .sorted(context.getListingReferenceOrdering())
+            .collect(toList()))
         .securitySchemes(context.getSecuritySchemes())
         .info(context.getApiInfo())
         .build();
@@ -96,37 +95,28 @@ public class ApiDocumentationScanner {
   }
 
   private Collection<? extends ApiListingReference> apiListingReferences(
-      Multimap<String, ApiListing> apiListings,
+      Map<String, List<ApiListing>> apiListings,
       DocumentationContext context) {
-    Map<String, Collection<ApiListing>> grouped = Multimaps.asMap(apiListings);
-    return FluentIterable.from(grouped.entrySet()).transform(toApiListingReference(context)).toSet();
+    return apiListings.entrySet().stream().map(toApiListingReference(context)).collect(toSet());
   }
 
-  private Function<Map.Entry<String, Collection<ApiListing>>, ApiListingReference> toApiListingReference(final DocumentationContext context) {
-    return new Function<Map.Entry<String, Collection<ApiListing>>, ApiListingReference>() {
-      @Override
-      public ApiListingReference apply(Map.Entry<String, Collection<ApiListing>> input) {
-        String description = Joiner.on(System.getProperty("line.separator"))
-            .join(descriptions(input.getValue()));
-        PathAdjuster adjuster = new PathMappingAdjuster(context);
-        PathProvider pathProvider = context.getPathProvider();
-        String path = pathProvider.getResourceListingPath(context.getGroupName(), input.getKey());
-        return new ApiListingReference(adjuster.adjustedPath(path), description, 0);
-      }
+  private Function<Map.Entry<String, List<ApiListing>>, ApiListingReference> toApiListingReference(
+      final DocumentationContext context) {
+
+    return input -> {
+      String description = String.join(System.getProperty("line.separator"),
+          descriptions(input.getValue()));
+      PathAdjuster adjuster = new PathMappingAdjuster(context);
+      PathProvider pathProvider = context.getPathProvider();
+      String path = pathProvider.getResourceListingPath(context.getGroupName(), input.getKey());
+      return new ApiListingReference(adjuster.adjustedPath(path), description, 0);
     };
   }
 
   private Iterable<String> descriptions(Collection<ApiListing> apiListings) {
-    return FluentIterable.from(apiListings).transform(toDescription()).toSortedList(Ordering.natural());
-  }
-
-  private Function<ApiListing, String> toDescription() {
-    return new Function<ApiListing, String>() {
-      @Override
-      public String apply(ApiListing input) {
-        return input.getDescription();
-      }
-    };
+    return apiListings.stream()
+        .map(ApiListing::getDescription)
+        .sorted(Comparator.naturalOrder()).collect(toList());
   }
 
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,7 +27,11 @@ import com.fasterxml.classmate.members.ResolvedField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.google.common.collect.Lists.*;
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
+
 
 @Component
 public class FieldProvider {
@@ -41,9 +45,9 @@ public class FieldProvider {
   public Iterable<ResolvedField> in(ResolvedType resolvedType) {
     MemberResolver memberResolver = new MemberResolver(typeResolver);
     if (resolvedType.getErasedType() == Object.class) {
-      return newArrayList();
+      return new ArrayList<>();
     }
     ResolvedTypeWithMembers resolvedMemberWithMembers = memberResolver.resolve(resolvedType, null, null);
-    return newArrayList(resolvedMemberWithMembers.getMemberFields());
+    return Stream.of(resolvedMemberWithMembers.getMemberFields()).collect(toList());
   }
 }

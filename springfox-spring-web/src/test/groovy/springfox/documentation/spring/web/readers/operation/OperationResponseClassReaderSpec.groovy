@@ -33,7 +33,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.base.Strings.*
+
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class OperationResponseClassReaderSpec extends DocumentationContextSpec {

@@ -33,7 +33,7 @@ public class PathMappingAdjuster implements PathAdjuster {
   @Override
   public String adjustedPath(String path) {
     return UriComponentsBuilder
-        .fromPath(this.context.getPathMapping().or("/"))
+        .fromPath(this.context.getPathMapping().orElse("/"))
         .path(path)
         .build()
         .toUriString();

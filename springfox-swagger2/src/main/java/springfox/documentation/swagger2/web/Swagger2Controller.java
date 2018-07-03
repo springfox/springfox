@@ -19,8 +19,6 @@
 
 package springfox.documentation.swagger2.web;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
 import io.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,15 +43,16 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.google.common.base.Strings.*;
+import static java.util.Optional.*;
 import static org.springframework.util.MimeTypeUtils.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 @Controller
 @ApiIgnore
 public class Swagger2Controller {
 
-  public static final String DEFAULT_URL = "/v2/api-docs";
+  private static final String DEFAULT_URL = "/v2/api-docs";
   private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2Controller.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
@@ -90,19 +89,19 @@ public class Swagger2Controller {
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
-    String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
+    String groupName = ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       LOGGER.warn("Unable to find specification for group {}", groupName);
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
-    swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
-    if (isNullOrEmpty(swagger.getHost())) {
+    swagger.basePath(isEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
+    if (isEmpty(swagger.getHost())) {
       swagger.host(hostName(uriComponents));
     }
-    return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<>(jsonSerializer.toJson(swagger), HttpStatus.OK);
   }
 
   private String hostName(UriComponents uriComponents) {

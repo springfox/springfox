@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ package springfox.documentation.schema
 import com.fasterxml.classmate.GenericType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.type.SimpleType
-import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -33,6 +32,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -71,7 +71,7 @@ class ReturnTypesSpec extends Specification {
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,
-              ImmutableSet.builder().build()))
+              emptySet()))
       modelResponseClass == expectedResponseClassName
 
     where:

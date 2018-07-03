@@ -20,11 +20,12 @@
 package springfox.documentation.builders
 
 import com.fasterxml.classmate.ResolvedType
-import com.google.common.base.Optional
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
+
+import static java.util.Optional.*
 
 class ParameterBuilderSpec extends Specification {
   @Unroll
@@ -39,11 +40,11 @@ class ParameterBuilderSpec extends Specification {
     def built = sut.build()
 
     then:
-    if (built."$property" instanceof Optional) {
-      assert built."$property" == Optional.of(value)
-    } else {
-      assert built."$property" == value
-    }
+      if (built."$property" instanceof Optional) {
+        assert built."$property" == of(value)
+      } else {
+        assert built."$property" == value
+      }
 
     where:
     builderMethod     | value                                  | property
@@ -73,11 +74,11 @@ class ParameterBuilderSpec extends Specification {
     def built = sut.build()
 
     then:
-    if (built."$property" instanceof Optional) {
-      assert built."$property" == Optional.of(value)
-    } else {
-      assert built."$property" == value
-    }
+      if (built."$property" instanceof Optional) {
+        assert built."$property" == of(value)
+      } else {
+        assert built."$property" == value
+      }
 
     where:
     builderMethod     | value                                  | property

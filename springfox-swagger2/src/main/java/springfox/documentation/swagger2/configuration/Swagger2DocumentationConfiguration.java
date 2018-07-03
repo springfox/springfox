@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger2.configuration;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -38,9 +37,9 @@ import springfox.documentation.swagger2.web.Swagger2Controller;
 @Configuration
 @Import({ SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
 @ComponentScan(basePackages = {
+    "springfox.documentation.swagger2.readers.parameter",
     "springfox.documentation.swagger2.mappers"
 })
-@ConditionalOnWebApplication
 public class Swagger2DocumentationConfiguration {
   @Bean
   public JacksonModuleRegistrar swagger2Module() {

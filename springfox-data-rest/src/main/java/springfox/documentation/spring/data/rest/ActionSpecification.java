@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,7 +27,10 @@ import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Optional.*;
 
 class ActionSpecification {
   private final Collection<RequestMethod> supportedMethods;
@@ -89,18 +90,16 @@ class ActionSpecification {
   }
 
   public Optional<HandlerMethod> getHandlerMethod() {
-    return Optional.fromNullable(handlerMethod);
+    return ofNullable(handlerMethod);
   }
 
   public Optional<Class<?>> getDeclaringClass() {
-    return getHandlerMethod().transform(new Function<HandlerMethod, Class<?>>() {
-      @Override
-      public Class<?> apply(HandlerMethod input) {
-        if (AopUtils.isAopProxy(handlerMethod.getBean())) {
-          return AopUtils.getTargetClass(handlerMethod.getBean());
-        }
-        return handlerMethod.getBeanType();
+    return getHandlerMethod().map(input -> {
+      Object bean = new OptionalDeferencer<>().convert(handlerMethod.getBean());
+      if (AopUtils.isAopProxy(bean)) {
+        return AopUtils.getTargetClass(bean);
       }
+      return (Class<?>) bean;
     });
   }
 }
