@@ -39,7 +39,7 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
       HeadersRequestCondition headersCondition = new HeadersRequestCondition("test=testValue")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["headersCondition": headersCondition])
-      OperationContext operationContext = operationContext(context(), handlerMethod, 0, requestMappingInfo)
+      OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
@@ -69,7 +69,7 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
       HeadersRequestCondition headersCondition = new HeadersRequestCondition("!test")
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["headersCondition": headersCondition])
-      OperationContext operationContext = operationContext(context(), handlerMethod, 0, requestMappingInfo)
+      OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
 
     when:
       sut.apply(operationContext)
@@ -84,7 +84,7 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
       HeadersRequestCondition paramCondition = new HeadersRequestCondition("test=testValue", "test=3")
-      OperationContext operationContext = operationContext(context(),
+      OperationContext operationContext = operationContext(documentationContext(),
         handlerMethod,
         0,
         requestMappingInfo('/parameter-conditions', ["headersCondition": paramCondition]))

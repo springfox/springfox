@@ -19,9 +19,9 @@
 package springfox.documentation.spi.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 public interface ParameterMetadataAccessor {
 

@@ -21,7 +21,6 @@ package springfox.documentation.schema.property
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
@@ -41,7 +40,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -78,17 +77,17 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         inputParam("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            emptySet()))
 
     then:
     inputValue.collect { it.name }.containsAll(['property'])
@@ -128,17 +127,17 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         inputParam("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            emptySet()))
 
     then:
     inputValue.collect { it.name }.containsAll(['name'])
@@ -177,15 +176,15 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     def inputContext = inputParam("group",
         type,
         SPRING_WEB,
-        new AlternateTypeProvider(newArrayList()),
+        new AlternateTypeProvider(new ArrayList<>()),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     def returnContext = returnValue("group",
         type,
         SPRING_WEB,
-        new AlternateTypeProvider(newArrayList()),
+        new AlternateTypeProvider(new ArrayList<>()),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
 
     when:
     inputContext.seen(typeResolver.resolve(Category))
@@ -233,17 +232,17 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         inputParam("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            emptySet()))
     def returnValue = sut.propertiesFor(
         type,
         returnValue("group",
             type,
             SPRING_WEB,
-            new AlternateTypeProvider(newArrayList()),
+            new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
-            ImmutableSet.builder().build()))
+            emptySet()))
 
     then:
     def inputProp = inputValue.find({ it.name == "localDate" })

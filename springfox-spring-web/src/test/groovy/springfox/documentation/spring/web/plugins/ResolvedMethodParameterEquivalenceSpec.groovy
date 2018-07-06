@@ -5,14 +5,13 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.service.ResolvedMethodParameter
 
-
 class ResolvedMethodParameterEquivalenceSpec extends Specification {
   @Unroll
   def "two methods parameters are considered same => #areSame" (){
     given:
       def sut = new ResolvedMethodParameterEquivalence()
     expect:
-      sut.equivalent(first, second) == areSame
+      sut.test(first, second) == areSame
       (sut.doHash(first) == sut.doHash(second)) == areSame
     where:
       first                   | second                | areSame

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 import springfox.documentation.spring.web.readers.operation.DefaultOperationReader
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 @Mixin([RequestMappingSupport, AuthSupport, ServicePluginsSupport])
@@ -50,7 +50,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
             .securityReferences(defaultAuth())
             .forPaths(PathSelectors.regex(".*"))
             .build()
-    plugin.securityContexts(newArrayList(securityContext))
+    plugin.securityContexts(singletonList(securityContext))
     sut = new ApiOperationReader(customWebPlugins([], [], [new DefaultOperationReader()]), new CachingOperationNameGenerator())
   }
 
@@ -66,7 +66,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
 
       HandlerMethod handlerMethod = dummyHandlerMethod()
 
-      RequestMappingContext context = new RequestMappingContext(context(),
+      RequestMappingContext context = new RequestMappingContext(documentationContext(),
               new WebMvcRequestHandler(methodResolver,
                   requestMappingInfo,
                   handlerMethod))

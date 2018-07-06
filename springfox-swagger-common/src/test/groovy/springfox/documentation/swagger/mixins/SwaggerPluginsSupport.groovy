@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -46,7 +46,10 @@ import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 import springfox.documentation.swagger.web.SwaggerApiListingReader
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.Collections.*
+import static java.util.stream.Collectors.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
@@ -55,19 +58,19 @@ class SwaggerPluginsSupport {
     def resolver = new TypeResolver()
     def descriptions = new DescriptionResolver(new MockEnvironment())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        create(newArrayList(new DefaultTypeNameProvider()))
+        create(singletonList(new DefaultTypeNameProvider()))
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        create(newArrayList(new ApiModelPropertyPropertyBuilder(descriptions)))
+        create(singletonList(new ApiModelPropertyPropertyBuilder(descriptions)))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        create(newArrayList(new ApiModelBuilder(resolver, typeNameExtractor)))
+        create(singletonList(new ApiModelBuilder(resolver, typeNameExtractor)))
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        create(newArrayList())
+        create(new ArrayList<>())
 
     new SchemaPluginsManager(propRegistry, modelRegistry, syntheticModelRegistry)
   }
@@ -75,7 +78,7 @@ class SwaggerPluginsSupport {
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
     def resolver = new TypeResolver()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new SwaggerApiListingReader()))
+    plugins.apiListingPlugins = create(Stream.of(new MediaTypeReader(), new SwaggerApiListingReader()).collect(toList()))
     plugins.documentationPlugins = create([])
     def descriptions = new DescriptionResolver(new MockEnvironment())
     plugins.parameterExpanderPlugins =

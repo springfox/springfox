@@ -23,7 +23,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder;
-import com.google.common.base.Function;
+
+import java.util.function.Function;
+
 
 public class BeanPropertyDefinitions {
   private BeanPropertyDefinitions() {

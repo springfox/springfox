@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.Optional;
+import java.util.function.Function;
+
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -41,8 +43,8 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   @Override
   public ModelReference apply(ResolvedType type) {
     return collectionReference(type)
-        .or(mapReference(type))
-        .or(modelReference(type));
+        .map(Optional::of).orElse(mapReference(type))
+        .orElse(modelReference(type));
   }
 
   private ModelReference modelReference(ResolvedType type) {
@@ -60,21 +62,21 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(new ModelRef(typeName, apply(mapValueType), true));
+      return of(new ModelRef(typeName, apply(mapValueType), true));
     }
-    return Optional.absent();
+    return empty();
   }
 
   private Optional<ModelReference> collectionReference(ResolvedType type) {
     if (isContainerType(type)) {
       ResolvedType collectionElementType = collectionElementType(type);
       String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return Optional.<ModelReference>of(
+      return of(
           new ModelRef(
               typeName,
               apply(collectionElementType),
               allowableValues(collectionElementType)));
     }
-    return Optional.absent();
+    return empty();
   }
 }

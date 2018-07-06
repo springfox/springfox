@@ -20,6 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -72,7 +73,7 @@ public class EntityContext {
     return resource.getDomainType().getSimpleName();
   }
 
-  public Optional<PersistentEntity<?, ?>> entity() {
+  public Optional<PersistentEntity<?, ? extends PersistentProperty<?>> entity() {
     return entities.getPersistentEntity(resource.getDomainType());
   }
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.ResolvedType
-import com.google.common.base.Optional
-import com.google.common.collect.Ordering
 import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
@@ -45,7 +43,8 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
+import static java.util.Optional.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -153,7 +152,7 @@ class DocketSpec extends DocumentationContextSpec {
         .configure(contextBuilder)
 
     expect:
-    context().alternateTypeProvider.rules.contains(rule)
+    documentationContext().alternateTypeProvider.rules.contains(rule)
   }
 
   def "Model substitution registers new rules"() {
@@ -165,7 +164,7 @@ class DocketSpec extends DocumentationContextSpec {
         .configure(contextBuilder)
 
     then:
-    context().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
+    documentationContext().alternateTypeProvider.rules.size() == expectedSize + jdk8RuleCount
 
     where:
     method                    | args                               | expectedSize
@@ -179,7 +178,7 @@ class DocketSpec extends DocumentationContextSpec {
     plugin."$builderMethod"(object)
 
     then:
-    context()."$property" == object || (context()."$property" == [object] as Set)
+    documentationContext()."$property" == object || (documentationContext()."$property" == [object] as Set)
 
     where:
     builderMethod               | object                                         | property
@@ -210,7 +209,7 @@ class DocketSpec extends DocumentationContextSpec {
     plugin."$builderMethod"(object)
 
     then:
-    context().genericsNamingStrategy.getClass() == strategy
+    documentationContext().genericsNamingStrategy.getClass() == strategy
 
     where:
     builderMethod       | object | strategy
@@ -223,24 +222,24 @@ class DocketSpec extends DocumentationContextSpec {
     plugin."$builderMethod"(object)
 
     then:
-    context().pathMapping == path
+    documentationContext().pathMapping == path
 
     where:
     builderMethod | object  | path
-    'pathMapping' | "/test" | Optional.of("/test")
-    'pathMapping' | null    | Optional.absent()
+    'pathMapping' | "/test" | of("/test")
+    'pathMapping' | null    | empty()
   }
 
-  Ordering<ApiDescription> apiDescriptionOrdering() {
+  Comparator<ApiDescription> apiDescriptionOrdering() {
     new Defaults().apiDescriptionOrdering()
   }
 
-  Ordering<ApiDescription> operationOrdering() {
+  Comparator<ApiDescription> operationOrdering() {
     new Defaults().operationOrdering()
   }
 
   private List<SecurityContext> validContexts() {
-    newArrayList(SecurityContext.builder()
+    singletonList(SecurityContext.builder()
         .forPaths(PathSelectors.any())
         .build())
   }

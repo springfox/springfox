@@ -20,6 +20,7 @@ class ExpandedParameterBuilderSpec extends Specification {
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
+        "",
         new ModelAttributeParameterMetadataAccessor(
             [named("enums").rawMember],
             named("enums").type,
@@ -50,6 +51,7 @@ class ExpandedParameterBuilderSpec extends Specification {
     and:
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
+        "",
         "",
         new ModelAttributeParameterMetadataAccessor(
             [named(field).rawMember],

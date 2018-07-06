@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License")
  *  you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
 import javax.servlet.ServletContext
 
-import static com.google.common.collect.Lists.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Mixin([SwaggerPluginsSupport])
@@ -98,7 +97,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
     @Override
     DocumentationContextBuilder create(DocumentationType documentationType) {
-      List<AlternateTypeRule> rules = newArrayList()
+      List<AlternateTypeRule> rules = new ArrayList<>()
       rules.add(newRule(typeResolver.resolve(Map.class, String.class, String.class),
           typeResolver.resolve(Object.class)))
       rules.add(newMapRule(WildcardType.class, WildcardType.class))

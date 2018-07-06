@@ -23,6 +23,7 @@ import io.swagger.models.properties.DoubleProperty
 import io.swagger.models.properties.FloatProperty
 import io.swagger.models.properties.IntegerProperty
 import io.swagger.models.properties.LongProperty
+import io.swagger.models.properties.StringProperty
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.service.AllowableListValues
@@ -32,42 +33,42 @@ import static springfox.documentation.swagger2.mappers.EnumMapper.*
 
 class EnumMapperSpec extends Specification {
   @Unroll("#property.class.simpleName")
-  def "adds enum values for numeric properties" () {
+  def "adds enum values for numeric properties"() {
     when:
-      maybeAddAllowableValues(property, allowableValues)
+    maybeAddAllowableValues(property, allowableValues)
     then:
-      if (allowableValues instanceof AllowableListValues) {
-        assert property.enum.size() == expectedSize
-      } else if (allowableValues instanceof AllowableRangeValues) {
-        assert property.minimum == 1D
-        assert property.exclusiveMinimum == null
-        assert property.maximum == 2D
-        assert property.exclusiveMaximum == null
-      } else {
-        assert property.enum == null
-      }
+    if (allowableValues instanceof AllowableListValues) {
+      assert property.enum.size() == expectedSize
+    } else if (allowableValues instanceof AllowableRangeValues) {
+      assert property.minimum == 1D
+      assert property.exclusiveMinimum == null
+      assert property.maximum == 2D
+      assert property.exclusiveMaximum == null
+    } else {
+      assert property.enum == null
+    }
     where:
-      property              | expectedSize | allowableValues
-      new IntegerProperty() | 0            | new AllowableListValues(["A", "B", "C"], "List")
-      new LongProperty()    | 0            | new AllowableListValues(["A", "B", "C"], "List")
-      new DoubleProperty()  | 0            | new AllowableListValues(["A", "B", "C"], "List")
-      new FloatProperty()   | 0            | new AllowableListValues(["A", "B", "C"], "List")
-      new IntegerProperty() | 3            | new AllowableListValues(["1", "2", "3"], "List")
-      new LongProperty()    | 3            | new AllowableListValues(["1", "2", "3"], "List")
-      new DoubleProperty()  | 3            | new AllowableListValues(["1", "2", "3"], "List")
-      new FloatProperty()   | 3            | new AllowableListValues(["1", "2", "3"], "List")
-      new IntegerProperty() | 0            | new AllowableRangeValues("1", "2")
-      new LongProperty()    | 0            | new AllowableRangeValues("1", "2")
-      new DoubleProperty()  | 0            | new AllowableRangeValues("1", "2")
-      new FloatProperty()   | 0            | new AllowableRangeValues("1", "2")
-      new IntegerProperty() | 0            | null
-      new LongProperty()    | 0            | null
-      new DoubleProperty()  | 0            | null
-      new FloatProperty()   | 0            | null
+    property              | expectedSize | allowableValues
+    new IntegerProperty() | 0            | new AllowableListValues(["A", "B", "C"], "List")
+    new LongProperty()    | 0            | new AllowableListValues(["A", "B", "C"], "List")
+    new DoubleProperty()  | 0            | new AllowableListValues(["A", "B", "C"], "List")
+    new FloatProperty()   | 0            | new AllowableListValues(["A", "B", "C"], "List")
+    new IntegerProperty() | 3            | new AllowableListValues(["1", "2", "3"], "List")
+    new LongProperty()    | 3            | new AllowableListValues(["1", "2", "3"], "List")
+    new DoubleProperty()  | 3            | new AllowableListValues(["1", "2", "3"], "List")
+    new FloatProperty()   | 3            | new AllowableListValues(["1", "2", "3"], "List")
+    new IntegerProperty() | 0            | new AllowableRangeValues("1", "2")
+    new LongProperty()    | 0            | new AllowableRangeValues("1", "2")
+    new DoubleProperty()  | 0            | new AllowableRangeValues("1", "2")
+    new FloatProperty()   | 0            | new AllowableRangeValues("1", "2")
+    new IntegerProperty() | 0            | null
+    new LongProperty()    | 0            | null
+    new DoubleProperty()  | 0            | null
+    new FloatProperty()   | 0            | null
   }
 
   @Unroll("Exclusive #property.class.simpleName")
-  def "adds enum values with exclusive for numeric properties" () {
+  def "adds enum values with exclusive for numeric properties"() {
     when:
     maybeAddAllowableValues(property, allowableValues)
     then:
@@ -78,34 +79,49 @@ class EnumMapperSpec extends Specification {
     where:
     property              | expMin | expMax | expExlMin | expExlMax | allowableValues
     new IntegerProperty() | 1      | 7      | true      | true      | new AllowableRangeValues("1", true, "7", true)
-    new LongProperty()    | 2      | 8      | false     | false     | new AllowableRangeValues("2", false,  "8", false)
+    new LongProperty()    | 2      | 8      | false     | false     | new AllowableRangeValues("2", false, "8", false)
     new DoubleProperty()  | 3      | 9      | false     | true      | new AllowableRangeValues("3", false, "9", true)
     new FloatProperty()   | 4      | 10     | true      | false     | new AllowableRangeValues("4", true, "10", false)
   }
 
   @Unroll("#allowableValues?.class.simpleName")
-  def "adds enum values for parameters" () {
+  def "adds enum values for parameters"() {
     when:
-      maybeAddAllowableValuesToParameter(parameter, allowableValues)
+    maybeAddAllowableValuesToParameter(parameter, property, allowableValues)
     then:
     if (allowableValues instanceof AllowableListValues) {
       assert parameter.enum.size() == expectedSize
     } else if (allowableValues instanceof AllowableRangeValues) {
-      assert parameter.minimum == safeBigDecimal(allowableValues.min)
-      assert parameter.exclusiveMinimum == allowableValues.exclusiveMin
-      assert parameter.maximum == safeBigDecimal(allowableValues.max)
-      assert parameter.exclusiveMaximum == allowableValues.exclusiveMax
+      if (property instanceof StringProperty) {
+        verifyAll {
+          parameter.minLength  == safeInteger(allowableValues.min)
+          parameter.maxLength == safeInteger(allowableValues.max)
+        }
+      } else {
+        verifyAll {
+          parameter.minimum == safeBigDecimal(allowableValues.min)
+          parameter.exclusiveMinimum == allowableValues.exclusiveMin
+          parameter.maximum == safeBigDecimal(allowableValues.max)
+          parameter.exclusiveMaximum == allowableValues.exclusiveMax
+        }
+      }
     } else {
       assert parameter.enum == null
     }
     where:
-    parameter             | expectedSize | allowableValues
-    new QueryParameter()  | 3            | new AllowableListValues(["A", "B", "C"], "List")
-    new QueryParameter()  | 3            | new AllowableListValues(["1", "2", "3"], "List")
-    new QueryParameter()  | 0            | new AllowableRangeValues("1", "2")
-    new QueryParameter()  | 0            | new AllowableRangeValues("A", "B")
-    new QueryParameter()  | 0            | new AllowableRangeValues("1", true, "B", false)
-    new QueryParameter()  | 0            | null
+    parameter            | expectedSize | property              | allowableValues
+    new QueryParameter() | 3            | new StringProperty()  | new AllowableListValues(["A", "B", "C"], "List")
+    new QueryParameter() | 3            | new StringProperty()  | new AllowableListValues(["1", "2", "3"], "List")
+    new QueryParameter() | 0            | new StringProperty()  | new AllowableRangeValues("1", "2")
+    new QueryParameter() | 0            | new StringProperty()  | new AllowableRangeValues("A", "B")
+    new QueryParameter() | 0            | new StringProperty()  | new AllowableRangeValues("1", true, "B", false)
+    new QueryParameter() | 0            | new StringProperty()  | null
+    new QueryParameter() | 3            | new IntegerProperty() | new AllowableListValues(["A", "B", "C"], "List")
+    new QueryParameter() | 3            | new IntegerProperty() | new AllowableListValues(["1", "2", "3"], "List")
+    new QueryParameter() | 0            | new IntegerProperty() | new AllowableRangeValues("1", "2")
+    new QueryParameter() | 0            | new IntegerProperty() | new AllowableRangeValues("A", "B")
+    new QueryParameter() | 0            | new IntegerProperty() | new AllowableRangeValues("1", true, "B", false)
+    new QueryParameter() | 0            | new IntegerProperty() | null
   }
 
 }

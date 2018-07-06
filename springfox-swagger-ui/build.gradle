@@ -24,12 +24,12 @@ buildscript {
 }
 
 plugins {
-  id "de.undercouch.download" version "3.4.2"
+  id "de.undercouch.download" version "3.4.3"
   id "com.moowork.node" version "1.2.0"
 }
 
 ext {
-  swaggerUiVersion = '3.14.0'
+  swaggerUiVersion = '3.17.1'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -68,6 +68,10 @@ task unzip(type: Copy) {
   from zipTree(file(destinationZip))
   include "*/dist/**"
   into file("${buildDir}")
+}
+
+task npmTest(type: NpmTask) {
+  args = ['run', 'test']
 }
 
 task npmBuild(type: NpmTask) {
@@ -125,6 +129,7 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-npmBuild.dependsOn(npm_install)
+npmTest.dependsOn(npm_install)
+npmBuild.dependsOn(npm_install, npmTest)
 customizeSwaggerUi.dependsOn(unzip, npmBuild)
 jar.dependsOn(customizeSwaggerUi)

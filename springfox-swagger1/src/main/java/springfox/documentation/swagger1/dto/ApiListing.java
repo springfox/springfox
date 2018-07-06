@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,15 +23,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Ordering;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 @JsonPropertyOrder({"apiVersion", "swaggerVersion", "basePath", "resourcePath", "produces", "consumes", "apis",
@@ -125,9 +123,9 @@ public class ApiListing {
   }
 
   public void setApis(List<ApiDescription> apis) {
-    this.apis = FluentIterable.from(apis)
-      .toSortedList(Ordering.from(byPath())
-          .compound(byDescription()));
+    this.apis = apis.stream()
+      .sorted(byPath()
+          .thenComparing(byDescription())).collect(toList());
   }
 
   public Map<String, ModelDto> getModels() {
@@ -168,21 +166,21 @@ public class ApiListing {
     }
   }
 
-  public void appendProtocols(HashSet<String> protocols) {
+  public void appendProtocols(Set<String> protocols) {
     if (!nullToEmptySet(protocols).isEmpty()) {
       this.protocols = nullToEmptySet(this.protocols);
       this.protocols.addAll(protocols);
     }
   }
 
-  public void appendConsumes(HashSet<String> consumes) {
+  public void appendConsumes(Set<String> consumes) {
     if (!nullToEmptySet(consumes).isEmpty()) {
       this.consumes = nullToEmptySet(this.consumes);
       this.consumes.addAll(consumes);
     }
   }
 
-  public void appendProduces(HashSet<String> produces) {
+  public void appendProduces(Set<String> produces) {
     if (!nullToEmptySet(produces).isEmpty()) {
       this.produces = nullToEmptySet(this.produces);
       this.produces.addAll(produces);
@@ -197,21 +195,11 @@ public class ApiListing {
   }
 
   private Comparator<ApiDescription> byPath() {
-    return new Comparator<ApiDescription>() {
-      @Override
-      public int compare(ApiDescription first, ApiDescription second) {
-        return first.getPath().compareTo(second.getPath());
-      }
-    };
+    return Comparator.comparing(ApiDescription::getPath);
   }
 
   private Comparator<ApiDescription> byDescription() {
-    return new Comparator<ApiDescription>() {
-      @Override
-      public int compare(ApiDescription first, ApiDescription second) {
-        return first.getDescription().compareTo(second.getDescription());
-      }
-    };
+    return Comparator.comparing(ApiDescription::getDescription);
   }
 }
 

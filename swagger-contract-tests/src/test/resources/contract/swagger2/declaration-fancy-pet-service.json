@@ -63,7 +63,8 @@
                             "format": "int32"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },

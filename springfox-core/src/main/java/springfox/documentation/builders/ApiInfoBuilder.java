@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 /**
  * Builds the api information
@@ -39,7 +39,7 @@ public class ApiInfoBuilder {
   private String license;
   private String licenseUrl;
   private String version;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Updates the api title
@@ -112,7 +112,7 @@ public class ApiInfoBuilder {
   /**
    * Updates license information for this API
    *
-   * @param license
+   * @param license licence string
    * @return this
    */
   public ApiInfoBuilder license(String license) {

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 package springfox.documentation.swagger2.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +29,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.google.common.annotations.VisibleForTesting;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.Info;
@@ -73,7 +73,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
     context.setMixInAnnotations(Model.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Operation.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Path.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Response.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(Response.class, ResponseSerializer.class);
     context.setMixInAnnotations(Parameter.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(ExternalDocs.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Xml.class, CustomizedSwaggerSerializer.class);
@@ -86,6 +86,12 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
   @JsonAutoDetect
   @JsonInclude(value = Include.NON_EMPTY)
   private class CustomizedSwaggerSerializer {
+  }
+
+  @JsonAutoDetect
+  @JsonInclude(value = Include.NON_EMPTY)
+  @JsonIgnoreProperties("responseSchema")
+  private class ResponseSerializer {
   }
 
   @JsonAutoDetect
@@ -130,28 +136,23 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
       }
 
       private boolean canConvertToString(Object value) {
-        if (value instanceof java.lang.Boolean
-            || value instanceof java.lang.Character
-            || value instanceof java.lang.String
-            || value instanceof java.lang.Byte
-            || value instanceof java.lang.Short
-            || value instanceof java.lang.Integer
-            || value instanceof java.lang.Long
-            || value instanceof java.lang.Float
-            || value instanceof java.lang.Double
-            || value instanceof java.lang.Void) {
-          return true;
-        }
-        return false;
+        return value instanceof Boolean
+            || value instanceof Character
+            || value instanceof String
+            || value instanceof Byte
+            || value instanceof Short
+            || value instanceof Integer
+            || value instanceof Long
+            || value instanceof Float
+            || value instanceof Double
+            || value instanceof Void;
       }
 
-      @VisibleForTesting
       boolean isStringLiteral(String value) {
         return (value.startsWith("\"") && value.endsWith("\""))
             || (value.startsWith("'") && value.endsWith("'"));
       }
 
-      @VisibleForTesting
       boolean isNotJsonString(final String value) {
         // strictly speaking, should also test for equals("null") since {"example": null} would be valid JSON
         // but swagger2 does not support null values

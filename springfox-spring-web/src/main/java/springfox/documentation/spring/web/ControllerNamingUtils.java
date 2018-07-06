@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.util.UriUtils;
 
-import static springfox.documentation.spring.web.paths.Paths.splitCamelCase;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 public class ControllerNamingUtils {
   private static Logger log = LoggerFactory.getLogger(ControllerNamingUtils.class);
@@ -48,7 +48,7 @@ public class ControllerNamingUtils {
   }
 
   public static String encode(String path) {
-      return UriUtils.encodePath(path, ISO_8859_1);
+    return UriUtils.encodePath(path, ISO_8859_1);
   }
 
   public static String decode(String path) {

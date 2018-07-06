@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,10 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.collect.Sets.*
+import java.util.stream.Stream
+
+import static java.util.Collections.*
+import static java.util.stream.Collectors.*
 
 @Mixin([RequestMappingSupport])
 class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
@@ -41,7 +44,7 @@ class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
             ]
         )
     OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo, RequestMethod.POST)
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo, RequestMethod.POST)
     operationContext.operationBuilder().method(HttpMethod.POST)
 
     when:
@@ -60,11 +63,11 @@ class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
 
     where:
     expectedConsumes                                  | expectedProduces                                  | handlerMethod
-    newHashSet('application/xml')                     | newHashSet()                                      | dummyHandlerMethod('methodWithXmlConsumes')
-    newHashSet()                                      | newHashSet('application/xml')                     | dummyHandlerMethod('methodWithXmlProduces')
-    newHashSet('application/xml')                     | newHashSet('application/json')                    | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
-    newHashSet('application/xml')                     | newHashSet('application/xml')                     | dummyHandlerMethod('methodWithBothXmlMediaTypes')
-    newHashSet('application/xml', 'application/json') | newHashSet('application/xml', 'application/json') | dummyHandlerMethod('methodWithMultipleMediaTypes')
+    singleton('application/xml')                     | new HashSet<>()                                    | dummyHandlerMethod('methodWithXmlConsumes')
+    new HashSet<>()                                    | singleton('application/xml')                     | dummyHandlerMethod('methodWithXmlProduces')
+    singleton('application/xml')                     | singleton('application/json')                    | dummyHandlerMethod('methodWithMediaTypeAndFile', MultipartFile)
+    singleton('application/xml')                     | singleton('application/xml')                     | dummyHandlerMethod('methodWithBothXmlMediaTypes')
+    Stream.of('application/xml', 'application/json').collect(toSet()) | Stream.of('application/xml', 'application/json').collect(toSet()) | dummyHandlerMethod('methodWithMultipleMediaTypes')
 
   }
 }

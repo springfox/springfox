@@ -28,7 +28,7 @@ class OperationNicknameIntoUniqueIdReaderSpec extends DocumentationContextSpec {
   def "should set various unique operation id based on swagger annotation"() {
     given:
       OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
     and:
       def sut = new OperationNicknameIntoUniqueIdReader()
     when:

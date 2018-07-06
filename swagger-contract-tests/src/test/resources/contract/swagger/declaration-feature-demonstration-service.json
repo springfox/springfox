@@ -296,15 +296,15 @@
             "path": "/features"
         },
         {
-            "description": "findIdentityById",
+            "description": "findById",
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "findIdentityById",
-                    "nickname": "findIdentityByIdUsingGET",
+                    "summary": "findById",
+                    "nickname": "findByIdUsingGET",
                     "produces": [
-                        "application/vnd.com.fancy-pet+json",
-                        "application/vnd.com.pet+json"
+                        "application/vnd.com.pet+json",
+                        "application/vnd.com.fancy-pet+json"
                     ],
                     "consumes": [
                         
@@ -323,7 +323,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "Pet"
+                            "responseModel": "FancyPet"
                         },
                         {
                             "code": 401,
@@ -339,7 +339,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "Pet"
+                    "type": "FancyPet"
                 }
             ],
             "path": "/features/1367/{itemId}"
@@ -1964,6 +1964,213 @@
         
     ],
     "models": {
+        "Entry«string,Map«string,Example»»": {
+            "description": "",
+            "id": "Entry«string,Map«string,Example»»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "List[Entry«string,Example»]"
+                }
+            }
+        },
+        "Category": {
+            "description": "",
+            "id": "Category",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "ModelWithMapProperty": {
+            "description": "Describes model with map property",
+            "id": "ModelWithMapProperty",
+            "properties": {
+                "params": {
+                    "description": "Map of params to be sent",
+                    "required": false,
+                    "type": "object"
+                }
+            }
+        },
+        "ObjectNode": {
+            "description": "",
+            "id": "ObjectNode",
+            "properties": {
+                "array": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "bigDecimal": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "bigInteger": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "binary": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "boolean": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "containerNode": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "double": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "float": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "floatingPointNumber": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "int": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "integralNumber": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "long": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "missingNode": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "nodeType": {
+                    "enum": [
+                        "ARRAY",
+                        "BINARY",
+                        "BOOLEAN",
+                        "MISSING",
+                        "NULL",
+                        "NUMBER",
+                        "OBJECT",
+                        "POJO",
+                        "STRING"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "null": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "number": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "object": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "pojo": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "short": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "textual": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "valueNode": {
+                    "required": false,
+                    "type": "boolean"
+                }
+            }
+        },
+        "InputStream": {
+            "description": "",
+            "id": "InputStream",
+            "properties": {
+                
+            }
+        },
+        "Entry«string,Example»": {
+            "description": "",
+            "id": "Entry«string,Example»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "Example"
+                }
+            }
+        },
+        "Truck": {
+            "description": "",
+            "id": "Truck",
+            "properties": {
+                "make": {
+                    "required": false,
+                    "type": "string"
+                },
+                "model": {
+                    "required": false,
+                    "type": "string"
+                },
+                "payloadCapacity": {
+                    "required": false,
+                    "format": "double",
+                    "type": "number"
+                }
+            }
+        },
+        "NestedType": {
+            "description": "",
+            "id": "NestedType",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "Vehicle": {
+            "description": "",
+            "discriminator": "type",
+            "id": "Vehicle",
+            "properties": {
+                "make": {
+                    "required": false,
+                    "type": "string"
+                },
+                "model": {
+                    "required": false,
+                    "type": "string"
+                }
+            },
+            "subTypes": [
+                "Car",
+                "Truck"
+            ]
+        },
+        "ModelWithObjectNode": {
+            "description": "",
+            "id": "ModelWithObjectNode",
+            "properties": {
+                "anyObject": {
+                    "required": false,
+                    "type": "ObjectNode"
+                }
+            }
+        },
         "Car": {
             "description": "",
             "id": "Car",
@@ -1985,39 +2192,6 @@
                     "required": false,
                     "format": "double",
                     "type": "number"
-                }
-            }
-        },
-        "EnumObjectType": {
-            "description": "",
-            "id": "EnumObjectType",
-            "properties": {
-                "description": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
                 }
             }
         },
@@ -2087,101 +2261,64 @@
                 }
             }
         },
-        "ObjectNode": {
+        "EnumObjectType": {
             "description": "",
-            "id": "ObjectNode",
+            "id": "EnumObjectType",
             "properties": {
-
-            }
-        },
-        "Truck": {
-            "description": "",
-            "id": "Truck",
-            "properties": {
-                "make": {
+                "description": {
                     "required": false,
                     "type": "string"
                 },
-                "model": {
-                    "required": false,
-                    "type": "string"
-                },
-                "payloadCapacity": {
-                    "required": false,
-                    "format": "double",
-                    "type": "number"
-                }
-            }
-        },
-        "Entry«string,Map«string,Example»»": {
-            "description": "",
-            "id": "Entry«string,Map«string,Example»»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "List[Entry«string,Example»]"
-                }
-            }
-        },
-        "Entry«string,Example»": {
-            "description": "",
-            "id": "Entry«string,Example»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "Example"
-                }
-            }
-        },
-        "NestedType": {
-            "description": "",
-            "id": "NestedType",
-            "properties": {
                 "name": {
                     "required": false,
                     "type": "string"
                 }
             }
         },
-        "ModelWithMapProperty": {
-            "description": "Describes model with map property",
-            "id": "ModelWithMapProperty",
-            "properties": {
-                "params": {
-                    "description": "Map of params to be sent",
-                    "required": false,
-                    "type": "object"
-                }
-            }
-        },
-        "ModelWithObjectNode": {
+        "FancyPet": {
             "description": "",
-            "id": "ModelWithObjectNode",
+            "id": "FancyPet",
             "properties": {
-                "anyObject": {
+                "age": {
                     "required": false,
-                    "type": "ObjectNode"
-                }
-            }
-        },
-        "Vehicle": {
-            "description": "",
-            "discriminator": "type",
-            "id": "Vehicle",
-            "properties": {
-                "make": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "categories": {
+                    "required": false,
+                    "items": {
+                        "type": "Category"
+                    },
+                    "type": "array"
+                },
+                "id": {
                     "required": false,
                     "type": "string"
                 },
-                "model": {
+                "name": {
                     "required": false,
                     "type": "string"
                 }
-            },
-            "subTypes": [
-                "Car",
-                "Truck"
-            ]
+            }
+        },
+        "Pet": {
+            "description": "",
+            "id": "Pet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
         }
     },
     "produces": [

@@ -155,8 +155,6 @@ representations. This is a limitation of the OAI Spec 2.0.
 
 Here is how we configure the `JacksonSerializerConvention`.
 
-NOTE: this feature requires the https://mvnrepository.com/artifact/org.reflections/reflections/0.9.10[reflections library].
-
 https://github.com/springfox/springfox/blob/c48a8bb019371cb1e3c79d24c3db3791ac5025cc/swagger-contract-tests/src/test/groovy/springfox/test/contract/swaggertests/FunctionContractSpec.groovy#L201-L204[FunctionContractSpec.java]
 [[jackson-convention-example]]
 [source,java,linenums]

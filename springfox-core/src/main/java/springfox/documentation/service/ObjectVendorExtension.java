@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Collections.*;
+
 
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
-  private final List<VendorExtension> properties = newArrayList();
+  private final List<VendorExtension> properties = new ArrayList<>();
   private final String name;
 
   public ObjectVendorExtension(String name) {
@@ -43,7 +43,7 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
 
   @Override
   public List<VendorExtension> getValue() {
-    return ImmutableList.copyOf(properties);
+    return unmodifiableList(properties);
   }
 
 
@@ -52,20 +52,14 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   }
 
   public void replaceProperty(VendorExtension property) {
-    Optional<VendorExtension> vendorProperty = Iterables.tryFind(properties, withName(property.getName()));
-    if (vendorProperty.isPresent()) {
-      properties.remove(vendorProperty.get());
-    }
+    Optional<VendorExtension> vendorProperty = StreamSupport.stream(properties.spliterator(), false).filter(withName(property.getName())).findFirst();
+
+    vendorProperty.ifPresent(properties::remove);
     properties.add(property);
   }
 
   private Predicate<VendorExtension> withName(final String name) {
-    return new Predicate<VendorExtension>() {
-      @Override
-      public boolean apply(VendorExtension input) {
-        return input.getName().equals(name);
-      }
-    };
+    return input -> input.getName().equals(name);
   }
 
   @Override
@@ -77,19 +71,20 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
       return false;
     }
     ObjectVendorExtension that = (ObjectVendorExtension) o;
-    return Objects.equal(properties, that.properties);
+    return Objects.equals(properties, that.properties);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(properties);
+    return Objects.hash(properties);
   }
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("properties", properties)
-        .add("name", name)
-        .toString();
+    return new StringBuilder(this.getClass().getSimpleName())
+        .append("{")
+        .append("properties=").append(properties).append(", ")
+        .append("name=").append(name)
+        .append("}").toString();
   }
 }

@@ -42,8 +42,7 @@
                         "in": "path",
                         "description": "param1",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -53,7 +52,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/child/child-method": {
@@ -79,7 +79,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },

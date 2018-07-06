@@ -18,14 +18,13 @@
  */
 package springfox.documentation.schema.property;
 
-import com.google.common.base.Equivalence;
-
 import java.lang.reflect.Method;
+import java.util.function.BiPredicate;
 
-class SimpleMethodSignatureEquality extends Equivalence<Method> {
+class SimpleMethodSignatureEquality implements BiPredicate<Method, Method> {
 
   @Override
-  protected boolean doEquivalent(Method first, Method other) {
+  public boolean test(Method first, Method other) {
     return first.getName().equals(other.getName())
         && first.getReturnType().equals(other.getReturnType())
         && equalParamTypes(first.getParameterTypes(), other.getParameterTypes());
@@ -43,8 +42,7 @@ class SimpleMethodSignatureEquality extends Equivalence<Method> {
     return false;
   }
 
-  @Override
-  protected int doHash(Method method) {
+  public int doHash(Method method) {
     return method.hashCode();
   }
 }

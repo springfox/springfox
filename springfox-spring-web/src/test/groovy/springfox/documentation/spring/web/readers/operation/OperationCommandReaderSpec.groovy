@@ -33,7 +33,7 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
   def "should set various properties based on method name or swagger annotation"() {
     given:
       OperationContext operationContext =
-        operationContext(context(), handlerMethod, CURRENT_COUNT)
+        operationContext(documentationContext(), handlerMethod, CURRENT_COUNT)
 
     when:
       command.apply(operationContext)

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,25 +18,34 @@
  */
 
 package springfox.documentation.spring.web.mixins
-import springfox.documentation.service.*
 
-import static com.google.common.collect.Lists.*
+import springfox.documentation.service.AuthorizationCodeGrant
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.GrantType
+import springfox.documentation.service.ImplicitGrant
+import springfox.documentation.service.LoginEndpoint
+import springfox.documentation.service.OAuth
+import springfox.documentation.service.SecurityReference
+import springfox.documentation.service.TokenEndpoint
+import springfox.documentation.service.TokenRequestEndpoint
+
+import static java.util.Collections.*
 
 class AuthSupport {
   def defaultAuth() {
     AuthorizationScope authorizationScope =
             new AuthorizationScope("global", "accessEverything")
     AuthorizationScope[] authorizationScopes = [authorizationScope] as AuthorizationScope[];
-    newArrayList(new SecurityReference("oauth2", authorizationScopes))
+    singletonList(new SecurityReference("oauth2", authorizationScopes))
   }
 
   def authorizationTypes() {
 
-    List<AuthorizationScope> authorizationScopeList = newArrayList();
+    List<AuthorizationScope> authorizationScopeList = new ArrayList<>();
     authorizationScopeList.add(new AuthorizationScope("global", "access all"));
 
 
-    List<GrantType> grantTypes = newArrayList();
+    List<GrantType> grantTypes = new ArrayList<>();
 
     LoginEndpoint loginEndpoint = new LoginEndpoint("http://petstore.swagger.io/oauth/dialog");
     grantTypes.add(new ImplicitGrant(loginEndpoint, "access_token"));

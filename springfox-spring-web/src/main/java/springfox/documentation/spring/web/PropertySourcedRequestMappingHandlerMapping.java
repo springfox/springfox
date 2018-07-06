@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
  */
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
@@ -36,9 +34,11 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.util.Optional.*;
+
 public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
-  private final Map<String, HandlerMethod> handlerMethods = new LinkedHashMap<String, HandlerMethod>();
+  private final Map<String, HandlerMethod> handlerMethods = new LinkedHashMap<>();
   private final Environment environment;
   private final Object handler;
 
@@ -78,14 +78,9 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
   private String mappingPath(final PropertySourcedMapping mapper) {
     final String key = mapper.propertyKey();
     final String target = mapper.value();
-    return Optional.fromNullable(environment.getProperty(key))
-        .transform(new Function<String, String>() {
-          @Override
-          public String apply(String input) {
-            return target.replace(String.format("${%s}", key), input);
-          }
-        })
-        .orNull();
+    return ofNullable(environment.getProperty(key))
+        .map(input -> target.replace(String.format("${%s}", key), input))
+        .orElse(null);
   }
 
   @Override
@@ -102,10 +97,9 @@ public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingH
    * @param urlPath the path to match.
    * @param request the http servlet request.
    * @return The HandlerMethod if one was found.
-   * @throws Exception
    */
   @Override
-  protected HandlerMethod lookupHandlerMethod(String urlPath, HttpServletRequest request) throws Exception {
+  protected HandlerMethod lookupHandlerMethod(String urlPath, HttpServletRequest request) {
     logger.debug("looking up handler for path: " + urlPath);
     HandlerMethod handlerMethod = handlerMethods.get(urlPath);
     if (handlerMethod != null) {

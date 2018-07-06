@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,15 +18,14 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Collections.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ListVendorExtension<T> implements VendorExtension<List<T>> {
-  private final List<T> values = newArrayList();
+  private final List<T> values = new ArrayList<>();
   private final String name;
 
   public ListVendorExtension(String name, List<T> values) {
@@ -41,6 +40,6 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
 
   @Override
   public List<T> getValue() {
-    return ImmutableList.copyOf(values);
+    return unmodifiableList(values);
   }
 }

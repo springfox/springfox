@@ -48,7 +48,8 @@
                             "format": "date"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1209": {
@@ -69,7 +70,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "csv"
+                        "collectionFormat": "multi"
                     }
                 ],
                 "responses": {
@@ -79,7 +80,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1306{?paramMap}": {
@@ -116,7 +118,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1376-bare": {
@@ -136,7 +139,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1376-input-bare{?url}": {
@@ -162,7 +166,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1376-input-property{?url}": {
@@ -187,7 +192,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1376-property": {
@@ -207,7 +213,8 @@
                             "$ref": "#/definitions/Bug1376"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1420": {
@@ -225,7 +232,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1440": {
@@ -242,7 +250,8 @@
                             "$ref": "#/definitions/Resource«string»"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1475": {
@@ -265,7 +274,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1475-example": {
@@ -288,7 +298,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1605": {
@@ -306,7 +317,8 @@
                             "format": "byte"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1627": {
@@ -320,7 +332,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1632": {
@@ -345,7 +358,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1632s": {
@@ -373,7 +387,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1676": {
@@ -398,7 +413,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1697": {
@@ -423,7 +439,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1722": {
@@ -457,7 +474,8 @@
                     "200": {
                         "description": "The apple is removed"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1734{?offset}": {
@@ -483,7 +501,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1740": {
@@ -500,7 +519,8 @@
                             "$ref": "#/definitions/Bug1740"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1749{?ascending,companyName,email,like,pageNumber,pageSize,set,sortDirection,sortField}": {
@@ -589,7 +609,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1750a": {
@@ -609,7 +630,8 @@
                     "204": {
                         "description": "no ids found"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1750b": {
@@ -632,7 +654,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1767": {
@@ -672,7 +695,8 @@
                             "$ref": "#/definitions/Bug1777"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1778{?e,s}": {
@@ -700,7 +724,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1819a": {
@@ -728,7 +753,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1819b{?enumTypes}": {
@@ -765,7 +791,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1841": {
@@ -783,7 +810,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1864{?somename}": {
@@ -805,7 +833,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1881": {
@@ -833,7 +862,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1887/{env}/{list-id}/emails": {
@@ -884,7 +914,8 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1894": {
@@ -901,7 +932,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1907": {
@@ -929,7 +961,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1926/filtered": {
@@ -961,7 +994,8 @@
                             ]
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1926/not-filtered": {
@@ -993,7 +1027,8 @@
                             ]
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1939{?credential-source-id,password,username}": {
@@ -1036,7 +1071,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/1965": {
@@ -1096,7 +1132,122 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                }
+                },
+                "deprecated": false
+            }
+        },
+        "/bugs/1965-form-data": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug1965FormData",
+                "operationId": "bug1965FormDataUsingPOST_2",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "allCapsSet",
+                        "description": "description of allCapsSet",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "annotatedEnumType",
+                        "description": "description of annotatedEnumType",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "bar",
+                        "description": "description of bar",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "enumType",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "foo",
+                        "description": "description of foo",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "localDateTime",
+                        "description": "local date time desc dd-MM-yyyy hh:mm:ss",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "nestedType.name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "parentBeanProperty",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "propertyWithNoSetterMethod",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "readOnlyString",
+                        "description": "A read only string",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Example"
+                        }
+                    }
+                },
+                "deprecated": false
             }
         },
         "/bugs/2029{?name}": {
@@ -1130,7 +1281,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/2081{?a.importantField,b.importantField}": {
@@ -1158,7 +1310,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/2107/{someId}": {
@@ -1178,8 +1331,7 @@
                         "description": "This is the description",
                         "required": true,
                         "type": "string",
-                        "default": "1f1f1f",
-                        "allowEmptyValue": false
+                        "default": "1f1f1f"
                     }
                 ],
                 "responses": {
@@ -1189,7 +1341,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/2114{?clearIndex,siteSecret,stripHtmlTags,xmlUrl}": {
@@ -1247,7 +1400,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/2118": {
@@ -1275,7 +1429,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/2161": {
@@ -1283,8 +1438,8 @@
                 "tags": [
                     "Bugs"
                 ],
-                "summary": "bug2161And2249",
-                "operationId": "bug2161And2249UsingGET_2",
+                "summary": "bug2161And2249and2469",
+                "operationId": "bug2161And2249and2469UsingGET_2",
                 "parameters": [
                     {
                         "in": "body",
@@ -1303,7 +1458,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/2268{?$filter}": {
@@ -1346,7 +1502,8 @@
                             "USER"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/bugs/2368": {
@@ -1360,7 +1517,181 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
+            }
+        },
+        "/bugs/2378": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "upperCaseField",
+                "operationId": "upperCaseFieldUsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "input",
+                        "description": "input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UpperCasedField"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/bugs/2391{?from_country_id}": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2391",
+                "operationId": "bug2391UsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "from_country_id",
+                        "in": "query",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/bugs/2415": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2415",
+                "operationId": "bug2415UsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "input",
+                        "description": "input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Bug2415"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/bugs/2415{?input}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2415",
+                "operationId": "bug2415UsingGET_2",
+                "parameters": [
+                    {
+                        "name": "input",
+                        "in": "query",
+                        "description": "input",
+                        "required": true,
+                        "type": "string",
+                        "maxLength": 16,
+                        "minLength": 8,
+                        "pattern": "^[A-Za-z0-9]{8,16}$"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/bugs/2423{?from,to}": {
+            "get": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2423",
+                "operationId": "bug2423UsingGET_2",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/bugs/2479": {
+            "post": {
+                "tags": [
+                    "Bugs"
+                ],
+                "summary": "bug2479",
+                "operationId": "bug2479UsingPOST_2",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "input",
+                        "description": "input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Bug2479"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
@@ -1429,7 +1760,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug1944": {
@@ -1446,7 +1778,8 @@
                     "404": {
                         "description": "No object was found with the given ID"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug2182": {
@@ -1463,7 +1796,8 @@
                             "$ref": "#/definitions/ProductVO"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug2203": {
@@ -1483,7 +1817,8 @@
                             "$ref": "#/definitions/Response«LanguageResponse»"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug2220": {
@@ -1506,7 +1841,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug2220/{bar}": {
@@ -1529,7 +1865,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug2230": {
@@ -1560,7 +1897,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/bug2282": {
@@ -1577,7 +1915,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/{bar}/2148{?year}": {
@@ -1613,7 +1952,8 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/bugs/{propertyKey}/{environmentKey}": {
@@ -1629,16 +1969,14 @@
                         "in": "path",
                         "description": "Key of the environment",
                         "required": false,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     },
                     {
                         "name": "propertyKey",
                         "in": "path",
                         "description": "Key of the property",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -1648,7 +1986,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },
@@ -1762,6 +2101,32 @@
                 }
             },
             "title": "Bug1881"
+        },
+        "Bug2415": {
+            "type": "object",
+            "properties": {
+                "test": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 16,
+                    "pattern": "^[A-Za-z0-9]{8,16}$"
+                }
+            },
+            "title": "Bug2415"
+        },
+        "Bug2479": {
+            "type": "object",
+            "properties": {
+                "first": {
+                    "description": "First",
+                    "$ref": "#/definitions/Example"
+                },
+                "second": {
+                    "description": "Second",
+                    "$ref": "#/definitions/Example"
+                }
+            },
+            "title": "Bug2479"
         },
         "EHDTOApplicatorUnits": {
             "type": "object",
@@ -2083,6 +2448,10 @@
                 "bug_1964"
             ],
             "properties": {
+                "bug2469": {
+                    "type": "string",
+                    "example": "[test] n/a"
+                },
                 "bug_1964": {
                     "type": "boolean"
                 },
@@ -2096,6 +2465,20 @@
                 }
             },
             "title": "Status"
+        },
+        "UpperCasedField": {
+            "type": "object",
+            "properties": {
+                "YEAR": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            },
+            "title": "UpperCasedField"
         }
     }
 }

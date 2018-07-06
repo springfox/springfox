@@ -31,11 +31,11 @@
                 "tags": [
                     "feature-demonstration-service"
                 ],
-                "summary": "findIdentityById",
-                "operationId": "findIdentityByIdUsingGET_1",
+                "summary": "findById",
+                "operationId": "findByIdUsingGET_1",
                 "produces": [
-                    "application/vnd.com.fancy-pet+json",
-                    "application/vnd.com.pet+json"
+                    "application/vnd.com.pet+json",
+                    "application/vnd.com.fancy-pet+json"
                 ],
                 "parameters": [
                     {
@@ -50,10 +50,11 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/FancyPet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/1430-body": {
@@ -82,7 +83,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/1430-query": {
@@ -109,7 +111,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/1490/entity/{itemId}": {
@@ -135,7 +138,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/1490/{itemId}": {
@@ -161,7 +165,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -194,7 +199,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/2031": {
@@ -238,7 +244,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/addFiles": {
@@ -268,7 +275,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/allMethodsAllowed": {
@@ -282,7 +290,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "head": {
                 "tags": [
@@ -297,7 +306,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "post": {
                 "tags": [
@@ -312,7 +322,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -327,7 +338,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -339,7 +351,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "options": {
                 "tags": [
@@ -354,7 +367,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -369,7 +383,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/arrayOfArrays": {
@@ -417,7 +432,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/bare": {
@@ -521,7 +537,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/bigDecimal": {
@@ -547,7 +564,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/boolean": {
@@ -573,7 +591,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/date": {
@@ -600,7 +619,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/effective": {
@@ -617,7 +637,8 @@
                             "$ref": "#/definitions/Example"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/effectives": {
@@ -637,7 +658,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/enumObject": {
@@ -654,7 +676,8 @@
                             "$ref": "#/definitions/EnumObjectType"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/examples": {
@@ -684,7 +707,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/inheritance": {
@@ -713,7 +737,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/integers": {
@@ -744,7 +769,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/listOfMaps": {
@@ -764,7 +790,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/mapOfMapOfExample": {
@@ -787,7 +814,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/mapProperty": {
@@ -804,7 +832,8 @@
                             "$ref": "#/definitions/ModelWithMapProperty"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/modelAttributes": {
@@ -878,7 +907,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/propertyWithArrayOfArrays": {
@@ -906,7 +936,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/propertyWithObjectNode": {
@@ -934,7 +965,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/status": {
@@ -964,7 +996,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/statuses": {
@@ -1002,7 +1035,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/features/{petId}": {
@@ -1020,11 +1054,8 @@
                         "description": "ID of pet that needs to be fetched",
                         "required": true,
                         "type": "string",
-                        "maximum": 5,
-                        "exclusiveMaximum": false,
-                        "minimum": 1,
-                        "exclusiveMinimum": false,
-                        "allowEmptyValue": false,
+                        "maxLength": 5,
+                        "minLength": 1,
                         "x-example": "3"
                     }
                 ],
@@ -1036,6 +1067,7 @@
                         }
                     }
                 },
+                "deprecated": false,
                 "x-test1": "value1",
                 "x-test2": {
                     "name2": "value2"
@@ -1087,6 +1119,15 @@
                     "title": "Car"
                 }
             ]
+        },
+        "Category": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Category"
         },
         "CustomTypeFor2031": {
             "type": "object",
@@ -1165,6 +1206,32 @@
             },
             "title": "Example"
         },
+        "FancyPet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Category"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "FancyPet"
+        },
+        "InputStream": {
+            "type": "object",
+            "title": "InputStream"
+        },
         "Map«string,Example»": {
             "type": "object",
             "title": "Map«string,Example»",
@@ -1229,6 +1296,82 @@
         },
         "ObjectNode": {
             "type": "object",
+            "properties": {
+                "array": {
+                    "type": "boolean"
+                },
+                "bigDecimal": {
+                    "type": "boolean"
+                },
+                "bigInteger": {
+                    "type": "boolean"
+                },
+                "binary": {
+                    "type": "boolean"
+                },
+                "boolean": {
+                    "type": "boolean"
+                },
+                "containerNode": {
+                    "type": "boolean"
+                },
+                "double": {
+                    "type": "boolean"
+                },
+                "float": {
+                    "type": "boolean"
+                },
+                "floatingPointNumber": {
+                    "type": "boolean"
+                },
+                "int": {
+                    "type": "boolean"
+                },
+                "integralNumber": {
+                    "type": "boolean"
+                },
+                "long": {
+                    "type": "boolean"
+                },
+                "missingNode": {
+                    "type": "boolean"
+                },
+                "nodeType": {
+                    "type": "string",
+                    "enum": [
+                        "ARRAY",
+                        "BINARY",
+                        "BOOLEAN",
+                        "MISSING",
+                        "NULL",
+                        "NUMBER",
+                        "OBJECT",
+                        "POJO",
+                        "STRING"
+                    ]
+                },
+                "null": {
+                    "type": "boolean"
+                },
+                "number": {
+                    "type": "boolean"
+                },
+                "object": {
+                    "type": "boolean"
+                },
+                "pojo": {
+                    "type": "boolean"
+                },
+                "short": {
+                    "type": "boolean"
+                },
+                "textual": {
+                    "type": "boolean"
+                },
+                "valueNode": {
+                    "type": "boolean"
+                }
+            },
             "title": "ObjectNode"
         },
         "Pet": {

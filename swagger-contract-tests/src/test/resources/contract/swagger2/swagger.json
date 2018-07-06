@@ -85,7 +85,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -135,7 +136,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/api/pet/findByStatus": {
@@ -187,7 +189,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/api/pet/findByTags": {
@@ -256,11 +259,8 @@
                         "description": "ID of pet that needs to be fetched",
                         "required": true,
                         "type": "string",
-                        "maximum": 5,
-                        "exclusiveMaximum": false,
-                        "minimum": 1,
-                        "exclusiveMinimum": false,
-                        "allowEmptyValue": false
+                        "maxLength": 5,
+                        "minLength": 1
                     }
                 ],
                 "responses": {
@@ -302,7 +302,7 @@
                 "security": [
                     {
                         "api_key": [
-                            
+
                         ]
                     },
                     {
@@ -311,7 +311,8 @@
                             "read:pets"
                         ]
                     }
-                ]
+                ],
+                "deprecated": false
             }
         },
         "/api/store/order": {
@@ -392,7 +393,8 @@
                     "400": {
                         "description": "Invalid Order"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/store/order/{orderId}": {
@@ -413,11 +415,8 @@
                         "description": "ID of pet that needs to be fetched",
                         "required": true,
                         "type": "string",
-                        "maximum": 5,
-                        "exclusiveMaximum": false,
-                        "minimum": 1,
-                        "exclusiveMinimum": false,
-                        "allowEmptyValue": false
+                        "maxLength": 5,
+                        "minLength": 1
                     }
                 ],
                 "responses": {
@@ -433,7 +432,8 @@
                     "404": {
                         "description": "Order not found"
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -452,10 +452,7 @@
                         "description": "ID of the order that needs to be deleted",
                         "required": true,
                         "type": "string",
-                        "exclusiveMaximum": false,
-                        "minimum": 1,
-                        "exclusiveMinimum": false,
-                        "allowEmptyValue": false
+                        "minLength": 1
                     }
                 ],
                 "responses": {
@@ -471,7 +468,8 @@
                     "404": {
                         "description": "Order not found"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user": {
@@ -506,7 +504,8 @@
                             "$ref": "#/definitions/User"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/createWithArray": {
@@ -543,7 +542,8 @@
                             "$ref": "#/definitions/User"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/createWithList": {
@@ -580,7 +580,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/login": {
@@ -621,7 +622,8 @@
                     "400": {
                         "description": "Invalid username/password supplied"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/logout": {
@@ -641,7 +643,8 @@
                             "type": "string"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/api/user/{username}": {
@@ -660,8 +663,7 @@
                         "in": "path",
                         "description": "The name that needs to be fetched. Use user1 for testing. ",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -677,7 +679,8 @@
                     "404": {
                         "description": "User not found"
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -754,8 +757,7 @@
                         "in": "path",
                         "description": "name that need to be deleted",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     },
                     {
                         "name": "username",
@@ -777,7 +779,8 @@
                     "404": {
                         "description": "User not found"
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -795,8 +798,7 @@
                         "in": "path",
                         "description": "The name that needs to be deleted",
                         "required": true,
-                        "type": "string",
-                        "allowEmptyValue": false
+                        "type": "string"
                     }
                 ],
                 "responses": {
@@ -812,7 +814,8 @@
                     "404": {
                         "description": "User not found"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/generic/pets/test": {
@@ -832,7 +835,8 @@
                             "$ref": "#/definitions/Pet"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },

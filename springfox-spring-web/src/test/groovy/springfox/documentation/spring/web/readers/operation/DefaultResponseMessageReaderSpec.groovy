@@ -53,7 +53,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   def "Should add default response messages"() {
     given:
       OperationContext operationContext =
-          operationContext(context(),
+          operationContext(documentationContext(),
               handlerMethod,
               0,
               requestMappingInfo("/somePath"),
@@ -78,7 +78,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   def "swagger annotation should override when using default reader"() {
     given:
       OperationContext operationContext =
-          operationContext(context(), dummyHandlerMethod('methodWithApiResponses'))
+          operationContext(documentationContext(), dummyHandlerMethod('methodWithApiResponses'))
 
     when:
       sut.apply(operationContext)
@@ -95,7 +95,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing a model should override the success response code"() {
     given:
-      OperationContext operationContext = operationContext(context(), dummyHandlerMethod('methodWithConcreteResponseBody'))
+      OperationContext operationContext = operationContext(documentationContext(), dummyHandlerMethod('methodWithConcreteResponseBody'))
 
     when:
       sut.apply(operationContext)
@@ -111,7 +111,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   def "Methods with return type containing a container model should override the success response code"() {
     given:
       OperationContext operationContext =
-          operationContext(context(), dummyHandlerMethod('methodWithListOfBusinesses'))
+          operationContext(documentationContext(), dummyHandlerMethod('methodWithListOfBusinesses'))
 
     when:
       sut.apply(operationContext)
@@ -128,7 +128,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   def "Methods with return type containing ResponseStatus annotation"() {
     given:
       OperationContext operationContext =
-          operationContext(context(), dummyHandlerMethod('methodWithResponseStatusAnnotation'))
+          operationContext(documentationContext(), dummyHandlerMethod('methodWithResponseStatusAnnotation'))
 
     when:
       sut.apply(operationContext)
@@ -144,7 +144,7 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   def "Methods with return type containing ResponseStatus annotation and empty reason message"() {
     given:
       OperationContext operationContext =
-          operationContext(context(), dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'))
+          operationContext(documentationContext(), dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'))
 
     when:
       sut.apply(operationContext)

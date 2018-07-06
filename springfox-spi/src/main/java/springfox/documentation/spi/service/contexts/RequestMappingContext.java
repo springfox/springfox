@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,10 +19,6 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Ordering;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
@@ -36,12 +32,17 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.*;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 public class RequestMappingContext {
   private final OperationModelContextsBuilder operationModelContextsBuilder;
@@ -50,7 +51,7 @@ public class RequestMappingContext {
   private final String requestMappingPattern;
   private final ApiDescriptionBuilder apiDescriptionBuilder;
 
-  private final Map<String, Model> modelMap = newHashMap();
+  private final Map<String, Model> modelMap = new HashMap<>();
 
   public RequestMappingContext(DocumentationContext context, RequestHandler handler) {
 
@@ -102,8 +103,8 @@ public class RequestMappingContext {
     return requestMappingPattern;
   }
 
-  public ImmutableMap<String, Model> getModelMap() {
-    return ImmutableMap.copyOf(modelMap);
+  public Map<String, Model> getModelMap() {
+    return unmodifiableMap(modelMap);
   }
 
   public OperationModelContextsBuilder operationModelsBuilder() {
@@ -118,7 +119,7 @@ public class RequestMappingContext {
     return documentationContext.getAlternateTypeProvider().alternateFor(resolvedType);
   }
 
-  public Ordering<Operation> operationOrdering() {
+  public Comparator<Operation> operationOrdering() {
     return documentationContext.operationOrdering();
   }
 
@@ -132,7 +133,7 @@ public class RequestMappingContext {
         operationModelContextsBuilder, requestMappingPattern, knownModels);
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
+  public Set<Class> getIgnorableParameterTypes() {
     return documentationContext.getIgnorableParameterTypes();
   }
 
@@ -140,8 +141,8 @@ public class RequestMappingContext {
     return documentationContext.getGenericsNamingStrategy();
   }
 
-  public ImmutableSet<ResolvedType> getAdditionalModels() {
-    return ImmutableSet.copyOf(documentationContext.getAdditionalModels());
+  public Set<ResolvedType> getAdditionalModels() {
+    return documentationContext.getAdditionalModels().stream().collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
   }
 
   public PatternsRequestCondition getPatternsCondition() {
@@ -189,15 +190,11 @@ public class RequestMappingContext {
   }
 
   public <T extends Annotation> List<T> findAnnotations(Class<T> annotation) {
-    List<T> annotations = newArrayList();
+    List<T> annotations = new ArrayList<>();
     Optional<T> methodAnnotation = findAnnotation(annotation);
     Optional<T> controllerAnnotation = findControllerAnnotation(annotation);
-    if (methodAnnotation.isPresent()) {
-      annotations.add(methodAnnotation.get());
-    }
-    if (controllerAnnotation.isPresent()) {
-      annotations.add(controllerAnnotation.get());
-    }
+    methodAnnotation.ifPresent(annotations::add);
+    controllerAnnotation.ifPresent(annotations::add);
     return annotations;
   }
 

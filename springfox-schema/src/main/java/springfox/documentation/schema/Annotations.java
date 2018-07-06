@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ package springfox.documentation.schema;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 
 import java.lang.annotation.Annotation;
+import java.util.Optional;
+
+import static java.util.Optional.*;
 
 public class Annotations {
 
@@ -47,15 +48,15 @@ public class Annotations {
       Class<A> annotationClass) {
 
     return tryGetFieldAnnotation(beanPropertyDefinition, annotationClass)
-        .or(tryGetGetterAnnotation(beanPropertyDefinition, annotationClass))
-        .or(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass));
+        .map(Optional::of).orElse(tryGetGetterAnnotation(beanPropertyDefinition, annotationClass))
+        .map(Optional::of).orElse(tryGetSetterAnnotation(beanPropertyDefinition, annotationClass));
   }
 
   public static boolean memberIsUnwrapped(AnnotatedMember member) {
     if (member == null) {
       return false;
     }
-    return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
+    return ofNullable(member.getAnnotation(JsonUnwrapped.class)).isPresent();
   }
 
   public static String unwrappedPrefix(AnnotatedMember member) {
@@ -63,14 +64,9 @@ public class Annotations {
       return "";
     }
 
-    return Optional.fromNullable(member.getAnnotation(JsonUnwrapped.class))
-        .transform(new Function<JsonUnwrapped,
-            String>() {
-          @Override
-          public String apply(JsonUnwrapped input) {
-            return input.prefix();
-          }
-        }).or("");
+    return ofNullable(member.getAnnotation(JsonUnwrapped.class))
+        .map(JsonUnwrapped::prefix)
+        .orElse("");
   }
 
   @SuppressWarnings("PMD")
@@ -79,9 +75,9 @@ public class Annotations {
       Class<A> annotationClass) {
 
     if (beanPropertyDefinition.hasGetter()) {
-      return Optional.fromNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
+      return ofNullable(beanPropertyDefinition.getGetter().getAnnotation(annotationClass));
     }
-    return Optional.absent();
+    return empty();
   }
 
   @SuppressWarnings("PMD")
@@ -90,9 +86,9 @@ public class Annotations {
       Class<A> annotationClass) {
 
     if (beanPropertyDefinition.hasSetter()) {
-      return Optional.fromNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
+      return ofNullable(beanPropertyDefinition.getSetter().getAnnotation(annotationClass));
     }
-    return Optional.absent();
+    return empty();
   }
 
   @SuppressWarnings("PMD")
@@ -101,9 +97,9 @@ public class Annotations {
       Class<A> annotationClass) {
     
     if (beanPropertyDefinition.hasField()) {
-      return Optional.fromNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
+      return ofNullable(beanPropertyDefinition.getField().getAnnotation(annotationClass));
     }
-    return Optional.absent();
+    return empty();
   }
 
   public static String memberName(AnnotatedMember member) {

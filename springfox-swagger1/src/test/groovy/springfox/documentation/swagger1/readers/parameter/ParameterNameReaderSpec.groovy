@@ -51,9 +51,9 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     and: "mocks are setup"
       operationContext.consumes() >> []
-    and: "context is setup"
+    and: "documentationContext is setup"
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), genericNamingStrategy, operationContext)
+          documentationContext(), genericNamingStrategy, operationContext)
     when:
       def sut = nameReader(apiParam)
       sut.apply(parameterContext)

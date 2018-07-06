@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.base.Optional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -59,6 +58,8 @@ import springfox.documentation.spring.web.dummy.models.Response;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -70,6 +71,7 @@ import java.nio.ByteBuffer;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -340,6 +342,11 @@ public class BugsController {
     return ResponseEntity.ok(null);
   }
 
+  @PostMapping(path = "/1965-form-data", consumes = "multipart/form-data")
+  public ResponseEntity<Example> bug1965FormData(Example sfData) {
+    return ResponseEntity.ok(null);
+  }
+
   @PostMapping(path = "/1965", consumes = "multipart/form-data")
   public ResponseEntity<Example> bug1965(
       @Valid @RequestPart(name = "sfParamMap") @RequestParam Map<String, String> paramMap,
@@ -381,7 +388,7 @@ public class BugsController {
   }
 
   @GetMapping(path = "/2161")
-  ResponseEntity<String> bug2161And2249(@RequestBody Status status) {
+  ResponseEntity<String> bug2161And2249and2469(@RequestBody Status status) {
     return ResponseEntity.ok("");
   }
 
@@ -425,24 +432,24 @@ public class BugsController {
 
   @GetMapping("/bug2282")
   @ApiOperation("/bug2282")
-  public String bug2282(User user){
+  public String bug2282(User user) {
     return "";
   }
 
   @PostMapping(value = "/bug2230", consumes = MediaType.APPLICATION_ATOM_XML_VALUE)
   @ApiOperation("/bug2230")
   public String bug2230(
-      @RequestBody EHDTOApplicatorUnits applicatorUnits){
+      @RequestBody EHDTOApplicatorUnits applicatorUnits) {
     return "";
   }
 
   @GetMapping(value = "/bug2182")
   @ApiOperation("/bug2182")
-  public ProductVO bug2182(){
+  public ProductVO bug2182() {
     return null;
   }
 
-  @GetMapping({"/bug2220", "/bug2220/{bar}"})
+  @GetMapping({ "/bug2220", "/bug2220/{bar}" })
   public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
   }
 
@@ -455,9 +462,57 @@ public class BugsController {
   public void bug1944() {
   }
 
+  @PostMapping("/2378")
+  public void upperCaseField(@RequestBody UpperCasedField input) {
+  }
+
+  @PostMapping("/2391")
+  public void bug2391(@ModelAttribute Bug2391 input) {
+  }
+
   @RequestMapping(value = "/2368", method = RequestMethod.GET)
   public ResponseEntity<Void> bug2368(@ModelAttribute @Valid GenericRequest<Void> voidRequest) {
     return ResponseEntity.ok(null);
+  }
+
+  @PostMapping("/2479")
+  public void bug2479(@RequestBody Bug2479 input) {
+  }
+
+
+  @PostMapping("/2415")
+  public void bug2415(@RequestBody Bug2415 input) {
+  }
+
+  @GetMapping("/2415")
+  public ResponseEntity<String> bug2415(
+      @Pattern(regexp = "^[A-Za-z0-9]{8,16}$")
+      @Size(min = 8, max = 16)
+      @RequestParam String input) {
+    return ResponseEntity.ok("test");
+  }
+
+  @GetMapping("/2423")
+  public void bug2423(Bug2423 input) {
+  }
+
+  public class Bug2423 {
+    public String from;
+    public String to;
+  }
+
+  public class Bug2415 {
+    private String test;
+    
+    @Pattern(regexp = "^[A-Za-z0-9]{8,16}$")
+    @Size(min = 8, max = 16)
+    public String getTest() {
+      return test;
+    }
+
+    public void setTest(String test) {
+      this.test = test;
+    }
   }
 
   public class GenericRequest<T> {
@@ -702,6 +757,8 @@ public class BugsController {
     private final Boolean enabled;
     @ApiModelProperty(example = "'1235'")
     private final String integerString;
+    @ApiModelProperty(example = "'[test] n/a'")
+    private final String bug2469;
 
     @JsonProperty("bug_1964")
     @ApiModelProperty(required = true)
@@ -710,9 +767,11 @@ public class BugsController {
     @JsonCreator
     Status(
         @JsonProperty("enabled") Boolean enabled,
-        @JsonProperty("integerString") String integerString) {
+        @JsonProperty("integerString") String integerString,
+        @JsonProperty("bug2469") String bug2469) {
       this.enabled = enabled;
       this.integerString = integerString;
+      this.bug2469 = bug2469;
     }
 
     @JsonProperty("enabled")
@@ -729,6 +788,10 @@ public class BugsController {
     @ApiModelProperty(required = true)
     public boolean isBug1964() {
       return bug1964;
+    }
+
+    public String getBug2469() {
+      return bug2469;
     }
   }
 
@@ -960,6 +1023,59 @@ public class BugsController {
       public String getInnerValue() {
         return innerValue;
       }
+    }
+  }
+
+  private class UpperCasedField {
+    @ApiModelProperty(name = "AGE", value = "the age of person")
+    private Integer AGE;
+
+    public Integer YEAR;
+
+    public Integer getAGE() {
+      return AGE;
+    }
+
+    public void setAGE(Integer AGE) {
+      this.AGE = AGE;
+    }
+  }
+
+  public class Bug2391 {
+    @ApiModelProperty(name = "from_country_id", position = 1, required = true)
+    private Long fromCountryId;
+
+    @ModelAttribute("from_country_id")
+    public Long getFromCountryId() {
+      return fromCountryId;
+    }
+
+    public void setFromCountryId(Long fromCountryId) {
+      this.fromCountryId = fromCountryId;
+    }
+  }
+
+  private class Bug2479 {
+    @ApiModelProperty("First")
+    private Example first;
+
+    @ApiModelProperty("Second")
+    private Example second;
+
+    public Example getFirst() {
+      return first;
+    }
+
+    public void setFirst(Example first) {
+      this.first = first;
+    }
+
+    public Example getSecond() {
+      return second;
+    }
+
+    public void setSecond(Example second) {
+      this.second = second;
     }
   }
 }

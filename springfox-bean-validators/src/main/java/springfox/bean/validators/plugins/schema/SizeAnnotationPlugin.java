@@ -18,8 +18,7 @@
  */
 package springfox.bean.validators.plugins.schema;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
@@ -28,6 +27,7 @@ import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Size;
+import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
 import static springfox.bean.validators.plugins.Validators.*;
@@ -46,13 +46,10 @@ public class SizeAnnotationPlugin implements ModelPropertyBuilderPlugin {
   public void apply(ModelPropertyContext context) {
     Optional<Size> size = extractAnnotation(context);
 
-    if (size.isPresent()) {
-      context.getBuilder().allowableValues(stringLengthRange(size.get()));
-    }
+    size.ifPresent(size1 -> context.getBuilder().allowableValues(stringLengthRange(size1)));
   }
 
-  @VisibleForTesting
   Optional<Size> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, Size.class).or(annotationFromField(context, Size.class));
+    return annotationFromBean(context, Size.class).map(Optional::of).orElse(annotationFromField(context, Size.class));
   }
 }

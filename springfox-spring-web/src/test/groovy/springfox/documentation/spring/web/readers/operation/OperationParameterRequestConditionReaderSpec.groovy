@@ -40,7 +40,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["paramsCondition": paramCondition])
       OperationContext operationContext =
-          operationContext(context(), handlerMethod, 0, requestMappingInfo)
+          operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()
@@ -71,7 +71,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
               ["paramsCondition": paramCondition])
       OperationContext operationContext =
-          operationContext(context(), handlerMethod, 0, requestMappingInfo)
+          operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
 
     when:
       sut.apply(operationContext)
@@ -88,7 +88,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
       ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue", "test=3")
       def requestMappingInfo = requestMappingInfo('/parameter-conditions', ["paramsCondition": paramCondition])
       OperationContext operationContext =
-        operationContext(context(), handlerMethod, 0, requestMappingInfo)
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
     when:
       sut.apply(operationContext)
 

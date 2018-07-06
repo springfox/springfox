@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,9 +21,6 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Ordering;
 import org.springframework.core.OrderComparator;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
@@ -44,29 +41,33 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.function.Function;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 
-  private final List<SecurityContext> securityContexts = newArrayList();
-  private final Set<Class> ignorableParameterTypes = newHashSet();
-  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = newTreeMap();
-  private final List<Parameter> globalOperationParameters = newArrayList();
-  private final List<AlternateTypeRule> rules = newArrayList();
-  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = newHashMap();
-  private final Set<String> protocols = newHashSet();
-  private final Set<String> produces = newHashSet();
-  private final Set<String> consumes = newHashSet();
-  private final Set<ResolvedType> additionalModels = newHashSet();
-  private final Set<Tag> tags = newTreeSet(Tags.tagComparator());
+  private final List<SecurityContext> securityContexts = new ArrayList<>();
+  private final Set<Class> ignorableParameterTypes = new HashSet<>();
+  private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap<>();
+  private final List<Parameter> globalOperationParameters = new ArrayList<>();
+  private final List<AlternateTypeRule> rules = new ArrayList<>();
+  private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap<>();
+  private final Set<String> protocols = new HashSet<>();
+  private final Set<String> produces = new HashSet<>();
+  private final Set<String> consumes = new HashSet<>();
+  private final Set<ResolvedType> additionalModels = new HashSet<>();
+  private final Set<Tag> tags = new TreeSet<>(Tags.tagComparator());
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
 
   private TypeResolver typeResolver;
@@ -76,10 +77,10 @@ public class DocumentationContextBuilder {
   private ResourceGroupingStrategy resourceGroupingStrategy;
   private PathProvider pathProvider;
   private List<? extends SecurityScheme> securitySchemes;
-  private Ordering<ApiListingReference> listingReferenceOrdering;
-  private Ordering<ApiDescription> apiDescriptionOrdering;
+  private Comparator<ApiListingReference> listingReferenceOrdering;
+  private Comparator<ApiDescription> apiDescriptionOrdering;
   private DocumentationType documentationType;
-  private Ordering<Operation> operationOrdering;
+  private Comparator<Operation> operationOrdering;
   private boolean applyDefaultResponseMessages;
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private String host;
@@ -123,7 +124,9 @@ public class DocumentationContextBuilder {
   }
 
   /**
-   @deprecated  @since 2.2.0 - only here for backward compatibility
+   * @deprecated  @since 2.2.0 - only here for backward compatibility
+   * @param resourceGroupingStrategy - custom resource grouping strategy
+   * @return this
    */
   @Deprecated
   public DocumentationContextBuilder withResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
@@ -147,19 +150,19 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder apiListingReferenceOrdering(
-      Ordering<ApiListingReference> listingReferenceOrdering) {
+          Comparator<ApiListingReference> listingReferenceOrdering) {
 
     this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this.listingReferenceOrdering);
     return this;
   }
 
-  public DocumentationContextBuilder apiDescriptionOrdering(Ordering<ApiDescription> apiDescriptionOrdering) {
+  public DocumentationContextBuilder apiDescriptionOrdering(Comparator<ApiDescription> apiDescriptionOrdering) {
     this.apiDescriptionOrdering = defaultIfAbsent(apiDescriptionOrdering, this.apiDescriptionOrdering);
     return this;
   }
 
   private Map<RequestMethod, List<ResponseMessage>> aggregateResponseMessages() {
-    Map<RequestMethod, List<ResponseMessage>> responseMessages = newHashMap();
+    Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
     if (applyDefaultResponseMessages) {
       responseMessages.putAll(defaultResponseMessages);
     }
@@ -173,9 +176,9 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
-    rules.addAll(from(ruleBuilders)
-        .transform(evaluator(typeResolver))
-        .toList());
+    rules.addAll(ruleBuilders.stream()
+        .map(evaluator(typeResolver))
+        .collect(toList()));
     return this;
   }
 
@@ -184,7 +187,7 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder operationOrdering(Ordering<Operation> operationOrdering) {
+  public DocumentationContextBuilder operationOrdering(Comparator<Operation> operationOrdering) {
     this.operationOrdering = defaultIfAbsent(operationOrdering, this.operationOrdering);
     return this;
   }
@@ -289,11 +292,6 @@ public class DocumentationContextBuilder {
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
       evaluator(final TypeResolver typeResolver) {
 
-    return new Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>() {
-      @Override
-      public AlternateTypeRule apply(Function<TypeResolver, AlternateTypeRule> input) {
-        return input.apply(typeResolver);
-      }
-    };
+    return input -> input.apply(typeResolver);
   }
 }

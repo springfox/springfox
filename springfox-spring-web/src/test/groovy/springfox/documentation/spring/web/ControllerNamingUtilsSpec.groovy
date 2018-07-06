@@ -18,7 +18,6 @@
  */
 
 package springfox.documentation.spring.web
-import com.google.common.base.Objects
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -57,7 +56,7 @@ class ControllerNamingUtilsSpec extends Specification {
     when:
       def decoded = ControllerNamingUtils.decode(path)
     then:
-      Objects.equal(decoded, path)
+      Objects.equals(decoded, path)
     where:
       path << [null, '', ""]
   }

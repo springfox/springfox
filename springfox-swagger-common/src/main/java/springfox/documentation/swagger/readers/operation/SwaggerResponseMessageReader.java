@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package springfox.documentation.swagger.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -40,13 +39,14 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
@@ -83,17 +83,15 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
-        operationAnnotation.transform(resolvedTypeFromOperation(typeResolver, defaultResponse));
-    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.transform(responseHeaders());
-    Map<String, Header> defaultHeaders = newHashMap();
-    if (defaultResponseHeaders.isPresent()) {
-      defaultHeaders.putAll(headers(defaultResponseHeaders.get()));
-    }
+        operationAnnotation.map(resolvedTypeFromOperation(typeResolver, defaultResponse));
+    Optional<ResponseHeader[]> defaultResponseHeaders = operationAnnotation.map(ApiOperation::responseHeaders);
+    Map<String, Header> defaultHeaders = new HashMap<>();
+    defaultResponseHeaders.ifPresent(responseHeaders -> defaultHeaders.putAll(headers(responseHeaders)));
 
     List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
-    Set<ResponseMessage> responseMessages = newHashSet();
+    Set<ResponseMessage> responseMessages = new HashSet<>();
 
-    Map<Integer, ApiResponse> seenResponsesByCode = newHashMap();
+    Map<Integer, ApiResponse> seenResponsesByCode = new HashMap<>();
     for (ApiResponses apiResponses : allApiResponses) {
       ApiResponse[] apiResponseAnnotations = apiResponses.value();
       for (ApiResponse apiResponse : apiResponseAnnotations) {
@@ -105,23 +103,23 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context.getAlternateTypeProvider(),
               context.getGenericsNamingStrategy(),
               context.getIgnorableParameterTypes());
-          Optional<ModelReference> responseModel = Optional.absent();
+          Optional<ModelReference> responseModel = empty();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
           if (isSuccessful(apiResponse.code())) {
-            type = type.or(operationResponse);
+            type = type.map(Optional::of).orElse(operationResponse);
           }
           if (type.isPresent()) {
-            responseModel = Optional.of(
+            responseModel = of(
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
-          Map<String, Header> headers = newHashMap(defaultHeaders);
+          Map<String, Header> headers = new HashMap<>(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
           responseMessages.add(new ResponseMessageBuilder()
               .code(apiResponse.code())
               .message(apiResponse.message())
-              .responseModel(responseModel.orNull())
+              .responseModel(responseModel.orElse(null))
               .headersWithDescription(headers)
               .build());
         }
@@ -163,7 +161,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   private Optional<ResolvedType> resolvedType(
       ResolvedType resolvedType,
       ApiResponse apiResponse) {
-    return fromNullable(resolvedTypeFromResponse(
+    return ofNullable(resolvedTypeFromResponse(
         typeResolver,
         resolvedType).apply(apiResponse));
   }

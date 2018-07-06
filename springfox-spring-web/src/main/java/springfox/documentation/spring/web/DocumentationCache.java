@@ -22,12 +22,11 @@ package springfox.documentation.spring.web;
 import springfox.documentation.service.Documentation;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
-
 public class DocumentationCache {
-  private Map<String, Documentation> documentationLookup = newLinkedHashMap();
+  private Map<String, Documentation> documentationLookup = new LinkedHashMap();
 
   public void addDocumentation(Documentation documentation) {
     documentationLookup.put(documentation.getGroupName(), documentation);

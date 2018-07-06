@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,17 +22,18 @@ package springfox.documentation.spring.web.paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.google.common.base.Strings.*;
+import static org.springframework.util.StringUtils.*;
+
 
 public class Paths {
-  private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-\\.]+[/]?)");
+  private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-.]+[/]?)");
 
   private Paths() {
     throw new UnsupportedOperationException();
   }
 
   public static String splitCamelCase(String s, String separator) {
-    if (isNullOrEmpty(s)) {
+    if (isEmpty(s)) {
       return "";
     }
     return s.replaceAll(
@@ -50,14 +51,14 @@ public class Paths {
   }
 
   public static String maybeChompLeadingSlash(String path) {
-    if (isNullOrEmpty(path) || !path.startsWith("/")) {
+    if (isEmpty(path) || !path.startsWith("/")) {
       return path;
     }
     return path.replaceFirst("^/", "");
   }
 
   public static String maybeChompTrailingSlash(String path) {
-    if (isNullOrEmpty(path) || !path.endsWith("/")) {
+    if (isEmpty(path) || !path.endsWith("/")) {
       return path;
     }
     return path.replaceFirst("/$", "");
@@ -65,7 +66,7 @@ public class Paths {
 
 
   public static String firstPathSegment(String path) {
-    if (isNullOrEmpty(path)) {
+    if (isEmpty(path)) {
       return path;
     }
     Matcher matcher = FIRST_PATH_FRAGMENT_REGEX.matcher(path);
@@ -82,7 +83,7 @@ public class Paths {
    * A good extension point if you need to alter endpoints by adding or removing path segments.
    * Note: this should not be an absolute  uri
    *
-   * @param requestMappingPattern
+   * @param requestMappingPattern request mapping pattern
    * @return the request mapping endpoint
    */
   public static String sanitizeRequestMappingPattern(String requestMappingPattern) {

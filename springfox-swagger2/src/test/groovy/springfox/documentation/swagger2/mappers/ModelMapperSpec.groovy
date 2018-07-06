@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers
 
-import com.google.common.collect.ImmutableSet
+import com.fasterxml.classmate.types.ResolvedObjectType
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
@@ -31,15 +31,16 @@ import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.ModelRef
+import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.SimpleType
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 
-import static com.google.common.base.Functions.*
-import static com.google.common.base.Suppliers.*
-import static com.google.common.collect.Maps.*
+import java.util.function.Function
+
+import static java.util.Collections.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 import static springfox.documentation.swagger2.mappers.ModelMapper.*
@@ -58,8 +59,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            emptySet())).get()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -87,9 +88,9 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
         .get()
-    def modelMap = newHashMap()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -112,7 +113,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -134,7 +135,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -156,7 +157,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -179,7 +180,7 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -197,8 +198,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            emptySet())).get()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -235,8 +236,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            emptySet())).get()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -338,7 +339,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .example(modelProperty.example)
         .xml(modelProperty.xml)
         .build()
-    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+    newModel.updateModelRef(createFactory(modelProperty))
   }
 
 
@@ -351,8 +352,8 @@ class ModelMapperSpec extends SchemaSpecification {
             DocumentationType.SWAGGER_2,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).get()
-    def modelMap = newHashMap()
+            emptySet())).get()
+    def modelMap = new HashMap<>()
 
     and:
     modelMap.put("test", model)
@@ -390,7 +391,7 @@ class ModelMapperSpec extends SchemaSpecification {
         .position(modelProperty.position)
         .type(modelProperty.type)
         .build()
-    newModel.updateModelRef(forSupplier(ofInstance((modelProperty.modelRef))))
+    newModel.updateModelRef(createFactory(modelProperty))
   }
 
   def "model property positions affect the serialization order"() {
@@ -472,4 +473,12 @@ class ModelMapperSpec extends SchemaSpecification {
     model
   }
 
+  Function createFactory(ModelProperty modelProperty) {
+    new Function<ResolvedObjectType, ModelReference>() {
+      @Override
+      ModelReference apply(ResolvedObjectType type) {
+        return modelProperty.getModelRef()
+      }
+    }
+  }
 }

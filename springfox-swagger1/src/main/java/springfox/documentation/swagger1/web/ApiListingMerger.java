@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@
  */
 package springfox.documentation.swagger1.web;
 
-import com.google.common.base.Optional;
 import springfox.documentation.swagger1.dto.ApiListing;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static java.util.Optional.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiListingMerger {
   public static Optional<ApiListing> mergedApiListing(Collection<ApiListing> apiListings) {
@@ -40,13 +40,13 @@ public class ApiListingMerger {
         merged.setDescription(each.getDescription());
         merged.appendAuthorizations(each.getAuthorizations());
         merged.appendApis(each.getApis());
-        merged.appendProtocols(newHashSet(each.getProtocols()));
-        merged.appendConsumes(newHashSet(each.getConsumes()));
+        merged.appendProtocols(new HashSet<>(each.getProtocols()));
+        merged.appendConsumes(new HashSet<>(each.getConsumes()));
         merged.appendModels(each.getModels());
-        merged.appendProduces(newHashSet(each.getProduces()));
+        merged.appendProduces(new HashSet<>(each.getProduces()));
       }
-      return Optional.of(merged);
+      return of(merged);
     }
-    return from(nullToEmptyList(apiListings)).first();
+    return nullToEmptyList(apiListings).stream().findFirst();
   }
 }

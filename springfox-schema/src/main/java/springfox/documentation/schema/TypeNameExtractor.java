@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
 
-import static com.google.common.base.Optional.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 
@@ -74,7 +74,7 @@ public class TypeNameExtractor {
     Class<?> erasedType = resolvedType.getErasedType();
     GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
     ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), context.getDocumentationType());
-    String simpleName = fromNullable(typeNameFor(erasedType)).or(typeName(nameContext));
+    String simpleName = ofNullable(typeNameFor(erasedType)).orElse(typeName(nameContext));
     StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {

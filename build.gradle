@@ -11,10 +11,10 @@ buildscript {
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
     classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
-    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.6.2"
-    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.2"
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.4"
+    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.7"
     classpath "org.ajoberstar:gradle-git:1.7.2"
   }
 }
@@ -44,6 +44,13 @@ subprojects {
   javadoc {
     options.encoding = 'UTF-8'
   }
+
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.deprecation = true
+    options.compilerArgs += ["-Xlint:unchecked", "-Xlint:deprecation", "-parameters"]
+  }
+
   //Commented PMD and Findbugs as its taking too much time for very little value
   //Perhaps run every 20 CI builds (mod of ci build number)
 //  apply from: "$rootDir/gradle/code-quality.gradle"
@@ -72,8 +79,6 @@ subprojects {
   jvmsrc {
     packageName "springfox"
   }
-
-  compileJava.options.encoding = 'UTF-8'
 
   sourceCompatibility = jdkVersion
   targetCompatibility = jdkVersion

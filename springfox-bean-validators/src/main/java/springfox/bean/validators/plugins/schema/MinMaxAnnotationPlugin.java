@@ -18,8 +18,7 @@
  */
 package springfox.bean.validators.plugins.schema;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
@@ -29,6 +28,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
 import static springfox.bean.validators.plugins.Validators.*;
@@ -52,13 +52,11 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
     context.getBuilder().allowableValues(allowableRange(min, max));
   }
 
-  @VisibleForTesting
-  Optional<Min> extractMin(ModelPropertyContext context) {
-    return annotationFromBean(context, Min.class).or(annotationFromField(context, Min.class));
+  private Optional<Min> extractMin(ModelPropertyContext context) {
+    return annotationFromBean(context, Min.class).map(Optional::of).orElse(annotationFromField(context, Min.class));
   }
 
-  @VisibleForTesting
-  Optional<Max> extractMax(ModelPropertyContext context) {
-    return annotationFromBean(context, Max.class).or(annotationFromField(context, Max.class));
+  private Optional<Max> extractMax(ModelPropertyContext context) {
+    return annotationFromBean(context, Max.class).map(Optional::of).orElse(annotationFromField(context, Max.class));
   }
 }

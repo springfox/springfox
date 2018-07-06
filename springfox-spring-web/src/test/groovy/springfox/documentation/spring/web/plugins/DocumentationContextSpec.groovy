@@ -20,12 +20,12 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
-import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
+import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import javax.servlet.ServletContext
 
@@ -41,13 +41,20 @@ class DocumentationContextSpec extends Specification {
     defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), Mock(ServletContext))
 
     contextBuilder = this.defaultConfiguration.create(DocumentationType.SWAGGER_12)
-            .requestHandlers([])
-            .operationOrdering(Ordering.from(nickNameComparator()))
+        .requestHandlers([])
+        .operationOrdering(nickNameComparator())
     plugin = new Docket(DocumentationType.SWAGGER_12)
     operationReader = Mock(ApiOperationReader)
   }
 
-  def context() {
+  def documentationContext() {
     plugin.configure(contextBuilder)
+  }
+
+  def context() {
+    OperationContext context = Mock()
+    context.documentationContext >> documentationContext()
+    context.consumes() >> []
+    return context
   }
 }

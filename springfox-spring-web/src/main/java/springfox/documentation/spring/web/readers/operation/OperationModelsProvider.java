@@ -73,7 +73,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   private void collectFromReturnType(RequestMappingContext context) {
     ResolvedType modelType = context.getReturnType();
     modelType = context.alternateFor(modelType);
-    LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
+    LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));
     context.operationModelsBuilder().addReturn(modelType);
   }
 
@@ -87,7 +87,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
         if (parameterType.hasParameterAnnotation(RequestBody.class)
             || parameterType.hasParameterAnnotation(RequestPart.class)) {
           ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
-          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).or("<null>"));
+          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));
           context.operationModelsBuilder().addInputParam(modelType);
         }
     }

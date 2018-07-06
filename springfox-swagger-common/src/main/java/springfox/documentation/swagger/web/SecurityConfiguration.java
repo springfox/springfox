@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -68,7 +68,17 @@ public class SecurityConfiguration {
   }
 
   /**
+   *
    * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
+   *
+   * @param clientId - client id
+   * @param clientSecret - client secret
+   * @param realm - realm
+   * @param appName - application name
+   * @param apiKey - api key
+   * @param apiKeyVehicle - how the api key is transmitted
+   * @param apiKeyName - name of the api key
+   * @param scopeSeparator - scope separator
    */
   @Deprecated
   public SecurityConfiguration(
@@ -130,6 +140,7 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apiKey
    */
   @Deprecated
   @JsonProperty("apiKey")
@@ -139,6 +150,7 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apiKeyName
    */
   @Deprecated
   @JsonProperty("apiKeyName")
@@ -148,6 +160,7 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apiKeyVehicle - header, cookie etc.
    */
   @Deprecated
   @JsonProperty("apiKeyVehicle")

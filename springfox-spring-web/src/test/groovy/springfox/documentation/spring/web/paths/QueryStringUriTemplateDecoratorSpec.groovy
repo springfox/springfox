@@ -1,6 +1,5 @@
 package springfox.documentation.spring.web.paths
 
-import com.google.common.base.Optional
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.AllowableValues
@@ -8,6 +7,8 @@ import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+
+import static java.util.Optional.*
 
 class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
   def "Is active only when the uri template is enabled" () {
@@ -23,7 +24,7 @@ class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
       def requestMappingContext = Mock(RequestMappingContext)
       PathContext ctx = new PathContext(requestMappingContext, operation(params, allowedValues))
     and:
-      requestMappingContext.getDocumentationContext() >> context()
+      requestMappingContext.getDocumentationContext() >> documentationContext()
     and:
       def sut = new QueryStringUriTemplateDecorator()
     when:
@@ -62,7 +63,7 @@ class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
 
   Optional<Operation> operation(List<String> paramNames, allowableValueLookup) {
     if (paramNames == null) {
-      return Optional.absent()
+      return empty()
     }
     def operation = Mock(Operation)
     operation.getParameters() >> paramNames.collect {
@@ -71,7 +72,7 @@ class QueryStringUriTemplateDecoratorSpec extends DocumentationContextSpec {
           .parameterType("query")
           .allowableValues(allowableValue(allowableValueLookup[it]))
           .build() }
-    Optional.of(operation)
+    of(operation)
   }
 
   AllowableValues allowableValue(values) {

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,19 +24,20 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Optional;
 import springfox.documentation.schema.ResolvedTypes;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
-import static com.google.common.base.Optional.*;
+import java.util.Optional;
+
+import static java.util.Optional.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 public abstract class BaseModelProperty implements ModelProperty {
 
   private final String name;
-  protected final BeanPropertyDefinition jacksonProperty;
-  protected final Optional<JsonFormat> jsonFormatAnnotation;
+  private final BeanPropertyDefinition jacksonProperty;
+  private final Optional<JsonFormat> jsonFormatAnnotation;
   protected final TypeResolver resolver;
   protected final AlternateTypeProvider alternateTypeProvider;
 
@@ -51,9 +52,9 @@ public abstract class BaseModelProperty implements ModelProperty {
     this.jacksonProperty = jacksonProperty;
     AnnotatedMember primaryMember = jacksonProperty.getPrimaryMember();
     if (primaryMember != null) {
-      jsonFormatAnnotation = Optional.fromNullable(primaryMember.getAnnotation(JsonFormat.class));
+      jsonFormatAnnotation = ofNullable(primaryMember.getAnnotation(JsonFormat.class));
     } else {
-      jsonFormatAnnotation = Optional.absent();
+      jsonFormatAnnotation = empty();
     }
   }
 
@@ -84,12 +85,9 @@ public abstract class BaseModelProperty implements ModelProperty {
 
   @Override
   public AllowableValues allowableValues() {
-    Optional<AllowableValues> allowableValues = fromNullable(ResolvedTypes.allowableValues(getType()));
+    Optional<AllowableValues> allowableValues = ofNullable(ResolvedTypes.allowableValues(getType()));
     //Preference to inferred allowable values over list values via ApiModelProperty
-    if (allowableValues.isPresent()) {
-      return allowableValues.get();
-    }
-    return null;
+    return allowableValues.orElse(null);
   }
 
   @Override

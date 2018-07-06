@@ -33,7 +33,6 @@ import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.base.Predicates.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 
@@ -52,7 +51,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
             .select()
-              .apis((not(withClassAnnotation(ApiIgnore))))
+              .apis(withClassAnnotation(ApiIgnore).negate())
               .paths(regex(".*?"))
               .build()
   }
@@ -67,7 +66,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
 
     then:
-      context().groupName == "default"
+      documentationContext().groupName == "default"
     where:
       handlerMappings              | resourceGroupingStrategy     | groupName | message
       [requestMappingInfo("path")] | null                         | null      | "resourceGroupingStrategy is required"
@@ -95,7 +94,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result = sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.size() == 2
@@ -119,7 +118,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.requestHandlers(requestHandlers)
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result = sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.size() == 2

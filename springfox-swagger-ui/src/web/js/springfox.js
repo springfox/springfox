@@ -1,14 +1,40 @@
+import csrfSupport from './csrf';
+
 window.onload = () => {
 
   const buildSystemAsync = async (baseUrl) => {
     try {
-      const configUIResponse = await fetch(baseUrl + "/swagger-resources/configuration/ui", {credentials: 'same-origin'});
+      const configUIResponse = await fetch(
+          baseUrl + "/swagger-resources/configuration/ui",
+          {
+            credentials: 'same-origin',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          });
       const configUI = await configUIResponse.json();
 
-      const configSecurityResponse = await fetch(baseUrl + "/swagger-resources/configuration/security", {credentials: 'same-origin'});
+      const configSecurityResponse = await fetch(
+          baseUrl + "/swagger-resources/configuration/security",
+          {
+            credentials: 'same-origin',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          });
       const configSecurity = await configSecurityResponse.json();
 
-      const resourcesResponse = await fetch(baseUrl + "/swagger-resources", {credentials: 'same-origin'});
+      const resourcesResponse = await fetch(
+          baseUrl + "/swagger-resources",
+          {
+            credentials: 'same-origin',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          });
       const resources = await resourcesResponse.json();
       resources.forEach(resource => {
         if (resource.url.substring(0, 4) !== 'http') {
@@ -106,6 +132,7 @@ window.onload = () => {
   /* Entry Point */
   (async () => {
     await buildSystemAsync(getBaseURL());
+    await csrfSupport(getBaseURL());
   })();
 
 };

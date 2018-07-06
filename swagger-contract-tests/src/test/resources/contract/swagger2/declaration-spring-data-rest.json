@@ -66,7 +66,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/addresses/{id}": {
@@ -93,7 +94,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -130,7 +132,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -152,7 +155,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -189,7 +193,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/addresses/{id}/person": {
@@ -219,7 +224,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "post": {
                 "tags": [
@@ -257,7 +263,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -295,7 +302,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -321,7 +329,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -359,7 +368,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/addresses{?page,size,sort}": {
@@ -405,7 +415,8 @@
                             "$ref": "#/definitions/ResourcesOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people": {
@@ -436,7 +447,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/pageable{?page,size,sort}": {
@@ -481,7 +493,8 @@
                             }
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/search/findByFirstName{?firstName}": {
@@ -507,7 +520,8 @@
                             "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/search/findByLastName{?name}": {
@@ -535,7 +549,8 @@
                             "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/{id}": {
@@ -562,7 +577,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -599,7 +615,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -621,7 +638,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -658,7 +676,8 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/{id}/personAddress": {
@@ -688,7 +707,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "post": {
                 "tags": [
@@ -726,7 +746,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -764,7 +785,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -790,7 +812,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -828,7 +851,8 @@
                             "$ref": "#/definitions/ResourceOfAddress"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/{id}/tags": {
@@ -837,7 +861,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_5",
+                "operationId": "personTagsUsingGET_4",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -858,7 +882,8 @@
                             "$ref": "#/definitions/ResourcesOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "post": {
                 "tags": [
@@ -899,7 +924,8 @@
                             "$ref": "#/definitions/ResourcesOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -940,14 +966,15 @@
                             "$ref": "#/definitions/ResourcesOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_5",
+                "operationId": "personTagsUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -966,7 +993,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -1007,7 +1035,8 @@
                             "$ref": "#/definitions/ResourcesOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/{id}/tags/{tagId}": {
@@ -1016,7 +1045,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_4",
+                "operationId": "personTagsUsingGET_5",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1044,14 +1073,15 @@
                             "$ref": "#/definitions/ResourceOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_4",
+                "operationId": "personTagsUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1077,7 +1107,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people/{id}{?lastName}": {
@@ -1105,7 +1136,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/people{?page,size,sort}": {
@@ -1151,7 +1183,8 @@
                             "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/tags": {
@@ -1182,7 +1215,8 @@
                             "$ref": "#/definitions/ResourceOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/tags/{id}": {
@@ -1209,7 +1243,8 @@
                             "$ref": "#/definitions/ResourceOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -1246,7 +1281,8 @@
                             "$ref": "#/definitions/ResourceOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
@@ -1268,7 +1304,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -1305,7 +1342,8 @@
                             "$ref": "#/definitions/ResourceOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/tags/{id}/people": {
@@ -1314,7 +1352,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_5",
+                "operationId": "tagPeopleUsingGET_4",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -1335,7 +1373,8 @@
                             "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "post": {
                 "tags": [
@@ -1376,7 +1415,8 @@
                             "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "put": {
                 "tags": [
@@ -1417,14 +1457,15 @@
                             "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_5",
+                "operationId": "tagPeopleUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1443,7 +1484,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             },
             "patch": {
                 "tags": [
@@ -1484,7 +1526,8 @@
                             "$ref": "#/definitions/ResourcesOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/tags/{id}/people/{personId}": {
@@ -1493,7 +1536,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_4",
+                "operationId": "tagPeopleUsingGET_5",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1521,14 +1564,15 @@
                             "$ref": "#/definitions/ResourceOfPerson"
                         }
                     }
-                }
+                },
+                "deprecated": false
             },
             "delete": {
                 "tags": [
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_4",
+                "operationId": "tagPeopleUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1554,7 +1598,8 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "deprecated": false
             }
         },
         "/rest/tags{?page,size,sort}": {
@@ -1600,7 +1645,8 @@
                             "$ref": "#/definitions/ResourcesOfTag"
                         }
                     }
-                }
+                },
+                "deprecated": false
             }
         }
     },

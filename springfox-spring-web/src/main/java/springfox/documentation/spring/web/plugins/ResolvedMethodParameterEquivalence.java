@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,23 +18,47 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Equivalence;
-import com.google.common.base.Objects;
 import springfox.documentation.service.ResolvedMethodParameter;
 
-class ResolvedMethodParameterEquivalence extends Equivalence<ResolvedMethodParameter> {
+import java.util.Objects;
+import java.util.function.BiPredicate;
+
+class ResolvedMethodParameterEquivalence implements BiPredicate<ResolvedMethodParameter, ResolvedMethodParameter> {
   @Override
-  protected boolean doEquivalent(ResolvedMethodParameter a, ResolvedMethodParameter b) {
-    return Objects.equal(a.defaultName(), b.defaultName())
-        && Objects.equal(a.getParameterIndex(), b.getParameterIndex())
-        && Objects.equal(a.getParameterType(), b.getParameterType());
+  public boolean test(ResolvedMethodParameter a, ResolvedMethodParameter b) {
+    return Objects.equals(a.defaultName(), b.defaultName())
+        && Objects.equals(a.getParameterIndex(), b.getParameterIndex())
+        && Objects.equals(a.getParameterType(), b.getParameterType());
   }
 
-  @Override
-  protected int doHash(ResolvedMethodParameter self) {
-    return Objects.hashCode(
-        self.defaultName(),
-        self.getParameterIndex(),
-        self.getParameterType());
+  public int doHash(ResolvedMethodParameter self) {
+    return Objects.hash(
+            self.defaultName(),
+            self.getParameterIndex(),
+            self.getParameterType());
+  }
+
+  public Wrapper wrap(ResolvedMethodParameter input) {
+    return new Wrapper(input, this);
+  }
+
+  public class Wrapper {
+    private final ResolvedMethodParameter parameter;
+    private final ResolvedMethodParameterEquivalence equivalence;
+
+  public Wrapper(ResolvedMethodParameter parameter, ResolvedMethodParameterEquivalence equivalence) {
+      this.parameter = parameter;
+      this.equivalence = equivalence;
+    }
+
+    @Override
+    public int hashCode() {
+      return equivalence.doHash(parameter);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      return equivalence.equals(((Wrapper) other).equivalence) && equivalence.test(parameter, ((Wrapper) other).parameter);
+    }
   }
 }

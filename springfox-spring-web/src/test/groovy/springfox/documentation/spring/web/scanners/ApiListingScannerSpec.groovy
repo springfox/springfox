@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.Multimap
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
@@ -43,8 +42,7 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static com.google.common.collect.Lists.*
-import static com.google.common.collect.Maps.*
+import static java.util.Collections.*
 import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.*
@@ -71,18 +69,18 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
     contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
-        .securityContexts(newArrayList(securityContext))
+        .securityContexts(singletonList(securityContext))
         .configure(contextBuilder)
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
-    apiModelReader.read(_) >> newHashMap()
+    apiModelReader.read(_) >> new HashMap<>()
     scanner = new ApiListingScanner(apiDescriptionReader, apiModelReader, defaultWebPlugins())
   }
 
   def "Should create an api listing for a single resource grouping "() {
     given:
-    def context = context()
+    def context = documentationContext()
     RequestMappingContext requestMappingContext = requestMapping(context)
     listingContext = listingContext(requestMappingContext, context)
 
@@ -102,12 +100,12 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "should assign global authorizations"() {
     given:
-    def context = context()
+    def context = documentationContext()
     def requestMappingContext = requestMapping(context)
     listingContext = listingContext(requestMappingContext, context)
 
     when:
-    Multimap<String, ApiListing> apiListingMap = scanner.scan(listingContext)
+    Map<String, List<ApiListing>> apiListingMap = scanner.scan(listingContext)
 
     then:
     Collection<ApiListing> listings = apiListingMap.get('businesses')
@@ -117,8 +115,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   def "Should create an api listing for an api description with no backing controller"() {
     given:
     plugin.groupName("different-group")
-    def context = context()
-    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    def context = documentationContext()
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = new HashMap<>()
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
 
     and:
@@ -149,7 +147,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   def "Should not mix existing apis with apis with no backing controller"() {
     given:
     plugin.groupName("different-group")
-    def context = context()
+    def context = documentationContext()
     def sut = new ApiListingScanner(
         apiDescriptionReader,
         apiModelReader,
@@ -187,9 +185,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "should assign resource form @RequestMapping annotation"() {
     given:
-    def context = context()
+    def context = documentationContext()
     def requestMappingContext = requestMapping(context, "dummyMethod")
-    def resourceGroupRequestMappings = newHashMap()
+    def resourceGroupRequestMappings = new HashMap<>()
     resourceGroupRequestMappings.put(
         new ResourceGroup("resourcePath", DummyControllerWithResourcePath),
         [requestMappingContext])
@@ -211,7 +209,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   @Unroll
   def "should find longest common path"() {
     given:
-    String result = longestCommonPath(apiDescriptions(paths)).orNull()
+    String result = longestCommonPath(apiDescriptions(paths)).orElse(null)
 
     expect:
     result == expected
@@ -233,7 +231,7 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
       DocumentationContext context) {
 
     ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
-    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = new HashMap<>()
     resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
     new ApiListingScanningContext(context, resourceGroupRequestMappings)
   }
