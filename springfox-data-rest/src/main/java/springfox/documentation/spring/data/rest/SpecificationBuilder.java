@@ -251,7 +251,7 @@ abstract class SpecificationBuilder {
     }
 
     private static ResolvedMethodParameter transferResolvedMethodParameter(ResolvedMethodParameter src) {
-      com.google.common.base.Optional<Param> param = src.findAnnotation(Param.class);
+      Optional<Param> param = src.findAnnotation(Param.class);
       if (param.isPresent()) {
         return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
       }

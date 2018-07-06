@@ -130,7 +130,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       LOG.debug("Reading property {}", each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
       Optional<AnnotatedMember> annotatedMember
-          = ofNullable(safeGetPrimaryMember(jacksonProperty));
+          = ofNullable(safeGetPrimaryMember(jacksonProperty, givenContext));
       annotatedMember.ifPresent(
           member -> properties.addAll(
               candidateProperties(

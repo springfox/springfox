@@ -73,7 +73,7 @@ public class EntityContext {
     return resource.getDomainType().getSimpleName();
   }
 
-  public Optional<PersistentEntity<?, ? extends PersistentProperty<?>> entity() {
+  public Optional<PersistentEntity<?, ? extends PersistentProperty<?>>> entity() {
     return entities.getPersistentEntity(resource.getDomainType());
   }
 
