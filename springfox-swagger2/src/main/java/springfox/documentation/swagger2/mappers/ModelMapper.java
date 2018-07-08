@@ -53,6 +53,7 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
@@ -125,6 +126,8 @@ public abstract class ModelMapper {
       return new ArrayProperty(resolvedTypeToProperty(collectionElementType(type)));
     } else if (isMapType(type)) {
       return new MapProperty(resolvedTypeToProperty(mapValueType(type)));
+    } else if (isBaseType(type)) {
+      return property(typeNameFor(type.getErasedType()));
     } else {
       return new RefProperty(type.getErasedType().getSimpleName());
     }
