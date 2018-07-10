@@ -20,11 +20,12 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import java.util.List;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 class EntitySaveExtractor implements EntityOperationsExtractor {
   @Override
@@ -32,29 +33,29 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
     final List<RequestHandler> handlers = new ArrayList<>();
 
     context.crudMethods().getSaveMethod()
-      .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
-      .ifPresent(handler -> {
+        .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+        .ifPresent(handler -> {
 
-        SpecificationBuilder.getInstance(context, handler)
-          .withPath(String.format("%s%s/{id}",
-                        context.basePath(),
-                        context.resourcePath()))
-          .supportsMethod(PUT)
-          .supportsMethod(PATCH)
-          .withParameter(Parameter.ID)
-          .withParameter(Parameter.BODY)
-          .build()
-          .map(put -> new SpringDataRestRequestHandler(context, put))
-          .ifPresent(handlers::add);
+          SpecificationBuilder.getInstance(context, handler)
+              .withPath(String.format("%s%s/{id}",
+                  context.basePath(),
+                  context.resourcePath()))
+              .supportsMethod(PUT)
+              .supportsMethod(PATCH)
+              .withParameter(Parameter.ID)
+              .withParameter(Parameter.BODY)
+              .build()
+              .map(put -> new SpringDataRestRequestHandler(context, put))
+              .ifPresent(handlers::add);
 
-        SpecificationBuilder.getInstance(context, handler)
-          .supportsMethod(POST)
-          .withParameter(Parameter.BODY)
-          .build()
-          .map(post -> new SpringDataRestRequestHandler(context, post))
-          .ifPresent(handlers::add);
+          SpecificationBuilder.getInstance(context, handler)
+              .supportsMethod(POST)
+              .withParameter(Parameter.BODY)
+              .build()
+              .map(post -> new SpringDataRestRequestHandler(context, post))
+              .ifPresent(handlers::add);
 
-      });
+        });
 
     return handlers;
   }

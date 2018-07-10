@@ -24,12 +24,10 @@ import springfox.documentation.RequestHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.rest.webmvc.RestMediaTypes.SPRING_DATA_COMPACT_JSON;
-import static org.springframework.data.rest.webmvc.RestMediaTypes.TEXT_URI_LIST;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
-import static springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter.ID;
-import static springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter.ITEM;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter.*;
 
 public class EntityAssociationItemDeleteExtractor implements EntityAssociationOperationsExtractor {
   @Override
@@ -40,28 +38,28 @@ public class EntityAssociationItemDeleteExtractor implements EntityAssociationOp
     final String propertyIdentifier = propertyIdentifierName(property);
 
     final String mappingPath = context.associationMetadata()
-      .map(metadata -> metadata.getMappingFor(property))
-      .map(mapping -> mapping.getPath())
-      .map(p -> p.toString())
-      .orElse("");
+        .map(metadata -> metadata.getMappingFor(property))
+        .map(mapping -> mapping.getPath())
+        .map(p -> p.toString())
+        .orElse("");
 
     final String path = String.format("%s%s/{id}/%s/{%s}",
-                                      context.getEntityContext().basePath(),
-                                      context.getEntityContext().resourcePath(),
-                                      mappingPath,
-                                      propertyIdentifier);
+        context.getEntityContext().basePath(),
+        context.getEntityContext().resourcePath(),
+        mappingPath,
+        propertyIdentifier);
 
     if (property.isMap() || property.isCollectionLike()) {
 
       SpecificationBuilder.getInstance(context, path)
-        .supportsMethod(DELETE)
-        .consumes(TEXT_URI_LIST)
-        .consumes(SPRING_DATA_COMPACT_JSON)
-        .withParameter(ID)
-        .withParameter(ITEM)
-        .build()
-        .map(deleteItem -> new SpringDataRestRequestHandler(context.getEntityContext(), deleteItem))
-        .ifPresent(handlers::add);
+          .supportsMethod(DELETE)
+          .consumes(TEXT_URI_LIST)
+          .consumes(SPRING_DATA_COMPACT_JSON)
+          .withParameter(ID)
+          .withParameter(ITEM)
+          .build()
+          .map(deleteItem -> new SpringDataRestRequestHandler(context.getEntityContext(), deleteItem))
+          .ifPresent(handlers::add);
 
     }
     return handlers;

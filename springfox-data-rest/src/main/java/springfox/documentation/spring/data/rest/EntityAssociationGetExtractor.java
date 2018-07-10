@@ -20,13 +20,13 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.data.mapping.PersistentProperty;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 public class EntityAssociationGetExtractor implements EntityAssociationOperationsExtractor {
   @Override
@@ -36,23 +36,23 @@ public class EntityAssociationGetExtractor implements EntityAssociationOperation
     final PersistentProperty<?> property = context.getAssociation().getInverse();
 
     final String mappingPath = context.associationMetadata()
-      .map(metadata -> metadata.getMappingFor(property))
-      .map(mapping -> mapping.getPath())
-      .map(p -> p.toString())
-      .orElse("");
+        .map(metadata -> metadata.getMappingFor(property))
+        .map(mapping -> mapping.getPath())
+        .map(p -> p.toString())
+        .orElse("");
 
     final String path = String.format("%s%s/{id}/%s",
-                                      context.getEntityContext().basePath(),
-                                      context.getEntityContext().resourcePath(),
-                                      mappingPath);
+        context.getEntityContext().basePath(),
+        context.getEntityContext().resourcePath(),
+        mappingPath);
 
     SpecificationBuilder.getInstance(context, path)
-      .supportsMethod(GET)
-      .produces(HAL_JSON)
-      .withParameter(Parameter.ID)
-      .build()
-      .map(get -> new SpringDataRestRequestHandler(context.getEntityContext(), get))
-      .ifPresent(handlers::add);
+        .supportsMethod(GET)
+        .produces(HAL_JSON)
+        .withParameter(Parameter.ID)
+        .build()
+        .map(get -> new SpringDataRestRequestHandler(context.getEntityContext(), get))
+        .ifPresent(handlers::add);
 
     return handlers;
   }

@@ -20,15 +20,6 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -39,19 +30,23 @@ import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.schema.Types;
 import springfox.documentation.service.ResolvedMethodParameter;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.bodyAnnotations;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.lowerCamelCaseName;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.pathAnnotations;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.propertyIdentifierName;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.propertyItemResponse;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.propertyResponse;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.upperCamelCaseName;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 abstract class SpecificationBuilder {
 
@@ -89,35 +84,36 @@ abstract class SpecificationBuilder {
         case ID:
 
           this.parameters.add(new ResolvedMethodParameter(
-            0,
-            "id",
-            pathAnnotations("id"),
-            resolveType(context.getEntityContext(), repo -> repo.getIdType())));
+              0,
+              "id",
+              pathAnnotations("id"),
+              resolveType(context.getEntityContext(), repo -> repo.getIdType())));
           break;
 
         case BODY:
 
           this.parameters.add(new ResolvedMethodParameter(
-            0,
-            "body",
-            bodyAnnotations(),
-            property.isCollectionLike()
+              0,
+              "body",
+              bodyAnnotations(),
+              property.isCollectionLike()
               ? context.getEntityContext().getTypeResolver().resolve(List.class, String.class)
               : context.getEntityContext().getTypeResolver().resolve(String.class)));
           break;
 
         case ITEM:
           this.parameters.add(new ResolvedMethodParameter(
-            index,
-            propertyIdentifierName(property),
-            pathAnnotations(propertyIdentifierName(property)),
-            context.getEntityContext().getTypeResolver().resolve(String.class)));
+              index,
+              propertyIdentifierName(property),
+              pathAnnotations(propertyIdentifierName(property)),
+              context.getEntityContext().getTypeResolver().resolve(String.class)));
 
           break;
 
         case PAGEABLE:
           break;
-        default: break;
+        default:
+          break;
       }
       return this;
     }
@@ -128,28 +124,28 @@ abstract class SpecificationBuilder {
       final TypeResolver resolver = context.getEntityContext().getTypeResolver();
 
       return context.getEntityContext().entity()
-        .map(entity -> actionName(entity, property))
-        .map(actionName -> new ActionSpecification(
-          actionName,
-          path,
-          supportedMethods,
-          produces,
-          consumes,
-          null,
-          parameters,
-          supportedMethods.contains(DELETE)
-            ? resolver.resolve(Void.TYPE)
-            : parameters.stream().anyMatch(param -> param.getParameterIndex() > 0)
-              ? propertyItemResponse(property, resolver)
-              : propertyResponse(property, resolver))
-        );
+          .map(entity -> actionName(entity, property))
+          .map(actionName -> new ActionSpecification(
+              actionName,
+              path,
+              supportedMethods,
+              produces,
+              consumes,
+              null,
+              parameters,
+              supportedMethods.contains(DELETE)
+              ? resolver.resolve(Void.TYPE)
+              : parameters.stream().anyMatch(param -> param.getParameterIndex() > 0)
+                ? propertyItemResponse(property, resolver)
+                : propertyResponse(property, resolver))
+          );
 
     }
 
     private static String actionName(PersistentEntity<?, ?> entity, PersistentProperty<?> property) {
       return String.format("%s%s",
-                           lowerCamelCaseName(entity.getType().getSimpleName()),
-                           upperCamelCaseName(property.getName()));
+          lowerCamelCaseName(entity.getType().getSimpleName()),
+          upperCamelCaseName(property.getName()));
     }
 
   }
@@ -171,20 +167,20 @@ abstract class SpecificationBuilder {
         case ID:
 
           this.parameters.add(new ResolvedMethodParameter(
-            0,
-            "id",
-            pathAnnotations("id", handlerMethod),
-            resolveType(context, repo -> repo.getIdType())));
+              0,
+              "id",
+              pathAnnotations("id", handlerMethod),
+              resolveType(context, repo -> repo.getIdType())));
 
           break;
 
         case BODY:
 
           this.parameters.add(new ResolvedMethodParameter(
-            0,
-            "body",
-            bodyAnnotations(handlerMethod),
-            resolveType(context, repo -> repo.getDomainType())));
+              0,
+              "body",
+              bodyAnnotations(handlerMethod),
+              resolveType(context, repo -> repo.getDomainType())));
 
           break;
 
@@ -194,24 +190,25 @@ abstract class SpecificationBuilder {
           final TypeResolver typeResolver = context.getTypeResolver();
 
           this.parameters.add(new ResolvedMethodParameter(
-            0,
-            configuration.getPageParamName(),
-            Collections.EMPTY_LIST,
-            typeResolver.resolve(String.class)));
+              0,
+              configuration.getPageParamName(),
+              Collections.EMPTY_LIST,
+              typeResolver.resolve(String.class)));
           this.parameters.add(new ResolvedMethodParameter(
-            1,
-            configuration.getLimitParamName(),
-            Collections.EMPTY_LIST,
-            typeResolver.resolve(String.class)));
+              1,
+              configuration.getLimitParamName(),
+              Collections.EMPTY_LIST,
+              typeResolver.resolve(String.class)));
           this.parameters.add(new ResolvedMethodParameter(
-            2,
-            configuration.getSortParamName(),
-            Collections.EMPTY_LIST,
-            typeResolver.resolve(String.class)));
+              2,
+              configuration.getSortParamName(),
+              Collections.EMPTY_LIST,
+              typeResolver.resolve(String.class)));
 
           break;
-          
-        default: break;
+
+        default:
+          break;
       }
       return this;
     }
@@ -222,32 +219,33 @@ abstract class SpecificationBuilder {
       // Default path
       if (!StringUtils.hasText(path)) {
         path = String.format("%s%s",
-                             context.basePath(),
-                             context.resourcePath());
+            context.basePath(),
+            context.resourcePath());
       }
 
       return context.entity()
-        .map(entity -> actionName(entity, handlerMethod.getMethod()))
-        .map(actionName -> new ActionSpecification(
-          actionName,
-          path,
-          supportedMethods,
-          produces,
-          consumes,
-          handlerMethod,
-          !parameters.isEmpty() ? parameters : transferResolvedMethodParameterList(context, handlerMethod),
-          inferReturnType(context, handlerMethod))
-        );
+          .map(entity -> actionName(entity, handlerMethod.getMethod()))
+          .map(actionName -> new ActionSpecification(
+              actionName,
+              path,
+              supportedMethods,
+              produces,
+              consumes,
+              handlerMethod,
+              !parameters.isEmpty() ? parameters : transferResolvedMethodParameterList(context, handlerMethod),
+              inferReturnType(context, handlerMethod))
+          );
     }
 
-    private static List<ResolvedMethodParameter> transferResolvedMethodParameterList(EntityContext context, HandlerMethod handler) {
+    private static List<ResolvedMethodParameter> transferResolvedMethodParameterList(EntityContext context,
+                                                                                     HandlerMethod handler) {
 
       final TypeResolver resolver = context.getTypeResolver();
       final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
 
       return methodResolver.methodParameters(handler).stream()
-        .map(resolvedMethodParameter -> transferResolvedMethodParameter(resolvedMethodParameter))
-        .collect(Collectors.toList());
+          .map(resolvedMethodParameter -> transferResolvedMethodParameter(resolvedMethodParameter))
+          .collect(Collectors.toList());
     }
 
     private static ResolvedMethodParameter transferResolvedMethodParameter(ResolvedMethodParameter src) {
@@ -259,8 +257,8 @@ abstract class SpecificationBuilder {
     }
 
     private static ResolvedType inferReturnType(
-      EntityContext context,
-      HandlerMethod handler) {
+        EntityContext context,
+        HandlerMethod handler) {
 
       final TypeResolver resolver = context.getTypeResolver();
       final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
@@ -270,7 +268,8 @@ abstract class SpecificationBuilder {
       final ResolvedType methodReturnType = methodResolver.methodReturnType(handler);
 
       if (springfox.documentation.schema.Collections.isContainerType(methodReturnType)) {
-        return resolver.resolve(Resources.class, springfox.documentation.schema.Collections.collectionElementType(methodReturnType));
+        return resolver.resolve(Resources.class,
+            springfox.documentation.schema.Collections.collectionElementType(methodReturnType));
       } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
         return resolver.resolve(Resources.class, domainReturnType);
       } else if (Types.isBaseType(domainReturnType)) {

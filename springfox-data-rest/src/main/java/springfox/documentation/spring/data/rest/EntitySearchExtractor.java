@@ -20,33 +20,34 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import java.util.List;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 class EntitySearchExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
 
     return StreamSupport.stream(context.searchMappings().getExportedMappings().spliterator(), false)
-      .map(mapping -> {
+        .map(mapping -> {
 
-        final HandlerMethod handler = new HandlerMethod(context.getRepositoryInstance(), mapping.getMethod());
+          final HandlerMethod handler = new HandlerMethod(context.getRepositoryInstance(), mapping.getMethod());
 
-        return SpecificationBuilder.getInstance(context, handler)
-          .withPath(String.format("%s%s/search%s",
-                context.basePath(),
-                context.resourcePath(),
-                mapping.getPath()))
-          .supportsMethod(GET)
-          .build()
-          .map(get -> new SpringDataRestRequestHandler(context, get));
+          return SpecificationBuilder.getInstance(context, handler)
+              .withPath(String.format("%s%s/search%s",
+                  context.basePath(),
+                  context.resourcePath(),
+                  mapping.getPath()))
+              .supportsMethod(GET)
+              .build()
+              .map(get -> new SpringDataRestRequestHandler(context, get));
 
-      })
-      .filter(handler -> handler.isPresent())
-      .map(handler -> handler.get())
-      .collect(Collectors.toList());
+        })
+        .filter(handler -> handler.isPresent())
+        .map(handler -> handler.get())
+        .collect(Collectors.toList());
   }
 }

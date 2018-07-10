@@ -20,14 +20,13 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.data.mapping.PersistentProperty;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.rest.webmvc.RestMediaTypes.SPRING_DATA_COMPACT_JSON;
-import static org.springframework.data.rest.webmvc.RestMediaTypes.TEXT_URI_LIST;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 public class EntityAssociationDeleteExtractor implements EntityAssociationOperationsExtractor {
   @Override
@@ -37,24 +36,24 @@ public class EntityAssociationDeleteExtractor implements EntityAssociationOperat
     final PersistentProperty<?> property = context.getAssociation().getInverse();
 
     final String mappingPath = context.associationMetadata()
-      .map(metadata -> metadata.getMappingFor(property))
-      .map(mapping -> mapping.getPath())
-      .map(p -> p.toString())
-      .orElse("");
+        .map(metadata -> metadata.getMappingFor(property))
+        .map(mapping -> mapping.getPath())
+        .map(p -> p.toString())
+        .orElse("");
 
     final String path = String.format("%s%s/{id}/%s",
-                                      context.getEntityContext().basePath(),
-                                      context.getEntityContext().resourcePath(),
-                                      mappingPath);
+        context.getEntityContext().basePath(),
+        context.getEntityContext().resourcePath(),
+        mappingPath);
 
     SpecificationBuilder.getInstance(context, path)
-      .supportsMethod(DELETE)
-      .consumes(TEXT_URI_LIST)
-      .consumes(SPRING_DATA_COMPACT_JSON)
-      .withParameter(Parameter.ID)
-      .build()
-      .map(delete -> new SpringDataRestRequestHandler(context.getEntityContext(), delete))
-      .ifPresent(handlers::add);
+        .supportsMethod(DELETE)
+        .consumes(TEXT_URI_LIST)
+        .consumes(SPRING_DATA_COMPACT_JSON)
+        .withParameter(Parameter.ID)
+        .build()
+        .map(delete -> new SpringDataRestRequestHandler(context.getEntityContext(), delete))
+        .ifPresent(handlers::add);
 
     return handlers;
   }

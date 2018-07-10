@@ -22,9 +22,8 @@ import org.springframework.data.mapping.SimpleAssociationHandler;
 import org.springframework.data.rest.webmvc.mapping.Associations;
 import springfox.documentation.RequestHandler;
 
-import java.util.List;
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class EntityAssociationsExtractor implements EntityOperationsExtractor {
@@ -36,16 +35,16 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
     final Associations associations = context.getAssociations();
 
     context.entity()
-      .ifPresent(entity -> entity.doWithAssociations((SimpleAssociationHandler) association -> {
+        .ifPresent(entity -> entity.doWithAssociations((SimpleAssociationHandler) association -> {
 
-        if (associations.isLinkableAssociation(association)) {
-          final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
+          if (associations.isLinkableAssociation(association)) {
+            final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
 
-          handlers.addAll(context.getAssociationExtractors().stream()
-            .flatMap(extractor -> extractor.extract(associationContext).stream())
-            .collect(Collectors.toList()));
-        }
-      }));
+            handlers.addAll(context.getAssociationExtractors().stream()
+                .flatMap(extractor -> extractor.extract(associationContext).stream())
+                .collect(Collectors.toList()));
+          }
+        }));
 
     return handlers;
   }

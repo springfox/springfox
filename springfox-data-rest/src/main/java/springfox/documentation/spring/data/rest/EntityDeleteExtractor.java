@@ -20,11 +20,12 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import java.util.List;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 import java.util.ArrayList;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
+import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 class EntityDeleteExtractor implements EntityOperationsExtractor {
   @Override
@@ -32,20 +33,20 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
     final List<RequestHandler> handlers = new ArrayList<>();
 
     context.crudMethods().getDeleteMethod()
-      .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
-      .ifPresent(handler -> {
+        .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+        .ifPresent(handler -> {
 
-        SpecificationBuilder.getInstance(context, handler)
-          .withPath(String.format("%s%s/{id}",
-                        context.basePath(),
-                        context.resourcePath()))
-          .supportsMethod(DELETE)
-          .withParameter(Parameter.ID)
-          .build()
-          .map(get -> new SpringDataRestRequestHandler(context, get))
-          .ifPresent(handlers::add);
+          SpecificationBuilder.getInstance(context, handler)
+              .withPath(String.format("%s%s/{id}",
+                  context.basePath(),
+                  context.resourcePath()))
+              .supportsMethod(DELETE)
+              .withParameter(Parameter.ID)
+              .build()
+              .map(get -> new SpringDataRestRequestHandler(context, get))
+              .ifPresent(handlers::add);
 
-      });
+        });
 
     return handlers;
   }

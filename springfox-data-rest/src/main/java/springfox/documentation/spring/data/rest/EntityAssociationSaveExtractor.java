@@ -20,13 +20,13 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.data.mapping.PersistentProperty;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
 public class EntityAssociationSaveExtractor implements EntityAssociationOperationsExtractor {
   @Override
@@ -36,33 +36,33 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
     final PersistentProperty<?> property = context.getAssociation().getInverse();
 
     final String mappingPath = context.associationMetadata()
-      .map(metadata -> metadata.getMappingFor(property))
-      .map(mapping -> mapping.getPath())
-      .map(p -> p.toString())
-      .orElse("");
+        .map(metadata -> metadata.getMappingFor(property))
+        .map(mapping -> mapping.getPath())
+        .map(p -> p.toString())
+        .orElse("");
 
     context.getEntityContext().entity()
-      .filter(entity -> property.isWritable() && property.getOwner().equals(entity))
-      .ifPresent(entity -> {
+        .filter(entity -> property.isWritable() && property.getOwner().equals(entity))
+        .ifPresent(entity -> {
 
-        final String path = String.format("%s%s/{id}/%s",
-                      context.getEntityContext().basePath(),
-                      context.getEntityContext().resourcePath(),
-                      mappingPath);
+          final String path = String.format("%s%s/{id}/%s",
+              context.getEntityContext().basePath(),
+              context.getEntityContext().resourcePath(),
+              mappingPath);
 
-        SpecificationBuilder.getInstance(context, path)
-          .supportsMethod(PUT)
-          .supportsMethod(PATCH)
-          .supportsMethod(POST)
-          .consumes(TEXT_URI_LIST)
-          .consumes(SPRING_DATA_COMPACT_JSON)
-          .withParameter(Parameter.ID)
-          .withParameter(Parameter.BODY)
-          .build()
-          .map(update -> new SpringDataRestRequestHandler(context.getEntityContext(), update))
-          .ifPresent(handlers::add);
+          SpecificationBuilder.getInstance(context, path)
+              .supportsMethod(PUT)
+              .supportsMethod(PATCH)
+              .supportsMethod(POST)
+              .consumes(TEXT_URI_LIST)
+              .consumes(SPRING_DATA_COMPACT_JSON)
+              .withParameter(Parameter.ID)
+              .withParameter(Parameter.BODY)
+              .build()
+              .map(update -> new SpringDataRestRequestHandler(context.getEntityContext(), update))
+              .ifPresent(handlers::add);
 
-      });
+        });
 
     return handlers;
   }

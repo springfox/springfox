@@ -20,13 +20,14 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.http.MediaType.*;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
@@ -34,21 +35,21 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
     final List<RequestHandler> handlers = new ArrayList<>();
 
     context.crudMethods().getFindAllMethod()
-      .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
-      .ifPresent(handler -> {
+        .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+        .ifPresent(handler -> {
 
-        SpecificationBuilder.getInstance(context, handler)
-          .supportsMethod(GET)
-          .produces(APPLICATION_JSON)
-          .produces(HAL_JSON)
-          .produces(SPRING_DATA_COMPACT_JSON)
-          .produces(TEXT_URI_LIST)
-          .withParameter(Parameter.PAGEABLE)
-          .build()
-          .map(get -> new SpringDataRestRequestHandler(context, get))
-          .ifPresent(handlers::add);
+          SpecificationBuilder.getInstance(context, handler)
+              .supportsMethod(GET)
+              .produces(APPLICATION_JSON)
+              .produces(HAL_JSON)
+              .produces(SPRING_DATA_COMPACT_JSON)
+              .produces(TEXT_URI_LIST)
+              .withParameter(Parameter.PAGEABLE)
+              .build()
+              .map(get -> new SpringDataRestRequestHandler(context, get))
+              .ifPresent(handlers::add);
 
-      });
+        });
 
     return handlers;
   }

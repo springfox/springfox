@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 import static springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter.*;
 
@@ -38,27 +38,27 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
     final String propertyIdentifier = propertyIdentifierName(property);
 
     final String mappingPath = context.associationMetadata()
-      .map(metadata -> metadata.getMappingFor(property))
-      .map(mapping -> mapping.getPath())
-      .map(p -> p.toString())
-      .orElse("");
+        .map(metadata -> metadata.getMappingFor(property))
+        .map(mapping -> mapping.getPath())
+        .map(p -> p.toString())
+        .orElse("");
 
     final String path = String.format("%s%s/{id}/%s/{%s}",
-                                      context.getEntityContext().basePath(),
-                                      context.getEntityContext().resourcePath(),
-                                      mappingPath,
-                                      propertyIdentifier);
+        context.getEntityContext().basePath(),
+        context.getEntityContext().resourcePath(),
+        mappingPath,
+        propertyIdentifier);
 
     if (property.isMap() || property.isCollectionLike()) {
 
       SpecificationBuilder.getInstance(context, path)
-        .supportsMethod(GET)
-        .consumes(HAL_JSON)
-        .withParameter(ID)
-        .withParameter(ITEM)
-        .build()
-        .map(getPropertyItem -> new SpringDataRestRequestHandler(context.getEntityContext(), getPropertyItem))
-        .ifPresent(handlers::add);
+          .supportsMethod(GET)
+          .consumes(HAL_JSON)
+          .withParameter(ID)
+          .withParameter(ITEM)
+          .build()
+          .map(getPropertyItem -> new SpringDataRestRequestHandler(context.getEntityContext(), getPropertyItem))
+          .ifPresent(handlers::add);
 
     }
     return handlers;
