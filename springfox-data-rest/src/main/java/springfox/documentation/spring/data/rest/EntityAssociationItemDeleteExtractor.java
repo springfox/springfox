@@ -59,7 +59,7 @@ public class EntityAssociationItemDeleteExtractor implements EntityAssociationOp
           .consumes(TEXT_URI_LIST)
           .consumes(SPRING_DATA_COMPACT_JSON)
           .withParameterType(ID)
-          .withParameterType(ITEM)
+          .withParameterType(ASSOCIATION)
           .build()
           .map(deleteItem -> new SpringDataRestRequestHandler(context.getEntityContext(), deleteItem))
           .ifPresent(handlers::add);

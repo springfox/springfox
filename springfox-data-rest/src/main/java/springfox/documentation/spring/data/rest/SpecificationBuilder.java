@@ -104,9 +104,9 @@ abstract class SpecificationBuilder {
 
   enum ParameterType {
     ID,
-    BODY,
-    PAGEABLE,
-    ITEM
+    RESOURCE,
+    PAGEABLE_RESOURCE,
+    ASSOCIATION
   }
 
   private static class AssociationActionSpecificationBuilder extends SpecificationBuilder {
@@ -140,7 +140,7 @@ abstract class SpecificationBuilder {
               pathAnnotations("id"),
               resolveType(context.getEntityContext(), RepositoryMetadata::getIdType)));
 
-        case BODY:
+        case RESOURCE:
 
           return withParameter(new ResolvedMethodParameter(
               0,
@@ -150,14 +150,14 @@ abstract class SpecificationBuilder {
               ? context.getEntityContext().getTypeResolver().resolve(List.class, String.class)
               : context.getEntityContext().getTypeResolver().resolve(String.class)));
 
-        case ITEM:
+        case ASSOCIATION:
           return withParameter(new ResolvedMethodParameter(
               index,
               propertyIdentifierName(property),
               pathAnnotations(propertyIdentifierName(property)),
               context.getEntityContext().getTypeResolver().resolve(String.class)));
 
-        case PAGEABLE:
+        case PAGEABLE_RESOURCE:
         default:
           break;
       }
@@ -263,7 +263,7 @@ abstract class SpecificationBuilder {
               pathAnnotations("id", handlerMethod),
               resolveType(context, RepositoryMetadata::getIdType)));
 
-        case BODY:
+        case RESOURCE:
 
           return withParameter(new ResolvedMethodParameter(
               0,
@@ -272,7 +272,7 @@ abstract class SpecificationBuilder {
               resolveType(context, RepositoryMetadata::getDomainType)));
 
 
-        case PAGEABLE:
+        case PAGEABLE_RESOURCE:
 
           RepositoryRestConfiguration configuration = context.getConfiguration();
           TypeResolver typeResolver = context.getTypeResolver();
