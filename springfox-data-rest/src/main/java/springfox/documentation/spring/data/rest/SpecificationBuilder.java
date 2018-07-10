@@ -50,7 +50,7 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 abstract class SpecificationBuilder {
 
-  protected final Set<RequestMethod> supportedMethods = new HashSet<>();
+  final Set<RequestMethod> supportedMethods = new HashSet<>();
   protected final Set<MediaType> produces = new HashSet<>();
   protected final Set<MediaType> consumes = new HashSet<>();
   protected final List<ResolvedMethodParameter> parameters = new ArrayList<>();
@@ -61,7 +61,7 @@ abstract class SpecificationBuilder {
     ID,
     BODY,
     PAGEABLE,
-    ITEM;
+    ITEM
   }
 
   private static class AssociationActionSpecificationBuilder extends SpecificationBuilder {
@@ -69,7 +69,7 @@ abstract class SpecificationBuilder {
     private final EntityAssociationContext context;
     private final PersistentProperty<?> property;
 
-    protected AssociationActionSpecificationBuilder(EntityAssociationContext context, String path) {
+    AssociationActionSpecificationBuilder(EntityAssociationContext context, String path) {
       this.context = context;
       this.path = path;
       this.property = context.getAssociation().getInverse();
@@ -87,7 +87,7 @@ abstract class SpecificationBuilder {
               0,
               "id",
               pathAnnotations("id"),
-              resolveType(context.getEntityContext(), repo -> repo.getIdType())));
+              resolveType(context.getEntityContext(), RepositoryMetadata::getIdType)));
           break;
 
         case BODY:
@@ -155,7 +155,7 @@ abstract class SpecificationBuilder {
     private final EntityContext context;
     private final HandlerMethod handlerMethod;
 
-    protected EntityActionSpecificationBuilder(EntityContext context, HandlerMethod handlerMethod) {
+    EntityActionSpecificationBuilder(EntityContext context, HandlerMethod handlerMethod) {
       this.context = context;
       this.handlerMethod = handlerMethod;
     }
@@ -170,7 +170,7 @@ abstract class SpecificationBuilder {
               0,
               "id",
               pathAnnotations("id", handlerMethod),
-              resolveType(context, repo -> repo.getIdType())));
+              resolveType(context, RepositoryMetadata::getIdType)));
 
           break;
 
@@ -180,7 +180,7 @@ abstract class SpecificationBuilder {
               0,
               "body",
               bodyAnnotations(handlerMethod),
-              resolveType(context, repo -> repo.getDomainType())));
+              resolveType(context, RepositoryMetadata::getDomainType)));
 
           break;
 
@@ -189,22 +189,24 @@ abstract class SpecificationBuilder {
           final RepositoryRestConfiguration configuration = context.getConfiguration();
           final TypeResolver typeResolver = context.getTypeResolver();
 
+          //noinspection unchecked
           this.parameters.add(new ResolvedMethodParameter(
               0,
               configuration.getPageParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(String.class)));
+          //noinspection unchecked
           this.parameters.add(new ResolvedMethodParameter(
               1,
               configuration.getLimitParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(String.class)));
+          //noinspection unchecked
           this.parameters.add(new ResolvedMethodParameter(
               2,
               configuration.getSortParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(String.class)));
-
           break;
 
         default:
@@ -244,7 +246,7 @@ abstract class SpecificationBuilder {
       final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
 
       return methodResolver.methodParameters(handler).stream()
-          .map(resolvedMethodParameter -> transferResolvedMethodParameter(resolvedMethodParameter))
+          .map(EntityActionSpecificationBuilder::transferResolvedMethodParameter)
           .collect(Collectors.toList());
     }
 
@@ -283,7 +285,7 @@ abstract class SpecificationBuilder {
 
   }
 
-  protected static ResolvedType resolveType(EntityContext context, Function<RepositoryMetadata, Type> getType) {
+  static ResolvedType resolveType(EntityContext context, Function<RepositoryMetadata, Type> getType) {
 
     final RepositoryMetadata repository = context.getRepositoryMetadata();
     final TypeResolver typeResolver = context.getTypeResolver();

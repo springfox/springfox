@@ -32,7 +32,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = new ArrayList<>();
+    List<RequestHandler> handlers = new ArrayList<>();
 
     context.crudMethods().getFindAllMethod()
         .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))

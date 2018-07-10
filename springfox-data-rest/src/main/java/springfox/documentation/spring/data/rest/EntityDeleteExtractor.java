@@ -30,7 +30,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 class EntityDeleteExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = new ArrayList<>();
+    List<RequestHandler> handlers = new ArrayList<>();
 
     context.crudMethods().getDeleteMethod()
         .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))

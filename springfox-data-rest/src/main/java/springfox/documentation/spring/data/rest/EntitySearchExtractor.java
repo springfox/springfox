@@ -22,6 +22,7 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -46,8 +47,8 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
               .map(get -> new SpringDataRestRequestHandler(context, get));
 
         })
-        .filter(handler -> handler.isPresent())
-        .map(handler -> handler.get())
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .collect(Collectors.toList());
   }
 }

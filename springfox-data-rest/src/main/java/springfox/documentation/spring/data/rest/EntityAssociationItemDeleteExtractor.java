@@ -19,6 +19,8 @@
 package springfox.documentation.spring.data.rest;
 
 import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.rest.core.Path;
+import org.springframework.data.rest.core.mapping.ResourceMapping;
 import springfox.documentation.RequestHandler;
 
 import java.util.ArrayList;
@@ -33,17 +35,17 @@ public class EntityAssociationItemDeleteExtractor implements EntityAssociationOp
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
 
-    final List<RequestHandler> handlers = new ArrayList<>();
-    final PersistentProperty<?> property = context.getAssociation().getInverse();
-    final String propertyIdentifier = propertyIdentifierName(property);
+    List<RequestHandler> handlers = new ArrayList<>();
+    PersistentProperty<?> property = context.getAssociation().getInverse();
+    String propertyIdentifier = propertyIdentifierName(property);
 
-    final String mappingPath = context.associationMetadata()
+    String mappingPath = context.associationMetadata()
         .map(metadata -> metadata.getMappingFor(property))
-        .map(mapping -> mapping.getPath())
-        .map(p -> p.toString())
+        .map(ResourceMapping::getPath)
+        .map(Path::toString)
         .orElse("");
 
-    final String path = String.format("%s%s/{id}/%s/{%s}",
+    String path = String.format("%s%s/{id}/%s/{%s}",
         context.getEntityContext().basePath(),
         context.getEntityContext().resourcePath(),
         mappingPath,

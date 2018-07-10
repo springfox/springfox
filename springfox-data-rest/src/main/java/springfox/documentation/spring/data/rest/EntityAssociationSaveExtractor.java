@@ -19,6 +19,8 @@
 package springfox.documentation.spring.data.rest;
 
 import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.rest.core.Path;
+import org.springframework.data.rest.core.mapping.ResourceMapping;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
 
@@ -32,20 +34,20 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
 
-    final List<RequestHandler> handlers = new ArrayList<>();
-    final PersistentProperty<?> property = context.getAssociation().getInverse();
+    List<RequestHandler> handlers = new ArrayList<>();
+    PersistentProperty<?> property = context.getAssociation().getInverse();
 
-    final String mappingPath = context.associationMetadata()
+    String mappingPath = context.associationMetadata()
         .map(metadata -> metadata.getMappingFor(property))
-        .map(mapping -> mapping.getPath())
-        .map(p -> p.toString())
+        .map(ResourceMapping::getPath)
+        .map(Path::toString)
         .orElse("");
 
     context.getEntityContext().entity()
         .filter(entity -> property.isWritable() && property.getOwner().equals(entity))
         .ifPresent(entity -> {
 
-          final String path = String.format("%s%s/{id}/%s",
+          String path = String.format("%s%s/{id}/%s",
               context.getEntityContext().basePath(),
               context.getEntityContext().resourcePath(),
               mappingPath);

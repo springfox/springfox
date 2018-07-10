@@ -31,14 +31,14 @@ public class EntityAssociationsExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(final EntityContext context) {
 
-    final List<RequestHandler> handlers = new ArrayList<>();
-    final Associations associations = context.getAssociations();
+    List<RequestHandler> handlers = new ArrayList<>();
+    Associations associations = context.getAssociations();
 
     context.entity()
         .ifPresent(entity -> entity.doWithAssociations((SimpleAssociationHandler) association -> {
 
           if (associations.isLinkableAssociation(association)) {
-            final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
+            EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
 
             handlers.addAll(context.getAssociationExtractors().stream()
                 .flatMap(extractor -> extractor.extract(associationContext).stream())
