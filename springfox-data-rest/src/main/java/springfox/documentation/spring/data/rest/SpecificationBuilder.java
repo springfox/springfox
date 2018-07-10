@@ -46,6 +46,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 abstract class SpecificationBuilder {
@@ -58,8 +59,8 @@ abstract class SpecificationBuilder {
 
   static ResolvedType resolveType(EntityContext context, Function<RepositoryMetadata, Type> getType) {
 
-    final RepositoryMetadata repository = context.getRepositoryMetadata();
-    final TypeResolver typeResolver = context.getTypeResolver();
+    RepositoryMetadata repository = context.getRepositoryMetadata();
+    TypeResolver typeResolver = context.getTypeResolver();
 
     return getType != null ? typeResolver.resolve(getType.apply(repository)) : typeResolver.resolve(Void.TYPE);
   }
@@ -133,7 +134,7 @@ abstract class SpecificationBuilder {
       switch (parameter) {
         case ID:
 
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id"),
@@ -142,7 +143,7 @@ abstract class SpecificationBuilder {
 
         case BODY:
 
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               0,
               "body",
               bodyAnnotations(),
@@ -152,7 +153,7 @@ abstract class SpecificationBuilder {
           break;
 
         case ITEM:
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               index,
               propertyIdentifierName(property),
               pathAnnotations(propertyIdentifierName(property)),
@@ -171,7 +172,7 @@ abstract class SpecificationBuilder {
     @Override
     Optional<ActionSpecification> build() {
 
-      final TypeResolver resolver = context.getEntityContext().getTypeResolver();
+      TypeResolver resolver = context.getEntityContext().getTypeResolver();
 
       return context.getEntityContext().entity()
           .map(entity -> actionName(entity, property))
@@ -183,15 +184,18 @@ abstract class SpecificationBuilder {
               consumes,
               null,
               parameters,
-              supportedMethods.contains(DELETE)
-              ? resolver.resolve(Void.TYPE)
-              : parameters.stream().anyMatch(param -> param.getParameterIndex() > 0)
-                ? propertyItemResponse(property, resolver)
-                : propertyResponse(property, resolver))
+              returnType(resolver))
           );
-
     }
 
+    private ResolvedType returnType(TypeResolver resolver) {
+      return supportedMethods.contains(DELETE)
+             ? resolver.resolve(Void.TYPE)
+             : parameters.stream()
+                   .anyMatch(param -> param.getParameterIndex() > 0)
+               ? propertyItemResponse(property, resolver)
+               : propertyResponse(property, resolver);
+    }
   }
 
   private static class EntityActionSpecificationBuilder extends SpecificationBuilder {
@@ -204,18 +208,20 @@ abstract class SpecificationBuilder {
       this.handlerMethod = handlerMethod;
     }
 
-    private static List<ResolvedMethodParameter> transferResolvedMethodParameterList(EntityContext context,
-                                                                                     HandlerMethod handler) {
+    private static List<ResolvedMethodParameter> transferResolvedMethodParameterList(
+        EntityContext context,
+        HandlerMethod handler) {
 
-      final TypeResolver resolver = context.getTypeResolver();
-      final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
+      TypeResolver resolver = context.getTypeResolver();
+      HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
 
       return methodResolver.methodParameters(handler).stream()
           .map(EntityActionSpecificationBuilder::transferResolvedMethodParameter)
           .collect(Collectors.toList());
     }
 
-    private static ResolvedMethodParameter transferResolvedMethodParameter(ResolvedMethodParameter src) {
+    private static ResolvedMethodParameter transferResolvedMethodParameter(
+        ResolvedMethodParameter src) {
       Optional<Param> param = src.findAnnotation(Param.class);
       if (param.isPresent()) {
         return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
@@ -227,16 +233,18 @@ abstract class SpecificationBuilder {
         EntityContext context,
         HandlerMethod handler) {
 
-      final TypeResolver resolver = context.getTypeResolver();
-      final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
-      final RepositoryMetadata repository = context.getRepositoryMetadata();
+      TypeResolver resolver = context.getTypeResolver();
+      HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
+      RepositoryMetadata repository = context.getRepositoryMetadata();
 
-      final ResolvedType domainReturnType = resolver.resolve(repository.getReturnedDomainClass(handler.getMethod()));
-      final ResolvedType methodReturnType = methodResolver.methodReturnType(handler);
+      ResolvedType domainReturnType =
+          resolver.resolve(repository.getReturnedDomainClass(handler.getMethod()));
+      ResolvedType methodReturnType =
+          methodResolver.methodReturnType(handler);
 
-      if (springfox.documentation.schema.Collections.isContainerType(methodReturnType)) {
+      if (isContainerType(methodReturnType)) {
         return resolver.resolve(Resources.class,
-            springfox.documentation.schema.Collections.collectionElementType(methodReturnType));
+            collectionElementType(methodReturnType));
       } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
         return resolver.resolve(Resources.class, domainReturnType);
       } else if (Types.isBaseType(domainReturnType)) {
@@ -254,7 +262,7 @@ abstract class SpecificationBuilder {
       switch (parameter) {
         case ID:
 
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id", handlerMethod),
@@ -264,7 +272,7 @@ abstract class SpecificationBuilder {
 
         case BODY:
 
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               0,
               "body",
               bodyAnnotations(handlerMethod),
@@ -274,23 +282,23 @@ abstract class SpecificationBuilder {
 
         case PAGEABLE:
 
-          final RepositoryRestConfiguration configuration = context.getConfiguration();
-          final TypeResolver typeResolver = context.getTypeResolver();
+          RepositoryRestConfiguration configuration = context.getConfiguration();
+          TypeResolver typeResolver = context.getTypeResolver();
 
           //noinspection unchecked
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               0,
               configuration.getPageParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(String.class)));
           //noinspection unchecked
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               1,
               configuration.getLimitParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(String.class)));
           //noinspection unchecked
-          this.parameters.add(new ResolvedMethodParameter(
+          withParameter(new ResolvedMethodParameter(
               2,
               configuration.getSortParamName(),
               Collections.EMPTY_LIST,
@@ -306,7 +314,6 @@ abstract class SpecificationBuilder {
     @Override
     Optional<ActionSpecification> build() {
 
-      // Default path
       if (!StringUtils.hasText(path)) {
         path = String.format("%s%s",
             context.basePath(),
@@ -322,10 +329,15 @@ abstract class SpecificationBuilder {
               produces,
               consumes,
               handlerMethod,
-              !parameters.isEmpty() ? parameters : transferResolvedMethodParameterList(context, handlerMethod),
+              inputParameters(),
               inferReturnType(context, handlerMethod))
           );
     }
 
+    private List<ResolvedMethodParameter> inputParameters() {
+      return !parameters.isEmpty()
+             ? parameters
+             : transferResolvedMethodParameterList(context, handlerMethod);
+    }
   }
 }

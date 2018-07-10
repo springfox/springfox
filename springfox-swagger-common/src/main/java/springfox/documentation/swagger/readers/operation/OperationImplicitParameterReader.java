@@ -84,7 +84,10 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
   }
 
   private static ModelRef maybeGetModelRef(ApiImplicitParam param) {
-    String dataType = ofNullable(param.dataType()).filter(((Predicate<String>)String::isEmpty).negate()).orElse("string");
+    String dataType = ofNullable(param.dataType())
+        .filter(((Predicate<String>)String::isEmpty).negate())
+        .orElse("string");
+
     AllowableValues allowableValues = null;
     if (isBaseType(dataType)) {
       allowableValues = allowableValueFromString(param.allowableValues());
