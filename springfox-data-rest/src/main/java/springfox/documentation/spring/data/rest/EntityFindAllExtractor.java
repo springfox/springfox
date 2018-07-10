@@ -45,7 +45,7 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
               .produces(HAL_JSON)
               .produces(SPRING_DATA_COMPACT_JSON)
               .produces(TEXT_URI_LIST)
-              .withParameter(Parameter.PAGEABLE)
+              .withParameterType(ParameterType.PAGEABLE)
               .build()
               .map(get -> new SpringDataRestRequestHandler(context, get))
               .ifPresent(handlers::add);

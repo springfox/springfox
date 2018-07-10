@@ -43,15 +43,15 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
                   context.resourcePath()))
               .supportsMethod(PUT)
               .supportsMethod(PATCH)
-              .withParameter(Parameter.ID)
-              .withParameter(Parameter.BODY)
+              .withParameterType(ParameterType.ID)
+              .withParameterType(ParameterType.BODY)
               .build()
               .map(put -> new SpringDataRestRequestHandler(context, put))
               .ifPresent(handlers::add);
 
           entityAction(context, handler)
               .supportsMethod(POST)
-              .withParameter(Parameter.BODY)
+              .withParameterType(ParameterType.BODY)
               .build()
               .map(post -> new SpringDataRestRequestHandler(context, post))
               .ifPresent(handlers::add);

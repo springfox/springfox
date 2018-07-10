@@ -29,7 +29,7 @@ import java.util.List;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
-import static springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.ParameterType.*;
 import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 public class EntityAssociationItemGetExtractor implements EntityAssociationOperationsExtractor {
@@ -57,8 +57,8 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
       associationAction(context, path)
           .supportsMethod(GET)
           .consumes(HAL_JSON)
-          .withParameter(ID)
-          .withParameter(ITEM)
+          .withParameterType(ID)
+          .withParameterType(ITEM)
           .build()
           .map(getPropertyItem -> new SpringDataRestRequestHandler(context.getEntityContext(), getPropertyItem))
           .ifPresent(handlers::add);

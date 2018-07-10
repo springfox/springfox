@@ -59,8 +59,8 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
               .supportsMethod(POST)
               .consumes(TEXT_URI_LIST)
               .consumes(SPRING_DATA_COMPACT_JSON)
-              .withParameter(Parameter.ID)
-              .withParameter(Parameter.BODY)
+              .withParameterType(ParameterType.ID)
+              .withParameterType(ParameterType.BODY)
               .build()
               .map(update -> new SpringDataRestRequestHandler(context.getEntityContext(), update))
               .ifPresent(handlers::add);

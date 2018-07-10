@@ -42,7 +42,7 @@ class EntityDeleteExtractor implements EntityOperationsExtractor {
                   context.basePath(),
                   context.resourcePath()))
               .supportsMethod(DELETE)
-              .withParameter(Parameter.ID)
+              .withParameterType(ParameterType.ID)
               .build()
               .map(get -> new SpringDataRestRequestHandler(context, get))
               .ifPresent(handlers::add);

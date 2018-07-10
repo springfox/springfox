@@ -53,7 +53,7 @@ public class EntityAssociationDeleteExtractor implements EntityAssociationOperat
         .supportsMethod(DELETE)
         .consumes(TEXT_URI_LIST)
         .consumes(SPRING_DATA_COMPACT_JSON)
-        .withParameter(Parameter.ID)
+        .withParameterType(ParameterType.ID)
         .build()
         .map(delete -> new SpringDataRestRequestHandler(context.getEntityContext(), delete))
         .ifPresent(handlers::add);

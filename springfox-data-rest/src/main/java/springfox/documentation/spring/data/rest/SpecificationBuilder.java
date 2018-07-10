@@ -98,11 +98,11 @@ abstract class SpecificationBuilder {
     return this;
   }
 
-  abstract SpecificationBuilder withParameter(Parameter parameter);
+  abstract SpecificationBuilder withParameterType(ParameterType parameterType);
 
   abstract Optional<ActionSpecification> build();
 
-  enum Parameter {
+  enum ParameterType {
     ID,
     BODY,
     PAGEABLE,
@@ -127,42 +127,37 @@ abstract class SpecificationBuilder {
     }
 
     @Override
-    SpecificationBuilder withParameter(Parameter parameter) {
+    SpecificationBuilder withParameterType(ParameterType parameterType) {
 
       int index = this.parameters.size();
 
-      switch (parameter) {
+      switch (parameterType) {
         case ID:
 
-          withParameter(new ResolvedMethodParameter(
+          return withParameter(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id"),
               resolveType(context.getEntityContext(), RepositoryMetadata::getIdType)));
-          break;
 
         case BODY:
 
-          withParameter(new ResolvedMethodParameter(
+          return withParameter(new ResolvedMethodParameter(
               0,
               "body",
               bodyAnnotations(),
               property.isCollectionLike()
               ? context.getEntityContext().getTypeResolver().resolve(List.class, String.class)
               : context.getEntityContext().getTypeResolver().resolve(String.class)));
-          break;
 
         case ITEM:
-          withParameter(new ResolvedMethodParameter(
+          return withParameter(new ResolvedMethodParameter(
               index,
               propertyIdentifierName(property),
               pathAnnotations(propertyIdentifierName(property)),
               context.getEntityContext().getTypeResolver().resolve(String.class)));
 
-          break;
-
         case PAGEABLE:
-          break;
         default:
           break;
       }
@@ -257,28 +252,25 @@ abstract class SpecificationBuilder {
     }
 
     @Override
-    SpecificationBuilder withParameter(Parameter parameter) {
+    SpecificationBuilder withParameterType(ParameterType parameterType) {
 
-      switch (parameter) {
+      switch (parameterType) {
         case ID:
 
-          withParameter(new ResolvedMethodParameter(
+          return withParameter(new ResolvedMethodParameter(
               0,
               "id",
               pathAnnotations("id", handlerMethod),
               resolveType(context, RepositoryMetadata::getIdType)));
 
-          break;
-
         case BODY:
 
-          withParameter(new ResolvedMethodParameter(
+          return withParameter(new ResolvedMethodParameter(
               0,
               "body",
               bodyAnnotations(handlerMethod),
               resolveType(context, RepositoryMetadata::getDomainType)));
 
-          break;
 
         case PAGEABLE:
 
@@ -303,7 +295,6 @@ abstract class SpecificationBuilder {
               configuration.getSortParamName(),
               Collections.EMPTY_LIST,
               typeResolver.resolve(String.class)));
-          break;
 
         default:
           break;

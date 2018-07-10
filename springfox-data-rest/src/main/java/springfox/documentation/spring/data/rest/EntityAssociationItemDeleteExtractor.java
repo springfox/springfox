@@ -29,7 +29,7 @@ import java.util.List;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
-import static springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.ParameterType.*;
 import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 public class EntityAssociationItemDeleteExtractor implements EntityAssociationOperationsExtractor {
@@ -58,8 +58,8 @@ public class EntityAssociationItemDeleteExtractor implements EntityAssociationOp
           .supportsMethod(DELETE)
           .consumes(TEXT_URI_LIST)
           .consumes(SPRING_DATA_COMPACT_JSON)
-          .withParameter(ID)
-          .withParameter(ITEM)
+          .withParameterType(ID)
+          .withParameterType(ITEM)
           .build()
           .map(deleteItem -> new SpringDataRestRequestHandler(context.getEntityContext(), deleteItem))
           .ifPresent(handlers::add);
