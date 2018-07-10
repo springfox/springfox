@@ -30,6 +30,7 @@ import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 import static springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 public class EntityAssociationItemGetExtractor implements EntityAssociationOperationsExtractor {
   @Override
@@ -53,7 +54,7 @@ public class EntityAssociationItemGetExtractor implements EntityAssociationOpera
 
     if (property.isMap() || property.isCollectionLike()) {
 
-      SpecificationBuilder.getInstance(context, path)
+      associationAction(context, path)
           .supportsMethod(GET)
           .consumes(HAL_JSON)
           .withParameter(ID)

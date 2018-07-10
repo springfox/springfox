@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 class EntitySearchExtractor implements EntityOperationsExtractor {
   @Override
@@ -37,7 +38,7 @@ class EntitySearchExtractor implements EntityOperationsExtractor {
 
           final HandlerMethod handler = new HandlerMethod(context.getRepositoryInstance(), mapping.getMethod());
 
-          return SpecificationBuilder.getInstance(context, handler)
+          return entityAction(context, handler)
               .withPath(String.format("%s%s/search%s",
                   context.basePath(),
                   context.resourcePath(),

@@ -20,7 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,7 @@ import java.util.List;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
@@ -38,7 +39,7 @@ class EntityFindAllExtractor implements EntityOperationsExtractor {
         .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
         .ifPresent(handler -> {
 
-          SpecificationBuilder.getInstance(context, handler)
+          entityAction(context, handler)
               .supportsMethod(GET)
               .produces(APPLICATION_JSON)
               .produces(HAL_JSON)

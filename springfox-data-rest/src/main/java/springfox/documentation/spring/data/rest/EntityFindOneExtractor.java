@@ -20,12 +20,13 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 class EntityFindOneExtractor implements EntityOperationsExtractor {
   @Override
@@ -36,7 +37,7 @@ class EntityFindOneExtractor implements EntityOperationsExtractor {
         .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
         .ifPresent(handler -> {
 
-          SpecificationBuilder.getInstance(context, handler)
+          entityAction(context, handler)
               .withPath(String.format("%s%s/{id}",
                   context.basePath(),
                   context.resourcePath()))

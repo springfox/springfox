@@ -64,11 +64,11 @@ abstract class SpecificationBuilder {
     return getType != null ? typeResolver.resolve(getType.apply(repository)) : typeResolver.resolve(Void.TYPE);
   }
 
-  static SpecificationBuilder getInstance(EntityContext context, HandlerMethod handlerMethod) {
+  static SpecificationBuilder entityAction(EntityContext context, HandlerMethod handlerMethod) {
     return new EntityActionSpecificationBuilder(context, handlerMethod);
   }
 
-  static SpecificationBuilder getInstance(EntityAssociationContext context, String path) {
+  static SpecificationBuilder associationAction(EntityAssociationContext context, String path) {
     return new AssociationActionSpecificationBuilder(context, path);
   }
 

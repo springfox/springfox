@@ -22,13 +22,14 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.Path;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.spring.data.rest.SpecificationBuilder.Parameter;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 public class EntityAssociationSaveExtractor implements EntityAssociationOperationsExtractor {
   @Override
@@ -52,7 +53,7 @@ public class EntityAssociationSaveExtractor implements EntityAssociationOperatio
               context.getEntityContext().resourcePath(),
               mappingPath);
 
-          SpecificationBuilder.getInstance(context, path)
+          associationAction(context, path)
               .supportsMethod(PUT)
               .supportsMethod(PATCH)
               .supportsMethod(POST)
