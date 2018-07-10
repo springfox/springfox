@@ -120,12 +120,6 @@ abstract class SpecificationBuilder {
       this.property = context.getAssociation().getInverse();
     }
 
-    private static String actionName(PersistentEntity<?, ?> entity, PersistentProperty<?> property) {
-      return String.format("%s%s",
-          lowerCamelCaseName(entity.getType().getSimpleName()),
-          upperCamelCaseName(property.getName()));
-    }
-
     @Override
     SpecificationBuilder withParameterType(ParameterType parameterType) {
 
@@ -133,7 +127,6 @@ abstract class SpecificationBuilder {
 
       switch (parameterType) {
         case ID:
-
           return withParameter(new ResolvedMethodParameter(
               0,
               "id",
@@ -141,7 +134,6 @@ abstract class SpecificationBuilder {
               resolveType(context.getEntityContext(), RepositoryMetadata::getIdType)));
 
         case RESOURCE:
-
           return withParameter(new ResolvedMethodParameter(
               0,
               "body",
@@ -183,6 +175,15 @@ abstract class SpecificationBuilder {
           );
     }
 
+    private String actionName(
+        PersistentEntity<?, ?> entity,
+        PersistentProperty<?> property) {
+
+      return String.format("%s%s",
+          lowerCamelCaseName(entity.getType().getSimpleName()),
+          upperCamelCaseName(property.getName()));
+    }
+
     private ResolvedType returnType(TypeResolver resolver) {
       return supportedMethods.contains(DELETE)
              ? resolver.resolve(Void.TYPE)
@@ -203,60 +204,11 @@ abstract class SpecificationBuilder {
       this.handlerMethod = handlerMethod;
     }
 
-    private static List<ResolvedMethodParameter> transferResolvedMethodParameterList(
-        EntityContext context,
-        HandlerMethod handler) {
-
-      TypeResolver resolver = context.getTypeResolver();
-      HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
-
-      return methodResolver.methodParameters(handler).stream()
-          .map(EntityActionSpecificationBuilder::transferResolvedMethodParameter)
-          .collect(Collectors.toList());
-    }
-
-    private static ResolvedMethodParameter transferResolvedMethodParameter(
-        ResolvedMethodParameter src) {
-      Optional<Param> param = src.findAnnotation(Param.class);
-      if (param.isPresent()) {
-        return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
-      }
-      return src;
-    }
-
-    private static ResolvedType inferReturnType(
-        EntityContext context,
-        HandlerMethod handler) {
-
-      TypeResolver resolver = context.getTypeResolver();
-      HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
-      RepositoryMetadata repository = context.getRepositoryMetadata();
-
-      ResolvedType domainReturnType =
-          resolver.resolve(repository.getReturnedDomainClass(handler.getMethod()));
-      ResolvedType methodReturnType =
-          methodResolver.methodReturnType(handler);
-
-      if (isContainerType(methodReturnType)) {
-        return resolver.resolve(Resources.class,
-            collectionElementType(methodReturnType));
-      } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
-        return resolver.resolve(Resources.class, domainReturnType);
-      } else if (Types.isBaseType(domainReturnType)) {
-        return domainReturnType;
-      } else if (Types.isVoid(domainReturnType)) {
-        return resolver.resolve(Void.TYPE);
-      }
-
-      return resolver.resolve(Resource.class, domainReturnType);
-    }
-
     @Override
     SpecificationBuilder withParameterType(ParameterType parameterType) {
 
       switch (parameterType) {
         case ID:
-
           return withParameter(new ResolvedMethodParameter(
               0,
               "id",
@@ -264,7 +216,6 @@ abstract class SpecificationBuilder {
               resolveType(context, RepositoryMetadata::getIdType)));
 
         case RESOURCE:
-
           return withParameter(new ResolvedMethodParameter(
               0,
               "body",
@@ -273,7 +224,6 @@ abstract class SpecificationBuilder {
 
 
         case PAGEABLE_RESOURCE:
-
           RepositoryRestConfiguration configuration = context.getConfiguration();
           TypeResolver typeResolver = context.getTypeResolver();
 
@@ -323,6 +273,54 @@ abstract class SpecificationBuilder {
               inputParameters(),
               inferReturnType(context, handlerMethod))
           );
+    }
+
+    private static ResolvedMethodParameter transferResolvedMethodParameter(
+        ResolvedMethodParameter src) {
+      Optional<Param> param = src.findAnnotation(Param.class);
+      if (param.isPresent()) {
+        return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
+      }
+      return src;
+    }
+
+    private ResolvedType inferReturnType(
+        EntityContext context,
+        HandlerMethod handler) {
+
+      TypeResolver resolver = context.getTypeResolver();
+      HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
+      RepositoryMetadata repository = context.getRepositoryMetadata();
+
+      ResolvedType domainReturnType =
+          resolver.resolve(repository.getReturnedDomainClass(handler.getMethod()));
+      ResolvedType methodReturnType =
+          methodResolver.methodReturnType(handler);
+
+      if (isContainerType(methodReturnType)) {
+        return resolver.resolve(Resources.class,
+            collectionElementType(methodReturnType));
+      } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
+        return resolver.resolve(Resources.class, domainReturnType);
+      } else if (Types.isBaseType(domainReturnType)) {
+        return domainReturnType;
+      } else if (Types.isVoid(domainReturnType)) {
+        return resolver.resolve(Void.TYPE);
+      }
+
+      return resolver.resolve(Resource.class, domainReturnType);
+    }
+
+    private List<ResolvedMethodParameter> transferResolvedMethodParameterList(
+        EntityContext context,
+        HandlerMethod handler) {
+
+      TypeResolver resolver = context.getTypeResolver();
+      HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
+
+      return methodResolver.methodParameters(handler).stream()
+          .map(EntityActionSpecificationBuilder::transferResolvedMethodParameter)
+          .collect(Collectors.toList());
     }
 
     private List<ResolvedMethodParameter> inputParameters() {
