@@ -50,14 +50,58 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 abstract class SpecificationBuilder {
 
-  final Set<RequestMethod> supportedMethods = new HashSet<>();
+  protected final Set<RequestMethod> supportedMethods = new HashSet<>();
   protected final Set<MediaType> produces = new HashSet<>();
   protected final Set<MediaType> consumes = new HashSet<>();
   protected final List<ResolvedMethodParameter> parameters = new ArrayList<>();
   protected String path;
 
-  enum Parameter {
+  static ResolvedType resolveType(EntityContext context, Function<RepositoryMetadata, Type> getType) {
 
+    final RepositoryMetadata repository = context.getRepositoryMetadata();
+    final TypeResolver typeResolver = context.getTypeResolver();
+
+    return getType != null ? typeResolver.resolve(getType.apply(repository)) : typeResolver.resolve(Void.TYPE);
+  }
+
+  static SpecificationBuilder getInstance(EntityContext context, HandlerMethod handlerMethod) {
+    return new EntityActionSpecificationBuilder(context, handlerMethod);
+  }
+
+  static SpecificationBuilder getInstance(EntityAssociationContext context, String path) {
+    return new AssociationActionSpecificationBuilder(context, path);
+  }
+
+  SpecificationBuilder withPath(String path) {
+    this.path = path;
+    return this;
+  }
+
+  SpecificationBuilder supportsMethod(RequestMethod method) {
+    this.supportedMethods.add(method);
+    return this;
+  }
+
+  SpecificationBuilder produces(MediaType type) {
+    this.produces.add(type);
+    return this;
+  }
+
+  SpecificationBuilder consumes(MediaType type) {
+    this.consumes.add(type);
+    return this;
+  }
+
+  SpecificationBuilder withParameter(ResolvedMethodParameter parameter) {
+    this.parameters.add(parameter);
+    return this;
+  }
+
+  abstract SpecificationBuilder withParameter(Parameter parameter);
+
+  abstract Optional<ActionSpecification> build();
+
+  enum Parameter {
     ID,
     BODY,
     PAGEABLE,
@@ -73,6 +117,12 @@ abstract class SpecificationBuilder {
       this.context = context;
       this.path = path;
       this.property = context.getAssociation().getInverse();
+    }
+
+    private static String actionName(PersistentEntity<?, ?> entity, PersistentProperty<?> property) {
+      return String.format("%s%s",
+          lowerCamelCaseName(entity.getType().getSimpleName()),
+          upperCamelCaseName(property.getName()));
     }
 
     @Override
@@ -142,12 +192,6 @@ abstract class SpecificationBuilder {
 
     }
 
-    private static String actionName(PersistentEntity<?, ?> entity, PersistentProperty<?> property) {
-      return String.format("%s%s",
-          lowerCamelCaseName(entity.getType().getSimpleName()),
-          upperCamelCaseName(property.getName()));
-    }
-
   }
 
   private static class EntityActionSpecificationBuilder extends SpecificationBuilder {
@@ -158,6 +202,50 @@ abstract class SpecificationBuilder {
     EntityActionSpecificationBuilder(EntityContext context, HandlerMethod handlerMethod) {
       this.context = context;
       this.handlerMethod = handlerMethod;
+    }
+
+    private static List<ResolvedMethodParameter> transferResolvedMethodParameterList(EntityContext context,
+                                                                                     HandlerMethod handler) {
+
+      final TypeResolver resolver = context.getTypeResolver();
+      final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
+
+      return methodResolver.methodParameters(handler).stream()
+          .map(EntityActionSpecificationBuilder::transferResolvedMethodParameter)
+          .collect(Collectors.toList());
+    }
+
+    private static ResolvedMethodParameter transferResolvedMethodParameter(ResolvedMethodParameter src) {
+      Optional<Param> param = src.findAnnotation(Param.class);
+      if (param.isPresent()) {
+        return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
+      }
+      return src;
+    }
+
+    private static ResolvedType inferReturnType(
+        EntityContext context,
+        HandlerMethod handler) {
+
+      final TypeResolver resolver = context.getTypeResolver();
+      final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
+      final RepositoryMetadata repository = context.getRepositoryMetadata();
+
+      final ResolvedType domainReturnType = resolver.resolve(repository.getReturnedDomainClass(handler.getMethod()));
+      final ResolvedType methodReturnType = methodResolver.methodReturnType(handler);
+
+      if (springfox.documentation.schema.Collections.isContainerType(methodReturnType)) {
+        return resolver.resolve(Resources.class,
+            springfox.documentation.schema.Collections.collectionElementType(methodReturnType));
+      } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
+        return resolver.resolve(Resources.class, domainReturnType);
+      } else if (Types.isBaseType(domainReturnType)) {
+        return domainReturnType;
+      } else if (Types.isVoid(domainReturnType)) {
+        return resolver.resolve(Void.TYPE);
+      }
+
+      return resolver.resolve(Resource.class, domainReturnType);
     }
 
     @Override
@@ -239,95 +327,5 @@ abstract class SpecificationBuilder {
           );
     }
 
-    private static List<ResolvedMethodParameter> transferResolvedMethodParameterList(EntityContext context,
-                                                                                     HandlerMethod handler) {
-
-      final TypeResolver resolver = context.getTypeResolver();
-      final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
-
-      return methodResolver.methodParameters(handler).stream()
-          .map(EntityActionSpecificationBuilder::transferResolvedMethodParameter)
-          .collect(Collectors.toList());
-    }
-
-    private static ResolvedMethodParameter transferResolvedMethodParameter(ResolvedMethodParameter src) {
-      Optional<Param> param = src.findAnnotation(Param.class);
-      if (param.isPresent()) {
-        return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
-      }
-      return src;
-    }
-
-    private static ResolvedType inferReturnType(
-        EntityContext context,
-        HandlerMethod handler) {
-
-      final TypeResolver resolver = context.getTypeResolver();
-      final HandlerMethodResolver methodResolver = new HandlerMethodResolver(resolver);
-      final RepositoryMetadata repository = context.getRepositoryMetadata();
-
-      final ResolvedType domainReturnType = resolver.resolve(repository.getReturnedDomainClass(handler.getMethod()));
-      final ResolvedType methodReturnType = methodResolver.methodReturnType(handler);
-
-      if (springfox.documentation.schema.Collections.isContainerType(methodReturnType)) {
-        return resolver.resolve(Resources.class,
-            springfox.documentation.schema.Collections.collectionElementType(methodReturnType));
-      } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
-        return resolver.resolve(Resources.class, domainReturnType);
-      } else if (Types.isBaseType(domainReturnType)) {
-        return domainReturnType;
-      } else if (Types.isVoid(domainReturnType)) {
-        return resolver.resolve(Void.TYPE);
-      }
-
-      return resolver.resolve(Resource.class, domainReturnType);
-    }
-
   }
-
-  static ResolvedType resolveType(EntityContext context, Function<RepositoryMetadata, Type> getType) {
-
-    final RepositoryMetadata repository = context.getRepositoryMetadata();
-    final TypeResolver typeResolver = context.getTypeResolver();
-
-    return getType != null ? typeResolver.resolve(getType.apply(repository)) : typeResolver.resolve(Void.TYPE);
-  }
-
-  static SpecificationBuilder getInstance(EntityContext context, HandlerMethod handlerMethod) {
-    return new EntityActionSpecificationBuilder(context, handlerMethod);
-  }
-
-  static SpecificationBuilder getInstance(EntityAssociationContext context, String path) {
-    return new AssociationActionSpecificationBuilder(context, path);
-  }
-
-  SpecificationBuilder withPath(String path) {
-    this.path = path;
-    return this;
-  }
-
-  SpecificationBuilder supportsMethod(RequestMethod method) {
-    this.supportedMethods.add(method);
-    return this;
-  }
-
-  SpecificationBuilder produces(MediaType type) {
-    this.produces.add(type);
-    return this;
-  }
-
-  SpecificationBuilder consumes(MediaType type) {
-    this.consumes.add(type);
-    return this;
-  }
-
-  SpecificationBuilder withParameter(ResolvedMethodParameter parameter) {
-    this.parameters.add(parameter);
-    return this;
-  }
-
-  abstract SpecificationBuilder withParameter(Parameter parameter);
-
-  abstract Optional<ActionSpecification> build();
-
 }
