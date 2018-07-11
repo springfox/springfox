@@ -18,55 +18,37 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.repository.core.CrudMethods;
-import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import static java.util.Collections.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 class EntityDeleteExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = new ArrayList<>();
-    final PersistentEntity<?, ?> entity = context.entity();
-    CrudMethods crudMethods = context.crudMethods();
-    TypeResolver resolver = context.getTypeResolver();
-    RepositoryMetadata repository = context.getRepositoryMetadata();
-    Object deleteMethod = crudMethods.getDeleteMethod();
-    if (crudMethods.hasDelete()) {
-      OptionalDeferencer<Method> converter = new OptionalDeferencer<>();
-      Method actualDeleteMethod = converter.convert(deleteMethod);
-      HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(),
-          actualDeleteMethod);
-      ActionSpecification spec = new ActionSpecification(
-          actionName(entity, actualDeleteMethod),
-          String.format("%s%s/{id}",
-              context.basePath(),
-              context.resourcePath()),
-              singleton(RequestMethod.DELETE),
-          new HashSet<>(),
-          new HashSet<>(),
-          handler,
-          singletonList(new ResolvedMethodParameter(
-              0,
-              "id",
-              pathAnnotations("id", handler),
-              resolver.resolve(repository.getIdType()))),
-          resolver.resolve(Void.TYPE));
-      handlers.add(new SpringDataRestRequestHandler(context, spec));
-    }
+    List<RequestHandler> handlers = new ArrayList<>();
+
+    context.crudMethods().getDeleteMethod()
+        .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+        .ifPresent(handler -> {
+
+          entityAction(context, handler)
+              .withPath(String.format("%s%s/{id}",
+                  context.basePath(),
+                  context.resourcePath()))
+              .supportsMethod(DELETE)
+              .withParameterType(ParameterType.ID)
+              .build()
+              .map(get -> new SpringDataRestRequestHandler(context, get))
+              .ifPresent(handlers::add);
+
+        });
+
     return handlers;
   }
 }

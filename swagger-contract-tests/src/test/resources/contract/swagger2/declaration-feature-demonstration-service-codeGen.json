@@ -1228,10 +1228,6 @@
             },
             "title": "FancyPet"
         },
-        "InputStream": {
-            "type": "object",
-            "title": "InputStream"
-        },
         "MapOfstringAndExample": {
             "type": "object",
             "title": "MapOfstringAndExample",
@@ -1296,82 +1292,6 @@
         },
         "ObjectNode": {
             "type": "object",
-            "properties": {
-                "array": {
-                    "type": "boolean"
-                },
-                "bigDecimal": {
-                    "type": "boolean"
-                },
-                "bigInteger": {
-                    "type": "boolean"
-                },
-                "binary": {
-                    "type": "boolean"
-                },
-                "boolean": {
-                    "type": "boolean"
-                },
-                "containerNode": {
-                    "type": "boolean"
-                },
-                "double": {
-                    "type": "boolean"
-                },
-                "float": {
-                    "type": "boolean"
-                },
-                "floatingPointNumber": {
-                    "type": "boolean"
-                },
-                "int": {
-                    "type": "boolean"
-                },
-                "integralNumber": {
-                    "type": "boolean"
-                },
-                "long": {
-                    "type": "boolean"
-                },
-                "missingNode": {
-                    "type": "boolean"
-                },
-                "nodeType": {
-                    "type": "string",
-                    "enum": [
-                        "ARRAY",
-                        "BINARY",
-                        "BOOLEAN",
-                        "MISSING",
-                        "NULL",
-                        "NUMBER",
-                        "OBJECT",
-                        "POJO",
-                        "STRING"
-                    ]
-                },
-                "null": {
-                    "type": "boolean"
-                },
-                "number": {
-                    "type": "boolean"
-                },
-                "object": {
-                    "type": "boolean"
-                },
-                "pojo": {
-                    "type": "boolean"
-                },
-                "short": {
-                    "type": "boolean"
-                },
-                "textual": {
-                    "type": "boolean"
-                },
-                "valueNode": {
-                    "type": "boolean"
-                }
-            },
             "title": "ObjectNode"
         },
         "Pet": {

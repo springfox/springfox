@@ -34,6 +34,7 @@ import org.springframework.data.rest.webmvc.mapping.Associations;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 
 public class EntityContext {
   private final RepositoryRestConfiguration configuration;
@@ -72,11 +73,8 @@ public class EntityContext {
     return resource.getDomainType().getSimpleName();
   }
 
-  public PersistentEntity<?, ? extends PersistentProperty<?>> entity() {
-    Object domainType = resource.getDomainType();
-    OptionalDeferencer<Class<?>> converter = new OptionalDeferencer<>();
-    Class actualDomainType = converter.convert(domainType);
-    return entities.getPersistentEntity(actualDomainType).orElse(null);
+  public Optional<PersistentEntity<?, ? extends PersistentProperty<?>>> entity() {
+    return entities.getPersistentEntity(resource.getDomainType());
   }
 
   public CrudMethods crudMethods() {

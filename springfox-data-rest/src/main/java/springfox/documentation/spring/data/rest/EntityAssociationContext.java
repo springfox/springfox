@@ -18,7 +18,9 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import java.util.Optional;
 import org.springframework.data.mapping.Association;
+import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
 
@@ -42,7 +44,9 @@ public class EntityAssociationContext {
     return association;
   }
 
-  public ResourceMetadata associationMetadata() {
-    return entityContext.getAssociations().getMetadataFor(entityContext.entity().getType());
+  public Optional<ResourceMetadata> associationMetadata() {
+    return entityContext.entity()
+            .map(PersistentEntity::getType)
+            .map(clazz -> entityContext.getAssociations().getMetadataFor(clazz));
   }
 }

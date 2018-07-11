@@ -21,7 +21,6 @@ package springfox.documentation.spring.data.rest;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
-import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
@@ -78,23 +77,22 @@ class EntityServicesProvider implements RequestHandlerProvider {
   public List<RequestHandler> requestHandlers() {
     List<EntityContext> contexts = new ArrayList<>();
     for (Class each : repositories) {
-      Object repositoryInformation = repositories.getRepositoryInformationFor(each);
-      Object repositoryInstance = repositories.getRepositoryFor(each);
-      ResourceMetadata resource = mappings.getMetadataFor(each);
-      if (resource.isExported()) {
-        OptionalDeferencer<RepositoryInformation> converter = new OptionalDeferencer<>();
-        RepositoryInformation repositoryInfo =
-            converter.convert(repositoryInformation);
-        contexts.add(new EntityContext(
-            typeResolver,
-            configuration,
-            repositoryInfo,
-            repositoryInstance,
-            resource,
-            mappings,
-            entities,
-            associations, extractorConfiguration));
-      }
+      repositories.getRepositoryInformationFor(each).ifPresent(repositoryInfo -> {
+        repositories.getRepositoryFor(each).ifPresent(repositoryInstance -> {
+          ResourceMetadata resource = mappings.getMetadataFor(each);
+          if (resource.isExported()) {
+            contexts.add(new EntityContext(
+                typeResolver,
+                configuration,
+                repositoryInfo,
+                repositoryInstance,
+                resource,
+                mappings,
+                entities,
+                associations, extractorConfiguration));
+          }
+        });
+      });
 
     }
 

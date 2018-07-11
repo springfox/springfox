@@ -18,95 +18,46 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.repository.core.CrudMethods;
-import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.hateoas.Resource;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
-import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 class EntitySaveExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = new ArrayList<>();
-    final PersistentEntity<?, ?> entity = context.entity();
-    CrudMethods crudMethods = context.crudMethods();
-    Object getSaveMethod = crudMethods.getSaveMethod();
-    OptionalDeferencer<Method> converter = new OptionalDeferencer<>();
-    if (crudMethods.hasSaveMethod()) {
-      Method actualSaveMethod = converter.convert(getSaveMethod);
-      HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(),
-          actualSaveMethod);
-      RepositoryMetadata resource = context.getRepositoryMetadata();
-      ActionSpecification put = saveActionSpecification(
-          entity,
-          Stream.of(PUT, PATCH).collect(toSet()),
-          String.format("%s%s/{id}",
-              context.basePath(),
-              context.resourcePath()),
-          handler,
-          context.getTypeResolver(),
-          resource, Stream.of(
-              new ResolvedMethodParameter(
-                  0,
-                  "id",
-                  pathAnnotations("id", handler),
-                  context.getTypeResolver().resolve(resource.getIdType())),
-              new ResolvedMethodParameter(
-                  0,
-                  "body",
-                  bodyAnnotations(handler),
-                  context.getTypeResolver().resolve(resource.getDomainType()))).collect(toList()));
-      handlers.add(new SpringDataRestRequestHandler(context, put));
-      ActionSpecification post = saveActionSpecification(
-          entity,
-          singleton(POST),
-          String.format("%s%s", context.basePath(), context.resourcePath()),
-          handler,
-          context.getTypeResolver(), resource, singletonList(
-              new ResolvedMethodParameter(
-                  0,
-                  "body",
-                  bodyAnnotations(handler),
-                  context.getTypeResolver().resolve(resource.getDomainType()))));
-      handlers.add(new SpringDataRestRequestHandler(context, post));
-    }
+    List<RequestHandler> handlers = new ArrayList<>();
+
+    context.crudMethods().getSaveMethod()
+        .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+        .ifPresent(handler -> {
+
+          entityAction(context, handler)
+              .withPath(String.format("%s%s/{id}",
+                  context.basePath(),
+                  context.resourcePath()))
+              .supportsMethod(PUT)
+              .supportsMethod(PATCH)
+              .withParameterType(ParameterType.ID)
+              .withParameterType(ParameterType.RESOURCE)
+              .build()
+              .map(put -> new SpringDataRestRequestHandler(context, put))
+              .ifPresent(handlers::add);
+
+          entityAction(context, handler)
+              .supportsMethod(POST)
+              .withParameterType(ParameterType.RESOURCE)
+              .build()
+              .map(post -> new SpringDataRestRequestHandler(context, post))
+              .ifPresent(handlers::add);
+
+        });
+
     return handlers;
-  }
-
-  private ActionSpecification saveActionSpecification(
-      PersistentEntity<?, ?> entity,
-      Set<RequestMethod> methods,
-      String path,
-      HandlerMethod handler,
-      TypeResolver typeResolver,
-      RepositoryMetadata repository,
-      List<ResolvedMethodParameter> parameters) {
-
-    return new ActionSpecification(
-        actionName(entity, handler.getMethod()),
-        path,
-        methods,
-        new HashSet<>(),
-        new HashSet<>(),
-        handler,
-        parameters,
-        typeResolver.resolve(Resource.class, repository.getReturnedDomainClass(handler.getMethod())));
   }
 }

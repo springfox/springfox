@@ -39,24 +39,23 @@ class RequestExtractionUtils {
     throw new UnsupportedOperationException();
   }
 
-  public static String lowerCamelCaseName(String stringValue) {
+  static String lowerCamelCaseName(String stringValue) {
     return Character.toLowerCase(stringValue.charAt(0)) + stringValue.substring(1);
   }
 
-  public static String upperCamelCaseName(String stringValue) {
+  static String upperCamelCaseName(String stringValue) {
     return Character.toUpperCase(stringValue.charAt(0)) + stringValue.substring(1);
   }
 
-  public static String actionName(PersistentEntity<?, ?> entity, Method method) {
+  static String actionName(PersistentEntity<?, ?> entity, Method method) {
     return String.format("%s%s", method.getName(), entity.getType().getSimpleName());
   }
 
-
-  public static  List<Annotation> pathAnnotations(String name) {
+  static List<Annotation> pathAnnotations(String name) {
     return pathAnnotations(name, null);
   }
 
-  public static  List<Annotation> pathAnnotations(String name, HandlerMethod handler) {
+  static List<Annotation> pathAnnotations(String name, HandlerMethod handler) {
     List<Annotation> annotations = handlerAnnotations(handler);
     if (name != null) {
       annotations.add(SynthesizedAnnotations.pathVariable(name));
@@ -64,7 +63,7 @@ class RequestExtractionUtils {
     return annotations;
   }
 
-  public static  List<Annotation> bodyAnnotations(HandlerMethod handler) {
+  static List<Annotation> bodyAnnotations(HandlerMethod handler) {
     List<Annotation> annotations = handlerAnnotations(handler);
     annotations.add(SynthesizedAnnotations.REQUEST_BODY_ANNOTATION);
     return annotations;
@@ -78,14 +77,13 @@ class RequestExtractionUtils {
     return annotations;
   }
 
-  public static  List<Annotation> bodyAnnotations() {
+  static List<Annotation> bodyAnnotations() {
     List<Annotation> annotations = handlerAnnotations(null);
     annotations.add(SynthesizedAnnotations.REQUEST_BODY_ANNOTATION);
     return annotations;
   }
 
-
-  public static String propertyIdentifierName(PersistentProperty<?> property) {
+  static String propertyIdentifierName(PersistentProperty<?> property) {
     String propertyName = property.getName();
     if (property.isCollectionLike()) {
       propertyName = property.getComponentType().getSimpleName();
@@ -95,7 +93,7 @@ class RequestExtractionUtils {
     return String.format("%sId", propertyName.toLowerCase());
   }
 
-  public static ResolvedType propertyResponse(PersistentProperty<?> property, TypeResolver resolver) {
+  static ResolvedType propertyResponse(PersistentProperty<?> property, TypeResolver resolver) {
     if (property.isCollectionLike()) {
       return resolver.resolve(Resources.class, property.getComponentType());
     } else if (property.isMap()) {
@@ -109,7 +107,7 @@ class RequestExtractionUtils {
     return resolver.resolve(Resource.class, property.getType());
   }
 
-  public static ResolvedType propertyItemResponse(PersistentProperty<?> property, TypeResolver resolver) {
+  static ResolvedType propertyItemResponse(PersistentProperty<?> property, TypeResolver resolver) {
     if (property.isCollectionLike()) {
       return resolver.resolve(Resource.class, property.getComponentType());
     } else if (property.isMap()) {
