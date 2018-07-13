@@ -81,7 +81,7 @@ public class ResponseMessageBuilder {
    *
    * @param examples response examples
    * @return this
-   * @since 2.9.4
+   * @since 3.0.0
    */
   public ResponseMessageBuilder examples(List<Example> examples) {
     this.examples.addAll(nullToEmptyList(examples));

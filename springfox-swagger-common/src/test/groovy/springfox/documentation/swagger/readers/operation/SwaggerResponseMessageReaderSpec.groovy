@@ -191,16 +191,16 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
   def "Supports examples"() {
     given:
     OperationContext operationContext =
-            operationContext(documentationContext(), handlerMethodIn(ResponseExampleTestController, methodName))
+        operationContext(documentationContext(), handlerMethodIn(ResponseExampleTestController, methodName))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-            OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
     def typeNameExtractor = new TypeNameExtractor(
-            resolver,
-            modelNameRegistry,
-            new JacksonEnumTypeDeterminer())
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
 
     when:
     new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
@@ -226,7 +226,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
     }
     for (def i = 0; i < examples.size(); i++) {
       if (examples[i].mediaType != expectedExamples[i].mediaType
-        || examples[i].value != expectedExamples[i].value) {
+          || examples[i].value != expectedExamples[i].value) {
         return false
       }
     }

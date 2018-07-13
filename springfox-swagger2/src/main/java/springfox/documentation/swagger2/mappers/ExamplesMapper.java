@@ -18,14 +18,12 @@
  */
 package springfox.documentation.swagger2.mappers;
 
+import springfox.documentation.schema.Example;
+
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.mapstruct.Mapper;
-import springfox.documentation.schema.Example;
-
-@Mapper
 public class ExamplesMapper {
 
   public Map<String, Object> mapExamples(List<Example> from) {
