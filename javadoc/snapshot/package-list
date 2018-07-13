@@ -5,6 +5,7 @@ springfox.bean.validators.plugins.schema
 springfox.documentation
 springfox.documentation.annotations
 springfox.documentation.builders
+springfox.documentation.common
 springfox.documentation.schema
 springfox.documentation.schema.configuration
 springfox.documentation.schema.plugins
