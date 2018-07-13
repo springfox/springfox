@@ -37,7 +37,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package springfox.documentation.swagger.common;
+package springfox.documentation.common;
 
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;

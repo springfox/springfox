@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ValueConstants;
+import springfox.documentation.common.SpringVersion;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -46,11 +47,17 @@ import static java.util.Optional.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
+  private final SpringVersion springVersion;
   private final DescriptionResolver descriptions;
 
   @Autowired
   public ParameterRequiredReader(DescriptionResolver descriptions) {
+    this(descriptions, new SpringVersion());
+  }
+
+  ParameterRequiredReader(DescriptionResolver descriptions, SpringVersion springVersion) {
     this.descriptions = descriptions;
+    this.springVersion = springVersion;
   }
 
   @Override
@@ -83,7 +90,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
-      String paramName = ofNullable(pathVariable.get().name()).filter(((Predicate<String>)String::isEmpty).negate())
+      String paramName = ofNullable(pathVariable.get().name()).filter(((Predicate<String>) String::isEmpty).negate())
           .orElse(methodParameter.defaultName().orElse(null));
 
       if (pathVariable.get().required() ||
@@ -106,7 +113,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
       String paramName) {
 
     return !pathVariable.required()
-         && operationContext.requestMappingPattern().contains("{" + paramName + "}");
+        && operationContext.requestMappingPattern().contains("{" + paramName + "}");
   }
 
   @SuppressWarnings("squid:S1872")

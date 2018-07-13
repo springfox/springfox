@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.common.SpringVersion
+import springfox.documentation.common.Version
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -70,42 +72,47 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
             documentationContext(),
             Mock(GenericTypeNamingStrategy),
             operation)
+    and:
+    def springVersion = Mock(SpringVersion.class);
+    springVersion.getVersion() >> Version.parse(version)
 
     when:
-    def operationCommand = new ParameterRequiredReader(description)
+    def operationCommand = new ParameterRequiredReader(description, springVersion)
     operationCommand.apply(parameterContext)
 
     then:
     parameterContext.parameterBuilder().build().isRequired() == expected
 
     where:
-    paramAnnotations                                        | requestPattern           | expected
-    [apiParam(false), pathVariableRequired()]               | "/path/{required-param}" | true
-    [apiParam(true), pathVariableRequired()]                | "/path/{required-param}" | true
-    [apiParam(false), pathVariableOptional()]               | "/path/{optional-param}" | true
-    [apiParam(false), pathVariableOptional()]               | "/path"                  | false
-    [apiParam(true), pathVariableOptional()]                | "/path/{optional-param}" | true
-    [apiParam(true), pathVariableOptional()]                | "/path"                  | false
-    [apiParam(false), requestHeader(false, "", "")]         | "/path"                  | false
-    [requestHeader(true, "", "")]                           | "/path"                  | true
-    [requestHeader(false, "", "")]                          | "/path"                  | false
-    [apiParam(true)]                                        | "/path"                  | false
-    [apiParam(false)]                                       | "/path"                  | false
-    [requestParam(true, "", DEFAULT_NONE)]                  | "/path"                  | true
-    [requestParam(true, "", "")]                            | "/path"                  | false
-    [requestParam(true, "", null)]                          | "/path"                  | false
-    [requestParam(true, "", "default value")]               | "/path"                  | false
-    [requestParam(false, "", DEFAULT_NONE)]                 | "/path"                  | false
-    [requestParam(false, "", "")]                           | "/path"                  | false
-    [requestBody(false)]                                    | "/path"                  | false
-    [requestBody(true)]                                     | "/path"                  | true
-    [requestPart(false, "")]                                | "/path"                  | false
-    [requestPart(true, "")]                                 | "/path"                  | true
-    []                                                      | "/path"                  | false
-    [null]                                                  | "/path"                  | false
-    [apiParam(true), requestParam(false, "", DEFAULT_NONE)] | "/path"                  | false
-    [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "/path"                  | true
-    [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "/path"                  | true
+    paramAnnotations                                        | version         | requestPattern           | expected
+    [apiParam(false), pathVariableRequired()]               | "4.3.3.RELEASE" | "/path/{required-param}" | true
+    [apiParam(false), pathVariableRequired()]               | "4.2.0.RELEASE" | "/path/{required-param}" | true
+    [apiParam(true), pathVariableRequired()]                | "4.3.3.RELEASE" | "/path/{required-param}" | true
+    [apiParam(true), pathVariableRequired()]                | "4.2.0.RELEASE" | "/path/{required-param}" | true
+    [apiParam(false), pathVariableOptional()]               | "4.3.3.RELEASE" | "/path/{optional-param}" | true
+    [apiParam(false), pathVariableOptional()]               | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(true), pathVariableOptional()]                | "4.3.3.RELEASE" | "/path/{optional-param}" | true
+    [apiParam(true), pathVariableOptional()]                | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(false), requestHeader(false, "", "")]         | "4.3.3.RELEASE" | "/path"                  | false
+    [requestHeader(true, "", "")]                           | "4.3.3.RELEASE" | "/path"                  | true
+    [requestHeader(false, "", "")]                          | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(true)]                                        | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(false)]                                       | "4.3.3.RELEASE" | "/path"                  | false
+    [requestParam(true, "", DEFAULT_NONE)]                  | "4.3.3.RELEASE" | "/path"                  | true
+    [requestParam(true, "", "")]                            | "4.3.3.RELEASE" | "/path"                  | false
+    [requestParam(true, "", null)]                          | "4.3.3.RELEASE" | "/path"                  | false
+    [requestParam(true, "", "default value")]               | "4.3.3.RELEASE" | "/path"                  | false
+    [requestParam(false, "", DEFAULT_NONE)]                 | "4.3.3.RELEASE" | "/path"                  | false
+    [requestParam(false, "", "")]                           | "4.3.3.RELEASE" | "/path"                  | false
+    [requestBody(false)]                                    | "4.3.3.RELEASE" | "/path"                  | false
+    [requestBody(true)]                                     | "4.3.3.RELEASE" | "/path"                  | true
+    [requestPart(false, "")]                                | "4.3.3.RELEASE" | "/path"                  | false
+    [requestPart(true, "")]                                 | "4.3.3.RELEASE" | "/path"                  | true
+    []                                                      | "4.3.3.RELEASE" | "/path"                  | false
+    [null]                                                  | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(true), requestParam(false, "", DEFAULT_NONE)] | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "4.3.3.RELEASE" | "/path"                  | true
+    [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "4.3.3.RELEASE" | "/path"                  | true
   }
 
   def pathVariableRequired() {
