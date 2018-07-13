@@ -602,6 +602,52 @@
             "path": "/features/1490/{itemId}"
         },
         {
+            "description": "saveUser",
+            "operations": [
+                {
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "deprecated": "false",
+                    "method": "POST",
+                    "nickname": "saveUserUsingPOST",
+                    "parameters": [],
+                    "produces": [
+                        "*/*"
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "User not found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Validation exception"
+                        }
+                    ],
+                    "summary": "Demo using examples",
+                    "type": "void"
+                }
+            ],
+            "path": "/features/1570"
+        },
+        {
             "description": "addFiles",
             "operations": [
                 {

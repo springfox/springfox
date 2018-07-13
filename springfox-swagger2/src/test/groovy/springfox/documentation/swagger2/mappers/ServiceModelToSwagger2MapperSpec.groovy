@@ -15,6 +15,7 @@ import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.ResourceListingBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
+import springfox.documentation.schema.Example
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.ModelReference
 import springfox.documentation.service.AllowableListValues
@@ -61,6 +62,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       mappedOperation.responses.size() == builtOperation.responseMessages.size()
       mappedOperation.responses.get("200").description == builtOperation.responseMessages.first().message
       mappedOperation.responses.get("200").schema.type == "string"
+      mappedOperation.responses.get("200").examples.get("mediaType") == "value"
       mappedOperation.vendorExtensions.size() == builtOperation.vendorExtensions.size()
       mappedOperation.vendorExtensions.containsKey("x-test1")
       mappedOperation.vendorExtensions.containsKey("x-test2")
@@ -176,10 +178,12 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
         .scope("test")
         .description("test scope")
         .build()
+    def example = new Example("mediaType", "value")
     def response = new ResponseMessageBuilder()
         .code(200)
         .message("Success")
         .responseModel(new ModelRef("string"))
+        .examples([example])
         .build()
 
     def first = new ObjectVendorExtension("")
