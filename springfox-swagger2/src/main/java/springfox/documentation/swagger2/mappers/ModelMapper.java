@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,14 +20,10 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Multimap;
+import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
+import io.swagger.models.RefModel;
 import io.swagger.models.Xml;
 import io.swagger.models.properties.AbstractNumericProperty;
 import io.swagger.models.properties.ArrayProperty;
@@ -43,12 +39,18 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.Maps.*;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
@@ -60,18 +62,38 @@ public abstract class ModelMapper {
       return null;
     }
 
-    Map<String, Model> map = newTreeMap();
-
+    Map<String, Model> map = new TreeMap();
+    InheritanceDeterminer determiner = new InheritanceDeterminer(from);
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
-      Model value = mapProperties(entry.getValue());
+      Model value;
+      if (determiner.hasParent(entry.getValue())) {
+        value = mapComposedModel(determiner.parent(entry.getValue()), entry.getValue());
+      } else {
+        value = mapModel(entry.getValue());
+      }
       map.put(key, value);
     }
 
     return map;
   }
 
-  private Model mapProperties(springfox.documentation.schema.Model source) {
+  private Model mapComposedModel(RefModel parent, springfox.documentation.schema.Model source) {
+    ComposedModel model = new ComposedModel()
+        .interfaces(singletonList(parent))
+        .child(mapModel(source));
+
+    model.setDescription(source.getDescription());
+    model.setExample(source.getExample());
+    model.setTitle(source.getName());
+
+    SortedMap<String, ModelProperty> sortedProperties = sort(source.getProperties());
+    Map<String, Property> modelProperties = mapProperties(sortedProperties);
+    model.setProperties(modelProperties);
+    return model;
+  }
+
+  private Model mapModel(springfox.documentation.schema.Model source) {
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
@@ -83,10 +105,10 @@ public abstract class ModelMapper {
     Map<String, Property> modelProperties = mapProperties(sortedProperties);
     model.setProperties(modelProperties);
 
-    FluentIterable<String> requiredFields = FluentIterable.from(source.getProperties().values())
+    Stream<String> requiredFields = source.getProperties().values().stream()
         .filter(requiredProperty())
-        .transform(propertyName());
-    model.setRequired(requiredFields.toList());
+        .map(propertyName());
+    model.setRequired(requiredFields.collect(toList()));
     model.setSimple(false);
     model.setType(ModelImpl.OBJECT);
     model.setTitle(source.getName());
@@ -103,10 +125,10 @@ public abstract class ModelMapper {
 
   private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<String, Property>();
-    SortedMap<String, ModelProperty> nonVoidProperties = filterEntries(properties, not(voidProperties()));
-    for (Map.Entry<String, ModelProperty> propertyEntry : nonVoidProperties.entrySet()) {
+    properties.entrySet().stream().filter(voidProperties().negate())
+    .forEachOrdered(propertyEntry -> {
       mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
-    }
+    });
     return mappedProperties;
   }
 
@@ -114,8 +136,8 @@ public abstract class ModelMapper {
    * Returns a {@link TreeMap} where the keys are sorted by their respective property position values in ascending
    * order.
    *
-   * @param modelProperties
-   * @return
+   * @param modelProperties properties to sort
+   * @return sorted properties by position and name
    */
   private SortedMap<String, ModelProperty> sort(Map<String, ModelProperty> modelProperties) {
 
@@ -124,20 +146,19 @@ public abstract class ModelMapper {
     return sortedMap;
   }
 
-  @VisibleForTesting
   Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {
       if (mapInterface.get().getTypeParameters().size() == 2) {
-        return Optional.of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
+        return of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
       }
-      return Optional.of((Class) Object.class);
+      return of((Class) Object.class);
     }
-    return Optional.absent();
+    return empty();
   }
 
   private Optional<ResolvedType> findMapInterface(ResolvedType type) {
-    return Optional.fromNullable(type.findSupertype(Map.class));
+    return ofNullable(type.findSupertype(Map.class));
   }
 
   private Property mapProperty(ModelProperty source) {
@@ -231,11 +252,11 @@ public abstract class ModelMapper {
     return responseProperty;
   }
 
-  Map<String, Model> modelsFromApiListings(Multimap<String, ApiListing> apiListings) {
-    Map<String, springfox.documentation.schema.Model> definitions = newTreeMap();
-    for (ApiListing each : apiListings.values()) {
+  Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
+    Map<String, springfox.documentation.schema.Model> definitions = new TreeMap();
+    apiListings.values().stream().flatMap(l -> l.stream()).forEachOrdered(each -> {
       definitions.putAll(each.getModels());
-    }
+    });
     return mapModels(definitions);
   }
 
@@ -251,7 +272,7 @@ public abstract class ModelMapper {
   private Predicate<ModelProperty> requiredProperty() {
     return new Predicate<ModelProperty>() {
       @Override
-      public boolean apply(ModelProperty input) {
+      public boolean test(ModelProperty input) {
         return input.isRequired();
       }
     };

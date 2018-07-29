@@ -71,6 +71,14 @@ TIP: The ___same___ patterns apply to all of the extensibility mechanisms
 
 That is it!
 
+==== Example OperationBuilderPlugin
+
+This example by https://github.com/koderman[@koderman]  is a custom extension for https://aws.amazon.com/api-gateway/[AWS Amazon Api Gateway] integration.
+
+++++
+<script src="https://gist.github.com/koderman/d49a67274e33f03405a8e45672794968.js"></script>
+++++
+
 ==== Example ParameterBuilderPlugin
 
 Here is an example of how to add parameters by hand.
@@ -109,7 +117,14 @@ include::../../swagger-contract-tests/src/main/java/springfox/test/contract/swag
 <2> Add a list of ``Operation``s for each description
 <3> NOTE: the code generated names are not guaranteed to be unique. For these custom endpoints it is the
 responsibility of the service author to ensure.
-<4> NOTE: It is important to also ensure we pass in a model reference even for primitive types
+<4> Added parameters to the operation
+<5> NOTE: It is important to also ensure we pass in a model reference even for primitive types
+<6> Set of response messages that overide the default/global response messages
+<7> Response model reference of the default model returned by the operation. Usually the  response model returned
+in a 200 or 201 response.
+<8> Optionally provide a group name, if provided this api  will only appear under that group. If absent,
+the api will appear under the default group.
+<9> CachingOperationNameGenerator is a component bean that is available to be autowired
 
 == Additional extensibility options
 .Other Extensibility
@@ -170,8 +185,7 @@ include::../../springfox-data-rest/src/main/java/springfox/documentation/spring/
 
 === Aggregating multiple swagger specifications in the same swagger-ui
 
-You need to create a bean that implements the https://github
-.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26[`SwaggerResourcesProvider`]
+You need to create a bean that implements the https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/SwaggerResourcesProvider.java#L25-L26[`SwaggerResourcesProvider`]
 interface. Typically you'd have to make a composite bean that uses multiple https://github.com/springfox/springfox/blob/cef36c0b0a3e20ef2cb0c23a76ee34866abaf490/springfox-swagger-common/src/main/java/springfox/documentation/swagger/web/InMemorySwaggerResourcesProvider.java#L38[InMemorySwaggerResourcesProvider]
 and adds your own json file to it as well.
 

@@ -18,7 +18,7 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.base.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -29,8 +29,7 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Pattern;
-
-import static springfox.bean.validators.plugins.Validators.*;
+import java.util.Optional;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -46,7 +45,8 @@ public class ExpandedParameterPatternAnnotationPlugin implements ExpandedParamet
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<Pattern> pattern = validatorFromExpandedParameter(context, Pattern.class);
+
+    Optional<Pattern> pattern = context.findAnnotation(Pattern.class);
 
     if (pattern.isPresent()) {
       LOG.debug("@Pattern present: {}", pattern.get().regexp());

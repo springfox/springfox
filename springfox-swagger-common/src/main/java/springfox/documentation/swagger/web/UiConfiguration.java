@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,11 +16,14 @@
  *
  *
  */
+
 package springfox.documentation.swagger.web;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import static java.util.Optional.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UiConfiguration {
@@ -29,31 +32,6 @@ public class UiConfiguration {
    */
   @Deprecated
   static final UiConfiguration DEFAULT = new UiConfiguration(null);
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private String apisSorter;
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private Long requestTimeout;
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private boolean jsonEditor;
-
-  /**
-   * @deprecated @since 2.8.0. This field is unused
-   */
-  @Deprecated
-  private boolean showRequestHeaders;
-
   /*--------------------------------------------*\
    * Display
   \*--------------------------------------------*/
@@ -69,15 +47,36 @@ public class UiConfiguration {
   private final OperationsSorter operationsSorter;
   private final Boolean showExtensions;
   private final TagsSorter tagsSorter;
-
+  private final String validatorUrl;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private String apisSorter;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private Long requestTimeout;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private boolean jsonEditor;
+  /**
+   * @deprecated @since 2.8.0. This field is unused
+   */
+  @Deprecated
+  private boolean showRequestHeaders;
   /*--------------------------------------------*\
    * Network
   \*--------------------------------------------*/
   private String[] supportedSubmitMethods;
-  private final String validatorUrl;
 
   /**
    * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   *
+   * @param validatorUrl - validator url
    */
   public UiConfiguration(String validatorUrl) {
     this(validatorUrl, "none", "alpha", "schema", Constants.DEFAULT_SUBMIT_METHODS, false, true, null);
@@ -85,6 +84,9 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
+   *
+   * @param validatorUrl - validator url
+   * @param supportedSubmitMethods - supported http methods (get,post etc.)
    */
   public UiConfiguration(String validatorUrl, String[] supportedSubmitMethods) {
     this(validatorUrl, "none", "alpha", "schema", supportedSubmitMethods, false, true, null);
@@ -336,6 +338,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apisSorter
    */
   @Deprecated
   @JsonProperty("apisSorter")
@@ -345,6 +348,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return jsonEditor
    */
   @Deprecated
   @JsonProperty("jsonEditor")
@@ -354,6 +358,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return showRequestHeaders
    */
   @Deprecated
   @JsonProperty("showRequestHeaders")
@@ -363,6 +368,7 @@ public class UiConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return requestTimeout
    */
   @Deprecated
   @JsonIgnore
@@ -437,7 +443,7 @@ public class UiConfiguration {
 
   @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
-    return validatorUrl;
+    return ofNullable(validatorUrl).orElse("");
   }
 
   public static class Constants {
@@ -445,7 +451,7 @@ public class UiConfiguration {
         "get", "put", "post",
         "delete", "options", "head",
         "patch", "trace" };
-    
+
     public static final String[] NO_SUBMIT_METHODS = new String[] {};
   }
 }

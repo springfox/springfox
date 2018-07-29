@@ -29,6 +29,7 @@ import java.lang.annotation.Target;
 public @interface ApiIgnore {
   /**
    * A brief description of why this parameter/operation is ignored
+   * @return  the description of why it is ignored
    */
   String value() default "";
 }

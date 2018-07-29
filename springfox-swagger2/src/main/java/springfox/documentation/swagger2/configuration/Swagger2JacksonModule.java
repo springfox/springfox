@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 package springfox.documentation.swagger2.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,7 +73,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
     context.setMixInAnnotations(Model.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Operation.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Path.class, CustomizedSwaggerSerializer.class);
-    context.setMixInAnnotations(Response.class, CustomizedSwaggerSerializer.class);
+    context.setMixInAnnotations(Response.class, ResponseSerializer.class);
     context.setMixInAnnotations(Parameter.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(ExternalDocs.class, CustomizedSwaggerSerializer.class);
     context.setMixInAnnotations(Xml.class, CustomizedSwaggerSerializer.class);
@@ -89,6 +90,12 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
   @JsonAutoDetect
   @JsonInclude(value = Include.NON_EMPTY)
+  @JsonIgnoreProperties("responseSchema")
+  private class ResponseSerializer {
+  }
+
+  @JsonAutoDetect
+  @JsonInclude(value = Include.NON_EMPTY)
   private interface PropertyExampleSerializerMixin {
 
     @JsonSerialize(using = PropertyExampleSerializer.class)
@@ -101,7 +108,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
       @SuppressWarnings("unused")
       public PropertyExampleSerializer() {
-        this(null);
+        this(Object.class);
       }
 
       PropertyExampleSerializer(Class<Object> t) {
@@ -110,19 +117,47 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
       @Override
       public void serialize(Object value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        String stringValue = (value instanceof String) ? ((String) value).trim() : value.toString().trim();
-        if (isNotJsonString(stringValue)) {
-          gen.writeRawValue(stringValue);
+        if (canConvertToString(value)) {
+          String stringValue = (value instanceof String) ? ((String) value).trim() : value.toString().trim();
+          if (isStringLiteral(stringValue)) {
+            String cleanedUp = stringValue.replaceAll("^\"", "")
+                .replaceAll("\"$", "")
+                .replaceAll("^'", "")
+                .replaceAll("'$", "");
+            gen.writeString(cleanedUp);
+          } else if (isNotJsonString(stringValue)) {
+            gen.writeRawValue(stringValue);
+          } else {
+            gen.writeString(stringValue);
+          }
         } else {
-          gen.writeString(stringValue);
+          gen.writeObject(value);
         }
       }
 
-      private boolean isNotJsonString(final String value) throws IOException {
+      private boolean canConvertToString(Object value) {
+        return value instanceof Boolean
+            || value instanceof Character
+            || value instanceof String
+            || value instanceof Byte
+            || value instanceof Short
+            || value instanceof Integer
+            || value instanceof Long
+            || value instanceof Float
+            || value instanceof Double
+            || value instanceof Void;
+      }
+
+      boolean isStringLiteral(String value) {
+        return (value.startsWith("\"") && value.endsWith("\""))
+            || (value.startsWith("'") && value.endsWith("'"));
+      }
+
+      boolean isNotJsonString(final String value) {
         // strictly speaking, should also test for equals("null") since {"example": null} would be valid JSON
         // but swagger2 does not support null values
         // and an example value of "null" probably does not make much sense anyway
-        return value.startsWith("{")                              // object
+        return value.startsWith("{")                          // object
             || value.startsWith("[")                          // array
             || "true".equals(value)                           // true
             || "false".equals(value)                          // false

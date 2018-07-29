@@ -39,8 +39,8 @@ task allJavadoc(type: Javadoc) {
 task allDocs {
   dependsOn asciidoctor, allJavadoc
   doLast {
-    println asciidoctor.attributes
-    println asciidoctor.properties
+    logger.lifecycle "[RELEASE] Asciidoctor attributes: ${asciidoctor.attributes}"
+    logger.lifecycle "[RELEASE] Asciidoctor properties: ${asciidoctor.properties}"
   }
 }
 
@@ -71,8 +71,8 @@ task createReleaseDocs(type: Exec, dependsOn: allDocs) {
   """
   
   if (buildInfo.dryRun) {
-    logger.info("Will run the following commands:")
-    logger.info(commands)
+    logger.warn("Will run the following commands:")
+    logger.warn(commands)
     commandLine "sh", "-c", "echo This is a dry run"
     return
   }

@@ -1,6 +1,18 @@
-plugins {
-  id 'org.springframework.boot' version '1.5.9.RELEASE'
+buildscript {
+  ext {
+    springBootVersion = '2.0.3.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
 }
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 repositories {
   jcenter()
@@ -16,6 +28,7 @@ configurations {
   all*.exclude group: 'ch.qos.logback'
 }
 
+ext['groovy.version'] = '2.5.0'
 ext {
   limits = [
       'instruction': 89.5,
@@ -49,3 +62,10 @@ dependencies {
     exclude group: 'org.springframework', module: 'spring-web'
   }
 }
+// tag::update-contract-tests[]
+// NOTE: Uncomment to bulk update contracts
+//test {
+//  systemProperty("contract.tests.root", "$projectDir/src/test/resources")
+//  systemProperty("contract.tests.update", true)
+//}
+// tag::update-contract-tests[]

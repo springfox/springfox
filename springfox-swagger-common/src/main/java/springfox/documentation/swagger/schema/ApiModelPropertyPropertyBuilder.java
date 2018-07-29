@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger.schema;
 
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -30,6 +29,9 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
+
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
@@ -45,27 +47,26 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
   
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<ApiModelProperty> annotation = Optional.absent();
+    Optional<ApiModelProperty> annotation = empty();
 
     if (context.getAnnotatedElement().isPresent()) {
-      annotation = annotation.or(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
+      annotation = annotation.map(Optional::of).orElse(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
     }
     if (context.getBeanPropertyDefinition().isPresent()) {
-      annotation = annotation.or(findPropertyAnnotation(
+      annotation = annotation.map(Optional::of).orElse(findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           ApiModelProperty.class));
     }
     if (annotation.isPresent()) {
       context.getBuilder()
-          .allowableValues(annotation.transform(toAllowableValues()).orNull())
-          .required(annotation.transform(toIsRequired()).or(false))
-          .readOnly(annotation.transform(toIsReadOnly()).or(false))
-          .allowEmptyValue(annotation.transform(toAllowEmptyValue()).or(false))
-          .description(annotation.transform(toDescription(descriptions)).orNull())
-          .isHidden(annotation.transform(toHidden()).or(false))
-          .type(annotation.transform(toType(context.getResolver())).orNull())
-          .position(annotation.transform(toPosition()).or(0))
-          .example(annotation.transform(toExample()).orNull());
+          .allowableValues(annotation.map(toAllowableValues()).orElse(null))
+          .required(annotation.map(ApiModelProperty::required).orElse(false))
+          .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
+          .description(annotation.map(toDescription(descriptions)).orElse(null))
+          .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
+          .type(annotation.map(toType(context.getResolver())).orElse(null))
+          .position(annotation.map(ApiModelProperty::position).orElse(0))
+          .example(annotation.map(toExample()).orElse(null));
     }
   }
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,13 +28,14 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.springWrapper.NameValueExpression;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Iterables.any;
-import static com.google.common.collect.Lists.newArrayList;
-import static springfox.documentation.builders.Parameters.withName;
+import static java.util.Collections.*;
+import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.builders.Parameters.*;
+import static springfox.documentation.service.Parameter.*;
 
 public abstract class AbstractOperationParameterRequestConditionReader implements OperationBuilderPlugin {
 
@@ -45,7 +46,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   public List<Parameter> getParameters(Set<NameValueExpression<String>> expressions, String parameterType) {
-    List<Parameter> parameters = newArrayList();
+    List<Parameter> parameters = new ArrayList<>();
     for (NameValueExpression<String> expression : expressions) {
       if (skipParameter(parameters, expression)) {
         continue;
@@ -53,20 +54,21 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
 
       String paramValue = expression.getValue();
       AllowableListValues allowableValues = null;
-      if (!isNullOrEmpty(paramValue)) {
-        allowableValues = new AllowableListValues(newArrayList(paramValue), "string");
+      if (!isEmpty(paramValue)) {
+        allowableValues = new AllowableListValues(singletonList(paramValue), "string");
       }
       Parameter parameter = new ParameterBuilder()
-              .name(expression.getName())
-              .description(null)
-              .defaultValue(paramValue)
-              .required(true)
-              .allowMultiple(false)
-              .type(resolver.resolve(String.class))
-              .modelRef(new ModelRef("string"))
-              .allowableValues(allowableValues)
-              .parameterType(parameterType)
-              .build();
+          .name(expression.getName())
+          .description(null)
+          .defaultValue(paramValue)
+          .required(true)
+          .allowMultiple(false)
+          .type(resolver.resolve(String.class))
+          .modelRef(new ModelRef("string"))
+          .allowableValues(allowableValues)
+          .parameterType(parameterType)
+          .order(DEFAULT_PRECEDENCE)
+          .build();
       parameters.add(parameter);
     }
 
@@ -78,7 +80,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {
-    return any(parameters, withName(expression.getName()));
+    return parameters.stream().anyMatch(withName(expression.getName()));
   }
 
   @Override

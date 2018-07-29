@@ -29,7 +29,7 @@ class OperationTagsReaderSpec extends DocumentationContextSpec {
   def "should have correct tags"() {
     given:
       OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
 
     and:
       OperationTagsReader sut = new OperationTagsReader(new DefaultTagsProvider())

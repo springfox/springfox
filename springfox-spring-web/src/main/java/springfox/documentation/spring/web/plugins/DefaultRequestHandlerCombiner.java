@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,13 +18,7 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Equivalence;
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.RequestHandler;
@@ -32,11 +26,18 @@ import springfox.documentation.spi.service.RequestHandlerCombiner;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.RequestHandler.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spi.service.contexts.Orderings.byOperationName;
+import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
 
 class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRequestHandlerCombiner.class);
@@ -44,24 +45,31 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
 
   public List<RequestHandler> combine(List<RequestHandler> source) {
     List<RequestHandler> combined = new ArrayList<RequestHandler>();
-    Multimap<String, RequestHandler> byPath = LinkedListMultimap.create();
+    Map<String, List<RequestHandler>> byPath = new HashMap<>();
+    LOGGER.debug("Total number of request handlers {}", nullToEmptyList(source).size());
     for (RequestHandler each : nullToEmptyList(source)) {
-      byPath.put(patternsCondition(each).toString(), each);
+      String pathKey = sortedPaths(each.getPatternsCondition());
+      LOGGER.debug("Adding key: {}, {}", pathKey, each.toString());
+      byPath.putIfAbsent(pathKey, new ArrayList<>());
+      byPath.get(pathKey).add(each);
     }
     for (String key : byPath.keySet()) {
       combined.addAll(combined(byPath.get(key)));
     }
-    return byPatternsCondition().sortedCopy(combined);
+    LOGGER.debug("Combined number of request handlers {}", combined.size());
+    return combined.stream()
+        .sorted(byPatternsCondition())
+        .collect(toList());
   }
 
   private Collection<? extends RequestHandler> combined(Collection<RequestHandler> requestHandlers) {
-    List<RequestHandler> source = newArrayList(requestHandlers);
+    List<RequestHandler> source = new ArrayList<>(requestHandlers);
     if (source.size() == 0 || source.size() == 1) {
       return requestHandlers;
     }
-    ListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> groupByEquality = safeGroupBy(source);
-    List<RequestHandler> combined = newArrayList();
-    for (Equivalence.Wrapper<RequestHandler> path : groupByEquality.keySet()) {
+    Map<PathAndParametersEquivalence.Wrapper, List<RequestHandler>> groupByEquality = safeGroupBy(source);
+    List<RequestHandler> combined = new ArrayList<>();
+    groupByEquality.keySet().stream().sorted(wrapperComparator()).forEachOrdered(path -> {
       List<RequestHandler> handlers = groupByEquality.get(path);
 
       RequestHandler toCombine = path.get();
@@ -70,28 +78,37 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
           if (each.equals(toCombine)) {
             continue;
           }
+          //noinspection ConstantConditions
+          LOGGER.debug("Combining {} and {}", toCombine.toString(), each.toString());
           toCombine = combine(toCombine, each);
         }
       }
       combined.add(toCombine);
-    }
+    });
     return combined;
   }
 
-  private ImmutableListMultimap<Equivalence.Wrapper<RequestHandler>, RequestHandler> safeGroupBy(
+  private Comparator<PathAndParametersEquivalence.Wrapper> wrapperComparator() {
+    return (first, second) -> byPatternsCondition()
+        .thenComparing(byOperationName())
+        .compare(first.get(), second.get());
+  }
+
+  private Map<PathAndParametersEquivalence.Wrapper, List<RequestHandler>> safeGroupBy(
       List<RequestHandler> source) {
     try {
-      return Multimaps.index(source, equivalenceAsKey());
+      return source.stream()
+          .collect(groupingBy(EQUIVALENCE::wrap, LinkedHashMap::new, toList()));
     } catch (Exception e) {
       LOGGER.error("Unable to index request handlers {}. Request handlers with issues{}",
           e.getMessage(),
           keys(source));
-      return ImmutableListMultimap.<Equivalence.Wrapper<RequestHandler>, RequestHandler>builder().build();
+      return Collections.emptyMap();
     }
   }
 
   private String keys(List<RequestHandler> source) {
-    final StringBuffer sb = new StringBuffer("Request Handlers with duplicate keys {");
+    final StringBuilder sb = new StringBuilder("Request Handlers with duplicate keys {");
     for (int i = 0; i < source.size(); i++) {
       sb.append('\t')
           .append(i)
@@ -102,17 +119,11 @@ class DefaultRequestHandlerCombiner implements RequestHandlerCombiner {
     return sb.toString();
   }
 
-  private Function<RequestHandler, Equivalence.Wrapper<RequestHandler>> equivalenceAsKey() {
-    return new
-        Function<RequestHandler, Equivalence.Wrapper<RequestHandler>>() {
-      @Override
-      public Equivalence.Wrapper<RequestHandler> apply(RequestHandler input) {
-        return EQUIVALENCE.wrap(input);
-      }
-    };
-  }
 
   private RequestHandler combine(RequestHandler first, RequestHandler second) {
-    return new CombinedRequestHandler(first, second);
+    if (first.compareTo(second) < 0) {
+      return new CombinedRequestHandler(first, second);
+    }
+    return new CombinedRequestHandler(second, first);
   }
 }

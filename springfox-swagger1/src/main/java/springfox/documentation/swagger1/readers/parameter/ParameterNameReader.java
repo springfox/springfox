@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger1.readers.parameter;
 
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiParam;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,7 +27,10 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import static com.google.common.base.Strings.*;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import static java.util.Optional.*;
 import static springfox.documentation.spring.web.readers.parameter.ParameterTypeReader.*;
 
 @Component("swagger1ParameterNameReader")
@@ -41,7 +43,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     String paramType = findParameterType(context);
     String name = null;
     if (apiParam.isPresent()) {
-      name = emptyToNull(apiParam.get().name());
+      name = ofNullable(apiParam.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
     }
     context.parameterBuilder().name(maybeOverrideName(name, paramType));
   }

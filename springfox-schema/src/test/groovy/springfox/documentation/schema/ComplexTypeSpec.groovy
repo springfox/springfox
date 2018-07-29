@@ -16,14 +16,15 @@
  *
  *
  */
+
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -40,13 +41,13 @@ class ComplexTypeSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
       Model asReturn = provider.modelFor(returnValue("group",
           complexType(),
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
 
     expect:
       asInput.getName() == "ComplexType"
@@ -84,13 +85,13 @@ class ComplexTypeSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
       Model asReturn = provider.modelFor(returnValue("group",
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
 
     expect:
       asInput.getName() == "RecursiveType"
@@ -125,13 +126,13 @@ class ComplexTypeSpec extends Specification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
       Model asReturn = provider.modelFor(returnValue("group",
           complexType,
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())).get()
+          emptySet())).get()
 
     expect:
       asInput.getName() == "InheritedComplexType"

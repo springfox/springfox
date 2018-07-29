@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,38 +18,40 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
+
 import org.mapstruct.Mapper;
 import springfox.documentation.service.ListVendorExtension;
 import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Function;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 
 @Mapper
 public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {
-    Map<String, Object> extensions = newTreeMap();
-    Iterable<ListVendorExtension> listExtensions = from(from)
-        .filter(ListVendorExtension.class);
+    Map<String, Object> extensions = new TreeMap<>();
+    Iterable<ListVendorExtension> listExtensions = from.stream()
+        .filter(ListVendorExtension.class::isInstance).map(each -> (ListVendorExtension)each).collect(toList());
     for (ListVendorExtension each : listExtensions) {
       extensions.put(each.getName(), each.getValue());
     }
-    Iterable<Map<String, Object>> objectExtensions = from(from)
-        .filter(ObjectVendorExtension.class)
-        .transform(toExtensionMap());
+    Iterable<Map<String, Object>> objectExtensions = from.stream()
+        .filter(ObjectVendorExtension.class::isInstance).map(each -> (ObjectVendorExtension)each)
+        .map(toExtensionMap()).collect(toList());
     for (Map<String, Object> each : objectExtensions) {
       extensions.putAll(each);
     }
-    Iterable<StringVendorExtension> propertyExtensions = from(from)
-        .filter(StringVendorExtension.class);
+    Iterable<StringVendorExtension> propertyExtensions = from.stream()
+        .filter(StringVendorExtension.class::isInstance).map(each -> (StringVendorExtension)each).collect(toList());
     for (StringVendorExtension each : propertyExtensions) {
       extensions.put(each.getName(), each.getValue());
     }
@@ -57,26 +59,25 @@ public class VendorExtensionsMapper {
   }
 
   private Function<ObjectVendorExtension, Map<String, Object>> toExtensionMap() {
-    return new Function<ObjectVendorExtension, Map<String, Object>>() {
-      @Override
-      public Map<String, Object> apply(ObjectVendorExtension input) {
-        if (!isNullOrEmpty(input.getName())) {
-          Map<String, Object> map = newHashMap();
-          map.put(input.getName(), mapExtensions(input.getValue()));
-          return map;
-        }
-        return propertiesAsMap(input);
+    return input -> {
+      if (!isEmpty(input.getName())) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(input.getName(), mapExtensions(input.getValue()));
+        return map;
       }
+      return propertiesAsMap(input);
     };
   }
 
   private Map<String, Object> propertiesAsMap(ObjectVendorExtension input) {
-    Map<String, Object> properties = newHashMap();
-    Iterable<StringVendorExtension> stringExtensions = from(input.getValue()).filter(StringVendorExtension.class);
+    Map<String, Object> properties = new HashMap<>();
+    Iterable<StringVendorExtension> stringExtensions = input.getValue().stream().filter(StringVendorExtension.class::isInstance)
+            .map(each -> (StringVendorExtension)each).collect(toList());
     for (StringVendorExtension property : stringExtensions) {
       properties.put(property.getName(), property.getValue());
     }
-    Iterable<ObjectVendorExtension> objectExtensions = from(input.getValue()).filter(ObjectVendorExtension.class);
+    Iterable<ObjectVendorExtension> objectExtensions = input.getValue().stream().filter(ObjectVendorExtension.class::isInstance)
+            .map(each -> (ObjectVendorExtension)each).collect(toList());
     for (ObjectVendorExtension property : objectExtensions) {
       properties.put(property.getName(), mapExtensions(property.getValue()));
     }

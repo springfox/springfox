@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,81 +18,40 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.google.common.collect.Lists;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.repository.core.CrudMethods;
-import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
 import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
 import static org.springframework.http.MediaType.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 class EntityFindAllExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
-    CrudMethods crudMethods = context.crudMethods();
-    TypeResolver resolver = context.getTypeResolver();
-    RepositoryMetadata repository = context.getRepositoryMetadata();
-    if (crudMethods.hasFindAllMethod()) {
-      HandlerMethod handler = new HandlerMethod(
-          context.getRepositoryInstance(),
-          crudMethods.getFindAllMethod());
-      ActionSpecification spec = new ActionSpecification(
-          actionName(entity, crudMethods.getFindAllMethod()),
-          String.format("%s%s",
-              context.basePath(),
-              context.resourcePath()),
-          newHashSet(RequestMethod.GET),
-          newHashSet(
-              APPLICATION_JSON,
-              HAL_JSON ,
-              SPRING_DATA_COMPACT_JSON,
-              TEXT_URI_LIST),
-          new HashSet<MediaType>(),
-          handler,
-          findAllParameters(context.getConfiguration(), context.getTypeResolver()),
-          resolver.resolve(Resources.class, repository.getReturnedDomainClass(handler.getMethod())));
-      handlers.add(new SpringDataRestRequestHandler(context, spec));
-    }
-    return handlers;
-  }
+    List<RequestHandler> handlers = new ArrayList<>();
 
-  private ArrayList<ResolvedMethodParameter> findAllParameters(
-      RepositoryRestConfiguration configuration,
-      TypeResolver resolver) {
-    ArrayList<ResolvedMethodParameter> parameters = new ArrayList<ResolvedMethodParameter>();
-    parameters.add(new ResolvedMethodParameter(
-        0,
-        configuration.getPageParamName(),
-        Lists.<Annotation>newArrayList(),
-        resolver.resolve(String.class)));
-    parameters.add(new ResolvedMethodParameter(
-        1,
-        configuration.getLimitParamName(),
-        Lists.<Annotation>newArrayList(),
-        resolver.resolve(String.class)));
-    parameters.add(new ResolvedMethodParameter(
-        2,
-        configuration.getSortParamName(),
-        Lists.<Annotation>newArrayList(),
-        resolver.resolve(String.class)));
-    return parameters;
+    context.crudMethods().getFindAllMethod()
+        .map(method -> new HandlerMethod(context.getRepositoryInstance(), method))
+        .ifPresent(handler -> {
+
+          entityAction(context, handler)
+              .supportsMethod(GET)
+              .produces(APPLICATION_JSON)
+              .produces(HAL_JSON)
+              .produces(SPRING_DATA_COMPACT_JSON)
+              .produces(TEXT_URI_LIST)
+              .withParameterType(ParameterType.PAGEABLE_RESOURCE)
+              .build()
+              .map(get -> new SpringDataRestRequestHandler(context, get))
+              .ifPresent(handlers::add);
+
+        });
+
+    return handlers;
   }
 }

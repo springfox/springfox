@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -30,6 +29,7 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import javax.validation.constraints.Size;
+import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
 import static springfox.bean.validators.plugins.Validators.*;
@@ -49,19 +49,11 @@ public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     Optional<Size> size = annotationFromParameter(context, Size.class);
-    LOG.info("searching for @size: {}", size.isPresent());
+    LOG.debug("searching for @size: {}", size.isPresent());
     if (size.isPresent()) {
       AllowableRangeValues values = stringLengthRange(size.get());
-      LOG.info("Adding allowable Values @Size: {} - {}", values.getMin(), values.getMax());
+      LOG.debug("Adding allowable Values @Size: {} - {}", values.getMin(), values.getMax());
       context.parameterBuilder().allowableValues(values);
-
-      // TODO Additionally show @Size in the description until https://github.com/springfox/springfox/issues/1244
-      // gets fixed
-      context.parameterBuilder()
-          .description(
-              String.format("@Size: %s - %s (until #1244 gets fixed)",
-                  values.getMin(),
-                  values.getMax()));
     }
   }
 }

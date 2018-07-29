@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ import springfox.documentation.schema.Xml;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelPropertyBuilder {
@@ -41,12 +41,12 @@ public class ModelPropertyBuilder {
   private AllowableValues allowableValues;
   private String name;
   private boolean isHidden;
-  private String example;
+  private Object example;
   private String pattern;
   private String defaultValue;
   private Xml xml;
   private Boolean allowEmptyValue;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -83,7 +83,25 @@ public class ModelPropertyBuilder {
     return this;
   }
 
+  /**
+   * Updates the example
+   * @param example - example value
+   * @return this
+   * @deprecated @since 2.8.1 Use the one with Object as parameter
+   */
+  @Deprecated
   public ModelPropertyBuilder example(String example) {
+    this.example = defaultIfAbsent(example, this.example);
+    return this;
+  }
+
+  /**
+   * Updates the example
+   * @param example - example value
+   * @return this
+   * @since 2.8.1
+   */
+  public ModelPropertyBuilder example(Object example) {
     this.example = defaultIfAbsent(example, this.example);
     return this;
   }
@@ -115,6 +133,7 @@ public class ModelPropertyBuilder {
   
   /***
    * Support for isAllowEmpty value
+   * @param allowEmptyValue true or false
    * @return true if supported
    * @since 2.8.0
    */
@@ -129,7 +148,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    if (xml != null && isNullOrEmpty(xml.getName())) {
+    if (xml != null && isEmpty(xml.getName())) {
       xml.setName(name);
     }
     return new ModelProperty(

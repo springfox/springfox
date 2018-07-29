@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,12 +24,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
+
+import java.util.Optional;
+
+import static java.util.Optional.*;
+import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 
 /**
  * BeanPropertyNamingStrategy based on ObjectMapper naming strategy.
@@ -43,19 +47,16 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
   private static final Logger LOG = LoggerFactory.getLogger(ObjectMapperBeanPropertyNamingStrategy.class);
   private ObjectMapper objectMapper;
 
-  public ObjectMapperBeanPropertyNamingStrategy() {
-  }
-
   @Override
   public String nameForSerialization(final BeanPropertyDefinition beanProperty) {
 
     SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
 
     Optional<PropertyNamingStrategy> namingStrategy
-            = Optional.fromNullable(serializationConfig.getPropertyNamingStrategy());
+            = ofNullable(serializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
-            .transform(BeanPropertyDefinitions.overTheWireName(beanProperty, serializationConfig))
-            .or(beanProperty.getName());
+            .map(overTheWireName(beanProperty, serializationConfig))
+            .orElse(beanProperty.getName());
 
     LOG.debug("Name '{}' renamed to '{}'", beanProperty.getName(), newName);
 
@@ -68,10 +69,10 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
     DeserializationConfig deserializationConfig = objectMapper.getDeserializationConfig();
 
     Optional<PropertyNamingStrategy> namingStrategy
-            = Optional.fromNullable(deserializationConfig.getPropertyNamingStrategy());
+            = ofNullable(deserializationConfig.getPropertyNamingStrategy());
     String newName = namingStrategy
-            .transform(BeanPropertyDefinitions.overTheWireName(beanProperty, deserializationConfig))
-            .or(beanProperty.getName());
+            .map(overTheWireName(beanProperty, deserializationConfig))
+            .orElse(beanProperty.getName());
 
     LOG.debug("Name '{}' renamed to '{}'", beanProperty.getName(), newName);
 

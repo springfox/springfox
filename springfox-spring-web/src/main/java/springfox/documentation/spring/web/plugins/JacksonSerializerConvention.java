@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,10 +22,7 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
-import org.reflections.Reflections;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -34,10 +31,15 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 /**
@@ -57,41 +59,35 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   @Override
   public List<AlternateTypeRule> rules() {
-    List<AlternateTypeRule> rules = newArrayList();
-    Reflections reflections = new Reflections(packagePrefix);
-    Set<Class<?>> serialized = reflections.getTypesAnnotatedWith(JsonSerialize.class);
-    Set<Class<?>> deserialized = reflections.getTypesAnnotatedWith(JsonDeserialize.class);
-    for (Class<?> type : Sets.union(serialized, deserialized)) {
-      Optional<Type> found = findAlternate(type);
-      if (found.isPresent()) {
-        rules.add(newRule(
-            resolver.resolve(type),
-            resolver.resolve(found.get()), getOrder()));
-        rules.add(newRule(
-            resolver.resolve(ResponseEntity.class, type),
-            resolver.resolve(found.get()), getOrder()));
-      }
-    }
+    List<AlternateTypeRule> rules = new ArrayList<>();
+    Set<Class<?>> serialized = new HashSet<>();
+    Set<Class<?>> deserialized = new HashSet<>();
+    new FastClasspathScanner(packagePrefix)
+        .matchClassesWithAnnotation(JsonSerialize.class, serialized::add)
+        .matchClassesWithAnnotation(JsonDeserialize.class, deserialized::add)
+        .scan();
+    Stream.concat(serialized.stream(), deserialized.stream())
+        .forEachOrdered(type -> {
+          Optional<Type> found = findAlternate(type);
+          if (found.isPresent()) {
+            rules.add(newRule(
+                resolver.resolve(type),
+                resolver.resolve(found.get()), getOrder()));
+            rules.add(newRule(
+                resolver.resolve(ResponseEntity.class, type),
+                resolver.resolve(found.get()), getOrder()));
+          }
+        });
     return rules;
   }
 
   private Optional<Type> findAlternate(Class<?> type) {
-    Class serializer = Optional.fromNullable(type.getAnnotation(JsonSerialize.class))
-        .transform(new Function<JsonSerialize, Class>() {
-          @Override
-          public Class apply(JsonSerialize input) {
-            return input.as();
-          }
-        })
-        .or(Void.class);
-    Class deserializer = Optional.fromNullable(type.getAnnotation(JsonDeserialize.class))
-        .transform(new Function<JsonDeserialize, Class>() {
-          @Override
-          public Class apply(JsonDeserialize input) {
-            return input.as();
-          }
-        })
-        .or(Void.class);
+    Class serializer = ofNullable(type.getAnnotation(JsonSerialize.class))
+        .map((Function<JsonSerialize, Class>) JsonSerialize::as)
+        .orElse(Void.class);
+    Class deserializer = ofNullable(type.getAnnotation(JsonDeserialize.class))
+        .map((Function<JsonDeserialize, Class>) JsonDeserialize::as)
+        .orElse(Void.class);
     Type toUse;
     if (serializer != deserializer) {
       LOGGER.warn("The serializer {} and deserializer {} . Picking the serializer by default",
@@ -105,7 +101,7 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
     } else {
       toUse = deserializer;
     }
-    return Optional.fromNullable(toUse);
+    return ofNullable(toUse);
   }
 
   @Override

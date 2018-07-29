@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,27 +19,37 @@
 package springfox.test.contract.swaggertests
 
 import com.fasterxml.classmate.TypeResolver
+import org.joda.time.LocalDate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
+import org.springframework.http.HttpMethod
+import springfox.documentation.builders.ApiInfoBuilder
+import springfox.documentation.builders.AuthorizationScopeBuilder
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.SecurityScheme
+import springfox.documentation.service.StringVendorExtension
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
 import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc
 import springfox.petstore.PetStoreConfiguration
 import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 
-import static com.google.common.base.Predicates.*
+import static java.util.Collections.*
+import static java.util.function.Predicate.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
@@ -125,7 +135,7 @@ class Swagger2TestConfig {
     // end::question-27-config[]
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
-        .alternateTypeRules(newRule(org.joda.time.LocalDate.class, String.class))
+        .alternateTypeRules(newRule(LocalDate.class, String.class))
         .select()
         .paths(regex("/features/.*"))
         .build()
@@ -158,21 +168,39 @@ class Swagger2TestConfig {
 
   @Bean
   Docket bugs(List<SecurityScheme> authorizationTypes) {
+    AuthorizationScope[] scopes = [new AuthorizationScopeBuilder()
+                                       .scope("read")
+                                       .description("Read access")
+                                       .build()]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugs")
+        .apiInfo(new ApiInfoBuilder().version("1.0")
+          .title("bugs API")
+          .description("bugs API")
+          .extensions(
+             singletonList(
+                new StringVendorExtension("test", "testValue")))
+          .build())
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
         .tags(new Tag("foo", "Foo Description"))
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
+        .securityContexts(
+        [SecurityContext.builder()
+             .securityReferences([new SecurityReference("petstore_auth", scopes)])
+             .forPaths(regex("/bugs/2268"))
+             .forHttpMethods(isEqual(HttpMethod.GET))
+             .build()
+        ])
         .alternateTypeRules(
-        newRule(URL.class, String.class),
-        newRule(
+          newRule(URL.class, String.class),
+          newRule(
             resolver.resolve(List.class, Link.class),
             resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .directModelSubstitute(ByteBuffer.class, String.class)
         .select()
-        .paths(regex("/bugs/.*"))
+          .paths(regex("/bugs/.*"))
         .build()
   }
 
@@ -194,6 +222,25 @@ class Swagger2TestConfig {
         .ignoredParameterTypes(BugsController.Bug1627, BugsController.Lang)
         .select()
         .paths(regex("/bugs/.*"))
+        .build()
+  }
+
+  @Bean
+  Docket differentGroup() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("different-group")
+        .useDefaultResponseMessages(false)
+        .tags(new Tag("Different", "Different Group"))
+        .produces(['application/xml', 'application/json'] as Set)
+        .enableUrlTemplating(true)
+        .alternateTypeRules(
+        newRule(URL.class, String.class),
+        newRule(
+            resolver.resolve(List.class, Link.class),
+            resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
+        .directModelSubstitute(ByteBuffer.class, String.class)
+        .select()
+        .paths(regex("/different/.*"))
         .build()
   }
 
@@ -287,8 +334,8 @@ class Swagger2TestConfig {
   }
 
   @Bean
-  ApiListingScannerPlugin listingScanner() {
-    new Bug1767ListingScanner()
+  ApiListingScannerPlugin listingScanner(CachingOperationNameGenerator operationNames) {
+    new Bug1767ListingScanner(operationNames)
   }
 
   @Bean
@@ -301,11 +348,11 @@ class Swagger2TestConfig {
         .forCodeGeneration(true)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-        .paths(or(
-          regex("/rest/people.*"),
-          regex("/rest/tags.*"),
-          regex("/rest/categories.*"),
-          regex("/rest/addresses.*")))
+        .paths(
+          regex("/rest/people.*")
+          .or(regex("/rest/tags.*"))
+          .or(regex("/rest/categories.*"))
+          .or(regex("/rest/addresses.*")))
         .build()
   }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.service.contexts.Defaults
@@ -64,13 +65,21 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     pluginsManager = swaggerServicePlugins([
         new SwaggerDefaultConfiguration(new Defaults(), typeResolver, Mock(ServletContext))])
     plugin
-        .ignoredParameterTypes(ServletRequest, ServletResponse, HttpServletRequest,
-        HttpServletResponse, BindingResult, ServletContext,
+        .ignoredParameterTypes(
+        ServletRequest,
+        ServletResponse,
+        HttpServletRequest,
+        HttpServletResponse,
+        BindingResult, ServletContext,
         DummyModels.Ignorable.class)
         .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
         .configure(contextBuilder)
 
-    def expander = new ModelAttributeParameterExpander(new FieldProvider(new TypeResolver()), enumTypeDeterminer)
+    def expander = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new AccessorsProvider(typeResolver),
+        enumTypeDeterminer)
+
     expander.pluginsManager = pluginsManager
 
     sut = new OperationParameterReader(expander, enumTypeDeterminer)
@@ -80,7 +89,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should ignore ignorables"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
 
     when:
     sut.apply(operationContext)
@@ -102,7 +111,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSinglePathVariable', String.class)
 
     OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
 
 
     when:
@@ -125,7 +134,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should expand ModelAttribute request params"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod('methodWithModelAttribute', Example.class))
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithModelAttribute', Example.class))
 
     when:
     sut.apply(operationContext)
@@ -177,7 +186,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     OperationContext operationContext = new OperationContext(
         new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET,
-        new RequestMappingContext(context(),
+        new RequestMappingContext(documentationContext(),
             new WebMvcRequestHandler(methodResolver,
                 requestMappingInfo("/somePath"),
                 dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))), 0)
@@ -195,7 +204,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
   def "Should not expand unannotated request params"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
 
     when:
     sut.apply(operationContext)

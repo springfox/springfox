@@ -33,7 +33,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static com.google.common.base.Strings.*
+
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class OperationResponseClassReaderSpec extends DocumentationContextSpec {
@@ -59,7 +59,7 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec {
 
   def "should have correct response class"() {
     given:
-      OperationContext operationContext = operationContext(context(), handlerMethod)
+      OperationContext operationContext = operationContext(documentationContext(), handlerMethod)
     when:
       sut.apply(operationContext)
       def operation = operationContext.operationBuilder().build()

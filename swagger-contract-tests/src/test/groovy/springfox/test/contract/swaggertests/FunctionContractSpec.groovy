@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -69,6 +69,9 @@ class FunctionContractSpec extends Specification implements FileAccess {
     response.statusCode == HttpStatus.OK
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+    maybeWriteToFile(
+        "/contract/swagger2/$contractFile",
+        raw.replace("localhost:$port", "localhost:__PORT__"))
     JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
 
     where:
@@ -91,6 +94,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     'declaration-spring-data-rest.json'                           | 'spring-data-rest'
     'declaration-consumes-produces-not-on-document-context.json'  | 'consumesProducesNotOnDocumentContext'
     'declaration-consumes-produces-on-document-context.json'      | 'consumesProducesOnDocumentContext'
+    'declaration-different-group.json'                            | 'different-group'
   }
 
   def "should list swagger resources for swagger 2.0"() {
@@ -155,6 +159,9 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     String raw = response.body
     response.statusCode == HttpStatus.OK
+    maybeWriteToFile(
+        "/contract/swagger/$contractFile",
+        raw.replace("localhost:$port", "localhost:__PORT__"))
     JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
     where:
@@ -163,7 +170,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     'declaration-concrete-controller.json'                        | '/default/concrete-controller'
     'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
     'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
-    'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
+//    'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
     'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
     'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
     'declaration-pet-service.json'                                | '/default/pet-service'

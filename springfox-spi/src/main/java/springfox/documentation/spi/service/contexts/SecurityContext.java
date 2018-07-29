@@ -19,10 +19,13 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.base.Predicate;
+
+import org.springframework.http.HttpMethod;
 import springfox.documentation.service.SecurityReference;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * A class to represent a default set of authorizations to apply to each api operation
@@ -33,26 +36,59 @@ public class SecurityContext {
 
   private final List<SecurityReference> securityReferences;
   private final Predicate<String> selector;
+  private final Predicate<HttpMethod> methodSelector;
 
-  public SecurityContext(List<SecurityReference> securityReferences, Predicate<String> selector) {
+  public SecurityContext(
+      List<SecurityReference> securityReferences,
+      Predicate<String> selector) {
 
     this.securityReferences = securityReferences;
     this.selector = selector;
+    this.methodSelector = (item) -> true;
   }
 
+  public SecurityContext(
+      List<SecurityReference> securityReferences,
+      Predicate<String> selector,
+      Predicate<HttpMethod> methodSelector) {
+
+    this.securityReferences = securityReferences;
+    this.selector = selector;
+    this.methodSelector = methodSelector;
+  }
+
+  /**
+   * Use securityForOperation instead
+   * @since 2.8.1
+   * @param path path to secure
+   * @return list of applicable security references
+   * @deprecated {@link SecurityContext#securityForOperation}
+   */
+  @Deprecated
   public List<SecurityReference> securityForPath(String path) {
-    if (selector.apply(path)) {
+    if (selector.test(path)) {
       return securityReferences;
     }
-    return null;
+    return new ArrayList<SecurityReference>();
+  }
+
+  public List<SecurityReference> securityForOperation(OperationContext operationContext) {
+    if (selector.test(operationContext.requestMappingPattern())
+        && methodSelector.test(operationContext.httpMethod())) {
+      return securityReferences;
+    }
+    return new ArrayList<SecurityReference>();
   }
 
   public List<SecurityReference> getSecurityReferences() {
     return securityReferences;
   }
 
+  public Predicate<HttpMethod> getMethodSelector() {
+    return methodSelector;
+  }
+
   public static SecurityContextBuilder builder() {
     return new SecurityContextBuilder();
   }
-
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@
  */
 package springfox.documentation.schema.property;
 
-import com.google.common.base.Optional;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.JaxbPresentInClassPathCondition;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -31,37 +32,40 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Annotations.*;
 
 @Component
+@Conditional(JaxbPresentInClassPathCondition.class)
 public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   
   @Override
   public void apply(ModelPropertyContext context) {
-    Optional<XmlElement> elementAnnotation = Optional.absent();
-    Optional<XmlAttribute> attributeAnnotation = Optional.absent();
+    Optional<XmlElement> elementAnnotation = empty();
+    Optional<XmlAttribute> attributeAnnotation = empty();
 
     if (context.getAnnotatedElement().isPresent()) {
-      elementAnnotation = elementAnnotation.or(findAnnotation(
+      elementAnnotation = elementAnnotation.map(Optional::of).orElse(findAnnotation(
           context.getAnnotatedElement().get(),
           XmlElement.class));
-      attributeAnnotation = attributeAnnotation.or(findAnnotation(
+      attributeAnnotation = attributeAnnotation.map(Optional::of).orElse(findAnnotation(
           context.getAnnotatedElement().get(),
           XmlAttribute.class));
     }
 
     if (context.getBeanPropertyDefinition().isPresent()) {
-      elementAnnotation = elementAnnotation.or(findPropertyAnnotation(
+      elementAnnotation = elementAnnotation.map(Optional::of).orElse(findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           XmlElement.class));
-      attributeAnnotation = attributeAnnotation.or(findPropertyAnnotation(
+      attributeAnnotation = attributeAnnotation.map(Optional::of).orElse(findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           XmlAttribute.class));
     }
 
-    if (elementAnnotation.isPresent()) {
+    if (elementAnnotation.isPresent() && context.getBeanPropertyDefinition().isPresent()) {
       Optional<XmlElementWrapper> wrapper = findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           XmlElementWrapper.class);
@@ -85,28 +89,33 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   public static <T extends Annotation> Optional<T> findAnnotation(
       AnnotatedElement annotated,
       Class<T> annotation) {
-    return Optional.fromNullable(AnnotationUtils.getAnnotation(annotated, annotation));
+    return ofNullable(AnnotationUtils.getAnnotation(annotated, annotation));
   }
 
   private String wrapperName(Optional<XmlElementWrapper> wrapper, Optional<XmlElement> element) {
     if (wrapper.isPresent()) {
-      return Optional.fromNullable(defaultToNull(emptyToNull(wrapper.get().name())))
-          .or(Optional.fromNullable(elementName(element)))
-          .orNull();
+      return ofNullable(defaultToNull(ofNullable(wrapper.get().name())
+              .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null)))
+          .orElse(ofNullable(elementName(element))
+          .orElse(null));
     }
     return elementName(element);
   }
 
   private String elementName(Optional<XmlElement> element) {
     if (element.isPresent()) {
-      return defaultToNull(emptyToNull(element.get().name()));
+      return defaultToNull(ofNullable(element.get().name())
+          .filter(((Predicate<String>)String::isEmpty).negate())
+          .orElse(null));
     }
     return null;
   }
 
   private String attributeName(Optional<XmlAttribute> attribute) {
     if (attribute.isPresent()) {
-      return defaultToNull(emptyToNull(attribute.get().name()));
+      return defaultToNull(ofNullable(attribute.get().name())
+          .filter(((Predicate<String>)String::isEmpty).negate())
+          .orElse(null));
     }
     return null;
   }

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+
 
 public class ApiInfo {
 
@@ -43,6 +43,14 @@ public class ApiInfo {
   /**
    * Deprecated in favor of richer contact object
    * @deprecated @since 2.4.0
+   *
+   * @param title title
+   * @param description description
+   * @param version version
+   * @param termsOfServiceUrl terms of service
+   * @param contactName contact name
+   * @param license licence text
+   * @param licenseUrl license url
    */
   @Deprecated
   public ApiInfo(
@@ -56,6 +64,17 @@ public class ApiInfo {
     this(title, description, version, termsOfServiceUrl, new Contact(contactName, "", ""), license, licenseUrl, new ArrayList<VendorExtension>());
   }
 
+  /**
+   * Default contstructor
+   * @param title title
+   * @param description description
+   * @param version version
+   * @param termsOfServiceUrl termsOfServiceUrl
+   * @param contact contact
+   * @param license license
+   * @param licenseUrl license url
+   * @param vendorExtensions vendor extensions
+   */
   public ApiInfo(
       String title,
       String description,
@@ -72,7 +91,7 @@ public class ApiInfo {
     this.contact = contact;
     this.license = license;
     this.licenseUrl = licenseUrl;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public String getTitle() {

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -53,13 +53,16 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
         new ParameterBuilder(),
-        context(),
+        documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
 
     when:
     ApiParamParameterBuilder operationCommand =
-        new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+        new ApiParamParameterBuilder(
+            descriptions,
+            new JacksonEnumTypeDeterminer()
+        )
     operationCommand.apply(parameterContext)
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
 
@@ -83,7 +86,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
         new ParameterContext(
             resolvedMethodParameter,
             new ParameterBuilder(),
-            context(),
+            documentationContext(),
             genericNamingStrategy,
             Mock(OperationContext))
 
@@ -112,7 +115,7 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     ParameterContext parameterContext = new ParameterContext(
         resolvedMethodParameter,
         new ParameterBuilder(),
-        context(),
+        documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
 
@@ -130,11 +133,13 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     where:
     apiParamAnnotation                                                | min  | max               | exclusiveMin | exclusiveMax
     apiParamWithAllowableValues("range[1,5]")                         | 1    | 5                 | false        | false
-    apiParamWithAllowableValues("range[1,1]")                         | 1    | 1                 | false        | false
-    apiParamWithAllowableValues("range(1,2)")                         | 1    | 2                 | true         | true
-    apiParamWithAllowableValues("range[1,2)")                         | 1    | 2                 | false        | true
+    apiParamWithAllowableValues("range[ 1, 5 ]")                      | 1    | 5                 | false        | false
+    apiParamWithAllowableValues("range [ 1, 5 ]")                     | 1    | 5                 | false        | false
+    apiParamWithAllowableValues("range[1, 1]")                        | 1    | 1                 | false        | false
+    apiParamWithAllowableValues(" range(1,2)")                        | 1    | 2                 | true         | true
+    apiParamWithAllowableValues("range[1,2) ")                        | 1    | 2                 | false        | true
     apiParamWithAllowableValues("range(1,2]")                         | 1    | 2                 | true         | false
-    apiParamWithAllowableValues("range(-infinity,infinity)")          | null | null              | true         | true
+    apiParamWithAllowableValues(" range( -infinity, infinity ) ")     | null | null              | true         | true
     apiParamWithAllowableValues("range[-infinity,infinity]")          | null | null              | false        | false
     apiParamWithAllowableValues("range(infinity,-infinity)")          | null | null              | true         | true
     apiParamWithAllowableValues("range[infinity,-infinity]")          | null | null              | false        | false
@@ -143,7 +148,11 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
 
   def "supports all swagger types"() {
     given:
-    ApiParamParameterBuilder sut = new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    ApiParamParameterBuilder sut =
+        new ApiParamParameterBuilder(
+            descriptions,
+            new JacksonEnumTypeDeterminer()
+        )
 
     expect:
     sut.supports(documentationType)
@@ -153,7 +162,10 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
   }
 
   def stubbedParamBuilder() {
-    new ApiParamParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())
+    new ApiParamParameterBuilder(
+        descriptions,
+        new JacksonEnumTypeDeterminer()
+    )
   }
 
   def stubbedResolvedType() {

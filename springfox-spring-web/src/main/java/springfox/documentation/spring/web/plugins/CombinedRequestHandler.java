@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2016-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -33,7 +31,13 @@ import springfox.documentation.springWrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
@@ -71,22 +75,24 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return Sets.union(first.supportedMethods(), second.supportedMethods());
+    return Stream.concat(first.supportedMethods().stream(), second.supportedMethods().stream()).collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    return Sets.union(first.produces(), second.produces());
+    return Stream.concat(ofNullable(first.produces()).orElse(emptySet()).stream(),
+            ofNullable(second.produces()).orElse(emptySet()).stream()).collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return Sets.union(first.consumes(), second.consumes());
+    return Stream.concat(ofNullable(first.consumes()).orElse(emptySet()).stream(),
+            ofNullable(second.consumes()).orElse(emptySet()).stream()).collect(toSet());
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return Sets.union(first.headers(), second.headers());
+    return Stream.concat(first.headers().stream(), second.headers().stream()).collect(toSet());
   }
 
   @Override
@@ -96,16 +102,16 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return first.findAnnotation(annotation).or(second.findAnnotation(annotation));
+    return first.findAnnotation(annotation).map(Optional::of).orElse(second.findAnnotation(annotation));
   }
 
   @Override
   public RequestHandlerKey key() {
-      return new RequestHandlerKey(
-          getPatternsCondition().getPatterns(),
-          supportedMethods(),
-          consumes(),
-          produces());
+    return new RequestHandlerKey(
+        getPatternsCondition().getPatterns(),
+        supportedMethods(),
+        consumes(),
+        produces());
   }
 
   @Override
@@ -120,7 +126,9 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
-    return first.findControllerAnnotation(annotation).or(second.findControllerAnnotation(annotation)) ;
+    return first.findControllerAnnotation(annotation)
+        .map(Optional::of)
+        .orElse(second.findControllerAnnotation(annotation)) ;
   }
 
   @Override
@@ -140,9 +148,9 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("CombinedRequestHandler{");
-    sb.append("first key=").append(first.key());
-    sb.append("second key=").append(second.key());
+    final StringBuilder sb = new StringBuilder("CombinedRequestHandler{");
+    sb.append("first key=").append(first == null ? "No key" : first.key());
+    sb.append("second key=").append(second == null ? "No key" : second.key());
     sb.append("combined key=").append(key());
     sb.append('}');
     return sb.toString();

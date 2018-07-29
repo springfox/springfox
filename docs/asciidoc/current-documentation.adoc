@@ -16,7 +16,9 @@ document; an abstract.*
 `Docket` helps configure a  subset of the services to be documented and groups them by name. Significant changes
 to this is the ability to provide an expressive predicate based for api selection.
 
-```java
+.Example configuration
+[source,java,linenums]
+----
   import static springfox.documentation.builders.PathSelectors.*;
   import static com.google.common.base.Predicates.*;
 
@@ -44,8 +46,7 @@ to this is the ability to provide an expressive predicate based for api selectio
         regex("/springsRestController.*"),
         regex("/test.*"));
   }
-
-```
+----
 
 For a list of handy predicates Look at https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/RequestHandlerSelectors.java[RequestHandlerSelectors]
 and https://github.com/springfox/springfox/blob/master/springfox-core/src/main/java/springfox/documentation/builders/PathSelectors.java[PathSelectors].
@@ -75,6 +76,7 @@ good example of where this breaks down is the following http://stackoverflow.com
 
 By default the swagger service descriptions are generated at the following urls
 
+.api docs default paths
 [options="header,footer"]
 |=======================
 |Swagger version  | Documentation Url           | Group
@@ -87,6 +89,7 @@ By default the swagger service descriptions are generated at the following urls
 To customize these endpoints, loading a http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[property source] with the following properties
 allows the properties to be  overridden
 
+.api docs path properties
 [options="header,footer"]
 |=======================
 |Swagger version | Override property
@@ -94,12 +97,89 @@ allows the properties to be  overridden
 |2.0             | springfox.documentation.swagger.v2.path
 |=======================
 
+=== Configuring startup.
+If you'd like to delay the startup of springfox, you could choose to set auto-startup to false. The property to use
+is `springfox.documentation.auto-startup` and this could either be passed in as a `-D` jvm arg or via a property in
+`application.yml/properties` file.
+
+.startup properties
+[options="header,footer"]
+|=======================
+|Override property | description
+| true | This is the default value, which starts scanning for endpoints automatically when
+the spring contexts is refreshed.
+| false | This setting starts scanning for endpoints only when when the `Lifecycle#start()` method is called explicitly.
+This is very useful for frameworks like grails that has its own lifecycle. It indicates that the library
+user is responsible for starting the `DocumentationPluginsBootStrapper` lifecycle.
+|=======================
+
+WARNING: Change this default to `false` with caution. This implies managing the startup of the plugins prior to
+requesting the swagger endpoints in a thread-safe manner.
+
+=== Overriding descriptions via properties
+Added support for resolving properties in property sources to replace expressions in certain annotations. In order to
+ use it simply define properties in `application.properties`, `application.yml` file or property files in your
+ classpath with values that you'd like to see replaced in known annotations. For e.g. `@ApiModelProperty(value="${property1.description}")`
+ will evaluate `property1.description` from the available properties. If none is found, it will render the
+ un-resolved expression as-is.
+
+Currently supported list of annotations are in order of priority within the annotation:
+
+.description resolution targets
+[options="header,footer"]
+|===
+|Annotation | Attribute | Target Property | Description
+
+| ApiModelProperty
+| value
+| ModelProperty#description
+| e.g. `@ApiModelProperty(value="${property1.description}")`
+
+| ApiModelProperty
+| description
+| ModelProperty#description
+| e.g. `@ApiModelProperty(notes="${property1.description}")`
+
+| ApiParam
+| value
+| Parameter#description
+| e.g. `@ApiParam(value="${param1.description}")`
+
+| ApiImplicitParam
+| value
+| Parameter#description
+| e.g. `@ApiImplicitParam(value="${param1.description}")`
+
+| ApiOperation
+| notes
+| Operation#notes
+| e.g. `@ApiOperation(notes="${operation1.description}")`
+
+| ApiOperation
+| summary
+| Operation#summary
+| e.g. `@ApiOperation(value="${operation1.summary}")`
+
+| RequestParam
+| defaultValue
+| Parameter#defaultValue
+| e.g. `@RequestParam(defaultValue="${param1.defaultValue}")`
+
+| RequestHeader
+| defaultValue
+| Parameter#defaultValue
+| e.g. `@RequestHeader(defaultValue="${param1.defaultValue}")`
+|===
+
+For a detailed explanation <<property-file-lookup, see here>>.
+
 === Overriding property datatypes
 
 Using the `ApiModelProperty#dataType` we can override the inferred data types. However it is restricted
  to only allow data types to be specified with a fully qualified class name. For e.g. if we have the following
  definition
 
+.Example data type override
 [source,java,linenums]
 ----
 
@@ -118,9 +198,10 @@ NOTE: In the case of `ApiImplicitParam#dataType`, since the type itself is usual
 use one of the base types specified in the Types class =>
 `springfox-schema/src/main/java/springfox/documentation/schema/Types.java`
 
+.Primitive types
 [source,groovy,linenums]
 ----
-include::../../springfox-schema/src/main/java/springfox/documentation/schema/Types.java[lines=42..55]
+include::../../springfox-schema/src/main/java/springfox/documentation/schema/Types.java[lines=42..56]
 ----
 
 
@@ -130,7 +211,9 @@ To use the plugin you must create a spring java configuration class which uses s
 This config class must then be defined in your xml application context.
 
 
-```xml
+.Xml Configuration
+[source,xml,linenums]
+----
 <!-- Required so springfox can access spring's RequestMappingHandlerMapping  -->
 <mvc:annotation-driven/>
 
@@ -138,9 +221,11 @@ This config class must then be defined in your xml application context.
 <context:annotation-config/>
 
 <bean class="com.yourapp.configuration.MySwaggerConfig"/>
-```
+----
 
-```java
+.Configuration bean pulled into xml a configuration as a bean
+[source,java,linenums]
+----
 
 @Configuration
 @EnableSwagger //Loads the spring beans required by the framework
@@ -156,7 +241,7 @@ public class MySwaggerConfig {
    }
 
 }
-```
+----
 
 
 === Docket Spring Java Configuration
@@ -164,7 +249,9 @@ public class MySwaggerConfig {
 - Use the `@EnableSwagger` or `@EnableSwagger2` annotation.
 - Define one or more Docket instances using springs `@Bean` annotation.
 
-```java
+.Java Configuration
+[source,java,linenums]
+----
 @Configuration
 @EnableWebMvc //NOTE: Only needed in a non-springboot application
 @EnableSwagger2
@@ -182,8 +269,9 @@ public class CustomJavaPluginConfig {
 
    //...
 }
-```
+----
 
+[[property-file-lookup]]
 === Support for documentation from property file lookup
 
 Starting with `2.7.0` we support looking up description from the following annotations given a property just like
@@ -227,13 +315,12 @@ Below are examples of how it would work
 ----
 
 <1> Example of `@ApiOperation#notes()`
-<2> Example of `@ApiParam#value()
+<2> Example of `@ApiParam#value()`
 <3> Example of `@RequestParam#defaultValue()`
 <4> Example of `@ApiOperation#value()`
 <5> Example of `@ApiImplicitParams#value()`
 
 [[model-description]]Model Example
-
 [source,java]
 .SomeModel.java
 ----
@@ -285,17 +372,21 @@ connected to an HTTP GET verb, Springfox will render `getPetsUsingGET` for the o
 
 ====== Given this annotated method ...
 
-```java
+.Standard Annotation On Method
+[source,java,linenums]
+----
 @ApiOperation(value = "")
 @RequestMapping(value = "/pets", method = RequestMethod.GET)
 public Model getAllThePets() {
     ...
 }
-```
+----
 
 ====== the default `operationId` will render looking like this:
 
-```json
+.Default Rendered Operation Id
+[source,json,linenums]
+----
 
 "paths": {
   "/pets": {
@@ -307,7 +398,7 @@ public Model getAllThePets() {
   }
 }
 
-```
+----
 
 ===== Customizing the value of _operationId_
 
@@ -316,17 +407,21 @@ In the event you wish to override the default `operationId` which Springfox rend
 
 ====== Given this annotated method ...
 
-```java
+.Nickname overrides default operationId
+[source,java,linenums]
+----
 @ApiOperation(value = "", nickname = "getMeAllThePetsPlease")
 @RequestMapping(value = "/pets", method = RequestMethod.GET)
 public Model getAllThePets() {
     ...
 }
-```
+----
 
 ====== ... the customized *operationId* will render looking like this:
 
-```json
+.Default Rendered Operation Id
+[source,json,linenums]
+----
 
 "paths": {
   "/pets": {
@@ -337,8 +432,7 @@ public Model getAllThePets() {
     }
   }
 }
-
-```
+----
 
 ==== Changing how Generic Types are Named
 
@@ -348,9 +442,10 @@ For example, if you wanted `List<String>` to be encoded as 'ListOfString' and `M
 to be encoded as 'MapOfStringAndObject' you could set the `forCodeGeneration` customization option to `true` during
 plugin customization:
 
-```java
+[source,json,linenums]
+----
  docket.forCodeGeneration(true|false);
-```
+----
 
 === Caching
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,19 +16,24 @@
  *
  *
  */
-package springfox.documentation.schema;
+package springfox.documentation.schema.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.JaxbPresentInClassPathCondition;
+import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @Component
+@Conditional(JaxbPresentInClassPathCondition.class)
 public class XmlModelPlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
 
@@ -43,9 +48,21 @@ public class XmlModelPlugin implements ModelBuilderPlugin {
     if (annotation != null) {
       context.getBuilder().xml(buildXml(annotation));
     }
+    XmlRootElement root = AnnotationUtils.findAnnotation(forClass(context), XmlRootElement.class);
+    if (root != null) {
+      context.getBuilder().xml(buildXml(root));
+    }
   }
 
   private Xml buildXml(XmlType annotation) {
+    return new Xml()
+        .name(defaultToNull(annotation.name()))
+        .attribute(false)
+        .namespace(defaultToNull(annotation.namespace()))
+        .wrapped(false);
+  }
+
+  private Xml buildXml(XmlRootElement annotation) {
     return new Xml()
         .name(defaultToNull(annotation.name()))
         .attribute(false)

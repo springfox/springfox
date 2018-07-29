@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,13 +18,21 @@
  */
 
 package springfox.test.contract.swaggertests
+
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import springfox.documentation.builders.ImplicitGrantBuilder
 import springfox.documentation.builders.OAuthBuilder
-import springfox.documentation.service.*
+import springfox.documentation.service.ApiKey
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.GrantType
+import springfox.documentation.service.LoginEndpoint
+import springfox.documentation.service.SecurityScheme
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.Collections.*
+import static java.util.stream.Collectors.*
 
 @Configuration
 public class SecuritySupport {
@@ -43,13 +51,13 @@ public class SecuritySupport {
   }
 
   List<AuthorizationScope> scopes() {
-    newArrayList(
+    Stream.of(
       new AuthorizationScope("write:pets", "modify pets in your account"),
-      new AuthorizationScope("read:pets", "read your pets"))
+      new AuthorizationScope("read:pets", "read your pets")).collect(toList())
   }
 
   List<GrantType> grantTypes() {
-    newArrayList(new ImplicitGrantBuilder()
+    singletonList(new ImplicitGrantBuilder()
             .loginEndpoint(new LoginEndpoint("http://petstore.swagger.io/api/oauth/dialog"))
             .build())
   }

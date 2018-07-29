@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,61 +20,66 @@
 package springfox.documentation.spring.web.readers.parameter;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.Sets;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
+import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.base.Objects.equal;
-import static com.google.common.collect.Sets.newHashSet;
 
 public class ExpansionContext {
-    private final String parentName;
-    private final ResolvedType paramType;
-    private final DocumentationContext documentationContext;
-    private final Set<ResolvedType> seenTypes;
+  private final String parentName;
+  private final ResolvedType paramType;
+  private final OperationContext operationContext;
+  private final Set<ResolvedType> seenTypes;
 
-    public ExpansionContext(
-            String parentName,
-            ResolvedType paramType,
-            DocumentationContext documentationContext) {
-        this(parentName, paramType, documentationContext, Sets.<ResolvedType>newHashSet());
-    }
+  public ExpansionContext(
+      String parentName,
+      ResolvedType paramType,
+      OperationContext operationContext) {
+    this(parentName, paramType, operationContext, new HashSet<>());
+  }
 
-    private ExpansionContext(
-            String parentName,
-            ResolvedType paramType,
-            DocumentationContext documentationContext,
-            Set<ResolvedType> seenTypes) {
-        this.parentName = parentName;
-        this.paramType = paramType;
-        this.documentationContext = documentationContext;
-        this.seenTypes = newHashSet(seenTypes);
-    }
+  private ExpansionContext(
+      String parentName,
+      ResolvedType paramType,
+      OperationContext operationContext,
+      Set<ResolvedType> seenTypes) {
+    this.parentName = parentName;
+    this.paramType = paramType;
+    this.operationContext = operationContext;
+    this.seenTypes = new HashSet<>(seenTypes);
+  }
 
-    public String getParentName() {
-        return parentName;
-    }
 
-    public ResolvedType getParamType() {
-        return paramType;
-    }
+  public String getParentName() {
+    return parentName;
+  }
 
-    public DocumentationContext getDocumentationContext() {
-        return documentationContext;
-    }
+  public ResolvedType getParamType() {
+    return paramType;
+  }
 
-    public boolean hasSeenType(ResolvedType type) {
-        return seenTypes.contains(type)
-                || equal(type, paramType);
-    }
+  public OperationContext getOperationContext() {
+    return operationContext;
+  }
 
-    public ExpansionContext childContext(
-            String parentName,
-            ResolvedType paramType,
-            DocumentationContext documentationContext) {
-        Set<ResolvedType> childSeenTypes = newHashSet(seenTypes);
-        childSeenTypes.add(paramType);
-        return new ExpansionContext(parentName, paramType, documentationContext, childSeenTypes);
-    }
+  public DocumentationContext getDocumentationContext() {
+    return operationContext.getDocumentationContext();
+  }
+
+  public boolean hasSeenType(ResolvedType type) {
+    return seenTypes.contains(type)
+        || Objects.equals(type, paramType);
+  }
+
+  public ExpansionContext childContext(
+      String parentName,
+      ResolvedType childType,
+      OperationContext operationContext) {
+    Set<ResolvedType> childSeenTypes = new HashSet<>(seenTypes);
+    childSeenTypes.add(childType);
+    return new ExpansionContext(parentName, childType, operationContext, childSeenTypes);
+  }
 }

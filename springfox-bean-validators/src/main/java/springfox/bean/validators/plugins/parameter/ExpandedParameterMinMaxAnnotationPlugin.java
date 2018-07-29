@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -31,9 +30,9 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
-import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -48,8 +47,10 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<Min> min = validatorFromExpandedParameter(context, Min.class);
-    Optional<Max> max = validatorFromExpandedParameter(context, Max.class);
+
+    Optional<Min> min = context.findAnnotation(Min.class);
+
+    Optional<Max> max = context.findAnnotation(Max.class);
 
     if (min.isPresent() || max.isPresent()) {
       AllowableRangeValues values = allowableRange(min, max);

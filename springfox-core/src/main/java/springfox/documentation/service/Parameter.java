@@ -20,12 +20,17 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
+import org.springframework.core.Ordered;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-public class Parameter {
+public class Parameter implements Ordered {
+  public static final int DEFAULT_PRECEDENCE = 0;
+  
   private final String name;
   private final String description;
   private final String defaultValue;
@@ -39,7 +44,11 @@ public class Parameter {
   private final Boolean hidden;
   private final String pattern;
   private final String collectionFormat;
+  private final int order;
+  private final Object scalarExample;
+  private final Map<String, List<Example>> examples;
   private final List<VendorExtension> vendorExtensions;
+  private final Boolean allowEmptyValue;
 
   public Parameter(
       String name,
@@ -47,6 +56,7 @@ public class Parameter {
       String defaultValue,
       boolean required,
       boolean allowMultiple,
+      Boolean allowEmptyValue,
       ModelReference modelRef,
       Optional<ResolvedType> type,
       AllowableValues allowableValues,
@@ -55,12 +65,16 @@ public class Parameter {
       boolean hidden,
       String pattern,
       String collectionFormat,
+      int order,
+      Object scalarExample,
+      Map<String, List<Example>> examples,
       List<VendorExtension> vendorExtensions) {
 
     this.description = description;
     this.defaultValue = defaultValue;
     this.required = required;
     this.allowMultiple = allowMultiple;
+    this.allowEmptyValue = allowEmptyValue;
     this.modelRef = modelRef;
     this.type = type;
     this.allowableValues = allowableValues;
@@ -70,6 +84,9 @@ public class Parameter {
     this.hidden = hidden;
     this.pattern = pattern;
     this.collectionFormat = collectionFormat;
+    this.order = order;
+    this.scalarExample = scalarExample;
+    this.examples = examples;
     this.vendorExtensions = vendorExtensions;
   }
 
@@ -127,5 +144,32 @@ public class Parameter {
 
   public String getCollectionFormat() {
     return collectionFormat;
+  }
+
+  public Boolean isAllowEmptyValue() {
+    return allowEmptyValue;
+  }
+
+  public Object getScalarExample() {
+    return scalarExample;
+  }
+
+  public Map<String, List<Example>> getExamples() {
+    return examples;
+  }
+
+  @Override
+  public int getOrder() {
+    return order;
+  }
+
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("Parameter{");
+    sb.append("name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append(", order='").append(order).append('\'');
+    sb.append('}');
+    return sb.toString();
   }
 }

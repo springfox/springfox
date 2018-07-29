@@ -38,12 +38,12 @@ class RequestHandlerSelectorsSpec extends Specification {
 
   def "any predicate matches all RequestHandlers" () {
     expect:
-      RequestHandlerSelectors.any().apply(Mock(RequestHandler))
+      RequestHandlerSelectors.any().test(Mock(RequestHandler))
   }
 
   def "none predicate matches no RequestHandlers" () {
     expect:
-      !none().apply(Mock(RequestHandler))
+      !none().test(Mock(RequestHandler))
   }
 
   def "withClassAnnotation predicate matches RequestHandlers with given Class Annotation" () {
@@ -52,7 +52,7 @@ class RequestHandlerSelectorsSpec extends Specification {
     when:
       def handlerMethod = new HandlerMethod(clazz, methodName)
     then:
-      withClassAnnotation(ApiIgnore).apply(new MockRequestHandler(reqMapping, handlerMethod)) == available
+      withClassAnnotation(ApiIgnore).test(new MockRequestHandler(reqMapping, handlerMethod)) == available
     where:
       clazz                   | methodName  | available
       new WithAnnotation()    | "test"      | true
@@ -65,7 +65,7 @@ class RequestHandlerSelectorsSpec extends Specification {
     when:
       def handlerMethod = new HandlerMethod(clazz, methodName)
     then:
-      withMethodAnnotation(ApiIgnore).apply(new MockRequestHandler(reqMapping, handlerMethod)) == available
+      withMethodAnnotation(ApiIgnore).test(new MockRequestHandler(reqMapping, handlerMethod)) == available
     where:
       clazz                   | methodName  | available
       new WithAnnotation()    | "test"      | true
@@ -79,7 +79,7 @@ class RequestHandlerSelectorsSpec extends Specification {
       def handlerMethod = new HandlerMethod(clazz, methodName)
     then:
       basePackage("springfox.documentation.builders")
-        .apply(new MockRequestHandler(reqMapping, handlerMethod)) == available
+        .test(new MockRequestHandler(reqMapping, handlerMethod)) == available
     where:
       clazz                   | methodName  | available
       new WithAnnotation()    | "test"      | true

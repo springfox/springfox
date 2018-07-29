@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
-import static com.google.common.base.Objects.*;
+import static java.util.Optional.*;
 
 public class ResourceGroup {
   private final String groupName;
@@ -48,7 +49,7 @@ public class ResourceGroup {
   }
 
   public Optional<? extends Class<?>> getControllerClass() {
-    return Optional.fromNullable(controllerClazz);
+    return ofNullable(controllerClazz);
   }
 
   @Override
@@ -65,14 +66,14 @@ public class ResourceGroup {
     }
     final ResourceGroup rhs = (ResourceGroup) obj;
 
-    return equal(this.groupName, rhs.groupName)
-        && equal(this.position, rhs.position)
-        && equal(this.controllerClazz, rhs.controllerClazz);
+    return Objects.equals(this.groupName, rhs.groupName)
+        && Objects.equals(this.position, rhs.position)
+        && Objects.equals(this.controllerClazz, rhs.controllerClazz);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(groupName, controllerClazz, position);
+    return Objects.hash(groupName, controllerClazz, position);
   }
 
   @Override
@@ -81,6 +82,6 @@ public class ResourceGroup {
         "ResourceGroup{groupName='%s', position=%d, controller=%s}",
         groupName,
         position,
-        controllerClazz.getName());
+        getControllerClass().map((Function<Class<?>,String>) Class::getName).orElse(""));
   }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger1.mixins.MapperSupport
 
-import static com.google.common.collect.Sets.*
+import static java.util.Collections.*
 
 class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSupport {
   def "Maps the api description correctly"() {
@@ -60,8 +60,8 @@ class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSup
                           .reference("basic")
                           .scopes(scope)
                           .build()])
-                        .consumes(newHashSet("application/json"))
-                        .produces(newHashSet("application/json"))
+                        .consumes(singleton("application/json"))
+                        .produces(singleton("application/json"))
                         .deprecated("deprecated")
                         .method(HttpMethod.POST)
                         .uniqueId("op1")
@@ -79,9 +79,9 @@ class ServiceModelToSwaggerMapperSpec extends Specification implements MapperSup
                           .build()])
                         .position(1)
                         .codegenMethodNameStem("")
-                        .protocols(newHashSet("https"))
+                        .protocols(singleton("https"))
                         .responseModel(new ModelRef("string"))
-                        .responseMessages(newHashSet(response))
+                        .responseMessages(singleton(response))
                       .build()
       def description = new ApiDescriptionBuilder(defaults.operationOrdering())
         .description("test")

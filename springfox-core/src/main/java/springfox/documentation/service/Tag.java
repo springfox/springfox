@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,25 +19,38 @@
 
 package springfox.documentation.service;
 
-import com.google.common.base.Objects;
 import org.springframework.core.Ordered;
 
-import static com.google.common.base.Preconditions.*;
-import static com.google.common.base.Strings.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+
+import static java.util.Optional.*;
 
 public class Tag implements Ordered {
   private final String name;
   private final String description;
   private final int order;
+  private final List<VendorExtension> vendorExtensions;
 
   public Tag(String name, String description) {
     this(name, description, Integer.MAX_VALUE);
   }
 
   public Tag(String name, String description, int order) {
-    this.name = checkNotNull(emptyToNull(name));
+    this(name, description, order, new ArrayList<>());
+  }
+
+  public Tag(String name, String description, List<VendorExtension> vendorExtensions) {
+    this(name, description, Integer.MAX_VALUE, vendorExtensions);
+  }
+
+  public Tag(String name, String description, int order, List<VendorExtension> vendorExtensions) {
+    this.name = of(name).filter(((Predicate<String>)String::isEmpty).negate()).get();
     this.description = description;
     this.order = order;
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public String getName() {
@@ -53,6 +66,10 @@ public class Tag implements Ordered {
     return order;
   }
 
+  public List<VendorExtension> getVendorExtensions() {
+    return vendorExtensions;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -62,12 +79,12 @@ public class Tag implements Ordered {
       return false;
     }
     Tag tag = (Tag) o;
-    return Objects.equal(name, tag.name) &&
-        Objects.equal(description, tag.description);
+    return Objects.equals(name, tag.name) &&
+        Objects.equals(description, tag.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, description);
+    return Objects.hash(name, description);
   }
 }

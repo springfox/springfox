@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -51,12 +51,14 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.SpringGroupingStrategy;
 import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
 @Component
@@ -96,7 +98,7 @@ public class DocumentationPluginsManager {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
     ensureNoDuplicateGroups(plugins);
     if (plugins.isEmpty()) {
-      return newArrayList(defaultDocumentationPlugin());
+      return singleton(defaultDocumentationPlugin());
     }
     return plugins;
   }
@@ -155,33 +157,21 @@ public class DocumentationPluginsManager {
   }
 
   public Function<String, String> decorator(final PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        Iterable<Function<String, String>> decorators
-            = from(pathDecorators.getPluginsFor(context.documentationContext()))
-            .transform(toDecorator(context));
-        String decorated = input;
-        for (Function<String, String> decorator : decorators) {
-          decorated = decorator.apply(decorated);
-        }
-        return decorated;
+    return input -> {
+      Iterable<Function<String, String>> decorators
+          = pathDecorators.getPluginsFor(context.documentationContext()).stream()
+          .map(each -> each.decorator(context)).collect(toList());
+      String decorated = input;
+      for (Function<String, String> decorator : decorators) {
+        decorated = decorator.apply(decorated);
       }
-    };
-  }
-
-  private Function<? super PathDecorator, Function<String, String>> toDecorator(final PathContext context) {
-    return new Function<PathDecorator, Function<String, String>>() {
-      @Override
-      public Function<String, String> apply(PathDecorator input) {
-        return input.decorator(context);
-      }
+      return decorated;
     };
   }
 
   public Collection<ApiDescription> additionalListings(final ApiListingScanningContext context) {
     final DocumentationType documentationType = context.getDocumentationContext().getDocumentationType();
-    List<ApiDescription> additional = newArrayList();
+    List<ApiDescription> additional = new ArrayList<>();
     for (ApiListingScannerPlugin each : apiListingScanners.getPluginsFor(documentationType)) {
       additional.addAll(each.apply(context.getDocumentationContext()));
     }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,35 +19,47 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import org.springframework.http.HttpMethod;
 import springfox.documentation.service.SecurityReference;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
+import java.util.function.Predicate;
 
 public class SecurityContextBuilder {
+  private List<SecurityReference> securityReferences = new ArrayList<>();
+  private Predicate<String> pathSelector = (each) -> true;
+  private Predicate<HttpMethod> methodSelector;
+
   SecurityContextBuilder() {
   }
 
-  private List<SecurityReference> securityReferences = newArrayList();
-  private Predicate<String> pathSelector = Predicates.alwaysTrue();
-
-  public SecurityContextBuilder securityReferences(List<SecurityReference> securityReferences) {
+  public SecurityContextBuilder securityReferences(
+      List<SecurityReference> securityReferences) {
     this.securityReferences = securityReferences;
     return this;
-  }
-
-  public SecurityContext build() {
-    if (securityReferences == null) {
-      securityReferences = newArrayList();
-    }
-    return new SecurityContext(securityReferences, pathSelector);
   }
 
   public SecurityContextBuilder forPaths(Predicate<String> selector) {
     this.pathSelector = selector;
     return this;
+  }
+
+  public SecurityContextBuilder forHttpMethods(Predicate<HttpMethod> methodSelector) {
+    this.methodSelector = methodSelector;
+    return this;
+  }
+
+  public SecurityContext build() {
+    if (securityReferences == null) {
+      securityReferences = new ArrayList<>();
+    }
+    if (methodSelector == null) {
+      methodSelector = (each) -> true;
+    }
+    return new SecurityContext(
+        securityReferences,
+        pathSelector,
+        methodSelector);
   }
 }

@@ -10,7 +10,7 @@ ext {
 }
 
 dependencies {
-  compile "org.reflections:reflections:$reflections"
+  compile "io.github.lukehutch:fast-classpath-scanner:$fastClasspathScanner"
   compile libs.core
   compile libs.spring
   compile project(':springfox-spi')

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
 
 public class ModelProperty {
   private final String name;
@@ -40,7 +40,7 @@ public class ModelProperty {
   private final String description;
   private final AllowableValues allowableValues;
   private ModelReference modelRef;
-  private final String example;
+  private final Object example;
   private final String pattern;
   private final String defaultValue;
   private final Xml xml;
@@ -57,7 +57,7 @@ public class ModelProperty {
       Boolean allowEmptyValue,
       String description,
       AllowableValues allowableValues,
-      String example,
+      Object example,
       String pattern,
       String defaultValue,
       Xml xml,
@@ -77,7 +77,7 @@ public class ModelProperty {
     this.pattern = pattern;
     this.defaultValue = defaultValue;
     this.xml = xml;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList(vendorExtensions);
   }
 
   public String getName() {
@@ -125,7 +125,7 @@ public class ModelProperty {
     return this;
   }
 
-  public String getExample() {
+  public Object getExample() {
     return example;
   }
 

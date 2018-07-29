@@ -1,8 +1,10 @@
+const path = require('path');
+
 module.exports = {
-  entry: ["babel-polyfill", "./js/springfox.js"],
+  entry: ['babel-polyfill', './js/springfox.js'],
   output: {
-    path: __dirname + "/dist",
-    filename: "springfox.js",
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'springfox.js',
   },
   module: {
     rules: [
@@ -10,9 +12,9 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         }
       }
     ]
   }
-}
+};

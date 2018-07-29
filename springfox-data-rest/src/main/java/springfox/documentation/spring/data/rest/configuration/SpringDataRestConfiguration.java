@@ -33,8 +33,10 @@ import springfox.documentation.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
 
 @Configuration
@@ -56,7 +58,7 @@ public class SpringDataRestConfiguration {
 
       @Override
       public List<AlternateTypeRule> rules() {
-        return newArrayList(
+        return singletonList(
             newRule(resolver.resolve(Pageable.class), resolver.resolve(pageableMixin(restConfiguration)))
         );
       }
@@ -71,11 +73,11 @@ public class SpringDataRestConfiguration {
             String.format("%s.generated.%s",
                 Pageable.class.getPackage().getName(),
                 Pageable.class.getSimpleName()))
-        .withProperties(newArrayList(
+        .withProperties(Stream.of(
             property(Integer.class, restConfiguration.getPageParamName()),
             property(Integer.class, restConfiguration.getLimitParamName()),
             property(String.class, restConfiguration.getSortParamName())
-        ))
+        ).collect(toList()))
         .build();
   }
 

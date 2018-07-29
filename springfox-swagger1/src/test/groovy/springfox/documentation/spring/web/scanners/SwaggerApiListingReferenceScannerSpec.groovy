@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.base.Optional
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.RequestHandler
 import springfox.documentation.annotations.ApiIgnore
@@ -36,7 +35,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 
-import static com.google.common.base.Predicates.*
+import static java.util.Optional.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 
@@ -55,7 +54,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     plugin
             .pathProvider(new RelativePathProvider(servletContext()))
             .select()
-              .apis(not(withClassAnnotation(ApiIgnore)))
+              .apis(withClassAnnotation(ApiIgnore).negate())
               .paths(regex(".*?"))
               .build()
   }
@@ -70,7 +69,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
               .configure(contextBuilder)
 
     then:
-      context().groupName == "default"
+      documentationContext().groupName == "default"
     where:
       handlerMappings              | resourceGroupingStrategy                   | groupName | message
       [requestMappingInfo("path")] | null                                       | null      | "resourceGroupingStrategy is required"
@@ -91,14 +90,14 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.requestHandlers(requestHandlers)
       plugin.groupName('groupName').configure(contextBuilder)
 
-      ApiListingReferenceScanResult result = sut.scan(context())
+      ApiListingReferenceScanResult result = sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.keySet().size() == 1
     and:
       def resourceGroup = result.resourceGroupRequestMappings.keySet().first()
       resourceGroup.groupName == "dummy-class"
-      resourceGroup.controllerClass == Optional.fromNullable(DummyClass)
+      resourceGroup.controllerClass == ofNullable(DummyClass)
       resourceGroup.position == 0
   }
 
@@ -119,7 +118,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result= sut.scan(context())
+      ApiListingReferenceScanResult result= sut.scan(documentationContext())
     then:
       result.resourceGroupRequestMappings.size() == 2
       result.resourceGroupRequestMappings[new ResourceGroup("dummy-controller", DummyController)].size() == 1
@@ -141,7 +140,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
       contextBuilder.requestHandlers(requestHandlers)
       plugin.configure(contextBuilder)
     and:
-      ApiListingReferenceScanResult result= sut.scan(context())
+      ApiListingReferenceScanResult result= sut.scan(documentationContext())
 
     then:
       result.resourceGroupRequestMappings.size() == 2

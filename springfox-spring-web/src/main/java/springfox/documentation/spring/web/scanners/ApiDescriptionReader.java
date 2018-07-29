@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,11 +33,13 @@ import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
 import springfox.documentation.springWrapper.PatternsRequestCondition;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Ordering.*;
+import static java.util.Comparator.*;
+import static java.util.stream.Collectors.*;
 
 @Component
 public class ApiDescriptionReader {
@@ -61,7 +63,7 @@ public class ApiDescriptionReader {
     PatternsRequestCondition patternsCondition = outerContext.getPatternsCondition();
     ApiSelector selector = outerContext.getDocumentationContext().getApiSelector();
 
-    List<ApiDescription> apiDescriptionList = newArrayList();
+    List<ApiDescription> apiDescriptionList = new ArrayList<>();
     for (String path : matchingPaths(selector, patternsCondition)) {
       String methodName = outerContext.getName();
       try {
@@ -70,8 +72,9 @@ public class ApiDescriptionReader {
         List<Operation> operations = operationReader.read(operationContext);
         if (operations.size() > 0) {
           operationContext.apiDescriptionBuilder()
+              .groupName(outerContext.getGroupName())
               .operations(operations)
-              .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, from(operations).first())))
+              .pathDecorator(pluginsManager.decorator(new PathContext(outerContext, operations.stream().findFirst())))
               .path(path)
               .description(methodName)
               .hidden(false);
@@ -88,8 +91,8 @@ public class ApiDescriptionReader {
   }
 
   private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
-    return natural().sortedCopy(from(patternsCondition.getPatterns())
-        .filter(selector.getPathSelector()));
+    return ((Set<String>) patternsCondition.getPatterns()).stream()
+            .filter(selector.getPathSelector()).sorted(naturalOrder()).collect(toList());
   }
 
 }

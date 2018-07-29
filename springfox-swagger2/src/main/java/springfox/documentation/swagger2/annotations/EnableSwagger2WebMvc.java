@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger2.annotations;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Import;
 import springfox.documentation.swagger2.configuration.Swagger2DocumentationWebMvcConfiguration;
 

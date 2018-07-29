@@ -36,7 +36,7 @@ class CachingOperationReaderSpec extends DocumentationContextSpec {
     RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
     def methodResolver = new HandlerMethodResolver(new TypeResolver())
 
-    def context = context()
+    def context = documentationContext()
     def requestMappingContext = new RequestMappingContext(
         context,
         new WebMvcRequestHandler(methodResolver,

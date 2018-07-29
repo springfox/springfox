@@ -19,8 +19,6 @@
 package springfox.documentation.schema.property.constructor
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.collect.ImmutableSet
-import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
@@ -29,8 +27,9 @@ import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.field.FieldModelProperty
+import springfox.documentation.service.AllowableListValues
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -47,12 +46,12 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           genericNamingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
       def field = field(typeToTest, fieldName)
       ObjectMapper mapper = new ObjectMapper()
       def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
       namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(beanPropertyDefinition, true,  namingStrategy)
+      String propName = name(beanPropertyDefinition, true,  namingStrategy, "")
       def sut = new FieldModelProperty(
           propName,
           field,
@@ -66,7 +65,7 @@ class ConstructorModelPropertySpec extends SchemaSpecification {
       typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
       sut.qualifiedTypeName() == qualifiedTypeName
       if (allowableValues != null) {
-        sut.allowableValues() == new AllowableListValues(newArrayList(allowableValues), "string")
+        sut.allowableValues() == new AllowableListValues(new ArrayList(allowableValues), "string")
       } else {
         sut.allowableValues() == null
       }

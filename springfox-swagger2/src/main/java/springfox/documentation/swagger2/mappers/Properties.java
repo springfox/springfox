@@ -20,11 +20,6 @@
 package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BaseIntegerProperty;
 import io.swagger.models.properties.BooleanProperty;
@@ -47,50 +42,53 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
 
 import java.math.BigDecimal;
+import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Functions.*;
-import static com.google.common.base.Strings.*;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
 class Properties {
   private static final Map<String, Function<String, ? extends Property>> typeFactory
-      = ImmutableMap.<String, Function<String, ? extends Property>>builder()
-      .put("int", newInstanceOf(IntegerProperty.class))
-      .put("long", newInstanceOf(LongProperty.class))
-      .put("float", newInstanceOf(FloatProperty.class))
-      .put("double", newInstanceOf(DoubleProperty.class))
-      .put("string", newInstanceOf(StringProperty.class))
-      .put("boolean", newInstanceOf(BooleanProperty.class))
-      .put("date", newInstanceOf(DateProperty.class))
-      .put("date-time", newInstanceOf(DateTimeProperty.class))
-      .put("bigdecimal", newInstanceOf(DecimalProperty.class))
-      .put("biginteger", newInstanceOf(BaseIntegerProperty.class))
-      .put("uuid", newInstanceOf(UUIDProperty.class))
-      .put("object", newInstanceOf(ObjectProperty.class))
-      .put("byte", bytePropertyFactory())
-      .put("__file", filePropertyFactory())
-      .build();
+      = unmodifiableMap(Stream.of(
+      new AbstractMap.SimpleEntry<>("int", newInstanceOf(IntegerProperty.class)),
+      new AbstractMap.SimpleEntry<>("long", newInstanceOf(LongProperty.class)),
+      new AbstractMap.SimpleEntry<>("float", newInstanceOf(FloatProperty.class)),
+      new AbstractMap.SimpleEntry<>("double", newInstanceOf(DoubleProperty.class)),
+      new AbstractMap.SimpleEntry<>("string", newInstanceOf(StringProperty.class)),
+      new AbstractMap.SimpleEntry<>("boolean", newInstanceOf(BooleanProperty.class)),
+      new AbstractMap.SimpleEntry<>("date", newInstanceOf(DateProperty.class)),
+      new AbstractMap.SimpleEntry<>("date-time", newInstanceOf(DateTimeProperty.class)),
+      new AbstractMap.SimpleEntry<>("bigdecimal", newInstanceOf(DecimalProperty.class)),
+      new AbstractMap.SimpleEntry<>("biginteger", newInstanceOf(BaseIntegerProperty.class)),
+      new AbstractMap.SimpleEntry<>("uuid", newInstanceOf(UUIDProperty.class)),
+      new AbstractMap.SimpleEntry<>("object", newInstanceOf(ObjectProperty.class)),
+      new AbstractMap.SimpleEntry<>("byte", bytePropertyFactory()),
+      new AbstractMap.SimpleEntry<>("__file", filePropertyFactory()))
+      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
   private Properties() {
     throw new UnsupportedOperationException();
   }
 
   public static Property property(final String typeName) {
-    String safeTypeName = nullToEmpty(typeName);
-    Function<String, Function<String, ? extends Property>> propertyLookup
-        = forMap(typeFactory, voidOrRef(safeTypeName));
-    return propertyLookup.apply(safeTypeName.toLowerCase()).apply(safeTypeName);
+    String safeTypeName = ofNullable(typeName).orElse("");
+    return typeFactory.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
   }
 
   public static Property property(final ModelReference modelRef) {
     if (modelRef.isMap()) {
       return new MapProperty(property(modelRef.itemModel().get()));
     } else if (modelRef.isCollection()) {
-      if ("byte".equals(modelRef.itemModel().transform(toTypeName()).or(""))) {
+      if ("byte".equals(modelRef.itemModel().map(toTypeName()).orElse(""))) {
         return new ByteArrayProperty();
       }
       return new ArrayProperty(
@@ -130,8 +128,8 @@ class Properties {
     };
   }
 
-  static Ordering<String> defaultOrdering(Map<String, ModelProperty> properties) {
-    return Ordering.from(byPosition(properties)).compound(byName());
+  static Comparator<String> defaultOrdering(Map<String, ModelProperty> properties) {
+    return byPosition(properties).thenComparing(byName());
   }
 
   private static Function<String, ? extends Property> voidOrRef(final String typeName) {
@@ -183,7 +181,7 @@ class Properties {
       public int compare(String first, String second) {
         ModelProperty p1 = modelProperties.get(first);
         ModelProperty p2 = modelProperties.get(second);
-        return Ints.compare(p1.getPosition(), p2.getPosition());
+        return Integer.compare(p1.getPosition(), p2.getPosition());
       }
     };
   }
@@ -191,7 +189,7 @@ class Properties {
   static Predicate<Map.Entry<String, ModelProperty>> voidProperties() {
     return new Predicate<Map.Entry<String, ModelProperty>>() {
       @Override
-      public boolean apply(Map.Entry<String, ModelProperty> input) {
+      public boolean test(Map.Entry<String, ModelProperty> input) {
         return isVoid(input.getValue().getType())
             || collectionOfVoid(input.getValue().getType())
             || arrayTypeOfVoid(input.getValue().getType().getArrayElementType());

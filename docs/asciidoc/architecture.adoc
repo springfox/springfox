@@ -8,7 +8,7 @@ When we started work on 2.0 swagger specification we realized that we're rewriti
  other scenarios as well e.g. RAML, ALPS and hypermedia formats.
 
 === Component Model
-The different SpringFox modules are split up as shown below.
+The different Springfox modules are split up as shown below.
 
 ```ascii
   +-----------------------------------------------------------------------------------------+
@@ -21,7 +21,7 @@ The different SpringFox modules are split up as shown below.
   |                                  springfox-spi                                          |
   |                                                                                         |
   | Contains the service provider interfaces that can be used to extend and enrich the      |
-  | service models e.g. swagger specific annotation processors.                             |
+  | service models, e.g. swagger specific annotation processors.                            |
   +------------------------------------------+----------------------------------------------+
                                              |
                                              |
@@ -32,9 +32,9 @@ The different SpringFox modules are split up as shown below.
   |                                  |       |       |                                      |
   | Schema inference extensions that |       |       | spring web specific extensions that  |
   | help build up the schema for the |       |       | can build the service models based   |
-  |  the parameters, models and      |       |       | on RequestMapping information.       |
-  |  responses                       |       |       | This is the heart library that       |
-  +----------------------------------+       |       | infers the service model.            |
+  | parameters, models and responses |       |       | on RequestMapping information.       |
+  +----------------------------------+       |       | This is the heart library that       |
+                                             |       | infers the service model.            |
                                              |       +--------------------------------------+
                                              |
         +------------------------------------+------------------------------------+

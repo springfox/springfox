@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +20,6 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Ordering;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
@@ -42,8 +39,11 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class DocumentationContext {
@@ -60,9 +60,9 @@ public class DocumentationContext {
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
   private final List<? extends SecurityScheme> securitySchemes;
-  private final Ordering<ApiListingReference> listingReferenceOrdering;
-  private final Ordering<ApiDescription> apiDescriptionOrdering;
-  private final Ordering<Operation> operationOrdering;
+  private final Comparator<ApiListingReference> listingReferenceOrdering;
+  private final Comparator<ApiDescription> apiDescriptionOrdering;
+  private final Comparator<Operation> operationOrdering;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final Optional<String> pathMapping;
   private final Set<ResolvedType> additionalModels;
@@ -87,9 +87,9 @@ public class DocumentationContext {
       List<SecurityContext> securityContexts,
       List<? extends SecurityScheme> securitySchemes,
       List<AlternateTypeRule> alternateTypeRules,
-      Ordering<ApiListingReference> listingReferenceOrdering,
-      Ordering<ApiDescription> apiDescriptionOrdering,
-      Ordering<Operation> operationOrdering,
+      Comparator<ApiListingReference> listingReferenceOrdering,
+      Comparator<ApiDescription> apiDescriptionOrdering,
+      Comparator<Operation> operationOrdering,
       Set<String> produces,
       Set<String> consumes,
       String host,
@@ -149,8 +149,8 @@ public class DocumentationContext {
     return apiSelector;
   }
 
-  public ImmutableSet<Class> getIgnorableParameterTypes() {
-    return ImmutableSet.copyOf(ignorableParameterTypes);
+  public Set<Class> getIgnorableParameterTypes() {
+    return new HashSet<>(ignorableParameterTypes);
   }
 
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
@@ -163,6 +163,7 @@ public class DocumentationContext {
 
   /**
    * @deprecated  @since 2.2.0 - only here for backward compatibility
+   * @return resource grouping strategy
    */
   @Deprecated
   public ResourceGroupingStrategy getResourceGroupingStrategy() {
@@ -181,11 +182,11 @@ public class DocumentationContext {
     return securitySchemes;
   }
 
-  public Ordering<ApiListingReference> getListingReferenceOrdering() {
+  public Comparator<ApiListingReference> getListingReferenceOrdering() {
     return listingReferenceOrdering;
   }
 
-  public Ordering<ApiDescription> getApiDescriptionOrdering() {
+  public Comparator<ApiDescription> getApiDescriptionOrdering() {
     return apiDescriptionOrdering;
   }
 
@@ -193,7 +194,7 @@ public class DocumentationContext {
     return alternateTypeProvider;
   }
 
-  public Ordering<Operation> operationOrdering() {
+  public Comparator<Operation> operationOrdering() {
     return operationOrdering;
   }
 

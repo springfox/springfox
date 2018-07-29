@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.documentation.swagger2.web;
+package springfox.documentation.swagger.common;
 
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,7 +35,7 @@ public class HostNameProvider {
     throw new UnsupportedOperationException();
   }
 
-  static UriComponents componentsFrom(
+  public static UriComponents componentsFrom(
       HttpServletRequest request,
       String basePath) {
 
@@ -62,23 +62,12 @@ public class HostNameProvider {
 
     ServletUriComponentsBuilder builder = fromContextPath(request);
 
-    builder.replacePath(prependForwardedPrefix(request, basePath));
+    XForwardPrefixPathAdjuster adjuster = new XForwardPrefixPathAdjuster(request);
+    builder.replacePath(adjuster.adjustedPath(basePath));
     if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
       builder.path(request.getServletPath());
     }
 
     return builder;
-  }
-
-  private static String prependForwardedPrefix(
-      HttpServletRequest request,
-      String path) {
-
-    String prefix = request.getHeader("X-Forwarded-Prefix");
-    if (prefix != null) {
-      return prefix + path;
-    } else {
-      return path;
-    }
   }
 }

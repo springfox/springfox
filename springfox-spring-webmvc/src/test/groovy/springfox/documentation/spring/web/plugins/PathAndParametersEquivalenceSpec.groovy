@@ -11,7 +11,9 @@ import springfox.documentation.RequestHandler
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spring.web.PatternsRequestConditionWrapper
 
-import static com.google.common.collect.Sets.*
+import java.util.stream.Stream
+
+import static java.util.stream.Collectors.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
 class PathAndParametersEquivalenceSpec extends Specification {
@@ -20,7 +22,7 @@ class PathAndParametersEquivalenceSpec extends Specification {
     given:
       def sut = new PathAndParametersEquivalence()
     expect:
-      sut.equivalent(first, second) == areSame
+      sut.test(first, second) == areSame
       (sut.doHash(first) == sut.doHash(second)) == sameHash
     where:
       first                                                | second                                                       | sameHash | areSame
@@ -45,7 +47,7 @@ class PathAndParametersEquivalenceSpec extends Specification {
       Set<NameValueExpression<String>> params) {
     def handler = Mock(RequestHandler)
     handler.patternsCondition >> new PatternsRequestConditionWrapper(new PatternsRequestCondition(path))
-    handler.produces() >> newHashSet(produces)
+    handler.produces() >> Stream.of(produces).collect(toSet())
     handler.parameters >> [parameter]
     handler.supportedMethods() >> methods
     handler.params() >> params

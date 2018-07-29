@@ -29,7 +29,7 @@ class OperationPositionReaderSpec extends DocumentationContextSpec {
   def "should have correct api position using swagger reader"() {
     given:
       OperationContext operationContext =
-        operationContext(context(), handlerMethod, contextCount)
+        operationContext(documentationContext(), handlerMethod, contextCount)
       OperationPositionReader operationPositionReader = new OperationPositionReader();
 
     when:

@@ -1,256 +1,264 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "create",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "PUT",
-          "summary": "create",
-          "nickname": "createUsingPUT",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "toCreate",
-              "name": "body",
-              "paramType": "body",
-              "type": "Resource«Pet»",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK"
-            },
-            {
-              "code": 201,
-              "message": "Created"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "void"
-        }
-      ],
-      "path": "/foo/create-t"
-    },
-    {
-      "description": "delete",
-      "operations": [
+            "description": "create",
+            "operations": [
+                {
+                    "method": "PUT",
+                    "summary": "create",
+                    "nickname": "createUsingPUT",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "toCreate",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "Resource«Pet»",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ],
+            "path": "/foo/create-t"
+        },
         {
-          "method": "DELETE",
-          "summary": "delete",
-          "nickname": "deleteUsingDELETE",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "id",
-              "name": "id",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "HttpEntity«Resource«Pet»»"
-            },
-            {
-              "code": 204,
-              "message": "No Content"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 405,
-              "message": "Invalid input"
-            }
-          ],
-          "deprecated": "false",
-          "type": "HttpEntity«Resource«Pet»»"
-        }
-      ],
-      "path": "/foo/delete-t/{id}"
-    },
-    {
-      "description": "get",
-      "operations": [
+            "description": "delete",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "delete",
+                    "nickname": "deleteUsingDELETE",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "id",
+                            "name": "id",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "HttpEntity«Resource«Pet»»"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "HttpEntity«Resource«Pet»»"
+                }
+            ],
+            "path": "/foo/delete-t/{id}"
+        },
         {
-          "method": "GET",
-          "summary": "get",
-          "nickname": "getUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "id",
-              "name": "id",
-              "paramType": "path",
-              "type": "string",
-              "required": true
+            "description": "get",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "get",
+                    "nickname": "getUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "id",
+                            "name": "id",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "Resource«Pet»"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Invalid input"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "Resource«Pet»"
+                }
+            ],
+            "path": "/foo/get-t/{id}"
+        }
+    ],
+    "basePath": "/",
+    "consumes": [
+        
+    ],
+    "models": {
+        "Pet": {
+            "description": "",
+            "id": "Pet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
             }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "Resource«Pet»"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            },
-            {
-              "code": 405,
-              "message": "Invalid input"
+        },
+        "Link": {
+            "description": "",
+            "id": "Link",
+            "properties": {
+                "deprecation": {
+                    "required": false,
+                    "type": "string"
+                },
+                "href": {
+                    "required": false,
+                    "type": "string"
+                },
+                "hreflang": {
+                    "required": false,
+                    "type": "string"
+                },
+                "media": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rel": {
+                    "required": false,
+                    "type": "string"
+                },
+                "templated": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "title": {
+                    "required": false,
+                    "type": "string"
+                },
+                "type": {
+                    "required": false,
+                    "type": "string"
+                }
             }
-          ],
-          "deprecated": "false",
-          "type": "Resource«Pet»"
-        }
-      ],
-      "path": "/foo/get-t/{id}"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [],
-  "models": {
-    "Pet": {
-      "description": "",
-      "id": "Pet",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
         },
-        "id": {
-          "required": false,
-          "type": "string"
+        "Resource«Pet»": {
+            "description": "",
+            "id": "Resource«Pet»",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "links": {
+                    "required": false,
+                    "items": {
+                        "type": "Link"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
         },
-        "name": {
-          "required": false,
-          "type": "string"
+        "HttpEntity«Resource«Pet»»": {
+            "description": "",
+            "id": "HttpEntity«Resource«Pet»»",
+            "properties": {
+                "body": {
+                    "required": false,
+                    "type": "Resource«Pet»"
+                }
+            }
         }
-      }
     },
-    "Link": {
-      "description": "",
-      "id": "Link",
-      "properties": {
-        "deprecation": {
-          "required": false,
-          "type": "string"
-        },
-        "href": {
-          "required": false,
-          "type": "string"
-        },
-        "hreflang": {
-          "required": false,
-          "type": "string"
-        },
-        "media": {
-          "required": false,
-          "type": "string"
-        },
-        "rel": {
-          "required": false,
-          "type": "string"
-        },
-        "templated": {
-          "required": false,
-          "type": "boolean"
-        },
-        "title": {
-          "required": false,
-          "type": "string"
-        },
-        "type": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "Resource«Pet»": {
-      "description": "",
-      "id": "Resource«Pet»",
-      "properties": {
-        "age": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
-        },
-        "id": {
-          "required": false,
-          "type": "string"
-        },
-        "links": {
-          "required": false,
-          "items": {
-            "type": "Link"
-          },
-          "type": "array"
-        },
-        "name": {
-          "required": false,
-          "type": "string"
-        }
-      }
-    },
-    "HttpEntity«Resource«Pet»»": {
-      "description": "",
-      "id": "HttpEntity«Resource«Pet»»",
-      "properties": {
-        "body": {
-          "required": false,
-          "type": "Resource«Pet»"
-        }
-      }
-    }
-  },
-  "produces": [],
-  "resourcePath": "/foo",
-  "swaggerVersion": "1.2"
+    "produces": [
+        
+    ],
+    "resourcePath": "/foo",
+    "swaggerVersion": "1.2"
 }

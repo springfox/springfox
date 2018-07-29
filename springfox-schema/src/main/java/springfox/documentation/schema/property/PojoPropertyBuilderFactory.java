@@ -24,11 +24,13 @@ import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
+import java.util.Optional;
+
+import static java.util.Optional.*;
 
 class PojoPropertyBuilderFactory {
   private static final Logger LOG = LoggerFactory.getLogger(POJOPropertyBuilder.class);
@@ -39,23 +41,31 @@ class PojoPropertyBuilderFactory {
           ? config.getAnnotationIntrospector()
           : null;
     boolean forSerialization = config instanceof SerializationConfig;
-    Optional<POJOPropertyBuilder> instance
-        = jackson26Instance(beanProperty, annotationIntrospector, forSerialization);
+    Optional<POJOPropertyBuilder> instance =
+        jackson26Instance(
+            beanProperty,
+            annotationIntrospector,
+            forSerialization);
+
     if (!instance.isPresent()) {
-      return jackson27Instance(config, beanProperty, annotationIntrospector, forSerialization);
+      return jackson27AndHigherInstance(
+          config,
+          beanProperty,
+          annotationIntrospector,
+          forSerialization);
     }
     return instance.get();
   }
 
   /**
    * Applies to constructor
-      new POJOPropertyBuilder(
-        config,
-        annotationIntrospector,
-        forSerialization,
-        new PropertyName(beanProperty.getName()))
+   * new POJOPropertyBuilder(
+   * config,
+   * annotationIntrospector,
+   * forSerialization,
+   * new PropertyName(beanProperty.getName()))
    */
-  private POJOPropertyBuilder jackson27Instance(
+  private POJOPropertyBuilder jackson27AndHigherInstance(
       MapperConfig<?> config,
       BeanPropertyDefinition beanProperty,
       AnnotationIntrospector annotationIntrospector,
@@ -79,7 +89,7 @@ class PojoPropertyBuilderFactory {
 
   /**
    * Applies to constructor
-     new POJOPropertyBuilder(new PropertyName(beanProperty.getName()),  annotationIntrospector,  true);
+   * new POJOPropertyBuilder(new PropertyName(beanProperty.getName()),  annotationIntrospector,  true);
    */
   private Optional<POJOPropertyBuilder> jackson26Instance(
       BeanPropertyDefinition beanProperty,
@@ -90,14 +100,14 @@ class PojoPropertyBuilderFactory {
           AnnotationIntrospector.class,
           Boolean.TYPE);
 
-      return Optional.of(constructor.newInstance(
+      return of(constructor.newInstance(
           new PropertyName(beanProperty.getName()),
           annotationIntrospector,
           forSerialization));
     } catch (Exception e) {
-      LOG.debug("Unable to instantiate jackson 26 object", e);
+      LOG.debug("Unable to instantiate jackson 2.6 object. Using higher version of jackson.");
     }
-    return Optional.absent();
+    return empty();
   }
 
   private Constructor<POJOPropertyBuilder> constructorWithParams(Class<?>... clazzes)

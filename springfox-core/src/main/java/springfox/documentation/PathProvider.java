@@ -23,7 +23,7 @@ public interface PathProvider {
 
   /**
    * Gets the application base path
-   * @return
+   * @return application base path
    */
   String getApplicationBasePath();
 

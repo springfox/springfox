@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 import static springfox.documentation.schema.AlternateTypeRules.*
@@ -74,6 +74,7 @@ class DocketSpec extends DocumentationContextSpec {
           OK.value(),
           "blah",
           null,
+          [],
           [] as Map,
           [])])
               .useDefaultResponseMessages(true)
@@ -98,6 +99,7 @@ class DocketSpec extends DocumentationContextSpec {
           OK.value(),
           "blah",
           null,
+          [],
           [] as Map,
           [])])
               .useDefaultResponseMessages(false)
@@ -135,7 +137,7 @@ class DocketSpec extends DocumentationContextSpec {
               .alternateTypeRules(rule)
               .configure(contextBuilder)
     expect:
-      context().alternateTypeProvider.rules.contains(rule)
+      documentationContext().alternateTypeProvider.rules.contains(rule)
   }
 
   def "Model substitution registers new rules"() {
@@ -162,7 +164,7 @@ class DocketSpec extends DocumentationContextSpec {
       plugin."$builderMethod"(object)
 
     then:
-      context()."$property" == object
+      documentationContext()."$property" == object
 
     where:
       builderMethod     | object                                         | property
@@ -175,7 +177,7 @@ class DocketSpec extends DocumentationContextSpec {
   }
 
   def validContexts() {
-    newArrayList(SecurityContext.builder().build())
+    singletonList(SecurityContext.builder().build())
   }
 
   def "non nullable swaggerApiResourceListing properties"() {

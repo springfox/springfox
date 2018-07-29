@@ -27,12 +27,12 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
+
 
 @Incubating("2.7.0")
 public class AlternateTypeBuilder {
   private String fullyQualifiedClassName;
-  private List<AlternateTypePropertyBuilder> properties = newArrayList();
+  private List<AlternateTypePropertyBuilder> properties = new ArrayList<>();
   private List<Annotation> annotations = new ArrayList<Annotation>();
 
   public AlternateTypeBuilder fullyQualifiedClassName(String fullyQualifiedClassName) {

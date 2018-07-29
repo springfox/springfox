@@ -82,7 +82,20 @@ The docs are generated in the `build/all-docs` folder. To publish the current do
 [source,bash]
 [subs="verbatim,attributes"]
 ----
-./gradlew publishDocs
+./gradlew releaseDocs
+----
+
+==== Updating the contract tests
+When developing new contract test, to make it easy to update the existing tests with new contracts, uncomment the
+following lines in https://github.com/springfox/springfox/blob/master/swagger-contract-tests/build.gradle[swagger-contract-tests/build.gradle].
+Usually this happens when we add a new contract test for a bug we've fixed or a feature that was added, we create an
+endpoint in https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/BugsController.java[BugsController]
+or https://github.com/springfox/springfox/blob/master/springfox-spring-web/src/test/java/springfox/documentation/spring/web/dummy/controllers/FeatureDemonstrationService.java[FeatureDemonstrationService] to demonstrate the new fix or behavior.
+
+[[update-contract-tests]]
+[source,gradle,linenums]
+----
+include::../../swagger-contract-tests/build.gradle[tags=update-contract-tests,indent=0]
 ----
 
 ==== CI Environment
@@ -94,10 +107,23 @@ https://circleci.com/gh/springfox/springfox[Circle CI]
 To release a non-snapshot version of Springfox:
 
 - Execute the the release commands:
-The below properties are required to run a release:
-    - `GITHUB_TOKEN`
-    - `BINTRAY_USERNAME`
-    - `BINTRAY_PASSWORD`
+The below environment variables are required to run a release:
+    - `GITHUB_TOKEN` - this is the github token
+    - `BINTRAY_USER_NAME` - this is your bintray user
+    - `BINTRAY_PASSWORD` - this is your bintray token
+    - `SONATYPE_USER_NAME`
+    - `SONATYPE_PASSWORD`
+    - `GPG_PASSPHRASE` - if your gpg key has a passphrase or ''
+    - `SONATYPE_SYNC` - automatically sync to maven central
+
+Alternatively you could set the following gradle/project properties (-Pproperty)
+    - `githubToken` - this is the github token
+    - `bintrayUsername` - this is your bintray user
+    - `bintrayApiKey` - this is your bintray token
+    - `gpgPassphrase` - if your gpg key has a passphrase or ''
+    - `ossUser`
+    - `ossPassword`
+    - `ossSync` - automatically sync to maven central
 
 
 Recommend using [autoenv](https://github.com/kennethreitz/autoenv) with a `.env` file at the root of the repo.
@@ -105,8 +131,8 @@ Recommend using [autoenv](https://github.com/kennethreitz/autoenv) with a `.env`
 [source,]
 [subs="verbatim,attributes"]
 ----
-    ./gradlew release publishDocs -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD
-    -PreleaseType=<MAJOR|MINOR|PATCH> -i
+    ./gradlew clean build release [-PreleaseType=<MAJOR|MINOR|PATCH>]
+    ./gradlew releaseDocs
 ----
 
 The release steps are as follows:
@@ -126,7 +152,7 @@ This is normally done by the CI server
 [source,]
 [subs="verbatim,attributes"]
 ----
-./gradlew snapshot -PbintrayUsername=<bintrayUsername> -PbintrayPassword=<bintrayPassword>
+./gradlew publishSnapshot
 ----
 
 ==== Override deploy
@@ -136,7 +162,7 @@ To bypass the standard release flow and upload directly to bintray use the follo
 [source,]
 [subs="verbatim,attributes"]
 ----
-./gradlew clean build bintrayUpload -PbintrayUsername=$BINTRAY_USERNAME -PbintrayPassword=$BINTRAY_PASSWORD -PreleaseType=<MAJOR|MINOR|PATCH>
+./gradlew clean build bintrayUpload -PreleaseType=<MAJOR|MINOR|PATCH>
  --stacktrace
 ----
 

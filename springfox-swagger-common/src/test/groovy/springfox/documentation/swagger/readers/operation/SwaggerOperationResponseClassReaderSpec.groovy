@@ -45,7 +45,7 @@ class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
     OperationContext operationContext =
-        operationContext(context(), handlerMethod)
+        operationContext(documentationContext(), handlerMethod)
 
     SwaggerOperationResponseClassReader sut =
         new SwaggerOperationResponseClassReader(new TypeResolver(), typeNameExtractor)

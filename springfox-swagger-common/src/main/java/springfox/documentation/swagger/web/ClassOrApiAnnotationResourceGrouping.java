@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@
 
 package springfox.documentation.swagger.web;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +30,14 @@ import springfox.documentation.springWrapper.RequestMappingInfo;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.spring.web.paths.Paths.*;
@@ -53,11 +52,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     Class<?> controllerClass = handlerMethod.getBeanType();
     String className = splitCamelCase(controllerClass.getSimpleName(), " ");
 
-    return fromNullable(
-        emptyToNull(
-          stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
-              .or(""))))
-        .or(className);
+    return stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
+              .filter(((Predicate<String>)String::isEmpty).negate())
+              .orElse(className));
   }
 
   @Override
@@ -72,15 +69,15 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
 
   @Override
   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {
-    return from(groups(handlerMethod)).transform(toResourceGroup(requestMappingInfo, handlerMethod)).toSet();
+    return groups(handlerMethod).stream().map(toResourceGroup(requestMappingInfo, handlerMethod)).collect(toSet());
   }
 
   private Set<String> groups(HandlerMethod handlerMethod) {
     Class<?> controllerClass = handlerMethod.getBeanType();
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
-    String apiValue = fromNullable(findAnnotation(controllerClass, Api.class))
-        .transform(toApiValue()).or("");
-    return Strings.isNullOrEmpty(apiValue) ? newHashSet(normalize(group)) : newHashSet(normalize(apiValue));
+    String apiValue = ofNullable(findAnnotation(controllerClass, Api.class))
+        .map(toApiValue()).orElse("");
+    return singleton(normalize(ofNullable(apiValue).filter(((Predicate<String>)String::isEmpty).negate()).orElse(group)));
   }
 
   private String normalize(String tag) {
@@ -89,15 +86,14 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
         .replaceAll("/", "");
   }
 
-  private Function<String, ResourceGroup> toResourceGroup(final RequestMappingInfo requestMappingInfo,
-                                                          final HandlerMethod handlerMethod) {
-    return new Function<String, ResourceGroup>() {
-      @Override
-      public ResourceGroup apply(String group) {
-        LOG.info("Group for method {} was {}", handlerMethod.getMethod().getName(), group);
-        Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
-        return new ResourceGroup(group, handlerMethod.getBeanType(), position);
-      }
+  private Function<String, ResourceGroup> toResourceGroup(
+      final RequestMappingInfo requestMappingInfo,
+      final HandlerMethod handlerMethod) {
+
+    return group -> {
+      LOG.info("Group for method {} was {}", handlerMethod.getMethod().getName(), group);
+      Integer position = getResourcePosition(requestMappingInfo, handlerMethod);
+      return new ResourceGroup(group, handlerMethod.getBeanType(), position);
     };
   }
 
@@ -114,45 +110,31 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
   }
 
   private Function<Api, Optional<String>> descriptionOrValueExtractor() {
-    return new Function<Api, Optional<String>>() {
-      @Override
-      public Optional<String> apply(Api input) {
-        //noinspection ConstantConditions
-        return descriptionExtractor().apply(input).or(valueExtractor().apply(input));
-      }
+    return input -> {
+      //noinspection ConstantConditions
+      return descriptionExtractor().apply(input).map(Optional::of).orElse(valueExtractor().apply(input));
     };
   }
 
   private Function<Api, String> toApiValue() {
-    return new Function<Api, String>() {
-      @Override
-      public String apply(Api input) {
-        return normalize(input.value());
-      }
-    };
+    return input -> normalize(input.value());
   }
 
   private Function<Api, Optional<String>> descriptionExtractor() {
-    return new Function<Api, Optional<String>>() {
-      @Override
-      public Optional<String> apply(Api input) {
-        if (null != input) {
-          return fromNullable(emptyToNull(input.description()));
-        }
-        return Optional.absent();
+    return input -> {
+      if (null != input) {
+        return of(input.description()).filter(((Predicate<String>)String::isEmpty).negate());
       }
+      return empty();
     };
   }
 
   private Function<Api, Optional<String>> valueExtractor() {
-    return new Function<Api, Optional<String>>() {
-      @Override
-      public Optional<String> apply(Api input) {
-        if (null != input) {
-          return fromNullable(emptyToNull(input.value()));
-        }
-        return Optional.absent();
+    return input -> {
+      if (null != input) {
+        return of(input.value()).filter(((Predicate<String>)String::isEmpty).negate());
       }
+      return empty();
     };
   }
 }

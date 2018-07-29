@@ -1,405 +1,417 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "getAliasedPathVariable",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "GET",
-          "summary": "Find a business by its id",
-          "nickname": "findBusinessById",
-          "produces": [
-            "*/*",
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "ID of business",
-              "name": "otherId",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "string"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "string"
-        }
-      ],
-      "path": "/businesses/aliased/{otherId}"
-    },
-    {
-      "description": "businessesByCategories",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "businessesByCategories",
-          "nickname": "businessesByCategoriesUsingGET",
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": true,
-              "enum": [
-                "PRODUCT",
-                "SERVICE"
-              ],
-              "description": "types",
-              "name": "types",
-              "paramType": "query",
-              "items": {
-                "type": "string"
-              },
-              "type": "array",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "array"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "items": {
-            "type": "Biz"
-          },
-          "type": "array"
-        }
-      ],
-      "path": "/businesses/byTypes"
-    },
-    {
-      "description": "businessAsString",
-      "operations": [
-        {
-          "method": "POST",
-          "summary": "businessAsString",
-          "nickname": "businessAsStringUsingPOST",
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "Business",
-              "responseModel": "Biz"
-            },
-            {
-              "code": 201,
-              "message": "Created"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "string"
-        }
-      ],
-      "path": "/businesses/demonstratesApiModelName"
-    },
-    {
-      "description": "getNonAliasedPathVariable",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "Find a business by its id",
-          "nickname": "findBusinessById_1",
-          "produces": [
-            "*/*",
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "ID of business",
-              "name": "businessId",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "string"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "string",
-          "authorizations": {
-            "oauth2": [
-              {
-                "description": "scope description",
-                "scope": "scope"
-              }
-            ]
-          }
-        }
-      ],
-      "path": "/businesses/non-aliased/{businessId}"
-    },
-    {
-      "description": "getResponseEntity",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "getResponseEntity",
-          "nickname": "getResponseEntityUsingGET",
-          "produces": [
-            "*/*",
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "businessId",
-              "name": "businessId",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "string"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "string"
-        }
-      ],
-      "path": "/businesses/responseEntity/{businessId}"
-    },
-    {
-      "description": "businessTypeEcho",
-      "operations": [
-        {
-          "method": "POST",
-          "summary": "businessTypeEcho",
-          "nickname": "businessTypeEchoUsingPOST",
-          "produces": [
-            "application/json"
-          ],
-          "consumes": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "enum": [
-                "PRODUCT",
-                "SERVICE"
-              ],
-              "description": "business",
-              "name": "body",
-              "paramType": "body",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "string"
-            },
-            {
-              "code": 201,
-              "message": "Created"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "string"
-        }
-      ],
-      "path": "/businesses/typeEcho"
-    },
-    {
-      "description": "getVanillaPathVariable",
-      "operations": [
-        {
-          "method": "GET",
-          "summary": "getVanillaPathVariable",
-          "nickname": "getVanillaPathVariableUsingGET",
-          "produces": [
-            "*/*",
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "businessId",
-              "name": "businessId",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "string"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "string"
-        }
-      ],
-      "path": "/businesses/vanilla/{businessId}"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [
-    "application/json"
-  ],
-  "models": {
-    "Biz": {
-      "description": "",
-      "id": "Biz",
-      "properties": {
-        "businessType": {
-          "enum": [
-            "PRODUCT",
-            "SERVICE"
-          ],
-          "required": false,
-          "type": "string"
+            "description": "getAliasedPathVariable",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Find a business by its id",
+                    "nickname": "findBusinessById",
+                    "produces": [
+                        "*/*",
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "ID of business",
+                            "name": "otherId",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ],
+            "path": "/businesses/aliased/{otherId}"
         },
-        "id": {
-          "required": false,
-          "format": "int32",
-          "type": "integer"
+        {
+            "description": "businessesByCategories",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "businessesByCategories",
+                    "nickname": "businessesByCategoriesUsingGET",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": true,
+                            "enum": [
+                                "PRODUCT",
+                                "SERVICE"
+                            ],
+                            "description": "types",
+                            "name": "types",
+                            "paramType": "query",
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "array"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "items": {
+                        "type": "Biz"
+                    },
+                    "type": "array"
+                }
+            ],
+            "path": "/businesses/byTypes"
         },
-        "inception": {
-          "required": false,
-          "format": "date",
-          "type": "string"
+        {
+            "description": "businessAsString",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "businessAsString",
+                    "nickname": "businessAsStringUsingPOST",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Business",
+                            "responseModel": "Biz"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ],
+            "path": "/businesses/demonstratesApiModelName"
         },
-        "name": {
-          "required": false,
-          "type": "string"
+        {
+            "description": "getNonAliasedPathVariable",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "Find a business by its id",
+                    "nickname": "findBusinessById_1",
+                    "produces": [
+                        "*/*",
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "ID of business",
+                            "name": "businessId",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string",
+                    "authorizations": {
+                        "oauth2": [
+                            {
+                                "description": "scope description",
+                                "scope": "scope"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "path": "/businesses/non-aliased/{businessId}"
         },
-        "owner": {
-          "required": false,
-          "type": "string"
+        {
+            "description": "getResponseEntity",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getResponseEntity",
+                    "nickname": "getResponseEntityUsingGET",
+                    "produces": [
+                        "*/*",
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "businessId",
+                            "name": "businessId",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ],
+            "path": "/businesses/responseEntity/{businessId}"
         },
-        "taxDate": {
-          "required": false,
-          "format": "date-time",
-          "type": "string"
+        {
+            "description": "businessTypeEcho",
+            "operations": [
+                {
+                    "method": "POST",
+                    "summary": "businessTypeEcho",
+                    "nickname": "businessTypeEchoUsingPOST",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "enum": [
+                                "PRODUCT",
+                                "SERVICE"
+                            ],
+                            "description": "business",
+                            "name": "body",
+                            "paramType": "body",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ],
+            "path": "/businesses/typeEcho"
+        },
+        {
+            "description": "getVanillaPathVariable",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "getVanillaPathVariable",
+                    "nickname": "getVanillaPathVariableUsingGET",
+                    "produces": [
+                        "*/*",
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "businessId",
+                            "name": "businessId",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "string"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "string"
+                }
+            ],
+            "path": "/businesses/vanilla/{businessId}"
         }
-      }
-    }
-  },
-  "produces": [
-    "*/*",
-    "application/json"
-  ],
-  "resourcePath": "/businesses",
-  "swaggerVersion": "1.2"
+    ],
+    "basePath": "/",
+    "consumes": [
+        "application/json"
+    ],
+    "models": {
+        "Biz": {
+            "description": "",
+            "id": "Biz",
+            "properties": {
+                "businessType": {
+                    "enum": [
+                        "PRODUCT",
+                        "SERVICE"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "id": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "inception": {
+                    "required": false,
+                    "format": "date",
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                },
+                "owner": {
+                    "required": false,
+                    "type": "string"
+                },
+                "taxDate": {
+                    "required": false,
+                    "format": "date-time",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "produces": [
+        "*/*",
+        "application/json"
+    ],
+    "resourcePath": "/businesses",
+    "swaggerVersion": "1.2"
 }

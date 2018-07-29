@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,14 +22,15 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
 
@@ -62,12 +63,7 @@ public class ResolvedTypes {
   }
 
   public static Optional<String> resolvedTypeSignature(ResolvedType resolvedType) {
-    return Optional.fromNullable(resolvedType).transform(new Function<ResolvedType, String>() {
-      @Override
-      public String apply(ResolvedType input) {
-        return input.getSignature();
-      }
-    });
+    return ofNullable(resolvedType).map(ResolvedType::getSignature);
   }
 
   public static Function<ResolvedType, ModelReference> modelRefFactory(

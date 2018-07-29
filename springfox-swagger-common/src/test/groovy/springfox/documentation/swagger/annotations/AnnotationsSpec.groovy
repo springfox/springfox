@@ -34,55 +34,62 @@ import static springfox.documentation.swagger.annotations.Annotations.*
 
 class AnnotationsSpec extends Specification {
 
-  @Shared def resolver = new TypeResolver()
-  @Shared def defaultType = resolver.resolve(String)
+  @Shared
+  def resolver = new TypeResolver()
+  @Shared
+  def defaultType = resolver.resolve(String)
 
   def "ApiResponses annotations should be looked up through the entire inheritance hierarchy"() {
     given:
-      AnnotatedElement annotatedElement = ConcreteController.getMethod("get", Object)
+    AnnotatedElement annotatedElement = ConcreteController.getMethod("get", Object)
+
     expect:
-      findApiResponsesAnnotations(annotatedElement).size() == 1
+    findApiResponsesAnnotations(annotatedElement).size() == 1
   }
 
   def "ApiParam annotations should be looked up through the entire inheritance hierarchy"() {
     given:
-      AnnotatedElement annotatedElement = DummyClass.getMethod("annotatedWithApiParam")
+    AnnotatedElement annotatedElement = DummyClass.getMethod("annotatedWithApiParam")
+
     expect:
-      findApiParamAnnotation(annotatedElement).isPresent()
+    findApiParamAnnotation(annotatedElement).isPresent()
   }
 
   def "ApiResponses annotations should be looked up when annotated at class level"() {
     given:
-      AnnotatedElement classLevel = DummyClass.class
-      AnnotatedElement methodLevel = DummyClass.getMethod("methodAnnotatedWithApiResponse")
+    AnnotatedElement classLevel = DummyClass.class
+    AnnotatedElement methodLevel = DummyClass.getMethod("methodAnnotatedWithApiResponse")
+
     expect:
-      findApiResponsesAnnotations(classLevel).size() == 1
-      findApiResponsesAnnotations(methodLevel).size() == 2
-      findApiResponsesAnnotations(methodLevel)[0]== methodLevel.getAnnotation(ApiResponses)
-      findApiResponsesAnnotations(methodLevel)[1] == classLevel.getAnnotation(ApiResponses)
+    findApiResponsesAnnotations(classLevel).size() == 1
+    findApiResponsesAnnotations(methodLevel).size() == 2
+    findApiResponsesAnnotations(methodLevel)[0] == methodLevel.getAnnotation(ApiResponses)
+    findApiResponsesAnnotations(methodLevel)[1] == classLevel.getAnnotation(ApiResponses)
   }
 
   def "Cannot instantiate the annotations helper"() {
     when:
-      new Annotations()
+    new Annotations()
+
     then:
-      thrown(UnsupportedOperationException)
+    thrown(UnsupportedOperationException)
   }
 
   def "ResolvedType from ApiOperation annotation"() {
     given:
-      def resolvedType = getResolvedType(apiOperation as ApiOperation, resolver, defaultType)
+    def resolvedType = getResolvedType(apiOperation as ApiOperation, resolver, defaultType)
 
     expect:
-      resolvedType == type
+    resolvedType == type
+
     where:
-      apiOperation                                              | type
-      null                                                      | defaultType
-      [response: { -> Void}]                                    | defaultType
-      [response: { -> String}, responseContainer: {-> "List"}]  | resolver.resolve(List, String)
-      [response: { -> String}, responseContainer: {-> "Set"}]   | resolver.resolve(Set, String)
-      [response: { -> String}, responseContainer: {-> "Other"}] | resolver.resolve(String)
-      [response: { -> String}, responseContainer: { -> ""}]     | resolver.resolve(String)
+    apiOperation                                                 | type
+    null                                                         | defaultType
+    [response: { -> Void }, responseContainer: { -> null }]      | defaultType
+    [response: { -> String }, responseContainer: { -> "List" }]  | resolver.resolve(List, String)
+    [response: { -> String }, responseContainer: { -> "Set" }]   | resolver.resolve(Set, String)
+    [response: { -> String }, responseContainer: { -> "Other" }] | resolver.resolve(String)
+    [response: { -> String }, responseContainer: { -> "" }]      | resolver.resolve(String)
   }
 
   def "ResolvedType from ApiResponse annotation"() {
@@ -90,15 +97,15 @@ class AnnotationsSpec extends Specification {
     def resolvedType = getResolvedType(apiOperation as ApiResponse, resolver, defaultType)
 
     expect:
-      resolvedType == type
-    where:
-      apiOperation                                              | type
-      null                                                      | defaultType
-      [response: { -> Void}]                                    | defaultType
-      [response: { -> String}, responseContainer: {-> "List"}]  | resolver.resolve(List, String)
-      [response: { -> String}, responseContainer: {-> "Set"}]   | resolver.resolve(Set, String)
-      [response: { -> String}, responseContainer: {-> "Other"}] | resolver.resolve(String)
-      [response: { -> String}, responseContainer: { -> ""}]     | resolver.resolve(String)
-  }
+    resolvedType == type
 
+    where:
+    apiOperation                                                 | type
+    null                                                         | defaultType
+    [response: { -> Void }, responseContainer: { -> null }]      | defaultType
+    [response: { -> String }, responseContainer: { -> "List" }]  | resolver.resolve(List, String)
+    [response: { -> String }, responseContainer: { -> "Set" }]   | resolver.resolve(Set, String)
+    [response: { -> String }, responseContainer: { -> "Other" }] | resolver.resolve(String)
+    [response: { -> String }, responseContainer: { -> "" }]      | resolver.resolve(String)
+  }
 }

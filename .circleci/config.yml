@@ -1,0 +1,61 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/openjdk:8-jdk-node-browsers
+    environment:
+      JVM_OPTIONS: -Xmx1024M -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512M
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx3840m -XX:+HeapDumpOnOutOfMemoryError"'
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
+#      - run:
+#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+#         command: sudo chmod +x ./gradlew
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - run:
+          name: pre-dependencies
+          command: npm install codecov
+      - save_cache:
+          paths:
+            - ~/node_modules
+            - ~/.m2
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
+      - run:
+          name: Run Tests
+          command: ./gradlew clean check codeCoverageReport --no-daemon
+          no_output_timeout: 900s
+          environment:
+            _JAVA_OPTIONS: -Xmx1024M -XX:ReservedCodeCacheSize=512M
+      - run:
+          name: Post test
+          command: ./node_modules/.bin/codecov
+      - run:
+          name: Save test results
+          command: |
+           mkdir -p ~/junit/
+           mkdir -p ~/reports/
+           find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+           cp -R swagger-contract-tests/build/reports/tests ~/reports
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_test_results:
+          path: ~/reports
+      - store_artifacts:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/reports
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ./gradlew publishSnapshot -x check
+              ./gradlew publishDocs -i
+            fi
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/b30a7db820817acfc6d8

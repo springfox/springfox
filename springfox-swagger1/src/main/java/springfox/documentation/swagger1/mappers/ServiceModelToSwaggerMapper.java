@@ -37,7 +37,11 @@ import springfox.documentation.swagger1.dto.ResourceListing;
 import springfox.documentation.swagger1.dto.ResponseMessage;
 
 
-@Mapper(uses = {AllowableValuesMapper.class, DataTypeMapper.class, AuthorizationTypesMapper.class})
+@Mapper(uses = {
+    AllowableValuesMapper.class,
+    DataTypeMapper.class,
+    AuthorizationTypesMapper.class
+})
 public interface ServiceModelToSwaggerMapper {
   //Api related
   ApiDescription toSwaggerApiDescription(springfox.documentation.service.ApiDescription from);
@@ -50,13 +54,18 @@ public interface ServiceModelToSwaggerMapper {
   Contact map(springfox.documentation.service.Contact from);
 
   @Mappings({
-          @Mapping(target = "responseModel", source = "responseModel", qualifiedBy = DataTypeMapper.ResponseTypeName
-                  .class)
+          @Mapping(
+              target = "responseModel",
+              source = "responseModel",
+              qualifiedBy = DataTypeMapper.ResponseTypeName.class)
   })
   ResponseMessage toSwaggerResponseMessage(springfox.documentation.service.ResponseMessage from);
 
   springfox.documentation.swagger1.dto.ApiListingReference toSwaggerApiListingReference(ApiListingReference from);
 
+  @Mappings({
+      @Mapping(target = "subTypes", source = "subTypes", qualifiedBy = DataTypeMapper.ResponseTypeName.class),
+  })
   ModelDto toSwaggerModelDto(Model from);
 
   @Mappings({

@@ -18,7 +18,6 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -29,8 +28,7 @@ import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.NotNull;
-
-import static springfox.bean.validators.plugins.Validators.*;
+import java.util.Optional;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -46,7 +44,8 @@ public class ExpandedParameterNotNullAnnotationPlugin implements ExpandedParamet
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    Optional<NotNull> notNull = validatorFromExpandedParameter(context, NotNull.class);
+
+    Optional<NotNull> notNull = context.findAnnotation(NotNull.class);
 
     if (notNull.isPresent()) {
       LOG.debug("Setting parameter to required because of @NotNull attribute");

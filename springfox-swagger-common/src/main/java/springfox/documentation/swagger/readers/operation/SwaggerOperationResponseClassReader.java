@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -57,8 +57,8 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
 
     ResolvedType returnType = context.alternateFor(context.getReturnType());
     returnType = context.findAnnotation(ApiOperation.class)
-        .transform(resolvedTypeFromOperation(typeResolver, returnType))
-        .or(returnType);
+        .map(resolvedTypeFromOperation(typeResolver, returnType))
+        .orElse(returnType);
     if (canSkip(context, returnType)) {
       return;
     }

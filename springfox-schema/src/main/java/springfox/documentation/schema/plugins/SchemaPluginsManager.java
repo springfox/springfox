@@ -19,6 +19,7 @@
 
 package springfox.documentation.schema.plugins;
 
+import com.fasterxml.classmate.ResolvedType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -28,22 +29,35 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.Optional.*;
 
 @Component
 public class SchemaPluginsManager {
   private final PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers;
   private final PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers;
+  private final PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders;
 
   @Autowired
   public SchemaPluginsManager(
       @Qualifier("modelPropertyBuilderPluginRegistry")
-      PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers,
+          PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers,
       @Qualifier("modelBuilderPluginRegistry")
-      PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers) {
+          PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers,
+      @Qualifier("syntheticModelProviderPluginRegistry")
+          PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders) {
     this.propertyEnrichers = propertyEnrichers;
     this.modelEnrichers = modelEnrichers;
+    this.syntheticModelProviders = syntheticModelProviders;
   }
 
   public ModelProperty property(ModelPropertyContext context) {
@@ -60,4 +74,24 @@ public class SchemaPluginsManager {
     return context.getBuilder().build();
   }
 
+  public Optional<Model> syntheticModel(ModelContext context) {
+    if (syntheticModelProviders.hasPluginFor(context)) {
+      return of(syntheticModelProviders.getPluginFor(context).create(context));
+    }
+    return empty();
+  }
+
+  public List<ModelProperty> syntheticProperties(ModelContext context) {
+    if (syntheticModelProviders.hasPluginFor(context)) {
+      return syntheticModelProviders.getPluginFor(context).properties(context);
+    }
+    return new ArrayList<ModelProperty>();
+  }
+
+  public Set<ResolvedType> dependencies(ModelContext context) {
+    if (syntheticModelProviders.hasPluginFor(context)) {
+      return syntheticModelProviders.getPluginFor(context).dependencies(context);
+    }
+    return new HashSet<ResolvedType>();
+  }
 }

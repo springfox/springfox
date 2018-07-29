@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,18 +24,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.base.Function;
-import com.google.common.primitives.Ints;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
-import static com.google.common.collect.ImmutableSortedSet.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.*;
 
 @JsonPropertyOrder({
         "method", "summary", "notes", "type", "nickname", "produces",
@@ -66,11 +65,20 @@ public class Operation {
   public Operation() {
   }
 
-  public Operation(String method, String summary, String notes, String responseClass, String nickname, int position,
-                   List<String> produces, List<String> consumes, List<String> protocol,
-                   List<Authorization> authorizations,
-                   List<Parameter> parameters, Set<ResponseMessage> responseMessages,
-                   String deprecated) {
+  public Operation(
+      String method,
+      String summary,
+      String notes,
+      String responseClass,
+      String nickname,
+      int position,
+      List<String> produces,
+      List<String> consumes,
+      List<String> protocol,
+      List<Authorization> authorizations,
+      List<Parameter> parameters,
+      Set<ResponseMessage> responseMessages,
+      String deprecated) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -81,40 +89,19 @@ public class Operation {
     this.consumes = consumes;
     this.protocol = protocol;
     this.authorizations = toAuthorizationsMap(authorizations);
-    this.parameters = parameters;
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.parameters = parameters.stream()
+        .sorted(byName()).collect(toList());
+    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(() -> new TreeSet<>(responseMessageOrdering())));
     this.deprecated = deprecated;
   }
 
   private Comparator<ResponseMessage> responseMessageOrdering() {
-    return new Comparator<ResponseMessage>() {
-      @Override
-      public int compare(ResponseMessage first, ResponseMessage second) {
-        return Ints.compare(first.getCode(), second.getCode());
-      }
-    };
+    return Comparator.comparingInt(ResponseMessage::getCode);
   }
 
   private Map<String, List<AuthorizationScope>> toAuthorizationsMap(List<Authorization> authorizations) {
-    return transformEntries(uniqueIndex(authorizations, byType()), toScopes());
-  }
-
-  private EntryTransformer<? super String, ? super Authorization, List<AuthorizationScope>> toScopes() {
-    return new EntryTransformer<String, Authorization, List<AuthorizationScope>>() {
-      @Override
-      public List<AuthorizationScope> transformEntry(String key, Authorization value) {
-        return newArrayList(value.getScopes());
-      }
-    };
-  }
-
-  private Function<? super Authorization, String> byType() {
-    return new Function<Authorization, String>() {
-      @Override
-      public String apply(Authorization input) {
-        return input.getType();
-      }
-    };
+    return authorizations.stream()
+        .collect(toMap(Authorization::getType, value -> new ArrayList<>(value.getScopes())));
   }
 
   public String getMethod() {
@@ -203,7 +190,7 @@ public class Operation {
   }
 
   public void setResponseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
+    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(()->new TreeSet<>(responseMessageOrdering())));
   }
 
   public String getDeprecated() {
@@ -216,5 +203,9 @@ public class Operation {
 
   public void setDataType(SwaggerDataType dataType) {
     this.dataType = dataType;
+  }
+
+  private Comparator<Parameter> byName() {
+    return Comparator.comparing(Parameter::getName);
   }
 }

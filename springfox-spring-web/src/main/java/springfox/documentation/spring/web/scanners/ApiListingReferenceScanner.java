@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.collect.ArrayListMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -29,8 +28,12 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Multimaps.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.*;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -40,21 +43,24 @@ public class ApiListingReferenceScanner {
   public ApiListingReferenceScanResult scan(DocumentationContext context) {
     LOG.info("Scanning for api listing references");
 
-    ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
-        = ArrayListMultimap.create();
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings
+        = new HashMap<>();
     ApiSelector selector = context.getApiSelector();
-    Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
-        .filter(selector.getRequestHandlerSelector());
+    Iterable<RequestHandler> matchingHandlers = context.getRequestHandlers().stream()
+        .filter(selector.getRequestHandlerSelector()).collect(toList());
     for (RequestHandler handler : matchingHandlers) {
-      ResourceGroup resourceGroup = new ResourceGroup(handler.groupName(),
-          handler.declaringClass(), 0);
+      ResourceGroup resourceGroup = new ResourceGroup(
+          handler.groupName(),
+          handler.declaringClass(),
+          0);
 
       RequestMappingContext requestMappingContext
           = new RequestMappingContext(context, handler);
 
-      resourceGroupRequestMappings.put(resourceGroup, requestMappingContext);
+      resourceGroupRequestMappings.putIfAbsent(resourceGroup, new ArrayList<>());
+      resourceGroupRequestMappings.get(resourceGroup).add(requestMappingContext);
     }
-    return new ApiListingReferenceScanResult(asMap(resourceGroupRequestMappings));
+    return new ApiListingReferenceScanResult(resourceGroupRequestMappings);
   }
 
 }

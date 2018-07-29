@@ -1,4 +1,146 @@
-#2.8.0 Release Notes
+# 2.9.2 Release Notes
+This is mostly a service release. Predominantly to publish the repository to maven along with minor improvements
+
+## Pull requests and contributions
+- (#2492) Added missing backtick   @TwinProduction
+- (#2465) X-Forwarded-Prefix should replace basePath in newer spring versions   @rainoko
+- (#2464) Remove replaceAll with trim   @ctruzzi
+- (#2434) Add csrf token support   @olOwOlo
+- (#2429) Remove output related to fixed issue (#1244) #2428   @haelduksf
+- (#2404) Using media type to determine correct param type when expanding param…   @andyRokit
+
+## Bugs
+- (#2502) OperationContext only finds SecurityContext's by path ignoring methods 
+@robinsonmark 
+- (#2481) ConditionalOnWebApplication not found after upgrading to 2.9.0  `duplicate` @gionn
+- (#2461) 2.8.0 /swagger-resource/configuration/ui does not set Accept header properly  @OverDrone
+- (#2446) ApiParam allowableValues string with spaces is not supported  @uriparush
+- (#2438) Upgrade to SpringFox 2.9.0 causes failures in Spring Boot 2.0.2.RELEASE  @james
+- (#2428) description = "@Size: Min - Max (until #1244 gets fixed)" when param annotated with @Min and/or @Max but #1244 is already fixed  @haelduksf
+- (#2423) Query Parameter extracted from Object doesn't recognize public field without getter  @kintomiko
+- (#2415) JSR-303: Size annotation on Path Param generates maximum/minimum, but on Model generates maxLength/minLength  @retinaburn
+- (#2401) Present multipart object attributes as "formData"  `duplicate` @andyRokit
+- (#2376) Model attribute expansion should respect form/query parameter type 
+@dilipkrish
+- (#2498) Path Parameter generated having unsupported properties `duplicate` @FossilBlade
+- (#2481) ConditionalOnWebApplication not found after upgrading to 2.9.0  `duplicate` @gionn
+- (#2466) There is no jar in maven repo.Why? `duplicate` @litttlefisher
+- (#2441) Upgrading from 2.8.0 to 2.9.0 causes SpringBootTest to stop working `duplicate` @maraswrona
+- (#2401) Present multipart object attributes as "formData"  `duplicate` @andyRokit
+- (#755) o.s.data.domain.Pageable - automatically add @ApiImplicitParams? can-use-for-docs `duplicate`  @steve
+
+## Feature
+- (#2180) Is it possible to document OAuth 2 scopes for different HTTP methods? feature @Beontra
+
+
+## Maintenance
+- (#2503) Upgrade libraries and patch versions  @dilipkrish
+- (#2448) X-Forwarded-prefix not work as expected since spring version 4.3.15  @rainoko
+
+
+# 2.9.0 Release Notes
+This is the last release supporting jdk 6 and spring 4.x. The next planned release is 3.0 which will have jdk 8 as a pre-requisite. There was a large effort to ensure a stable release before moving to the next major release. A big thank you again for the numerous feature/bug requests for making this product better and supporting this library. 
+
+A special thank you to @kasecato, @MaksimOrlov, @neumaennl, @rgoers and @Fyro-Ing for working on some much requested features.
+
+NOTE: All deprecations will be removed when we move to 3.0
+
+## Pull Requests
+- (#2356) Add tag vendor extensions  @nhtzr 
+- (#2323) fix for spring data rest 3.0.5.RELEASE while maintaining backward com…  @deodeveloper 
+- (#2313) springfox-data-rest: fix EntitySearchExtractor return type  @iles
+- (#2302) Fix several typos in the documentation  can-use-for-docs @rillig
+- (#2288) add Bean Property Definition presence check  @bratwurzt 
+- (#2277) Not checking if defaultValue on is empty  @matthewmcgarvey 
+- (#2275) Take the parameter name from attribute @RequestPart value  @VasilievAleksey 
+- (#2264) Upgrading swagger-ui to 3.11.0  maintenance @kasecato 
+- (#2258) Issue 2257 fix default file encoding related failures  @atsu85 
+- (#2228) Added minify plugin  maintenance @kasecato 
+- (#2225) Added support for IE 11 and Edge  @kasecato 
+- (#2163) add @SwaggerExampleObject annotation.  @gena
+- (#1817) Support javadoc based document generation => Issue 1691  @rgoers 
+- (#1671) General functionality for comparing models. Initial support for #182, #807, #895, #1356  @MaksimOrlov 
+- (#1152) Add Polymorphism Support  @Fyro-Ing
+
+## Features
+- (#2361) Make Documentation Plugins Bootstrapper autostart configurable feature @dilipkrish 
+- (#2293) Added Vendor Extensions Support to Tag object feature help wanted @nhtzr 
+- (#2253) Producing "x-example" with @ApiParam for @PathVariable feature help wanted @kilsbo 
+- (#2166) Swagger UI 3.x Suggested Improvements feature help wanted @dilipkrish 
+- (#2125) I want to Example Value customize feature help wanted @cheese10yun 
+- (#1903) XmlAttribute not applied duplicate feature @janfockaert 
+- (#1151) Add Polymorphism Support feature @Fyro
+- (#868) Springfox support for polymorphism duplicate feature help wanted @sunaina
+- (#2043) Generate own model @deblockt 
+- (#1700) @ApiModelProperty add example will be parsed to json `duplicate` @igieon 
+- (#1232) Externalizing Descriptions of Api-Annotations (ApiModel/ApiModelProperty/...) @jfiala 
+- (#1449) @ApiModelProperty not displaying attribute when using @ModelAttributeode `duplicate` @rantunesboreas
+
+## Bugs
+- (#2039) Endpoints with the same path and parameters but different headers some times cause java.lang.IllegalArgumentException: Multiple entries with same key  @joaoacmota 
+- (#2194) Swagger-UI authorization headers stopped being sent in 2.8.0  @ctmay4 
+- (#1964) How to disable 'example' output in models for booleans  @fairct 
+- (#2127) Endpoints not exported with Spring Data REST  has-workaround @drenda 
+- (#1827) Error when rendering recursively defined models  @tcsw1221 
+- (#2230) @XMLRootElement and @XmlAttribute ignored  @rstmm 
+- (#2265) @ApiModelProperty throwing NumberFormatException if example value is not set  wontfix @nikunjundhad 
+- (#2204) Schema error: should NOT have additional properties allowEmptyValue  @igorko 
+- (#2203) Nested maps are not being converted properly to Swagger models  @francocm 
+- (#1937) @ModelAttribute with getters and no setters  @bademux 
+- (#2357) swagger-ui.html in 2.8.0 contains references to 2.8.0-SNAPSHOT  @nahguam 
+- (#1831) @ApiParam hidden=true does not work on @RequestHeader  help wanted @scottf 
+- (#2231) Cannot create a rule to substitute list items with primitive types  @mclem 
+- (#2182) JsonUnwrapped prefix ignored in release 2.7.0  @ccdd4ever 
+- (#2314) UUID parameters don't have format "uuid"  @dominik
+- (#2249) How to avoid the automatic number convertion for example  @thelo
+- (#2368) Void type in @ModelAttribute annotated classes.  @MaksimOrlov 
+- (#1944) @ApiResponse(... response = Void.class) produces empty model, (... response = void.class) does not  has-workaround @rtomsick 
+- (#2076) How to convert a model Property to an Attribute in XML based req/res spring boot application?  @vinodamity 
+- (#2226) JAXB is required as explicit dependency for kotlin service/  @flatiron32 
+- (#2257) Tests fail on windows  @atsu85 
+- (#2272) springfox-data-rest v3 support  `duplicate` @PascalSchumacher 
+- (#2311) springfox-data-rest: Inconsistent model returned between findAll and search methods  @iles
+- (#2322) NumberFormatException when parsing node name from Forward header with double quotes  `not-reproducable` @thiagolocatelli 
+- (#2216) Springfox Swagger UI [2.8] IE / Edge Support  @gerard
+- (#2278) Swagger UI 2.8.0 doesn't show response working with ApiOperation  can-use-for-docs @mhersc1 
+- (#2320) SpringFox 2.8.0 Error: "Could not resolve pointer: /definitions/String"  @mrgrew 
+- (#2212) SizeAnnotationPlugin spams log at INFO level  @shabino 
+- (#2220) OperationParameterReader does not process optional path parameters correctly  @raphw 
+- (#2235) Full URLs in /swagger-resources no longer works after 2.7.0 -> 2.8.0 Upgrade  @gloeglm 
+- (#2263) @RequestPart "name/value" attribute ignored  @fschmager 
+- (#2268) Optional query parameters are marked as required in the UI  `not-reproducable` @ok11 
+- (#2271) When there are two return bodies with the same name class, only one class parameter can be parsed normally. For example: two Data classes  `duplicate` @k631583871 
+- (#2282) java.lang.StackOverflowError happened when model extends genericity class  @Seven4X 
+- (#2283) IE11 browsers can't display page on version 2.8.0  `duplicate` @903452746 
+- (#2296) @RequestParam field with default value "" (empty string) is marked required  `duplicate` @Mumi
+- (#2298) Support for breaking spring-data-rest changes `java.lang.NoSuchMethodError`  `duplicate` @salah3x 
+- (#2309) Swagger-ui web jar is not producing the artifact correctly  @dilipkrish 
+- (#2315) Swagger 2.8.0 not working on IE11  `duplicate` @Snina88 
+- (#2316) @RequestPart not reporting type or allowableValues in generated API  `not-reproducable` @bgiaccio 
+- (#2347) Parameter Vendor Extensions doesn't show up in generated spec  @RisenZhong 
+- (#2276) @RequestParam with defaultValue of empty string on String parameter marked as required  @matthewmcgarvey 
+- (#2286) [XmlPropertyPlugin]: Optional.get() cannot be called on an absent value  @bratwurzt 
+- (#2370) Not able to disable schema validation.  @makcpop 
+- (#1909) springfox doesn't work with Jackson 2.9.0.pr4 beihaifeiwu 
+- (#2344) When i use Swagger Junit is not working not working  @pparnati 
+- (#2365) The json serialiser ignores the dataType when output the digits only string @ouya2
+
+## Maintenance
+- (#2350) Upgrade libraries  @dilipkrish 
+- (#2329) Activate springfox only when web environment is available  @dilipkrish 
+- (#2264) Upgrading swagger-ui to 3.11.0  `PR`  @kasecato 
+- (#2256) Docket SecurityContexts to filter by HTTP methods  @vadimkim 
+- (#2252) Suggestion about PojoPropertyBuilderFactory: Change the alerts about Jackson 2.6 compliance  @rs
+- (#2243) Remove dependency on org.reflections.Reflections  @leewinder 
+- (#2228) Added minify plugin  `PR`  @kasecato 
+- (#2219) ApiListingScannerPlugin is ignored if no Spring controller is registered  @raphw 
+- (#2137) From swagger editor able to get the JWT auth token, but from application which enabled swagger-ui using springfox is not working  @ranjithap7576 
+- (#1980) spring-data-rest RepositoryRestResource.collectionResourceRel not Mapped in Model  @n3utrino 
+- (#1973) Springfox Swagger configuration breaks customized ObjectMapper in Spring Boot has-workaround  @avillev 
+- (#1680) HAL `Resources` not rendered correctly `duplicate` @raffaelschmid
+- (#1657) Parameter vendor extension support @zidanluo
+
+# 2.8.0 Release Notes
 
 ## Pull Requests
 - (#2178) Change regex in Paths.java to handle expressions/constraints correctly @nobe0716

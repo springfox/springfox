@@ -61,7 +61,7 @@ public abstract class AbstractPathProvider implements PathProvider {
    *
    * Includes the apiResourcePrefix
    *
-   * @param operationPath
+   * @param operationPath operation path
    * @return the relative path to the api operation
    * @see AbstractPathProvider#getApplicationBasePath()
    */

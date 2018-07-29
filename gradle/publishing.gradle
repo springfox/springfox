@@ -1,10 +1,30 @@
 import springfox.gradlebuild.plugins.MultiProjectReleasePlugin
+import java.text.SimpleDateFormat
 
-apply plugin: 'maven-publish'
+Date buildTimeAndDate = new Date()
 
 ext {
-  relUsername = project.hasProperty('bintrayUsername') ? project.property('bintrayUsername') : 'admin'
-  relPassword = project.hasProperty('bintrayPassword') ? project.property('bintrayPassword') : 'password'
+  buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+  buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+  projectUrl = "https://github.com/springfox/springfox"
+  bintrayUser = project.hasProperty('bintrayUsername') ?
+      project.property('bintrayUsername') :
+      System.getenv('BINTRAY_USER_NAME')
+  bintrayApiKey = project.hasProperty('bintrayApiKey') ?
+      project.property('bintrayApiKey') :
+      System.getenv('BINTRAY_PASSWORD')
+  passphrase = project.hasProperty('gpgPassphrase') ?
+      project.property('gpgPassphrase') :
+      System.getenv('GPG_PASSPHRASE')
+  sonatypeUser = project.hasProperty('ossUser') ?
+      project.property('ossUser') :
+      System.getenv('SONATYPE_USER_NAME')
+  sonatypePassword = project.hasProperty('ossPassword') ?
+      project.property('ossPassword') :
+      System.getenv('SONATYPE_PASSWORD')
+  shouldSyncWithMavenCentral = project.hasProperty('ossSync') ?
+      project.property('ossSync') :
+      System.getenv('SONATYPE_SYNC')
 
   pomMetaData = {
     resolveStrategy = Closure.DELEGATE_FIRST
@@ -80,6 +100,24 @@ ext {
   }
 }
 
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: "com.jfrog.artifactory"
+
+jar {
+  manifest {
+    attributes(
+        'Implementation-Title': "${project.name}",
+        'Implementation-Version': version.toString(),
+        'Created-By': System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')',
+        'Built-With': "gradle-${project.getGradle().getGradleVersion()}, groovy-${GroovySystem.getVersion()}",
+        'Build-Time': "${new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")}",
+        'Built-By': System.getProperty('user.name'),
+        'Built-On': "${InetAddress.localHost.hostName}/${InetAddress.localHost.hostAddress}"
+    )
+  }
+}
+
 def generatedSources = "$buildDir/generated/source/apt/main"
 
 task packageSources(type: Jar) {
@@ -93,6 +131,10 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
   from javadoc.destinationDir
 }
 
+artifacts {
+  archives packageSources
+  archives javadocJar
+}
 
 if (JavaVersion.current().isJava8Compatible()) {
   tasks.withType(Javadoc) {
@@ -101,76 +143,70 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 publishing {
-
-  repositories {
-    configure(rootProject.ext.releaseRepos)
-  }
-
   publications {
     mavenJava(MavenPublication) {
-      groupId 'io.springfox'
       from components.java
-
-      artifact packageSources {
-        classifier "sources"
-      }
-
-      artifact(javadocJar) {
-        classifier = 'javadoc'
-      }
-      //TODO - not right that every artifact has the same (pom) dependencies
       pom.withXml springfoxPomConfig
+      artifact packageSources
+      artifact javadocJar
     }
   }
 }
 
-if (!isSnapshot()) {
 
-  apply plugin: 'com.jfrog.bintray'
-  bintray {
-    user = rootProject.ext.bintrayCredentials.username
-    key = rootProject.ext.bintrayCredentials.password
-
-
-    publications = ['mavenJava']
-    dryRun = MultiProjectReleasePlugin.dryRun(project) //Whether to run this as dry-run, without deploying
-    publish = true //If version should be auto published after an upload
-    pkg {
-      repo = 'maven-repo'
-      userOrg = 'springfox' //An optional organization name when the repo belongs to one of the user's orgs
-      name = 'springfox'
-      desc = 'A suite of libraries for documenting spring based JSON APIs '
-      websiteUrl = 'https://github.com/springfox/springfox'
-      issueTrackerUrl = 'https://github.com/springfox/springfox/issues'
-      vcsUrl = 'https://github.com/springfox/springfox.git'
-      licenses = ['Apache-2.0']
-      labels = ['spring', 'swagger', 'apis']
-      publicDownloadNumbers = true
-
-      //Optional version descriptor
-//      version {
-//        name = '${project.rootProject.version}' //Bintray logical version name
-//        desc = 'Version: ${project.rootProject.version}'
-//        released = '${new java.util.Date()}' //2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ'
-//         OR a java.util.Date instance
-//        vcsTag = '${project.rootProject.version}'
-//      attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin'] //Optional version-level attributes
-//      gpg {
-//        sign = true //Determines whether to GPG sign the files. The default is false
-//        passphrase = 'passphrase' //Optional. The passphrase for GPG signing'
-//      }
-//      mavenCentralSync {
-//        sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
-//        user = 'userToken' //OSS user token
-//        password = 'password' //OSS user password
-//        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by putting 0 as value) and release the version manually.
-//      }
-//      }
+artifactory {
+  contextUrl = 'https://oss.jfrog.org'
+  resolve {
+    repository {
+      repoKey = 'libs-release'
+      maven = true
+    }
+  }
+  publish {
+    repository {
+      repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
+      //when using oss.jfrog.org the credentials are from Bintray. For local build we expect them to be found in
+      //~/.gradle/gradle.properties, otherwise to be set in the build server
+      username = project.bintrayUser
+      password = project.bintrayApiKey
+    }
+    defaults {
+      publications('mavenJava')
     }
   }
 }
 
-def isSnapshot() {
-  project.gradle.startParameter.taskNames.contains("snapshot")
+bintray {
+  user = project.bintrayUser
+  key = project.bintrayApiKey
+  dryRun = MultiProjectReleasePlugin.dryRun(project) //Whether to run this as dry-run, without deploying
+  publish = true //If version should be auto published after an upload
+  publications = ['mavenJava']
+  pkg {
+    repo = 'maven-repo'
+    name = "springfox"
+    userOrg = "springfox"
+    websiteUrl = "${project.projectUrl}"
+    issueTrackerUrl = "${project.projectUrl}/issues"
+    vcsUrl = "${project.projectUrl}.git"
+    desc = project.description
+    licenses = ['Apache-2.0']
+    labels = ['spring', 'swagger', 'apis', 'oas', 'openapi', 'springfox']
+    publicDownloadNumbers = true
+    version {
+      vcsTag = project.version
+      gpg {
+        sign = true //Determines whether to GPG sign the files. The default is false
+        //Optional. The passphrase for GPG signing'
+        passphrase = project.passphrase
+      }
+      mavenCentralSync {
+        sync = ("true" == project.shouldSyncWithMavenCentral)
+        user = project.sonatypeUser
+        password = project.sonatypePassword
+        close = '1'
+      }
+    }
+  }
 }
 

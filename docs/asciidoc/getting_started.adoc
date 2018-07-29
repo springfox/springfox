@@ -106,10 +106,10 @@ see `newArrayList(...)` its actually the guava equivalent of creating an normal 
 [subs="verbatim,attributes"]
 ----
 //This guava code snippet
-List<Something> guavaList = newArrayList(new Something);
+List<Something> guavaList = newArrayList(new Something());
 
 //... is equivalent to
-List<Something> list = new ArrayList<Something>();
+List<Something> list = new ArrayList<>();
 list.add(new Something());
 ----
 
@@ -122,43 +122,45 @@ via swagger.
 (default). Out of the box predicates provided are `any`, `none`, `withClassAnnotation`, `withMethodAnnotation` and
 `basePackage`.
 <6> `paths()` allows selection of ``Path``'s using a predicate. The example here uses an `any` predicate (default). Out of the box we provide predicates for `regex`, `ant`, `any`, `none`.
-<7> The selector requires to be built after configuring the api and path selectors.
-<8> Adds a servlet path mapping, when the servlet has a path mapping. this prefixes paths with the provided path
-mapping
-<9> Convenience rule builder substitutes `LocalDate` with `String` when rendering model properties
+<7> The selector needs to be built after configuring the api and path selectors.
+<8> Adds a servlet path mapping, when the servlet has a path mapping.
+This prefixes paths with the provided path mapping.
+<9> Convenience rule builder that substitutes `LocalDate` with `String` when rendering model properties
 <10> Convenience rule builder that substitutes a generic type with one type parameter with the type
-parameter. In this example `ResponseEntity<T>` with `T`. `alternateTypeRules` allows custom rules that are a bit more
- involved. The example substitutes  `DeferredResult<ResponseEntity<T>>`  with `T` generically
-<11> Flag to indicate if default http response codes need to be used or not
+parameter. In this example `ResponseEntity<T>` with `T`.
+`alternateTypeRules` allows custom rules that are a bit more involved.
+The example substitutes  `DeferredResult<ResponseEntity<T>>`  with `T` generically.
+<11> Flag to indicate if default http response codes need to be used or not.
 <12> Allows globally overriding response messages for different http methods. In this example we override the 500
-error code for all `GET`s ...
-<13> ...and indicate that it will use the response model `Error` (which will be defined elsewhere)
+error code for all `GET` requests ...
+<13> ... and indicate that it will use the response model `Error` (which will be defined elsewhere)
 <14> Sets up the security schemes used to protect the apis. Supported schemes are ApiKey, BasicAuth and OAuth
 <15> Provides a way to globally set up security contexts for operation. The idea here is that we provide a way to
 select operations to be protected by one of the specified security schemes.
 <16> Here we use ApiKey as the security schema that is identified by the name `mykey`
 <17> Selector for the paths this security context applies to.
-<18> Here we same key defined in the security scheme `mykey`
+<18> Here we use the same key defined in the security scheme `mykey`
 <19> Optional swagger-ui security configuration for oauth and apiKey settings
 <20> Optional swagger-ui ui configuration currently only supports the validation url
 <21> * _Incubating_ * setting this flag signals to the processor that the paths generated should try and use
 https://tools.ietf.org/html/rfc6570#section-3.2.8[form style query expansion]. As a result we could distinguish paths
  that have the same path stem but different query string combinations. An example of this would be two apis:
-* http://example.org/findCustomersBy?name=Test to find customers by name. Per https://tools.ietf.org/html/rfc6570[RFC
- 6570] This would be represented as http://example.org/findCustomersBy{?name}
-* http://example.org/findCustomersBy?zip=76051 to find customers by zip. Per https://tools.ietf.org/html/rfc6570[RFC
-  6570] This would be represented as http://example.org/findCustomersBy{?zip}
+First, http://example.org/findCustomersBy?name=Test to find customers by name.
+Per https://tools.ietf.org/html/rfc6570[RFC 6570],
+this would be represented as http://example.org/findCustomersBy{?name}.
+Second, http://example.org/findCustomersBy?zip=76051 to find customers by zip.
+Per https://tools.ietf.org/html/rfc6570[RFC 6570],
+this would be represented as http://example.org/findCustomersBy{?zip}.
 <22> Allows globally configuration of default path-/request-/headerparameters which are common for every rest operation of the api, but aren`t needed in spring controller method signature (for example authenticaton information). Parameters added here will be part of every API Operation in the generated swagger specification.
-<23> How do you want to transport the api key via a HEADER (header) or QUERY_PARAM (query)?
-<24> What header key needs to be used to send the api key. By default this value is set to ___api_key___. Depending
 on how the security is setup the name of the header used may need to be different. Overriding this value is a way to
 override the default behavior.
-<25> Adding tags is a way to define all the available tags that services/operations can opt into. Currently this only
+<23> Adding tags is a way to define all the available tags that services/operations can opt into. Currently this only
  has name and description.
-<26> Are there models in the application that are not "reachable"? Not reachable is when we have models that we would
+<24> Are there models in the application that are not "reachable"? Not reachable is when we have models that we would
  like to be described but aren't explicitly used in any operation. An example of this is an operation that returns a
  model serialized as a string. We do want to communicate the expectation of the schema for the string. This is a way
  to do exactly that.
+
 There are plenty of more options to configure the `Docket`. This should provide a good start.
 
 === Springfox Spring Data Rest
@@ -297,9 +299,9 @@ Since swagger ui is a static resource it needs to rely on *known* endpoints to c
 ☝️ are ***cool uris** that cannot change. There is <<q13,some customization>> that is possible, but swagger-ui needs
 to be available at the root of the _webcontext_.
 
-Regarding [where swagger-ui itself is served](http://springfox.github.io/springfox/docs/current/#q13) and [where the
-api docs are served](http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints) those are
- totally configurable.
+Regarding http://springfox.github.io/springfox/docs/current/#q13[where swagger-ui itself is served]
+and http://springfox.github.io/springfox/docs/current/#customizing-the-swagger-endpoints[where the api docs are served]
+those are totally configurable.
 
 === Springfox RFC6570 support *incubating*
 NOTE: _Keep in mind this is experimental_!
@@ -330,6 +332,108 @@ For maven:
 NOTE: The newer version has changed the group id from `_io.springfox_` to `_io.springfox.ui_`!
 
 - Enable url templating; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
+
+=== Securing swagger-ui
+https://github.com/springfox/springfox/issues/2191#issuecomment-359159833[The user contributed example] uses OAuth2 and
+cookies-based auth in the browser. (Credit: https://github.com/evser[@evser])
+
+[source,java]
+[subs="verbatim,attributes"]
+----
+       protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        .anyRequest().authenticated()
+        .and().exceptionHandling().accessDeniedHandler(new AccessDeniedHandlerImpl())
+        .and().logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+        .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+        .addFilterBefore(ssoFilter(ApplicationConfiguration.API_BASE_PATH + "/login"), BasicAuthenticationFilter.class)
+        .requiresChannel().anyRequest().requireSecure();
+  }
+
+  @Bean
+  public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
+    FilterRegistrationBean frb = new FilterRegistrationBean();
+    frb.setFilter(filter);
+    frb.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER);
+    return frb;
+  }
+
+  @Bean
+  @ConfigurationProperties("oauth2.client")
+  public OAuth2ProtectedResourceDetails authDetails() {
+    return new AuthorizationCodeResourceDetails();
+  }
+
+  @Bean
+  public SecurityConfiguration swaggerSecurityConfiguration() {
+    return new SecurityConfiguration("client-id", "client-secret", "realm",
+        "", "{{X-XSRF-COOKIE}}", ApiKeyVehicle.HEADER, "X-XSRF-TOKEN", ",");
+  }
+
+  private Filter ssoFilter(String path) {
+    OAuth2ClientAuthenticationProcessingFilter oAuth2ClientAuthenticationFilter = new OAuth2ClientAuthenticationProcessingFilter(path);
+    OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(authDetails(), oauth2ClientContext);
+    DefaultRedirectStrategy defaultRedirectStrategy = new DefaultRedirectStrategy();
+    oAuth2ClientAuthenticationFilter.setRestTemplate(oAuth2RestTemplate);
+    oAuth2ClientAuthenticationFilter.setTokenServices(resourceServerTokenServices);
+    oAuth2ClientAuthenticationFilter.setAuthenticationSuccessHandler(
+        (request, response, authentication) -> {
+          String redirectUrl = request.getParameter(REDIRECT_URL_PARAM);
+          if (redirectUrl == null) {
+            redirectUrl = DEFAULT_REDIRECT_URL;
+          } else {
+            if (!redirectUrlValidator.validateRedirectUrl(redirectUrl)) {
+              request.setAttribute(MESSAGE_ATTRIBUTE_NAME,
+                  messageSource.getMessage("ivalid.redirect.url", new String[] { redirectUrl }, LocaleContextHolder.getLocale()));
+              response.sendError(HttpStatus.FORBIDDEN.value());
+            }
+          }
+          defaultRedirectStrategy.sendRedirect(request, response, redirectUrl);
+        });
+    return oAuth2ClientAuthenticationFilter;
+  }
+----
+
+
+And configure the Docket to be secured via the `AUTHORIZATION` header:
+[source,java]
+[subs="verbatim,attributes"]
+----
+
+  @Bean
+  public Docket api() throws IOException, URISyntaxException {
+    final List<ResponseMessage> globalResponses = Arrays.asList(
+        new ResponseMessageBuilder()
+            .code(200)
+            .message("OK")
+            .build(),
+        new ResponseMessageBuilder()
+            .code(400)
+            .message("Bad Request")
+            .build(),
+        new ResponseMessageBuilder()
+            .code(500)
+            .message("Internal Error")
+            .build());
+    final ApiInfo apiInfo = new ApiInfo("REST API", new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(CHANGELOG_FILENAME)))
+        .lines()
+        .collect(Collectors.joining(System.lineSeparator())),
+        "1.0.0-RC1", "", new Contact("team", "", "bla@bla.com"), "", "", Collections.emptyList());
+    return new Docket(DocumentationType.SWAGGER_2),
+        .securitySchemes(Arrays.asList(new ApiKey("Token Access", HttpHeaders.AUTHORIZATION, In.HEADER.name()))))
+        .useDefaultResponseMessages(false)
+        .globalResponseMessage(RequestMethod.GET, globalResponses)
+        .globalResponseMessage(RequestMethod.POST, globalResponses)
+        .globalResponseMessage(RequestMethod.DELETE, globalResponses)
+        .globalResponseMessage(RequestMethod.PATCH, globalResponses)
+        .select()
+        .apis(RequestHandlerSelectors.basePackage("com.controller"))
+        .build()
+        .apiInfo(apiInfo)
+        .directModelSubstitute(Temporal.class, String.class);
+  }
+----
 
 === Springfox samples
 The https://github.com/springfox/springfox-demos[springfox-demos] repository contains a number of samples.

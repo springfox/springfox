@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@
  */
 package springfox.documentation.spring.web.paths;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -32,40 +29,40 @@ import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Predicates.*;
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.FluentIterable.*;
+import static java.util.Comparator.*;
+import static java.util.stream.Collectors.*;
+import static org.springframework.util.StringUtils.*;
 
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE + 60)
 class QueryStringUriTemplateDecorator implements PathDecorator {
   @Override
   public Function<String, String> decorator(final PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        StringBuilder sb = new StringBuilder(input);
-        String prefilled = prefilledQueryParams(context);
-        if (!isNullOrEmpty(prefilled)) {
-          sb.append(requiresContinuation(input) ? "&" : "?");
-          sb.append(prefilled);
-        }
-        Set<String> expressions = queryParamNames(context);
-        if (expressions.size() == 0) {
-          return sb.toString();
-        }
-        String prefix = queryTemplatePrefix(input, prefilled);
-        String queryTemplate = Joiner.on(',').join(expressions);
-        sb.append(prefix).append(queryTemplate).append("}");
+    return input -> {
+      StringBuilder sb = new StringBuilder(input);
+      String prefilled = prefilledQueryParams(context);
+      if (!isEmpty(prefilled)) {
+        sb.append(requiresContinuation(input) ? "&" : "?");
+        sb.append(prefilled);
+      }
+      Set<String> expressions = queryParamNames(context);
+      if (expressions.size() == 0) {
         return sb.toString();
       }
+      String prefix = queryTemplatePrefix(input, prefilled);
+      String queryTemplate = String.join(",", expressions);
+      sb.append(prefix).append(queryTemplate).append("}");
+      return sb.toString();
     };
   }
 
   private String queryTemplatePrefix(String input, String prefilled) {
     String prefix;
-    if (isNullOrEmpty(prefilled)) {
+    if (isEmpty(prefilled)) {
       if (requiresContinuation(input)) {
         prefix = "{&";
       } else {
@@ -81,59 +78,41 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
     return url.contains("?");
   }
 
+  @SuppressWarnings("unchecked")
   private Set<String> queryParamNames(PathContext context) {
-    return from(context.getParameters())
-        .filter(and(queryStringParams(), not(onlyOneAllowableValue())))
-        .transform(paramName())
-        .toSet();
+    return context.getParameters().stream()
+        .filter(queryStringParams().and(onlyOneAllowableValue().negate()))
+        .map(Parameter::getName)
+        .collect(toCollection(() -> new TreeSet(naturalOrder())));
   }
 
+  @SuppressWarnings("unchecked")
   private String prefilledQueryParams(PathContext context) {
-    return Joiner.on("&").join(from(context.getParameters())
+    return String.join("&", context.getParameters().stream()
         .filter(onlyOneAllowableValue())
-        .transform(queryStringWithValue())
-        .toSet())
+        .map(queryStringWithValue())
+        .collect(toCollection(() -> new TreeSet(naturalOrder()))))
         .trim();
   }
 
   private Predicate<Parameter> onlyOneAllowableValue() {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean apply(Parameter input) {
-        AllowableValues allowableValues = input.getAllowableValues();
-        return allowableValues != null
-            && allowableValues instanceof AllowableListValues
-            && ((AllowableListValues) allowableValues).getValues().size() == 1;
-      }
+    return input -> {
+      AllowableValues allowableValues = input.getAllowableValues();
+      return allowableValues != null
+          && allowableValues instanceof AllowableListValues
+          && ((AllowableListValues) allowableValues).getValues().size() == 1;
     };
   }
 
   private Predicate<Parameter> queryStringParams() {
-    return new Predicate<Parameter>() {
-      @Override
-      public boolean apply(Parameter input) {
-        return "query".equals(input.getParamType());
-      }
-    };
-  }
-
-  private Function<Parameter, String> paramName() {
-    return new Function<Parameter, String>() {
-      @Override
-      public String apply(Parameter input) {
-        return input.getName();
-      }
-    };
+    return input -> "query".equals(input.getParamType());
   }
 
 
   private Function<Parameter, String> queryStringWithValue() {
-    return new Function<Parameter, String>() {
-      @Override
-      public String apply(Parameter input) {
-        AllowableListValues allowableValues = (AllowableListValues) input.getAllowableValues();
-        return String.format("%s=%s", input.getName(), allowableValues.getValues().get(0).trim());
-      }
+    return input -> {
+      AllowableListValues allowableValues = (AllowableListValues) input.getAllowableValues();
+      return String.format("%s=%s", input.getName(), allowableValues.getValues().get(0).trim());
     };
   }
 

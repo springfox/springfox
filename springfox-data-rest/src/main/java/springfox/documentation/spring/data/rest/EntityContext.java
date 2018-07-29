@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.context.PersistentEntities;
 import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -33,6 +34,7 @@ import org.springframework.data.rest.webmvc.mapping.Associations;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 
 public class EntityContext {
   private final RepositoryRestConfiguration configuration;
@@ -71,7 +73,7 @@ public class EntityContext {
     return resource.getDomainType().getSimpleName();
   }
 
-  public PersistentEntity<?, ?> entity() {
+  public Optional<PersistentEntity<?, ? extends PersistentProperty<?>>> entity() {
     return entities.getPersistentEntity(resource.getDomainType());
   }
 

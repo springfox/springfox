@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@
 
 package springfox.documentation.builders;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.TreeMultimap;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.ResourceListing;
@@ -30,30 +27,32 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
-import static com.google.common.collect.Sets.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class DocumentationBuilder {
   private String groupName;
-  private Multimap<String, ApiListing> apiListings = TreeMultimap.create(Ordering.natural(), byListingPosition());
+  private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());
   private ResourceListing resourceListing;
-  private Set<Tag> tags = newLinkedHashSet();
+  private Set<Tag> tags = new LinkedHashSet<>();
   private String basePath;
-  private Set<String> produces = newLinkedHashSet();
-  private Set<String> consumes = newLinkedHashSet();
+  private Set<String> produces = new LinkedHashSet<>();
+  private Set<String> consumes = new LinkedHashSet<>();
   private String host;
-  private Set<String> schemes = newLinkedHashSet();
-  private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();
+  private Set<String> schemes = new LinkedHashSet<>();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
 
   /**
    * Name of the documentation group
    *
    * @param groupName - group name
-   * @return
+   * @return this
    */
   public DocumentationBuilder name(String groupName) {
     this.groupName = defaultIfAbsent(groupName, this.groupName);
@@ -66,8 +65,18 @@ public class DocumentationBuilder {
    * @param apiListings - entries to add to the existing documentation
    * @return this
    */
-  public DocumentationBuilder apiListingsByResourceGroupName(Multimap<String, ApiListing> apiListings) {
-    this.apiListings.putAll(nullToEmptyMultimap(apiListings));
+  public DocumentationBuilder apiListingsByResourceGroupName(Map<String, List<ApiListing>> apiListings) {
+    nullToEmptyMultimap(apiListings).entrySet().stream().forEachOrdered(entry -> {
+      List<ApiListing> list;
+      if (this.apiListings.containsKey(entry.getKey())) {
+        list = this.apiListings.get(entry.getKey());
+        list.addAll(entry.getValue());
+      } else {
+        list = new ArrayList<>(entry.getValue());
+        this.apiListings.put(entry.getKey(), list);
+      }
+      list.sort(byListingPosition());
+    });
     return this;
   }
 
@@ -161,12 +170,7 @@ public class DocumentationBuilder {
 
 
   public static Comparator<ApiListing> byListingPosition() {
-    return new Comparator<ApiListing>() {
-      @Override
-      public int compare(ApiListing first, ApiListing second) {
-        return first.getPosition() - second.getPosition();
-      }
-    };
+    return Comparator.comparingInt(ApiListing::getPosition);
   }
 
   public Documentation build() {

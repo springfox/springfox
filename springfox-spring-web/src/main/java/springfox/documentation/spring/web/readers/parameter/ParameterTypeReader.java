@@ -24,8 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,10 +35,10 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
-import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
 import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.spring.web.readers.parameter.ParameterTypeDeterminer.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -73,7 +71,9 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
       return "formData";
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
-      return queryOrForm(parameterContext.getOperationContext());
+      return determineScalarParameterType(
+          parameterContext.getOperationContext().consumes(),
+          parameterContext.getOperationContext().httpMethod());
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestHeader.class)) {
       return "header";
     } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
@@ -81,7 +81,9 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
           + "the ExpandedParameterBuilderPlugin");
     }
     if (!resolvedMethodParameter.hasParameterAnnotations()) {
-      return queryOrForm(parameterContext.getOperationContext());
+      return determineScalarParameterType(
+          parameterContext.getOperationContext().consumes(),
+          parameterContext.getOperationContext().httpMethod());
     }
     return "body";
   }
@@ -94,11 +96,4 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
     return MultipartFile.class.isAssignableFrom(parameterType.getErasedType());
   }
 
-  private static String queryOrForm(OperationContext context) {
-    if (context.consumes().contains(MediaType.APPLICATION_FORM_URLENCODED) && context.httpMethod() == HttpMethod
-        .POST) {
-      return "form";
-    }
-    return "query";
-  }
 }

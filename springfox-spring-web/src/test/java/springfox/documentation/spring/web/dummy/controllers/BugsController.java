@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.base.Optional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,7 +31,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,18 +42,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
+import springfox.documentation.spring.web.dummy.models.EHDTOApplicatorUnits;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.LanguageResponse;
+import springfox.documentation.spring.web.dummy.models.Response;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -63,6 +71,8 @@ import java.nio.ByteBuffer;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.*;
@@ -332,6 +342,11 @@ public class BugsController {
     return ResponseEntity.ok(null);
   }
 
+  @PostMapping(path = "/1965-form-data", consumes = "multipart/form-data")
+  public ResponseEntity<Example> bug1965FormData(Example sfData) {
+    return ResponseEntity.ok(null);
+  }
+
   @PostMapping(path = "/1965", consumes = "multipart/form-data")
   public ResponseEntity<Example> bug1965(
       @Valid @RequestPart(name = "sfParamMap") @RequestParam Map<String, String> paramMap,
@@ -373,30 +388,411 @@ public class BugsController {
   }
 
   @GetMapping(path = "/2161")
-  ResponseEntity<String> bug2161(@RequestBody Status status) {
+  ResponseEntity<String> bug2161And2249and2469(@RequestBody Status status) {
     return ResponseEntity.ok("");
+  }
+
+  @GetMapping(path = "/1881")
+  ResponseEntity<String> bug1881(@RequestBody Bug1881 container) {
+    return ResponseEntity.ok("");
+  }
+
+  @ApiOperation(value = "Get all examples", nickname = "bug2268", notes = "Get all examples ", response = Example.class,
+      responseContainer = "List", authorizations = {
+      @Authorization(value = "user_auth", scopes = {
+          @AuthorizationScope(scope = "ADMIN", description = "Manage users"),
+          @AuthorizationScope(scope = "USER", description = "Maintain own user")
+      })
+  }, tags = { "example" })
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Success", response = Example.class, responseContainer = "List"),
+  })
+  @RequestMapping(value = "/2268",
+      produces = { "application/json" },
+      method = RequestMethod.GET)
+  ResponseEntity<List<Example>> bug2268(
+      @ApiParam(value = "Filter the list")
+      @Valid
+      @RequestParam(value = "$filter", required = false) String filter) {
+    return null;
+  }
+
+  @RequestMapping(value = "/bug2203", method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public ResponseEntity<Response<LanguageResponse>> bug2203() {
+    return ResponseEntity.ok(null);
+  }
+
+  @GetMapping("/bug1827")
+  public String addBook(
+      @ModelAttribute Book book,
+      @RequestParam(required = false) String[] authorIds) {
+    return "";
+  }
+
+  @GetMapping("/bug2282")
+  @ApiOperation("/bug2282")
+  public String bug2282(User user) {
+    return "";
+  }
+
+  @PostMapping(value = "/bug2230", consumes = MediaType.APPLICATION_ATOM_XML_VALUE)
+  @ApiOperation("/bug2230")
+  public String bug2230(
+      @RequestBody EHDTOApplicatorUnits applicatorUnits) {
+    return "";
+  }
+
+  @GetMapping(value = "/bug2182")
+  @ApiOperation("/bug2182")
+  public ProductVO bug2182() {
+    return null;
+  }
+
+  @GetMapping({ "/bug2220", "/bug2220/{bar}" })
+  public void bug2220(@PathVariable(value = "bar", required = false) String bar) {
+  }
+
+  @ApiResponses({
+      @ApiResponse(code = 404, message = "No object was found with the given ID"),
+      @ApiResponse(code = 200, message = "The object was deleted successfully.",
+          response = void.class)
+  })
+  @GetMapping("/bug1944")
+  public void bug1944() {
+  }
+
+  @PostMapping("/2378")
+  public void upperCaseField(@RequestBody UpperCasedField input) {
+  }
+
+  @PostMapping("/2391")
+  public void bug2391(@ModelAttribute Bug2391 input) {
+  }
+
+  @RequestMapping(value = "/2368", method = RequestMethod.GET)
+  public ResponseEntity<Void> bug2368(@ModelAttribute @Valid GenericRequest<Void> voidRequest) {
+    return ResponseEntity.ok(null);
+  }
+
+  @PostMapping("/2479")
+  public void bug2479(@RequestBody Bug2479 input) {
+  }
+
+
+  @PostMapping("/2415")
+  public void bug2415(@RequestBody Bug2415 input) {
+  }
+
+  @GetMapping("/2415")
+  public ResponseEntity<String> bug2415(
+      @Pattern(regexp = "^[A-Za-z0-9]{8,16}$")
+      @Size(min = 8, max = 16)
+      @RequestParam String input) {
+    return ResponseEntity.ok("test");
+  }
+
+  @GetMapping("/2423")
+  public void bug2423(Bug2423 input) {
+  }
+
+  public class Bug2423 {
+    public String from;
+    public String to;
+  }
+
+  public class Bug2415 {
+    private String test;
+    
+    @Pattern(regexp = "^[A-Za-z0-9]{8,16}$")
+    @Size(min = 8, max = 16)
+    public String getTest() {
+      return test;
+    }
+
+    public void setTest(String test) {
+      this.test = test;
+    }
+  }
+
+  public class GenericRequest<T> {
+
+    @NotNull
+    private T parameters;
+
+    public T getParameters() {
+      return parameters;
+    }
+
+    public void setParameters(T parameters) {
+      this.parameters = parameters;
+    }
+
+  }
+
+  public class ProductVO {
+    private String name;
+
+    @JsonUnwrapped(prefix = "specification_")
+    private Specification specification;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public Specification getSpecification() {
+      return specification;
+    }
+
+    public void setSpecification(Specification specification) {
+      this.specification = specification;
+    }
+  }
+
+  public class Specification {
+    private String name;
+    @JsonUnwrapped(prefix = "child_")
+    private SpecificationChild child;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public SpecificationChild getChild() {
+      return child;
+    }
+
+    public void setChild(SpecificationChild child) {
+      this.child = child;
+    }
+  }
+
+  public class SpecificationChild {
+    private String name;
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+  }
+
+  public class User {
+    Office office;
+
+    public Office getOffice() {
+      return office;
+    }
+
+    public void setOffice(Office office) {
+      this.office = office;
+    }
+  }
+
+  public class Office extends TreeEntity<Office> {
+  }
+
+  public class TreeEntity<T> {
+    //    private T  parent ;
+    User user;
+
+    public User getUser() {
+      return user;
+    }
+
+    public void setUser(User user) {
+      this.user = user;
+    }
+  }
+
+  public class Book {
+    private Long id;
+    private String name;
+    private Set<Author> authors;
+
+    public Long getId() {
+      return id;
+    }
+
+    public void setId(Long id) {
+      this.id = id;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public Set<Author> getAuthors() {
+      return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+      this.authors = authors;
+    }
+  }
+
+  public class Author {
+    private Long id;
+    private String name;
+    private List<Book> books;
+
+    public Long getId() {
+      return id;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public List<Book> getBooks() {
+      return books;
+    }
+  }
+
+  public enum Lang {
+    zh, en
+  }
+
+  @XmlType(name = "model1907", namespace = "urn:bugs")
+  public static class Model1907 {
+
+    @NotNull
+    @XmlAttribute
+    private String somename;
+    @NotNull
+    @XmlElement
+    private Example example;
+
+    public Model1907() {
+    }
+
+    public String getSomename() {
+      return somename;
+    }
+
+    public void setSomename(String somename) {
+      this.somename = somename;
+    }
+
+    public Example getExample() {
+      return example;
+    }
+
+    public void setExample(Example example) {
+      this.example = example;
+    }
+  }
+
+  public static class Bug2081Filter {
+    String importantField;
+
+    public String getImportantField() {
+      return importantField;
+    }
+
+    public void setImportantField(String importantField) {
+      this.importantField = importantField;
+    }
+  }
+
+  public static class Bug2081 {
+    Bug2081Filter a;
+    Bug2081Filter b;
+
+    public Bug2081Filter getA() {
+      return a;
+    }
+
+    public void setA(Bug2081Filter a) {
+      this.a = a;
+    }
+
+    public Bug2081Filter getB() {
+      return b;
+    }
+
+    public void setB(Bug2081Filter b) {
+      this.b = b;
+    }
+  }
+
+  public static class Bug1881 {
+    private Map<String, List> data1;
+    private Map<String, List<Example>> data2;
+
+    public Map<String, List> getData1() {
+      return data1;
+    }
+
+    public void setData1(Map<String, List> data1) {
+      this.data1 = data1;
+    }
+
+    public Map<String, List<Example>> getData2() {
+      return data2;
+    }
+
+    public void setData2(Map<String, List<Example>> data2) {
+      this.data2 = data2;
+    }
   }
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
   public class Status {
     @ApiModelProperty(example = "false")
     private final Boolean enabled;
+    @ApiModelProperty(example = "'1235'")
+    private final String integerString;
+    @ApiModelProperty(example = "'[test] n/a'")
+    private final String bug2469;
+
+    @JsonProperty("bug_1964")
+    @ApiModelProperty(required = true)
+    private boolean bug1964;
 
     @JsonCreator
     Status(
-        @JsonProperty("enabled") final Boolean enabled) {
+        @JsonProperty("enabled") Boolean enabled,
+        @JsonProperty("integerString") String integerString,
+        @JsonProperty("bug2469") String bug2469) {
       this.enabled = enabled;
+      this.integerString = integerString;
+      this.bug2469 = bug2469;
     }
 
     @JsonProperty("enabled")
     public Boolean isEnabled() {
       return enabled;
     }
-  }
 
+    @JsonProperty("integerString")
+    public String getIntegerString() {
+      return integerString;
+    }
 
-  public enum Lang {
-    zh, en
+    @JsonProperty("bug_1964")
+    @ApiModelProperty(required = true)
+    public boolean isBug1964() {
+      return bug1964;
+    }
+
+    public String getBug2469() {
+      return bug2469;
+    }
   }
 
   public class LangNotFilteredWrapper {
@@ -439,13 +835,13 @@ public class BugsController {
 
   public class Key {
 
+    // if enabled, name will be shown @ApiModelProperty(value = "my description")
+    private final String key;
+
     @JsonCreator
     public Key(@JsonProperty("key") String keyContent) {
       key = keyContent;
     }
-
-    // if enabled, name will be shown @ApiModelProperty(value = "my description")
-    private final String key;
 
     public String getKey() {
       return key;
@@ -531,6 +927,8 @@ public class BugsController {
   }
 
   class Bug1697 {
+    private ByteBuffer bar;
+
     public ByteBuffer getBar() {
       return bar;
     }
@@ -538,10 +936,7 @@ public class BugsController {
     public void setBar(ByteBuffer bar) {
       this.bar = bar;
     }
-
-    private ByteBuffer bar;
   }
-
 
   class File {
     private String name;
@@ -631,68 +1026,56 @@ public class BugsController {
     }
   }
 
+  private class UpperCasedField {
+    @ApiModelProperty(name = "AGE", value = "the age of person")
+    private Integer AGE;
 
-  @XmlType(name = "model1907", namespace = "urn:bugs")
-  public static class Model1907 {
+    public Integer YEAR;
 
-    public Model1907() {
+    public Integer getAGE() {
+      return AGE;
     }
 
-    @NotNull
-    @XmlAttribute
-    private String somename;
-
-    @NotNull
-    @XmlElement
-    private Example example;
-
-    public String getSomename() {
-      return somename;
-    }
-
-    public void setSomename(String somename) {
-      this.somename = somename;
-    }
-
-    public Example getExample() {
-      return example;
-    }
-
-    public void setExample(Example example) {
-      this.example = example;
+    public void setAGE(Integer AGE) {
+      this.AGE = AGE;
     }
   }
 
-  public static class Bug2081Filter {
-    String importantField;
+  public class Bug2391 {
+    @ApiModelProperty(name = "from_country_id", position = 1, required = true)
+    private Long fromCountryId;
 
-    public String getImportantField() {
-      return importantField;
+    @ModelAttribute("from_country_id")
+    public Long getFromCountryId() {
+      return fromCountryId;
     }
 
-    public void setImportantField(String importantField) {
-      this.importantField = importantField;
+    public void setFromCountryId(Long fromCountryId) {
+      this.fromCountryId = fromCountryId;
     }
   }
 
-  public static class Bug2081 {
-    Bug2081Filter a;
-    Bug2081Filter b;
+  private class Bug2479 {
+    @ApiModelProperty("First")
+    private Example first;
 
-    public Bug2081Filter getA() {
-      return a;
+    @ApiModelProperty("Second")
+    private Example second;
+
+    public Example getFirst() {
+      return first;
     }
 
-    public void setA(Bug2081Filter a) {
-      this.a = a;
+    public void setFirst(Example first) {
+      this.first = first;
     }
 
-    public Bug2081Filter getB() {
-      return b;
+    public Example getSecond() {
+      return second;
     }
 
-    public void setB(Bug2081Filter b) {
-      this.b = b;
+    public void setSecond(Example second) {
+      this.second = second;
     }
   }
 }
