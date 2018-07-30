@@ -36,7 +36,6 @@ import springfox.documentation.springWrapper.PatternsRequestCondition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.*;

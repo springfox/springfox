@@ -19,8 +19,9 @@
 
 package springfox.documentation.swagger2.web;
 
-import com.google.common.base.Optional;
 import io.swagger.models.Swagger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.env.Environment;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.util.UriComponents;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
@@ -42,18 +42,20 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import java.util.Optional;
+
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Controller
 @ConditionalOnClass(name = "org.springframework.http.server.reactive.ServerHttpRequest")
 @ApiIgnore
 public class Swagger2ControllerWebFlux {
 
-  public static final String DEFAULT_URL = "/v2/api-docs";
+  private static final String DEFAULT_URL = "/v2/api-docs";
+  private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2ControllerWebFlux.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
-  private final String hostNameOverride;
   private final DocumentationCache documentationCache;
   private final ServiceModelToSwagger2Mapper mapper;
   private final JsonSerializer jsonSerializer;
@@ -64,8 +66,6 @@ public class Swagger2ControllerWebFlux {
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
       JsonSerializer jsonSerializer) {
-
-    this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
@@ -83,29 +83,17 @@ public class Swagger2ControllerWebFlux {
       @RequestParam(value = "group", required = false) String swaggerGroup,
       ServerHttpRequest request) {
 
-    String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
+    String groupName = Optional.ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
+      LOGGER.warn("Unable to find specification for group {}", groupName);
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
-    //UriComponents uriComponents = componentsFrom(request, swagger.getBasePath());
-    swagger.basePath("/");//Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
-    if (isNullOrEmpty(swagger.getHost())) {
+    swagger.basePath("/");
+    if (isEmpty(swagger.getHost())) {
       swagger.host(request.getURI().getAuthority());
     }
     return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
-  }
-
-  private String hostName(UriComponents uriComponents) {
-    if ("DEFAULT".equals(hostNameOverride)) {
-      String host = uriComponents.getHost();
-      int port = uriComponents.getPort();
-      if (port > -1) {
-        return String.format("%s:%d", host, port);
-      }
-      return host;
-    }
-    return hostNameOverride;
   }
 }

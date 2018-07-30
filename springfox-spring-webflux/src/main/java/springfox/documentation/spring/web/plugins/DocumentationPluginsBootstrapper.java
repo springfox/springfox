@@ -20,8 +20,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +39,12 @@ import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -99,12 +100,12 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
 
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin plugin) {
     DocumentationType documentationType = plugin.getDocumentationType();
-    List<RequestHandler> requestHandlers = from(handlerProviders)
-        .transformAndConcat(handlers())
-        .toList();
-    List<AlternateTypeRule> rules = from(nullToEmptyList(typeConventions))
-          .transformAndConcat(toRules())
-          .toList();
+    List<RequestHandler> requestHandlers = handlerProviders.stream()
+            .map(handlers()).flatMap((handle) -> StreamSupport.stream(handle.spliterator(), false))
+            .collect(toList());
+    List<AlternateTypeRule> rules = nullToEmptyList(typeConventions).stream()
+            .map(AlternateTypeRuleConvention::rules).flatMap((rule) -> StreamSupport.stream(rule.spliterator(), false))
+            .collect(toList());
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
         .rules(rules)
@@ -121,7 +122,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   }
 
   private RequestHandlerCombiner combiner() {
-    return Optional.fromNullable(combiner).or(new DefaultRequestHandlerCombiner());
+    return Optional.ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
@@ -147,8 +148,8 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   public void start() {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      List<DocumentationPlugin> plugins = pluginOrdering()
-          .sortedCopy(documentationPluginsManager.documentationPlugins());
+      List<DocumentationPlugin> plugins = StreamSupport.stream(documentationPluginsManager.documentationPlugins().spliterator(), false)
+              .sorted(pluginOrdering()).collect(toList());
       log.info("Found {} custom documentation plugin(s)", plugins.size());
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();

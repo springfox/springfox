@@ -55,7 +55,7 @@ import static springfox.documentation.swagger.common.HostNameProvider.*;
 public class Swagger2ControllerWebMvc {
 
   private static final String DEFAULT_URL = "/v2/api-docs";
-  private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2Controller.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Swagger2ControllerWebMvc.class);
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
   private final String hostNameOverride;
