@@ -55,4 +55,14 @@ public class NameValueExpressionWrapper<T> implements NameValueExpression {
     public boolean isNegated() {
         return this.e.isNegated();
     }
+
+    @Override
+    public int hashCode() {
+        return this.e.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.e.equals(obj);
+    }
 }
