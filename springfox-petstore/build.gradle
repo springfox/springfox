@@ -19,5 +19,5 @@ dependencies {
   compile libs.core
   compile project(':springfox-spi')
   compile project(':springfox-core')
-  compile project(':springfox-spring-web')
+  compile project(':springfox-spring-webmvc')
 }
