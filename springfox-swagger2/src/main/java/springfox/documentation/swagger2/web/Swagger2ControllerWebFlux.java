@@ -48,7 +48,7 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Controller
-@ConditionalOnClass(name = "org.springframework.http.server.reactive.ServerHttpRequest")
+@ConditionalOnClass(name = "org.springframework.web.reactive.BindingContext")
 @ApiIgnore
 public class Swagger2ControllerWebFlux {
 
