@@ -24,8 +24,19 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.core.codec.Decoder;
+import org.springframework.core.codec.Encoder;
+import org.springframework.http.codec.DecoderHttpMessageReader;
+import org.springframework.http.codec.EncoderHttpMessageWriter;
+import org.springframework.http.codec.HttpMessageReader;
+import org.springframework.http.codec.HttpMessageWriter;
+import org.springframework.http.codec.json.Jackson2CodecSupport;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.http.codec.support.DefaultServerCodecConfigurer;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
+
+import java.util.List;
 
 
 public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
@@ -34,9 +45,31 @@ public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEve
 
   @Override
   public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-    if (bean instanceof Jackson2JsonEncoder) {
-      Jackson2JsonEncoder encoder = (Jackson2JsonEncoder) bean;
+    if (bean instanceof Jackson2CodecSupport) {
+      Jackson2CodecSupport encoder = (Jackson2CodecSupport) bean;
       fireObjectMapperConfiguredEvent(encoder.getObjectMapper());
+    }
+    if (bean instanceof DefaultServerCodecConfigurer) {
+      List<HttpMessageReader<?>> readers = ((DefaultServerCodecConfigurer) bean).getReaders();
+      for (HttpMessageReader<?> reader : readers) {
+        if (reader instanceof DecoderHttpMessageReader) {
+          Decoder decoder = ((DecoderHttpMessageReader) reader).getDecoder();
+          if (decoder instanceof Jackson2JsonDecoder) {
+            fireObjectMapperConfiguredEvent(((Jackson2JsonDecoder)decoder).getObjectMapper());
+            return bean;
+          }
+        }
+      }
+      List<HttpMessageWriter<?>> writers = ((DefaultServerCodecConfigurer) bean).getWriters();
+      for (HttpMessageWriter<?> writer : writers) {
+        if (writer instanceof EncoderHttpMessageWriter) {
+            Encoder encoder = ((EncoderHttpMessageWriter) writer).getEncoder();
+            if (encoder instanceof Jackson2JsonEncoder) {
+                fireObjectMapperConfiguredEvent(((Jackson2JsonEncoder)encoder).getObjectMapper());
+                return bean;
+            }
+        }
+      }
     }
     return bean;
   }

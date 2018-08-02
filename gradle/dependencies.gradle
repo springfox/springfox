@@ -44,6 +44,19 @@ ext {
                   "org.springframework.hateoas:spring-hateoas:${springHateoas}",
                   "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
           ],
+          testNoHateoas : [
+                  "org.springframework:spring-test:${spring}",
+                  "cglib:cglib-nodep:$cglib",
+                  "org.objenesis:objenesis:$objenesis",
+                  "org.mockito:mockito-core:${mockito}",
+                  "com.jayway.jsonpath:json-path:${jsonPath}",
+                  "org.slf4j:slf4j-simple:${slf4j}",
+                  "org.yaml:snakeyaml:${snakeyaml}",
+                  "org.spockframework:spock-spring:${spock}",
+                  "org.spockframework:spock-core:${spock}",
+                  "org.codehaus.groovy:groovy-all:${groovy}",
+                  "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
+          ],
           swagger2Core  : [
                   "io.swagger:swagger-annotations:${swagger2Core}",
                   "io.swagger:swagger-models:${swagger2Core}"
