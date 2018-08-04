@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web;
 
-import springfox.documentation.springWrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.NameValueExpression;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -28,8 +28,8 @@ import springfox.documentation.schema.Model;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.springWrapper.NameValueExpression;
-import springfox.documentation.springWrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

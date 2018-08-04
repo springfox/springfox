@@ -30,7 +30,7 @@ import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.springWrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.NameValueExpression;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

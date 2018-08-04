@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.springWrapper;
+package springfox.documentation.spring.wrapper;
 
 import java.util.Set;
 

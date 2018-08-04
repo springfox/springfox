@@ -21,7 +21,7 @@ package springfox.documentation.spring.web;
 
 import org.springframework.web.reactive.result.method.RequestMappingInfo;
 
-public class RequestMappingInfoWrapper implements springfox.documentation.springWrapper.RequestMappingInfo {
+public class RequestMappingInfoWrapper implements springfox.documentation.spring.wrapper.RequestMappingInfo {
 
     public RequestMappingInfoWrapper(RequestMappingInfo info) {
     }

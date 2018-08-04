@@ -40,7 +40,7 @@ import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
-import springfox.documentation.springWrapper.PatternsRequestCondition
+import springfox.documentation.spring.wrapper.PatternsRequestCondition
 
 import java.lang.annotation.Annotation
 
@@ -223,7 +223,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       }
 
       @Override
-      springfox.documentation.springWrapper.RequestMappingInfo getRequestMapping() {
+      springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
         return null
       }
 

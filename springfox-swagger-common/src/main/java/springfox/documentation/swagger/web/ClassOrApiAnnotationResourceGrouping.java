@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.springWrapper.RequestMappingInfo;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 

@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.service.contexts.OperationContext;
-import springfox.documentation.springWrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.NameValueExpression;
 
 import java.util.List;
 import java.util.Set;

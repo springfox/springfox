@@ -28,8 +28,8 @@ import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
-import springfox.documentation.springWrapper.NameValueExpression;
-import springfox.documentation.springWrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -125,7 +125,7 @@ public class WebFluxRequestHandler implements RequestHandler {
   }
 
   @Override
-  public springfox.documentation.springWrapper.RequestMappingInfo getRequestMapping() {
+  public springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
     throw new UnsupportedOperationException();
   }
 

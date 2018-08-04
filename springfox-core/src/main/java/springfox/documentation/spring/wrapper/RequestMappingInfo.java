@@ -17,14 +17,7 @@
  *
  */
 
-package springfox.documentation.springWrapper;
+package springfox.documentation.spring.wrapper;
 
-public interface NameValueExpression<T> {
-
-  String getName();
-
-  T getValue();
-
-  boolean isNegated();
-
+public interface RequestMappingInfo {
 }

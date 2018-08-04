@@ -26,7 +26,7 @@ import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.springWrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.NameValueExpression;
 
 import java.util.ArrayList;
 import java.util.List;

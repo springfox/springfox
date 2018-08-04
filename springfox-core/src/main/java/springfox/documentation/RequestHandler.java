@@ -27,9 +27,9 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.service.ResolvedMethodParameter;
 
-import springfox.documentation.springWrapper.NameValueExpression;
-import springfox.documentation.springWrapper.PatternsRequestCondition;
-import springfox.documentation.springWrapper.RequestMappingInfo;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.Comparator;

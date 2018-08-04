@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 
 import java.util.Set;
 
-public class PatternsRequestConditionWrapper implements springfox.documentation.springWrapper.PatternsRequestCondition<PatternsRequestCondition> {
+public class PatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
     private org.springframework.web.servlet.mvc.condition.PatternsRequestCondition condition;
 
@@ -32,8 +32,8 @@ public class PatternsRequestConditionWrapper implements springfox.documentation.
     }
 
     @Override
-    public springfox.documentation.springWrapper.PatternsRequestCondition combine(
-            springfox.documentation.springWrapper.PatternsRequestCondition<PatternsRequestCondition> other
+    public springfox.documentation.spring.wrapper.PatternsRequestCondition combine(
+            springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other
     ) {
         if (other instanceof PatternsRequestConditionWrapper && !this.equals(other)) {
             return new PatternsRequestConditionWrapper(this.condition.combine(((PatternsRequestConditionWrapper) other).condition));

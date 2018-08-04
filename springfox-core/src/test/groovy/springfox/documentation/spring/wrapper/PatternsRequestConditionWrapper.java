@@ -19,8 +19,6 @@
 
 package springfox.documentation.spring.wrapper;
 
-import springfox.documentation.springWrapper.PatternsRequestCondition;
-
 import java.util.Set;
 
 public class PatternsRequestConditionWrapper

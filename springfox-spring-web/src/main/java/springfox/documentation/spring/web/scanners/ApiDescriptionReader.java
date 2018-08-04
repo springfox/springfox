@@ -31,7 +31,7 @@ import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
-import springfox.documentation.springWrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.util.ArrayList;
 import java.util.List;
