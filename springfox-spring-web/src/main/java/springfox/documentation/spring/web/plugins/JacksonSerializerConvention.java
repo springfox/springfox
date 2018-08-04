@@ -58,11 +58,19 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   @Override
   public List<AlternateTypeRule> rules() {
-    ScanResult scanResults = new ClassGraph().whitelistPackages(packagePrefix).enableAnnotationInfo().scan();
+    ScanResult scanResults = new ClassGraph()
+        .whitelistPackages(packagePrefix)
+        .enableAnnotationInfo()
+        .scan();
+
     List<Class<?>> serialized =
-        scanResults.getClassesWithAnnotation(JsonSerialize.class.getCanonicalName()).loadClasses();
+        scanResults.getClassesWithAnnotation(JsonSerialize.class.getCanonicalName())
+            .loadClasses();
+
     List<Class<?>> deserialized =
-        scanResults.getClassesWithAnnotation(JsonDeserialize.class.getCanonicalName()).loadClasses();
+        scanResults.getClassesWithAnnotation(JsonDeserialize.class.getCanonicalName())
+            .loadClasses();
+
     List<AlternateTypeRule> rules = new ArrayList<>();
     Stream.concat(serialized.stream(), deserialized.stream())
         .forEachOrdered(type -> {
