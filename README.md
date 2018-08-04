@@ -10,43 +10,6 @@
 |---|---|
 |[![Circle CI](https://circleci.com/gh/springfox/springfox/tree/master.svg?style=svg)](https://circleci.com/gh/springfox/springfox/tree/master)|[![codecov](https://codecov.io/gh/springfox/springfox/branch/master/graph/badge.svg)](https://codecov.io/gh/springfox/springfox) |
 
-### Install current dev version
-
-You must start to build project : 
-
-    ./gradlew clean build publishToMavenLocal -i -x test
-    
-To use it on you spring project you must add 4 dependencies : 
-- io.springfox:springfox-swagger2:2.9.0-SNAPSHOT
-- io.springfox:springfox-spring-webflux:2.9.0-SNAPSHOT
-- io.springfox:springfox-swagger-ui:2.9.0-SNAPSHOT
-- org.webjars:webjars-locator:0.32
-    
-And a this beans : 
-
-``` java 
-@Configuration
-@EnableSwagger2WebFlux
-class SwaggerConfiguration extends WebFluxConfigurationSupport {
-
-  @Bean
-  public Jackson2JsonEncoder jackson2JsonEncoder(ObjectMapper mapper) {
-      return new Jackson2JsonEncoder(mapper)
-  }
-
-  @Bean 
-  public Jackson2JsonDecoder jackson2JsonDecoder(ObjectMapper mapper) {
-      return new Jackson2JsonDecoder(mapper)
-  }
-
-  @Override
-  protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/**").addResourceLocations("classpath:META-INF/resources/")
-  }
-
-}
-```
-
 ### About
 For more information on this project visit the [Springfox Website](http://springfox.io) or
  [http://springfox.github.io/springfox/](http://springfox.github.io/springfox/)
