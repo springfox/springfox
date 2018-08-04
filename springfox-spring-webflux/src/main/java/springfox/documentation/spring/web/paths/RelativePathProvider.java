@@ -22,10 +22,6 @@ package springfox.documentation.spring.web.paths;
 public class RelativePathProvider extends AbstractPathProvider {
   public static final String ROOT = "/";
 
-  public RelativePathProvider() {
-    super();
-  }
-
   @Override
   protected String applicationPath() {
     return ROOT;
