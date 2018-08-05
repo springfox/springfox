@@ -171,7 +171,6 @@ public class Defaults {
     ignored.add(Void.class);
     ignored.add(Void.TYPE);
     ignored.add(HttpHeaders.class);
-    ignored.add(HttpHeaders.class);
     ignored.add(BindingResult.class);
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class); //Used to ignore parameters
