@@ -30,8 +30,8 @@
         }
     ],
     "schemes": [
-        "https",
-        "http"
+        "http",
+        "https"
     ],
     "produces": [
         "application/xml",
@@ -269,16 +269,16 @@
                     "400": {
                         "description": "Invalid ID supplied",
                         "headers": {
-                            "header1": {
-                                "type": "string"
-                            },
-                            "header2": {
+                            "header4": {
                                 "type": "string"
                             },
                             "header3": {
                                 "type": "string"
                             },
-                            "header4": {
+                            "header2": {
+                                "type": "string"
+                            },
+                            "header1": {
                                 "type": "string"
                             }
                         }
@@ -286,10 +286,10 @@
                     "404": {
                         "description": "Pet not found",
                         "headers": {
-                            "header3": {
+                            "header4": {
                                 "type": "string"
                             },
-                            "header4": {
+                            "header3": {
                                 "type": "string"
                             }
                         }
@@ -297,14 +297,14 @@
                 },
                 "security": [
                     {
-                        "api_key": [
-
-                        ]
-                    },
-                    {
                         "petstore_auth": [
                             "write:pets",
                             "read:pets"
+                        ]
+                    },
+                    {
+                        "api_key": [
+                            
                         ]
                     }
                 ],
