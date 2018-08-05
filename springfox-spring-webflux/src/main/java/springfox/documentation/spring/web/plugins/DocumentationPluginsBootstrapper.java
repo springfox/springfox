@@ -112,26 +112,12 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
         .requestHandlers(combiner().combine(requestHandlers));
   }
 
-  private Function<AlternateTypeRuleConvention, List<AlternateTypeRule>> toRules() {
-    return new Function<AlternateTypeRuleConvention, List<AlternateTypeRule>>() {
-      @Override
-      public List<AlternateTypeRule> apply(AlternateTypeRuleConvention input) {
-        return input.rules();
-      }
-    };
-  }
-
   private RequestHandlerCombiner combiner() {
     return Optional.ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
-    return new Function<RequestHandlerProvider, Iterable<RequestHandler>>() {
-      @Override
-      public Iterable<RequestHandler> apply(RequestHandlerProvider input) {
-        return input.requestHandlers();
-      }
-    };
+    return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) input -> input.requestHandlers();
   }
 
   @Override
