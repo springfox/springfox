@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
@@ -39,12 +40,12 @@ import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -57,10 +58,12 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 @Component
 public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
+  private static final String SPRINGFOX_DOCUMENTATION_AUTO_STARTUP = "springfox.documentation.auto-startup";
   private final DocumentationPluginsManager documentationPluginsManager;
   private final List<RequestHandlerProvider> handlerProviders;
   private final DocumentationCache scanned;
   private final ApiDocumentationScanner resourceListing;
+  private final Environment environment;
   private final DefaultConfiguration defaultConfiguration;
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
@@ -77,12 +80,14 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
       DocumentationCache scanned,
       ApiDocumentationScanner resourceListing,
       TypeResolver typeResolver,
-      Defaults defaults) {
+      Defaults defaults,
+      Environment environment) {
 
     this.documentationPluginsManager = documentationPluginsManager;
     this.handlerProviders = handlerProviders;
     this.scanned = scanned;
     this.resourceListing = resourceListing;
+    this.environment = environment;
     this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver);
   }
 
@@ -113,16 +118,20 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   }
 
   private RequestHandlerCombiner combiner() {
-    return Optional.ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
+    return ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
-    return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) input -> input.requestHandlers();
+    return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) RequestHandlerProvider::requestHandlers;
   }
 
   @Override
   public boolean isAutoStartup() {
-    return true;
+    String autoStartupConfig =
+        environment.getProperty(
+            SPRINGFOX_DOCUMENTATION_AUTO_STARTUP,
+            "true");
+    return Boolean.valueOf(autoStartupConfig);
   }
 
   @Override
