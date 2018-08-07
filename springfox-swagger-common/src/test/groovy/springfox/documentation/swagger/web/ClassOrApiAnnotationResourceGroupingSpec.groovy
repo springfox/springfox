@@ -31,7 +31,12 @@ class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
   @Unroll
   def "group paths and descriptions"() {
     given:
-      RequestMappingInfo requestMappingInfo = new RequestMappingInfo() {}
+      RequestMappingInfo requestMappingInfo = new RequestMappingInfo() {
+        @Override
+        Object getOriginalInfo() {
+          return null
+        }
+      }
       ClassOrApiAnnotationResourceGrouping strategy = new ClassOrApiAnnotationResourceGrouping()
       def group = strategy.getResourceGroups(requestMappingInfo, handlerMethod).first()
 

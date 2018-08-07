@@ -128,8 +128,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
-    return null;
-    // TODO return requestMapping;
+    return new RequestMappingInfoWrapper(requestMapping);
   }
 
   @Override

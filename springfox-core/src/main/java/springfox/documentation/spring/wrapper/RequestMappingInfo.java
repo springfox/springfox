@@ -19,5 +19,6 @@
 
 package springfox.documentation.spring.wrapper;
 
-public interface RequestMappingInfo {
+public interface RequestMappingInfo<T> {
+    T getOriginalInfo();
 }
