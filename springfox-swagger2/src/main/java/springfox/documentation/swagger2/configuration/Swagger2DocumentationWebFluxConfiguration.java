@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebFluxConfiguration;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
@@ -31,7 +32,8 @@ import springfox.documentation.swagger2.web.Swagger2ControllerWebFlux;
 
 @Configuration
 @ConditionalOnClass(name = "org.springframework.web.reactive.BindingContext")
-@Import({ SpringfoxWebFluxConfiguration.class, SwaggerCommonConfiguration.class, Swagger2ControllerWebFlux.class })
+@Import({ SpringfoxWebConfiguration.class, SpringfoxWebFluxConfiguration.class, SwaggerCommonConfiguration.class,
+        Swagger2ControllerWebFlux.class })
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.readers.parameter",
     "springfox.documentation.swagger2.mappers"

@@ -29,18 +29,18 @@ import org.springframework.web.servlet.HandlerMapping;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping;
+import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.paths.PathProviderFactory;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 import springfox.documentation.swagger1.web.Swagger1Controller;
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration;
 
-import javax.servlet.ServletContext;
-
 @Configuration
-@Import({ SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
+@Import({ SpringfoxWebConfiguration.class, SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger1.readers.parameter",
     "springfox.documentation.swagger1.mappers"
@@ -65,9 +65,9 @@ public class Swagger1DocumentationConfiguration {
 
   @Bean
   public SwaggerDefaultConfiguration swaggerDefaults(
-      ServletContext servletContext,
+      PathProviderFactory pathProviderFactory,
       TypeResolver type,
       Defaults defaults) {
-    return new SwaggerDefaultConfiguration(defaults, type, servletContext);
+    return new SwaggerDefaultConfiguration(defaults, type, pathProviderFactory);
   }
 }

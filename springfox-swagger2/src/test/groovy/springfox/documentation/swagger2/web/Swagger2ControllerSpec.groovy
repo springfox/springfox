@@ -13,6 +13,7 @@ import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
 import springfox.documentation.spring.web.paths.AbstractPathProvider
+import springfox.documentation.spring.web.paths.RelativePathProviderFactory
 import springfox.documentation.spring.web.plugins.DefaultConfiguration
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner
@@ -81,7 +82,8 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     given:
       def req = servletRequestWithXHeaders(prefix)
 
-      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), req.servletContext)
+      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(),
+              new RelativePathProviderFactory(req.servletContext))
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
           .operationOrdering(nickNameComparator())
@@ -119,7 +121,8 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
       def req = servletRequest()
 
-      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), req.servletContext)
+      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(),
+              new RelativePathProviderFactory(req.servletContext))
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
           .pathProvider(pathProvider)
