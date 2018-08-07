@@ -25,9 +25,9 @@ import java.util.Set;
 
 public class PatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
-    private org.springframework.web.servlet.mvc.condition.PatternsRequestCondition condition;
+    private PatternsRequestCondition condition;
 
-    public PatternsRequestConditionWrapper(org.springframework.web.servlet.mvc.condition.PatternsRequestCondition condition) {
+    public PatternsRequestConditionWrapper(PatternsRequestCondition condition) {
         this.condition = condition;
     }
 
