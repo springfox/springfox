@@ -60,7 +60,7 @@ class DocumentationContextSpec extends Specification {
     return context
   }
 
-  private class DummyPathProvider extends AbstractPathProvider {
+  class DummyPathProvider extends AbstractPathProvider {
     public static final String ROOT = "/"
 
     @Override
