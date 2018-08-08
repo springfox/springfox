@@ -1,4 +1,4 @@
-package springfox.documentation.spring.web
+package springfox.documentation
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Specification

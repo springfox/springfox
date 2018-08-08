@@ -25,11 +25,9 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.paths.AbstractPathProvider
 import springfox.documentation.spring.web.paths.PathProviderFactory
-import springfox.documentation.spring.web.paths.RelativePathProvider
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
-
-import javax.servlet.ServletContext
 
 import static springfox.documentation.spi.service.contexts.Orderings.*
 
@@ -41,7 +39,7 @@ class DocumentationContextSpec extends Specification {
 
   def setup() {
       def providerFactory = Mock(PathProviderFactory)
-      providerFactory.getInstance() >> new RelativePathProvider(Mock(ServletContext))
+      providerFactory.getInstance() >> new DummyPathProvider()
       defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), providerFactory)
 
     contextBuilder = this.defaultConfiguration.create(DocumentationType.SWAGGER_12)
@@ -60,5 +58,19 @@ class DocumentationContextSpec extends Specification {
     context.documentationContext >> documentationContext()
     context.consumes() >> []
     return context
+  }
+
+  private class DummyPathProvider extends AbstractPathProvider {
+    public static final String ROOT = "/"
+
+    @Override
+    protected String applicationPath() {
+      return ROOT
+    }
+
+    @Override
+    protected String getDocumentationPath() {
+      return ROOT
+    }
   }
 }
