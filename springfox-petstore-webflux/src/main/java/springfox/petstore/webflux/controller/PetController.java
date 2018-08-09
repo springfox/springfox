@@ -50,6 +50,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Api(value = "/pet", description = "Operations about pets")
 public class PetController {
 
+  public static final String WRITE_PETS = "write:pets";
+  public static final String READ_PETS = "read:pets";
+  public static final String PETSTORE_AUTH = "petstore_auth";
   PetRepository petData = new PetRepository();
 
   @RequestMapping(value = "/{petId}", method = GET)
@@ -63,9 +66,9 @@ public class PetController {
           },
           authorizations = {
                   @Authorization(value = "api_key"),
-                  @Authorization(value = "petstore_auth", scopes = {
-                          @AuthorizationScope(scope = "write:pets", description = ""),
-                          @AuthorizationScope(scope = "read:pets", description = "")
+                  @Authorization(value = PETSTORE_AUTH, scopes = {
+                          @AuthorizationScope(scope = WRITE_PETS, description = ""),
+                          @AuthorizationScope(scope = READ_PETS, description = "")
                   })})
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid ID supplied", responseHeaders = {
@@ -88,9 +91,9 @@ public class PetController {
 
   @RequestMapping(method = POST)
   @ApiOperation(value = "Add a new pet to the store",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
+          authorizations = @Authorization(value = PETSTORE_AUTH, scopes = {
+                  @AuthorizationScope(scope = WRITE_PETS, description = ""),
+                  @AuthorizationScope(scope = READ_PETS, description = "")
           }))
   @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
   public Mono<ResponseEntity<String>> addPet(
@@ -101,9 +104,9 @@ public class PetController {
 
   @RequestMapping(method = PUT)
   @ApiOperation(value = "Update an existing pet",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
+          authorizations = @Authorization(value = PETSTORE_AUTH, scopes = {
+                  @AuthorizationScope(scope = WRITE_PETS, description = ""),
+                  @AuthorizationScope(scope = READ_PETS, description = "")
           }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid ID supplied"),
           @ApiResponse(code = 404, message = "Pet not found"),
@@ -120,9 +123,9 @@ public class PetController {
           notes = "Multiple status values can be provided with comma-separated strings",
           response = Pet.class,
           responseContainer = "List",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
+          authorizations = @Authorization(value = PETSTORE_AUTH, scopes = {
+                  @AuthorizationScope(scope = WRITE_PETS, description = ""),
+                  @AuthorizationScope(scope = READ_PETS, description = "")
           }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid status value")})
   /** TODO: This renders parameter as
@@ -152,9 +155,9 @@ public class PetController {
           notes = "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
           response = Pet.class,
           responseContainer = "List",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
+          authorizations = @Authorization(value = PETSTORE_AUTH, scopes = {
+                  @AuthorizationScope(scope = WRITE_PETS, description = ""),
+                  @AuthorizationScope(scope = READ_PETS, description = "")
           }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid tag value")})
   @Deprecated
@@ -182,9 +185,9 @@ public class PetController {
       response = Pet.class,
       responseContainer = "List",
       hidden = true,
-      authorizations = @Authorization(value = "petstore_auth", scopes = {
-          @AuthorizationScope(scope = "write:pets", description = ""),
-          @AuthorizationScope(scope = "read:pets", description = "")
+      authorizations = @Authorization(value = PETSTORE_AUTH, scopes = {
+          @AuthorizationScope(scope = WRITE_PETS, description = ""),
+          @AuthorizationScope(scope = READ_PETS, description = "")
       }))
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid tag value")})
   public Mono<ResponseEntity<List<Pet>>> findPetsHidden(

@@ -23,7 +23,8 @@ import org.springframework.web.reactive.result.condition.PatternsRequestConditio
 
 import java.util.Set;
 
-public class WebFluxPatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
+public class WebFluxPatternsRequestConditionWrapper
+        implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
     private PatternsRequestCondition condition;
 

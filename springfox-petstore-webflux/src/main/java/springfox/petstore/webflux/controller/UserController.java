@@ -46,6 +46,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping(value = "/api/user", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(value = "/user", description = "Operations about user")
 public class UserController {
+  public static final String USERNAME = "username";
+  public static final String USER_NOT_FOUND = "User not found";
   UserRepository userRepository = new UserRepository();
 
   @RequestMapping(method = POST)
@@ -86,10 +88,10 @@ public class UserController {
   @ApiOperation(value = "Updated user", notes = "This can only be done by the logged in user.")
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid user supplied"),
-          @ApiResponse(code = 404, message = "User not found")})
+          @ApiResponse(code = 404, message = USER_NOT_FOUND)})
   public Mono<ResponseEntity<String>> updateUser(
           @ApiParam(value = "name that need to be deleted", required = true)
-          @PathVariable("username") String username,
+          @PathVariable(USERNAME) String username,
           @ApiParam(value = "Updated user object", required = true) User user) {
     if (userRepository.get(username) != null) {
       userRepository.add(user);
@@ -103,9 +105,9 @@ public class UserController {
   @ApiOperation(value = "Delete user", notes = "This can only be done by the logged in user.")
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid username supplied"),
-          @ApiResponse(code = 404, message = "User not found")})
+          @ApiResponse(code = 404, message = USER_NOT_FOUND)})
   public Mono<ResponseEntity<String>> deleteUser(
-          @ApiParam(value = "The name that needs to be deleted", required = true) @PathVariable("username") String
+          @ApiParam(value = "The name that needs to be deleted", required = true) @PathVariable(USERNAME) String
                   username) {
     if (userRepository.exists(username)) {
       userRepository.delete(username);
@@ -119,15 +121,15 @@ public class UserController {
   @ApiOperation(value = "Get user by user name", response = User.class)
   @ApiResponses(value = {
           @ApiResponse(code = 400, message = "Invalid username supplied"),
-          @ApiResponse(code = 404, message = "User not found")})
+          @ApiResponse(code = 404, message = USER_NOT_FOUND)})
   public Mono<ResponseEntity<User>> getUserByName(
           @ApiParam(value = "The name that needs to be fetched. Use user1 for testing. ", required = true)
-          @PathVariable("username") String username) {
+          @PathVariable(USERNAME) String username) {
     User user = userRepository.get(username);
     if (null != user) {
       return Mono.just(new ResponseEntity<User>(user, HttpStatus.OK));
     } else {
-      throw new NotFoundException(404, "User not found");
+      throw new NotFoundException(404, USER_NOT_FOUND);
     }
   }
 
@@ -136,7 +138,7 @@ public class UserController {
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid username/password supplied")})
   public Mono<ResponseEntity<String>> loginUser(
           @ApiParam(value = "The user name for login", required = true)
-          @RequestParam("username") String username,
+          @RequestParam(USERNAME) String username,
           @ApiParam(value = "The password for login in clear text", required = true)
           @RequestParam("password") String password) {
     return Mono.just(new ResponseEntity<String>("logged in user session:" + System.currentTimeMillis(), HttpStatus.OK));

@@ -20,6 +20,19 @@
 package springfox.petstore.webflux.controller;
 
 public class NotFoundException extends RuntimeException {
-  public NotFoundException(int i, String s) {
+  private final int errorCode;
+  private final String errorMessage;
+
+  public NotFoundException(int errorCode, String errorMessage) {
+    this.errorCode = errorCode;
+    this.errorMessage = errorMessage;
+  }
+
+  public int getErrorCode() {
+    return errorCode;
+  }
+
+  public String getErrorMessage() {
+    return errorMessage;
   }
 }

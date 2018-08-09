@@ -29,7 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import reactor.core.publisher.Mono;
 import springfox.petstore.webflux.model.Order;
@@ -93,13 +92,13 @@ public class PetStoreResource {
     return Mono.just(ok(""));
   }
 
-  @RequestMapping(value="search", method = RequestMethod.GET, produces = "application/json", params = "x=TX")
+  @RequestMapping(value="search", method = GET, produces = "application/json", params = "x=TX")
   @ResponseStatus(value = HttpStatus.OK)
   public Mono<ResponseEntity<Pet>> getPetInTx() {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value="search", method = RequestMethod.GET, produces = "application/json", params = "x=CA")
+  @RequestMapping(value="search", method = GET, produces = "application/json", params = "x=CA")
   @ResponseStatus(value = HttpStatus.OK)
   public Mono<ResponseEntity<Pet>> getPetInCA() {
     throw new UnsupportedOperationException();

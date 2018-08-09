@@ -23,7 +23,8 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 
 import java.util.Set;
 
-public class WebMvcPatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
+public class WebMvcPatternsRequestConditionWrapper
+        implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
     private PatternsRequestCondition condition;
 
