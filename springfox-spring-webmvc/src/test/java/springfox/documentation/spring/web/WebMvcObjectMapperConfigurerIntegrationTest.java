@@ -34,7 +34,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ObjectMapperConfigurerIntegrationTest {
+public class WebMvcObjectMapperConfigurerIntegrationTest {
   @Before
   public void setup() {
     TestObjectMapperListener.firedCount = 0;
@@ -80,8 +80,8 @@ public class ObjectMapperConfigurerIntegrationTest {
     }
 
     @Bean
-    public static ObjectMapperConfigurer objectMapperConfigurer() {
-      return new ObjectMapperConfigurer();
+    public static WebMvcObjectMapperConfigurer objectMapperConfigurer() {
+      return new WebMvcObjectMapperConfigurer();
     }
 
     @Bean
@@ -104,8 +104,8 @@ public class ObjectMapperConfigurerIntegrationTest {
     }
 
     @Bean
-    public static ObjectMapperConfigurer objectMapperConfigurer() {
-      return new ObjectMapperConfigurer();
+    public static WebMvcObjectMapperConfigurer objectMapperConfigurer() {
+      return new WebMvcObjectMapperConfigurer();
     }
 
     @Bean

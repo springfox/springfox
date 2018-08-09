@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringfoxWebMvcConfiguration {
   @Bean
-  public static ObjectMapperConfigurer objectMapperConfigurer() {
-    return new ObjectMapperConfigurer();
+  public static WebMvcObjectMapperConfigurer objectMapperConfigurer() {
+    return new WebMvcObjectMapperConfigurer();
   }
 }

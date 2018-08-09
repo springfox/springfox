@@ -24,11 +24,11 @@ import javax.servlet.ServletContext;
 import static org.springframework.util.StringUtils.*;
 
 
-public class RelativePathProvider extends AbstractPathProvider {
+public class WebMvcRelativePathProvider extends AbstractPathProvider {
   private static final String ROOT = "/";
   private final ServletContext servletContext;
 
-  public RelativePathProvider(ServletContext servletContext) {
+  public WebMvcRelativePathProvider(ServletContext servletContext) {
     super();
     this.servletContext = servletContext;
   }

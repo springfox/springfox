@@ -26,7 +26,7 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.web.PatternsRequestConditionWrapper;
+import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper;
 import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
 import springfox.documentation.spring.wrapper.NameValueExpression;
 import springfox.documentation.spring.wrapper.PatternsRequestCondition;
@@ -66,7 +66,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new PatternsRequestConditionWrapper(
+    return new WebMvcPatternsRequestConditionWrapper(
             new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(actionSpecification.getPath())
     );
   }

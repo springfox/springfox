@@ -21,20 +21,17 @@ package springfox.documentation.spring.web.paths
 
 import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.paths.AbstractPathProvider
-import springfox.documentation.spring.web.paths.Paths
-import springfox.documentation.spring.web.paths.RelativePathProvider
 
 import javax.servlet.ServletContext
 
 @Mixin(RequestMappingSupport)
-class RelativePathProviderSpec extends Specification {
+class WebMvcRelativePathProviderSpec extends Specification {
 
   def "relative paths"() {
     given:
       ServletContext servletContext = Mock(ServletContext)
       servletContext.contextPath >> "/"
-      AbstractPathProvider provider = new RelativePathProvider(servletContext)
+      AbstractPathProvider provider = new WebMvcRelativePathProvider(servletContext)
 //      provider.apiResourcePrefix = "some/prefix"
 
     expect:
@@ -76,7 +73,7 @@ class RelativePathProviderSpec extends Specification {
 
   def "should never return a path with duplicate slash"() {
     setup:
-      RelativePathProvider swaggerPathProvider = new RelativePathProvider(servletContext())
+      WebMvcRelativePathProvider swaggerPathProvider = new WebMvcRelativePathProvider(servletContext())
 
     when:
       String path = swaggerPathProvider.getResourceListingPath('/a', '/b')

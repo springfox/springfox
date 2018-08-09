@@ -25,16 +25,16 @@ import springfox.documentation.PathProvider;
 import javax.servlet.ServletContext;
 
 @Component
-public class RelativePathProviderFactory implements PathProviderFactory {
+public class WebMvcRelativePathProviderFactory implements PathProviderFactory {
     private final ServletContext servletContext;
 
     @Autowired
-    public RelativePathProviderFactory(ServletContext servletContext) {
+    public WebMvcRelativePathProviderFactory(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
     @Override
     public PathProvider getInstance() {
-        return new RelativePathProvider(servletContext);
+        return new WebMvcRelativePathProvider(servletContext);
     }
 }

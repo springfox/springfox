@@ -29,7 +29,7 @@ import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.Paths
-import springfox.documentation.spring.web.paths.RelativePathProvider
+import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -76,8 +76,8 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
     !secondApiDescription.isHidden()
 
     where:
-    pathProvider                                   | prefix
-    new RelativePathProvider(Mock(ServletContext)) | ""
+    pathProvider                                         | prefix
+    new WebMvcRelativePathProvider(Mock(ServletContext)) | ""
   }
 
   def "should handle exceptions gracefully"() {

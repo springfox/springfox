@@ -74,7 +74,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new PatternsRequestConditionWrapper(requestMapping.getPatternsCondition());
+    return new WebMvcPatternsRequestConditionWrapper(requestMapping.getPatternsCondition());
   }
 
   @Override
@@ -104,12 +104,12 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return NameValueExpressionWrapper.from(requestMapping.getHeadersCondition().getExpressions());
+    return WebMvcNameValueExpressionWrapper.from(requestMapping.getHeadersCondition().getExpressions());
   }
 
   @Override
   public Set<NameValueExpression<String>> params() {
-    return NameValueExpressionWrapper.from(requestMapping.getParamsCondition().getExpressions());
+    return WebMvcNameValueExpressionWrapper.from(requestMapping.getParamsCondition().getExpressions());
   }
 
   @Override
@@ -128,7 +128,7 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
-    return new RequestMappingInfoWrapper(requestMapping);
+    return new WebMvcRequestMappingInfoWrapper(requestMapping);
   }
 
   @Override

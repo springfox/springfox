@@ -38,7 +38,7 @@ import springfox.documentation.service.VendorExtension
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.paths.RelativePathProvider
+import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 
 import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
@@ -183,13 +183,13 @@ class DocketSpec extends DocumentationContextSpec {
     documentationContext()."$property" == object || (documentationContext()."$property" == [object] as Set)
 
     where:
-    builderMethod               | object                                         | property
-    'pathProvider'              | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-    'securitySchemes'           | new ArrayList<SecurityScheme>()                | 'securitySchemes'
-    'securityContexts'          | validContexts()                                | 'securityContexts'
-    'groupName'                 | 'someGroup'                                    | 'groupName'
-    'apiInfo'                   | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
-    'apiDescriptionOrdering'    | apiDescriptionOrdering()                       | 'apiDescriptionOrdering'
+    builderMethod               | object                                               | property
+    'pathProvider'              | new WebMvcRelativePathProvider(Mock(ServletContext)) | 'pathProvider'
+    'securitySchemes'           | new ArrayList<SecurityScheme>()                      | 'securitySchemes'
+    'securityContexts'          | validContexts()                                      | 'securityContexts'
+    'groupName'                 | 'someGroup'                                          | 'groupName'
+    'apiInfo'                   | new ApiInfo('', '', "", '', '', '', '')              | 'apiInfo'
+    'apiDescriptionOrdering'    | apiDescriptionOrdering()                             | 'apiDescriptionOrdering'
     'operationOrdering'         | operationOrdering()                            | 'operationOrdering'
     'produces'                  | ['application/json'] as Set                    | 'produces'
     'consumes'                  | ['application/json'] as Set                    | 'consumes'

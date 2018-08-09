@@ -36,13 +36,13 @@ import java.util.Map;
 
 import static java.util.Optional.*;
 
-public class PropertySourcedRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
+public class WebMvcPropertySourcedRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
   private final Map<String, HandlerMethod> handlerMethods = new LinkedHashMap<>();
   private final Environment environment;
   private final Object handler;
 
-  public PropertySourcedRequestMappingHandlerMapping(
+  public WebMvcPropertySourcedRequestMappingHandlerMapping(
       Environment environment,
       Object handler) {
     this.environment = environment;

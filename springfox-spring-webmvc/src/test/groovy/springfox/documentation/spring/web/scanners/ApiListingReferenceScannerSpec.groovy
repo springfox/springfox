@@ -29,7 +29,7 @@ import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.mixins.AccessorAssertions
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.paths.RelativePathProvider
+import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
@@ -49,7 +49,7 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     contextBuilder.requestHandlers(requestHandlers)
             .withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
-            .pathProvider(new RelativePathProvider(servletContext()))
+            .pathProvider(new WebMvcRelativePathProvider(servletContext()))
             .select()
               .apis(withClassAnnotation(ApiIgnore).negate())
               .paths(regex(".*?"))

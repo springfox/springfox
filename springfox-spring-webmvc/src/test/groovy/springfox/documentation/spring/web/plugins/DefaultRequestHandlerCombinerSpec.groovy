@@ -8,7 +8,7 @@ import spock.lang.Unroll
 import springfox.documentation.RequestHandler
 import springfox.documentation.RequestHandlerKey
 import springfox.documentation.service.ResolvedMethodParameter
-import springfox.documentation.spring.web.PatternsRequestConditionWrapper
+import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper
 
 import java.util.stream.Stream
 
@@ -108,7 +108,7 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
       ResolvedMethodParameter parameter) {
     def handler = Mock(RequestHandler)
     def key = Mock(RequestHandlerKey)
-    handler.patternsCondition >> new PatternsRequestConditionWrapper(new PatternsRequestCondition(path))
+    handler.patternsCondition >> new WebMvcPatternsRequestConditionWrapper(new PatternsRequestCondition(path))
     handler.getName() >> name
       handler.produces() >> Stream.of(produces).collect(toSet())
     handler.parameters >> [parameter]

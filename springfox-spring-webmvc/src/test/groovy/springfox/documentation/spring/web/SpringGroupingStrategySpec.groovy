@@ -30,7 +30,7 @@ class SpringGroupingStrategySpec extends Specification {
 
   def "group paths and descriptions"() {
     given:
-      RequestMappingInfo requestMappingInfo = new RequestMappingInfoWrapper(requestMappingInfo('/anything'))
+      RequestMappingInfo requestMappingInfo = new WebMvcRequestMappingInfoWrapper(requestMappingInfo('/anything'))
       ResourceGroupingStrategy strategy = new SpringGroupingStrategy()
 
       def groups = strategy.getResourceGroups(requestMappingInfo, handlerMethod)

@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.paths
 
 import spock.lang.Specification
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.paths.RelativePathProvider
 
 import javax.servlet.ServletContext
 
@@ -31,7 +30,7 @@ class RelativeSwaggerPathProviderSpec extends Specification {
    def "assert urls"(){
       given:
         ServletContext servletContext = Mock()
-        RelativePathProvider provider = new RelativePathProvider(servletContext)
+        WebMvcRelativePathProvider provider = new WebMvcRelativePathProvider(servletContext)
         servletContext.contextPath >> "/"
 
       expect:

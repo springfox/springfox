@@ -31,7 +31,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.paths.PathProviderFactory
-import springfox.documentation.spring.web.paths.RelativePathProvider
+import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
@@ -168,13 +168,13 @@ class DocketSpec extends DocumentationContextSpec {
       documentationContext()."$property" == object
 
     where:
-      builderMethod     | object                                         | property
-      'pathProvider'    | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-      'securitySchemes' | new ArrayList<SecurityScheme>()                | 'securitySchemes'
-      'securityContexts'| validContexts()                                 | 'securityContexts'
-      'groupName'       | 'someGroup'                                    | 'groupName'
-      'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
-      'apiInfo'         | ApiInfo.DEFAULT                                | 'apiInfo'
+      builderMethod     | object                                               | property
+      'pathProvider'    | new WebMvcRelativePathProvider(Mock(ServletContext)) | 'pathProvider'
+      'securitySchemes' | new ArrayList<SecurityScheme>()                      | 'securitySchemes'
+      'securityContexts'| validContexts()                                      | 'securityContexts'
+      'groupName'       | 'someGroup'                                          | 'groupName'
+      'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')              | 'apiInfo'
+      'apiInfo'         | ApiInfo.DEFAULT                                      | 'apiInfo'
   }
 
   def validContexts() {

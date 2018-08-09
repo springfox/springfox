@@ -24,20 +24,20 @@ import springfox.documentation.spring.wrapper.NameValueExpression;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NameValueExpressionWrapper<T> implements NameValueExpression {
+public class WebMvcNameValueExpressionWrapper<T> implements NameValueExpression {
     private org.springframework.web.servlet.mvc.condition.NameValueExpression<T> e;
 
     public static <T> Set<NameValueExpression<T>> from(Set<org.springframework.web.servlet.mvc.condition.NameValueExpression<T>> springSet) {
         Set<NameValueExpression<T>> wrapped = new HashSet<NameValueExpression<T>>();
 
         for (org.springframework.web.servlet.mvc.condition.NameValueExpression e: springSet) {
-            wrapped.add(new NameValueExpressionWrapper<T>(e));
+            wrapped.add(new WebMvcNameValueExpressionWrapper<T>(e));
         }
 
         return wrapped;
     }
 
-    public NameValueExpressionWrapper(org.springframework.web.servlet.mvc.condition.NameValueExpression<T> e) {
+    public WebMvcNameValueExpressionWrapper(org.springframework.web.servlet.mvc.condition.NameValueExpression<T> e) {
         this.e = e;
     }
 

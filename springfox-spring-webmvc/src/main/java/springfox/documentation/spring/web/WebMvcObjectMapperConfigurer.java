@@ -36,7 +36,7 @@ import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.*;
 
-public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
+public class WebMvcObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
 
   private ApplicationEventPublisher applicationEventPublisher;
 

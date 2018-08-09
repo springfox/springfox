@@ -23,11 +23,11 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 
 import java.util.Set;
 
-public class PatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
+public class WebMvcPatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
     private PatternsRequestCondition condition;
 
-    public PatternsRequestConditionWrapper(PatternsRequestCondition condition) {
+    public WebMvcPatternsRequestConditionWrapper(PatternsRequestCondition condition) {
         this.condition = condition;
     }
 
@@ -35,8 +35,8 @@ public class PatternsRequestConditionWrapper implements springfox.documentation.
     public springfox.documentation.spring.wrapper.PatternsRequestCondition combine(
             springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other
     ) {
-        if (other instanceof PatternsRequestConditionWrapper && !this.equals(other)) {
-            return new PatternsRequestConditionWrapper(this.condition.combine(((PatternsRequestConditionWrapper) other).condition));
+        if (other instanceof WebMvcPatternsRequestConditionWrapper && !this.equals(other)) {
+            return new WebMvcPatternsRequestConditionWrapper(this.condition.combine(((WebMvcPatternsRequestConditionWrapper) other).condition));
         }
         return this;
     }
@@ -49,8 +49,8 @@ public class PatternsRequestConditionWrapper implements springfox.documentation.
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof PatternsRequestConditionWrapper) {
-            return this.condition.equals(((PatternsRequestConditionWrapper) o).condition);
+        if (o instanceof WebMvcPatternsRequestConditionWrapper) {
+            return this.condition.equals(((WebMvcPatternsRequestConditionWrapper) o).condition);
         }
         return false;
     }
