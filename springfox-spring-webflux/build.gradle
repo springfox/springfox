@@ -10,7 +10,6 @@ ext {
 }
 
 dependencies {
-  compile "io.github.lukehutch:fast-classpath-scanner:$fastClasspathScanner"
   compile libs.core
   compile libs.spring
   compile project(':springfox-spi')
