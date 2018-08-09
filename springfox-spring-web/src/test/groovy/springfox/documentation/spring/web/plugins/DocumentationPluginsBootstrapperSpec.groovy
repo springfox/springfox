@@ -32,8 +32,6 @@ import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.paths.PathProviderFactory
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner
 
-import javax.servlet.ServletContext
-
 class DocumentationPluginsBootstrapperSpec extends Specification {
 
   DocumentationPluginsManager pluginManager = Mock(DocumentationPluginsManager)
