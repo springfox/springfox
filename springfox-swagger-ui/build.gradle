@@ -39,8 +39,8 @@ ext {
 }
 
 dependencies {
-  //compile project(':springfox-spring-web')
-  //testCompile libs.test
+  provided project(':springfox-spring-webmvc')
+  testCompile libs.test
 }
 
 node {
