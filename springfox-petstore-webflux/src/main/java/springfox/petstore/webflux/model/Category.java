@@ -17,12 +17,26 @@
  *
  */
 
-package springfox.petstore.model;
+package springfox.petstore.webflux.model;
 
-public class Tag {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Category {
   private long id;
   private String name;
 
+  public Category(long id, String name) {
+    this.id = id;
+    this.name = name;
+  }
+
+  @JsonCreator
+  public static Category create(@JsonProperty(value = "id", required=true) long id, @JsonProperty("name") String name) {
+    return new Category(id, name);
+  }
+
+  @JsonProperty
   public long getId() {
     return id;
   }
@@ -31,6 +45,7 @@ public class Tag {
     this.id = id;
   }
 
+  @JsonProperty
   public String getName() {
     return name;
   }

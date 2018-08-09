@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.petstore.controller;
+package springfox.petstore.webflux.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,10 +35,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import springfox.petstore.Responses;
-import springfox.petstore.model.Pet;
-import springfox.petstore.model.Pets;
-import springfox.petstore.repository.MapBackedRepository;
+import springfox.petstore.webflux.Responses;
+import springfox.petstore.webflux.model.Pet;
+import springfox.petstore.webflux.model.Pets;
+import springfox.petstore.webflux.repository.MapBackedRepository;
 
 import java.util.List;
 

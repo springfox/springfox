@@ -17,9 +17,9 @@
  *
  */
 
-package springfox.petstore.repository;
+package springfox.petstore.webflux.controller;
 
-import springfox.petstore.model.User;
-
-public class UserRepository extends MapBackedRepository<String, User> {
+public class NotFoundException extends RuntimeException {
+  public NotFoundException(int i, String s) {
+  }
 }

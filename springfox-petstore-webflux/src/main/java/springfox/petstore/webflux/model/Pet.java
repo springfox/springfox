@@ -17,10 +17,10 @@
  *
  */
 
-package springfox.petstore.model;
+package springfox.petstore.webflux.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import springfox.petstore.repository.Identifiable;
+import springfox.petstore.webflux.repository.Identifiable;
 
 import java.util.ArrayList;
 import java.util.List;

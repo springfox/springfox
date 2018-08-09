@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.petstore.controller;
+package springfox.petstore.webflux.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,13 +32,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import reactor.core.publisher.Mono;
-import springfox.petstore.model.Order;
-import springfox.petstore.model.Pet;
-import springfox.petstore.repository.MapBackedRepository;
+import springfox.petstore.webflux.model.Order;
+import springfox.petstore.webflux.model.Pet;
+import springfox.petstore.webflux.repository.MapBackedRepository;
 
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import static springfox.petstore.Responses.*;
+import static springfox.petstore.webflux.Responses.*;
 
 @Controller
 @RequestMapping(value = "/api/store", produces = APPLICATION_JSON_VALUE)

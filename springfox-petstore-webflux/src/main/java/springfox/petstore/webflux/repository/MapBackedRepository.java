@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.petstore.repository;
+package springfox.petstore.webflux.repository;
 
 import java.util.HashMap;
 import java.util.List;

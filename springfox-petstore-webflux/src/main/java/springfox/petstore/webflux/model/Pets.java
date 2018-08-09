@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.petstore.model;
+package springfox.petstore.webflux.model;
 
 import java.util.Objects;
 import java.util.function.Predicate;

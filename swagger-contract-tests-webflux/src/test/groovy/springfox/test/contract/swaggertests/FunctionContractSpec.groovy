@@ -114,7 +114,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @ComponentScan([
       "springfox.documentation.spring.web.dummy.controllers",
       "springfox.test.contract.swagger",
-      "springfox.petstore.controller"
+      "springfox.petstore.webflux.controller"
   ])
   @Import([
       SecuritySupport,

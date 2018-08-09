@@ -17,8 +17,9 @@
  *
  */
 
-package springfox.petstore.repository;
+package springfox.petstore.webflux.repository;
 
-public interface Identifiable<T> {
-  T getIdentifier();
+import springfox.petstore.webflux.model.User;
+
+public class UserRepository extends MapBackedRepository<String, User> {
 }

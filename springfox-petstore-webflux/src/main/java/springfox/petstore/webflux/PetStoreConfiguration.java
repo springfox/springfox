@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.petstore;
+package springfox.petstore.webflux;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.beans.factory.annotation.Autowired;
