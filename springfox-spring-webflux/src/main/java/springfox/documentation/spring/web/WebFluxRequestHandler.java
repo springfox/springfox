@@ -72,7 +72,7 @@ public class WebFluxRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new PatternsRequestConditionWrapper(requestMapping.getPatternsCondition());
+    return new WebFluxPatternsRequestConditionWrapper(requestMapping.getPatternsCondition());
   }
 
   @Override
@@ -102,12 +102,12 @@ public class WebFluxRequestHandler implements RequestHandler {
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return NameValueExpressionWrapper.from(requestMapping.getHeadersCondition().getExpressions());
+    return WebFluxNameValueExpressionWrapper.from(requestMapping.getHeadersCondition().getExpressions());
   }
 
   @Override
   public Set<NameValueExpression<String>> params() {
-    return NameValueExpressionWrapper.from(requestMapping.getParamsCondition().getExpressions());
+    return WebFluxNameValueExpressionWrapper.from(requestMapping.getParamsCondition().getExpressions());
   }
 
   @Override
@@ -118,7 +118,7 @@ public class WebFluxRequestHandler implements RequestHandler {
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
-        PatternUtil.toListString(requestMapping.getPatternsCondition().getPatterns()),
+        WebFluxPatternUtil.toListString(requestMapping.getPatternsCondition().getPatterns()),
         requestMapping.getMethodsCondition().getMethods(),
         requestMapping.getConsumesCondition().getConsumableMediaTypes(),
         requestMapping.getProducesCondition().getProducibleMediaTypes());

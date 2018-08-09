@@ -39,7 +39,7 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import java.util.List;
 
 
-public class ObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
+public class WebFluxObjectMapperConfigurer implements BeanPostProcessor, ApplicationEventPublisherAware {
 
   private ApplicationEventPublisher applicationEventPublisher;
 

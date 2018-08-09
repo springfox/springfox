@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,21 +16,15 @@
  *
  *
  */
+package springfox.documentation.spring.web.paths;
 
-package springfox.documentation.spring.web;
+import org.springframework.stereotype.Component;
+import springfox.documentation.PathProvider;
 
-import org.springframework.web.util.pattern.PathPattern;
-
-import java.util.HashSet;
-import java.util.Set;
-
-public class PatternUtil {
-
-    public static Set<String> toListString(Set<PathPattern> patterns) {
-        Set<String> paths = new HashSet<String>();
-        for (PathPattern p: patterns) {
-            paths.add(p.getPatternString());
-        }
-        return paths;
+@Component
+public class WebFluxRelativePathProviderFactory implements PathProviderFactory {
+    @Override
+    public PathProvider getInstance() {
+        return new WebFluxRelativePathProvider();
     }
 }

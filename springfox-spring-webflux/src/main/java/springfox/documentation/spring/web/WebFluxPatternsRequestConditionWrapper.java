@@ -23,11 +23,11 @@ import org.springframework.web.reactive.result.condition.PatternsRequestConditio
 
 import java.util.Set;
 
-public class PatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
+public class WebFluxPatternsRequestConditionWrapper implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
     private PatternsRequestCondition condition;
 
-    public PatternsRequestConditionWrapper(PatternsRequestCondition condition) {
+    public WebFluxPatternsRequestConditionWrapper(PatternsRequestCondition condition) {
         this.condition = condition;
     }
 
@@ -35,22 +35,22 @@ public class PatternsRequestConditionWrapper implements springfox.documentation.
     public springfox.documentation.spring.wrapper.PatternsRequestCondition combine(
             springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other
     ) {
-        if (other instanceof PatternsRequestConditionWrapper && !this.equals(other)) {
-            return new PatternsRequestConditionWrapper(this.condition.combine(((PatternsRequestConditionWrapper) other).condition));
+        if (other instanceof WebFluxPatternsRequestConditionWrapper && !this.equals(other)) {
+            return new WebFluxPatternsRequestConditionWrapper(this.condition.combine(((WebFluxPatternsRequestConditionWrapper) other).condition));
         }
         return this;
     }
 
     @Override
     public Set<String> getPatterns() {
-        return PatternUtil.toListString(this.condition.getPatterns());
+        return WebFluxPatternUtil.toListString(this.condition.getPatterns());
     }
 
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof PatternsRequestConditionWrapper) {
-            return this.condition.equals(((PatternsRequestConditionWrapper) o).condition);
+        if (o instanceof WebFluxPatternsRequestConditionWrapper) {
+            return this.condition.equals(((WebFluxPatternsRequestConditionWrapper) o).condition);
         }
         return false;
     }

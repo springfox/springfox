@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 public class SpringfoxWebFluxConfiguration {
 
   @Bean
-  public static ObjectMapperConfigurer objectMapperConfigurer() {
-    return new ObjectMapperConfigurer();
+  public static WebFluxObjectMapperConfigurer objectMapperConfigurer() {
+    return new WebFluxObjectMapperConfigurer();
   }
 }
