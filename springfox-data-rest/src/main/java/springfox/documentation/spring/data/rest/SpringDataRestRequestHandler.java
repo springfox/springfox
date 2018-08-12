@@ -67,7 +67,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
   @Override
   public PatternsRequestCondition getPatternsCondition() {
     return new WebMvcPatternsRequestConditionWrapper(
-            new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(actionSpecification.getPath())
+        new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(actionSpecification.getPath())
     );
   }
 
@@ -83,7 +83,8 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return actionSpecification.getSupportedMethods().stream().collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+    return actionSpecification.getSupportedMethods().stream()
+        .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
   }
 
   @Override
@@ -114,9 +115,14 @@ class SpringDataRestRequestHandler implements RequestHandler {
     return empty();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public RequestHandlerKey key() {
-    return new RequestHandlerKey(getPatternsCondition().getPatterns(), supportedMethods(), consumes(), produces());
+    return new RequestHandlerKey(
+        getPatternsCondition().getPatterns(),
+        supportedMethods(),
+        consumes(),
+        produces());
   }
 
   @Override

@@ -58,6 +58,7 @@ public class CombinedRequestHandler implements RequestHandler {
     return first.isAnnotatedWith(annotation) || second.isAnnotatedWith(annotation);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public PatternsRequestCondition getPatternsCondition() {
     return first.getPatternsCondition().combine(second.getPatternsCondition());
@@ -75,24 +76,34 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return Stream.concat(first.supportedMethods().stream(), second.supportedMethods().stream()).collect(toSet());
+    return Stream.concat(
+        first.supportedMethods().stream(),
+        second.supportedMethods().stream())
+        .collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    return Stream.concat(ofNullable(first.produces()).orElse(emptySet()).stream(),
-            ofNullable(second.produces()).orElse(emptySet()).stream()).collect(toSet());
+    return Stream.concat(
+        ofNullable(first.produces()).orElse(emptySet()).stream(),
+        ofNullable(second.produces()).orElse(emptySet()).stream())
+        .collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return Stream.concat(ofNullable(first.consumes()).orElse(emptySet()).stream(),
-            ofNullable(second.consumes()).orElse(emptySet()).stream()).collect(toSet());
+    return Stream.concat(
+        ofNullable(first.consumes()).orElse(emptySet()).stream(),
+        ofNullable(second.consumes()).orElse(emptySet()).stream())
+        .collect(toSet());
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return Stream.concat(first.headers().stream(), second.headers().stream()).collect(toSet());
+    return Stream.concat(
+        first.headers().stream(),
+        second.headers().stream())
+        .collect(toSet());
   }
 
   @Override
@@ -102,9 +113,12 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return first.findAnnotation(annotation).map(Optional::of).orElse(second.findAnnotation(annotation));
+    return first.findAnnotation(annotation)
+        .map(Optional::of)
+        .orElse(second.findAnnotation(annotation));
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
@@ -128,7 +142,7 @@ public class CombinedRequestHandler implements RequestHandler {
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     return first.findControllerAnnotation(annotation)
         .map(Optional::of)
-        .orElse(second.findControllerAnnotation(annotation)) ;
+        .orElse(second.findControllerAnnotation(annotation));
   }
 
   @Override
