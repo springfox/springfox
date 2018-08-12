@@ -33,6 +33,7 @@ import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.PathProviderFactory
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -51,7 +52,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   def setup() {
     pluginsManager = swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(),
-        Mock(ServletContext))])
+        Mock(PathProviderFactory))])
     sut = new ApiModelReader(
         modelProvider(swaggerSchemaPlugins()),
         new TypeResolver()

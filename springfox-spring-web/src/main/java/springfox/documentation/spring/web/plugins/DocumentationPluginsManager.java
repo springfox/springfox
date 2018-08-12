@@ -150,7 +150,7 @@ public class DocumentationPluginsManager {
 
   public DocumentationContextBuilder createContextBuilder(
       DocumentationType documentationType,
-      DefaultConfiguration defaultConfiguration) {
+      DefaultsProviderPlugin defaultConfiguration) {
     return defaultsProviders.getPluginFor(documentationType, defaultConfiguration)
         .create(documentationType)
         .withResourceGroupingStrategy(resourceGroupingStrategy(documentationType));

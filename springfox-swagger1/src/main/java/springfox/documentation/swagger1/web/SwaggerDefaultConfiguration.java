@@ -26,9 +26,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
+import springfox.documentation.spring.web.paths.PathProviderFactory;
 import springfox.documentation.spring.web.plugins.DefaultConfiguration;
 
-import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +41,11 @@ public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
   private TypeResolver typeResolver;
 
   public SwaggerDefaultConfiguration(
-      Defaults defaults,
-      TypeResolver typeResolver,
-      ServletContext servletContext) {
+          Defaults defaults,
+          TypeResolver typeResolver,
+          PathProviderFactory pathProviderFactory) {
     this.typeResolver = typeResolver;
-    defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
+    defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, pathProviderFactory);
   }
 
   @Override

@@ -29,7 +29,7 @@ import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.PropertySourcedMapping
-import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping
+import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping
 import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -85,7 +85,7 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
     given:
       def env = Mock(Environment)
       env.getProperty("springfox.documentation.swagger.v1.path") >> "shoes"
-      def handler = new PropertySourcedRequestMappingHandlerMapping(env, null)
+      def handler = new WebMvcPropertySourcedRequestMappingHandlerMapping(env, null)
       def method = Swagger1Controller.getMethod("getApiListing", String, String, HttpServletRequest)
       def annotation = method.getAnnotation(PropertySourcedMapping)
     when:

@@ -30,7 +30,8 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.paths.RelativePathProvider
+import springfox.documentation.spring.web.paths.PathProviderFactory
+import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
@@ -64,7 +65,7 @@ class DocketSpec extends DocumentationContextSpec {
       pluginContext.apiInfo.getLicenseUrl() == "http://www.apache.org/licenses/LICENSE-2.0"
       pluginContext.apiInfo.version == "1.0"
 
-      pluginContext.pathProvider instanceof RelativePathProvider
+      pluginContext.pathProvider instanceof DummyPathProvider // this one is dummy as this is what we have in test ctx
   }
 
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
@@ -142,7 +143,7 @@ class DocketSpec extends DocumentationContextSpec {
 
   def "Model substitution registers new rules"() {
     when:
-      def swaggerDefault = new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(), Mock(ServletContext))
+      def swaggerDefault = new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(), Mock(PathProviderFactory))
               .create(DocumentationType.SWAGGER_12)
       def isjdk8 = System.getProperty("java.version").startsWith("1.8")
       def jdk8RuleCount = (isjdk8 ? 6 : 0)
@@ -167,13 +168,13 @@ class DocketSpec extends DocumentationContextSpec {
       documentationContext()."$property" == object
 
     where:
-      builderMethod     | object                                         | property
-      'pathProvider'    | new RelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-      'securitySchemes' | new ArrayList<SecurityScheme>()                | 'securitySchemes'
-      'securityContexts'| validContexts()                                 | 'securityContexts'
-      'groupName'       | 'someGroup'                                    | 'groupName'
-      'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')        | 'apiInfo'
-      'apiInfo'         | ApiInfo.DEFAULT                                | 'apiInfo'
+      builderMethod     | object                                               | property
+      'pathProvider'    | new WebMvcRelativePathProvider(Mock(ServletContext)) | 'pathProvider'
+      'securitySchemes' | new ArrayList<SecurityScheme>()                      | 'securitySchemes'
+      'securityContexts'| validContexts()                                      | 'securityContexts'
+      'groupName'       | 'someGroup'                                          | 'groupName'
+      'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')              | 'apiInfo'
+      'apiInfo'         | ApiInfo.DEFAULT                                      | 'apiInfo'
   }
 
   def validContexts() {

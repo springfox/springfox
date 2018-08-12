@@ -13,6 +13,7 @@ import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.JsonSupport
 import springfox.documentation.spring.web.paths.AbstractPathProvider
+import springfox.documentation.spring.web.paths.WebMvcRelativePathProviderFactory
 import springfox.documentation.spring.web.plugins.DefaultConfiguration
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner
@@ -32,7 +33,7 @@ import static springfox.documentation.spi.service.contexts.Orderings.*
 class Swagger2ControllerSpec extends DocumentationContextSpec
     implements MapperSupport, JsonSupport{
 
-  Swagger2Controller controller = new Swagger2Controller(
+  Swagger2ControllerWebMvc controller = new Swagger2ControllerWebMvc(
       mockEnvironment(),
       new DocumentationCache(),
       swagger2Mapper(),
@@ -81,7 +82,8 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     given:
       def req = servletRequestWithXHeaders(prefix)
 
-      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), req.servletContext)
+      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(),
+              new WebMvcRelativePathProviderFactory(req.servletContext))
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
           .operationOrdering(nickNameComparator())
@@ -119,7 +121,8 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
       def req = servletRequest()
 
-      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), req.servletContext)
+      def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(),
+              new WebMvcRelativePathProviderFactory(req.servletContext))
       this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
           .requestHandlers([])
           .pathProvider(pathProvider)

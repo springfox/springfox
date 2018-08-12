@@ -22,12 +22,12 @@ import com.fasterxml.classmate.ResolvedType;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -60,11 +60,7 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new PatternsRequestCondition(Stream.concat(
-        first.getPatternsCondition().getPatterns().stream(),
-        second.getPatternsCondition().getPatterns().stream())
-        .distinct()
-        .toArray(String[]::new));
+    return first.getPatternsCondition().combine(second.getPatternsCondition());
   }
 
   @Override

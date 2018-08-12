@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.Operation;
 import springfox.documentation.spi.service.contexts.ApiSelector;
@@ -32,9 +31,11 @@ import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.*;
@@ -89,8 +90,8 @@ public class ApiDescriptionReader {
   }
 
   private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
-    return patternsCondition.getPatterns().stream()
-        .filter(selector.getPathSelector()).sorted(naturalOrder()).collect(toList());
+    return ((Set<String>) patternsCondition.getPatterns()).stream()
+            .filter(selector.getPathSelector()).sorted(naturalOrder()).collect(toList());
   }
 
 }

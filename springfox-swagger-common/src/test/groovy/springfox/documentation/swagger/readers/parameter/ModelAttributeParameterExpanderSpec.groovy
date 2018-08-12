@@ -32,6 +32,7 @@ import springfox.documentation.spi.service.DefaultsProviderPlugin
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.dummy.models.ModelAttributeWithHiddenParametersExample
+import springfox.documentation.spring.web.paths.WebMvcRelativePathProviderFactory
 import springfox.documentation.spring.web.plugins.DefaultConfiguration
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.parameter.ExpansionContext
@@ -92,7 +93,8 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     @Autowired
     SwaggerDefaults(Defaults defaults, TypeResolver typeResolver, ServletContext servletContext) {
       this.typeResolver = typeResolver
-      defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext)
+      defaultConfiguration = new DefaultConfiguration(defaults, typeResolver,
+              new WebMvcRelativePathProviderFactory(servletContext))
     }
 
     @Override

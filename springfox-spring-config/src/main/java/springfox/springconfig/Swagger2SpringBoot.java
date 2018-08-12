@@ -50,7 +50,7 @@ import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
 import springfox.documentation.swagger.web.TagsSorter;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 import springfox.petstore.controller.PetController;
 
 import java.util.List;
@@ -60,7 +60,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 
 
 @SpringBootApplication
-@EnableSwagger2//<1>
+@EnableSwagger2WebMvc//<1>
 @ComponentScan(basePackageClasses = {
     PetController.class
 })//<2>
