@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.reactive.result.method.RequestMappingInfo;
+import org.springframework.web.util.pattern.PathPattern;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -35,6 +36,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class WebFluxRequestHandler implements RequestHandler {
   private final HandlerMethodResolver methodResolver;
@@ -118,7 +120,9 @@ public class WebFluxRequestHandler implements RequestHandler {
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
-        WebFluxPatternUtil.toListString(requestMapping.getPatternsCondition().getPatterns()),
+        requestMapping.getPatternsCondition().getPatterns().stream()
+            .map(PathPattern::getPatternString)
+            .collect(Collectors.toSet()),
         requestMapping.getMethodsCondition().getMethods(),
         requestMapping.getConsumesCondition().getConsumableMediaTypes(),
         requestMapping.getProducesCondition().getProducibleMediaTypes());

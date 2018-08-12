@@ -42,11 +42,14 @@ public class WebFluxPatternsRequestConditionWrapper
         return this;
     }
 
-    @Override
-    public Set<String> getPatterns() {
-        return WebFluxPatternUtil.toListString(this.condition.getPatterns());
     }
 
+  @Override
+  public Set<String> getPatterns() {
+    return this.wrapped.getPatterns().stream()
+        .map(PathPattern::getPatternString)
+        .collect(Collectors.toSet());
+  }
 
     @Override
     public boolean equals(Object o) {
