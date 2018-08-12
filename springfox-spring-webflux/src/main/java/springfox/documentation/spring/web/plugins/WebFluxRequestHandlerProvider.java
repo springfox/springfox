@@ -63,25 +63,15 @@ public class WebFluxRequestHandlerProvider implements RequestHandlerProvider {
         .collect(toList());
   }
 
-  private Function<? super RequestMappingInfoHandlerMapping,
-        Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-    return new Function<RequestMappingInfoHandlerMapping, Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>>() {
-      @Override
-      public Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>> apply(RequestMappingInfoHandlerMapping input) {
-        return input.getHandlerMethods().entrySet();
-      }
-    };
+  private Function<RequestMappingInfoHandlerMapping,
+      Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+    return input -> input.getHandlerMethods().entrySet();
   }
 
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
-    return new Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler>() {
-      @Override
-      public WebFluxRequestHandler apply(Map.Entry<RequestMappingInfo, HandlerMethod> input) {
-        return new WebFluxRequestHandler(
-            methodResolver,
-            input.getKey(),
-            input.getValue());
-      }
-    };
+    return input -> new WebFluxRequestHandler(
+        methodResolver,
+        input.getKey(),
+        input.getValue());
   }
 }

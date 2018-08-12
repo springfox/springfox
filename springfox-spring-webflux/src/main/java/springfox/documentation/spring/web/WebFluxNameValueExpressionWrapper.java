@@ -27,15 +27,14 @@ import java.util.Set;
 public class WebFluxNameValueExpressionWrapper<T> implements NameValueExpression {
     private org.springframework.web.reactive.result.condition.NameValueExpression<T> e;
 
-    public static <T> Set<NameValueExpression<T>> from(Set<org.springframework.web.reactive.result.condition.NameValueExpression<T>> springSet) {
-        Set<NameValueExpression<T>> wrapped = new HashSet<NameValueExpression<T>>();
 
-        for (org.springframework.web.reactive.result.condition.NameValueExpression e: springSet) {
-            wrapped.add(new WebFluxNameValueExpressionWrapper<T>(e));
-        }
+  public static <T> Set<NameValueExpression<T>> from(
+      Set<org.springframework.web.reactive.result.condition.NameValueExpression<T>> springSet) {
 
-        return wrapped;
-    }
+    return springSet.stream()
+        .map(WebFluxNameValueExpressionWrapper::new)
+        .collect(Collectors.toSet());
+  }
 
     public WebFluxNameValueExpressionWrapper(org.springframework.web.reactive.result.condition.NameValueExpression<T> e) {
         this.e = e;

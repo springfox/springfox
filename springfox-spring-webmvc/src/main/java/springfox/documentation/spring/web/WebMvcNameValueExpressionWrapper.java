@@ -27,15 +27,14 @@ import java.util.Set;
 public class WebMvcNameValueExpressionWrapper<T> implements NameValueExpression {
     private org.springframework.web.servlet.mvc.condition.NameValueExpression<T> e;
 
-    public static <T> Set<NameValueExpression<T>> from(Set<org.springframework.web.servlet.mvc.condition.NameValueExpression<T>> springSet) {
-        Set<NameValueExpression<T>> wrapped = new HashSet<NameValueExpression<T>>();
 
-        for (org.springframework.web.servlet.mvc.condition.NameValueExpression e: springSet) {
-            wrapped.add(new WebMvcNameValueExpressionWrapper<T>(e));
-        }
+  public static <T> Set<NameValueExpression<T>> from(
+      Set<org.springframework.web.servlet.mvc.condition.NameValueExpression<T>> springSet) {
 
-        return wrapped;
-    }
+    return springSet.stream()
+        .map(WebMvcNameValueExpressionWrapper::new)
+        .collect(Collectors.toSet());
+  }
 
     public WebMvcNameValueExpressionWrapper(org.springframework.web.servlet.mvc.condition.NameValueExpression<T> e) {
         this.e = e;
