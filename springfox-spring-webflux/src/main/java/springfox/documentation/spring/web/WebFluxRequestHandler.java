@@ -36,6 +36,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class WebFluxRequestHandler implements RequestHandler {
@@ -150,9 +151,10 @@ public class WebFluxRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("WebMvcRequestHandler{");
-    sb.append("key=").append(key());
-    sb.append('}');
-    return sb.toString();
+    return new StringJoiner(", ", WebFluxRequestHandler.class.getSimpleName() + "{", "}")
+        .add("requestMapping=" + requestMapping)
+        .add("handlerMethod=" + handlerMethod)
+        .add("key=" + key())
+        .toString();
   }
 }

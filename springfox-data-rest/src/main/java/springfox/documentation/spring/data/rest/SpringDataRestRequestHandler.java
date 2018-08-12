@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
@@ -160,9 +161,10 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("SpringDataRestRequestHandler{");
-    sb.append("key=").append(key());
-    sb.append('}');
-    return sb.toString();
+    return new StringJoiner(", ", SpringDataRestRequestHandler.class.getSimpleName() + "{", "}")
+        .add("entityContext=" + entityContext)
+        .add("actionSpecification=" + actionSpecification)
+        .add("key=" + key())
+        .toString();
   }
 }

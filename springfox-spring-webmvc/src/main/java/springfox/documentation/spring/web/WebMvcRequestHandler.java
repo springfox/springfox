@@ -35,6 +35,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import static java.util.Optional.*;
 
@@ -148,9 +149,10 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("WebMvcRequestHandler{");
-    sb.append("key=").append(key());
-    sb.append('}');
-    return sb.toString();
+    return new StringJoiner(", ", WebMvcRequestHandler.class.getSimpleName() + "{", "}")
+        .add("requestMapping=" + requestMapping)
+        .add("handlerMethod=" + handlerMethod)
+        .add("key=" + key())
+        .toString();
   }
 }

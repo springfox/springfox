@@ -33,6 +33,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 import static java.util.Collections.*;
@@ -162,11 +163,10 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("CombinedRequestHandler{");
-    sb.append("first key=").append(first == null ? "No key" : first.key());
-    sb.append("second key=").append(second == null ? "No key" : second.key());
-    sb.append("combined key=").append(key());
-    sb.append('}');
-    return sb.toString();
+    return new StringJoiner(", ", CombinedRequestHandler.class.getSimpleName() + "{", "}")
+        .add("first=" + first)
+        .add("second=" + second)
+        .add("combined key=" + key())
+        .toString();
   }
 }
