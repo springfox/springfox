@@ -20,12 +20,12 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import springfox.documentation.spring.web.paths.PathProviderFactory;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
+import springfox.documentation.spring.web.paths.PathProviderFactory;
 
 public class DefaultConfiguration implements DefaultsProviderPlugin {
 
@@ -33,9 +33,10 @@ public class DefaultConfiguration implements DefaultsProviderPlugin {
   private final TypeResolver typeResolver;
   private final PathProviderFactory pathProviderFactory;
 
-  public DefaultConfiguration(Defaults defaults,
-                       TypeResolver typeResolver,
-                       PathProviderFactory pathProviderFactory) {
+  public DefaultConfiguration(
+      Defaults defaults,
+      TypeResolver typeResolver,
+      PathProviderFactory pathProviderFactory) {
     this.defaults = defaults;
     this.typeResolver = typeResolver;
     this.pathProviderFactory = pathProviderFactory;
@@ -44,16 +45,16 @@ public class DefaultConfiguration implements DefaultsProviderPlugin {
   @Override
   public DocumentationContextBuilder create(DocumentationType documentationType) {
     return new DocumentationContextBuilder(documentationType)
-            .operationOrdering(defaults.operationOrdering())
-            .apiDescriptionOrdering(defaults.apiDescriptionOrdering())
-            .apiListingReferenceOrdering(defaults.apiListingReferenceOrdering())
-            .additionalIgnorableTypes(defaults.defaultIgnorableParameterTypes())
-            .rules(defaults.defaultRules(typeResolver))
-            .defaultResponseMessages(defaults.defaultResponseMessages())
-            .pathProvider(pathProviderFactory.getInstance())
-            .typeResolver(typeResolver)
-            .enableUrlTemplating(false)
-            .selector(ApiSelector.DEFAULT);
+        .operationOrdering(defaults.operationOrdering())
+        .apiDescriptionOrdering(defaults.apiDescriptionOrdering())
+        .apiListingReferenceOrdering(defaults.apiListingReferenceOrdering())
+        .additionalIgnorableTypes(defaults.defaultIgnorableParameterTypes())
+        .rules(defaults.defaultRules(typeResolver))
+        .defaultResponseMessages(defaults.defaultResponseMessages())
+        .pathProvider(pathProviderFactory.getInstance())
+        .typeResolver(typeResolver)
+        .enableUrlTemplating(false)
+        .selector(ApiSelector.DEFAULT);
   }
 
   @Override
