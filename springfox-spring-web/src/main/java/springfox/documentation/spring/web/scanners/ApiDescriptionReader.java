@@ -91,7 +91,9 @@ public class ApiDescriptionReader {
 
   private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
     return ((Set<String>) patternsCondition.getPatterns()).stream()
-            .filter(selector.getPathSelector()).sorted(naturalOrder()).collect(toList());
+        .filter(selector.getPathSelector())
+        .sorted(naturalOrder())
+        .collect(toList());
   }
 
 }

@@ -23,7 +23,6 @@ import javax.servlet.ServletContext;
 
 import static org.springframework.util.StringUtils.*;
 
-
 public class WebMvcRelativePathProvider extends AbstractPathProvider {
   private static final String ROOT = "/";
   private final ServletContext servletContext;

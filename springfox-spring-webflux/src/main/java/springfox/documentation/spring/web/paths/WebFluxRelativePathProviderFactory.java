@@ -23,8 +23,8 @@ import springfox.documentation.PathProvider;
 
 @Component
 public class WebFluxRelativePathProviderFactory implements PathProviderFactory {
-    @Override
-    public PathProvider getInstance() {
-        return new WebFluxRelativePathProvider();
-    }
+  @Override
+  public PathProvider getInstance() {
+    return new WebFluxRelativePathProvider();
+  }
 }

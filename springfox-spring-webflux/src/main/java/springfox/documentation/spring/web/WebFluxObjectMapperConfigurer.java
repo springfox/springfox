@@ -55,7 +55,7 @@ public class WebFluxObjectMapperConfigurer implements BeanPostProcessor, Applica
         if (reader instanceof DecoderHttpMessageReader) {
           Decoder decoder = ((DecoderHttpMessageReader) reader).getDecoder();
           if (decoder instanceof Jackson2JsonDecoder) {
-            fireObjectMapperConfiguredEvent(((Jackson2JsonDecoder)decoder).getObjectMapper());
+            fireObjectMapperConfiguredEvent(((Jackson2JsonDecoder) decoder).getObjectMapper());
             return bean;
           }
         }
@@ -63,11 +63,11 @@ public class WebFluxObjectMapperConfigurer implements BeanPostProcessor, Applica
       List<HttpMessageWriter<?>> writers = ((DefaultServerCodecConfigurer) bean).getWriters();
       for (HttpMessageWriter<?> writer : writers) {
         if (writer instanceof EncoderHttpMessageWriter) {
-            Encoder encoder = ((EncoderHttpMessageWriter) writer).getEncoder();
-            if (encoder instanceof Jackson2JsonEncoder) {
-                fireObjectMapperConfiguredEvent(((Jackson2JsonEncoder)encoder).getObjectMapper());
-                return bean;
-            }
+          Encoder encoder = ((EncoderHttpMessageWriter) writer).getEncoder();
+          if (encoder instanceof Jackson2JsonEncoder) {
+            fireObjectMapperConfiguredEvent(((Jackson2JsonEncoder) encoder).getObjectMapper());
+            return bean;
+          }
         }
       }
     }

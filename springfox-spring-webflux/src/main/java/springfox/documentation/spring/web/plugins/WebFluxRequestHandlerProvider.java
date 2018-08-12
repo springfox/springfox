@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -56,8 +56,11 @@ public class WebFluxRequestHandlerProvider implements RequestHandlerProvider {
   @Override
   public List<RequestHandler> requestHandlers() {
     return nullToEmptyList(handlerMappings).stream()
-            .map(toMappingEntries()).flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
-            .map(toRequestHandler()).sorted(byPatternsCondition()).collect(toList());
+        .map(toMappingEntries())
+        .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+        .map(toRequestHandler())
+        .sorted(byPatternsCondition())
+        .collect(toList());
   }
 
   private Function<? super RequestMappingInfoHandlerMapping,

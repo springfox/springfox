@@ -40,21 +40,21 @@ public class WebFluxNameValueExpressionWrapper<T> implements NameValueExpression
     public WebFluxNameValueExpressionWrapper(org.springframework.web.reactive.result.condition.NameValueExpression<T> e) {
         this.e = e;
     }
+  @Override
+  public String getName() {
+    return wrapped.getName();
+  }
 
-    @Override
-    public String getName() {
-        return this.e.getName();
-    }
 
     @Override
     public Object getValue() {
         return this.e.getValue();
     }
+  @Override
+  public boolean isNegated() {
+    return wrapped.isNegated();
+  }
 
-    @Override
-    public boolean isNegated() {
-        return this.e.isNegated();
-    }
 
     @Override
     public int hashCode() {

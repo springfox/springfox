@@ -41,7 +41,9 @@ public class WebMvcObjectMapperConfigurer implements BeanPostProcessor, Applicat
   private ApplicationEventPublisher applicationEventPublisher;
 
   @Override
-  public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+  public Object postProcessBeforeInitialization(
+      Object bean,
+      String beanName) throws BeansException {
 
     if (bean instanceof RequestMappingHandlerAdapter) {
       RequestMappingHandlerAdapter adapter = (RequestMappingHandlerAdapter) bean;
@@ -51,7 +53,9 @@ public class WebMvcObjectMapperConfigurer implements BeanPostProcessor, Applicat
   }
 
   @Override
-  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+  public Object postProcessAfterInitialization(
+      Object bean,
+      String beanName) throws BeansException {
     return bean;
   }
 
@@ -60,7 +64,9 @@ public class WebMvcObjectMapperConfigurer implements BeanPostProcessor, Applicat
     this.applicationEventPublisher = applicationEventPublisher;
   }
 
-  private List<HttpMessageConverter<?>> configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+  private List<HttpMessageConverter<?>> configureMessageConverters(
+      List<HttpMessageConverter<?>> converters) {
+
     Iterable<MappingJackson2HttpMessageConverter> jackson2Converters = jackson2Converters(converters);
     if (StreamSupport.stream(jackson2Converters.spliterator(), false).count() > 0) {
       for (MappingJackson2HttpMessageConverter each : jackson2Converters) {
@@ -74,8 +80,10 @@ public class WebMvcObjectMapperConfigurer implements BeanPostProcessor, Applicat
 
   private Iterable<MappingJackson2HttpMessageConverter> jackson2Converters(
       List<HttpMessageConverter<?>> messageConverters) {
+
     List<MappingJackson2HttpMessageConverter> converters = messageConverters.stream()
-        .filter(MappingJackson2HttpMessageConverter.class::isInstance).map((each) -> (MappingJackson2HttpMessageConverter)each)
+        .filter(MappingJackson2HttpMessageConverter.class::isInstance)
+        .map(MappingJackson2HttpMessageConverter.class::cast)
         .collect(toList());
     Collections.reverse(converters);
     return converters;

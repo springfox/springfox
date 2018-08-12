@@ -132,7 +132,7 @@ public class WebMvcRequestHandler implements RequestHandler {
   }
 
   @Override
-  public List<ResolvedMethodParameter> getParameters(){
+  public List<ResolvedMethodParameter> getParameters() {
     return methodResolver.methodParameters(handlerMethod);
   }
 

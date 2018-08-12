@@ -26,15 +26,15 @@ import javax.servlet.ServletContext;
 
 @Component
 public class WebMvcRelativePathProviderFactory implements PathProviderFactory {
-    private final ServletContext servletContext;
+  private final ServletContext servletContext;
 
-    @Autowired
-    public WebMvcRelativePathProviderFactory(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
+  @Autowired
+  public WebMvcRelativePathProviderFactory(ServletContext servletContext) {
+    this.servletContext = servletContext;
+  }
 
-    @Override
-    public PathProvider getInstance() {
-        return new WebMvcRelativePathProvider(servletContext);
-    }
+  @Override
+  public PathProvider getInstance() {
+    return new WebMvcRelativePathProvider(servletContext);
+  }
 }
