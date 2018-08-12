@@ -21,12 +21,17 @@ package springfox.documentation.spring.web;
 
 import springfox.documentation.spring.wrapper.NameValueExpression;
 
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class WebMvcNameValueExpressionWrapper<T> implements NameValueExpression {
-    private org.springframework.web.servlet.mvc.condition.NameValueExpression<T> e;
+public class WebMvcNameValueExpressionWrapper<T> implements NameValueExpression<T> {
+  private org.springframework.web.servlet.mvc.condition.NameValueExpression<T> wrapped;
 
+  private WebMvcNameValueExpressionWrapper(
+      org.springframework.web.servlet.mvc.condition.NameValueExpression<T> wrapped) {
+    this.wrapped = wrapped;
+  }
 
   public static <T> Set<NameValueExpression<T>> from(
       Set<org.springframework.web.servlet.mvc.condition.NameValueExpression<T>> springSet) {
@@ -36,32 +41,28 @@ public class WebMvcNameValueExpressionWrapper<T> implements NameValueExpression 
         .collect(Collectors.toSet());
   }
 
-    public WebMvcNameValueExpressionWrapper(org.springframework.web.servlet.mvc.condition.NameValueExpression<T> e) {
-        this.e = e;
-    }
+  @Override
+  public String getName() {
+    return wrapped.getName();
+  }
 
-    @Override
-    public String getName() {
-        return this.e.getName();
-    }
+  @Override
+  public T getValue() {
+    return wrapped.getValue();
+  }
 
-    @Override
-    public Object getValue() {
-        return this.e.getValue();
-    }
+  @Override
+  public boolean isNegated() {
+    return wrapped.isNegated();
+  }
 
-    @Override
-    public boolean isNegated() {
-        return this.e.isNegated();
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(wrapped);
+  }
 
-    @Override
-    public int hashCode() {
-        return this.e.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this.e.equals(obj);
-    }
+  @Override
+  public boolean equals(Object obj) {
+    return Objects.equals(wrapped, obj);
+  }
 }

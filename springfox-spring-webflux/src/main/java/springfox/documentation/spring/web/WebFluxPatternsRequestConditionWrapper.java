@@ -20,29 +20,29 @@
 package springfox.documentation.spring.web;
 
 import org.springframework.web.reactive.result.condition.PatternsRequestCondition;
+import org.springframework.web.util.pattern.PathPattern;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class WebFluxPatternsRequestConditionWrapper
-        implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
+    implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
-    private PatternsRequestCondition condition;
+  private PatternsRequestCondition wrapped;
 
-    public WebFluxPatternsRequestConditionWrapper(PatternsRequestCondition condition) {
-        this.condition = condition;
+  public WebFluxPatternsRequestConditionWrapper(PatternsRequestCondition wrapped) {
+    this.wrapped = wrapped;
+  }
+
+  @Override
+  public springfox.documentation.spring.wrapper.PatternsRequestCondition combine(
+      springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other) {
+    if (other instanceof WebFluxPatternsRequestConditionWrapper && !this.equals(other)) {
+      return new WebFluxPatternsRequestConditionWrapper(
+          wrapped.combine(((WebFluxPatternsRequestConditionWrapper) other).wrapped));
     }
-
-    @Override
-    public springfox.documentation.spring.wrapper.PatternsRequestCondition combine(
-            springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other
-    ) {
-        if (other instanceof WebFluxPatternsRequestConditionWrapper && !this.equals(other)) {
-            return new WebFluxPatternsRequestConditionWrapper(this.condition.combine(((WebFluxPatternsRequestConditionWrapper) other).condition));
-        }
-        return this;
-    }
-
-    }
+    return this;
+  }
 
   @Override
   public Set<String> getPatterns() {
@@ -51,22 +51,22 @@ public class WebFluxPatternsRequestConditionWrapper
         .collect(Collectors.toSet());
   }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof WebFluxPatternsRequestConditionWrapper) {
-            return this.condition.equals(((WebFluxPatternsRequestConditionWrapper) o).condition);
-        }
-        return false;
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof WebFluxPatternsRequestConditionWrapper) {
+      return wrapped.equals(((WebFluxPatternsRequestConditionWrapper) other).wrapped);
     }
+    return false;
+  }
 
-    @Override
-    public int hashCode() {
-        return this.condition.hashCode();
-    }
+  @Override
+  public int hashCode() {
+    return this.wrapped.hashCode();
+  }
 
-    @Override
-    public String toString() {
-        return this.condition.toString();
-    }
+  @Override
+  public String toString() {
+    return this.wrapped.toString();
+  }
 }
 
