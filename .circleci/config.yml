@@ -1,6 +1,9 @@
 version: 2
 jobs:
   build:
+    branches:
+      ignore:
+        - gh-pages
     working_directory: ~/code
     docker:
       - image: circleci/openjdk:8-jdk-node-browsers
@@ -24,6 +27,7 @@ jobs:
           paths:
             - ~/node_modules
             - ~/.m2
+            - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
       - run:
           name: Run Tests
