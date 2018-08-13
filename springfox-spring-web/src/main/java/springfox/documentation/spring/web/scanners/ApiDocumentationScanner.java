@@ -48,6 +48,7 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 @Component
 public class ApiDocumentationScanner {
 
+  private static final String ROOT = "/";
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private ApiListingScanner apiListingScanner;
 
@@ -75,7 +76,7 @@ public class ApiDocumentationScanner {
         .consumes(context.getConsumes())
         .host(context.getHost())
         .schemes(context.getProtocols())
-        .basePath(context.getPathProvider().getApplicationBasePath())
+        .basePath(ROOT)
         .extensions(context.getVendorExtentions())
         .tags(tags);
 

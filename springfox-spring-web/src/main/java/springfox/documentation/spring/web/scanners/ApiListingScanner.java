@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.scanners;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
@@ -59,6 +58,7 @@ import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
 @Component
 public class ApiListingScanner {
+  private static final String ROOT = "/";
   private final ApiDescriptionReader apiDescriptionReader;
   private final ApiModelReader apiModelReader;
   private final DocumentationPluginsManager pluginsManager;
@@ -148,12 +148,10 @@ public class ApiListingScanner {
           .orElse(longestCommonPath(sortedApis)
           .orElse(null));
 
-      PathProvider pathProvider = documentationContext.getPathProvider();
-      String basePath = pathProvider.getApplicationBasePath();
       PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
           .apiVersion(documentationContext.getApiInfo().getVersion())
-          .basePath(adjuster.adjustedPath(basePath))
+          .basePath(adjuster.adjustedPath(ROOT))
           .resourcePath(resourcePath)
           .produces(produces)
           .consumes(consumes)

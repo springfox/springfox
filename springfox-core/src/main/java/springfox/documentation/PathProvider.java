@@ -25,6 +25,7 @@ public interface PathProvider {
    * Gets the application base path
    * @return application base path
    */
+  @Deprecated
   String getApplicationBasePath();
 
   /**
