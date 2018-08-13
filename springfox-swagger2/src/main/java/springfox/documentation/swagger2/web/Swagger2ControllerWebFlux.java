@@ -87,13 +87,13 @@ public class Swagger2ControllerWebFlux {
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       LOGGER.warn("Unable to find specification for group {}", groupName);
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
     swagger.basePath("/");
     if (isEmpty(swagger.getHost())) {
       swagger.host(request.getURI().getAuthority());
     }
-    return new ResponseEntity<Json>(jsonSerializer.toJson(swagger), HttpStatus.OK);
+    return new ResponseEntity<>(jsonSerializer.toJson(swagger), HttpStatus.OK);
   }
 }

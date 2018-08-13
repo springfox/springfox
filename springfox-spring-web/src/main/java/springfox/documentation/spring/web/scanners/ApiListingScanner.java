@@ -176,12 +176,7 @@ public class ApiListingScanner {
   }
 
   private Predicate<ApiDescription> onlySelectedApis(final DocumentationContext context) {
-    return new Predicate<ApiDescription>() {
-      @Override
-      public boolean test(ApiDescription input) {
-        return context.getApiSelector().getPathSelector().test(input.getPath());
-      }
-    };
+    return input -> context.getApiSelector().getPathSelector().test(input.getPath());
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
