@@ -1,7 +1,7 @@
 {
   "name": "springfox-swagger-ui",
   "version": "1.0.0",
-  "description": "Automated JSON API documentation for API's built with Spring",
+  "description": "Automated JSON API documentation for APIs built with Spring",
   "scripts": {
     "test": "jest",
     "dev": "webpack --mode development --config webpack.config.js --progress --watch",
