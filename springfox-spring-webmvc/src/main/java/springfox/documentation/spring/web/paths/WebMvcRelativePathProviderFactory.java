@@ -25,6 +25,6 @@ import springfox.documentation.PathProvider;
 public class WebMvcRelativePathProviderFactory implements PathProviderFactory {
   @Override
   public PathProvider getInstance() {
-    return new WebMvcRelativePathProvider();
+    return new DefaultPathProvider();
   }
 }

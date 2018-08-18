@@ -30,7 +30,7 @@ import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.mixins.AccessorAssertions
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
@@ -53,7 +53,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     contextBuilder.requestHandlers(requestHandlers)
         .withResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
     plugin
-        .pathProvider(new WebMvcRelativePathProvider())
+        .pathProvider(new DefaultPathProvider())
         .select()
         .apis(withClassAnnotation(ApiIgnore).negate())
         .paths(regex(".*?"))

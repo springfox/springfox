@@ -33,7 +33,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
-import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
 import static java.util.Optional.*
@@ -137,7 +137,7 @@ class DocumentationPluginsManagerSpec extends Specification {
       def pathContext = Mock(PathContext)
       def context = Mock(DocumentationContext)
     and:
-      pathContext.pathProvider() >> new WebMvcRelativePathProvider()
+      pathContext.pathProvider() >> new DefaultPathProvider()
       pathContext.documentationContext() >> context
       context.getPathMapping() >> empty()
       pathContext.parameters >> []

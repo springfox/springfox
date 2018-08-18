@@ -25,7 +25,7 @@ import springfox.documentation.PathProvider;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 
-public abstract class DefaultPathProvider implements PathProvider {
+public class DefaultPathProvider implements PathProvider {
 
   /**
    * The base path to the swagger api documentation.

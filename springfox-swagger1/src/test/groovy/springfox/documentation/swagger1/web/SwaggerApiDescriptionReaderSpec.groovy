@@ -34,8 +34,6 @@ import springfox.documentation.spring.web.scanners.ApiDescriptionLookup
 import springfox.documentation.spring.web.scanners.ApiDescriptionReader
 import springfox.documentation.swagger1.mixins.SwaggerPathProviderSupport
 
-import javax.servlet.ServletContext
-
 import static springfox.documentation.spring.web.paths.Paths.*
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, ServicePluginsSupport])
@@ -75,8 +73,8 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
     secondApiDescription.getDescription() == dummyHandlerMethod().method.name
 
     where:
-    pathProvider                                      | prefix
-    relativeSwaggerPathProvider(Mock(ServletContext)) | ""
+    pathProvider                  | prefix
+    relativeSwaggerPathProvider() | ""
   }
 
   def "should sanitize request mapping endpoints"() {

@@ -38,7 +38,7 @@ import springfox.documentation.service.VendorExtension
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
-import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 
 import javax.servlet.ServletRequest
 
@@ -183,7 +183,7 @@ class DocketSpec extends DocumentationContextSpec {
 
     where:
     builderMethod               | object                                  | property
-    'pathProvider'              | new WebMvcRelativePathProvider()        | 'pathProvider'
+    'pathProvider'              | new DefaultPathProvider()               | 'pathProvider'
     'securitySchemes'           | new ArrayList<SecurityScheme>()         | 'securitySchemes'
     'securityContexts'          | validContexts()                         | 'securityContexts'
     'groupName'                 | 'someGroup'                             | 'groupName'

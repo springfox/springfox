@@ -33,7 +33,7 @@ import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.paths.Paths
-import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
+
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
@@ -127,7 +127,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "resource with mocked apis"() {
     given:
-    DefaultPathProvider pathProvider = new WebMvcRelativePathProvider()
+    DefaultPathProvider pathProvider = new DefaultPathProvider()
     plugin
         .groupName("groupName")
         .select()

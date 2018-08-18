@@ -25,13 +25,13 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import javax.servlet.ServletContext
 
 @Mixin(RequestMappingSupport)
-class WebMvcRelativePathProviderSpec extends Specification {
+class DefaultPathProviderSpec extends Specification {
 
   def "relative paths"() {
     given:
     ServletContext servletContext = Mock(ServletContext)
     servletContext.contextPath >> "/"
-    DefaultPathProvider provider = new WebMvcRelativePathProvider()
+    DefaultPathProvider provider = new DefaultPathProvider()
 
     expect:
     provider.getResourceListingPath('default', 'api-declaration') == "/default/api-declaration"
@@ -40,7 +40,7 @@ class WebMvcRelativePathProviderSpec extends Specification {
 
   def "should never return a path with duplicate slash"() {
     setup:
-    WebMvcRelativePathProvider swaggerPathProvider = new WebMvcRelativePathProvider()
+    DefaultPathProvider swaggerPathProvider = new DefaultPathProvider()
 
     when:
     String path = swaggerPathProvider.getResourceListingPath('/a', '/b')
