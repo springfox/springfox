@@ -62,15 +62,5 @@ class DocumentationContextSpec extends Specification {
   }
 
   class DummyPathProvider extends AbstractPathProvider {
-
-    @Override
-    protected String applicationPath() {
-      return ROOT
-    }
-
-    @Override
-    protected String getDocumentationPath() {
-      return ROOT
-    }
   }
 }

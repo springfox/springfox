@@ -31,17 +31,16 @@ class WebMvcRelativePathProviderSpec extends Specification {
     given:
     ServletContext servletContext = Mock(ServletContext)
     servletContext.contextPath >> "/"
-    AbstractPathProvider provider = new WebMvcRelativePathProvider(servletContext)
+    AbstractPathProvider provider = new WebMvcRelativePathProvider()
 
     expect:
-    provider.getApplicationBasePath() == "/"
     provider.getResourceListingPath('default', 'api-declaration') == "/default/api-declaration"
   }
 
 
   def "should never return a path with duplicate slash"() {
     setup:
-    WebMvcRelativePathProvider swaggerPathProvider = new WebMvcRelativePathProvider(servletContext())
+    WebMvcRelativePathProvider swaggerPathProvider = new WebMvcRelativePathProvider()
 
     when:
     String path = swaggerPathProvider.getResourceListingPath('/a', '/b')

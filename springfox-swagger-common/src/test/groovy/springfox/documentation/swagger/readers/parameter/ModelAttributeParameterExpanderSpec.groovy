@@ -94,7 +94,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     SwaggerDefaults(Defaults defaults, TypeResolver typeResolver, ServletContext servletContext) {
       this.typeResolver = typeResolver
       defaultConfiguration = new DefaultConfiguration(defaults, typeResolver,
-              new WebMvcRelativePathProviderFactory(servletContext))
+              new WebMvcRelativePathProviderFactory())
     }
 
     @Override

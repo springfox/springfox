@@ -53,7 +53,7 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     contextBuilder.requestHandlers(requestHandlers)
         .withResourceGroupingStrategy(new ClassOrApiAnnotationResourceGrouping())
     plugin
-        .pathProvider(new WebMvcRelativePathProvider(servletContext()))
+        .pathProvider(new WebMvcRelativePathProvider())
         .select()
         .apis(withClassAnnotation(ApiIgnore).negate())
         .paths(regex(".*?"))

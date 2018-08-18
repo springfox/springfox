@@ -19,26 +19,5 @@
 
 package springfox.documentation.spring.web.paths;
 
-import javax.servlet.ServletContext;
-
-import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.spring.web.paths.Paths.*;
-
 public class WebMvcRelativePathProvider extends AbstractPathProvider {
-  private final ServletContext servletContext;
-
-  public WebMvcRelativePathProvider(ServletContext servletContext) {
-    super();
-    this.servletContext = servletContext;
-  }
-
-  @Override
-  protected String applicationPath() {
-    return isEmpty(servletContext.getContextPath()) ? ROOT : servletContext.getContextPath();
-  }
-
-  @Override
-  protected String getDocumentationPath() {
-    return ROOT;
-  }
 }

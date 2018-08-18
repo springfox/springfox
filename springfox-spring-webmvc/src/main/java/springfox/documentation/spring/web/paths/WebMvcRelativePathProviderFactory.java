@@ -18,23 +18,13 @@
  */
 package springfox.documentation.spring.web.paths;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
 
-import javax.servlet.ServletContext;
-
 @Component
 public class WebMvcRelativePathProviderFactory implements PathProviderFactory {
-  private final ServletContext servletContext;
-
-  @Autowired
-  public WebMvcRelativePathProviderFactory(ServletContext servletContext) {
-    this.servletContext = servletContext;
-  }
-
   @Override
   public PathProvider getInstance() {
-    return new WebMvcRelativePathProvider(servletContext);
+    return new WebMvcRelativePathProvider();
   }
 }

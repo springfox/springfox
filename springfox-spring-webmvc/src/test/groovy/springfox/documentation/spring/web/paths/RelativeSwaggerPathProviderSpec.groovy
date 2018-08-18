@@ -30,11 +30,10 @@ class RelativeSwaggerPathProviderSpec extends Specification {
    def "assert urls"(){
       given:
         ServletContext servletContext = Mock()
-        WebMvcRelativePathProvider provider = new WebMvcRelativePathProvider(servletContext)
+        WebMvcRelativePathProvider provider = new WebMvcRelativePathProvider()
         servletContext.contextPath >> "/"
 
       expect:
-        provider.applicationPath() == "/"
         provider.getDocumentationPath() == "/"
    }
 

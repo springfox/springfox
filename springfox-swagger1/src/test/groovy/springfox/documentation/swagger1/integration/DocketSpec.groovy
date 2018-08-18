@@ -36,7 +36,6 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 
-import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
 import static java.util.Collections.*
@@ -168,13 +167,13 @@ class DocketSpec extends DocumentationContextSpec {
       documentationContext()."$property" == object
 
     where:
-      builderMethod     | object                                               | property
-      'pathProvider'    | new WebMvcRelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-      'securitySchemes' | new ArrayList<SecurityScheme>()                      | 'securitySchemes'
-      'securityContexts'| validContexts()                                      | 'securityContexts'
-      'groupName'       | 'someGroup'                                          | 'groupName'
-      'apiInfo'         | new ApiInfo('', '', "", '', '', '', '')              | 'apiInfo'
-      'apiInfo'         | ApiInfo.DEFAULT                                      | 'apiInfo'
+      builderMethod     | object                                  | property
+      'pathProvider'    | new WebMvcRelativePathProvider()        | 'pathProvider'
+      'securitySchemes' | new ArrayList<SecurityScheme>()         | 'securitySchemes'
+      'securityContexts'| validContexts()                         | 'securityContexts'
+      'groupName'       | 'someGroup'                             | 'groupName'
+      'apiInfo'         | new ApiInfo('', '', "", '', '', '', '') | 'apiInfo'
+      'apiInfo'         | ApiInfo.DEFAULT                         | 'apiInfo'
   }
 
   def validContexts() {

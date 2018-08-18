@@ -84,7 +84,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     def req = servletRequestWithXHeaders(prefix)
 
     def defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(),
-        new WebMvcRelativePathProviderFactory(req.servletContext))
+        new WebMvcRelativePathProviderFactory())
     this.contextBuilder = defaultConfiguration.create(DocumentationType.SWAGGER_12)
         .requestHandlers([])
         .operationOrdering(nickNameComparator())

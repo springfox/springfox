@@ -127,7 +127,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   def "resource with mocked apis"() {
     given:
-    AbstractPathProvider pathProvider = new WebMvcRelativePathProvider(servletContext())
+    AbstractPathProvider pathProvider = new WebMvcRelativePathProvider()
     plugin
         .groupName("groupName")
         .select()

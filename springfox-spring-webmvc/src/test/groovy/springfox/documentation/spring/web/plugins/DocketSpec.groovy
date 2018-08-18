@@ -40,7 +40,6 @@ import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 
-import javax.servlet.ServletContext
 import javax.servlet.ServletRequest
 
 import static java.util.Collections.*
@@ -183,23 +182,23 @@ class DocketSpec extends DocumentationContextSpec {
     documentationContext()."$property" == object || (documentationContext()."$property" == [object] as Set)
 
     where:
-    builderMethod               | object                                               | property
-    'pathProvider'              | new WebMvcRelativePathProvider(Mock(ServletContext)) | 'pathProvider'
-    'securitySchemes'           | new ArrayList<SecurityScheme>()                      | 'securitySchemes'
-    'securityContexts'          | validContexts()                                      | 'securityContexts'
-    'groupName'                 | 'someGroup'                                          | 'groupName'
-    'apiInfo'                   | new ApiInfo('', '', "", '', '', '', '')              | 'apiInfo'
-    'apiDescriptionOrdering'    | apiDescriptionOrdering()                             | 'apiDescriptionOrdering'
-    'operationOrdering'         | operationOrdering()                            | 'operationOrdering'
-    'produces'                  | ['application/json'] as Set                    | 'produces'
-    'consumes'                  | ['application/json'] as Set                    | 'consumes'
-    'host'                      | 'someHost'                                     | 'host'
-    'protocols'                 | ['application/json'] as Set                    | 'protocols'
-    'additionalModels'          | Mock(ResolvedType)                             | 'additionalModels'
-    'enableUrlTemplating'       | true                                           | 'isUriTemplatesEnabled'
-    'tags'                      | new Tag("test", "test")                        | 'tags'
-    'globalOperationParameters' | [Mock(Parameter)]                              | 'globalOperationParameters'
-    'extensions'                | extensions()                                   | 'vendorExtensions'
+    builderMethod               | object                                  | property
+    'pathProvider'              | new WebMvcRelativePathProvider()        | 'pathProvider'
+    'securitySchemes'           | new ArrayList<SecurityScheme>()         | 'securitySchemes'
+    'securityContexts'          | validContexts()                         | 'securityContexts'
+    'groupName'                 | 'someGroup'                             | 'groupName'
+    'apiInfo'                   | new ApiInfo('', '', "", '', '', '', '') | 'apiInfo'
+    'apiDescriptionOrdering'    | apiDescriptionOrdering()                | 'apiDescriptionOrdering'
+    'operationOrdering'         | operationOrdering()                     | 'operationOrdering'
+    'produces'                  | ['application/json'] as Set             | 'produces'
+    'consumes'                  | ['application/json'] as Set             | 'consumes'
+    'host'                      | 'someHost'                              | 'host'
+    'protocols'                 | ['application/json'] as Set             | 'protocols'
+    'additionalModels'          | Mock(ResolvedType)                      | 'additionalModels'
+    'enableUrlTemplating'       | true                                    | 'isUriTemplatesEnabled'
+    'tags'                      | new Tag("test", "test")                 | 'tags'
+    'globalOperationParameters' | [Mock(Parameter)]                       | 'globalOperationParameters'
+    'extensions'                | extensions()                            | 'vendorExtensions'
   }
 
   List<VendorExtension> extensions() {
