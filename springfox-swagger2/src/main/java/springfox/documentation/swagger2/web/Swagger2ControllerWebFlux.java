@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -44,8 +43,8 @@ import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import java.util.Optional;
 
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.MimeTypeUtils.*;
+import static org.springframework.util.StringUtils.*;
 
 @Controller
 @ConditionalOnClass(name = "org.springframework.web.reactive.BindingContext")
@@ -62,7 +61,6 @@ public class Swagger2ControllerWebFlux {
 
   @Autowired
   public Swagger2ControllerWebFlux(
-      Environment environment,
       DocumentationCache documentationCache,
       ServiceModelToSwagger2Mapper mapper,
       JsonSerializer jsonSerializer) {

@@ -62,7 +62,7 @@ class RequestMappingSupport {
     HeadersRequestCondition headersRequestCondition =
         overrides["headersCondition"] ?: headersRequestCondition()
     RequestMethodsRequestCondition requestMethodsRequestCondition =
-            overrides['requestMethodsRequestCondition'] ?: requestMethodsRequestCondition(RequestMethod.values())
+        overrides['requestMethodsRequestCondition'] ?: requestMethodsRequestCondition(RequestMethod.values())
 
     new RequestMappingInfo(
         patternsRequestCondition,
@@ -74,29 +74,43 @@ class RequestMappingSupport {
         null)
   }
 
-  HandlerMethod dummyHandlerMethod(String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
+  HandlerMethod dummyHandlerMethod(
+      String methodName = "dummyMethod",
+      Class<?>... parameterTypes = null) {
+    
     def clazz = new DummyClass()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  HandlerMethod handlerMethodIn(Class<?> aClass, String methodName = "dummyMethod", Class<?>... parameterTypes = null) {
+  HandlerMethod handlerMethodIn(
+      Class<?> aClass,
+      String methodName = "dummyMethod",
+      Class<?>... parameterTypes = null) {
+
     new HandlerMethod(aClass, aClass.getMethod(methodName, parameterTypes))
   }
 
-  HandlerMethod dummyControllerHandlerMethod(String methodName = "dummyMethod", parameterTypes = null) {
+  HandlerMethod dummyControllerHandlerMethod(
+      String methodName = "dummyMethod",
+      parameterTypes = null) {
+
     def clazz = new DummyController()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  HandlerMethod dummyOperationWithTags(String methodName = "dummyMethod", parameterTypes = null) {
+  HandlerMethod dummyOperationWithTags(
+      String methodName = "dummyMethod",
+      parameterTypes = null) {
+
     def clazz = new DummyControllerWithTags()
     Class c = clazz.getClass();
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  HandlerMethod dummyControllerWithApiDescriptionHandlerMethod(String methodName = "dummyMethod",
+  HandlerMethod dummyControllerWithApiDescriptionHandlerMethod(
+      String methodName = "dummyMethod",
       parameterTypes = null) {
 
     def clazz = new DummyControllerWithApiDescription()
@@ -104,8 +118,9 @@ class RequestMappingSupport {
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  HandlerMethod dummyControllerWithResourcePath(String methodName = "dummyMethod",
-       parameterTypes = null) {
+  HandlerMethod dummyControllerWithResourcePath(
+      String methodName = "dummyMethod",
+      parameterTypes = null) {
 
     def clazz = new DummyControllerWithResourcePath()
     Class c = clazz.getClass();
@@ -118,14 +133,20 @@ class RequestMappingSupport {
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
-  HandlerMethod fancyPetServiceHandlerMethod(String methodName = "createObject", parameterTypes = FancyPet) {
+  HandlerMethod fancyPetServiceHandlerMethod(
+      String methodName = "createObject",
+      parameterTypes = FancyPet) {
+
     def clazz = new FancyPetService()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
 
-  HandlerMethod multipleRequestMappingsHandlerMethod(String methodName = "canGroom", parameterTypes = String) {
+  HandlerMethod multipleRequestMappingsHandlerMethod(
+      String methodName = "canGroom",
+      parameterTypes = String) {
+
     def clazz = new PetGroomingService()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
@@ -177,7 +198,7 @@ class RequestMappingSupport {
       context,
       handlerMethod,
       operationIndex = 0,
-      requestMapping =  requestMappingInfo("/somePath"),
+      requestMapping = requestMappingInfo("/somePath"),
       httpMethod = RequestMethod.GET) {
     new OperationContext(
         new OperationBuilder(new CachingOperationNameGenerator()),

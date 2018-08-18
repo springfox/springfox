@@ -43,7 +43,8 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)
-  ApiDocumentationScanner swaggerApiResourceListing = new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
+  ApiDocumentationScanner swaggerApiResourceListing =
+      new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
 
   def "default swagger resource"() {
     when: "I create a swagger resource"
@@ -146,7 +147,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
     when:
     listingReferenceScanner.scan(_) >>
-        new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
+    new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
     listingScanner.scan(_) >> new HashMap<>()
 
     and:
@@ -187,11 +188,11 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
 
     then:
-      scanned.resourceListing.apis.size() == 1
+    scanned.resourceListing.apis.size() == 1
 
-      def resourceLinkApi = scanned.resourceListing.apis.get(0)
-      resourceLinkApi.path == "/groupName/test"
-      resourceLinkApi.description.normalize() == """Operation with path /a and position 2
+    def resourceLinkApi = scanned.resourceListing.apis.get(0)
+    resourceLinkApi.path == "/groupName/test"
+    resourceLinkApi.description.normalize() == """Operation with path /a and position 2
                                                            |Operation with path /b and position 1
                                                            |Operation with path /c and position 2""".stripMargin()
 

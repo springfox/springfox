@@ -29,68 +29,38 @@ class WebMvcRelativePathProviderSpec extends Specification {
 
   def "relative paths"() {
     given:
-      ServletContext servletContext = Mock(ServletContext)
-      servletContext.contextPath >> "/"
-      AbstractPathProvider provider = new WebMvcRelativePathProvider(servletContext)
-//      provider.apiResourcePrefix = "some/prefix"
+    ServletContext servletContext = Mock(ServletContext)
+    servletContext.contextPath >> "/"
+    AbstractPathProvider provider = new WebMvcRelativePathProvider(servletContext)
 
     expect:
-      provider.getApplicationBasePath() == "/"
-      provider.getResourceListingPath('default', 'api-declaration') == "/default/api-declaration"
+    provider.getApplicationBasePath() == "/"
+    provider.getResourceListingPath('default', 'api-declaration') == "/default/api-declaration"
   }
 
 
-
-//  def "Invalid prefix's"() {
-//    when:
-//      ServletContext servletContext = Mock(ServletContext)
-//      servletContext.contextPath >> "/"
-//      PathProvider provider = new RelativePathProvider(servletContext)
-////      provider.apiResourcePrefix = prefix
-//    then:
-//      thrown(IllegalArgumentException)
-//    where:
-//      prefix << [null, '/', '/api', '/api/', 'api/v1/', '/api/v1/']
-//  }
-
-//  def "api declaration path"() {
-//    given:
-//      ServletContext servletContext = Mock(ServletContext)
-//      servletContext.contextPath >> contextPath
-//      PathProvider provider = new RelativePathProvider(servletContext)
-////      provider.apiResourcePrefix = prefix
-//      provider.getOperationPath(apiDeclaration) == expected
-//
-//    where:
-//      contextPath | prefix   | apiDeclaration           | expected
-//      '/'         | ""       | "/business/{businessId}" | "/business/{businessId}"
-//      '/'         | "api"    | "/business/{businessId}" | "/api/business/{businessId}"
-//      '/'         | "api/v1" | "/business/{businessId}" | "/api/v1/business/{businessId}"
-//      ''          | ""       | "/business/{businessId}" | "/business/{businessId}"
-//      ''          | "api"    | "/business/{businessId}" | "/api/business/{businessId}"
-//      ''          | "api/v1" | "/business/{businessId}" | "/api/v1/business/{businessId}"
-//  }
-
   def "should never return a path with duplicate slash"() {
     setup:
-      WebMvcRelativePathProvider swaggerPathProvider = new WebMvcRelativePathProvider(servletContext())
+    WebMvcRelativePathProvider swaggerPathProvider = new WebMvcRelativePathProvider(servletContext())
 
     when:
-      String path = swaggerPathProvider.getResourceListingPath('/a', '/b')
-      String opPath = swaggerPathProvider.getOperationPath('//a/b')
+    String path = swaggerPathProvider.getResourceListingPath('/a', '/b')
+    String opPath = swaggerPathProvider.getOperationPath('//a/b')
+
     then:
-      path == '/a/b'
-      opPath == path
+    path == '/a/b'
+    opPath == path
   }
 
   def "should replace slashes"() {
     expect:
-      Paths.removeAdjacentForwardSlashes(input) == expected
+    Paths.removeAdjacentForwardSlashes(input) == expected
+
     where:
-      input             | expected
-      '//a/b'           | '/a/b'
-      '//a//b//c'       | '/a/b/c'
-      'http://some//a'  | 'http://some/a'
-      'https://some//a' | 'https://some/a'
+    input             | expected
+    '//a/b'           | '/a/b'
+    '//a//b//c'       | '/a/b/c'
+    'http://some//a'  | 'http://some/a'
+    'https://some//a' | 'https://some/a'
   }
 }

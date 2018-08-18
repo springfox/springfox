@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
-
 class DefaultExtractorConfiguration implements RequestHandlerExtractorConfiguration {
   private final List<EntityOperationsExtractor> defaultEntityExtractors  = Stream.of(
       new EntitySaveExtractor(),

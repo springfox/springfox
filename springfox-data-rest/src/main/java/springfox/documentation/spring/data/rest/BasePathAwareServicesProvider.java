@@ -49,6 +49,13 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
     this.methodResolver = methodResolver;
     basePathAwareMappings.setApplicationContext(applicationContext);
     basePathAwareMappings.afterPropertiesSet();
+
+  private static boolean isEntitySchemaService(HandlerMethod input) {
+    return input.getBeanType().getSimpleName().equals("RepositorySchemaController");
+  }
+
+  private static boolean isAlpsProfileServices(HandlerMethod input) {
+    return AlpsController.class.equals(input.getBeanType());
   }
 
   @Override
@@ -61,13 +68,5 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
       }
     }
     return requestHandlers;
-  }
-
-  private static boolean isEntitySchemaService(HandlerMethod input) {
-    return input.getBeanType().getSimpleName().equals("RepositorySchemaController");
-  }
-
-  private static boolean isAlpsProfileServices(HandlerMethod input) {
-    return AlpsController.class.equals(input.getBeanType());
   }
 }

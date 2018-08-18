@@ -78,7 +78,9 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
   def "swagger annotation should override when using default reader"() {
     given:
       OperationContext operationContext =
-          operationContext(documentationContext(), dummyHandlerMethod('methodWithApiResponses'))
+          operationContext(
+              documentationContext(),
+              dummyHandlerMethod('methodWithApiResponses'))
 
     when:
       sut.apply(operationContext)
@@ -95,7 +97,10 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing a model should override the success response code"() {
     given:
-      OperationContext operationContext = operationContext(documentationContext(), dummyHandlerMethod('methodWithConcreteResponseBody'))
+      OperationContext operationContext =
+          operationContext(
+              documentationContext(),
+              dummyHandlerMethod('methodWithConcreteResponseBody'))
 
     when:
       sut.apply(operationContext)

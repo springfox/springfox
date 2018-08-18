@@ -93,7 +93,6 @@ class EntityServicesProvider implements RequestHandlerProvider {
           }
         });
       });
-
     }
 
     List<RequestHandler> handlers = new ArrayList<>();

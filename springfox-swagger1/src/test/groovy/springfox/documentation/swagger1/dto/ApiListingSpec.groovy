@@ -111,8 +111,7 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
 
   def "should serialize"() {
     expect:
-      writePretty(apiListing) ==
-              '''{
+      writePretty(apiListing) == '''{
   "apiVersion" : "1",
   "apis" : [ ],
   "basePath" : "/base",
