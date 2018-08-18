@@ -19,5 +19,5 @@
 
 package springfox.documentation.spring.web.paths;
 
-public class WebMvcRelativePathProvider extends AbstractPathProvider {
+public class WebMvcRelativePathProvider extends DefaultPathProvider {
 }

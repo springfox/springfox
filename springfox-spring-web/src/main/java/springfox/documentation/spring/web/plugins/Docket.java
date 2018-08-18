@@ -44,6 +44,7 @@ import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.paths.DefaultPathProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,7 +172,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param pathProvider - provides an alternate implementation of path provider
    * @return this Docket
-   * @see springfox.documentation.spring.web.paths.AbstractPathProvider
+   * @see DefaultPathProvider
    */
   public Docket pathProvider(PathProvider pathProvider) {
     this.pathProvider = pathProvider;

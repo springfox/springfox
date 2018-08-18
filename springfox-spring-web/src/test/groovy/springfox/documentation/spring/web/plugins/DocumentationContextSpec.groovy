@@ -25,12 +25,11 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
-import springfox.documentation.spring.web.paths.AbstractPathProvider
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.paths.PathProviderFactory
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import static springfox.documentation.spi.service.contexts.Orderings.*
-import static springfox.documentation.spring.web.paths.Paths.*
 
 class DocumentationContextSpec extends Specification {
   DocumentationContextBuilder contextBuilder
@@ -61,6 +60,6 @@ class DocumentationContextSpec extends Specification {
     return context
   }
 
-  class DummyPathProvider extends AbstractPathProvider {
+  class DummyPathProvider extends DefaultPathProvider {
   }
 }

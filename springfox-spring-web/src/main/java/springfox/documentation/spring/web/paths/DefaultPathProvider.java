@@ -25,7 +25,7 @@ import springfox.documentation.PathProvider;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 
-public abstract class AbstractPathProvider implements PathProvider {
+public abstract class DefaultPathProvider implements PathProvider {
 
   /**
    * The base path to the swagger api documentation.
@@ -65,7 +65,7 @@ public abstract class AbstractPathProvider implements PathProvider {
    * @param groupName      the group name for this Resource Object e.g. 'default'
    * @param apiDeclaration the identifier for the api declaration e.g 'business-controller'
    * @return the resource listing path
-   * @see AbstractPathProvider#getDocumentationPath()
+   * @see DefaultPathProvider#getDocumentationPath()
    * by appending the swagger group and apiDeclaration
    */
   @Override

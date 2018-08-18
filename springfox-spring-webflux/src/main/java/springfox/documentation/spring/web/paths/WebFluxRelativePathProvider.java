@@ -19,7 +19,5 @@
 
 package springfox.documentation.spring.web.paths;
 
-import static springfox.documentation.spring.web.paths.Paths.*;
-
-public class WebFluxRelativePathProvider extends AbstractPathProvider {
+public class WebFluxRelativePathProvider extends DefaultPathProvider {
 }

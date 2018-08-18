@@ -31,7 +31,7 @@ class WebMvcRelativePathProviderSpec extends Specification {
     given:
     ServletContext servletContext = Mock(ServletContext)
     servletContext.contextPath >> "/"
-    AbstractPathProvider provider = new WebMvcRelativePathProvider()
+    DefaultPathProvider provider = new WebMvcRelativePathProvider()
 
     expect:
     provider.getResourceListingPath('default', 'api-declaration') == "/default/api-declaration"
