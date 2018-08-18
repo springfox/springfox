@@ -26,7 +26,6 @@ import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.paths.DefaultPathProvider
-import springfox.documentation.spring.web.paths.PathProviderFactory
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import static springfox.documentation.spi.service.contexts.Orderings.*
@@ -38,9 +37,10 @@ class DocumentationContextSpec extends Specification {
   private defaultConfiguration
 
   def setup() {
-      def providerFactory = Mock(PathProviderFactory)
-      providerFactory.getInstance() >> new DummyPathProvider()
-      defaultConfiguration = new DefaultConfiguration(new Defaults(), new TypeResolver(), providerFactory)
+    defaultConfiguration = new DefaultConfiguration(
+        new Defaults(),
+        new TypeResolver(),
+        new DummyPathProvider())
 
     contextBuilder = this.defaultConfiguration.create(DocumentationType.SWAGGER_12)
         .requestHandlers([])

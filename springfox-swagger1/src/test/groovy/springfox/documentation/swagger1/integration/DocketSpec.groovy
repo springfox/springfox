@@ -31,7 +31,6 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.paths.DefaultPathProvider
-import springfox.documentation.spring.web.paths.PathProviderFactory
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
@@ -148,7 +147,10 @@ class DocketSpec extends DocumentationContextSpec {
 
   def "Model substitution registers new rules"() {
     when:
-    def swaggerDefault = new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(), Mock(PathProviderFactory))
+    def swaggerDefault = new SwaggerDefaultConfiguration(
+        new Defaults(),
+        new TypeResolver(),
+        new DefaultPathProvider())
         .create(DocumentationType.SWAGGER_12)
     def isjdk8 = System.getProperty("java.version").startsWith("1.8")
     def jdk8RuleCount = (isjdk8 ? 6 : 0)

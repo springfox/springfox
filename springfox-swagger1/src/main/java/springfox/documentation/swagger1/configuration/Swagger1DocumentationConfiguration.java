@@ -26,14 +26,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.HandlerMapping;
+import springfox.documentation.PathProvider;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
+import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
-import springfox.documentation.spring.web.paths.PathProviderFactory;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 import springfox.documentation.swagger1.web.Swagger1Controller;
@@ -65,9 +65,9 @@ public class Swagger1DocumentationConfiguration {
 
   @Bean
   public SwaggerDefaultConfiguration swaggerDefaults(
-      PathProviderFactory pathProviderFactory,
+      PathProvider pathProvider,
       TypeResolver type,
       Defaults defaults) {
-    return new SwaggerDefaultConfiguration(defaults, type, pathProviderFactory);
+    return new SwaggerDefaultConfiguration(defaults, type, pathProvider);
   }
 }

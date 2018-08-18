@@ -38,7 +38,7 @@ import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Treeish
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.paths.PathProviderFactory
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -65,7 +65,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     def typeResolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     pluginsManager = swaggerServicePlugins([
-        new SwaggerDefaultConfiguration(new Defaults(), typeResolver, Mock(PathProviderFactory))])
+        new SwaggerDefaultConfiguration(new Defaults(), typeResolver, new DefaultPathProvider())])
     plugin
         .ignoredParameterTypes(
         ServletRequest,

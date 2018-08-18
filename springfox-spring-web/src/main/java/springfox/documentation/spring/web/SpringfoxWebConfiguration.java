@@ -26,12 +26,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
+import springfox.documentation.PathProvider;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.*;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
+import springfox.documentation.spring.web.paths.DefaultPathProvider;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.util.List;
@@ -83,4 +85,8 @@ public class SpringfoxWebConfiguration {
     return new HandlerMethodResolver(resolver);
   }
 
+  @Bean
+  public PathProvider pathProvider() {
+    return new DefaultPathProvider();
+  }
 }

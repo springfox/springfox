@@ -20,13 +20,13 @@
 package springfox.documentation.swagger1.web;
 
 import com.fasterxml.classmate.TypeResolver;
+import springfox.documentation.PathProvider;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.WildcardType;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
-import springfox.documentation.spring.web.paths.PathProviderFactory;
 import springfox.documentation.spring.web.plugins.DefaultConfiguration;
 
 import java.util.ArrayList;
@@ -41,11 +41,11 @@ public class SwaggerDefaultConfiguration implements DefaultsProviderPlugin {
   private TypeResolver typeResolver;
 
   public SwaggerDefaultConfiguration(
-          Defaults defaults,
-          TypeResolver typeResolver,
-          PathProviderFactory pathProviderFactory) {
+      Defaults defaults,
+      TypeResolver typeResolver,
+      PathProvider pathProvider) {
     this.typeResolver = typeResolver;
-    defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, pathProviderFactory);
+    defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, pathProvider);
   }
 
   @Override

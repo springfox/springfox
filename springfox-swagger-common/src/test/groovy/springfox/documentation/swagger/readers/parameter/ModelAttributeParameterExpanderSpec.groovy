@@ -32,14 +32,12 @@ import springfox.documentation.spi.service.DefaultsProviderPlugin
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.dummy.models.ModelAttributeWithHiddenParametersExample
-import springfox.documentation.spring.web.paths.WebMvcRelativePathProviderFactory
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.plugins.DefaultConfiguration
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.parameter.ExpansionContext
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
-
-import javax.servlet.ServletContext
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
@@ -63,8 +61,8 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     sut.pluginsManager = swaggerServicePlugins([
         new SwaggerDefaults(
             new Defaults(),
-            new TypeResolver(),
-            Mock(ServletContext))])
+            new TypeResolver()
+        )])
   }
 
   def "shouldn't expand hidden parameters"() {
@@ -91,10 +89,12 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     private TypeResolver typeResolver
 
     @Autowired
-    SwaggerDefaults(Defaults defaults, TypeResolver typeResolver, ServletContext servletContext) {
+    SwaggerDefaults(Defaults defaults, TypeResolver typeResolver) {
       this.typeResolver = typeResolver
-      defaultConfiguration = new DefaultConfiguration(defaults, typeResolver,
-              new WebMvcRelativePathProviderFactory())
+      defaultConfiguration = new DefaultConfiguration(
+          defaults,
+          typeResolver,
+          new DefaultPathProvider())
     }
 
     @Override

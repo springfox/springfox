@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import springfox.documentation.spring.web.paths.PathProviderFactory;
+import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
@@ -82,7 +82,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
       ApiDocumentationScanner resourceListing,
       TypeResolver typeResolver,
       Defaults defaults,
-      PathProviderFactory pathProviderFactory,
+      PathProvider pathProvider,
       Environment environment) {
 
     this.documentationPluginsManager = documentationPluginsManager;
@@ -90,7 +90,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
     this.scanned = scanned;
     this.resourceListing = resourceListing;
     this.environment = environment;
-    this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, pathProviderFactory);
+    this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, pathProvider);
   }
 
   private DocumentationContext buildContext(DocumentationPlugin each) {
