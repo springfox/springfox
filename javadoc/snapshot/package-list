@@ -28,6 +28,7 @@ springfox.documentation.spring.web.plugins
 springfox.documentation.spring.web.readers.operation
 springfox.documentation.spring.web.readers.parameter
 springfox.documentation.spring.web.scanners
+springfox.documentation.spring.wrapper
 springfox.documentation.swagger.annotations
 springfox.documentation.swagger.common
 springfox.documentation.swagger.configuration
@@ -49,3 +50,7 @@ springfox.petstore
 springfox.petstore.controller
 springfox.petstore.model
 springfox.petstore.repository
+springfox.petstore.webflux
+springfox.petstore.webflux.controller
+springfox.petstore.webflux.model
+springfox.petstore.webflux.repository
