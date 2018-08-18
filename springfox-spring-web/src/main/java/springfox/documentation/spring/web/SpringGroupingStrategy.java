@@ -20,9 +20,9 @@
 package springfox.documentation.spring.web;
 
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
 import java.util.Set;

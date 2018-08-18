@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.scanners;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
@@ -49,12 +48,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import static java.util.Optional.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static java.util.stream.Collectors.*;
+import static java.util.stream.Stream.*;
+import static java.util.stream.StreamSupport.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
 @Component
@@ -95,12 +97,14 @@ public class ApiListingScanner {
         commons.add(word);
       }
     }
-    return of("/" + String.join("/", commons.stream().filter(Objects::nonNull).collect(toList())));
+    return of("/" + String.join("/", commons.stream()
+        .filter(Objects::nonNull)
+        .collect(toList())));
   }
 
   static List<String> urlParts(ApiDescription apiDescription) {
     return Stream.of(apiDescription.getPath().split("\\/"))
-        .filter(((Predicate<String>)String::isEmpty).negate())
+        .filter(((Predicate<String>) String::isEmpty).negate())
         .map(String::trim)
         .collect(toList());
   }
@@ -112,9 +116,13 @@ public class ApiListingScanner {
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
         = context.getRequestMappingsByResourceGroup();
     Collection<ApiDescription> additionalListings = pluginsManager.additionalListings(context);
-    Set<ResourceGroup> allResourceGroups = Stream.concat(StreamSupport.stream(collectResourceGroups(additionalListings).spliterator(), false),
-        requestMappingsByResourceGroup.keySet().stream())
-        .collect(toSet());
+    Set<ResourceGroup> allResourceGroups =
+        concat(
+            stream(
+                collectResourceGroups(additionalListings).spliterator(),
+                false),
+            requestMappingsByResourceGroup.keySet().stream())
+            .collect(toSet());
 
     List<SecurityReference> securityReferences = new ArrayList<>();
     for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
@@ -127,7 +135,9 @@ public class ApiListingScanner {
       Set<ApiDescription> apiDescriptions = new HashSet<>();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
-      List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
+      List<RequestMappingContext> requestMappings =
+          nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
+
       for (RequestMappingContext each : sortedByMethods(requestMappings)) {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
@@ -135,8 +145,8 @@ public class ApiListingScanner {
 
       List<ApiDescription> additional = additionalListings.stream()
           .filter(
-                  belongsTo(resourceGroup.getGroupName()).and(
-                  onlySelectedApis(documentationContext)))
+              belongsTo(resourceGroup.getGroupName())
+                  .and(onlySelectedApis(documentationContext)))
           .collect(toList());
       apiDescriptions.addAll(additional);
 
@@ -145,15 +155,14 @@ public class ApiListingScanner {
 
       String resourcePath = new ResourcePathProvider(resourceGroup)
           .resourcePath()
-          .orElse(longestCommonPath(sortedApis)
-          .orElse(null));
+          .orElse(
+              longestCommonPath(sortedApis)
+                  .orElse(null));
 
-      PathProvider pathProvider = documentationContext.getPathProvider();
-      String basePath = pathProvider.getApplicationBasePath();
       PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
           .apiVersion(documentationContext.getApiInfo().getVersion())
-          .basePath(adjuster.adjustedPath(basePath))
+          .basePath(adjuster.adjustedPath(ROOT))
           .resourcePath(resourcePath)
           .produces(produces)
           .consumes(consumes)
@@ -176,12 +185,7 @@ public class ApiListingScanner {
   }
 
   private Predicate<ApiDescription> onlySelectedApis(final DocumentationContext context) {
-    return new Predicate<ApiDescription>() {
-      @Override
-      public boolean test(ApiDescription input) {
-        return context.getApiSelector().getPathSelector().test(input.getPath());
-      }
-    };
+    return input -> context.getApiSelector().getPathSelector().test(input.getPath());
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {

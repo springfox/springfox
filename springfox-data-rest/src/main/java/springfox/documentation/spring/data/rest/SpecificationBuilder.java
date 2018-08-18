@@ -62,7 +62,9 @@ abstract class SpecificationBuilder {
     RepositoryMetadata repository = context.getRepositoryMetadata();
     TypeResolver typeResolver = context.getTypeResolver();
 
-    return getType != null ? typeResolver.resolve(getType.apply(repository)) : typeResolver.resolve(Void.TYPE);
+    return getType != null
+           ? typeResolver.resolve(getType.apply(repository))
+           : typeResolver.resolve(Void.TYPE);
   }
 
   static SpecificationBuilder entityAction(EntityContext context, HandlerMethod handlerMethod) {
@@ -204,6 +206,15 @@ abstract class SpecificationBuilder {
       this.handlerMethod = handlerMethod;
     }
 
+    private static ResolvedMethodParameter transferResolvedMethodParameter(
+        ResolvedMethodParameter src) {
+      Optional<Param> param = src.findAnnotation(Param.class);
+      if (param.isPresent()) {
+        return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
+      }
+      return src;
+    }
+
     @Override
     SpecificationBuilder withParameterType(ParameterType parameterType) {
 
@@ -273,15 +284,6 @@ abstract class SpecificationBuilder {
               inputParameters(),
               inferReturnType(context, handlerMethod))
           );
-    }
-
-    private static ResolvedMethodParameter transferResolvedMethodParameter(
-        ResolvedMethodParameter src) {
-      Optional<Param> param = src.findAnnotation(Param.class);
-      if (param.isPresent()) {
-        return src.annotate(SynthesizedAnnotations.requestParam(param.get().value()));
-      }
-      return src;
     }
 
     private ResolvedType inferReturnType(

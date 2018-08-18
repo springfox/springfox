@@ -44,6 +44,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 public class ApiDocumentationScanner {
@@ -75,7 +76,7 @@ public class ApiDocumentationScanner {
         .consumes(context.getConsumes())
         .host(context.getHost())
         .schemes(context.getProtocols())
-        .basePath(context.getPathProvider().getApplicationBasePath())
+        .basePath(ROOT)
         .extensions(context.getVendorExtentions())
         .tags(tags);
 

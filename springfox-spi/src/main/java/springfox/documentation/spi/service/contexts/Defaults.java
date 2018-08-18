@@ -38,6 +38,7 @@ import springfox.documentation.service.ResponseMessage;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
@@ -166,17 +167,31 @@ public class Defaults {
 
   private void initIgnorableTypes() {
     ignored = new HashSet<>();
-    ignored.add(ServletRequest.class);
     ignored.add(Class.class);
     ignored.add(Void.class);
     ignored.add(Void.TYPE);
-    ignored.add(HttpServletRequest.class);
-    ignored.add(HttpServletResponse.class);
     ignored.add(HttpHeaders.class);
     ignored.add(BindingResult.class);
-    ignored.add(ServletContext.class);
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class); //Used to ignore parameters
+
+    boolean exists = true;
+
+    try {
+      Class.forName("javax.servlet.ServletContext", false, this.getClass().getClassLoader());
+    } catch (ClassNotFoundException e) {
+      exists = false;
+    }
+
+    if (exists) {
+      ignored.add(ServletRequest.class);
+      ignored.add(ServletResponse.class);
+      ignored.add(HttpServletRequest.class);
+      ignored.add(HttpServletResponse.class);
+      ignored.add(ServletContext.class);
+    }
+
+
   }
 
   private void initResponseMessages() {

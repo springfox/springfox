@@ -21,8 +21,6 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.builders.ApiDescriptionBuilder;
@@ -30,6 +28,8 @@ import springfox.documentation.schema.Model;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

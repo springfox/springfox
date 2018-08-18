@@ -22,17 +22,18 @@ import com.fasterxml.classmate.ResolvedType;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 import static java.util.Collections.*;
@@ -58,13 +59,10 @@ public class CombinedRequestHandler implements RequestHandler {
     return first.isAnnotatedWith(annotation) || second.isAnnotatedWith(annotation);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new PatternsRequestCondition(Stream.concat(
-        first.getPatternsCondition().getPatterns().stream(),
-        second.getPatternsCondition().getPatterns().stream())
-        .distinct()
-        .toArray(String[]::new));
+    return first.getPatternsCondition().combine(second.getPatternsCondition());
   }
 
   @Override
@@ -79,24 +77,34 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return Stream.concat(first.supportedMethods().stream(), second.supportedMethods().stream()).collect(toSet());
+    return Stream.concat(
+        first.supportedMethods().stream(),
+        second.supportedMethods().stream())
+        .collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> produces() {
-    return Stream.concat(ofNullable(first.produces()).orElse(emptySet()).stream(),
-            ofNullable(second.produces()).orElse(emptySet()).stream()).collect(toSet());
+    return Stream.concat(
+        ofNullable(first.produces()).orElse(emptySet()).stream(),
+        ofNullable(second.produces()).orElse(emptySet()).stream())
+        .collect(toSet());
   }
 
   @Override
   public Set<? extends MediaType> consumes() {
-    return Stream.concat(ofNullable(first.consumes()).orElse(emptySet()).stream(),
-            ofNullable(second.consumes()).orElse(emptySet()).stream()).collect(toSet());
+    return Stream.concat(
+        ofNullable(first.consumes()).orElse(emptySet()).stream(),
+        ofNullable(second.consumes()).orElse(emptySet()).stream())
+        .collect(toSet());
   }
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return Stream.concat(first.headers().stream(), second.headers().stream()).collect(toSet());
+    return Stream.concat(
+        first.headers().stream(),
+        second.headers().stream())
+        .collect(toSet());
   }
 
   @Override
@@ -106,9 +114,12 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return first.findAnnotation(annotation).map(Optional::of).orElse(second.findAnnotation(annotation));
+    return first.findAnnotation(annotation)
+        .map(Optional::of)
+        .orElse(second.findAnnotation(annotation));
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
@@ -132,7 +143,7 @@ public class CombinedRequestHandler implements RequestHandler {
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     return first.findControllerAnnotation(annotation)
         .map(Optional::of)
-        .orElse(second.findControllerAnnotation(annotation)) ;
+        .orElse(second.findControllerAnnotation(annotation));
   }
 
   @Override
@@ -152,11 +163,10 @@ public class CombinedRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("CombinedRequestHandler{");
-    sb.append("first key=").append(first == null ? "No key" : first.key());
-    sb.append("second key=").append(second == null ? "No key" : second.key());
-    sb.append("combined key=").append(key());
-    sb.append('}');
-    return sb.toString();
+    return new StringJoiner(", ", CombinedRequestHandler.class.getSimpleName() + "{", "}")
+        .add("first=" + first)
+        .add("second=" + second)
+        .add("combined key=" + key())
+        .toString();
   }
 }

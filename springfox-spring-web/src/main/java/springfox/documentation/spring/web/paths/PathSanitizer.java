@@ -35,12 +35,7 @@ import static springfox.documentation.spring.web.paths.Paths.*;
 class PathSanitizer implements PathDecorator {
   @Override
   public Function<String, String> decorator(PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        return removeAdjacentForwardSlashes(sanitizeRequestMappingPattern(input));
-      }
-    };
+    return input -> removeAdjacentForwardSlashes(sanitizeRequestMappingPattern(input));
   }
 
   @Override

@@ -30,46 +30,75 @@ ext {
 
   libs = [
 
-          test          : [
-                  "org.springframework:spring-test:${spring}",
-                  "cglib:cglib-nodep:$cglib",
-                  "org.objenesis:objenesis:$objenesis",
-                  "org.mockito:mockito-core:${mockito}",
-                  "com.jayway.jsonpath:json-path:${jsonPath}",
-                  "org.slf4j:slf4j-simple:${slf4j}",
-                  "org.yaml:snakeyaml:${snakeyaml}",
-                  "org.spockframework:spock-spring:${spock}",
-                  "org.spockframework:spock-core:${spock}",
-                  "org.codehaus.groovy:groovy-all:${groovy}",
-                  "org.springframework.hateoas:spring-hateoas:${springHateoas}",
-                  "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
-          ],
-          swagger2Core  : [
-                  "io.swagger:swagger-annotations:${swagger2Core}",
-                  "io.swagger:swagger-models:${swagger2Core}"
-          ],
-          spring        : [
-                  "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
-                  "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}",
-          ],
-          springProvided: [
-                  "org.springframework:spring-core:$spring",
-                  "org.springframework:spring-web:$spring",
-                  "org.springframework:spring-webmvc:$spring",
-                  "org.springframework:spring-context:$spring",
-          ],
-          springBootProvided: [
-              "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
-          ],
-          clientProvided: [
-                  "javax.servlet:javax.servlet-api:$servlet",
-                  "com.fasterxml.jackson.core:jackson-core:${jackson}",
-                  "com.fasterxml.jackson.core:jackson-databind:${jackson}",
-                  "joda-time:joda-time:$joda"
-          ],
-          core          : [
-                  "com.fasterxml:classmate:${classmate}",
-                  "org.slf4j:slf4j-api:${slf4j}",
-          ]
+      test                  : [
+          "org.springframework:spring-test:${spring}",
+          "cglib:cglib-nodep:$cglib",
+          "org.objenesis:objenesis:$objenesis",
+          "org.mockito:mockito-core:${mockito}",
+          "com.jayway.jsonpath:json-path:${jsonPath}",
+          "org.slf4j:slf4j-simple:${slf4j}",
+          "org.yaml:snakeyaml:${snakeyaml}",
+          "org.spockframework:spock-spring:${spock}",
+          "org.spockframework:spock-core:${spock}",
+          "org.codehaus.groovy:groovy-all:${groovy}",
+          "org.springframework.hateoas:spring-hateoas:${springHateoas}",
+          "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
+      ],
+      testNoHateoas         : [
+          "org.springframework:spring-test:${spring}",
+          "cglib:cglib-nodep:$cglib",
+          "org.objenesis:objenesis:$objenesis",
+          "org.mockito:mockito-core:${mockito}",
+          "com.jayway.jsonpath:json-path:${jsonPath}",
+          "org.slf4j:slf4j-simple:${slf4j}",
+          "org.yaml:snakeyaml:${snakeyaml}",
+          "org.spockframework:spock-spring:${spock}",
+          "org.spockframework:spock-core:${spock}",
+          "org.codehaus.groovy:groovy-all:${groovy}",
+          "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
+      ],
+      swagger2Core          : [
+          "io.swagger:swagger-annotations:${swagger2Core}",
+          "io.swagger:swagger-models:${swagger2Core}"
+      ],
+      spring                : [
+          "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
+          "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}",
+      ],
+      springProvided        : [
+          "org.springframework:spring-core:$spring",
+          "org.springframework:spring-web:$spring",
+          "org.springframework:spring-context:$spring",
+      ],
+      springProvidedWithMvc : [
+          "org.springframework:spring-core:$spring",
+          "org.springframework:spring-web:$spring",
+          "org.springframework:spring-webmvc:$spring",
+          "org.springframework:spring-context:$spring",
+      ],
+      springProvidedWithFlux: [
+          "org.springframework:spring-core:$spring",
+          "org.springframework:spring-web:$spring",
+          "org.springframework:spring-webflux:$spring",
+          "org.springframework:spring-context:$spring",
+      ],
+      springBootProvided    : [
+          "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
+      ],
+      clientProvided        : [
+          "com.fasterxml.jackson.core:jackson-core:${jackson}",
+          "com.fasterxml.jackson.core:jackson-databind:${jackson}",
+          "joda-time:joda-time:$joda"
+      ],
+      clientProvidedServlet : [
+          "com.fasterxml.jackson.core:jackson-core:${jackson}",
+          "com.fasterxml.jackson.core:jackson-databind:${jackson}",
+          "joda-time:joda-time:$joda",
+          "javax.servlet:javax.servlet-api:$servlet",
+      ],
+      core                  : [
+          "com.fasterxml:classmate:${classmate}",
+          "org.slf4j:slf4j-api:${slf4j}",
+      ]
   ]
 }

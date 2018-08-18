@@ -31,12 +31,17 @@ parsers:
       macro: no
 
 comment:
-  layout: "header, diff"
+  layout: "reach, diff, flags, files"
   behavior: default
-  require_changes: no
+  require_changes: false  # if true: only post the comment if coverage changes
+  require_base: no        # [yes :: must have a base report to post]
+  require_head: yes       # [yes :: must have a head report to post]
+  branches: null
 
 ignore:
   - "springfox-petstore"  # ignore petstore project as its a sample
+  - "springfox-petstore-webflux"  # ignore petstore project as its a sample
   - "springfox-spring-config" # ignore project used for documentation
   - "swagger-contract-tests" # ignore contract tests as its purely for testing
+  - "swagger-contract-tests-webflux" # ignore contract tests as its purely for testing
 

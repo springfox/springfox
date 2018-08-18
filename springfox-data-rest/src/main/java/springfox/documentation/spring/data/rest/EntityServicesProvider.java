@@ -30,13 +30,15 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 
-import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
+import static springfox.documentation.spring.web.paths.Paths.contextPath;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {
@@ -46,34 +48,29 @@ class EntityServicesProvider implements RequestHandlerProvider {
   private final TypeResolver typeResolver;
   private final PersistentEntities entities;
   private final Associations associations;
-
-  @Autowired(required = false)
-  private RequestHandlerExtractorConfiguration extractorConfiguration;
+  private final RequestHandlerExtractorConfiguration extractorConfiguration;
+  private final String contextPath;
 
   @Autowired
   public EntityServicesProvider(
+      ServletContext servletContext,
       RepositoryRestConfiguration configuration,
       ResourceMappings mappings,
       Repositories repositories,
       TypeResolver typeResolver,
       PersistentEntities entities,
-      Associations associations) {
+      Associations associations,
+      Optional<RequestHandlerExtractorConfiguration> extractorConfiguration) {
     this.mappings = mappings;
     this.configuration = configuration;
     this.repositories = repositories;
     this.typeResolver = typeResolver;
     this.entities = entities;
     this.associations = associations;
+    this.extractorConfiguration = extractorConfiguration.orElse(new DefaultExtractorConfiguration());
+    this.contextPath = contextPath(servletContext);
   }
 
-  @PostConstruct
-  public void init() {
-    if (extractorConfiguration == null) {
-      extractorConfiguration = new DefaultExtractorConfiguration();
-    }
-  }
-
-  @Override
   public List<RequestHandler> requestHandlers() {
     List<EntityContext> contexts = new ArrayList<>();
     for (Class each : repositories) {
@@ -83,17 +80,18 @@ class EntityServicesProvider implements RequestHandlerProvider {
           if (resource.isExported()) {
             contexts.add(new EntityContext(
                 typeResolver,
-                configuration,
+                contextPath, configuration,
                 repositoryInfo,
                 repositoryInstance,
                 resource,
                 mappings,
                 entities,
-                associations, extractorConfiguration));
+                associations,
+                extractorConfiguration
+            ));
           }
         });
       });
-
     }
 
     List<RequestHandler> handlers = new ArrayList<>();

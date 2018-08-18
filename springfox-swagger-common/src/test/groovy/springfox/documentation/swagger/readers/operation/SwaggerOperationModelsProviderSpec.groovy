@@ -23,6 +23,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
@@ -36,7 +37,9 @@ class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
       )
       RequestMappingContext requestContext = new RequestMappingContext(
           documentationContext(),
-          new WebMvcRequestHandler(methodResolver,
+          new WebMvcRequestHandler(
+              Paths.ROOT,
+              methodResolver,
               requestMappingInfo,
               dummyHandlerMethod(operationName)))
       SwaggerOperationModelsProvider sut = new SwaggerOperationModelsProvider(new TypeResolver())

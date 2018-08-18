@@ -32,12 +32,7 @@ import java.util.function.Function;
 class OperationPathDecorator implements PathDecorator {
   @Override
   public Function<String, String> decorator(final PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        return context.pathProvider().getOperationPath(input);
-      }
-    };
+    return input -> context.pathProvider().getOperationPath(input);
   }
 
   @Override

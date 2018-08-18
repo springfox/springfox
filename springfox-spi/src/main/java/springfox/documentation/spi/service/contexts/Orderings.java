@@ -19,7 +19,6 @@
 
 package springfox.documentation.spi.service.contexts;
 
-
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListingReference;
