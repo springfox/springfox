@@ -10,6 +10,7 @@ import spock.lang.Unroll
 import springfox.documentation.RequestHandler
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper
+import springfox.documentation.spring.web.paths.Paths
 
 import java.util.stream.Stream
 
@@ -53,7 +54,9 @@ class PathAndParametersEquivalenceSpec extends Specification {
       ResolvedMethodParameter parameter,
       Set<NameValueExpression<String>> params) {
     def handler = Mock(RequestHandler)
-    handler.patternsCondition >> new WebMvcPatternsRequestConditionWrapper(new PatternsRequestCondition(path))
+    handler.patternsCondition >> new WebMvcPatternsRequestConditionWrapper(
+        Paths.ROOT,
+        new PatternsRequestCondition(path))
     handler.produces() >> Stream.of(produces).collect(toSet())
     handler.parameters >> [parameter]
     handler.supportedMethods() >> methods

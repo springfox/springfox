@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.paths;
 
+import javax.servlet.ServletContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +27,7 @@ import static org.springframework.util.StringUtils.*;
 
 
 public class Paths {
+  public static final String ROOT = "/";
   private static final Pattern FIRST_PATH_FRAGMENT_REGEX = Pattern.compile("^([/]?[\\w\\-.]+[/]?)");
 
   private Paths() {
@@ -90,10 +92,19 @@ public class Paths {
     String result = requestMappingPattern;
     //remove regex portion '/{businessId:\\w+}'
     result = result.replaceAll("\\{([^}]+?):([^/{}]|\\{[\\d,]+})+}", "{$1}");
-    return result.isEmpty() ? "/" : result;
+    return rootPathWhenEmpty(result);
   }
 
   public static String removeAdjacentForwardSlashes(String candidate) {
     return candidate.replaceAll("(?<!(http:|https:))//", "/");
+  }
+
+  public static String contextPath(ServletContext context) {
+    String path = context.getContextPath();
+    return rootPathWhenEmpty(path);
+  }
+
+  public static String rootPathWhenEmpty(String path) {
+    return !isEmpty(path) ? path : ROOT;
   }
 }

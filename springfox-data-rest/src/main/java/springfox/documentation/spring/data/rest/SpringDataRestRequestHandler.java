@@ -47,10 +47,13 @@ import static java.util.stream.Collectors.*;
 class SpringDataRestRequestHandler implements RequestHandler {
   private final EntityContext entityContext;
   private final ActionSpecification actionSpecification;
+  private final String contextPath;
 
   SpringDataRestRequestHandler(
       EntityContext entityContext,
       ActionSpecification actionSpecification) {
+
+    this.contextPath = entityContext.contextPath();
     this.entityContext = entityContext;
     this.actionSpecification = actionSpecification;
   }
@@ -68,6 +71,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
   @Override
   public PatternsRequestCondition getPatternsCondition() {
     return new WebMvcPatternsRequestConditionWrapper(
+        contextPath,
         new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(actionSpecification.getPath())
     );
   }

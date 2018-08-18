@@ -40,14 +40,17 @@ import java.util.StringJoiner;
 import static java.util.Optional.*;
 
 public class WebMvcRequestHandler implements RequestHandler {
+  private final String contextPath;
   private final HandlerMethodResolver methodResolver;
   private final RequestMappingInfo requestMapping;
   private final HandlerMethod handlerMethod;
 
   public WebMvcRequestHandler(
+      String contextPath,
       HandlerMethodResolver methodResolver,
       RequestMappingInfo requestMapping,
       HandlerMethod handlerMethod) {
+    this.contextPath = contextPath;
     this.methodResolver = methodResolver;
     this.requestMapping = requestMapping;
     this.handlerMethod = handlerMethod;
@@ -75,7 +78,9 @@ public class WebMvcRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new WebMvcPatternsRequestConditionWrapper(requestMapping.getPatternsCondition());
+    return new WebMvcPatternsRequestConditionWrapper(
+        contextPath,
+        requestMapping.getPatternsCondition());
   }
 
   @Override

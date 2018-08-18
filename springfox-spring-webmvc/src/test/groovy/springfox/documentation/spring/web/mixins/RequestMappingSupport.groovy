@@ -42,6 +42,7 @@ import springfox.documentation.spring.web.dummy.controllers.FancyPetService
 import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.FancyPet
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
@@ -205,7 +206,9 @@ class RequestMappingSupport {
         httpMethod,
         new RequestMappingContext(
             context,
-            new WebMvcRequestHandler(new HandlerMethodResolver(new TypeResolver()),
+            new WebMvcRequestHandler(
+                Paths.ROOT,
+                new HandlerMethodResolver(new TypeResolver()),
                 requestMapping,
                 handlerMethod)),
         operationIndex)

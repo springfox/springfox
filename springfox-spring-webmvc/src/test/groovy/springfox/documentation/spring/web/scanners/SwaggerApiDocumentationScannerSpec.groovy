@@ -32,6 +32,7 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.paths.AbstractPathProvider
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -137,6 +138,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
     RequestMappingContext requestMappingContext = new RequestMappingContext(documentationContext(),
         new WebMvcRequestHandler(
+            Paths.ROOT,
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo("somePath/"),
             dummyHandlerMethod()))

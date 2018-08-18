@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.BasePathAwareHandlerMapping;
@@ -30,25 +31,32 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 
 @Component
 public class BasePathAwareServicesProvider implements RequestHandlerProvider {
   private final BasePathAwareHandlerMapping basePathAwareMappings;
   private final HandlerMethodResolver methodResolver;
+  private final String contextPath;
 
+  @Autowired
   public BasePathAwareServicesProvider(
       RepositoryRestConfiguration repositoryConfiguration,
       ApplicationContext applicationContext,
-      HandlerMethodResolver methodResolver) {
+      HandlerMethodResolver methodResolver,
+      ServletContext servletContext) {
     basePathAwareMappings = new BasePathAwareHandlerMapping(repositoryConfiguration);
     this.methodResolver = methodResolver;
     basePathAwareMappings.setApplicationContext(applicationContext);
     basePathAwareMappings.afterPropertiesSet();
+    contextPath = contextPath(servletContext);
+  }
 
   private static boolean isEntitySchemaService(HandlerMethod input) {
     return input.getBeanType().getSimpleName().equals("RepositorySchemaController");
@@ -64,7 +72,12 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
     for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
       if (!isEntitySchemaService(each.getValue())
           && !isAlpsProfileServices(each.getValue())) {
-        requestHandlers.add(new WebMvcRequestHandler(methodResolver, each.getKey(), each.getValue()));
+        requestHandlers.add(
+            new WebMvcRequestHandler(
+                contextPath,
+                methodResolver,
+                each.getKey(),
+                each.getValue()));
       }
     }
     return requestHandlers;

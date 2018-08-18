@@ -45,6 +45,8 @@ import springfox.documentation.spring.web.scanners.ApiModelReader
 
 import javax.servlet.http.HttpServletResponse
 
+import static springfox.documentation.spring.web.paths.Paths.*
+
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class ApiModelReaderSpec extends DocumentationContextSpec {
 
@@ -89,7 +91,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def requestMappingContext(HandlerMethod handlerMethod) {
     return new RequestMappingContext(
         documentationContext(),
-        new WebMvcRequestHandler(methodResolver, requestMappingInfo('/somePath'),
+        new WebMvcRequestHandler(
+            ROOT,
+            methodResolver,
+            requestMappingInfo('/somePath'),
             handlerMethod))
   }
 
@@ -176,7 +181,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
     RequestMappingContext context =
         new RequestMappingContext(pluginContext,
-            new WebMvcRequestHandler(methodResolver,
+            new WebMvcRequestHandler(
+                ROOT,
+                methodResolver,
                 requestMappingInfo('/businesses/responseEntity/{businessId}'),
                 handlerMethod))
 

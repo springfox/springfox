@@ -31,6 +31,7 @@ import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
@@ -66,10 +67,12 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
 
     HandlerMethod handlerMethod = dummyHandlerMethod()
 
-      RequestMappingContext context = new RequestMappingContext(documentationContext(),
-              new WebMvcRequestHandler(methodResolver,
-                  requestMappingInfo,
-                  handlerMethod))
+    RequestMappingContext context = new RequestMappingContext(documentationContext(),
+        new WebMvcRequestHandler(
+            Paths.ROOT,
+            methodResolver,
+            requestMappingInfo,
+            handlerMethod))
     when:
     def operations = sut.read(context)
 

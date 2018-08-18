@@ -40,8 +40,9 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 
-import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
+
+import static springfox.documentation.spring.web.paths.Paths.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport, SchemaPluginsSupport])
 class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
@@ -109,7 +110,9 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
   def context(HandlerMethod handlerMethod) {
     return new RequestMappingContext(
         documentationContext(),
-        new WebMvcRequestHandler(methodResolver,
+        new WebMvcRequestHandler(
+            ROOT,
+            methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))
   }
@@ -123,7 +126,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     )
     RequestMappingContext context = new RequestMappingContext(
         documentationContext(),
-        new WebMvcRequestHandler(methodResolver,
+        new WebMvcRequestHandler(ROOT, methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))
 
@@ -152,6 +155,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
         new RequestMappingContext(
             pluginContext,
             new WebMvcRequestHandler(
+                ROOT,
                 methodResolver,
                 requestMappingInfo('/businesses/responseEntity/{businessId}'),
                 handlerMethod))
@@ -172,6 +176,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     RequestMappingContext context = new RequestMappingContext(
         documentationContext(),
         new WebMvcRequestHandler(
+            ROOT,
             methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))

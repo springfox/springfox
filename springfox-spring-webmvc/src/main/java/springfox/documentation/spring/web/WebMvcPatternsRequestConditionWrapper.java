@@ -22,13 +22,21 @@ package springfox.documentation.spring.web;
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 public class WebMvcPatternsRequestConditionWrapper
     implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
-  private PatternsRequestCondition condition;
+  private final String contextPath;
+  private final PatternsRequestCondition condition;
 
-  public WebMvcPatternsRequestConditionWrapper(PatternsRequestCondition condition) {
+  public WebMvcPatternsRequestConditionWrapper(
+      String contextPath,
+      PatternsRequestCondition condition) {
+
+    this.contextPath = contextPath;
     this.condition = condition;
   }
 
@@ -37,14 +45,17 @@ public class WebMvcPatternsRequestConditionWrapper
       springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other) {
     if (other instanceof WebMvcPatternsRequestConditionWrapper && !this.equals(other)) {
       return new WebMvcPatternsRequestConditionWrapper(
-          this.condition.combine(((WebMvcPatternsRequestConditionWrapper) other).condition));
+          contextPath,
+          condition.combine(((WebMvcPatternsRequestConditionWrapper) other).condition));
     }
     return this;
   }
 
   @Override
   public Set<String> getPatterns() {
-    return this.condition.getPatterns();
+    return this.condition.getPatterns().stream()
+        .map(p -> String.format("%s/%s", maybeChompTrailingSlash(contextPath),  maybeChompLeadingSlash(p)))
+        .collect(Collectors.toSet());
   }
 
 

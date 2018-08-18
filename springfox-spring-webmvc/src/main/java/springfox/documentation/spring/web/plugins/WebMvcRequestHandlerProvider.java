@@ -31,8 +31,10 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
@@ -43,15 +45,21 @@ import static springfox.documentation.spi.service.contexts.Orderings.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
+  private static final String ROOT = "/";
   private final List<RequestMappingInfoHandlerMapping> handlerMappings;
   private final HandlerMethodResolver methodResolver;
+  private final String contextPath;
 
   @Autowired
   public WebMvcRequestHandlerProvider(
+      Optional<ServletContext> servletContext,
       HandlerMethodResolver methodResolver,
       List<RequestMappingInfoHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
     this.methodResolver = methodResolver;
+    this.contextPath = servletContext
+        .map(ServletContext::getContextPath)
+        .orElse(ROOT);
   }
 
   @Override
@@ -71,6 +79,7 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
     return input -> new WebMvcRequestHandler(
+        contextPath,
         methodResolver,
         input.getKey(),
         input.getValue());

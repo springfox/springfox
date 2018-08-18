@@ -29,6 +29,7 @@ import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.mixins.AccessorAssertions
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.paths.WebMvcRelativePathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -78,15 +79,16 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     given:
 
     requestHandlers = [
-          new WebMvcRequestHandler(
-              methodResolver,
+        new WebMvcRequestHandler(
+            Paths.ROOT,
+            methodResolver,
               requestMappingInfo("/public/{businessId}"),
               dummyControllerHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+        new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:
@@ -106,12 +108,12 @@ class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
     given:
 
       requestHandlers = [
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
       ]
 
     when:

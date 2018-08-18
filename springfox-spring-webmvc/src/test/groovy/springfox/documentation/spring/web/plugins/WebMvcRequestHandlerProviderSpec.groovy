@@ -19,6 +19,7 @@
 package springfox.documentation.spring.web.plugins
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.mock.web.MockServletContext
 import spock.lang.Specification
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
@@ -26,6 +27,7 @@ class WebMvcRequestHandlerProviderSpec extends Specification {
   def "when handler mappings is empty or null" () {
     given:
       WebMvcRequestHandlerProvider sut = new WebMvcRequestHandlerProvider(
+          Optional.of(new MockServletContext("/")),
           new HandlerMethodResolver(new TypeResolver()),
           handlers)
     expect:

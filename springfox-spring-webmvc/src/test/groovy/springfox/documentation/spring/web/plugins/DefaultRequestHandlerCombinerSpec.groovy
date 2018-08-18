@@ -13,6 +13,7 @@ import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper
 import java.util.stream.Stream
 
 import static java.util.stream.Collectors.*
+import static springfox.documentation.spring.web.paths.Paths.*
 
 class DefaultRequestHandlerCombinerSpec extends Specification {
   def equality = new PathAndParametersEquivalence()
@@ -108,9 +109,11 @@ class DefaultRequestHandlerCombinerSpec extends Specification {
       ResolvedMethodParameter parameter) {
     def handler = Mock(RequestHandler)
     def key = Mock(RequestHandlerKey)
-    handler.patternsCondition >> new WebMvcPatternsRequestConditionWrapper(new PatternsRequestCondition(path))
+    handler.patternsCondition >> new WebMvcPatternsRequestConditionWrapper(
+        ROOT,
+        new PatternsRequestCondition(path))
     handler.getName() >> name
-      handler.produces() >> Stream.of(produces).collect(toSet())
+    handler.produces() >> Stream.of(produces).collect(toSet())
     handler.parameters >> [parameter]
     handler.supportedMethods() >> [RequestMethod.GET]
     handler.params() >> []

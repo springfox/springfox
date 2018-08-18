@@ -53,6 +53,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
     RequestMappingContext mappingContext = new RequestMappingContext(
         documentationContext(),
         new WebMvcRequestHandler(
+            Paths.ROOT,
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo,
             dummyHandlerMethod()))
@@ -96,6 +97,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
     RequestMappingContext mappingContext = new RequestMappingContext(
         documentationContext(),
         new WebMvcRequestHandler(
+            Paths.ROOT,
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo,
             dummyHandlerMethod()))

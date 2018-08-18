@@ -38,6 +38,7 @@ import springfox.documentation.swagger.web.ClassOrApiAnnotationResourceGrouping
 import static java.util.Optional.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
+import static springfox.documentation.spring.web.paths.Paths.*
 
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
@@ -81,12 +82,11 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
     when:
     RequestMappingInfo businessRequestMappingInfo = requestMappingInfo("/api/v1/businesses")
     RequestMappingInfo accountsRequestMappingInfo = requestMappingInfo("/api/v1/accounts")
-
-      requestHandlers =
-              [
-                  new WebMvcRequestHandler(new HandlerMethodResolver(new TypeResolver()), businessRequestMappingInfo, dummyHandlerMethod()),
-                  new WebMvcRequestHandler(new HandlerMethodResolver(new TypeResolver()), accountsRequestMappingInfo, dummyHandlerMethod())
-              ]
+    requestHandlers =
+        [
+            new WebMvcRequestHandler(ROOT, new HandlerMethodResolver(new TypeResolver()), businessRequestMappingInfo, dummyHandlerMethod()),
+            new WebMvcRequestHandler(ROOT, new HandlerMethodResolver(new TypeResolver()), accountsRequestMappingInfo, dummyHandlerMethod())
+        ]
 
     contextBuilder.requestHandlers(requestHandlers)
     plugin.groupName('groupName').configure(contextBuilder)
@@ -104,15 +104,14 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
   def "grouping of listing references using Spring grouping strategy"() {
     given:
-
-      requestHandlers = [
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
-      ]
+    requestHandlers = [
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+    ]
 
     when:
     contextBuilder.requestHandlers(requestHandlers)
@@ -130,14 +129,14 @@ class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
 
   def "grouping of listing references using Class or Api Grouping Strategy"() {
     given:
-      requestHandlers = [
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
-          new WebMvcRequestHandler(methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
-      ]
+    requestHandlers = [
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}"), dummyControllerHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/inventoryTypes"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/accounts"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/employees"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory"), dummyHandlerMethod()),
+        new WebMvcRequestHandler(ROOT, methodResolver, requestMappingInfo("/public/{businessId}/inventory/products"), dummyHandlerMethod())
+    ]
 
     when:
     contextBuilder.requestHandlers(requestHandlers)

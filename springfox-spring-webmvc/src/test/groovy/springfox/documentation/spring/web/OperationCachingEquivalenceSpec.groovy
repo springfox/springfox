@@ -39,6 +39,7 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.mixins.HandlerMethodsSupport
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.wrapper.PatternsRequestCondition
 
@@ -67,10 +68,10 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     and:
       def first = new RequestMappingContext(
           documentationContext,
-          new WebMvcRequestHandler(methodResolver, firstMapping, anyMethod))
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, firstMapping, anyMethod))
       def second = new RequestMappingContext(
           documentationContext,
-          new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
+          new WebMvcRequestHandler(Paths.ROOT, methodResolver, secondMapping, anyMethod))
     then:
       sut.test(first, second)
   }
@@ -113,10 +114,10 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     and:
       def first = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(methodResolver, firstMapping, anyMethod))
+        new WebMvcRequestHandler(Paths.ROOT, methodResolver, firstMapping, anyMethod))
       def second = new RequestMappingContext(
         documentationContext,
-        new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
+        new WebMvcRequestHandler(Paths.ROOT, methodResolver, secondMapping, anyMethod))
     then:
       !sut.test(first, second)
   }

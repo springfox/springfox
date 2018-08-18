@@ -39,6 +39,7 @@ import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
@@ -246,9 +247,10 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
             new RequestMappingContext(
                     context,
                     new WebMvcRequestHandler(
-                            methodResolver,
-                            requestMappingInfo,
-                            dummyHandlerMethod(methodName)))
+                        Paths.ROOT,
+                        methodResolver,
+                        requestMappingInfo,
+                        dummyHandlerMethod(methodName)))
     requestMappingContext
   }
 
