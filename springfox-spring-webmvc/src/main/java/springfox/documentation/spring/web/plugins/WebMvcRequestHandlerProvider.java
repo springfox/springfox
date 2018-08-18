@@ -41,11 +41,11 @@ import java.util.stream.StreamSupport;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
-  private static final String ROOT = "/";
   private final List<RequestMappingInfoHandlerMapping> handlerMappings;
   private final HandlerMethodResolver methodResolver;
   private final String contextPath;

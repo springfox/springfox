@@ -44,11 +44,11 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.service.Tags.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 public class ApiDocumentationScanner {
 
-  private static final String ROOT = "/";
   private ApiListingReferenceScanner apiListingReferenceScanner;
   private ApiListingScanner apiListingScanner;
 

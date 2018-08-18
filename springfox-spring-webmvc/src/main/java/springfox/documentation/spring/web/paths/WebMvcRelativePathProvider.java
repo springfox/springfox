@@ -22,9 +22,9 @@ package springfox.documentation.spring.web.paths;
 import javax.servlet.ServletContext;
 
 import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 public class WebMvcRelativePathProvider extends AbstractPathProvider {
-  private static final String ROOT = "/";
   private final ServletContext servletContext;
 
   public WebMvcRelativePathProvider(ServletContext servletContext) {

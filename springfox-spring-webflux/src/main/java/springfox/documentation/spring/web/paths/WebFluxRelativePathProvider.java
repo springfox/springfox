@@ -19,9 +19,10 @@
 
 package springfox.documentation.spring.web.paths;
 
-public class WebFluxRelativePathProvider extends AbstractPathProvider {
-  public static final String ROOT = "/";
+import static springfox.documentation.spring.web.paths.Paths.*;
 
+public class WebFluxRelativePathProvider extends AbstractPathProvider {
+  
   @Override
   protected String applicationPath() {
     return ROOT;

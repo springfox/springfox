@@ -30,6 +30,7 @@ import springfox.documentation.spring.web.paths.PathProviderFactory
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import static springfox.documentation.spi.service.contexts.Orderings.*
+import static springfox.documentation.spring.web.paths.Paths.*
 
 class DocumentationContextSpec extends Specification {
   DocumentationContextBuilder contextBuilder
@@ -61,7 +62,6 @@ class DocumentationContextSpec extends Specification {
   }
 
   class DummyPathProvider extends AbstractPathProvider {
-    public static final String ROOT = "/"
 
     @Override
     protected String applicationPath() {

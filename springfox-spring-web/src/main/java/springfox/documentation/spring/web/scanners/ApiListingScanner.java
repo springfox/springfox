@@ -56,11 +56,11 @@ import static java.util.stream.Stream.*;
 import static java.util.stream.StreamSupport.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
 @Component
 public class ApiListingScanner {
-  private static final String ROOT = "/";
   private final ApiDescriptionReader apiDescriptionReader;
   private final ApiModelReader apiModelReader;
   private final DocumentationPluginsManager pluginsManager;
