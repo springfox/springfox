@@ -25,7 +25,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
-import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -76,14 +75,6 @@ public class Validators {
 
     ResolvedMethodParameter methodParam = context.resolvedMethodParameter();
     return methodParam.findAnnotation(annotationType);
-  }
-
-  public static <T extends Annotation> Optional<T> validatorFromExpandedParameter(
-      ParameterExpansionContext context,
-      Class<T> annotationType) {
-
-    Field field = context.getField().getRawMember();
-    return Optional.fromNullable(field.getAnnotation(annotationType));
   }
 
   private static Optional<Field> extractFieldFromPropertyDefinition(BeanPropertyDefinition propertyDefinition) {

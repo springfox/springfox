@@ -163,6 +163,7 @@ public class DocumentationContext {
 
   /**
    * @deprecated  @since 2.2.0 - only here for backward compatibility
+   * @return resource grouping strategy
    */
   @Deprecated
   public ResourceGroupingStrategy getResourceGroupingStrategy() {

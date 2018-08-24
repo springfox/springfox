@@ -85,7 +85,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
           new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
                   Stub(OperationContext){
                       operationModelsBuilder() >> operationModelContextsBuilder})
 
@@ -144,7 +144,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       
       ParameterContext parameterContext =
-          new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+          new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
               Stub(OperationContext){
                   operationModelsBuilder() >> operationModelContextsBuilder})
 
@@ -164,7 +164,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
           new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), context(), namingStrategy,
+              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
                   Stub(OperationContext){
                       operationModelsBuilder() >> operationModelContextsBuilder})
 

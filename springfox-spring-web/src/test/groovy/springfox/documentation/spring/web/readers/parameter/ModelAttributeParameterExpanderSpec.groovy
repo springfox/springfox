@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spring.web.dummy.models.Example
@@ -46,7 +47,10 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
     typeResolver = new TypeResolver()
     enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), enumTypeDeterminer)
+    sut = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new AccessorsProvider(typeResolver),
+        enumTypeDeterminer)
     sut.pluginsManager = defaultWebPlugins()
   }
 
@@ -133,7 +137,10 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   def "Should return empty set when there is an exception"() {
     given:
     ModelAttributeParameterExpander expander =
-        new ModelAttributeParameterExpander(new FieldProvider(typeResolver), enumTypeDeterminer) {
+        new ModelAttributeParameterExpander(
+            new FieldProvider(typeResolver),
+            new AccessorsProvider(typeResolver),
+            enumTypeDeterminer) {
           @Override
           BeanInfo getBeanInfo(Class<?> clazz) throws IntrospectionException {
             throw new IntrospectionException("Fail")
@@ -146,5 +153,142 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
     then:
     parameters.size() == 0
+  }
+
+
+  def "should handle expansion of Book"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(Book),
+            context()))
+
+    expect:
+    parameters.size() == 3
+    parameters.find { it.name == 'id' }
+    parameters.find { it.name == 'authors[0].id' }
+    parameters.find { it.name == 'authors[0].books[0].id' }
+  }
+
+
+  def "should handle expansion item with public fields"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(Bug2423),
+            context()))
+
+    expect:
+    parameters.size() == 2
+    parameters.find { it.name == 'from' }
+    parameters.find { it.name == 'to' }
+  }
+
+  class Bug2423 {
+    public String from
+    public String to
+  }
+
+  class Book {
+    private Long id
+    private Set<Author> authors
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    Set<Author> getAuthors() {
+      return authors
+    }
+
+    void setAuthors(Set<Author> authors) {
+      this.authors = authors
+    }
+  }
+
+  class Author {
+    private Long id
+    private List<Book> books
+
+    Long getId() {
+      return id
+    }
+
+    void setId(Long id) {
+      this.id = id
+    }
+
+    List<Book> getBooks() {
+      return books
+    }
+
+    void setBooks(List<Book> books) {
+      this.books = books
+    }
+  }
+
+  def "should handle expansion of User"() {
+    given:
+    def parameters = sut.expand(
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(User),
+            context()))
+
+    expect:
+    parameters.size() == 2
+    parameters.find { it.name == 'office.parent.name' }
+    parameters.find { it.name == 'office.name' }
+  }
+
+  class User {
+    Office office
+
+    Office getOffice() {
+      return office
+    }
+
+    void setOffice(Office office) {
+      this.office = office
+    }
+  }
+
+  class Office extends TreeEntity<Office> {
+    String name
+
+    String getName() {
+      return name
+    }
+
+    void setName(String name) {
+      this.name = name
+    }
+  }
+
+  class TreeEntity<T> {
+    T  parent
+    User user
+
+    User getUser() {
+      return user
+    }
+
+    void setUser(User user) {
+      this.user = user
+    }
+
+    T getParent() {
+      return parent
+    }
+
+    void setParent(T parent) {
+      this.parent = parent
+    }
   }
 }

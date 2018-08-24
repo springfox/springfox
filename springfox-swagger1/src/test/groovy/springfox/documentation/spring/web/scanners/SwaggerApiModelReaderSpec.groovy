@@ -29,6 +29,7 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.service.ResourceGroup
@@ -53,7 +54,7 @@ import javax.servlet.http.HttpServletResponse
 
 import static com.google.common.collect.Maps.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport])
+@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport, SchemaPluginsSupport])
 class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
@@ -136,7 +137,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   def apiListingContext(HandlerMethod handlerMethod, String path) {
     def requestMappingContext = new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(
             methodResolver,
             requestMappingInfo(path),
@@ -146,7 +147,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     def resourceGroupRequestMappings = newHashMap()
     resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
     
-    return new ApiListingScanningContext(context(), resourceGroupRequestMappings)
+    return new ApiListingScanningContext(documentationContext(), resourceGroupRequestMappings)
   }
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {

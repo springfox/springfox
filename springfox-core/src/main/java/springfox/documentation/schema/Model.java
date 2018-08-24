@@ -35,8 +35,8 @@ public class Model {
   private final String description;
   private final String baseModel;
   private final String discriminator;
-  private final List<String> subTypes;
-  private final String example;
+  private final List<ModelReference> subTypes;
+  private final Object example;
   private final Xml xml;
 
   public Model(
@@ -48,8 +48,8 @@ public class Model {
       String description,
       String baseModel,
       String discriminator,
-      List<String> subTypes,
-      String example,
+      List<ModelReference> subTypes,
+      Object example,
       Xml xml) {
 
     this.id = id;
@@ -93,7 +93,7 @@ public class Model {
     return discriminator;
   }
 
-  public List<String> getSubTypes() {
+  public List<ModelReference> getSubTypes() {
     return subTypes;
   }
 
@@ -101,7 +101,7 @@ public class Model {
     return type;
   }
 
-  public String getExample() {
+  public Object getExample() {
     return example;
   }
 

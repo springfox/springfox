@@ -30,6 +30,7 @@ import java.util.List;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiDescriptionBuilder {
+  private String groupName;
   private String path;
   private String description;
   private List<Operation> operations;
@@ -45,7 +46,7 @@ public class ApiDescriptionBuilder {
    * Updates the path to the api operation
    *
    * @param path - operation path
-   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   * @return this @see springfox.documentation.builders.ApiDescriptionBuilder
    */
   public ApiDescriptionBuilder path(String path) {
     this.path = defaultIfAbsent(path, this.path);
@@ -56,7 +57,7 @@ public class ApiDescriptionBuilder {
    * Updates the descriptions to the api operation
    *
    * @param description - operation description
-   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   * @return this @see springfox.documentation.builders.ApiDescriptionBuilder
    */
   public ApiDescriptionBuilder description(String description) {
     this.description = defaultIfAbsent(description, this.description);
@@ -67,7 +68,7 @@ public class ApiDescriptionBuilder {
    * Updates the operations to the api operation
    *
    * @param operations - operations for each of the http methods for that path
-   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   * @return this @see springfox.documentation.builders.ApiDescriptionBuilder
    */
   public ApiDescriptionBuilder operations(List<Operation> operations) {
     if (operations != null) {
@@ -80,7 +81,7 @@ public class ApiDescriptionBuilder {
    * Marks the operation as hidden
    *
    * @param hidden - operation path
-   * @return @see springfox.documentation.builders.ApiDescriptionBuilder
+   * @return this @see springfox.documentation.builders.ApiDescriptionBuilder
    */
   public ApiDescriptionBuilder hidden(boolean hidden) {
     this.hidden = hidden;
@@ -92,7 +93,24 @@ public class ApiDescriptionBuilder {
     return this;
   }
 
+  /**
+   * Updates the group name the api operation belongs to
+   *
+   * @param groupName -  group this api description belongs to
+   * @return this @see springfox.documentation.builders.ApiDescriptionBuilder
+   * @since 2.8.1
+   */
+  public ApiDescriptionBuilder groupName(String groupName) {
+    this.groupName = defaultIfAbsent(groupName, this.groupName);
+    return this;
+  }
+
   public ApiDescription build() {
-    return new ApiDescription(pathDecorator.apply(path), description, operations, hidden);
+    return new ApiDescription(
+        groupName,
+        pathDecorator.apply(path),
+        description,
+        operations,
+        hidden);
   }
 }

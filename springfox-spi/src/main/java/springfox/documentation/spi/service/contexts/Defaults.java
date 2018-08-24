@@ -40,7 +40,6 @@ import springfox.documentation.service.ResponseMessage;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
@@ -78,6 +77,7 @@ public class Defaults {
 
   /**
    * Default response messages set on all api operations
+   * @return - map of method to response messages
    */
   public Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages() {
     return responses;
@@ -141,7 +141,8 @@ public class Defaults {
     return rules;
   }
 
-  void maybeAddRuleForClassName(TypeResolver typeResolver, List<AlternateTypeRule> rules, String className, Class clazz ) {
+  private void maybeAddRuleForClassName(TypeResolver typeResolver, List<AlternateTypeRule> rules, String className,
+                                        Class clazz) {
     Optional<? extends Class> fromClazz = ClassSupport.classByName(className);
     if (fromClazz.isPresent()) {
       rules.add(newRule(
@@ -174,8 +175,6 @@ public class Defaults {
     ignored.add(Class.class);
     ignored.add(Void.class);
     ignored.add(Void.TYPE);
-    ignored.add(HttpHeaders.class);
-    ignored.add(ServletResponse.class);
     ignored.add(HttpServletRequest.class);
     ignored.add(HttpServletResponse.class);
     ignored.add(HttpHeaders.class);

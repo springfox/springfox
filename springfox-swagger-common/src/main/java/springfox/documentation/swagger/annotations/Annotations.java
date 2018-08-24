@@ -74,7 +74,8 @@ public class Annotations {
     };
   }
 
-  public static Function<ApiResponse, ResolvedType> resolvedTypeFromResponse(final TypeResolver typeResolver,
+  public static Function<ApiResponse, ResolvedType> resolvedTypeFromResponse(
+      final TypeResolver typeResolver,
       final ResolvedType defaultType) {
 
     return new Function<ApiResponse, ResolvedType>() {
@@ -85,35 +86,58 @@ public class Annotations {
     };
   }
 
+  @SuppressWarnings("Duplicates")
   @VisibleForTesting
-  static ResolvedType getResolvedType(ApiOperation annotation,
-      TypeResolver typeResolver, ResolvedType defaultType) {
+  static ResolvedType getResolvedType(
+      ApiOperation annotation,
+      TypeResolver resolver,
+      ResolvedType defaultType) {
 
-    if (null != annotation && Void.class != annotation.response()) {
-      if ("List".compareToIgnoreCase(annotation.responseContainer()) == 0) {
-        return typeResolver.resolve(List.class, annotation.response());
-      } else if ("Set".compareToIgnoreCase(annotation.responseContainer()) == 0) {
-        return typeResolver.resolve(Set.class, annotation.response());
-      } else {
-        return typeResolver.resolve(annotation.response());
+    if (null != annotation) {
+      Class<?> response = annotation.response();
+      String responseContainer = annotation.responseContainer();
+      if (resolvedType(resolver, response, responseContainer).isPresent()) {
+        return resolvedType(resolver, response, responseContainer).get();
       }
     }
     return defaultType;
   }
 
+  @SuppressWarnings("Duplicates")
   @VisibleForTesting
-  static ResolvedType getResolvedType(ApiResponse annotation,
-      TypeResolver typeResolver, ResolvedType defaultType) {
+  static ResolvedType getResolvedType(
+      ApiResponse annotation,
+      TypeResolver resolver,
+      ResolvedType defaultType) {
 
-    if (null != annotation && Void.class != annotation.response()) {
-      if ("List".compareToIgnoreCase(annotation.responseContainer()) == 0) {
-        return typeResolver.resolve(List.class, annotation.response());
-      } else if ("Set".compareToIgnoreCase(annotation.responseContainer()) == 0) {
-        return typeResolver.resolve(Set.class, annotation.response());
-      } else {
-        return typeResolver.resolve(annotation.response());
+    if (null != annotation) {
+      Class<?> response = annotation.response();
+      String responseContainer = annotation.responseContainer();
+      if (resolvedType(resolver, response, responseContainer).isPresent()) {
+        return resolvedType(resolver, response, responseContainer).get();
       }
     }
     return defaultType;
+  }
+
+  private static Optional<ResolvedType> resolvedType(
+      TypeResolver resolver,
+      Class<?> response,
+      String responseContainer) {
+    if (isNotVoid(response)) {
+      if ("List".compareToIgnoreCase(responseContainer) == 0) {
+        return Optional.of(resolver.resolve(List.class, response));
+      } else if ("Set".compareToIgnoreCase(responseContainer) == 0) {
+        return Optional.of(resolver.resolve(Set.class, response));
+      } else {
+        return Optional.of(resolver.resolve(response));
+      }
+    }
+    return Optional.absent();
+  }
+
+  private static boolean isNotVoid(Class<?> response) {
+    return Void.class != response
+        && void.class != response;
   }
 }

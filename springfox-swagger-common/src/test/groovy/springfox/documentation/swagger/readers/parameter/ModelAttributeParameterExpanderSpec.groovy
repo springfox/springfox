@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import springfox.documentation.schema.AlternateTypeRule
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.WildcardType
+import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DefaultsProviderPlugin
@@ -49,16 +50,30 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
 
   def setup() {
     typeResolver = new TypeResolver()
-    plugin.alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
-    sut = new ModelAttributeParameterExpander(new FieldProvider(typeResolver), new JacksonEnumTypeDeterminer())
-    sut.pluginsManager = swaggerServicePlugins([new SwaggerDefaults(new Defaults(), new TypeResolver(),
-        Mock(ServletContext))])
+    plugin.alternateTypeRules(
+        newRule(
+            typeResolver.resolve(LocalDateTime),
+            typeResolver.resolve(String)))
+
+    sut = new ModelAttributeParameterExpander(
+        new FieldProvider(typeResolver),
+        new AccessorsProvider(typeResolver),
+        new JacksonEnumTypeDeterminer())
+
+    sut.pluginsManager = swaggerServicePlugins([
+        new SwaggerDefaults(
+            new Defaults(),
+            new TypeResolver(),
+            Mock(ServletContext))])
   }
 
   def "shouldn't expand hidden parameters"() {
     when:
     def parameters = sut.expand(
-        new ExpansionContext("", typeResolver.resolve(ModelAttributeWithHiddenParametersExample), context()))
+        new ExpansionContext(
+            "",
+            typeResolver.resolve(ModelAttributeWithHiddenParametersExample),
+            context()))
 
     then:
     parameters.size() == 7

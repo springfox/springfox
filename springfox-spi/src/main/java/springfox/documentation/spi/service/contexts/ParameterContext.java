@@ -53,7 +53,7 @@ public class ParameterContext {
   }
 
   /**
-   * @return
+   * @return method parameter
    * @since 2.5.0 this has been deprecated
    * @deprecated Use {@link ParameterContext#resolvedMethodParameter()} instead
    */

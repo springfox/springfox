@@ -25,14 +25,22 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
+import org.springframework.http.HttpMethod
+import springfox.documentation.builders.ApiInfoBuilder
+import springfox.documentation.builders.AuthorizationScopeBuilder
+import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.SecurityScheme
+import springfox.documentation.service.StringVendorExtension
 import springfox.documentation.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
+import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration
 import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
 import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import springfox.petstore.PetStoreConfiguration
 import springfox.test.contract.swagger.Bug1767ListingScanner
@@ -40,6 +48,7 @@ import springfox.test.contract.swagger.Bug1767ListingScanner
 import java.nio.ByteBuffer
 
 import static com.google.common.base.Predicates.*
+import static com.google.common.collect.Lists.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
@@ -158,21 +167,39 @@ class Swagger2TestConfig {
 
   @Bean
   Docket bugs(List<SecurityScheme> authorizationTypes) {
+    AuthorizationScope[] scopes = [new AuthorizationScopeBuilder()
+                                       .scope("read")
+                                       .description("Read access")
+                                       .build()]
     return new Docket(DocumentationType.SWAGGER_2)
         .groupName("bugs")
+        .apiInfo(new ApiInfoBuilder().version("1.0")
+          .title("bugs API")
+          .description("bugs API")
+          .extensions(
+            newArrayList(
+                new StringVendorExtension("test", "testValue")))
+          .build())
         .useDefaultResponseMessages(false)
         .securitySchemes(authorizationTypes)
         .tags(new Tag("foo", "Foo Description"))
         .produces(['application/xml', 'application/json'] as Set)
         .enableUrlTemplating(true)
+        .securityContexts(
+        [SecurityContext.builder()
+             .securityReferences([new SecurityReference("petstore_auth", scopes)])
+             .forPaths(regex("/bugs/2268"))
+             .forHttpMethods(equalTo(HttpMethod.GET))
+             .build()
+        ])
         .alternateTypeRules(
-        newRule(URL.class, String.class),
-        newRule(
+          newRule(URL.class, String.class),
+          newRule(
             resolver.resolve(List.class, Link.class),
             resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
         .directModelSubstitute(ByteBuffer.class, String.class)
         .select()
-        .paths(regex("/bugs/.*"))
+          .paths(regex("/bugs/.*"))
         .build()
   }
 
@@ -194,6 +221,25 @@ class Swagger2TestConfig {
         .ignoredParameterTypes(BugsController.Bug1627, BugsController.Lang)
         .select()
         .paths(regex("/bugs/.*"))
+        .build()
+  }
+
+  @Bean
+  Docket differentGroup() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("different-group")
+        .useDefaultResponseMessages(false)
+        .tags(new Tag("Different", "Different Group"))
+        .produces(['application/xml', 'application/json'] as Set)
+        .enableUrlTemplating(true)
+        .alternateTypeRules(
+        newRule(URL.class, String.class),
+        newRule(
+            resolver.resolve(List.class, Link.class),
+            resolver.resolve(Map.class, String.class, BugsController.LinkAlternate.class)))
+        .directModelSubstitute(ByteBuffer.class, String.class)
+        .select()
+        .paths(regex("/different/.*"))
         .build()
   }
 
@@ -287,8 +333,8 @@ class Swagger2TestConfig {
   }
 
   @Bean
-  ApiListingScannerPlugin listingScanner() {
-    new Bug1767ListingScanner()
+  ApiListingScannerPlugin listingScanner(CachingOperationNameGenerator operationNames) {
+    new Bug1767ListingScanner(operationNames)
   }
 
   @Bean

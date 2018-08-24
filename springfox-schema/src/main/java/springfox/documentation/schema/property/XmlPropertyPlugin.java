@@ -19,8 +19,10 @@
 package springfox.documentation.schema.property;
 
 import com.google.common.base.Optional;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
+import springfox.documentation.schema.JaxbPresentInClassPathCondition;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -36,6 +38,7 @@ import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.Annotations.*;
 
 @Component
+@Conditional(JaxbPresentInClassPathCondition.class)
 public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   
   @Override
@@ -61,7 +64,7 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
           XmlAttribute.class));
     }
 
-    if (elementAnnotation.isPresent()) {
+    if (elementAnnotation.isPresent() && context.getBeanPropertyDefinition().isPresent()) {
       Optional<XmlElementWrapper> wrapper = findPropertyAnnotation(
           context.getBeanPropertyDefinition().get(),
           XmlElementWrapper.class);

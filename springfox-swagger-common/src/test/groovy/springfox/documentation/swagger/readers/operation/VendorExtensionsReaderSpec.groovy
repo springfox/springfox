@@ -30,7 +30,7 @@ class VendorExtensionsReaderSpec extends DocumentationContextSpec {
   def "should read from annotations"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod('methodWithExtensions'))
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithExtensions'))
       VendorExtensionsReader sut = new VendorExtensionsReader()
     when:
       sut.apply(operationContext)

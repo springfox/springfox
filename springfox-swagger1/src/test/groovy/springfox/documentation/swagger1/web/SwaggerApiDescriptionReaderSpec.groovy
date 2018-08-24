@@ -53,7 +53,7 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
                 [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
         )
         RequestMappingContext mappingContext = new RequestMappingContext(
-            context(),
+            documentationContext(),
             new WebMvcRequestHandler(
                 new HandlerMethodResolver(new TypeResolver()),
                 requestMappingInfo,

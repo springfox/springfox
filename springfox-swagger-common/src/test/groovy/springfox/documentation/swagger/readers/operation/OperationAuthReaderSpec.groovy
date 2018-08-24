@@ -38,7 +38,7 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
   def "should read from annotations"() {
     given:
     OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod('methodWithAuth'))
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithAuth'))
 
     when:
       sut.apply(operationContext)
@@ -63,7 +63,7 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
               .build()
       plugin.securityContexts(newArrayList(securityContext))
       OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod())
+        operationContext(documentationContext(), dummyHandlerMethod())
 
     when:
       sut.apply(operationContext)
@@ -84,7 +84,7 @@ class OperationAuthReaderSpec extends DocumentationContextSpec {
               .build()
       plugin.securityContexts(newArrayList(securityContext))
       OperationContext operationContext =
-        operationContext(context(), dummyHandlerMethod('methodWithHttpGETMethod'))
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithHttpGETMethod'))
 
     when:
       sut.apply(operationContext)

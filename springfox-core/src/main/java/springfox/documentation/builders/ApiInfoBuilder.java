@@ -112,7 +112,7 @@ public class ApiInfoBuilder {
   /**
    * Updates license information for this API
    *
-   * @param license
+   * @param license licence string
    * @return this
    */
   public ApiInfoBuilder license(String license) {

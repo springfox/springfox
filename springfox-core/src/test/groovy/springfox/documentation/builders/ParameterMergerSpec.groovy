@@ -22,6 +22,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static com.google.common.collect.Sets.*
+import static org.springframework.core.Ordered.*
 
 class ParameterMergerSpec extends Specification {
   @Unroll
@@ -47,10 +48,33 @@ class ParameterMergerSpec extends Specification {
     []                   | []
   }
 
-  def param(String name, String desc) {
+  @Unroll
+  def "Merge prioritizes the merges by order"() {
+    given:
+    def merger = new ParameterMerger([first], [second])
+
+    when:
+    def merged = merger.merged()
+
+
+    then:
+    merged.size() == 1
+    merged.first().description == "winning desc"
+
+    where:
+    first                                   | second
+    param("a", "desc")                      | param("a", "winning desc")
+    param("a", "desc", LOWEST_PRECEDENCE)   | param("a", "winning desc", 0)
+    param("a", "desc", 0)                   | param("a", "winning desc", HIGHEST_PRECEDENCE)
+    param("a", "winning desc", HIGHEST_PRECEDENCE) | param("a", "desc", 0)
+
+  }
+
+  def param(String name, String desc, order = LOWEST_PRECEDENCE) {
     new ParameterBuilder()
         .name(name)
         .description(desc)
+        .order(order)
         .build()
   }
 }

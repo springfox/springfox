@@ -50,7 +50,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     and:
-    Documentation scanned = swaggerApiResourceListing.scan(context())
+    Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
 
     then: "I should should have the correct defaults"
     ResourceListing resourceListing = scanned.resourceListing
@@ -81,7 +81,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     and:
-    Documentation scanned = swaggerApiResourceListing.scan(context())
+    Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
 
     then:
     ApiInfo actual = scanned.getResourceListing().getInfo()
@@ -110,7 +110,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     and:
-    Documentation scanned = swaggerApiResourceListing.scan(context())
+    Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
 
     then:
     ResourceListing resourceListing = scanned.resourceListing
@@ -133,7 +133,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .pathProvider(pathProvider)
         .configure(contextBuilder)
 
-    RequestMappingContext requestMappingContext = new RequestMappingContext(context(),
+    RequestMappingContext requestMappingContext = new RequestMappingContext(documentationContext(),
         new WebMvcRequestHandler(
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo("somePath/"), dummyHandlerMethod()),
@@ -149,7 +149,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingScanner.scan(_) >> LinkedListMultimap.create()
 
     and:
-    Documentation scanned = swaggerApiResourceListing.scan(context())
+    Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
     scanned.resourceListing != null
 
     then:
@@ -182,7 +182,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
     listingScanner.scan(_) >> listingsMap
 
     when:
-    Documentation scanned = swaggerApiResourceListing.scan(context())
+    Documentation scanned = swaggerApiResourceListing.scan(documentationContext())
 
     then:
       scanned.resourceListing.apis.size() == 1

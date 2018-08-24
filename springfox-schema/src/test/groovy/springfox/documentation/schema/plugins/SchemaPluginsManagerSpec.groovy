@@ -31,8 +31,10 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
+import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.ViewProviderPlugin
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import java.lang.reflect.AnnotatedElement
@@ -48,6 +50,7 @@ class SchemaPluginsManagerSpec extends Specification {
   def propertyPlugin = Mock(ModelPropertyBuilderPlugin)
   def modelPlugin = Mock(ModelBuilderPlugin)
   def namePlugin = Mock(TypeNameProviderPlugin)
+  def resourcesModelPlugin = Mock(SyntheticModelProviderPlugin)
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
@@ -66,7 +69,11 @@ class SchemaPluginsManagerSpec extends Specification {
             OrderAwarePluginRegistry.create(newArrayList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
 
-    sut = new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderPlugin)
+    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
+        OrderAwarePluginRegistry.create(newArrayList(resourcesModelPlugin))
+    resourcesModelPlugin.supports(_) >> false
+
+    sut = new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderPlugin, sytheticModelRegistry)
     typeNames = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,

@@ -67,7 +67,7 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
 
       HandlerMethod handlerMethod = dummyHandlerMethod()
 
-      RequestMappingContext context = new RequestMappingContext(context(),
+      RequestMappingContext context = new RequestMappingContext(documentationContext(),
               new WebMvcRequestHandler(
                   methodResolver,
                   requestMappingInfo,

@@ -1,302 +1,318 @@
 {
-  "apiVersion": "1.0",
-  "apis": [
-    {
-      "description": "canGroom",
-      "operations": [
+    "apiVersion": "1.0",
+    "apis": [
         {
-          "method": "GET",
-          "summary": "canGroom",
-          "nickname": "canGroomUsingGET",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "type",
-              "name": "type",
-              "paramType": "query",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "boolean"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "boolean",
-          "authorizations": {
-            "petstore_auth": [
-              {
-                "description": "read your pets",
-                "scope": "read:pets"
-              }
-            ]
-          }
-        }
-      ],
-      "path": "/petgrooming"
-    },
-    {
-      "description": "groomingFunctionThatReturnsVoid",
-      "operations": [
+            "description": "canGroom",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "canGroom",
+                    "nickname": "canGroomUsingGET",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "type",
+                            "name": "type",
+                            "paramType": "query",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "boolean"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "boolean",
+                    "authorizations": {
+                        "petstore_auth": [
+                            {
+                                "description": "read your pets",
+                                "scope": "read:pets"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "path": "/petgrooming"
+        },
         {
-          "method": "DELETE",
-          "summary": "groomingFunctionThatReturnsVoid",
-          "nickname": "groomingFunctionThatReturnsVoidUsingDELETE",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "input",
-              "name": "input",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "Just testing"
-            },
-            {
-              "code": 204,
-              "message": "No Content"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            }
-          ],
-          "deprecated": "false",
-          "type": "void",
-          "authorizations": {
-            "petstore_auth": [
-              {
-                "description": "read your pets",
-                "scope": "read:pets"
-              }
-            ]
-          }
-        }
-      ],
-      "path": "/petgrooming/voidMethod/{input}"
-    },
-    {
-      "description": "canGroom",
-      "operations": [
+            "description": "groomingFunctionThatReturnsVoid",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "groomingFunctionThatReturnsVoid",
+                    "nickname": "groomingFunctionThatReturnsVoidUsingDELETE",
+                    "produces": [
+                        "application/xml",
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "input",
+                            "name": "input",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Just testing"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void",
+                    "authorizations": {
+                        "petstore_auth": [
+                            {
+                                "description": "read your pets",
+                                "scope": "read:pets"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "path": "/petgrooming/voidMethod/{input}"
+        },
         {
-          "method": "GET",
-          "summary": "canGroom",
-          "nickname": "canGroomUsingGET_1",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "type",
-              "name": "type",
-              "paramType": "query",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "boolean"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "boolean"
-        }
-      ],
-      "path": "/pets"
-    },
-    {
-      "description": "canGroom",
-      "operations": [
+            "description": "canGroom",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "canGroom",
+                    "nickname": "canGroomUsingGET_1",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "type",
+                            "name": "type",
+                            "paramType": "query",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "boolean"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "boolean"
+                }
+            ],
+            "path": "/pets"
+        },
         {
-          "method": "GET",
-          "summary": "canGroom",
-          "nickname": "canGroomUsingGET_2",
-          "produces": [
-            "*/*"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "type",
-              "name": "type",
-              "paramType": "query",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "OK",
-              "responseModel": "boolean"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            },
-            {
-              "code": 404,
-              "message": "Not Found"
-            }
-          ],
-          "deprecated": "false",
-          "type": "boolean"
-        }
-      ],
-      "path": "/pets/grooming"
-    },
-    {
-      "description": "groomingFunctionThatReturnsVoid",
-      "operations": [
+            "description": "canGroom",
+            "operations": [
+                {
+                    "method": "GET",
+                    "summary": "canGroom",
+                    "nickname": "canGroomUsingGET_2",
+                    "produces": [
+                        "*/*"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "type",
+                            "name": "type",
+                            "paramType": "query",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK",
+                            "responseModel": "boolean"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Not Found"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "boolean"
+                }
+            ],
+            "path": "/pets/grooming"
+        },
         {
-          "method": "DELETE",
-          "summary": "groomingFunctionThatReturnsVoid",
-          "nickname": "groomingFunctionThatReturnsVoidUsingDELETE_1",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "input",
-              "name": "input",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "Just testing"
-            },
-            {
-              "code": 204,
-              "message": "No Content"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            }
-          ],
-          "deprecated": "false",
-          "type": "void"
-        }
-      ],
-      "path": "/pets/grooming/voidMethod/{input}"
-    },
-    {
-      "description": "groomingFunctionThatReturnsVoid",
-      "operations": [
+            "description": "groomingFunctionThatReturnsVoid",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "groomingFunctionThatReturnsVoid",
+                    "nickname": "groomingFunctionThatReturnsVoidUsingDELETE_1",
+                    "produces": [
+                        "application/xml",
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "input",
+                            "name": "input",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Just testing"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ],
+            "path": "/pets/grooming/voidMethod/{input}"
+        },
         {
-          "method": "DELETE",
-          "summary": "groomingFunctionThatReturnsVoid",
-          "nickname": "groomingFunctionThatReturnsVoidUsingDELETE_2",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "consumes": [],
-          "parameters": [
-            {
-              "allowMultiple": false,
-              "description": "input",
-              "name": "input",
-              "paramType": "path",
-              "type": "string",
-              "required": true
-            }
-          ],
-          "responseMessages": [
-            {
-              "code": 200,
-              "message": "Just testing"
-            },
-            {
-              "code": 204,
-              "message": "No Content"
-            },
-            {
-              "code": 401,
-              "message": "Unauthorized"
-            },
-            {
-              "code": 403,
-              "message": "Forbidden"
-            }
-          ],
-          "deprecated": "false",
-          "type": "void"
+            "description": "groomingFunctionThatReturnsVoid",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "summary": "groomingFunctionThatReturnsVoid",
+                    "nickname": "groomingFunctionThatReturnsVoidUsingDELETE_2",
+                    "produces": [
+                        "application/xml",
+                        "application/json"
+                    ],
+                    "consumes": [
+                        
+                    ],
+                    "parameters": [
+                        {
+                            "allowMultiple": false,
+                            "description": "input",
+                            "name": "input",
+                            "paramType": "path",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "Just testing"
+                        },
+                        {
+                            "code": 204,
+                            "message": "No Content"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        }
+                    ],
+                    "deprecated": "false",
+                    "type": "void"
+                }
+            ],
+            "path": "/pets/voidMethod/{input}"
         }
-      ],
-      "path": "/pets/voidMethod/{input}"
-    }
-  ],
-  "basePath": "/",
-  "consumes": [],
-  "produces": [],
-  "resourcePath": "/petgrooming",
-  "swaggerVersion": "1.2"
+    ],
+    "basePath": "/",
+    "consumes": [
+        
+    ],
+    "produces": [
+        
+    ],
+    "resourcePath": "/petgrooming",
+    "swaggerVersion": "1.2"
 }

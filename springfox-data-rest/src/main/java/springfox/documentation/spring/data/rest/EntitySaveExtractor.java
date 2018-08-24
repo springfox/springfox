@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResolvedMethodParameter;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,10 +45,13 @@ class EntitySaveExtractor implements EntityOperationsExtractor {
     final List<RequestHandler> handlers = newArrayList();
     final PersistentEntity<?, ?> entity = context.entity();
     CrudMethods crudMethods = context.crudMethods();
+    Object getSaveMethod = crudMethods.getSaveMethod();
+    Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
     if (crudMethods.hasSaveMethod()) {
+      Method actualSaveMethod = (Method) converter.convert(getSaveMethod).orNull();
       HandlerMethod handler = new HandlerMethod(
           context.getRepositoryInstance(),
-          crudMethods.getSaveMethod());
+          actualSaveMethod);
       RepositoryMetadata resource = context.getRepositoryMetadata();
       ActionSpecification put = saveActionSpecification(
           entity,

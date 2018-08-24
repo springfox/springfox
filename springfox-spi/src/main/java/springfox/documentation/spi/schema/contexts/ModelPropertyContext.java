@@ -62,7 +62,7 @@ public class ModelPropertyContext {
 
   /**
    * Model property build. Use this to override model property attributes
-   * @return
+   * @return the builder
    */
   public ModelPropertyBuilder getBuilder() {
     return builder;

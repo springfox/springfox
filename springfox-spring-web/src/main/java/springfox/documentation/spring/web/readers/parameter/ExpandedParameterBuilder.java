@@ -37,7 +37,6 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +44,7 @@ import static com.google.common.base.Strings.*;
 import static com.google.common.collect.Lists.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.service.Parameter.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -62,15 +62,15 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
 
   @Override
   public void apply(ParameterExpansionContext context) {
-    AllowableValues allowable = allowableValues(context.getField().getRawMember());
+    AllowableValues allowable = allowableValues(context.getFieldType().getErasedType());
 
     String name = isNullOrEmpty(context.getParentName())
-                  ? context.getField().getName()
-                  : String.format("%s.%s", context.getParentName(), context.getField().getName());
+                  ? context.getFieldName()
+                  : String.format("%s.%s", context.getParentName(), context.getFieldName());
 
     String typeName = context.getDataTypeName();
     ModelReference itemModel = null;
-    ResolvedType resolved = resolver.resolve(context.getField().getType());
+    ResolvedType resolved = resolver.resolve(context.getFieldType());
     if (isContainerType(resolved)) {
       resolved = fieldType(context).or(resolved);
       ResolvedType elementType = collectionElementType(resolved);
@@ -94,12 +94,13 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .type(resolved)
         .modelRef(new ModelRef(typeName, itemModel))
         .allowableValues(allowable)
-        .parameterType("query")
+        .parameterType(context.getParameterType())
+        .order(DEFAULT_PRECEDENCE)
         .parameterAccess(null);
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {
-    return Optional.of(context.getField().getType());
+    return Optional.of(context.getFieldType());
   }
 
   @Override
@@ -107,11 +108,11 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     return true;
   }
 
-  private AllowableValues allowableValues(final Field field) {
+  private AllowableValues allowableValues(Class<?> fieldType) {
 
     AllowableValues allowable = null;
-    if (enumTypeDeterminer.isEnum(field.getType())) {
-      allowable = new AllowableListValues(getEnumValues(field.getType()), "LIST");
+    if (enumTypeDeterminer.isEnum(fieldType)) {
+      allowable = new AllowableListValues(getEnumValues(fieldType), "LIST");
     }
 
     return allowable;

@@ -23,7 +23,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Ordering;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +125,9 @@ public class ApiListing {
   }
 
   public void setApis(List<ApiDescription> apis) {
-    this.apis = apis;
+    this.apis = FluentIterable.from(apis)
+      .toSortedList(Ordering.from(byPath())
+          .compound(byDescription()));
   }
 
   public Map<String, ModelDto> getModels() {
@@ -189,6 +194,24 @@ public class ApiListing {
       this.models = nullToEmptyMap(this.models);
       this.models.putAll(models);
     }
+  }
+
+  private Comparator<ApiDescription> byPath() {
+    return new Comparator<ApiDescription>() {
+      @Override
+      public int compare(ApiDescription first, ApiDescription second) {
+        return first.getPath().compareTo(second.getPath());
+      }
+    };
+  }
+
+  private Comparator<ApiDescription> byDescription() {
+    return new Comparator<ApiDescription>() {
+      @Override
+      public int compare(ApiDescription first, ApiDescription second) {
+        return first.getDescription().compareTo(second.getDescription());
+      }
+    };
   }
 }
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,16 +42,19 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.util.Collections;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.base.Predicates.*;
 import static com.google.common.collect.FluentIterable.*;
 import static com.google.common.collect.Lists.*;
 import static com.google.common.collect.Sets.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
 @Component
 public class ApiListingScanner {
@@ -59,24 +63,63 @@ public class ApiListingScanner {
   private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
-  public ApiListingScanner(ApiDescriptionReader apiDescriptionReader,
-                           ApiModelReader apiModelReader,
-                           DocumentationPluginsManager pluginsManager) {
+  public ApiListingScanner(
+      ApiDescriptionReader apiDescriptionReader,
+      ApiModelReader apiModelReader,
+      DocumentationPluginsManager pluginsManager) {
+
     this.apiDescriptionReader = apiDescriptionReader;
     this.apiModelReader = apiModelReader;
     this.pluginsManager = pluginsManager;
   }
 
+  static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
+    List<String> commons = newArrayList();
+    if (null == apiDescriptions || apiDescriptions.isEmpty()) {
+      return Optional.absent();
+    }
+    List<String> firstWords = urlParts(apiDescriptions.get(0));
+
+    for (int position = 0; position < firstWords.size(); position++) {
+      String word = firstWords.get(position);
+      boolean allContain = true;
+      for (int i = 1; i < apiDescriptions.size(); i++) {
+        List<String> words = urlParts(apiDescriptions.get(i));
+        if (words.size() < position + 1 || !words.get(position).equals(word)) {
+          allContain = false;
+          break;
+        }
+      }
+      if (allContain) {
+        commons.add(word);
+      }
+    }
+    Joiner joiner = Joiner.on("/").skipNulls();
+    return Optional.of("/" + joiner.join(commons));
+  }
+
+  static List<String> urlParts(ApiDescription apiDescription) {
+    return Splitter.on('/')
+        .omitEmptyStrings()
+        .trimResults()
+        .splitToList(apiDescription.getPath());
+  }
+
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
-    Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
-    Map<ResourceGroup, Map<String, Model>> models = apiModelReader.read(context);
+    final Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
+    final Map<ResourceGroup, Map<String, Model>> models = apiModelReader.read(context);
 
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
         = context.getRequestMappingsByResourceGroup();
+    Collection<ApiDescription> additionalListings = pluginsManager.additionalListings(context);
+    Set<ResourceGroup> allResourceGroups = FluentIterable.from(collectResourceGroups(additionalListings))
+        .append(requestMappingsByResourceGroup.keySet())
+        .toSet();
+
     List<SecurityReference> securityReferences = newArrayList();
-    for (ResourceGroup resourceGroup : sortedByName(requestMappingsByResourceGroup.keySet())) {
+    for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
       Set<String> produces = new LinkedHashSet<String>(documentationContext.getProduces());
@@ -85,16 +128,21 @@ public class ApiListingScanner {
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = newHashSet();
 
-      for (RequestMappingContext each : sortedByMethods(requestMappingsByResourceGroup.get(resourceGroup))) {
+      List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
+      for (RequestMappingContext each : sortedByMethods(requestMappings)) {
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      apiDescriptions.addAll(from(pluginsManager.additionalListings(context))
-          .filter(onlySelectedApis(documentationContext))
-          .toList());
+      List<ApiDescription> additional = from(additionalListings)
+          .filter(
+              and(
+                  belongsTo(resourceGroup.getGroupName()),
+                  onlySelectedApis(documentationContext)))
+          .toList();
+      apiDescriptions.addAll(additional);
 
-      List<ApiDescription> sortedApis = newArrayList(apiDescriptions);
-      Collections.sort(sortedApis, documentationContext.getApiDescriptionOrdering());
+      List<ApiDescription> sortedApis = FluentIterable.from(apiDescriptions)
+          .toSortedList(documentationContext.getApiDescriptionOrdering());
 
       String resourcePath = new ResourcePathProvider(resourceGroup)
           .resourcePath()
@@ -136,44 +184,7 @@ public class ApiListingScanner {
     };
   }
 
-  private Iterable<ResourceGroup> sortedByName(Set<ResourceGroup> resourceGroups) {
-    return from(resourceGroups).toSortedList(resourceGroupComparator());
-  }
-
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
     return from(contexts).toSortedList(methodComparator());
   }
-
-  static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
-    List<String> commons = newArrayList();
-    if (null == apiDescriptions || apiDescriptions.isEmpty()) {
-      return Optional.absent();
-    }
-    List<String> firstWords = urlParts(apiDescriptions.get(0));
-
-    for (int position = 0; position < firstWords.size(); position++) {
-      String word = firstWords.get(position);
-      boolean allContain = true;
-      for (int i = 1; i < apiDescriptions.size(); i++) {
-        List<String> words = urlParts(apiDescriptions.get(i));
-        if (words.size() < position + 1 || !words.get(position).equals(word)) {
-          allContain = false;
-          break;
-        }
-      }
-      if (allContain) {
-        commons.add(word);
-      }
-    }
-    Joiner joiner = Joiner.on("/").skipNulls();
-    return Optional.of("/" + joiner.join(commons));
-  }
-
-  static List<String> urlParts(ApiDescription apiDescription) {
-    return Splitter.on('/')
-        .omitEmptyStrings()
-        .trimResults()
-        .splitToList(apiDescription.getPath());
-  }
-
 }

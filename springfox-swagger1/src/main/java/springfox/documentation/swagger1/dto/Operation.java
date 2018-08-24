@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import com.google.common.primitives.Ints;
 
 import java.util.Comparator;
@@ -66,11 +67,20 @@ public class Operation {
   public Operation() {
   }
 
-  public Operation(String method, String summary, String notes, String responseClass, String nickname, int position,
-                   List<String> produces, List<String> consumes, List<String> protocol,
-                   List<Authorization> authorizations,
-                   List<Parameter> parameters, Set<ResponseMessage> responseMessages,
-                   String deprecated) {
+  public Operation(
+      String method,
+      String summary,
+      String notes,
+      String responseClass,
+      String nickname,
+      int position,
+      List<String> produces,
+      List<String> consumes,
+      List<String> protocol,
+      List<Authorization> authorizations,
+      List<Parameter> parameters,
+      Set<ResponseMessage> responseMessages,
+      String deprecated) {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
@@ -81,7 +91,8 @@ public class Operation {
     this.consumes = consumes;
     this.protocol = protocol;
     this.authorizations = toAuthorizationsMap(authorizations);
-    this.parameters = parameters;
+    this.parameters = FluentIterable.from(parameters)
+        .toSortedList(byName());
     this.responseMessages = copyOf(responseMessageOrdering(), responseMessages);
     this.deprecated = deprecated;
   }
@@ -216,5 +227,14 @@ public class Operation {
 
   public void setDataType(SwaggerDataType dataType) {
     this.dataType = dataType;
+  }
+
+  private Comparator<Parameter> byName() {
+    return new Comparator<Parameter>() {
+      @Override
+      public int compare(Parameter first, Parameter second) {
+        return first.getName().compareTo(second.getName());
+      }
+    };
   }
 }

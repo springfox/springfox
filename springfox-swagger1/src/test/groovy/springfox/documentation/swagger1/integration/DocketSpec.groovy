@@ -135,7 +135,7 @@ class DocketSpec extends DocumentationContextSpec {
               .alternateTypeRules(rule)
               .configure(contextBuilder)
     expect:
-      context().alternateTypeProvider.rules.contains(rule)
+      documentationContext().alternateTypeProvider.rules.contains(rule)
   }
 
   def "Model substitution registers new rules"() {
@@ -162,7 +162,7 @@ class DocketSpec extends DocumentationContextSpec {
       plugin."$builderMethod"(object)
 
     then:
-      context()."$property" == object
+      documentationContext()."$property" == object
 
     where:
       builderMethod     | object                                         | property

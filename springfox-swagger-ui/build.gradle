@@ -24,12 +24,12 @@ buildscript {
 }
 
 plugins {
-  id "de.undercouch.download" version "3.3.0"
+  id "de.undercouch.download" version "3.4.3"
   id "com.moowork.node" version "1.2.0"
 }
 
 ext {
-  swaggerUiVersion = '3.11.0'
+  swaggerUiVersion = '3.17.1'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -44,8 +44,8 @@ dependencies {
 }
 
 node {
-  version = '9.6.1'
-  npmVersion = '5.7.1'
+  version = '8.11.1' // LTS
+  npmVersion = '5.8.0'
   distBaseUrl = 'https://nodejs.org/dist'
   download = true
   workDir = file("${project.buildDir}/nodejs")
@@ -53,8 +53,8 @@ node {
   nodeModulesDir = file("${project.projectDir}/src/web")
 }
 
-task swaggerUiDownload << {
-  if (!file(destinationZip)?.exists()) {
+task swaggerUiDownload {
+  doLast {
     download {
       src downloadUrl
       dest destinationZip
@@ -64,35 +64,42 @@ task swaggerUiDownload << {
 }
 
 task unzip(type: Copy) {
+  dependsOn swaggerUiDownload
   from zipTree(file(destinationZip))
   include "*/dist/**"
   into file("${buildDir}")
+}
+
+task npmTest(type: NpmTask) {
+  args = ['run', 'test']
 }
 
 task npmBuild(type: NpmTask) {
   args = ['run', 'build']
 }
 
-task customizeSwaggerUi << {
-  copy {
-    from("${projectDir}/src/web/dist/springfox.js")
-    into("${buildDir}/${swaggerUiExplodedDir}")
+task customizeSwaggerUi {
+  doLast {
+    copy {
+      from("${projectDir}/src/web/dist/springfox.js")
+      into("${buildDir}/${swaggerUiExplodedDir}")
+    }
+    copy {
+      from("${projectDir}/src/web/css/springfox.css")
+      into("${buildDir}/${swaggerUiExplodedDir}")
+    }
+    copy {
+      from "${projectDir}/src/web/fonts"
+      into "${buildDir}/${swaggerUiExplodedDir}/fonts"
+    }
+    copy {
+      from "${projectDir}/src/web/swagger-ui.html"
+      into "${buildDir}/swagger-ui-${swaggerUiVersion}"
+      filter(ReplaceTokens, tokens: [VERSION: "${project.version}".toString()])
+    }
+    delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
+    delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
   }
-  copy {
-    from("${projectDir}/src/web/css/springfox.css")
-    into("${buildDir}/${swaggerUiExplodedDir}")
-  }
-  copy {
-    from "${projectDir}/src/web/fonts"
-    into "${buildDir}/${swaggerUiExplodedDir}/fonts"
-  }
-  copy {
-    from "${projectDir}/src/web/swagger-ui.html"
-    into "${buildDir}/swagger-ui-${swaggerUiVersion}"
-    filter(ReplaceTokens, tokens: [VERSION: "${project.version}".toString()])
-  }
-  delete "${buildDir}/${swaggerUiExplodedDir}/index.html"
-  delete "${buildDir}/${swaggerUiExplodedDir}/swagger-ui.js"
 }
 
 jar {
@@ -122,8 +129,7 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-build.dependsOn(customizeSwaggerUi)
-customizeSwaggerUi.dependsOn(unzip)
-unzip.dependsOn(swaggerUiDownload)
-swaggerUiDownload.dependsOn(npmBuild)
-npmBuild.dependsOn(npm_install)
+npmTest.dependsOn(npm_install)
+npmBuild.dependsOn(npm_install, npmTest)
+customizeSwaggerUi.dependsOn(unzip, npmBuild)
+jar.dependsOn(customizeSwaggerUi)

@@ -2,6 +2,7 @@ package springfox.documentation.swagger2.mappers
 import com.fasterxml.classmate.ResolvedType
 import io.swagger.models.parameters.SerializableParameter
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.AllowableListValues
@@ -17,6 +18,7 @@ class SerializableParameterFactoriesSpec extends Specification {
       thrown(UnsupportedOperationException)
   }
 
+  @Unroll
   def "Known serializable parameters are mapped" () {
     given:
       Parameter parameter = parameter(parameterType)
@@ -66,6 +68,7 @@ class SerializableParameterFactoriesSpec extends Specification {
       "path"         | new ModelRef("sometype", new ModelRef("itemType"), true)
   }
 
+  @Unroll
   def "Known serializable parameters are mapped with allowable values" () {
     given:
       Parameter parameter = parameterWithAllowableValues(parameterType)

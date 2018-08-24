@@ -33,4 +33,5 @@ dependencies {
 
   testCompile libs.test
   testCompile project(':springfox-schema')
+  testCompile project(':springfox-spring-web')
 }

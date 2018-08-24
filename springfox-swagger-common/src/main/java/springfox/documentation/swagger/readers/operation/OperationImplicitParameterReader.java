@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,11 +40,12 @@ import java.util.List;
 
 import static com.google.common.base.Strings.*;
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
+import static springfox.documentation.swagger.readers.parameter.Examples.*;
 import static springfox.documentation.swagger.schema.ApiModelProperties.*;
 
-
 @Component
-@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
+@Order(SWAGGER_PLUGIN_ORDER)
 public class OperationImplicitParameterReader implements OperationBuilderPlugin {
   private final DescriptionResolver descriptions;
 
@@ -75,6 +76,9 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .allowableValues(allowableValueFromString(param.allowableValues()))
         .parameterType(emptyToNull(param.paramType()))
         .parameterAccess(param.access())
+        .order(SWAGGER_PLUGIN_ORDER)
+        .scalarExample(param.example())
+        .complexExamples(examples(param.examples()))
         .build();
   }
 

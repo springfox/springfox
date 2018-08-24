@@ -57,7 +57,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
           .name("doc-group")
           .host("test")
           .schemes(["https"] as Set)
-          .tags([new Tag("tag", "tag description")] as Set)
+          .tags([new Tag("tag", "tag description", [new StringVendorExtension("x-test3", "value")])] as Set)
           .build()
     when:
       def sut = swagger2Mapper()
@@ -72,6 +72,7 @@ class ServiceModelToSwagger2MapperSpec extends Specification implements MapperSu
       mapped.definitions.isEmpty()
       mapped.tags.first().name == "tag"
       mapped.tags.first().description == "tag description"
+      mapped.tags.first().vendorExtensions.containsKey("x-test3")
   }
 
   def "Maps documentation with resource listing to swagger models"() {

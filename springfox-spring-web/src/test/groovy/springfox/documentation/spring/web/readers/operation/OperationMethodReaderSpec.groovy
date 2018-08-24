@@ -33,7 +33,7 @@ class OperationMethodReaderSpec extends DocumentationContextSpec {
     given:
       OperationContext operationContext =
         operationContext(
-            context(),
+            documentationContext(),
             dummyHandlerMethod('methodWithListOfBusinesses'),
             0,
             requestMappingInfo("/somePath"),

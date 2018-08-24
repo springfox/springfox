@@ -33,6 +33,7 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0. This field is unused
+   * @return
    */
   @Deprecated
   private String apiKey;
@@ -68,7 +69,17 @@ public class SecurityConfiguration {
   }
 
   /**
+   *
    * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
+   *
+   * @param clientId - client id
+   * @param clientSecret - client secret
+   * @param realm - realm
+   * @param appName - application name
+   * @param apiKey - api key
+   * @param apiKeyVehicle - how the api key is transmitted
+   * @param apiKeyName - name of the api key
+   * @param scopeSeparator - scope separator
    */
   @Deprecated
   public SecurityConfiguration(
@@ -130,6 +141,7 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apiKey
    */
   @Deprecated
   @JsonProperty("apiKey")
@@ -139,6 +151,7 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apiKeyName
    */
   @Deprecated
   @JsonProperty("apiKeyName")
@@ -148,6 +161,7 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0
+   * @return apiKeyVehicle - header, cookie etc.
    */
   @Deprecated
   @JsonProperty("apiKeyVehicle")

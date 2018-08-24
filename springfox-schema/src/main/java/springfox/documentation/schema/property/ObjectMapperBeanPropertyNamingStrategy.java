@@ -43,9 +43,6 @@ public class ObjectMapperBeanPropertyNamingStrategy implements BeanPropertyNamin
   private static final Logger LOG = LoggerFactory.getLogger(ObjectMapperBeanPropertyNamingStrategy.class);
   private ObjectMapper objectMapper;
 
-  public ObjectMapperBeanPropertyNamingStrategy() {
-  }
-
   @Override
   public String nameForSerialization(final BeanPropertyDefinition beanProperty) {
 

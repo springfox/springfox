@@ -44,15 +44,36 @@ class UiConfigurationSpec extends Specification {
       "    \"validatorUrl\": \"validator:urn\"\n" +
       "}"
 
+  def uiConfigWithoutValidatorUrl = new UiConfiguration(null, UiConfiguration.Constants.NO_SUBMIT_METHODS)
+  def expectedWithoutValidatorUrl = "{\n" +
+      "    \"apisSorter\":\"alpha\"," +
+      "    \"supportedSubmitMethods\":[]," +
+      "    \"jsonEditor\":false," +
+      "    \"showRequestHeaders\":true," +
+      "    \"deepLinking\": true,\n" +
+      "    \"displayOperationId\": false,\n" +
+      "    \"defaultModelsExpandDepth\": 1,\n" +
+      "    \"defaultModelExpandDepth\": 1,\n" +
+      "    \"displayRequestDuration\": false,\n" +
+      "    \"docExpansion\": \"none\",\n" +
+      "    \"filter\": false,\n" +
+      "    \"operationsSorter\": \"alpha\",\n" +
+      "    \"showExtensions\": false,\n" +
+      "    \"tagsSorter\": \"alpha\",\n" +
+      "    \"validatorUrl\": \"\"\n" +
+      "}"
+
   def "Renders non-null values using default ObjectMapper"() {
     given:
     ObjectMapper mapper = new ObjectMapper()
 
     when:
     def actual = mapper.writer().writeValueAsString(uiConfig)
+    def actualWithoutValidatorUrl = mapper.writer().writeValueAsString(uiConfigWithoutValidatorUrl)
 
     then:
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE)
+    JSONAssert.assertEquals(expectedWithoutValidatorUrl, actualWithoutValidatorUrl, JSONCompareMode.NON_EXTENSIBLE)
   }
 
   def "Renders non-null values using configured ObjectMapper"() {
@@ -62,8 +83,10 @@ class UiConfigurationSpec extends Specification {
 
     when:
     def actual = mapper.writer().writeValueAsString(uiConfig)
+    def actualWithoutValidatorUrl = mapper.writer().writeValueAsString(uiConfigWithoutValidatorUrl)
 
     then:
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE)
+    JSONAssert.assertEquals(expectedWithoutValidatorUrl, actualWithoutValidatorUrl, JSONCompareMode.NON_EXTENSIBLE)
   }
 }

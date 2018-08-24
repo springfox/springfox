@@ -50,6 +50,7 @@ public class EnumMapper {
 
   static SerializableParameter maybeAddAllowableValuesToParameter(
       SerializableParameter toReturn,
+      Property property,
       AllowableValues allowableValues) {
 
     if (allowableValues instanceof AllowableListValues) {
@@ -57,10 +58,15 @@ public class EnumMapper {
     }
     if (allowableValues instanceof AllowableRangeValues) {
       AllowableRangeValues range = (AllowableRangeValues) allowableValues;
-      toReturn.setMinimum(safeBigDecimal(range.getMin()));
-      toReturn.setExclusiveMinimum(range.getExclusiveMin());
-      toReturn.setMaximum(safeBigDecimal(range.getMax()));
-      toReturn.setExclusiveMaximum(range.getExclusiveMax());
+      if (property instanceof StringProperty) {
+        toReturn.setMinLength(safeInteger(range.getMin()));
+        toReturn.setMaxLength(safeInteger(range.getMax()));
+      } else {
+        toReturn.setMinimum(safeBigDecimal(range.getMin()));
+        toReturn.setExclusiveMinimum(range.getExclusiveMin());
+        toReturn.setMaximum(safeBigDecimal(range.getMax()));
+        toReturn.setExclusiveMaximum(range.getExclusiveMax());
+      }
     }
     return toReturn;
   }
@@ -71,6 +77,17 @@ public class EnumMapper {
     }
     try {
       return new BigDecimal(doubleString);
+    } catch (NumberFormatException e) {
+      return null;
+    }
+  }
+
+  static Integer safeInteger(String doubleString) {
+    if (doubleString == null){
+      return null;
+    }
+    try {
+      return new BigDecimal(doubleString).intValue();
     } catch (NumberFormatException e) {
       return null;
     }

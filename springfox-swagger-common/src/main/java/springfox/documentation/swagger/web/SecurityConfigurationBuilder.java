@@ -56,6 +56,7 @@ public class SecurityConfigurationBuilder {
 
   /**
    * @param clientId Default clientId.
+   * @return this
    */
   public SecurityConfigurationBuilder clientId(String clientId) {
     this.clientId = clientId;
@@ -64,6 +65,7 @@ public class SecurityConfigurationBuilder {
 
   /**
    * @param clientSecret Default clientSecret.
+   * @return this
    */
   public SecurityConfigurationBuilder clientSecret(String clientSecret) {
     this.clientSecret = clientSecret;
@@ -72,6 +74,7 @@ public class SecurityConfigurationBuilder {
 
   /**
    * @param realm Realm query parameter (for oauth1) added to authorizationUrl and tokenUrl.
+   * @return this
    */
   public SecurityConfigurationBuilder realm(String realm) {
     this.realm = realm;
@@ -80,6 +83,7 @@ public class SecurityConfigurationBuilder {
 
   /**
    * @param appName Application name, displayed in authorization popup.
+   * @return this
    */
   public SecurityConfigurationBuilder appName(String appName) {
     this.appName = appName;
@@ -89,6 +93,7 @@ public class SecurityConfigurationBuilder {
   /**
    * @param scopeSeparator Scope separator for passing scopes, encoded before calling, default value is a space (encoded
    *                       value %20).
+   * @return this
    */
   public SecurityConfigurationBuilder scopeSeparator(String scopeSeparator) {
     this.scopeSeparator = scopeSeparator;
@@ -97,6 +102,7 @@ public class SecurityConfigurationBuilder {
 
   /**
    * @param additionalQueryStringParams Additional query parameters added to authorizationUrl and tokenUrl.
+   * @return this
    */
   public SecurityConfigurationBuilder additionalQueryStringParams(Map<String, Object> additionalQueryStringParams) {
     this.additionalQueryStringParams = additionalQueryStringParams;
@@ -109,6 +115,7 @@ public class SecurityConfigurationBuilder {
    *                                                  Password using the HTTP Basic Authentication scheme (Authorization
    *                                                  header with Basic base64encoded[client_id:client_secret]). The
    *                                                  default is false.
+   * @return this
    */
   public SecurityConfigurationBuilder useBasicAuthenticationWithAccessCodeGrant(Boolean useBasicAuthenticationWithAccessCodeGrant) {
     this.useBasicAuthenticationWithAccessCodeGrant = useBasicAuthenticationWithAccessCodeGrant;

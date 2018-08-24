@@ -66,7 +66,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     given:
       ApiDocumentationScanner scanner =
           new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(scanner.scan(context()))
+      controller.documentationCache.addDocumentation(scanner.scan(documentationContext()))
     when:
       def result = controller.getDocumentation(group, request)
     then:
@@ -90,7 +90,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
       ApiDocumentationScanner swaggerApiResourceListing =
           new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(documentationContext()))
     when:
       def result = jsonBodyResponse(controller.getDocumentation(null, req).getBody().value())
 
@@ -99,9 +99,9 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
     where:
       prefix        | expectedPath
-      "/fooservice" | "/fooservice/contextPath/servletPath"
-      "/"           | "/contextPath/servletPath"
-      ""            | "/contextPath/servletPath"
+      "/fooservice" | "/fooservice/servletPath"
+      "/"           | "/servletPath"
+      ""            | "/servletPath"
   }
 
   def "should respect custom basePath even a custom host is not set"() {
@@ -129,7 +129,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
 
       ApiDocumentationScanner swaggerApiResourceListing =
           new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(documentationContext()))
     when:
       def result = jsonBodyResponse(controller.getDocumentation(null, req).getBody().value())
 
@@ -147,7 +147,7 @@ class Swagger2ControllerSpec extends DocumentationContextSpec
     given:
       ApiDocumentationScanner swaggerApiResourceListing =
         new ApiDocumentationScanner(listingReferenceScanner, listingScanner)
-      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(context()))
+      controller.documentationCache.addDocumentation(swaggerApiResourceListing.scan(documentationContext()))
     when:
       def result = controller.getDocumentation(null, request)
     and:

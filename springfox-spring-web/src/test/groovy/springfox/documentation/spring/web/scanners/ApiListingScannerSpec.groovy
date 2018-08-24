@@ -27,11 +27,13 @@ import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.schema.UniqueTypeNameAdapter
-import springfox.documentation.spi.service.contexts.SecurityContext
+import springfox.documentation.spi.service.ApiListingScannerPlugin
+import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.WebMvcRequestHandler
+import springfox.documentation.spring.web.dummy.Bug2219ListingScanner
 import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyControllerWithResourcePath
 import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
@@ -81,21 +83,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "Should create an api listing for a single resource grouping "() {
     given:
-    RequestMappingInfo requestMappingInfo = requestMappingInfo("/businesses")
-
-    def context = context()
-    RequestMappingContext requestMappingContext = new RequestMappingContext(
-        context,
-        new WebMvcRequestHandler(
-            methodResolver,
-            requestMappingInfo,
-            dummyHandlerMethod("methodWithConcreteResponseBody")),
-        Mock(UniqueTypeNameAdapter))
-
-    ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
-    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
-    resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
-    listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+    def context = documentationContext()
+    RequestMappingContext requestMappingContext = requestMapping(context)
+    listingContext = listingContext(requestMappingContext, context)
 
     when:
     apiDescriptionReader.read(requestMappingContext) >> []
@@ -113,20 +103,9 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def "should assign global authorizations"() {
     given:
-    RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
-
-    def context = context()
-    def requestMappingContext = new RequestMappingContext(
-        context,
-        new WebMvcRequestHandler(
-            methodResolver,
-            requestMappingInfo,
-            dummyHandlerMethod("methodWithConcreteResponseBody")),
-        Mock(UniqueTypeNameAdapter))
-    def resourceGroupRequestMappings = newHashMap()
-    resourceGroupRequestMappings.put(new ResourceGroup("businesses", DummyClass), [requestMappingContext])
-
-    listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+    def context = documentationContext()
+    def requestMappingContext = requestMapping(context)
+    listingContext = listingContext(requestMappingContext, context)
 
     when:
     Multimap<String, ApiListing> apiListingMap = scanner.scan(listingContext)
@@ -136,20 +115,86 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     listings.first().getSecurityReferences().size() == 0
   }
 
+  def "Should create an api listing for an api description with no backing controller"() {
+    given:
+    plugin.groupName("different-group")
+    def context = documentationContext()
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
+
+    and:
+    def sut = new ApiListingScanner(
+        apiDescriptionReader,
+        apiModelReader,
+        customWebPlugins(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [additionalListingsScanner()]
+        ))
+
+    when:
+    def scanned = sut.scan(listingContext)
+
+    then:
+    scanned.containsKey("different-group")
+    Collection<ApiListing> listings = scanned.get("different-group")
+    listings.size() == 1
+    listings.first().apis.first().description == 'This is a bug-fix for 2219'
+  }
+
+
+  def "Should not mix existing apis with apis with no backing controller"() {
+    given:
+    plugin.groupName("different-group")
+    def context = documentationContext()
+    def sut = new ApiListingScanner(
+        apiDescriptionReader,
+        apiModelReader,
+        customWebPlugins(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [additionalListingsScanner()]
+        ))
+
+    and:
+    RequestMappingContext requestMappingContext = requestMapping(context)
+    listingContext = listingContext(requestMappingContext, context)
+
+    when:
+    def scanned = sut.scan(listingContext)
+
+    then:
+    scanned.size() == 2
+
+    and:
+    scanned.containsKey("different-group")
+    def differentListings = scanned.get("different-group")
+    differentListings.first().apis.first().description == 'This is a bug-fix for 2219'
+
+    and:
+    scanned.containsKey("businesses")
+    def businessListings = scanned.get("businesses")
+    businessListings.size() == 1
+    businessListings.first().description == "Dummy Class"
+  }
+
   def "should assign resource form @RequestMapping annotation"() {
     given:
-    RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
-
-    def context = context()
-    def requestMappingContext = new RequestMappingContext(
-        context,
-        new WebMvcRequestHandler(
-            methodResolver,
-            requestMappingInfo,
-            dummyControllerWithResourcePath("dummyMethod")),
-        Mock(UniqueTypeNameAdapter))
+    def context = documentationContext()
+    def requestMappingContext = requestMapping(context, "dummyMethod")
     def resourceGroupRequestMappings = newHashMap()
-    resourceGroupRequestMappings.put(new ResourceGroup("resourcePath", DummyControllerWithResourcePath), [requestMappingContext])
+    resourceGroupRequestMappings.put(
+        new ResourceGroup("resourcePath", DummyControllerWithResourcePath),
+        [requestMappingContext])
+
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
 
     when:
@@ -182,5 +227,36 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     ['/a/b/c/d/e/f', '/a', '/a/b']               | '/a'
     ['/d', '/e', 'f']                            | '/'
     ['/a/b/c', '/a/b/c/d/e/f', '/a/b/c/d/e/f/g'] | '/a/b/c'
+  }
+
+  def listingContext(
+      RequestMappingContext requestMappingContext,
+      DocumentationContext context) {
+
+    ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
+    Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = newHashMap()
+    resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
+    new ApiListingScanningContext(context, resourceGroupRequestMappings)
+  }
+
+  def requestMapping(
+      DocumentationContext context,
+      String methodName = "methodWithConcreteResponseBody",
+      String path = "/businesses") {
+
+    RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
+    RequestMappingContext requestMappingContext =
+        new RequestMappingContext(
+            context,
+            new WebMvcRequestHandler(
+                methodResolver,
+                requestMappingInfo,
+                dummyHandlerMethod(methodName),
+                Mock(UniqueTypeNameAdapter)))
+    requestMappingContext
+  }
+
+  ApiListingScannerPlugin additionalListingsScanner() {
+    new Bug2219ListingScanner()
   }
 }

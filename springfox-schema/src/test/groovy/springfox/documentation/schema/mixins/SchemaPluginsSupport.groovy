@@ -26,10 +26,10 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.ViewProviderPlugin
+import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
+import springfox.documentation.spi.schema.contexts.ModelContext
 
 import static com.google.common.collect.Lists.*
-
-import com.fasterxml.classmate.TypeResolver
 
 class SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
@@ -39,11 +39,13 @@ class SchemaPluginsSupport {
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
             OrderAwarePluginRegistry.create(newArrayList())
-            
+
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new JacksonJsonViewProvider(new TypeResolver())))
-            
 
-    new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry)
+    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
+        OrderAwarePluginRegistry.create(newArrayList())
+
+    new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry, syntheticModelRegistry)
   }
 }

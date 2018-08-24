@@ -43,7 +43,7 @@ public class ModelProperty {
   private final String description;
   private final AllowableValues allowableValues;
   private ModelReference modelRef;
-  private final String example;
+  private final Object example;
   private final String pattern;
   private final String defaultValue;
   private final Xml xml;
@@ -60,7 +60,7 @@ public class ModelProperty {
       Boolean allowEmptyValue,
       String description,
       AllowableValues allowableValues,
-      String example,
+      Object example,
       String pattern,
       String defaultValue,
       Xml xml,
@@ -128,7 +128,7 @@ public class ModelProperty {
     return this;
   }
 
-  public String getExample() {
+  public Object getExample() {
     return example;
   }
 

@@ -52,6 +52,7 @@ import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.spring.web.mixins.SchemaPluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -62,7 +63,7 @@ import javax.servlet.http.HttpServletResponse
 
 import static com.google.common.collect.Maps.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
+@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class ApiModelReaderSpec extends DocumentationContextSpec {
 
   ApiModelReader sut
@@ -131,7 +132,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   def apiListingContext(HandlerMethod handlerMethod, String path) {
     def requestMappingContext = new RequestMappingContext(
-        context(),
+        documentationContext(),
         new WebMvcRequestHandler(
             methodResolver,
             requestMappingInfo(path), handlerMethod),

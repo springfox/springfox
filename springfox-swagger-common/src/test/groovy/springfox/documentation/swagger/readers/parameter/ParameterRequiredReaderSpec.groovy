@@ -82,7 +82,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Ap
     new ParameterContext(
         resolvedMethodParameter,
         new ParameterBuilder(),
-        context(),
+        documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
   }

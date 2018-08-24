@@ -36,21 +36,19 @@ class CachingOperationReaderSpec extends DocumentationContextSpec {
     given:
     RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')
     def methodResolver = new HandlerMethodResolver(new TypeResolver())
-    def context = context()
+
+    def context = documentationContext()
     def requestMappingContext = new RequestMappingContext(
         context,
-        new WebMvcRequestHandler(
-            methodResolver,
+        new WebMvcRequestHandler(methodResolver,
             requestMappingInfo,
             dummyHandlerMethod("methodWithConcreteResponseBody")),
-        Mock(UniqueTypeNameAdapter))
+            Mock(UniqueTypeNameAdapter))
     def mock = Mock(OperationReader) {
       read(requestMappingContext) >> [anOperation()]
     }
-
     when:
     def sut = new CachingOperationReader(mock)
-
     then:
     sut.read(requestMappingContext) == sut.read(requestMappingContext)
   }

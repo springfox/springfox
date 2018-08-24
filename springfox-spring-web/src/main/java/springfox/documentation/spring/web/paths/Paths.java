@@ -82,7 +82,7 @@ public class Paths {
    * A good extension point if you need to alter endpoints by adding or removing path segments.
    * Note: this should not be an absolute  uri
    *
-   * @param requestMappingPattern
+   * @param requestMappingPattern request mapping pattern
    * @return the request mapping endpoint
    */
   public static String sanitizeRequestMappingPattern(String requestMappingPattern) {

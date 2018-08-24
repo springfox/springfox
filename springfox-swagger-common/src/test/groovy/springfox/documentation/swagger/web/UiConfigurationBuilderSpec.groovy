@@ -41,7 +41,9 @@ class UiConfigurationBuilderSpec extends Specification {
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"supportedSubmitMethods\": [\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\",\"trace\"]\n" +
+      "    \"supportedSubmitMethods\": [\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\"," +
+      "\"trace\"],\n" +
+      "    \"validatorUrl\": \"\"\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

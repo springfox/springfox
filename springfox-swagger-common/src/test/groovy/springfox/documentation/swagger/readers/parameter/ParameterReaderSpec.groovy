@@ -47,7 +47,7 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
         new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        context(), genericNamingStrategy, Mock(OperationContext))
+        documentationContext(), genericNamingStrategy, Mock(OperationContext))
     def sut = stubbedParamBuilder()
 
     when:

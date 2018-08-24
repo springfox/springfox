@@ -52,7 +52,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter =
           new ResolvedMethodParameter(0, "", [apiParamAnnotation, reqParamAnnot], Mock(ResolvedType))
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-          context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+          documentationContext(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
       parameterPlugin.apply(parameterContext)
 
@@ -74,7 +74,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       def resolvedMethodParameter  = new ResolvedMethodParameter("someName", method.getMethodParameters().first(),
           resolvedBeanType)
       ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        context(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+        documentationContext(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
       parameterPlugin.apply(parameterContext)
 

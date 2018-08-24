@@ -57,7 +57,7 @@ public class DocumentationBuilder {
    * Name of the documentation group
    *
    * @param groupName - group name
-   * @return
+   * @return this
    */
   public DocumentationBuilder name(String groupName) {
     this.groupName = defaultIfAbsent(groupName, this.groupName);
