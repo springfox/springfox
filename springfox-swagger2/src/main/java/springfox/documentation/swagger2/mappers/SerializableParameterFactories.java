@@ -90,7 +90,7 @@ public class SerializableParameterFactories {
         Property itemProperty
             = maybeAddAllowableValues(
                 itemTypeProperty(paramItemModelRef),
-                paramItemModelRef.getAllowableValues());
+                source.getAllowableValues());
         toReturn.setItems(itemProperty);
         maybeAddAllowableValuesToParameter(toReturn, itemProperty, paramItemModelRef.getAllowableValues());
       }
