@@ -40,6 +40,7 @@ class UiConfigurationBuilderSpec extends Specification {
       "    \"filter\": false,\n" +
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
+      "    \"showCommonExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
       "    \"supportedSubmitMethods\": [\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\"," +
       "\"trace\"],\n" +

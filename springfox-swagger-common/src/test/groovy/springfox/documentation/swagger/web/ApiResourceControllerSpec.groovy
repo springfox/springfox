@@ -60,6 +60,7 @@ class ApiResourceControllerSpec extends Specification {
     "maxDisplayedTags": 1000,
     "operationsSorter": "alpha",
     "showExtensions": false,
+    "showCommonExtensions": false,
     "tagsSorter": "alpha",
     "supportedSubmitMethods":["get","put","post","delete","options","head","patch","trace"],
     "validatorUrl": "/validate"
@@ -105,6 +106,7 @@ class ApiResourceControllerSpec extends Specification {
           .maxDisplayedTags(1000)
           .operationsSorter(OperationsSorter.ALPHA)
           .showExtensions(false)
+          .showCommonExtensions(false)
           .tagsSorter(TagsSorter.ALPHA)
           .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
           .validatorUrl("/validate")

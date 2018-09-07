@@ -46,6 +46,7 @@ public class UiConfiguration {
   private final Integer maxDisplayedTags;
   private final OperationsSorter operationsSorter;
   private final Boolean showExtensions;
+  private final Boolean showCommonExtensions;
   private final TagsSorter tagsSorter;
   private final String validatorUrl;
   /**
@@ -190,6 +191,7 @@ public class UiConfiguration {
     this.maxDisplayedTags = null;
     this.operationsSorter = OperationsSorter.of(apisSorter);
     this.showExtensions = false;
+    this.showCommonExtensions = false;
     this.tagsSorter = TagsSorter.of(apisSorter);
   }
 
@@ -222,6 +224,8 @@ public class UiConfiguration {
    *                                 returned by the server unchanged.
    * @param showExtensions           Controls the display of vendor extension (x-) fields and values for Operations,
    *                                 Parameters, and Schema.
+   * @param showCommonExtensions     Controls the display of extensions (pattern, maxLength, minLength, maximum,
+   *                                 minimum) fields and values for Parameters.
    * @param tagsSorter               Apply a sort to the tag list of each API. It can be 'alpha' (sort by paths
    *                                 alphanumerically) or a function (see Array.prototype.sort() to learn how to write a
    *                                 sort function). Two tag name strings are passed to the sorter for each pass.
@@ -243,6 +247,7 @@ public class UiConfiguration {
       Integer maxDisplayedTags,
       OperationsSorter operationsSorter,
       Boolean showExtensions,
+      Boolean showCommonExtensions,
       TagsSorter tagsSorter,
       String validatorUrl) {
     this(
@@ -257,6 +262,7 @@ public class UiConfiguration {
         maxDisplayedTags,
         operationsSorter,
         showExtensions,
+        showCommonExtensions,
         tagsSorter,
         Constants.DEFAULT_SUBMIT_METHODS,
         validatorUrl);
@@ -291,6 +297,8 @@ public class UiConfiguration {
    *                                 returned by the server unchanged.
    * @param showExtensions           Controls the display of vendor extension (x-) fields and values for Operations,
    *                                 Parameters, and Schema.
+   * @param showCommonExtensions     Controls the display of extensions (pattern, maxLength, minLength, maximum,
+   *                                 minimum) fields and values for Parameters.
    * @param tagsSorter               Apply a sort to the tag list of each API. It can be 'alpha' (sort by paths
    *                                 alphanumerically) or a function (see Array.prototype.sort() to learn how to write a
    *                                 sort function). Two tag name strings are passed to the sorter for each pass.
@@ -316,6 +324,7 @@ public class UiConfiguration {
       Integer maxDisplayedTags,
       OperationsSorter operationsSorter,
       Boolean showExtensions,
+      Boolean showCommonExtensions,
       TagsSorter tagsSorter,
       String[] supportedSubmitMethods,
       String validatorUrl) {
@@ -331,6 +340,7 @@ public class UiConfiguration {
     this.maxDisplayedTags = maxDisplayedTags;
     this.operationsSorter = operationsSorter;
     this.showExtensions = showExtensions;
+    this.showCommonExtensions = showCommonExtensions;
     this.tagsSorter = tagsSorter;
     this.supportedSubmitMethods = supportedSubmitMethods;
     this.validatorUrl = validatorUrl;
@@ -429,6 +439,11 @@ public class UiConfiguration {
   @JsonProperty("showExtensions")
   public Boolean getShowExtensions() {
     return showExtensions;
+  }
+
+  @JsonProperty("showCommonExtensions")
+  public Boolean getShowCommonExtensions() {
+    return showCommonExtensions;
   }
 
   @JsonProperty("tagsSorter")
