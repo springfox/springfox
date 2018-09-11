@@ -31,6 +31,7 @@ import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.service.ResourceListing;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
+import springfox.documentation.spring.web.paths.DefaultPathProvider;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 
 import java.util.Collection;
@@ -76,7 +77,7 @@ public class ApiDocumentationScanner {
         .consumes(context.getConsumes())
         .host(context.getHost())
         .schemes(context.getProtocols())
-        .basePath(ROOT)
+        .basePath(basePath(context.getPathProvider()))
         .extensions(context.getVendorExtentions())
         .tags(tags);
 
@@ -93,6 +94,11 @@ public class ApiDocumentationScanner {
         .build();
     group.resourceListing(resourceListing);
     return group.build();
+  }
+
+  private String basePath(PathProvider pathProvider){
+    return DefaultPathProvider.class.isInstance(pathProvider)?
+            ((DefaultPathProvider)pathProvider).getDocumentationPath(): ROOT;
   }
 
   private Collection<? extends ApiListingReference> apiListingReferences(

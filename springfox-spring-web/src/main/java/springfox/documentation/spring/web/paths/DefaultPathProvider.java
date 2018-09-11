@@ -38,7 +38,7 @@ public class DefaultPathProvider implements PathProvider {
    *
    * @return the documentation base path
    */
-  protected String getDocumentationPath() {
+  public String getDocumentationPath() {
     return ROOT;
   }
 
