@@ -80,8 +80,7 @@ public class Operation {
     this.protocol = protocol;
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
-    this.parameters = parameters.stream()
-        .sorted(byParameterName()).collect(toList());
+    this.parameters = parameters;
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);

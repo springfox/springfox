@@ -319,6 +319,7 @@ public class OperationBuilder {
             .responseModel(responseWithModel)
             .headersWithDescription(responseMessage.getHeaders())
             .headersWithDescription(each.getHeaders())
+            .examples(each.getExamples())
             .build());
       } else {
         merged.add(each);

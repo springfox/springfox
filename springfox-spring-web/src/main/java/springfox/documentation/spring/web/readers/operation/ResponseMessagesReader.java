@@ -71,7 +71,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     int httpStatusCode = httpStatusCode(context);
     String message = message(context);
     ModelReference modelRef = null;
-    if (!isVoid(returnType)) {
+    if (!isVoid(returnType) && !isNoContent(httpStatusCode)) {
       ModelContext modelContext = ModelContext.returnValue(
           context.getGroupName(),
           returnType,
@@ -111,4 +111,11 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     return reasonPhrase;
   }
 
+  static boolean isNoContent(int code) {
+    try {
+      return HttpStatus.NO_CONTENT.value() == code;
+    } catch (Exception ignored) {
+      return false;
+    }
+  }
 }
