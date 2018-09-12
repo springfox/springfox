@@ -99,7 +99,7 @@ public class ModelContext {
     this.adjustTypeNames = parentContext.adjustTypeNames;
   }
   
-  ModelContext(ModelContext parentContext, boolean adjustTypeNames) {
+  private ModelContext(ModelContext parentContext, boolean adjustTypeNames) {
     this.parentContext = parentContext;
     this.type = parentContext.type;
     this.groupName = parentContext.groupName;
