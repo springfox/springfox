@@ -1605,7 +1605,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry«string,Map«string,Example»»]"
+                    "type": "List[Entry_7«string,Map«string,Example»»]"
                 }
             ],
             "path": "/features/mapOfMapOfExample"
@@ -1964,16 +1964,6 @@
         
     ],
     "models": {
-        "Entry«string,Map«string,Example»»": {
-            "description": "",
-            "id": "Entry«string,Map«string,Example»»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "List[Entry«string,Example»]"
-                }
-            }
-        },
         "ModelWithMapProperty": {
             "description": "Describes model with map property",
             "id": "ModelWithMapProperty",
@@ -1992,9 +1982,9 @@
                 
             }
         },
-        "Entry«string,Example»": {
+        "Entry_5«string,Example»": {
             "description": "",
-            "id": "Entry«string,Example»",
+            "id": "Entry_5«string,Example»",
             "properties": {
                 "key": {
                     "required": false,
@@ -2018,6 +2008,16 @@
                     "required": false,
                     "format": "double",
                     "type": "number"
+                }
+            }
+        },
+        "Entry_7«string,Map«string,Example»»": {
+            "description": "",
+            "id": "Entry_7«string,Map«string,Example»»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "List[Entry_5«string,Example»]"
                 }
             }
         },

@@ -248,7 +248,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry_4«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -276,7 +276,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry«string,Pet»]"
+                    "type": "List[Entry_4«string,Pet»]"
                 }
             ],
             "path": "/pets/echo"
@@ -587,7 +587,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry«string,List«string»»]"
+                    "type": "List[Entry_11«string,List«string»»]"
                 }
             ],
             "path": "/pets/nameToNickNamesMap"
@@ -680,7 +680,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry_4«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -732,7 +732,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry_4«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -784,7 +784,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry«string,Pet»]",
+                            "type": "List[Entry_4«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -1095,6 +1095,19 @@
         
     ],
     "models": {
+        "Entry_11«string,List«string»»": {
+            "description": "",
+            "id": "Entry_11«string,List«string»»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
         "Pet": {
             "description": "",
             "id": "Pet",
@@ -1114,26 +1127,13 @@
                 }
             }
         },
-        "Entry«string,Pet»": {
+        "Entry_4«string,Pet»": {
             "description": "",
-            "id": "Entry«string,Pet»",
+            "id": "Entry_4«string,Pet»",
             "properties": {
                 "key": {
                     "required": false,
                     "type": "Pet"
-                }
-            }
-        },
-        "Entry«string,List«string»»": {
-            "description": "",
-            "id": "Entry«string,List«string»»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
                 }
             }
         }

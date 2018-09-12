@@ -63,7 +63,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/Pet_2"
                         }
                     }
                 ],
@@ -108,7 +108,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/Pet_2"
                         }
                     }
                 ],
@@ -174,7 +174,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet"
+                                "$ref": "#/definitions/Pet_1"
                             }
                         }
                     },
@@ -221,7 +221,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet"
+                                "$ref": "#/definitions/Pet_1"
                             }
                         }
                     },
@@ -267,7 +267,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/Pet_1"
                         }
                     },
                     "400": {
@@ -493,7 +493,7 @@
                         "description": "Created user object",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/User_2"
                         }
                     }
                 ],
@@ -501,7 +501,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/User_1"
                         }
                     }
                 },
@@ -530,7 +530,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/User_2"
                             }
                         }
                     }
@@ -539,7 +539,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/User_1"
                         }
                     }
                 },
@@ -568,7 +568,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/User_2"
                             }
                         }
                     }
@@ -670,7 +670,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/User_1"
                         }
                     },
                     "400": {
@@ -832,7 +832,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/Pet_3"
                         }
                     }
                 },
@@ -857,7 +857,20 @@
         }
     },
     "definitions": {
-        "Category": {
+        "Category_1": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Category_1"
+        },
+        "Category_2": {
             "type": "object",
             "required": [
                 "id"
@@ -871,7 +884,7 @@
                     "type": "string"
                 }
             },
-            "title": "Category"
+            "title": "Category_2"
         },
         "Order": {
             "type": "object",
@@ -911,11 +924,11 @@
             },
             "title": "Order"
         },
-        "Pet": {
+        "Pet_1": {
             "type": "object",
             "properties": {
                 "category": {
-                    "$ref": "#/definitions/Category"
+                    "$ref": "#/definitions/Category_1"
                 },
                 "id": {
                     "type": "integer",
@@ -950,7 +963,60 @@
                     }
                 }
             },
-            "title": "Pet"
+            "title": "Pet_1"
+        },
+        "Pet_2": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/Category_2"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photoUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "description": "pet status in the store",
+                    "enum": [
+                        "available",
+                        "pending",
+                        "sold"
+                    ]
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    }
+                }
+            },
+            "title": "Pet_2"
+        },
+        "Pet_3": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Pet_3"
         },
         "Tag": {
             "type": "object",
@@ -965,7 +1031,7 @@
             },
             "title": "Tag"
         },
-        "User": {
+        "User_1": {
             "type": "object",
             "properties": {
                 "email": {
@@ -999,7 +1065,40 @@
                     "type": "string"
                 }
             },
-            "title": "User"
+            "title": "User_1"
+        },
+        "User_2": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "userStatus": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "User Status"
+                },
+                "username": {
+                    "type": "string"
+                }
+            },
+            "title": "User_2"
         }
     }
 }
