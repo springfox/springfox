@@ -137,7 +137,7 @@ public class ApiModelReader  {
             newModels.add(model_to);
             ModelContext context_to = contextMap.get(model_to.getId());
             context_to.assumeEqualsTo(contextMap.get(model_for.getId()));
-            adjustLinksFor(modelBranch, model_for.getId(), contextMap.get(model_to.getId()));
+            modelBranch = adjustLinksFor(modelBranch, model_for.getId(), contextMap.get(model_to.getId()));
             continue outer;
           }
         }
@@ -152,6 +152,15 @@ public class ApiModelReader  {
     Map<String, Model> modelsWithoutRefs = newHashMap();
     first: for (Map.Entry<String, Model> entry_model : modelBranch.entrySet()) {
       Model model = entry_model.getValue();
+      if (!model.getSubTypes().isEmpty()) {
+        for (ModelReference modelReference: model.getSubTypes()) {
+          Optional<Integer> modelId = getModelId(modelReference);
+          if (modelId.isPresent() && 
+              modelBranch.containsKey(String.valueOf(modelId.get()))) {
+            continue first;
+          }
+        }
+      }
       for (Map.Entry<String, ModelProperty> entry_property : 
         model.getProperties().entrySet()) {
         ModelProperty property = entry_property.getValue();
@@ -182,11 +191,25 @@ public class ApiModelReader  {
     return ImmutableMap.copyOf(modelTypeMap);
   }
 
-  private void adjustLinksFor(Map<String, Model> branch,
+  private Map<String, Model> adjustLinksFor(Map<String, Model> branch,
           String id_for,
           ModelContext modelContext) {
+    Map<String, Model> updatedBranch = newHashMap();
     for(Map.Entry<String, Model> entry : branch.entrySet()) {
       Model model = entry.getValue();
+   // same to subTypes
+      List<ModelReference> subTypes = new ArrayList<ModelReference>();
+      for (ModelReference oldModelRef: model.getSubTypes()) {
+        Optional<Integer> modelId = getModelId(oldModelRef);
+        if (modelId.isPresent() && 
+            String.valueOf(modelId.get()).equals(id_for)) {
+          subTypes.add(modelRefFactory(
+              ModelContext.withAdjustedTypeName(
+                  modelContext), enumTypeDeterminer, typeNameExtractor).apply(modelContext.getType()));
+        } else {
+          subTypes.add(oldModelRef);
+        }
+      }
       for (Map.Entry<String, ModelProperty> property_entry : model.getProperties().entrySet()) {
         ModelProperty property = property_entry.getValue();
         Optional<Integer> modelId = getModelId(property.getModelRef());
@@ -196,9 +219,11 @@ public class ApiModelReader  {
           break;
         }
       }
+      updatedBranch.put(entry.getKey(), updateModel(model, model.getName(), subTypes));
     }
+    return updatedBranch;
   }
-  
+
   private Map<ResourceGroup, Map<String, Model>> updateTypeNames(Map<ResourceGroup, List<Model>> modelMap,
           Map<String, ModelContext> contextMap) {
     Map<ResourceGroup, Map<String, Model>> updatedModelMap = newHashMap();
@@ -215,19 +240,22 @@ public class ApiModelReader  {
                     contextMap.get(String.valueOf(modelId.get()))), enumTypeDeterminer, typeNameExtractor));
           }
         }
+        List<ModelReference> subTypes = new ArrayList<ModelReference>();
+        for (ModelReference oldModelRef: model.getSubTypes()) {
+          Optional<Integer> modelId = getModelId(oldModelRef);
+          if (modelId.isPresent() && 
+              contextMap.containsKey(String.valueOf(modelId.get()))) {
+            ModelContext modelContext = contextMap.get(String.valueOf(modelId.get()));
+            subTypes.add(modelRefFactory(
+                ModelContext.withAdjustedTypeName(
+                    modelContext), enumTypeDeterminer, typeNameExtractor).apply(modelContext.getType()));
+          } else {
+            subTypes.add(oldModelRef);
+          }
+        }
         String name = typeNameExtractor.typeName(
             ModelContext.withAdjustedTypeName(contextMap.get(model.getId())));
-        updatedModels.put(name, new ModelBuilder(model.getId())
-                                    .name(name)
-                                    .type(model.getType())
-                                    .qualifiedType(model.getQualifiedType())
-                                    .properties(model.getProperties())
-                                    .description(model.getDescription())
-                                    .baseModel(model.getBaseModel())
-                                    .discriminator(model.getDiscriminator())
-                                    .subTypes(model.getSubTypes())
-                                    .example(model.getExample())
-                                    .build());
+        updatedModels.put(name, updateModel(model, name, subTypes));
       }
       updatedModelMap.put(resourceGroup, updatedModels);
     }
@@ -246,6 +274,21 @@ public class ApiModelReader  {
         return Optional.absent();
       }
     }
+  }
+  
+  private Model updateModel(Model oldModel, String newName, List<ModelReference> newSubTypes) {
+    return new ModelBuilder(oldModel.getId())
+                   .name(newName)
+                   .type(oldModel.getType())
+                   .qualifiedType(oldModel.getQualifiedType())
+                   .properties(oldModel.getProperties())
+                   .description(oldModel.getDescription())
+                   .baseModel(oldModel.getBaseModel())
+                   .discriminator(oldModel.getDiscriminator())
+                   .subTypes(newSubTypes)
+                   .example(oldModel.getExample())
+                   .xml(oldModel.getXml())
+                   .build();
   }
 
   private void markIgnorablesAsHasSeen(TypeResolver typeResolver,
