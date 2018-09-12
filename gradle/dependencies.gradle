@@ -3,7 +3,7 @@ ext {
   byteBuddyVersion = "1.8.22"
   cglib = "3.2.8"
   classmate = "1.4.0"
-  classGraph = "4.1.7"
+  classGraph = "4.2.3"
   equalsverifierVersion = '2.5.2'
   groovy = "2.5.0"
   jacocoVersion = '0.8.1'
