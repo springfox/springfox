@@ -31,6 +31,8 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 
 import static com.google.common.collect.Lists.*
 
+import com.fasterxml.classmate.TypeResolver
+
 class SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {

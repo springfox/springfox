@@ -1,5 +1,6 @@
 package springfox.documentation.schema.plugins
 
+import com.google.common.base.Optional;
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
@@ -13,6 +14,8 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.TypeNameIndexingAdapter
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -28,6 +31,7 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
     def sut =
         new PropertyDiscriminatorBasedInheritancePlugin(
             resolver,
+            Mock(EnumTypeDeterminer),
             Mock(TypeNameExtractor))
 
     expect:
@@ -42,6 +46,7 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
     def sut =
         new PropertyDiscriminatorBasedInheritancePlugin(
             resolver,
+            enumTypeDeterminer(),
             typeNameExtractor())
     def context = modelContext(type)
 
@@ -150,8 +155,11 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
   ModelContext modelContext(Type type) {
     ModelContext.inputParam(
         "test",
-        type,
+        resolver.resolve(type),
+        Optional.absent(),
+        new HashSet<>(),
         DocumentationType.SWAGGER_2,
+        new TypeNameIndexingAdapter(),
         new AlternateTypeProvider([]),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.of()
@@ -160,6 +168,10 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
 
   def typeNameExtractor() {
     new TypeNameExtractor(resolver, modelNamePlugins(), new JacksonEnumTypeDeterminer())
+  }
+  
+  def enumTypeDeterminer() {
+    new JacksonEnumTypeDeterminer()
   }
 
   PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNamePlugins() {

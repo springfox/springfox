@@ -35,6 +35,8 @@ import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.TypeWithJsonFormat
 import springfox.documentation.schema.TypeWithSetterButNoGetter
+import springfox.documentation.schema.TypeWithJsonView
+import springfox.documentation.schema.Views
 import springfox.documentation.schema.UnwrappedType
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.SchemaPluginsSupport

@@ -66,7 +66,8 @@ class SwaggerPluginsSupport {
         create(newArrayList(new ApiModelPropertyPropertyBuilder(descriptions)))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        create(newArrayList(new ApiModelBuilder(resolver, typeNameExtractor)))
+        create(
+          newArrayList(new ApiModelBuilder(resolver, typeNameExtractor, new JacksonEnumTypeDeterminer())))
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
         create(newArrayList(new JacksonJsonViewProvider(new TypeResolver())))

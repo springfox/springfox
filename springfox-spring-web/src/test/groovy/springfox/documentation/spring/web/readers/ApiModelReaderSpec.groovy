@@ -34,6 +34,7 @@ import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeNameIndexingAdapter
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -52,7 +53,6 @@ import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
-import springfox.documentation.spring.web.mixins.SchemaPluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -141,7 +141,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     def resourceGroupRequestMappings = newHashMap()
     resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
     
-    return new ApiListingScanningContext(context(), resourceGroupRequestMappings)
+    return new ApiListingScanningContext(documentationContext(), resourceGroupRequestMappings)
   }
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {

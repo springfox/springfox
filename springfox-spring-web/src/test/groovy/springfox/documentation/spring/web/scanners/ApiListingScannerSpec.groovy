@@ -251,8 +251,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
             new WebMvcRequestHandler(
                 methodResolver,
                 requestMappingInfo,
-                dummyHandlerMethod(methodName),
-                Mock(UniqueTypeNameAdapter)))
+                dummyHandlerMethod(methodName)),
+                Mock(UniqueTypeNameAdapter))
     requestMappingContext
   }
 
