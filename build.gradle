@@ -91,7 +91,7 @@ subprojects {
   jacoco {
     toolVersion = "$jacocoVersion"
   }
-  
+
   jacocoTestReport {
     reports {
       xml.enabled true
@@ -106,8 +106,8 @@ subprojects {
 
 apply from: "$rootDir/gradle/documentation.gradle"
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '4.4.1'
+wrapper {
+  gradleVersion = '4.10.1'
 }
 
 task codeCoverageReport(type: JacocoReport) {
@@ -121,7 +121,7 @@ task codeCoverageReport(type: JacocoReport) {
 
   reports {
     xml.enabled true
-    xml.destination "${buildDir}/reports/jacoco/report.xml"
+    xml.destination file("${buildDir}/reports/jacoco/report.xml")
     html.enabled false
     csv.enabled false
   }
