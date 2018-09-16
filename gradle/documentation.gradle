@@ -2,11 +2,13 @@ import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.utils.ProjectDefinitions
 
 apply plugin: "org.asciidoctor.convert"
-apply plugin: 'org.ajoberstar.github-pages'
+apply plugin: 'org.ajoberstar.git-publish'
 
-githubPages {
-  deleteExistingFiles = false
-  pages {
+gitPublish {
+  preserve {
+    include '**/*'
+  }
+  contents {
     from "${buildDir}/all-docs"
   }
 }
@@ -45,7 +47,7 @@ task allDocs {
 }
 
 task publishDocs {
-  dependsOn publishGhPages
+  dependsOn gitPublishPush
 }
 
 task createReleaseDocs(type: Exec, dependsOn: allDocs) {
@@ -84,4 +86,4 @@ task releaseDocs {
   dependsOn createReleaseDocs, publishDocs
 }
 
-publishGhPages.dependsOn allDocs
+gitPublishPush.dependsOn allDocs

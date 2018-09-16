@@ -38,6 +38,7 @@ import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.ApiListing;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public abstract class ModelMapper {
       return null;
     }
 
-    Map<String, Model> map = new TreeMap();
+    Map<String, Model> map = new TreeMap<>();
     InheritanceDeterminer determiner = new InheritanceDeterminer(from);
     for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
@@ -253,10 +254,10 @@ public abstract class ModelMapper {
   }
 
   Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
-    Map<String, springfox.documentation.schema.Model> definitions = new TreeMap();
-    apiListings.values().stream().flatMap(l -> l.stream()).forEachOrdered(each -> {
-      definitions.putAll(each.getModels());
-    });
+    Map<String, springfox.documentation.schema.Model> definitions = new TreeMap<>();
+    apiListings.values().stream()
+        .flatMap(Collection::stream)
+        .forEachOrdered(each -> definitions.putAll(each.getModels()));
     return mapModels(definitions);
   }
 

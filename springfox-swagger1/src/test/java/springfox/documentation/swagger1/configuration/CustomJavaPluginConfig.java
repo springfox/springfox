@@ -27,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger1.annotations.EnableSwagger;
 
@@ -72,7 +73,10 @@ public class CustomJavaPluginConfig {
         .title("My Apps API Title")
         .description("My Apps API Description")
         .termsOfServiceUrl("My Apps API terms of service")
-        .contact("My Apps API Contact Email")
+        .contact(new Contact(
+            "My Apps API Contact Email",
+            "",
+            ""))
         .license("My Apps API Licence Type")
         .licenseUrl("My Apps API License URL")
         .build();
