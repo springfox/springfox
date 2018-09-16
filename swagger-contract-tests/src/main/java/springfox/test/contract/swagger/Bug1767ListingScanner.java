@@ -57,6 +57,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
     return new ArrayList<>(
         Arrays.asList( //<1>
             new ApiDescription(
+                "test",
                 "/bugs/1767",
                 "This is a bug",
                 Collections.singletonList( //<2>
