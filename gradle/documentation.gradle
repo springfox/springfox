@@ -6,7 +6,7 @@ apply plugin: 'org.ajoberstar.git-publish'
 
 gitPublish {
   // where to publish to (repo must exist)
-  repoUri = 'git@github.com/springfox/springfox.git'
+  repoUri = 'https://github.com/springfox/springfox.git'
 
   // branch will be created if it doesn't exist
   branch = 'gh-pages'
