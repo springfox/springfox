@@ -28,23 +28,24 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
-public class ApiUploaderLauncher {
+public class FileUploaderLauncher {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiUploaderLauncher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileUploaderLauncher.class);
 
     private DocumentationCache documentationCache;
 
-    private List<SwaggerHubFileUploader> swaggerHubFileUploaders;
+    private List<FileUploader> fileUploaders;
 
     @Autowired
-    public ApiUploaderLauncher(
-            final DocumentationCache documentationCache) {
+    public FileUploaderLauncher(
+            final DocumentationCache documentationCache, final List<FileUploader> fileUploaders) {
         this.documentationCache = documentationCache;
+        this.fileUploaders = fileUploaders;
     }
 
     @PostConstruct
     public void init() {
-        for (SwaggerHubFileUploader fileUploader : this.swaggerHubFileUploaders) {
+        for (FileUploader fileUploader : this.fileUploaders) {
             fileUploader.uploadSwaggerDescriptors(this.documentationCache.all());
         }
     }

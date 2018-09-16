@@ -4,7 +4,7 @@ import springfox.documentation.service.Documentation;
 
 import java.util.Map;
 
-public interface SwaggerHubFileUploader {
+public interface FileUploader {
 
     void uploadSwaggerDescriptors(Map<String, Documentation> descriptors);
 }

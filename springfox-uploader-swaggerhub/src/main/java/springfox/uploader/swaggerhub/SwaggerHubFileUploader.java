@@ -14,14 +14,14 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
-import springfox.documentation.uploader.SwaggerHubFileUploader;
+import springfox.documentation.uploader.FileUploader;
 
 import java.util.Map;
 
 @Component
-public class SwaggerHubFileUploaderImpl implements SwaggerHubFileUploader {
+public class SwaggerHubFileUploader implements FileUploader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerHubFileUploaderImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerHubFileUploader.class);
 
     private static final String SWAGGER_HUB_URL = "https://uploader.com/api/{owner}/{api}";
 
@@ -38,7 +38,7 @@ public class SwaggerHubFileUploaderImpl implements SwaggerHubFileUploader {
     private String swaggerHubOwner;
 
     @Autowired
-    public SwaggerHubFileUploaderImpl(
+    public SwaggerHubFileUploader(
             final ServiceModelToSwagger2Mapper mapper,
             final JsonSerializer jsonSerializer) {
         this.mapper = mapper;
