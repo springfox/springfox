@@ -25,7 +25,7 @@ sourceSets {
 
 // Define integration test task
 task integrationTest(type: Test) {
-  testClassesDir = sourceSets.integrationTest.output.classesDir
+  testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
