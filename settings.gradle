@@ -14,5 +14,6 @@ include 'springfox-petstore'
 // Auxiliary projects that are not published
 include 'springfox-spring-config'
 include 'swagger-contract-tests'
-include 'springfox-swaggerhub'
+include 'springfox-uploader'
+include 'springfox-uploader-swaggerhub'
 
