@@ -1,4 +1,4 @@
-package springfox.uploader.swaggerhub;
+package springfox.documentation.uploader.swaggerhub;
 
 import io.swagger.models.Swagger;
 import org.slf4j.Logger;
