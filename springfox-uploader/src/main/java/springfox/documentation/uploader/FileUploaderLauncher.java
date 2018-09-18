@@ -27,6 +27,12 @@ import springfox.documentation.spring.web.DocumentationCache;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+/**
+ * Class that starts the process of auto-upload of Swagger files to all the providers configured by including 
+ * in the classpath their Maven artifact including their implementation of {@link FileUploader}.
+ *
+ * @author Esteban Cristóbal Rodríguez
+ */
 @Component
 public class FileUploaderLauncher {
 
