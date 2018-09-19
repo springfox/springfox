@@ -36,12 +36,17 @@ import springfox.documentation.uploader.FileUploader;
 
 import java.util.Map;
 
+/**
+ * Implementation of {@link FileUploader} interface to upload Swagger files to SwaggerHub.
+ *
+ * @author Esteban Cristóbal Rodríguez
+ */
 @Component
 public class SwaggerHubFileUploader implements FileUploader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerHubFileUploader.class);
 
-    private static final String SWAGGER_HUB_URL = "https://uploader.com/api/{owner}/{api}";
+    private static final String SWAGGER_HUB_URL = "https://api.swaggerhub.com/apis/{owner}/{api}";
 
     private ServiceModelToSwagger2Mapper mapper;
 
@@ -58,10 +63,10 @@ public class SwaggerHubFileUploader implements FileUploader {
     @Autowired
     public SwaggerHubFileUploader(
             final ServiceModelToSwagger2Mapper mapper,
-            final JsonSerializer jsonSerializer) {
+            final JsonSerializer jsonSerializer, final RestTemplate restTemplate) {
         this.mapper = mapper;
         this.jsonSerializer = jsonSerializer;
-        this.restTemplate = new RestTemplate();
+        this.restTemplate = restTemplate;
     }
 
     @Override
