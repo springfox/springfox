@@ -21,10 +21,13 @@ package springfox.documentation.uploader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration;
 
 @Configuration
 @ComponentScan(basePackages = {"springfox.documentation.uploader"})
+@Import(Swagger2DocumentationConfiguration.class)
 public class FileUploaderBeanConfiguration {
   
     @Bean

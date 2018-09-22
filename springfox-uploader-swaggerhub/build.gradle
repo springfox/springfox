@@ -11,4 +11,5 @@ ext {
 
 dependencies {
     compile project(':springfox-uploader')
+    testCompile libs.test
 }
