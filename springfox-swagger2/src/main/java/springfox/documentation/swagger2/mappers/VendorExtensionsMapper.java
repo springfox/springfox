@@ -20,7 +20,6 @@ package springfox.documentation.swagger2.mappers;
 
 
 import org.mapstruct.Mapper;
-import springfox.documentation.service.ListVendorExtension;
 import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
@@ -39,20 +38,16 @@ public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {
     Map<String, Object> extensions = new TreeMap<>();
-    Iterable<ListVendorExtension> listExtensions = from.stream()
-        .filter(ListVendorExtension.class::isInstance).map(each -> (ListVendorExtension)each).collect(toList());
-    for (ListVendorExtension each : listExtensions) {
-      extensions.put(each.getName(), each.getValue());
-    }
     Iterable<Map<String, Object>> objectExtensions = from.stream()
         .filter(ObjectVendorExtension.class::isInstance).map(each -> (ObjectVendorExtension)each)
         .map(toExtensionMap()).collect(toList());
     for (Map<String, Object> each : objectExtensions) {
       extensions.putAll(each);
     }
-    Iterable<StringVendorExtension> propertyExtensions = from.stream()
-        .filter(StringVendorExtension.class::isInstance).map(each -> (StringVendorExtension)each).collect(toList());
-    for (StringVendorExtension each : propertyExtensions) {
+    Iterable<VendorExtension> propertyExtensions = from.stream()
+        .filter(each -> !ObjectVendorExtension.class.isInstance(each))
+        .map(each -> (VendorExtension)each).collect(toList());
+    for (VendorExtension each : propertyExtensions) {
       extensions.put(each.getName(), each.getValue());
     }
     return extensions;
