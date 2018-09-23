@@ -27,12 +27,14 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import springfox.documentation.uploader.FileUploader;
+import springfox.documentation.uploader.FileUploaderException;
 
 import java.util.Map;
 
@@ -70,7 +72,7 @@ public class SwaggerHubFileUploader implements FileUploader {
     }
 
     @Override
-    public void uploadSwaggerDescriptors(final Map<String, Documentation> descriptors) {
+    public void uploadSwaggerDescriptors(final Map<String, Documentation> descriptors) throws FileUploaderException {
         LOGGER.info("Start Swagger file upload to SwaggerHub");
         for (Map.Entry<String, Documentation> entry : descriptors.entrySet()) {
             final String apiName = entry.getKey();
@@ -80,39 +82,31 @@ public class SwaggerHubFileUploader implements FileUploader {
         LOGGER.info("Finished Swagger file upload to SwaggerHub.");
     }
 
-    private void uploadFile(final String apiName, final Swagger swagger) {
+    private void uploadFile(final String apiName, final Swagger swagger) throws FileUploaderException {
         final Json jsonSwagger = this.jsonSerializer.toJson(swagger);
         LOGGER.debug("Uploading Swagger file for {} endpoint", apiName);
         final HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Basic ".concat(this.swaggerHubApiKey));
         final HttpEntity<Json> request = new HttpEntity<Json>(jsonSwagger, headers);
-        final ResponseEntity<String> response = this.restTemplate
-                .postForEntity(SWAGGER_HUB_URL, request, String.class, this.swaggerHubOwner, apiName);
-        switch (response.getStatusCode()) {
-            case OK:
-                // Empty because the behaviour is going to be the same that in CREATED case
-            case CREATED:
-                LOGGER.debug("Successfully uploaded API {}", apiName);
-                break;
-            case RESET_CONTENT:
-                LOGGER.warn("Successfully uploaded API {}, but it should be reloaded", apiName);
-                break;
-            case BAD_REQUEST:
-                LOGGER.error("Invalid generated Swagger file for API {}", apiName);
-                break;
-            case FORBIDDEN:
-                LOGGER.error("Reached maximum number of APIs allowed into SwaggerHub");
-                break;
-            case CONFLICT:
-                LOGGER.error("Could not overwrite current version for API {}", apiName);
-                break;
-            case UNSUPPORTED_MEDIA_TYPE:
-                LOGGER.error("Incorrect Content-Type value");
-                break;
-            default:
-                LOGGER.error("Could not upload API to SwaggerHub. Received HTTP Status code {}", response.getStatusCode());
-                break;
+        try {
+            final ResponseEntity<String> response = this.restTemplate
+                    .postForEntity(SWAGGER_HUB_URL, request, String.class, this.swaggerHubOwner, apiName);
+            switch (response.getStatusCode()) {
+                case OK:
+                    // Empty because the behaviour is going to be the same that in CREATED case
+                case CREATED:
+                    LOGGER.debug("Successfully uploaded API {}", apiName);
+                    break;
+                case RESET_CONTENT:
+                    LOGGER.warn("Successfully uploaded API {}, but it should be reloaded", apiName);
+                    break;
+                default:
+                    LOGGER.error("Could not upload API {} to SwaggerHub. Received HTTP Status code {}", apiName, response.getStatusCode());
+                    throw new FileUploaderException("Could not upload API to SwaggerHub");
+            }
+            LOGGER.debug("Successfully uploaded Swagger file for {} endpoint", apiName);
+        } catch (RestClientException e) {
+            LOGGER.error("Error uploading API {} to SwaggerHub:\n", apiName, e);
         }
-        LOGGER.debug("Successfully uploaded Swagger file for {} endpoint", apiName);
     }
 }

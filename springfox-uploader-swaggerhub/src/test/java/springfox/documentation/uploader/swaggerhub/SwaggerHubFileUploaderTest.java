@@ -21,13 +21,19 @@ package springfox.documentation.uploader.swaggerhub;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
-import springfox.documentation.uploader.FileUploaderBeanConfiguration;
+import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.uploader.FileUploaderException;
+import springfox.documentation.uploader.spring.FileUploaderBeanConfiguration;
 import springfox.documentation.uploader.swaggerhub.spring.FileUploaderTestBeanConfiguration;
 
-import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.client.ExpectedCount.once;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 /**
  * Test class for {@link SwaggerHubFileUploader}.
@@ -36,7 +42,13 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {FileUploaderBeanConfiguration.class, FileUploaderTestBeanConfiguration.class})
+@TestPropertySource(properties = {"springfox.documentation.uploader.api.key=api", "springfox.documentation.uploader.owner=owner"})
 public class SwaggerHubFileUploaderTest {
+
+    private static final String SWAGGERHUB_URL = "https://api.swaggerhub.com/apis/owner/test";
+
+    @Autowired
+    private DocumentationCache documentationCache;
 
     @Autowired
     private SwaggerHubFileUploader fileUploader;
@@ -45,42 +57,60 @@ public class SwaggerHubFileUploaderTest {
     private MockRestServiceServer server;
 
     @Test
-    public void testRunOk() {
-        assertTrue(false);
+    public void testRunOk() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.OK);
+        this.runFileUploader();
     }
 
     @Test
-    public void testRunCreated() {
-        assertTrue(false);
+    public void testRunCreated() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.CREATED);
+        this.runFileUploader();
     }
 
     @Test
-    public void testRunResetContent() {
-        assertTrue(false);
+    public void testRunResetContent() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.RESET_CONTENT);
+        this.runFileUploader();
     }
 
     @Test
-    public void testRunBadRequest() {
-        assertTrue(false);
+    public void testRunBadRequest() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.BAD_REQUEST);
+        this.runFileUploader();
     }
 
     @Test
-    public void testRunForbidden() {
-        assertTrue(false);
+    public void testRunForbidden() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.FORBIDDEN);
+        this.runFileUploader();
     }
 
     @Test
-    public void testRunConflict() {
-        assertTrue(false);
+    public void testRunConflict() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.CONFLICT);
+        this.runFileUploader();
     }
 
     @Test
-    public void testRunUnsupportedMediaType() {
-        assertTrue(false);
+    public void testRunUnsupportedMediaType() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        this.runFileUploader();
     }
 
-    @Test
-    public void testRunDefault() {
-        assertTrue(false);
+    @Test(expected = FileUploaderException.class)
+    public void testRunDefault() throws FileUploaderException {
+        this.configureMockServer(HttpStatus.MULTI_STATUS);
+        this.runFileUploader();
+    }
+
+    private void configureMockServer(final HttpStatus httpStatus) {
+        this.server.reset();
+        this.server.expect(once(), requestTo(SWAGGERHUB_URL)).andRespond(withStatus(httpStatus));
+    }
+
+    private void runFileUploader() throws FileUploaderException {
+        this.fileUploader.uploadSwaggerDescriptors(this.documentationCache.all());
+        this.server.verify();
     }
 }

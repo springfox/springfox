@@ -19,7 +19,7 @@
 package springfox.documentation.uploader.annotations;
 
 import org.springframework.context.annotation.Import;
-import springfox.documentation.uploader.FileUploaderBeanConfiguration;
+import springfox.documentation.uploader.spring.FileUploaderBeanConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

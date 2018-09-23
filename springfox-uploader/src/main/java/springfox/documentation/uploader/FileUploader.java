@@ -32,7 +32,9 @@ public interface FileUploader {
     /**
      * Uploads the descriptors passed as parameter to the provider implementing this interface.
      *
-     * @param descriptors Swagger descriptors (values) to be uploaded, and endpoints (keys) they belong to.
+     * @param descriptors Swagger descriptors (values) to be uploaded, and endpoints (keys) they belong to
+     *
+     * @throws FileUploaderException in case of problems during file upload
      */
-    void uploadSwaggerDescriptors(Map<String, Documentation> descriptors);
+    void uploadSwaggerDescriptors(Map<String, Documentation> descriptors) throws FileUploaderException;
 }

@@ -16,13 +16,15 @@
  *
  *
  */
-package springfox.documentation.uploader;
+package springfox.documentation.uploader.launcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spring.web.DocumentationCache;
+import springfox.documentation.uploader.FileUploader;
+import springfox.documentation.uploader.FileUploaderException;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -52,7 +54,11 @@ public class FileUploaderLauncher {
     @PostConstruct
     public void init() {
         for (FileUploader fileUploader : this.fileUploaders) {
-            fileUploader.uploadSwaggerDescriptors(this.documentationCache.all());
+            try {
+                fileUploader.uploadSwaggerDescriptors(this.documentationCache.all());
+            } catch (FileUploaderException e) {
+                LOGGER.error("Error uploading Swagger files:\n", e);
+            }
         }
     }
 
