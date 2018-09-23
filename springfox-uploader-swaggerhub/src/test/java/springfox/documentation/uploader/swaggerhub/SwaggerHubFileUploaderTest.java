@@ -46,6 +46,41 @@ public class SwaggerHubFileUploaderTest {
 
     @Test
     public void testRunOk() {
-        assertTrue(true);
+        assertTrue(false);
+    }
+
+    @Test
+    public void testRunCreated() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void testRunResetContent() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void testRunBadRequest() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void testRunForbidden() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void testRunConflict() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void testRunUnsupportedMediaType() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void testRunDefault() {
+        assertTrue(false);
     }
 }
