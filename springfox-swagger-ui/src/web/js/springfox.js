@@ -86,7 +86,7 @@ window.onload = () => {
       defaultModelExpandDepth: configUI.defaultModelExpandDepth,
       defaultModelRendering: configUI.defaultModelRendering,
       displayRequestDuration: configUI.displayRequestDuration,
-      docExpansion: configUI.docExpansion,
+      docExpansion: configUI.Do,
       filter: configUI.filter,
       maxDisplayedTags: configUI.maxDisplayedTags,
       operationsSorter: configUI.operationsSorter,
@@ -101,6 +101,9 @@ window.onload = () => {
       showMutatedRequest: true,
       supportedSubmitMethods: configUI.supportedSubmitMethods,
       validatorUrl: configUI.validatorUrl,
+      enableCsrf: configUI.enableCsrf,
+      csrfExcludeUrls: configUI.csrfExcludeUrls,
+
       /*--------------------------------------------*\
        * Macros
       \*--------------------------------------------*/
@@ -132,7 +135,9 @@ window.onload = () => {
   /* Entry Point */
   (async () => {
     await buildSystemAsync(getBaseURL());
-    await csrfSupport(getBaseURL());
+    if (window.ui.getConfigs().enableCsrf) {
+      await csrfSupport(getBaseURL(), window.ui.getConfigs().csrfExcludeUrls);
+    }
   })();
 
 };

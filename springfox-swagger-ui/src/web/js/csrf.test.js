@@ -50,7 +50,7 @@ test('o ? ?', async () => {
 
 test('x o ?', async () => {
   fetchMock.mock(`${baseUrl}/`, `<html><head><title>No Meta</title></head><body></body></html>`);
-  fetchMock.mock(`${baseUrl}/csrf`, { headerName, token });
+  fetchMock.mock(`${baseUrl}/csrf`, { headerName, token })
 
   await expectOk();
 });
@@ -87,5 +87,5 @@ test('x invalid-json ?', async () => {
   expect(error).toBeInstanceOf(FetchError);
 
   // Make sure this function will not throw exception.
-  await patchRequestInterceptor(baseUrl);
+  await patchRequestInterceptor(baseUrl), [];
 });

@@ -41,7 +41,9 @@ class UiConfigurationSpec extends Specification {
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"validatorUrl\": \"validator:urn\"\n" +
+      "    \"validatorUrl\": \"validator:urn\",\n" +
+      "    \"enableCsrf\": true,\n" +
+      "    \"csrfExcludedUrls\": []\n" +
       "}"
 
   def uiConfigWithoutValidatorUrl = new UiConfiguration(null, UiConfiguration.Constants.NO_SUBMIT_METHODS)
@@ -60,8 +62,10 @@ class UiConfigurationSpec extends Specification {
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"validatorUrl\": \"\"\n" +
-      "}"
+      "    \"validatorUrl\": \"\",\n" +
+      "    \"enableCsrf\": true,\n" +
+      "    \"csrfExcludedUrls\": []\n" +
+          "}"
 
   def "Renders non-null values using default ObjectMapper"() {
     given:

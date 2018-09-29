@@ -48,6 +48,8 @@ public class UiConfiguration {
   private final Boolean showExtensions;
   private final TagsSorter tagsSorter;
   private final String validatorUrl;
+  private final Boolean enableCsrf;
+  private final String[] csrfExcludedUrls;
   /**
    * @deprecated @since 2.8.0. This field is unused
    */
@@ -191,6 +193,8 @@ public class UiConfiguration {
     this.operationsSorter = OperationsSorter.of(apisSorter);
     this.showExtensions = false;
     this.tagsSorter = TagsSorter.of(apisSorter);
+    this.enableCsrf = true;
+    this.csrfExcludedUrls = Constants.NO_CSRF_EXCLUDES;
   }
 
   /**
@@ -259,7 +263,9 @@ public class UiConfiguration {
         showExtensions,
         tagsSorter,
         Constants.DEFAULT_SUBMIT_METHODS,
-        validatorUrl);
+        validatorUrl,
+        true,
+        Constants.NO_CSRF_EXCLUDES);
   }
 
   /**
@@ -318,7 +324,10 @@ public class UiConfiguration {
       Boolean showExtensions,
       TagsSorter tagsSorter,
       String[] supportedSubmitMethods,
-      String validatorUrl) {
+      String validatorUrl,
+      Boolean enableCsrf,
+      String[] csrfExcludedUrls
+      ) {
     this.apisSorter = "alpha";
     this.deepLinking = deepLinking;
     this.displayOperationId = displayOperationId;
@@ -334,6 +343,8 @@ public class UiConfiguration {
     this.tagsSorter = tagsSorter;
     this.supportedSubmitMethods = supportedSubmitMethods;
     this.validatorUrl = validatorUrl;
+    this.enableCsrf = enableCsrf;
+    this.csrfExcludedUrls = csrfExcludedUrls;
   }
 
   /**
@@ -446,6 +457,16 @@ public class UiConfiguration {
     return ofNullable(validatorUrl).orElse("");
   }
 
+  @JsonProperty("enableCsrf")
+  public Boolean getEnableCsrf() {
+    return enableCsrf;
+  }
+
+  @JsonProperty("csrfExcludedUrls")
+  public String[] getCsrfExcludedUrls() {
+    return csrfExcludedUrls;
+  }
+
   public static class Constants {
     public static final String[] DEFAULT_SUBMIT_METHODS = new String[] {
         "get", "put", "post",
@@ -453,5 +474,7 @@ public class UiConfiguration {
         "patch", "trace" };
 
     public static final String[] NO_SUBMIT_METHODS = new String[] {};
+
+    public static final String[] NO_CSRF_EXCLUDES = new String[] {};
   }
 }

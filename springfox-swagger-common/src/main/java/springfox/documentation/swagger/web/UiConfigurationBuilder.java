@@ -38,11 +38,14 @@ public class UiConfigurationBuilder {
   private Boolean showExtensions;
   private TagsSorter tagsSorter;
 
+
   /*--------------------------------------------*\
    * Network
   \*--------------------------------------------*/
   private String[] supportedSubmitMethods;
   private String validatorUrl;
+  private Boolean enableCsrf;
+  private String[] csrfExcludedUrls;
 
   private UiConfigurationBuilder() {
   }
@@ -66,7 +69,9 @@ public class UiConfigurationBuilder {
         defaultIfAbsent(showExtensions, false),
         defaultIfAbsent(tagsSorter, TagsSorter.ALPHA),
         defaultIfAbsent(supportedSubmitMethods, UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS),
-        defaultIfAbsent(validatorUrl, null)
+        defaultIfAbsent(validatorUrl, null),
+        defaultIfAbsent(enableCsrf, true),
+        defaultIfAbsent(csrfExcludedUrls, UiConfiguration.Constants.NO_CSRF_EXCLUDES)
     );
   }
 
@@ -212,6 +217,25 @@ public class UiConfigurationBuilder {
    */
   public UiConfigurationBuilder validatorUrl(String validatorUrl) {
     this.validatorUrl = validatorUrl;
+    return this;
+  }
+
+  /**
+   * @param enableCsrf By default CSRF is enabled and the CSRF tokens are added to each request
+   * @return this
+   */
+  public UiConfigurationBuilder enableCsrf(boolean enableCsrf) {
+    this.enableCsrf = enableCsrf;
+    return this;
+  }
+
+  /**
+   * @param csrfExcludedUrls By default when CSRF is enabled the CSRF token is added to each request. Use this parameter to
+   *                         exclude urls starting with values in the array.
+   * @return this
+   */
+  public UiConfigurationBuilder csrfExcludedUrls(String[] csrfExcludedUrls) {
+    this.csrfExcludedUrls = csrfExcludedUrls;
     return this;
   }
 }
