@@ -86,7 +86,7 @@ window.onload = () => {
       defaultModelExpandDepth: configUI.defaultModelExpandDepth,
       defaultModelRendering: configUI.defaultModelRendering,
       displayRequestDuration: configUI.displayRequestDuration,
-      docExpansion: configUI.Do,
+      docExpansion: configUI.docExpansion,
       filter: configUI.filter,
       maxDisplayedTags: configUI.maxDisplayedTags,
       operationsSorter: configUI.operationsSorter,
