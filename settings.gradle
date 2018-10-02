@@ -1,4 +1,5 @@
 rootProject.name = 'springfox'
+enableFeaturePreview('STABLE_PUBLISHING')
 include 'springfox-core'
 include 'springfox-spi'
 include 'springfox-schema'

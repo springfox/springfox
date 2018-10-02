@@ -1,5 +1,5 @@
 plugins {
-  id "net.ltgt.apt-idea" version "0.17"
+  id "net.ltgt.apt-idea" version "0.18"
 }
 
 ext {
@@ -25,7 +25,7 @@ sourceSets {
 
 // Define integration test task
 task integrationTest(type: Test) {
-  testClassesDir = sourceSets.integrationTest.output.classesDir
+  testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
