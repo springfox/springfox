@@ -649,10 +649,7 @@
                         }
                     },
                     "204": {
-                        "description": "no ids found",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "no ids found"
                     }
                 },
                 "deprecated": false
