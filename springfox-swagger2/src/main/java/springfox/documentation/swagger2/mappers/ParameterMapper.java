@@ -25,6 +25,7 @@ import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.RefModel;
 import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.FormParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.Property;
@@ -46,8 +47,38 @@ public class ParameterMapper {
   private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
 
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
-    Parameter bodyParameter = bodyParameter(source);
-    return SerializableParameterFactories.create(source).orElse(bodyParameter);
+    Parameter parameter;
+    switch (source.getParamType()) {
+      case "formData":
+        parameter = formParameter(source);
+        break;
+      default:
+        parameter = bodyParameter(source);
+        break;
+    }
+    return SerializableParameterFactories.create(source).orElse(parameter);
+  }
+
+  private Parameter formParameter(springfox.documentation.service.Parameter source) {
+    FormParameter parameter = new FormParameter()
+            .description(source.getDescription())
+            .type(source.getModelRef().getType())
+            .name(source.getName());
+    parameter.setIn(source.getParamType());
+    parameter.setAccess(source.getParamAccess());
+    parameter.setPattern(source.getPattern());
+    parameter.setRequired(source.isRequired());
+    parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
+    for (Entry<String, List<Example>> each : source.getExamples().entrySet()) {
+      Optional<Example> example = each.getValue().stream().findFirst();
+      if (example.isPresent() && example.get().getValue() != null) {
+        // Form parameters only support a single example
+        parameter.example(String.valueOf(example.get().getValue()));
+        break;
+      }
+    }
+
+    return parameter;
   }
 
   private Parameter bodyParameter(springfox.documentation.service.Parameter source) {
