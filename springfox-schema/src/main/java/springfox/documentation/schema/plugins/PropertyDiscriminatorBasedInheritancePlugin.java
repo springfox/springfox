@@ -67,12 +67,15 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
   }
 
   private List<ModelReference> modelRefs(ModelContext context) {
-    JsonSubTypes subTypes = AnnotationUtils.getAnnotation(forClass(context), JsonSubTypes.class);
+    Class<?> containingClass = forClass(context);
+    JsonSubTypes subTypes = AnnotationUtils.getAnnotation(containingClass, JsonSubTypes.class);
     List<ModelReference> modelRefs = new ArrayList<>();
     if (subTypes != null) {
       for (JsonSubTypes.Type each : subTypes.value()) {
-        modelRefs.add(modelRefFactory(context, typeNameExtractor)
-            .apply(typeResolver.resolve(each.value())));
+        if (each.value() != containingClass) {
+          modelRefs.add(modelRefFactory(context, typeNameExtractor)
+                .apply(typeResolver.resolve(each.value())));
+        }
       }
     }
     return modelRefs;
