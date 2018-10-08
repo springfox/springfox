@@ -67,6 +67,35 @@ class DocketSpec extends DocumentationContextSpec {
     pluginContext.pathProvider instanceof DummyPathProvider // this one is dummy as this is what we have in test ctx
   }
 
+  def "Swagger global response messages should override the default for a list of RequestMethods"() {
+    when:
+    plugin
+            .globalResponseMessage(Arrays.asList(GET,POST), [new ResponseMessage(
+            OK.value(),
+            "blah",
+            null,
+            [],
+            [] as Map,
+            [])])
+            .useDefaultResponseMessages(true)
+            .configure(contextBuilder)
+
+    and:
+    def pluginContext = contextBuilder.build()
+
+    then:
+    pluginContext.getGlobalResponseMessages()[GET][0].getMessage() == "blah"
+    pluginContext.getGlobalResponseMessages()[GET].size() == 1
+
+    pluginContext.getGlobalResponseMessages()[POST][0].getMessage() == "blah"
+    pluginContext.getGlobalResponseMessages()[POST].size() == 1
+
+    and: "defaults are preserved"
+    pluginContext.getGlobalResponseMessages().keySet().containsAll(
+            [PUT, DELETE, PATCH, TRACE, OPTIONS, HEAD]
+    )
+  }
+
   def "Swagger global response messages should override the default for a particular RequestMethod"() {
     when:
     plugin
