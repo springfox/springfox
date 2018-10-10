@@ -193,8 +193,7 @@ public class Docket implements DocumentationPlugin {
    */
   public Docket globalResponseMessage(List<RequestMethod> requestMethods,
                                        List<ResponseMessage> responseMessages) {
-    for(RequestMethod requestMethod : requestMethods)
-    {
+    for(RequestMethod requestMethod : requestMethods) {
       this.globalResponseMessage(requestMethod, responseMessages);
     }
 
