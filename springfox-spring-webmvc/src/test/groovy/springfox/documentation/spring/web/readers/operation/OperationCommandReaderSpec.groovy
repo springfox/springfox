@@ -47,6 +47,7 @@ class OperationCommandReaderSpec extends DocumentationContextSpec {
       new DefaultOperationReader()    | 'uniqueId'   | dummyHandlerMethod()                       | 'dummyMethodUsingGET'
       new DefaultOperationReader()    | 'position'   | dummyHandlerMethod()                       | CURRENT_COUNT
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod('methodWithDeprecated') | 'true'
+      new OperationDeprecatedReader() | 'deprecated' | dummyDeprecatedController()                | 'true'
       new OperationDeprecatedReader() | 'deprecated' | dummyHandlerMethod()                       | 'false'
   }
 
