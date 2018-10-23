@@ -220,8 +220,8 @@
         "/bugs/1420": {
             "get": {
                 "tags": [
-                    "foo",
-                    "Bugs"
+                    "Bugs",
+                    "foo"
                 ],
                 "summary": "issue1420",
                 "operationId": "issue1420UsingGET_2",
@@ -493,8 +493,8 @@
                         "required": false,
                         "type": "integer",
                         "default": 0,
-                        "allowEmptyValue": false,
-                        "format": "int32"
+                        "format": "int32",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -803,8 +803,8 @@
                 "summary": "method1",
                 "operationId": "method1UsingGET_2",
                 "produces": [
-                    "application/atom+xml",
-                    "application/json;charset=UTF-8"
+                    "application/json;charset=UTF-8",
+                    "application/atom+xml"
                 ],
                 "responses": {
                     "200": {
@@ -1115,8 +1115,8 @@
                         }
                     },
                     {
-                        "in": "formData",
                         "name": "sfId",
+                        "in": "formData",
                         "description": "sfId",
                         "required": true,
                         "type": "integer",
@@ -1146,72 +1146,73 @@
                 ],
                 "parameters": [
                     {
-                        "in": "formData",
                         "name": "allCapsSet",
+                        "in": "formData",
                         "description": "description of allCapsSet",
                         "required": false,
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
-                        "in": "formData",
                         "name": "annotatedEnumType",
+                        "in": "formData",
                         "description": "description of annotatedEnumType",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "bar",
+                        "in": "formData",
                         "description": "description of bar",
                         "required": false,
                         "type": "integer",
                         "format": "int32"
                     },
                     {
-                        "in": "formData",
                         "name": "enumType",
+                        "in": "formData",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "foo",
+                        "in": "formData",
                         "description": "description of foo",
                         "required": true,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "localDateTime",
+                        "in": "formData",
                         "description": "local date time desc dd-MM-yyyy hh:mm:ss",
                         "required": true,
                         "type": "string",
                         "format": "date-time"
                     },
                     {
-                        "in": "formData",
                         "name": "nestedType.name",
+                        "in": "formData",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "parentBeanProperty",
+                        "in": "formData",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "propertyWithNoSetterMethod",
+                        "in": "formData",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "readOnlyString",
+                        "in": "formData",
                         "description": "A read only string",
                         "required": false,
                         "type": "string"
@@ -1443,8 +1444,8 @@
         "/bugs/2268{?$filter}": {
             "get": {
                 "tags": [
-                    "example",
-                    "Bugs"
+                    "Bugs",
+                    "example"
                 ],
                 "summary": "Get all examples",
                 "description": "Get all examples ",

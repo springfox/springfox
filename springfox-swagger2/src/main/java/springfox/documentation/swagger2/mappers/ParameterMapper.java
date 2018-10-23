@@ -62,13 +62,10 @@ public class ParameterMapper {
 
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
     Parameter parameter;
-    switch (source.getParamType()) {
-      case "formData":
-        parameter = formParameter(source);
-        break;
-      default:
-        parameter = bodyParameter(source);
-        break;
+    if ("formData".equals(source.getParamType())) {
+      parameter = formParameter(source);
+    } else {
+      parameter = bodyParameter(source);
     }
     return SerializableParameterFactories.create(source).orElse(parameter);
   }
