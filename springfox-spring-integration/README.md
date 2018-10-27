@@ -1,0 +1,3 @@
+# Springfox Spring-Integration
+
+Swagger2DocumentationWebFluxConfiguration pulls in SpringfoxWebFluxConfiguration
