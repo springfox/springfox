@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@
  *
  */
 
-package springfox.test.contract.swagger;
+package springfox.documentation.spring.integration;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@SpringBootApplication
-@EnableSwagger2WebMvc
-public class SwaggerApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(SwaggerApplication.class, args);
+@Configuration
+public class SpringfoxSpringIntegrationConfiguration {
+
+  @Bean
+  public static SpringIntegrationObjectMapperConfigurer objectMapperConfigurer() {
+    return new SpringIntegrationObjectMapperConfigurer();
   }
 }

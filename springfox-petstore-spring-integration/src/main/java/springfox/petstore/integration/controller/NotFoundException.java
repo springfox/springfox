@@ -17,16 +17,22 @@
  *
  */
 
-package springfox.test.contract.swagger;
+package springfox.petstore.integration.controller;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+public class NotFoundException extends RuntimeException {
+  private final int errorCode;
+  private final String errorMessage;
 
-@SpringBootApplication
-@EnableSwagger2WebMvc
-public class SwaggerApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(SwaggerApplication.class, args);
+  public NotFoundException(int errorCode, String errorMessage) {
+    this.errorCode = errorCode;
+    this.errorMessage = errorMessage;
+  }
+
+  public int getErrorCode() {
+    return errorCode;
+  }
+
+  public String getErrorMessage() {
+    return errorMessage;
   }
 }

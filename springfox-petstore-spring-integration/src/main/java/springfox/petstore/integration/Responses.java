@@ -17,16 +17,21 @@
  *
  */
 
-package springfox.test.contract.swagger;
+package springfox.petstore.integration;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@SpringBootApplication
-@EnableSwagger2WebMvc
-public class SwaggerApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(SwaggerApplication.class, args);
+public class Responses {
+  public static ResponseEntity ok() {
+    return new ResponseEntity(HttpStatus.OK);
+  }
+
+  public static ResponseEntity notFound() {
+    return new ResponseEntity(HttpStatus.NOT_FOUND);
+  }
+
+  public static <T> ResponseEntity<T> ok(T model) {
+    return new ResponseEntity<T>(model, HttpStatus.OK);
   }
 }

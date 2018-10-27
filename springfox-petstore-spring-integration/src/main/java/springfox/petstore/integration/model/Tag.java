@@ -17,16 +17,25 @@
  *
  */
 
-package springfox.test.contract.swagger;
+package springfox.petstore.integration.model;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+public class Tag {
+  private long id;
+  private String name;
 
-@SpringBootApplication
-@EnableSwagger2WebMvc
-public class SwaggerApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(SwaggerApplication.class, args);
+  public long getId() {
+    return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 }
