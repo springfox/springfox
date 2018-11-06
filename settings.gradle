@@ -15,10 +15,8 @@ include 'springfox-data-rest'
 include 'springfox-swagger-ui'
 include 'springfox-petstore'
 include 'springfox-petstore-webflux'
-include 'springfox-petstore-spring-integration'
 
 // Auxiliary projects that are not published
 include 'springfox-spring-config'
 include 'swagger-contract-tests'
 include 'swagger-contract-tests-webflux'
-include 'swagger-contract-tests-spring-integration'

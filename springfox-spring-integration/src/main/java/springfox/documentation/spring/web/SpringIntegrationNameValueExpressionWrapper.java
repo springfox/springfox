@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.integration;
+package springfox.documentation.spring.web;
 
 import springfox.documentation.spring.wrapper.NameValueExpression;
 

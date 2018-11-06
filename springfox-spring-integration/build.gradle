@@ -12,7 +12,7 @@ ext {
 dependencies {
   compile libs.core
   compile libs.spring
-  compile libs.springProvidedWithSpringIntegration
+  compileOnly libs.springProvidedWithSpringIntegration
   compile project(':springfox-spi')
   compile project(':springfox-schema').sourceSets.main.output
   compile project(':springfox-spring-web')

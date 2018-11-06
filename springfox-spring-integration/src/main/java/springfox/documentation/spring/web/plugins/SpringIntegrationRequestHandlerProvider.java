@@ -16,9 +16,10 @@
  *
  *
  */
-package springfox.documentation.spring.integration.plugins;
+package springfox.documentation.spring.web.plugins;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.integration.http.inbound.IntegrationRequestMappingHandlerMapping;
@@ -27,9 +28,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
-import springfox.documentation.spring.integration.SpringIntegrationRequestHandler;
+import springfox.documentation.spring.web.SpringIntegrationRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
-
 
 import java.util.List;
 import java.util.Map;
@@ -37,12 +37,17 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static java.util.stream.Collectors.toList;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
 
+/**
+ * TODO: check if the other classes which were built following the WebFlux example are necessary;
+ *   maybe the WebFlux and WebMvc jars are sufficient.
+ * TODO: concept to support explicit swagger annotations somehow - maybe a dummy method somewhere?
+ */
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.LOWEST_PRECEDENCE) // TODO: remove precedence?
 public class SpringIntegrationRequestHandlerProvider implements RequestHandlerProvider {
     private final List<IntegrationRequestMappingHandlerMapping> handlerMappings;
     private final HandlerMethodResolver methodResolver;
@@ -53,6 +58,8 @@ public class SpringIntegrationRequestHandlerProvider implements RequestHandlerPr
             List<IntegrationRequestMappingHandlerMapping> handlerMappings) {
         this.handlerMappings = handlerMappings;
         this.methodResolver = methodResolver;
+        // TODO servlet context as in WebMvcRequestHandler,
+        //   see what the webflux provider does?
     }
 
     @Override
@@ -67,8 +74,10 @@ public class SpringIntegrationRequestHandlerProvider implements RequestHandlerPr
 
     private Function<IntegrationRequestMappingHandlerMapping,
             Set<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-        return input -> input.getHandlerMethods()
-                .entrySet();
+        return input -> {
+            Map<RequestMappingInfo, HandlerMethod> handlerMethods = input.getHandlerMethods();
+            return handlerMethods.entrySet();
+        };
     }
 
     private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {

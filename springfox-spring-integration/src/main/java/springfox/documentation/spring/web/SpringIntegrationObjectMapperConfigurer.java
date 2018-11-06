@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.spring.integration;
+package springfox.documentation.spring.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeansException;
