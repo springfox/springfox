@@ -16,9 +16,8 @@ dependencies {
   compile project(':springfox-spi')
   compile project(':springfox-schema').sourceSets.main.output
   compile project(':springfox-spring-web')
-  compile project(':springfox-spring-webmvc')
+  compile project(':springfox-spring-webflux')
 
-  // provided libs.springProvidedWithFlux
   provided libs.clientProvidedServlet
 
   testCompile "javax.validation:validation-api:$validationApiVersion"

@@ -25,7 +25,7 @@
  * <li>Filter for Integration Handler Mappings in WebMvcRequestHandlerProvider</li>
  * </ul>
  *
- * @see springfox.documentation.spring.web.plugins.SpringIntegrationRequestHandlerProvider
+ * @see springfox.documentation.spring.web.plugins.SpringIntegrationWebMvcRequestHandlerProvider
  * @see springfox.documentation.spring.web.SpringIntegrationWebMvcRequestHandler
  */
 package springfox.documentation.spring.web;
