@@ -37,7 +37,6 @@ import org.springframework.web.util.UriTemplate;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**

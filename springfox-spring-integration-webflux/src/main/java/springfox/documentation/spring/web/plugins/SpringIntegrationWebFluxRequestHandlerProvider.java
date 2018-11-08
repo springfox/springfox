@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.integration.webflux.inbound.WebFluxIntegrationRequestMappingHandlerMapping;
 import org.springframework.stereotype.Component;

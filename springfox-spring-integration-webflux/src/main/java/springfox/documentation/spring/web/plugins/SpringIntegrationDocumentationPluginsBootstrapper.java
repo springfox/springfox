@@ -28,7 +28,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
-import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
 import springfox.documentation.spi.service.RequestHandlerCombiner;
 import springfox.documentation.spi.service.RequestHandlerProvider;
@@ -38,9 +37,6 @@ import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
-
-import static java.util.Optional.*;
 
 /**
  * After an application context refresh, builds and executes all DocumentationConfigurer instances found in the
