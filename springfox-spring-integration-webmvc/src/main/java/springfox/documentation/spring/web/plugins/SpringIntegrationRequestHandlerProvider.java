@@ -27,6 +27,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
+import springfox.documentation.spring.web.SpringIntegrationRequestHandlerUtils;
 import springfox.documentation.spring.web.SpringIntegrationWebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
@@ -90,6 +91,7 @@ public class SpringIntegrationRequestHandlerProvider implements RequestHandlerPr
                 contextPath,
                 methodResolver,
                 input.getKey(),
-                input.getValue());
+                input.getValue(),
+                new SpringIntegrationRequestHandlerUtils());
     }
 }
