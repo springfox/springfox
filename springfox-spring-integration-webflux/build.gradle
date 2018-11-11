@@ -17,6 +17,7 @@ dependencies {
   compile project(':springfox-schema').sourceSets.main.output
   compile project(':springfox-spring-web')
   compile project(':springfox-spring-webflux')
+  compile project(':springfox-spring-integration')
 
   provided libs.clientProvidedServlet
 

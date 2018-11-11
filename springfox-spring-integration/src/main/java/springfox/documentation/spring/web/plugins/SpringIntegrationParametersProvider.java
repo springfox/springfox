@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.documentation.spring.web;
+package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
@@ -28,6 +28,7 @@ import org.springframework.expression.spel.SpelNode;
 import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.integration.http.inbound.BaseHttpInboundEndpoint;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,10 +40,11 @@ import java.util.*;
 /**
  * Provides information about Spring Integration inbound HTTP handlers.
  */
-public class SpringIntegrationRequestHandlerUtils {
+@Component
+public class SpringIntegrationParametersProvider {
     private static final String REQUEST_PARAMS_EXPRESSION_CONTEXT_VARIABLE = "#requestParams";
-    private static final String PAYLOAD_EXPRESSION = "payloadExpression";
-    private static final String HEADER_EXPRESSIONS = "headerExpressions";
+    private static final String FIELD_PAYLOAD_EXPRESSION = "payloadExpression";
+    private static final String FIELD_HEADER_EXPRESSIONS = "headerExpressions";
 
     private final SpelExpressionParser parser = new SpelExpressionParser();
     private final TypeResolver typeResolver = new TypeResolver();
@@ -101,14 +103,14 @@ public class SpringIntegrationRequestHandlerUtils {
         List<ResolvedMethodParameter> parameters = new ArrayList<>();
 
         Expression payloadExpression = (Expression) ReflectionUtils.getFieldVal(inboundEndpoint,
-                PAYLOAD_EXPRESSION, true);
+                FIELD_PAYLOAD_EXPRESSION, true);
         if (payloadExpression != null) {
             extractRequestParam(payloadExpression, typeResolver).ifPresent(
                     parameters::add);
         }
         @SuppressWarnings("unchecked")
         Map<String, Expression> headerExpressions = (Map<String, Expression>) ReflectionUtils.getFieldVal(
-                inboundEndpoint, HEADER_EXPRESSIONS, true);
+                inboundEndpoint, FIELD_HEADER_EXPRESSIONS, true);
 
         if (headerExpressions != null) {
             for (Expression headerExpression : headerExpressions.values()) {

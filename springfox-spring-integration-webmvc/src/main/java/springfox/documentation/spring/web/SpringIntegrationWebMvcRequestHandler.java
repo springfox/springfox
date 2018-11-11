@@ -19,35 +19,37 @@
 package springfox.documentation.spring.web;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.integration.http.inbound.BaseHttpInboundEndpoint;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.web.plugins.SpringIntegrationParametersProvider;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * Provides information about WebMvc based Spring Integration inbound HTTP handlers.
  */
 public class SpringIntegrationWebMvcRequestHandler extends WebMvcRequestHandler {
-    private static final String REQUEST_PARAMS_EXPRESSION_CONTEXT_VARIABLE = "#requestParams";
-    private static final String PAYLOAD_EXPRESSION = "payloadExpression";
-    private static final String HEADER_EXPRESSIONS = "headerExpressions";
     private final HandlerMethodResolver methodResolver;
-    private final RequestMappingInfo requestMapping;
     private final HandlerMethod handlerMethod;
-    private SpringIntegrationRequestHandlerUtils parametersProvider;
+    private SpringIntegrationParametersProvider parametersProvider;
 
     public SpringIntegrationWebMvcRequestHandler(
             String contextPath,
             HandlerMethodResolver methodResolver,
             RequestMappingInfo requestMapping,
             HandlerMethod handlerMethod,
-            SpringIntegrationRequestHandlerUtils parametersProvider) {
+            SpringIntegrationParametersProvider parametersProvider) {
         super(contextPath, methodResolver, requestMapping, handlerMethod);
+
         this.methodResolver = methodResolver;
-        this.requestMapping = requestMapping;
         this.handlerMethod = handlerMethod;
         this.parametersProvider = parametersProvider;
     }
@@ -70,6 +72,12 @@ public class SpringIntegrationWebMvcRequestHandler extends WebMvcRequestHandler 
     public ResolvedType getReturnType() {
         // TODO come up with a way to define this
         return methodResolver.methodReturnType(handlerMethod);
+    }
+
+    @Override
+    public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
+        // TODO see if we can synthesize the annotations usually requested here
+        return ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
     }
 
     @Override

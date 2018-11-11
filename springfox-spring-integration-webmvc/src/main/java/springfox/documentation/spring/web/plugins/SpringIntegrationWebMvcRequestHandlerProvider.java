@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.plugins;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.integration.http.inbound.IntegrationRequestMappingHandlerMapping;
 import org.springframework.stereotype.Component;
@@ -27,42 +26,35 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
-import springfox.documentation.spring.web.SpringIntegrationRequestHandlerUtils;
 import springfox.documentation.spring.web.SpringIntegrationWebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import javax.servlet.ServletContext;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
-import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
 import static springfox.documentation.spring.web.paths.Paths.ROOT;
 
-/**
- * TODO: check if the other classes which were built following the WebFlux example are necessary;
- *   maybe the WebFlux and WebMvc jars are sufficient.
- * TODO: concept to support explicit swagger annotations somehow - maybe a dummy method somewhere?
- */
 @Component
-@Order(Ordered.LOWEST_PRECEDENCE) // TODO: remove precedence?
-public class SpringIntegrationRequestHandlerProvider implements RequestHandlerProvider {
+@Order
+public class SpringIntegrationWebMvcRequestHandlerProvider implements RequestHandlerProvider {
     private final List<IntegrationRequestMappingHandlerMapping> handlerMappings;
     private final HandlerMethodResolver methodResolver;
     private final String contextPath;
+    private SpringIntegrationParametersProvider parametersProvider;
 
     @Autowired
-    public SpringIntegrationRequestHandlerProvider(
+    public SpringIntegrationWebMvcRequestHandlerProvider(
             Optional<ServletContext> servletContext,
             HandlerMethodResolver methodResolver,
-            List<IntegrationRequestMappingHandlerMapping> handlerMappings) {
+            List<IntegrationRequestMappingHandlerMapping> handlerMappings,
+            SpringIntegrationParametersProvider parametersProvider) {
         this.handlerMappings = handlerMappings;
         this.methodResolver = methodResolver;
+        this.parametersProvider = parametersProvider;
         this.contextPath = servletContext
                 .map(ServletContext::getContextPath)
                 .orElse(ROOT);
@@ -72,7 +64,7 @@ public class SpringIntegrationRequestHandlerProvider implements RequestHandlerPr
     public List<RequestHandler> requestHandlers() {
         return nullToEmptyList(handlerMappings).stream()
                 .map(toMappingEntries())
-                .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+                .flatMap((Collection::stream))
                 .map(toRequestHandler())
                 .sorted(byPatternsCondition())
                 .collect(toList());
@@ -92,6 +84,6 @@ public class SpringIntegrationRequestHandlerProvider implements RequestHandlerPr
                 methodResolver,
                 input.getKey(),
                 input.getValue(),
-                new SpringIntegrationRequestHandlerUtils());
+                parametersProvider);
     }
 }

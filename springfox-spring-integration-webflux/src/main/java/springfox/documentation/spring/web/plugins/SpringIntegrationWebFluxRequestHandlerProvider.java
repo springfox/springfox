@@ -29,11 +29,11 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.SpringIntegrationWebFluxRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
@@ -44,22 +44,23 @@ import static springfox.documentation.spi.service.contexts.Orderings.byPatternsC
 public class SpringIntegrationWebFluxRequestHandlerProvider implements RequestHandlerProvider {
     private final List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings;
     private final HandlerMethodResolver methodResolver;
+    private SpringIntegrationParametersProvider parametersProvider;
 
     @Autowired
     public SpringIntegrationWebFluxRequestHandlerProvider(
             HandlerMethodResolver methodResolver,
-            List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings) {
+            List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings,
+            SpringIntegrationParametersProvider parametersProvider) {
         this.handlerMappings = handlerMappings;
         this.methodResolver = methodResolver;
-        // TODO servlet context as in WebMvcRequestHandler,
-        //   see what the webflux provider does?
+        this.parametersProvider = parametersProvider;
     }
 
     @Override
     public List<RequestHandler> requestHandlers() {
         return nullToEmptyList(handlerMappings).stream()
                 .map(toMappingEntries())
-                .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+                .flatMap((Collection::stream))
                 .map(toRequestHandler())
                 .sorted(byPatternsCondition())
                 .collect(toList());
@@ -77,6 +78,7 @@ public class SpringIntegrationWebFluxRequestHandlerProvider implements RequestHa
         return input -> new SpringIntegrationWebFluxRequestHandler(
                 methodResolver,
                 input.getKey(),
-                input.getValue());
+                input.getValue(),
+                parametersProvider);
     }
 }
