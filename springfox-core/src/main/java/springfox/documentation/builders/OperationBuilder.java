@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
@@ -36,7 +37,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.Optional.*;
 import static java.util.function.Function.*;
 import static java.util.stream.Collectors.*;
@@ -298,7 +301,8 @@ public class OperationBuilder {
 
   private String uniqueOperationIdStem() {
     String defaultStem = String.format("%sUsing%s", uniqueId, method);
-    return ofNullable(codeGenMethodNameStem).filter(((Predicate<String>)String::isEmpty).negate()).orElse(defaultStem);
+    return ofNullable(codeGenMethodNameStem).filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse(defaultStem);
   }
 
   private Set<ResponseMessage> mergeResponseMessages(Set<ResponseMessage> responseMessages) {
