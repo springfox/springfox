@@ -25,6 +25,7 @@ import springfox.documentation.OperationNameGenerator
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.ResponseMessageBuilder
+import springfox.documentation.schema.Example
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityReference
@@ -44,6 +45,7 @@ class OperationBuilderSpec extends Specification {
           .code(200)
           .message("OK")
           .responseModel(new ModelRef("String"))
+          .examples([new Example("application/json", "{\"foo\":  42}")])
           .build()
 
   def "Merges response messages when new response messages are applied" () {
@@ -75,6 +77,7 @@ class OperationBuilderSpec extends Specification {
       operation.responseMessages.first().message == "OK"
       operation.responseMessages.first().responseModel.type == "String"
       operation.responseMessages.first().responseModel.itemType == null
+      operation.responseMessages.first().examples.size() == 1
   }
 
   def "Setting properties on the builder with non-null values"() {
