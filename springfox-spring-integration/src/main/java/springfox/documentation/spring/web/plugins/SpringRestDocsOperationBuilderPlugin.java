@@ -1,3 +1,21 @@
+/*
+ *
+ *  Copyright 2016-2017 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
 package springfox.documentation.spring.web.plugins;
 
 import org.slf4j.Logger;
@@ -6,12 +24,9 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import rawhttp.core.RawHttp;
-import rawhttp.core.RawHttpHeaders;
 import rawhttp.core.RawHttpResponse;
-import rawhttp.core.body.BodyReader;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelRef;
@@ -21,7 +36,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
