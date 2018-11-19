@@ -1,9 +1,7 @@
 # Springfox Spring-Integration WebMvc
 
-Adds basic automatic recognition of SpringFox documentation for spring-integration WebMvc inbound http endpoints. 
-
-This does not include documentation of example responses. For information about providing example responses see the 
-readme file of the `springfox-spring-integration` module.
+Adds basic automatic recognition of SpringFox documentation for spring-integration WebMvc inbound http endpoints and
+allows to document responses through tests.
 
 ## Springfox in Spring Integration WebMvc
 
