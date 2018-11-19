@@ -94,7 +94,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
     return resource -> {
       try (InputStream resourceAsStream = new FileInputStream(resource.getFile())) {
         RawHttp rawHttp = new RawHttp();
-        // TODO must extract the body before the stream is closed
+        // must extract the body before the stream is closed
         RawHttpResponse<Void> rawHttpResponse = rawHttp.parseResponse(resourceAsStream).eagerly();
         return rawHttpResponse;
       } catch (IOException e) {

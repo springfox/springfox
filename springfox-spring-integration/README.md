@@ -14,8 +14,8 @@ choose the matching springfox-spring-integration implementation for WebMvc _or_ 
 
 Furthermore, since it is not feasible to use  static code analysis to find out about responses of spring-integration 
 http inbound endpoints, springfox-spring-integration offers a possibility to use spring-restdocs to document response
-bodies. We inject our own `SpringFoxTemplateFormat` instead of asciidoc or markdown and evaluate the documentation 
-snippets generated during test execution from this template format.
+bodies. We inject our own `SpringFoxTemplateFormat` instead of asciidoc or markdown in the test configuration 
+and evaluate the documentation snippets generated during test execution from this template format in `SpringRestDocsOperationBuilderPlugin`.
 
 For more information see the readme files of 
 [springfox-spring-integration-webmvc](../springfox-spring-integration-webmvc) and
