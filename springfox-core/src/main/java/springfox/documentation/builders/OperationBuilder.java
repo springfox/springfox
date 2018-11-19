@@ -39,7 +39,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static java.util.function.Function.*;
 import static java.util.stream.Collectors.*;
@@ -314,13 +314,22 @@ public class OperationBuilder {
       if (responsesByCode.containsKey(each.getCode())) {
         ResponseMessage responseMessage = responsesByCode.get(each.getCode());
         String message = defaultIfAbsent(ofNullable(each.getMessage())
-                .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null), responseMessage.getMessage());
-        ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(), responseMessage.getResponseModel());
+            .filter(((Predicate<String>) String::isEmpty).negate())
+            .orElse(null), responseMessage.getMessage());
+        List<Example> examples = Stream.concat(
+            ofNullable(responseMessage.getExamples()).orElse(emptyList())
+                .stream(),
+            ofNullable(each.getExamples()).orElse(emptyList())
+                .stream())
+            .collect(toList());
+        ModelReference responseWithModel = defaultIfAbsent(each.getResponseModel(),
+            responseMessage.getResponseModel());
         merged.remove(responseMessage);
         merged.add(new ResponseMessageBuilder()
             .code(each.getCode())
             .message(message)
             .responseModel(responseWithModel)
+            .examples(examples)
             .headersWithDescription(responseMessage.getHeaders())
             .headersWithDescription(each.getHeaders())
             .build());
