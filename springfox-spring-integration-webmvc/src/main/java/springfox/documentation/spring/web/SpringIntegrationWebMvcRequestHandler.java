@@ -63,9 +63,9 @@ public class SpringIntegrationWebMvcRequestHandler extends WebMvcRequestHandler 
 
     @Override
     public String getName() {
-        // TODO method name behind URL - maybe the id of the gateway?
-        return handlerMethod.getMethod()
-                .getName();
+        // TODO do sth sensible if there is no id
+        return ((BaseHttpInboundEndpoint)handlerMethod.getBean())
+                .getComponentName();
     }
 
     @Override

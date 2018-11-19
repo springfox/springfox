@@ -38,55 +38,54 @@ import static java.util.Optional.ofNullable;
  * Provides information about WebFlux based Spring Integration inbound HTTP handlers.
  */
 public class SpringIntegrationWebFluxRequestHandler extends WebFluxRequestHandler {
-    private final HandlerMethodResolver methodResolver;
-    private final HandlerMethod handlerMethod;
-    private SpringIntegrationParametersProvider parametersProvider;
+  private final HandlerMethodResolver methodResolver;
+  private final HandlerMethod handlerMethod;
+  private SpringIntegrationParametersProvider parametersProvider;
 
-    private final TypeResolver typeResolver = new TypeResolver();
-    private final SpelExpressionParser parser = new SpelExpressionParser();
+  private final TypeResolver typeResolver = new TypeResolver();
+  private final SpelExpressionParser parser = new SpelExpressionParser();
 
-    public SpringIntegrationWebFluxRequestHandler(
-            HandlerMethodResolver methodResolver,
-            RequestMappingInfo requestMapping,
-            HandlerMethod handlerMethod,
-            SpringIntegrationParametersProvider parametersProvider) {
-        super(methodResolver, requestMapping, handlerMethod);
+  public SpringIntegrationWebFluxRequestHandler(
+      HandlerMethodResolver methodResolver,
+      RequestMappingInfo requestMapping,
+      HandlerMethod handlerMethod,
+      SpringIntegrationParametersProvider parametersProvider) {
+    super(methodResolver, requestMapping, handlerMethod);
 
-        this.methodResolver = methodResolver;
-        this.handlerMethod = handlerMethod;
-        this.parametersProvider = parametersProvider;
-    }
+    this.methodResolver = methodResolver;
+    this.handlerMethod = handlerMethod;
+    this.parametersProvider = parametersProvider;
+  }
 
-    @Override
-    public String groupName() {
-        // TODO come up with a better group name, instead of generic handler class name
-        //   maybe the defining class of a flow in DSL? - but what about xml?
-        return ControllerNamingUtils.controllerNameAsGroup(handlerMethod);
-    }
+  @Override
+  public String groupName() {
+    // TODO come up with a better group name, instead of generic handler class name
+    //   maybe the defining class of a flow in DSL? - but what about xml?
+    return ControllerNamingUtils.controllerNameAsGroup(handlerMethod);
+  }
 
-    @Override
-    public String getName() {
-        // TODO method name behind URL - maybe the id of the gateway?
-        return handlerMethod.getMethod()
-                .getName();
-    }
+  @Override
+  public String getName() {
+    return ((BaseHttpInboundEndpoint) handlerMethod.getBean())
+        .getComponentName();
+  }
 
-    @Override
-    public ResolvedType getReturnType() {
-        // TODO come up with a way to define this
-        return methodResolver.methodReturnType(handlerMethod);
-    }
+  @Override
+  public ResolvedType getReturnType() {
+    // TODO come up with a way to define this
+    return methodResolver.methodReturnType(handlerMethod);
+  }
 
-    @Override
-    public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-        // TODO see if we can synthesize the annotations usually requested here
-        return ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
-    }
+  @Override
+  public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
+    // TODO see if we can synthesize the annotations usually requested here
+    return ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getMethod(), annotation));
+  }
 
-    @Override
-    public List<ResolvedMethodParameter> getParameters() {
-        BaseHttpInboundEndpoint inboundEndpoint = (BaseHttpInboundEndpoint) handlerMethod.getBean();
-        return parametersProvider.getParameters(inboundEndpoint);
-    }
+  @Override
+  public List<ResolvedMethodParameter> getParameters() {
+    return parametersProvider
+        .getParameters((BaseHttpInboundEndpoint) handlerMethod.getBean());
+  }
 
 }
