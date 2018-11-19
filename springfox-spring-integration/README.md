@@ -18,5 +18,6 @@ bodies. We inject our own `SpringFoxTemplateFormat` instead of asciidoc or markd
 snippets generated during test execution from this template format.
 
 For more information see the readme files of 
-[springfox-spring-integration-webmvc](../springfox-spring-integration-webmvc) and [springfox-spring-integration-webflux](../springfox-spring-integration-webflux).  
+[springfox-spring-integration-webmvc](../springfox-spring-integration-webmvc) and
+ [springfox-spring-integration-webflux](../springfox-spring-integration-webflux).  
 
