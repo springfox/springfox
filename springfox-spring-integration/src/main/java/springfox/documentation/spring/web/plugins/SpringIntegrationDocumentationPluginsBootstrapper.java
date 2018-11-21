@@ -39,10 +39,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * After an application context refresh, builds and executes all DocumentationConfigurer instances found in the
- * application context.
- * <p>
- * If no instances DocumentationConfigurer are found a default one is created and executed.
+ * After Spring ContextRefreshedEvent, builds and executes all DocumentationConfigurer instances found in the
+ * application context, because only after ContextRefreshedEvent the spring-integration handler mappings
+ * are initialized.
  */
 @Component
 public class SpringIntegrationDocumentationPluginsBootstrapper extends AbstractDocumentationPluginsBootstrapper {
