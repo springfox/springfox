@@ -18,13 +18,18 @@
  */
 package springfox.documentation.spring.web.plugins
 
-
+import org.springframework.core.ResolvableType
 import org.springframework.expression.Expression
 import org.springframework.integration.http.inbound.BaseHttpInboundEndpoint
 import org.springframework.integration.http.inbound.RequestMapping
 import spock.lang.Specification
 
 class SpringIntegrationParametersProviderSpec extends Specification {
+
+  class Foo {
+    def bar;
+  }
+
   def "Determines parameters"() {
 
     Expression payloadExpression = Mock() {
@@ -44,11 +49,13 @@ class SpringIntegrationParametersProviderSpec extends Specification {
       inboundEndpoint.setHeaderExpressions(headerExpressions)
       inboundEndpoint.setPayloadExpression(payloadExpression)
       inboundEndpoint.setRequestMapping(requestMapping)
+      inboundEndpoint.setRequestPayloadType(ResolvableType.forClass(Foo))
     when:
       def parameters = provider.getParameters(inboundEndpoint)
     then:
-      parameters.size() == 2
-      parameters[0].defaultName().get() == "upperLower"
-      parameters[1].defaultName().get() == "toConvert"
+      parameters.size() == 3
+      parameters[0].defaultName().get() == "body"
+      parameters[1].defaultName().get() == "upperLower"
+      parameters[2].defaultName().get() == "toConvert"
   }
 }
