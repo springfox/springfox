@@ -72,7 +72,7 @@ public class SpringIntegrationWebFluxRequestHandler extends WebFluxRequestHandle
 
   @Override
   public ResolvedType getReturnType() {
-    // TODO come up with a way to define this
+    // always void, hence we need the spring restdocs plugin
     return methodResolver.methodReturnType(handlerMethod);
   }
 

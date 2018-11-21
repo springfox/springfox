@@ -63,14 +63,13 @@ public class SpringIntegrationWebMvcRequestHandler extends WebMvcRequestHandler 
 
     @Override
     public String getName() {
-        // TODO do sth sensible if there is no id
         return ((BaseHttpInboundEndpoint)handlerMethod.getBean())
                 .getComponentName();
     }
 
     @Override
     public ResolvedType getReturnType() {
-        // TODO come up with a way to define this
+        // always void, hence we need the spring restdocs plugin
         return methodResolver.methodReturnType(handlerMethod);
     }
 
@@ -85,94 +84,6 @@ public class SpringIntegrationWebMvcRequestHandler extends WebMvcRequestHandler 
 
         BaseHttpInboundEndpoint inboundEndpoint = (BaseHttpInboundEndpoint) handlerMethod.getBean();
         return parametersProvider.getParameters(inboundEndpoint);
-//        List<ResolvedMethodParameter> parameters = new ArrayList<>();
-//        addRequestBodyParam(inboundEndpoint, parameters);
-//        addPathVariableParams(parameters);
-//        addRequestParamParams(inboundEndpoint, parameters);
-//        return parameters;
     }
-
-//    private void addRequestBodyParam(BaseHttpInboundEndpoint inboundEndpoint,
-//                                     List<ResolvedMethodParameter> parameters) {
-//        ResolvableType requestPayloadType = (ResolvableType) ReflectionUtils.getFieldVal(inboundEndpoint,
-//                "requestPayloadType", true);
-//        if (requestPayloadType != null) {
-//            ResolvedType parameterType = typeResolver.resolve(requestPayloadType.getType());
-//            Map<String, Object> requestBodyAttributes = new HashMap<>();
-//            RequestBody requestBodyAnnotation =
-//                    AnnotationUtils.synthesizeAnnotation(requestBodyAttributes,
-//                            RequestBody.class, null);
-//
-//            ResolvedMethodParameter body = new ResolvedMethodParameter(0, "body",
-//                    Collections.singletonList(requestBodyAnnotation), parameterType);
-//            parameters.add(body);
-//        }
-//    }
-//
-//    private void addPathVariableParams(List<ResolvedMethodParameter> parameters) {
-//
-//
-//        // TODO use streams:
-//        Set<String> patterns = requestMapping.getPatternsCondition()
-//                .getPatterns();
-//        for (String pattern : patterns) {
-//            UriTemplate uriTemplate = new UriTemplate(pattern);
-//            List<String> variableNames = uriTemplate.getVariableNames();
-//            for (String variableName : variableNames) {
-//                Map<String, Object> pathVariableAttributes = new HashMap<>();
-//                PathVariable pathVariableAnnotation =
-//                        AnnotationUtils.synthesizeAnnotation(pathVariableAttributes,
-//                                PathVariable.class, null);
-//
-//                ResolvedMethodParameter param = new ResolvedMethodParameter(0, variableName,
-//                        Collections.singletonList(pathVariableAnnotation), typeResolver.resolve(String.class));
-//                parameters.add(param);
-//            }
-//        }
-//    }
-//
-//
-//    private void addRequestParamParams(BaseHttpInboundEndpoint inboundEndpoint,
-//                                       List<ResolvedMethodParameter> parameters) {
-//        Expression payloadExpression = (Expression) ReflectionUtils.getFieldVal(inboundEndpoint,
-//                PAYLOAD_EXPRESSION, true);
-//        if (payloadExpression != null) {
-//            extractRequestParam(payloadExpression).ifPresent(
-//                    parameters::add);
-//        }
-//
-//        @SuppressWarnings("unchecked")
-//        Map<String, Expression> headerExpressions = (Map<String, Expression>) ReflectionUtils.getFieldVal(
-//                inboundEndpoint, HEADER_EXPRESSIONS, true);
-//
-//        if (headerExpressions != null) {
-//            for (Expression headerExpression : headerExpressions.values()) {
-//                extractRequestParam(headerExpression).ifPresent(parameters::add);
-//            }
-//        }
-//    }
-//
-//    private Optional<ResolvedMethodParameter> extractRequestParam(Expression expression) {
-//        ResolvedMethodParameter ret = null;
-//        String expressionString = expression.getExpressionString();
-//        SpelExpression spelExpression = parser.parseRaw(expressionString);
-//        SpelNode ast = spelExpression.getAST();
-//        SpelNode firstChild = ast.getChild(0); // possible #requestParams, VariableReference
-//        if (firstChild != null && REQUEST_PARAMS_EXPRESSION_CONTEXT_VARIABLE.equals(firstChild.toStringAST())) {
-//            String firstIndexer = ast.getChild(1)
-//                    .toStringAST();// ['value'] or value, Indexer
-//            String requestParamName = firstIndexer.replaceAll("^\\['|']", "");
-//            boolean required = requestParamName.equals(firstIndexer); // square brackets mean optional
-//            Map<String, Object> requestParamAttributes = new HashMap<>();
-//            requestParamAttributes.put("required", required);
-//            RequestParam requestParamAnnotation =
-//                    AnnotationUtils.synthesizeAnnotation(requestParamAttributes,
-//                            RequestParam.class, null);
-//
-//            ret = new ResolvedMethodParameter(0, requestParamName,
-//                    Collections.singletonList(requestParamAnnotation), typeResolver.resolve(String.class));
-//        }
-//        return Optional.ofNullable(ret);
-//    }
 
 }
