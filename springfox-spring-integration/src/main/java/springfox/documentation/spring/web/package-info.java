@@ -20,8 +20,8 @@
 /**
  * Adds support for Spring Integration Http inbound adapters and gateways.
  * <p>
- * Builds upon the springfox webmvc and webflux implementations, but uses Spring Integration http endpoint configurations to
- * create documentation. Spring Integration currently organizes the WebFlux/WebMvc split as follows.
+ * Builds upon the springfox webmvc and webflux implementations, but uses Spring Integration http endpoint
+ * configurations to create documentation. Spring Integration currently organizes the WebFlux/WebMvc split as follows.
  *
  * <ul>
  * <li>spring-integration-webflux pulls in spring-integration-http, but not spring-webmvc;
@@ -33,7 +33,9 @@
  * <p>
  * Key extension points:
  * <ul>
- * <li>SpringIntegrationDocumentationPluginBootstrapper bootstraps on ContextRefreshedEvent because that is when IntegrationRequestMappingHandlerMapping detects handler methods - as opposed to DocumentationPluginBootstrapper, which uses SmartLifecycle</li>
+ * <li>SpringIntegrationDocumentationPluginBootstrapper bootstraps on ContextRefreshedEvent because that is when
+ * IntegrationRequestMappingHandlerMapping detects handler methods - as opposed to DocumentationPluginBootstrapper,
+ * which uses SmartLifecycle.</li>
  * <li>WebFlux or WebMvc specific implementations are necessary to provide request handlers</li>
  * </ul>
  * <p>

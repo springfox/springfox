@@ -158,6 +158,7 @@ jar {
 ```
 ## Examples
 
-You can find example applications at [springfox-integration-webmvc](https://github.com/escalon/springfox-demos/tree/feature/spring-integration-support/springfox-integration-webmvc) and [springfox-integration-webflux](https://github.com/escalon/springfox-demos/tree/feature/spring-integration-support/springfox-integration-webflux).
+You can find an example application at 
+[springfox-integration-webmvc](https://github.com/springfox/springfox-demos/springfox-integration-webmvc).
 
 
