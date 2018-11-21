@@ -19,7 +19,6 @@ dependencies {
   compile project(':springfox-spring-webmvc')
   compile project(':springfox-spring-integration')
 
-  // provided libs.springProvidedWithFlux
   provided libs.clientProvidedServlet
 
   testCompile "javax.validation:validation-api:$validationApiVersion"
