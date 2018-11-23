@@ -73,7 +73,7 @@ Define the id of the inbound endpoint in the spring-integration Java DSL with a 
     public IntegrationFlow toLowerFlow() {
         return IntegrationFlows.from(
           WebFlux.inboundGateway("/conversions/lower")
-            .id("toLowerGateway")        // <-- id of endpoint
+            .id("toLowerGateway")                           // <-- id of endpoint
             .requestMapping(r -> r.methods(HttpMethod.POST)
               .consumes("application/json"))
             .requestPayloadType(Foo.class))
