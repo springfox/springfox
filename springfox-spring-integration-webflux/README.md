@@ -19,7 +19,7 @@ To enable springfox in your spring-integration application, add the following de
     </dependency>
     <dependency>
         <groupId>io.springfox</groupId>
-        <artifactId>springfox-spring-integration-webmvc</artifactId>
+        <artifactId>springfox-spring-integration-webflux</artifactId>
         <version>${springfox.version}</version>
     </dependency>
     <dependency>
