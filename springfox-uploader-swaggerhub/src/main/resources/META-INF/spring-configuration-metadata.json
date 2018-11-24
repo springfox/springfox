@@ -14,7 +14,7 @@
     {
       "name": "springfox.documentation.swaggerhub.owner",
       "type": "java.lang.String",
-      "description": "SWaggerHub account owner"
+      "description": "SwaggerHub account owner"
     }
   ]
 }
