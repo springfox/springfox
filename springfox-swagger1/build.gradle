@@ -1,5 +1,5 @@
 plugins {
-  id "net.ltgt.apt-idea" version "0.16"
+  id "net.ltgt.apt-idea" version "0.18"
 }
 
 ext {
@@ -25,7 +25,7 @@ sourceSets {
 
 // Define integration test task
 task integrationTest(type: Test) {
-  testClassesDir = sourceSets.integrationTest.output.classesDir
+  testClassesDirs = sourceSets.integrationTest.output.classesDirs
   classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
@@ -33,7 +33,7 @@ dependencies {
   compile libs.swagger2Core
   compile project(':springfox-spi')
   compile project(':springfox-schema')
-  compile project(':springfox-spring-web')
+  compile project(':springfox-spring-webmvc')
   compile project(':springfox-swagger-common')
   compile libs.core
   compile libs.spring
@@ -50,6 +50,7 @@ dependencies {
   testCompile project(':springfox-schema').sourceSets.test.output
   testCompile project(':springfox-swagger-common').sourceSets.test.output
   testCompile project(':springfox-spring-web').sourceSets.test.output
+  testCompile project(':springfox-spring-webmvc').sourceSets.test.output
   testCompile libs.test
 
   integrationTestCompile sourceSets.main.output

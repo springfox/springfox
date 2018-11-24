@@ -19,24 +19,29 @@
 
 package springfox.documentation.builders;
 
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Function;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ResponseMessageBuilder {
   private int code;
   private String message;
   private ModelReference responseModel;
-  private Map<String, Header> headers = newTreeMap();
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<Example> examples = new ArrayList<>();
+  private Map<String, Header> headers = new TreeMap<>();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   /**
    * Updates the http response code
@@ -72,6 +77,18 @@ public class ResponseMessageBuilder {
   }
 
   /**
+   * Updates the response examples
+   *
+   * @param examples response examples
+   * @return this
+   * @since 3.0.0
+   */
+  public ResponseMessageBuilder examples(List<Example> examples) {
+    this.examples.addAll(nullToEmptyList(examples));
+    return this;
+  }
+
+  /**
    * Updates the response headers
    *
    * @param headers header responses
@@ -81,18 +98,17 @@ public class ResponseMessageBuilder {
    */
   @Deprecated
   public ResponseMessageBuilder headers(Map<String, ModelReference> headers) {
-    this.headers.putAll(transformEntries(nullToEmptyMap(headers), toHeaderEntry()));
+    this.headers.putAll(nullToEmptyMap(headers).entrySet().stream().map(toHeaderEntry()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
     return this;
   }
 
-
-  private EntryTransformer<String, ModelReference, Header> toHeaderEntry() {
-    return new EntryTransformer<String, ModelReference, Header>() {
-      @Override
-      public Header transformEntry(String key, ModelReference value) {
-        return new Header(key, "", value);
-      }
-    };
+  private Function<Map.Entry<String, ModelReference>, Map.Entry<String, Header>> toHeaderEntry() {
+    return entry -> new AbstractMap.SimpleEntry<>(
+        entry.getKey(),
+        new Header(
+            entry.getKey(),
+            "",
+            entry.getValue()));
   }
 
   /**
@@ -120,6 +136,6 @@ public class ResponseMessageBuilder {
   }
 
   public ResponseMessage build() {
-    return new ResponseMessage(code, message, responseModel, headers, vendorExtensions);
+    return new ResponseMessage(code, message, responseModel, examples, headers, vendorExtensions);
   }
 }

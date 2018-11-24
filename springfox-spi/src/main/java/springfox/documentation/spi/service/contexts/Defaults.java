@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Optional;
-import com.google.common.collect.Ordering;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -40,20 +38,20 @@ import springfox.documentation.service.ResponseMessage;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
-import static java.util.Arrays.asList;
+import static java.util.Arrays.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.schema.AlternateTypeRules.*;
@@ -63,9 +61,9 @@ public class Defaults {
   private HashSet<Class> ignored;
   private LinkedHashMap<RequestMethod, List<ResponseMessage>> responses;
   private List<Class<? extends Annotation>> annotations;
-  private Ordering<Operation> operationOrdering;
-  private Ordering<ApiDescription> apiDescriptionOrdering;
-  private Ordering<ApiListingReference> apiListingReferenceOrdering;
+  private Comparator<Operation> operationOrdering;
+  private Comparator<ApiDescription> apiDescriptionOrdering;
+  private Comparator<ApiListingReference> apiListingReferenceOrdering;
 
   public Defaults() {
     init();
@@ -87,21 +85,21 @@ public class Defaults {
     return annotations;
   }
 
-  public Ordering<Operation> operationOrdering() {
+  public Comparator<Operation> operationOrdering() {
     return operationOrdering;
   }
 
 
-  public Ordering<ApiDescription> apiDescriptionOrdering() {
+  public Comparator<ApiDescription> apiDescriptionOrdering() {
     return apiDescriptionOrdering;
   }
 
-  public Ordering<ApiListingReference> apiListingReferenceOrdering() {
+  public Comparator<ApiListingReference> apiListingReferenceOrdering() {
     return apiListingReferenceOrdering;
   }
 
   public List<AlternateTypeRule> defaultRules(TypeResolver typeResolver) {
-    List<AlternateTypeRule> rules = newArrayList();
+    List<AlternateTypeRule> rules = new ArrayList<>();
     rules.add(newRule(typeResolver.resolve(Map.class), typeResolver.resolve(Object.class)));
     rules.add(newRule(typeResolver.resolve(Map.class, String.class, Object.class),
             typeResolver.resolve(Object.class)));
@@ -144,11 +142,9 @@ public class Defaults {
   private void maybeAddRuleForClassName(TypeResolver typeResolver, List<AlternateTypeRule> rules, String className,
                                         Class clazz) {
     Optional<? extends Class> fromClazz = ClassSupport.classByName(className);
-    if (fromClazz.isPresent()) {
-      rules.add(newRule(
-          typeResolver.resolve(fromClazz.get()),
-          typeResolver.resolve(clazz)));
-    }
+    fromClazz.ifPresent(aClass -> rules.add(newRule(
+        typeResolver.resolve(aClass),
+        typeResolver.resolve(clazz))));
   }
 
   private void init() {
@@ -159,33 +155,47 @@ public class Defaults {
   }
 
   private void initOrderings() {
-    operationOrdering = Ordering.from(Orderings.positionComparator()).compound(Orderings.nickNameComparator());
-    apiDescriptionOrdering = Ordering.from(Orderings.apiPathCompatator());
-    apiListingReferenceOrdering = Ordering.from(Orderings.listingPositionComparator()).compound(Orderings.listingReferencePathComparator());
+    operationOrdering = Orderings.positionComparator().thenComparing(Orderings.nickNameComparator());
+    apiDescriptionOrdering = Orderings.apiPathCompatator();
+    apiListingReferenceOrdering = Orderings.listingPositionComparator().thenComparing(Orderings.listingReferencePathComparator());
   }
 
   private void initExcludeAnnotations() {
-    annotations = new ArrayList<Class<? extends Annotation>>();
+    annotations = new ArrayList<>();
     annotations.add(ApiIgnore.class);
   }
 
   private void initIgnorableTypes() {
-    ignored = newHashSet();
-    ignored.add(ServletRequest.class);
+    ignored = new HashSet<>();
     ignored.add(Class.class);
     ignored.add(Void.class);
     ignored.add(Void.TYPE);
-    ignored.add(HttpServletRequest.class);
-    ignored.add(HttpServletResponse.class);
     ignored.add(HttpHeaders.class);
     ignored.add(BindingResult.class);
-    ignored.add(ServletContext.class);
     ignored.add(UriComponentsBuilder.class);
     ignored.add(ApiIgnore.class); //Used to ignore parameters
+
+    boolean exists = true;
+
+    try {
+      Class.forName("javax.servlet.ServletContext", false, this.getClass().getClassLoader());
+    } catch (ClassNotFoundException e) {
+      exists = false;
+    }
+
+    if (exists) {
+      ignored.add(ServletRequest.class);
+      ignored.add(ServletResponse.class);
+      ignored.add(HttpServletRequest.class);
+      ignored.add(HttpServletResponse.class);
+      ignored.add(ServletContext.class);
+    }
+
+
   }
 
   private void initResponseMessages() {
-    responses = newLinkedHashMap();
+    responses = new LinkedHashMap<>();
     responses.put(GET, asList(
             new ResponseMessageBuilder()
                     .code(OK.value())

@@ -19,16 +19,8 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import springfox.documentation.PathProvider;
 import springfox.documentation.builders.ApiListingBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.ApiDescription;
@@ -42,19 +34,29 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import static com.google.common.base.Predicates.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.stream.Collectors.*;
+import static java.util.stream.Stream.*;
+import static java.util.stream.StreamSupport.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 
 @Component
@@ -75,9 +77,9 @@ public class ApiListingScanner {
   }
 
   static Optional<String> longestCommonPath(List<ApiDescription> apiDescriptions) {
-    List<String> commons = newArrayList();
+    List<String> commons = new ArrayList<>();
     if (null == apiDescriptions || apiDescriptions.isEmpty()) {
-      return Optional.absent();
+      return empty();
     }
     List<String> firstWords = urlParts(apiDescriptions.get(0));
 
@@ -95,29 +97,34 @@ public class ApiListingScanner {
         commons.add(word);
       }
     }
-    Joiner joiner = Joiner.on("/").skipNulls();
-    return Optional.of("/" + joiner.join(commons));
+    return of("/" + String.join("/", commons.stream()
+        .filter(Objects::nonNull)
+        .collect(toList())));
   }
 
   static List<String> urlParts(ApiDescription apiDescription) {
-    return Splitter.on('/')
-        .omitEmptyStrings()
-        .trimResults()
-        .splitToList(apiDescription.getPath());
+    return Stream.of(apiDescription.getPath().split("\\/"))
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .map(String::trim)
+        .collect(toList());
   }
 
-  public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
-    final Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
+  public Map<String, List<ApiListing>> scan(ApiListingScanningContext context) {
+    final Map<String, List<ApiListing>> apiListingMap = new HashMap<>();
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
         = context.getRequestMappingsByResourceGroup();
     Collection<ApiDescription> additionalListings = pluginsManager.additionalListings(context);
-    Set<ResourceGroup> allResourceGroups = FluentIterable.from(collectResourceGroups(additionalListings))
-        .append(requestMappingsByResourceGroup.keySet())
-        .toSet();
+    Set<ResourceGroup> allResourceGroups =
+        concat(
+            stream(
+                collectResourceGroups(additionalListings).spliterator(),
+                false),
+            requestMappingsByResourceGroup.keySet().stream())
+            .collect(toSet());
 
-    List<SecurityReference> securityReferences = newArrayList();
+    List<SecurityReference> securityReferences = new ArrayList<>();
     for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
@@ -125,37 +132,37 @@ public class ApiListingScanner {
       Set<String> consumes = new LinkedHashSet<String>(documentationContext.getConsumes());
       String host = documentationContext.getHost();
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
-      Set<ApiDescription> apiDescriptions = newHashSet();
+      Set<ApiDescription> apiDescriptions = new HashSet<>();
 
       Map<String, Model> models = new LinkedHashMap<String, Model>();
-      List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
+      List<RequestMappingContext> requestMappings =
+          nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
+
       for (RequestMappingContext each : sortedByMethods(requestMappings)) {
         models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
-      List<ApiDescription> additional = from(additionalListings)
+      List<ApiDescription> additional = additionalListings.stream()
           .filter(
-              and(
-                  belongsTo(resourceGroup.getGroupName()),
-                  onlySelectedApis(documentationContext)))
-          .toList();
+              belongsTo(resourceGroup.getGroupName())
+                  .and(onlySelectedApis(documentationContext)))
+          .collect(toList());
       apiDescriptions.addAll(additional);
 
-      List<ApiDescription> sortedApis = FluentIterable.from(apiDescriptions)
-          .toSortedList(documentationContext.getApiDescriptionOrdering());
+      List<ApiDescription> sortedApis = apiDescriptions.stream()
+          .sorted(documentationContext.getApiDescriptionOrdering()).collect(toList());
 
       String resourcePath = new ResourcePathProvider(resourceGroup)
           .resourcePath()
-          .or(longestCommonPath(sortedApis))
-          .orNull();
+          .orElse(
+              longestCommonPath(sortedApis)
+                  .orElse(null));
 
-      PathProvider pathProvider = documentationContext.getPathProvider();
-      String basePath = pathProvider.getApplicationBasePath();
       PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
           .apiVersion(documentationContext.getApiInfo().getVersion())
-          .basePath(adjuster.adjustedPath(basePath))
+          .basePath(adjuster.adjustedPath(ROOT))
           .resourcePath(resourcePath)
           .produces(produces)
           .consumes(consumes)
@@ -171,21 +178,17 @@ public class ApiListingScanner {
           context.getDocumentationType(),
           resourceGroup,
           apiListingBuilder);
-      apiListingMap.put(resourceGroup.getGroupName(), pluginsManager.apiListing(apiListingContext));
+      apiListingMap.putIfAbsent(resourceGroup.getGroupName(), new LinkedList<>());
+      apiListingMap.get(resourceGroup.getGroupName()).add(pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;
   }
 
   private Predicate<ApiDescription> onlySelectedApis(final DocumentationContext context) {
-    return new Predicate<ApiDescription>() {
-      @Override
-      public boolean apply(ApiDescription input) {
-        return context.getApiSelector().getPathSelector().apply(input.getPath());
-      }
-    };
+    return input -> context.getApiSelector().getPathSelector().test(input.getPath());
   }
 
   private Iterable<RequestMappingContext> sortedByMethods(List<RequestMappingContext> contexts) {
-    return from(contexts).toSortedList(methodComparator());
+    return contexts.stream().sorted(methodComparator()).collect(toList());
   }
 }

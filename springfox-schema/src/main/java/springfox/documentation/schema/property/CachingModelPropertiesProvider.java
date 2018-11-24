@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +20,6 @@ package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,40 +29,36 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
 
 @Component
 @Qualifier("cachedModelProperties")
 public class CachingModelPropertiesProvider implements ModelPropertiesProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelPropertiesProvider.class);
-  private final LoadingCache<ModelContext, List<ModelProperty>> cache;
+  private final Map<ModelContext, List<ModelProperty>> cache;
+  private final Function<ModelContext, List<ModelProperty>> lookup;
 
   @Autowired
   public CachingModelPropertiesProvider(
       final TypeResolver resolver,
       @Qualifier("optimized") final ModelPropertiesProvider delegate) {
-    cache = CacheBuilder.newBuilder()
-        .maximumSize(1000)
-        .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(
-            new CacheLoader<ModelContext, List<ModelProperty>>() {
-              public List<ModelProperty> load(ModelContext key) {
-                return delegate.propertiesFor(key.resolvedType(resolver), key);
-              }
-            });
+    cache = new HashMap<>();
+    lookup = (key) -> delegate.propertiesFor(key.resolvedType(resolver), key);
   }
 
   @Override
   public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
     try {
-      return cache.get(givenContext);
+      return cache.computeIfAbsent(givenContext, lookup);
     } catch (Exception e) {
       LOGGER.warn("Exception calculating properties for model({}) -> {}. {}",
           type, givenContext.description(), e.getMessage());
-      return newArrayList();
+      return new ArrayList<>();
     }
   }
 

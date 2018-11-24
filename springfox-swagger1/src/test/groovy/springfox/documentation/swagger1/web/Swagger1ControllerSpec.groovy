@@ -19,8 +19,6 @@
 
 package springfox.documentation.swagger1.web
 
-import com.google.common.collect.LinkedListMultimap
-import com.google.common.collect.Multimap
 import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.web.util.WebUtils
@@ -31,7 +29,7 @@ import springfox.documentation.service.Documentation
 import springfox.documentation.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.PropertySourcedMapping
-import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping
+import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping
 import springfox.documentation.spring.web.json.JsonSerializer
 import springfox.documentation.spring.web.mixins.ApiListingSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
@@ -46,8 +44,6 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletRequest
-
-import static com.google.common.collect.Maps.*
 
 @Mixin([ApiListingSupport, AuthSupport])
 class Swagger1ControllerSpec extends DocumentationContextSpec
@@ -65,8 +61,8 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
   def setup() {
     listingReferenceScanner = Mock(ApiListingReferenceScanner)
     listingScanner = Mock(ApiListingScanner)
-    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(newHashMap())
-    listingScanner.scan(_) >> LinkedListMultimap.create()
+    listingReferenceScanner.scan(_) >> new ApiListingReferenceScanResult(new HashMap<>())
+    listingScanner.scan(_) >> new HashMap<>()
   }
 
   @Unroll
@@ -89,7 +85,7 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
     given:
       def env = Mock(Environment)
       env.getProperty("springfox.documentation.swagger.v1.path") >> "shoes"
-      def handler = new PropertySourcedRequestMappingHandlerMapping(env, null)
+      def handler = new WebMvcPropertySourcedRequestMappingHandlerMapping(env, null)
       def method = Swagger1Controller.getMethod("getApiListing", String, String, HttpServletRequest)
       def annotation = method.getAnnotation(PropertySourcedMapping)
     when:
@@ -100,8 +96,8 @@ class Swagger1ControllerSpec extends DocumentationContextSpec
 
   def "should respond with api listing for a given resource group"() {
     given:
-      Multimap<String, ApiListing> listings = LinkedListMultimap.<String, ApiListing>create()
-      listings.put('businesses', apiListing())
+      Map<String, List<ApiListing>> listings = new HashMap<>()
+      listings.put('businesses', Arrays.asList(apiListing()))
     and:
       Documentation group = new DocumentationBuilder()
               .name("groupName")

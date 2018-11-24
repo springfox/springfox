@@ -1,3 +1,21 @@
+/*
+ *
+ *  Copyright 2017-2019 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
 package springfox.documentation.swagger1.web
 
 import org.springframework.http.MediaType
@@ -6,7 +24,7 @@ import springfox.documentation.swagger1.dto.ApiListing
 import springfox.documentation.swagger1.dto.ModelDto
 import springfox.documentation.swagger1.dto.ModelPropertyDto
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 
 class ApiListingMergerSpec extends Specification {
 
@@ -16,12 +34,12 @@ class ApiListingMergerSpec extends Specification {
     then:
       !merged.isPresent()
     where:
-      apiListings << [newArrayList(), null]
+      apiListings << [new ArrayList<>(), null]
   }
 
   def "it returns api listing absent when collection has one element"(){
     when:
-      def merged = ApiListingMerger.mergedApiListing(newArrayList(Mock(ApiListing)))
+      def merged = ApiListingMerger.mergedApiListing(singletonList(Mock(ApiListing)))
     then:
       merged.isPresent()
   }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,14 +20,13 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
@@ -41,11 +40,13 @@ import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner;
 
-import javax.servlet.ServletContext;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
@@ -81,7 +82,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
       ApiDocumentationScanner resourceListing,
       TypeResolver typeResolver,
       Defaults defaults,
-      ServletContext servletContext,
+      PathProvider pathProvider,
       Environment environment) {
 
     this.documentationPluginsManager = documentationPluginsManager;
@@ -89,7 +90,7 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
     this.scanned = scanned;
     this.resourceListing = resourceListing;
     this.environment = environment;
-    this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, servletContext);
+    this.defaultConfiguration = new DefaultConfiguration(defaults, typeResolver, pathProvider);
   }
 
   private DocumentationContext buildContext(DocumentationPlugin each) {
@@ -106,38 +107,24 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
 
   private DocumentationContextBuilder defaultContextBuilder(DocumentationPlugin plugin) {
     DocumentationType documentationType = plugin.getDocumentationType();
-    List<RequestHandler> requestHandlers = from(handlerProviders)
-        .transformAndConcat(handlers())
-        .toList();
-    List<AlternateTypeRule> rules = from(nullToEmptyList(typeConventions))
-          .transformAndConcat(toRules())
-          .toList();
+    List<RequestHandler> requestHandlers = handlerProviders.stream()
+        .map(handlers()).flatMap((handle) -> StreamSupport.stream(handle.spliterator(), false))
+        .collect(toList());
+    List<AlternateTypeRule> rules = nullToEmptyList(typeConventions).stream()
+          .map(AlternateTypeRuleConvention::rules).flatMap((rule) -> StreamSupport.stream(rule.spliterator(), false))
+          .collect(toList());
     return documentationPluginsManager
         .createContextBuilder(documentationType, defaultConfiguration)
         .rules(rules)
         .requestHandlers(combiner().combine(requestHandlers));
   }
 
-  private Function<AlternateTypeRuleConvention, List<AlternateTypeRule>> toRules() {
-    return new Function<AlternateTypeRuleConvention, List<AlternateTypeRule>>() {
-      @Override
-      public List<AlternateTypeRule> apply(AlternateTypeRuleConvention input) {
-        return input.rules();
-      }
-    };
-  }
-
   private RequestHandlerCombiner combiner() {
-    return Optional.fromNullable(combiner).or(new DefaultRequestHandlerCombiner());
+    return ofNullable(combiner).orElse(new DefaultRequestHandlerCombiner());
   }
 
   private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
-    return new Function<RequestHandlerProvider, Iterable<RequestHandler>>() {
-      @Override
-      public Iterable<RequestHandler> apply(RequestHandlerProvider input) {
-        return input.requestHandlers();
-      }
-    };
+    return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) RequestHandlerProvider::requestHandlers;
   }
 
   @Override
@@ -158,8 +145,8 @@ public class DocumentationPluginsBootstrapper implements SmartLifecycle {
   public void start() {
     if (initialized.compareAndSet(false, true)) {
       log.info("Context refreshed");
-      List<DocumentationPlugin> plugins = pluginOrdering()
-          .sortedCopy(documentationPluginsManager.documentationPlugins());
+      List<DocumentationPlugin> plugins = StreamSupport.stream(documentationPluginsManager.documentationPlugins().spliterator(), false)
+          .sorted(pluginOrdering()).collect(toList());
       log.info("Found {} custom documentation plugin(s)", plugins.size());
       for (DocumentationPlugin each : plugins) {
         DocumentationType documentationType = each.getDocumentationType();

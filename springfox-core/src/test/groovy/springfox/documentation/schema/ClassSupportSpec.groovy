@@ -19,7 +19,7 @@ class ClassSupportSpec extends Specification {
       expectedFound == found.isPresent()
     where:
       name                                | expectedFound
-      "com.google.common.base.Optional"   | true
+      "java.util.Optional"   | true
       "java.util.NonExistent"             | false
   }
 

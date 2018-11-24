@@ -82,7 +82,7 @@ The docs are generated in the `build/all-docs` folder. To publish the current do
 [source,bash]
 [subs="verbatim,attributes"]
 ----
-./gradlew publishDocs
+./gradlew releaseDocs
 ----
 
 ==== Updating the contract tests
@@ -108,11 +108,22 @@ To release a non-snapshot version of Springfox:
 
 - Execute the the release commands:
 The below environment variables are required to run a release:
-    - `GITHUB_TOKEN`
-    - `BINTRAY_USER_NAME`
-    - `BINTRAY_PASSWORD`
+    - `GITHUB_TOKEN` - this is the github token
+    - `BINTRAY_USER_NAME` - this is your bintray user
+    - `BINTRAY_PASSWORD` - this is your bintray token
     - `SONATYPE_USER_NAME`
     - `SONATYPE_PASSWORD`
+    - `GPG_PASSPHRASE` - if your gpg key has a passphrase or ''
+    - `SONATYPE_SYNC` - automatically sync to maven central
+
+Alternatively you could set the following gradle/project properties (-Pproperty)
+    - `githubToken` - this is the github token
+    - `bintrayUsername` - this is your bintray user
+    - `bintrayApiKey` - this is your bintray token
+    - `gpgPassphrase` - if your gpg key has a passphrase or ''
+    - `ossUser`
+    - `ossPassword`
+    - `ossSync` - automatically sync to maven central
 
 
 Recommend using [autoenv](https://github.com/kennethreitz/autoenv) with a `.env` file at the root of the repo.
@@ -120,8 +131,8 @@ Recommend using [autoenv](https://github.com/kennethreitz/autoenv) with a `.env`
 [source,]
 [subs="verbatim,attributes"]
 ----
-    ./gradlew release -PreleaseType=<MAJOR|MINOR|PATCH> -i
-    ./gradlew publishDocs
+    ./gradlew clean build release [-PreleaseType=<MAJOR|MINOR|PATCH>]
+    ./gradlew releaseDocs
 ----
 
 The release steps are as follows:

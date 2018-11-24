@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,26 +20,24 @@
 package springfox.documentation.spi.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 import springfox.documentation.schema.AlternateTypeRule;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.*;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 
 public class AlternateTypeProvider {
-  private List<AlternateTypeRule> rules = newArrayList();
+  private List<AlternateTypeRule> rules = new ArrayList<>();
 
   public AlternateTypeProvider(List<AlternateTypeRule> alternateTypeRules) {
     rules.addAll(alternateTypeRules);
   }
 
   public ResolvedType alternateFor(ResolvedType type) {
-    Optional<AlternateTypeRule> matchingRule = FluentIterable.from(rules)
-            .firstMatch(thatAppliesTo(type));
+    Optional<AlternateTypeRule> matchingRule = rules.stream()
+            .filter(thatAppliesTo(type)).findFirst();
     if (matchingRule.isPresent()) {
       return matchingRule.get().alternateFor(type);
     }
@@ -51,11 +49,6 @@ public class AlternateTypeProvider {
   }
 
   private Predicate<AlternateTypeRule> thatAppliesTo(final ResolvedType type) {
-    return new Predicate<AlternateTypeRule>() {
-      @Override
-      public boolean apply(AlternateTypeRule input) {
-        return input.appliesTo(type);
-      }
-    };
+    return input -> input.appliesTo(type);
   }
 }

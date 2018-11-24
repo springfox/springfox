@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -34,7 +34,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
     expect:
       typeNameExtractor.typeName(context) == name
 
@@ -58,7 +58,7 @@ class TypeNameExtractorSpec extends SchemaSpecification {
           SWAGGER_12,
           alternateTypeProvider(),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
     expect:
       typeNameExtractor.typeName(context) == name
 

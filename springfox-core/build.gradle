@@ -18,4 +18,5 @@ dependencies {
   provided libs.clientProvided
 
   testCompile libs.test
+  testCompile libs.clientProvidedServlet
 }

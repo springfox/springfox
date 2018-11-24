@@ -1,8 +1,11 @@
 rootProject.name = 'springfox'
+enableFeaturePreview('STABLE_PUBLISHING')
 include 'springfox-core'
 include 'springfox-spi'
 include 'springfox-schema'
 include 'springfox-spring-web'
+include 'springfox-spring-webmvc'
+include 'springfox-spring-webflux'
 include 'springfox-swagger-common'
 include 'springfox-swagger1'
 include 'springfox-swagger2'
@@ -10,10 +13,11 @@ include 'springfox-bean-validators'
 include 'springfox-data-rest'
 include 'springfox-swagger-ui'
 include 'springfox-petstore'
+include 'springfox-petstore-webflux'
+include 'springfox-uploader'
+include 'springfox-uploader-swaggerhub'
 
 // Auxiliary projects that are not published
 include 'springfox-spring-config'
 include 'swagger-contract-tests'
-include 'springfox-uploader'
-include 'springfox-uploader-swaggerhub'
-
+include 'swagger-contract-tests-webflux'

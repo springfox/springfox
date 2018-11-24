@@ -1,0 +1,23 @@
+ext {
+  jdkVersion = 1.8
+}
+compileJava.options.encoding = 'UTF-8'
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+}
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile libs.spring
+  compile libs.springProvided
+  compile libs.swagger2Core
+  compile libs.core
+  compile project(':springfox-spi')
+  compile project(':springfox-core')
+  compile project(':springfox-spring-webflux')
+}

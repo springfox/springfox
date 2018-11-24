@@ -16,18 +16,20 @@
  *
  *
  */
+
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.service.ResourceGroup;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static java.util.Optional.*;
 
 class ResourcePathProvider {
   private final ResourceGroup resourceGroup;
@@ -37,29 +39,28 @@ class ResourcePathProvider {
   }
 
   public Optional<String> resourcePath() {
-    return Optional.fromNullable(
-        Strings.emptyToNull(controllerClass()
-            .transform(resourcePathExtractor())
-            .or("")));
+    return ofNullable(
+        controllerClass()
+            .map(resourcePathExtractor())
+            .filter(((Predicate<String>)String::isEmpty).negate())
+            .orElse(null));
   }
 
   private Function<Class<?>, String> resourcePathExtractor() {
-    return new Function<Class<?>, String>() {
-      @Override
-      public String apply(Class<?> input) {
-        String path = Iterables.getFirst(Arrays.asList(paths(input)), "");
-        if (Strings.isNullOrEmpty(path)) {
-          return "";
-        }
-        if (path.startsWith("/")) {
-          return path;
-        }
-        return "/" + path;
+    return input -> {
+      Optional<String> path = Arrays.stream(paths(input))
+          .findFirst().filter(((Predicate<String>)String::isEmpty)
+              .negate());
+      if (!path.isPresent()) {
+        return "";
       }
+      if (path.get().startsWith("/")) {
+        return path.get();
+      }
+      return "/" + path.get();
     };
   }
 
-  @VisibleForTesting
   String[] paths(Class<?> controller) {
     RequestMapping annotation
         = AnnotationUtils.findAnnotation(controller, RequestMapping.class);

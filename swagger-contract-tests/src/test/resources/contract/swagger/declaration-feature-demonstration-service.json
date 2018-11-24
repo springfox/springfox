@@ -296,12 +296,12 @@
             "path": "/features"
         },
         {
-            "description": "findIdentityById",
+            "description": "findById",
             "operations": [
                 {
                     "method": "GET",
-                    "summary": "findIdentityById",
-                    "nickname": "findIdentityByIdUsingGET",
+                    "summary": "findById",
+                    "nickname": "findByIdUsingGET",
                     "produces": [
                         "application/vnd.com.pet+json",
                         "application/vnd.com.fancy-pet+json"
@@ -323,7 +323,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "Pet"
+                            "responseModel": "FancyPet"
                         },
                         {
                             "code": 401,
@@ -339,7 +339,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "Pet"
+                    "type": "FancyPet"
                 }
             ],
             "path": "/features/1367/{itemId}"
@@ -600,6 +600,52 @@
                 }
             ],
             "path": "/features/1490/{itemId}"
+        },
+        {
+            "description": "saveUser",
+            "operations": [
+                {
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "deprecated": "false",
+                    "method": "POST",
+                    "nickname": "saveUserUsingPOST",
+                    "parameters": [],
+                    "produces": [
+                        "*/*"
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "OK"
+                        },
+                        {
+                            "code": 201,
+                            "message": "Created"
+                        },
+                        {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        },
+                        {
+                            "code": 403,
+                            "message": "Forbidden"
+                        },
+                        {
+                            "code": 404,
+                            "message": "User not found"
+                        },
+                        {
+                            "code": 405,
+                            "message": "Validation exception"
+                        }
+                    ],
+                    "summary": "Demo using examples",
+                    "type": "void"
+                }
+            ],
+            "path": "/features/1570"
         },
         {
             "description": "addFiles",
@@ -1974,6 +2020,16 @@
                 }
             }
         },
+        "Category": {
+            "description": "",
+            "id": "Category",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
         "ModelWithMapProperty": {
             "description": "Describes model with map property",
             "id": "ModelWithMapProperty",
@@ -1988,6 +2044,107 @@
         "ObjectNode": {
             "description": "",
             "id": "ObjectNode",
+            "properties": {
+                "array": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "bigDecimal": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "bigInteger": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "binary": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "boolean": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "containerNode": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "double": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "float": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "floatingPointNumber": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "int": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "integralNumber": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "long": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "missingNode": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "nodeType": {
+                    "enum": [
+                        "ARRAY",
+                        "BINARY",
+                        "BOOLEAN",
+                        "MISSING",
+                        "NULL",
+                        "NUMBER",
+                        "OBJECT",
+                        "POJO",
+                        "STRING"
+                    ],
+                    "required": false,
+                    "type": "string"
+                },
+                "null": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "number": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "object": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "pojo": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "short": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "textual": {
+                    "required": false,
+                    "type": "boolean"
+                },
+                "valueNode": {
+                    "required": false,
+                    "type": "boolean"
+                }
+            }
+        },
+        "InputStream": {
+            "description": "",
+            "id": "InputStream",
             "properties": {
                 
             }
@@ -2155,6 +2312,32 @@
             "id": "EnumObjectType",
             "properties": {
                 "description": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "FancyPet": {
+            "description": "",
+            "id": "FancyPet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "categories": {
+                    "required": false,
+                    "items": {
+                        "type": "Category"
+                    },
+                    "type": "array"
+                },
+                "id": {
                     "required": false,
                     "type": "string"
                 },

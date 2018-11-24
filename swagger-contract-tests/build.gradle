@@ -1,6 +1,18 @@
-plugins {
-  id 'org.springframework.boot' version '1.5.11.RELEASE'
+buildscript {
+  ext {
+    springBootVersion = '2.0.3.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
 }
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 repositories {
   jcenter()
@@ -14,8 +26,12 @@ apply plugin: 'org.springframework.boot'
 configurations {
   //Logback causing spring boot errors
   all*.exclude group: 'ch.qos.logback'
+  //Making sure we don't clash on the classpath as two controllers would be loaded
+  all*.exclude group: 'org.springframework', module: 'spring-webflux'
+  all*.exclude group: 'io.springfox', module: 'springfox-spring-webflux'
 }
 
+ext['groovy.version'] = '2.5.0'
 ext {
   limits = [
       'instruction': 89.5,
@@ -43,6 +59,7 @@ dependencies {
   compile project(':springfox-petstore')
   compile project(':springfox-bean-validators')
   compile project(':springfox-spring-web').sourceSets.test.output
+  compile project(':springfox-spring-webmvc').sourceSets.test.output
 
 
   compile(project(path: ':springfox-swagger-ui')) {

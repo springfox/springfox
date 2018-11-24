@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,18 +21,18 @@ package springfox.documentation.builders;
 
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.ResourceListing;
+import springfox.documentation.service.SecurityScheme;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ResourceListingBuilder {
   private String apiVersion;
-  private List<ApiListingReference> apis = newArrayList();
-  private List<SecurityScheme> securitySchemes = newArrayList();
+  private List<ApiListingReference> apis = new ArrayList<>();
+  private List<SecurityScheme> securitySchemes = new ArrayList<>();
   private ApiInfo info;
 
   /**

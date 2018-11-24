@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,64 +34,63 @@ import springfox.documentation.spring.web.scanners.ApiDescriptionLookup
 import springfox.documentation.spring.web.scanners.ApiDescriptionReader
 import springfox.documentation.swagger1.mixins.SwaggerPathProviderSupport
 
-import javax.servlet.ServletContext
-
 import static springfox.documentation.spring.web.paths.Paths.*
 
 @Mixin([RequestMappingSupport, SwaggerPathProviderSupport, ServicePluginsSupport])
 class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
 
-   def "should generate an api description for each request mapping pattern"() {
-      given:
-        def operationReader = Mock(ApiOperationReader)
-        ApiDescriptionReader sut =
-            new ApiDescriptionReader(operationReader, defaultWebPlugins(), new ApiDescriptionLookup())
-      and:
-        plugin.pathProvider(pathProvider)
-        RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
-                [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
-        )
-        RequestMappingContext mappingContext = new RequestMappingContext(
-            documentationContext(),
-            new WebMvcRequestHandler(
-                new HandlerMethodResolver(new TypeResolver()),
-                requestMappingInfo,
-                dummyHandlerMethod()))
-        operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
-      when:
-        def descriptionList = sut.read(mappingContext)
+  def "should generate an api description for each request mapping pattern"() {
+    given:
+    def operationReader = Mock(ApiOperationReader)
+    ApiDescriptionReader sut =
+        new ApiDescriptionReader(operationReader, defaultWebPlugins(), new ApiDescriptionLookup())
+    and:
+    plugin.pathProvider(pathProvider)
+    RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
+        [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
+    )
+    RequestMappingContext mappingContext = new RequestMappingContext(
+        documentationContext(),
+        new WebMvcRequestHandler(
+            ROOT,
+            new HandlerMethodResolver(new TypeResolver()),
+            requestMappingInfo,
+            dummyHandlerMethod()))
+    operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
+    when:
+    def descriptionList = sut.read(mappingContext)
 
-      then:
-        descriptionList.size() == 2
+    then:
+    descriptionList.size() == 2
 
-        ApiDescription apiDescription = descriptionList[0]
-        ApiDescription secondApiDescription = descriptionList[1]
+    ApiDescription apiDescription = descriptionList[0]
+    ApiDescription secondApiDescription = descriptionList[1]
 
-        apiDescription.getPath() == '/somePath/{businessId}'
-        apiDescription.getDescription() == dummyHandlerMethod().method.name
+    apiDescription.getPath() == '/somePath/{businessId}'
+    apiDescription.getDescription() == dummyHandlerMethod().method.name
 
-        secondApiDescription.getPath() == '/somePath/{businessId}'
-        secondApiDescription.getDescription() == dummyHandlerMethod().method.name
+    secondApiDescription.getPath() == '/somePath/{businessId}'
+    secondApiDescription.getDescription() == dummyHandlerMethod().method.name
 
-      where:
-        pathProvider                                      | prefix
-        relativeSwaggerPathProvider(Mock(ServletContext)) | ""
-   }
+    where:
+    pathProvider                  | prefix
+    relativeSwaggerPathProvider() | ""
+  }
 
-   def "should sanitize request mapping endpoints"() {
-      expect:
-        sanitizeRequestMappingPattern(mappingPattern) == expected
+  def "should sanitize request mapping endpoints"() {
+    expect:
+    sanitizeRequestMappingPattern(mappingPattern) == expected
 
-      where:
-        mappingPattern             | expected
-        ""                         | "/"
-        "/"                        | "/"
-        "/businesses"              | "/businesses"
-        "/{businessId:\\w+}"       | "/{businessId}"
-        "/businesses/{businessId}" | "/businesses/{businessId}"
-        "/foo/bar:{baz}"           | "/foo/bar:{baz}"
-        "/foo:{foo}/bar:{baz}"     | "/foo:{foo}/bar:{baz}"
-        "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
+    where:
+    mappingPattern             | expected
+    ""                         | "/"
+    "/"                        | "/"
+    "/businesses"              | "/businesses"
+    "/{businessId:\\w+}"       | "/{businessId}"
+    "/businesses/{businessId}" | "/businesses/{businessId}"
+    "/foo/bar:{baz}"           | "/foo/bar:{baz}"
+    "/foo:{foo}/bar:{baz}"     | "/foo:{foo}/bar:{baz}"
+    "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
 
-   }
+  }
 }

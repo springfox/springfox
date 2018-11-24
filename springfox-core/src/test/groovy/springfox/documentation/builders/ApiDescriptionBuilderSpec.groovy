@@ -19,15 +19,15 @@
 
 package springfox.documentation.builders
 
-import com.google.common.base.Function
-import com.google.common.collect.Ordering
 import spock.lang.Specification
 import springfox.documentation.service.Operation
+
+import java.util.function.Function
 
 class ApiDescriptionBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
-      def orderingMock = Mock(Ordering)
+      def orderingMock = Mock(Comparator)
       def sut = new ApiDescriptionBuilder(orderingMock)
     and:
       orderingMock.sortedCopy(value) >> value
@@ -53,7 +53,7 @@ class ApiDescriptionBuilderSpec extends Specification {
 
   def "Setting properties on the builder with null values preserves previous value"() {
     given:
-      def orderingMock = Mock(Ordering)
+      def orderingMock = Mock(Comparator)
       def sut = new ApiDescriptionBuilder(orderingMock)
     and:
       orderingMock.sortedCopy(value) >> value

@@ -18,13 +18,15 @@
  */
 package springfox.documentation.spring.web.paths;
 
-import com.google.common.base.Function;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
+
+import java.util.function.Function;
 
 import static springfox.documentation.spring.web.paths.Paths.*;
 
@@ -33,12 +35,7 @@ import static springfox.documentation.spring.web.paths.Paths.*;
 class PathSanitizer implements PathDecorator {
   @Override
   public Function<String, String> decorator(PathContext context) {
-    return new Function<String, String>() {
-      @Override
-      public String apply(String input) {
-        return removeAdjacentForwardSlashes(sanitizeRequestMappingPattern(input));
-      }
-    };
+    return input -> removeAdjacentForwardSlashes(sanitizeRequestMappingPattern(input));
   }
 
   @Override

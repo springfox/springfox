@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
  *
  *
  */
+
 package springfox.documentation.swagger.web;
 
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+
+import static java.util.Optional.*;
 
 @Controller
 @ApiIgnore
@@ -50,20 +52,20 @@ public class ApiResourceController {
   @RequestMapping(value = "/configuration/security")
   @ResponseBody
   public ResponseEntity<SecurityConfiguration> securityConfiguration() {
-    return new ResponseEntity<SecurityConfiguration>(
-        Optional.fromNullable(securityConfiguration).or(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
+    return new ResponseEntity<>(
+        ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping(value = "/configuration/ui")
   @ResponseBody
   public ResponseEntity<UiConfiguration> uiConfiguration() {
-    return new ResponseEntity<UiConfiguration>(
-        Optional.fromNullable(uiConfiguration).or(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
+    return new ResponseEntity<>(
+        ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
   }
 
   @RequestMapping
   @ResponseBody
   public ResponseEntity<List<SwaggerResource>> swaggerResources() {
-    return new ResponseEntity<List<SwaggerResource>>(swaggerResources.get(), HttpStatus.OK);
+    return new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK);
   }
 }

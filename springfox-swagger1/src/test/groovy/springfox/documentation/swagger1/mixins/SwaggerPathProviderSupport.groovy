@@ -19,13 +19,11 @@
 
 package springfox.documentation.swagger1.mixins
 
-import springfox.documentation.spring.web.paths.RelativePathProvider
-
-import javax.servlet.ServletContext
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 
 @SuppressWarnings("GrMethodMayBeStatic")
 class SwaggerPathProviderSupport {
-  RelativePathProvider relativeSwaggerPathProvider(ServletContext servletContext) {
-    new RelativePathProvider(servletContext)
+  DefaultPathProvider relativeSwaggerPathProvider() {
+    new DefaultPathProvider()
   }
 }
