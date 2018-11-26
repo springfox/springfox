@@ -17,9 +17,7 @@ dependencies {
 
     provided libs.springProvided
     provided libs.clientProvided
-    provided "org.reflections:reflections:$reflections"
 
-    testCompile "javax.validation:validation-api:$validationApiVersion"
     testCompile libs.test
     testCompile libs.swagger2Core
     testCompile project(':springfox-spring-web').sourceSets.test.output
