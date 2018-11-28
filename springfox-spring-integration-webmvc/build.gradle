@@ -24,6 +24,7 @@ dependencies {
   testCompile "javax.validation:validation-api:$validationApiVersion"
   testCompile project(':springfox-core')
   testCompile project(':springfox-spring-web').sourceSets.test.output
+  testCompile libs.springProvidedWithSpringIntegration
   testCompile libs.test
   testCompile libs.swagger2Core
   testCompile project(':springfox-core').sourceSets.test.output
