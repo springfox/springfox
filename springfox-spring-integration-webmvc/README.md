@@ -78,7 +78,7 @@ Define the id of the inbound endpoint in the spring-integration Java DSL with a 
                         .requestMapping(r -> r.methods(HttpMethod.POST)
                                 .consumes("application/json"))
                         .requestPayloadType(Foo.class)
-                        .id("toLowerGateway"))        // <-- id of endpoint
+                        .id("toLowerGateway"))            // <-- id of endpoint
                 .<Foo>handle((p, h) -> new Foo(p.getBar()
                         .toLowerCase()))
                 .get();
@@ -103,8 +103,8 @@ This allows Springfox to collect all spring-restdocs snippets which belong to a 
 Note that the OpenApi 2.0 Specification allows only [one example per response code and media-type](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#responseObject). 
 Starting from OpenApi 3.0 this will [change](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#media-type-object), but Springfox does not support that version yet.
 Therefore, if you have more than one test with a response having the same status code and media-type, Springfox's 
-internal data structure does maintain all examples correctly, but the Swagger2 dccumentation will only 
-use the first example.
+internal data structure does maintain all examples correctly, but the Swagger2 documentation will only 
+use the last example.
 
 
 Spring-Restdocs records request and response snippets during test execution, by default to the 
