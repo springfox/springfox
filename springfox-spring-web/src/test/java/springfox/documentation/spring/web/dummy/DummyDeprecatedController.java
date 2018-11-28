@@ -19,14 +19,13 @@
 
 package springfox.documentation.spring.web.dummy;
 
-import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Api(value = "Group name", position = 2)
-public class DummyController {
+@Deprecated
+public class DummyDeprecatedController {
 
   public void dummyMethod() {
-    //just a dummy method for testing
+
   }
 }
