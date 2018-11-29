@@ -18,75 +18,67 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.integration.webflux.inbound.WebFluxIntegrationRequestMappingHandlerMapping;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
+import org.springframework.web.reactive.result.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
-import springfox.documentation.spring.web.WebMvcRequestHandler;
+import springfox.documentation.spring.web.SpringIntegrationWebFluxRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
-import javax.servlet.ServletContext;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
-import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
-public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
-  private final List<RequestMappingInfoHandlerMapping> handlerMappings;
+@Order
+public class SpringIntegrationWebFluxRequestHandlerProvider implements RequestHandlerProvider {
+  private final List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings;
   private final HandlerMethodResolver methodResolver;
-  private final String contextPath;
+  private SpringIntegrationParametersProvider parametersProvider;
 
   @Autowired
-  public WebMvcRequestHandlerProvider(
-      Optional<ServletContext> servletContext,
+  public SpringIntegrationWebFluxRequestHandlerProvider(
       HandlerMethodResolver methodResolver,
-      List<RequestMappingInfoHandlerMapping> handlerMappings) {
+      List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings,
+      SpringIntegrationParametersProvider parametersProvider) {
     this.handlerMappings = handlerMappings;
     this.methodResolver = methodResolver;
-    this.contextPath = servletContext
-        .map(ServletContext::getContextPath)
-        .orElse(ROOT);
+    this.parametersProvider = parametersProvider;
   }
 
   @Override
   public List<RequestHandler> requestHandlers() {
     return nullToEmptyList(handlerMappings).stream()
-        .filter(requestMappingInfoHandlerMapping ->
-            !("org.springframework.integration.http.inbound.IntegrationRequestMappingHandlerMapping"
-                  .equals(requestMappingInfoHandlerMapping.getClass()
-                      .getName())))
         .map(toMappingEntries())
-        .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+        .flatMap((Collection::stream))
         .map(toRequestHandler())
         .sorted(byPatternsCondition())
         .collect(toList());
   }
 
-  private Function<RequestMappingInfoHandlerMapping,
-      Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-    return input -> input.getHandlerMethods()
-        .entrySet();
+  private Function<WebFluxIntegrationRequestMappingHandlerMapping,
+      Set<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+    return input -> {
+      Map<RequestMappingInfo, HandlerMethod> handlerMethods = input.getHandlerMethods();
+      return handlerMethods.entrySet();
+    };
   }
 
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
-    return input -> new WebMvcRequestHandler(
-        contextPath,
+    return input -> new SpringIntegrationWebFluxRequestHandler(
         methodResolver,
         input.getKey(),
-        input.getValue());
+        input.getValue(),
+        parametersProvider);
   }
 }
