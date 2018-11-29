@@ -590,8 +590,9 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#springfox-swagger-ui">3.5. Springfox Swagger UI</a></li>
 <li><a href="#springfox-rfc6570-support-incubating">3.6. Springfox RFC6570 support <strong>incubating</strong></a></li>
-<li><a href="#securing-swagger-ui">3.7. Securing swagger-ui</a></li>
-<li><a href="#springfox-samples">3.8. Springfox samples</a></li>
+<li><a href="#springfox-spring-integration-support-incubating">3.7. Springfox Spring-Integration Support <strong>incubating</strong></a></li>
+<li><a href="#securing-swagger-ui">3.8. Securing swagger-ui</a></li>
+<li><a href="#springfox-samples">3.9. Springfox samples</a></li>
 </ul>
 </li>
 <li><a href="#architecture">4. Architecture</a>
@@ -1852,7 +1853,44 @@ The newer version has changed the group id from <code><em>io.springfox</em></cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="securing-swagger-ui">3.7. Securing swagger-ui</h3>
+<h3 id="springfox-spring-integration-support-incubating">3.7. Springfox Spring-Integration Support <strong>incubating</strong></h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<em>Keep in mind this is experimental</em>!
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>As of Springfox 3.0 we offer experimental support for Spring Integration http inbound endpoints.</p>
+</div>
+<div class="paragraph">
+<p>The current implementation produces documentation for your endpoints, as far as possible automatically, based on static code analysis.
+Since the ultimate http responses in spring-integration cannot be determined statically from an http inbound endpoint,
+we use spring-restdocs to provide response body examples.</p>
+</div>
+<div class="paragraph">
+<p>We consider the
+support experimental because it has not been tested with a wide range of spring-integration applications and because we
+have only started to evaluate the possibilities we have with spring-restdocs.</p>
+</div>
+<div class="paragraph">
+<p>Depending on which web technology you choose, you need to include the appropriate <code>springfox-spring-integration-webflux</code>
+or <code>springfox-spring-integration-webmvc</code> dependency and use its respective tooling to produce documentation for your http
+responses, based on <a href="https://spring.io/projects/spring-restdocs">spring-restdocs</a>.</p>
+</div>
+<div class="paragraph">
+<p>See the readme for <a href="https://github.com/springfox/springfox/tree/master/springfox-spring-integration-webmvc">springfox-spring-integration-webmvc</a> and
+<a href="https://github.com/springfox/springfox/tree/master/springfox-spring-integration-webflux">springfox-spring-integration-webflux</a> for details.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="securing-swagger-ui">3.8. Securing swagger-ui</h3>
 <div class="paragraph">
 <p><a href="https://github.com/springfox/springfox/issues/2191#issuecomment-359159833">The user contributed example</a> uses OAuth2 and
 cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@evser</a>)</p>
@@ -1955,7 +1993,7 @@ cookies-based auth in the browser. (Credit: <a href="https://github.com/evser">@
 </div>
 </div>
 <div class="sect2">
-<h3 id="springfox-samples">3.8. Springfox samples</h3>
+<h3 id="springfox-samples">3.9. Springfox samples</h3>
 <div class="paragraph">
 <p>The <a href="https://github.com/springfox/springfox-demos">springfox-demos</a> repository contains a number of samples.</p>
 </div>
@@ -4809,7 +4847,7 @@ on-the-wire type (CustomTypeFor2031).</td>
 <div id="footer">
 <div id="footer-text">
 Version 3.0.0-SNAPSHOT<br>
-Last updated 2018-11-28 10:42:01 UTC
+Last updated 2018-11-29 01:57:44 UTC
 </div>
 </div>
 </body>
