@@ -128,7 +128,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
     }
   }
 
-  @Ignore
   def 'should honor swagger resource listing'() {
     given:
     def http = new TestRestTemplate()
