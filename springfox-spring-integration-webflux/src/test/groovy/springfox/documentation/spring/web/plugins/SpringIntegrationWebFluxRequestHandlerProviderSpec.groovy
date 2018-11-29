@@ -28,23 +28,25 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 class SpringIntegrationWebFluxRequestHandlerProviderSpec extends Specification {
   def methodResolver = Mock(HandlerMethodResolver)
-  def handlerMapping = Mock(WebFluxIntegrationRequestMappingHandlerMapping);
+  def handlerMapping = Mock(WebFluxIntegrationRequestMappingHandlerMapping)
   def handlerMappings = [handlerMapping]
   SpringIntegrationParametersProvider parametersProvider = Mock(SpringIntegrationParametersProvider)
 
   def provider = new SpringIntegrationWebFluxRequestHandlerProvider(methodResolver,
-    handlerMappings, parametersProvider);
+      handlerMappings, parametersProvider)
 
   def "Provides request handlers"() {
     given:
-      def requestMappingInfo = RequestMappingInfo.paths("/foo").build()
-      def handlerMethod = Mock(HandlerMethod)
-      def handlerMethods = [(requestMappingInfo): handlerMethod]
-      handlerMapping.getHandlerMethods() >> handlerMethods
+    def requestMappingInfo = RequestMappingInfo.paths("/foo").build()
+    def handlerMethod = Mock(HandlerMethod)
+    def handlerMethods = [(requestMappingInfo): handlerMethod]
+    handlerMapping.getHandlerMethods() >> handlerMethods
+
     when:
-      def handlers = provider.requestHandlers();
+    def handlers = provider.requestHandlers()
+
     then:
-      handlers.size() == 1
-      handlers[0] instanceof SpringIntegrationWebFluxRequestHandler
+    handlers.size() == 1
+    handlers[0] instanceof SpringIntegrationWebFluxRequestHandler
   }
 }

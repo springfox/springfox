@@ -37,8 +37,12 @@ import javax.servlet.http.HttpServletResponse
 
 class SpringIntegrationWebFluxRequestHandlerSpec extends Specification {
 
-  def method = ReflectionUtils.findMethod(HttpRequestHandler.class,
-    "handleRequest", HttpServletRequest.class, HttpServletResponse.class);
+  def method = ReflectionUtils.findMethod(
+      HttpRequestHandler.class,
+      "handleRequest",
+      HttpServletRequest.class,
+      HttpServletResponse.class)
+
   def methodResolver = Mock(HandlerMethodResolver)
   def requestMappingInfo = RequestMappingInfo.paths("/foo").build()
   def inboundEndpoint = Mock(BaseHttpInboundEndpoint)
@@ -52,51 +56,59 @@ class SpringIntegrationWebFluxRequestHandlerSpec extends Specification {
   }
 
   def requestHandler = new SpringIntegrationWebFluxRequestHandler(
-    methodResolver, requestMappingInfo, handlerMethod, parametersProvider
+      methodResolver, requestMappingInfo, handlerMethod, parametersProvider
   )
 
   def "Gets Group Name"() {
     given:
-      handlerMethod.getBeanType() >> WebFluxInboundEndpoint
+    handlerMethod.getBeanType() >> WebFluxInboundEndpoint
+
     when:
-      def groupName = requestHandler.groupName()
+    def groupName = requestHandler.groupName()
+
     then:
-      groupName == "web-flux-inbound-endpoint"
+    groupName == "web-flux-inbound-endpoint"
 
   }
 
   def "Gets Name"() {
     given:
-      inboundEndpoint.getComponentName() >> "baz"
+    inboundEndpoint.getComponentName() >> "baz"
+
     when:
-      def name = requestHandler.getName()
+    def name = requestHandler.getName()
+
     then:
-      name == "baz"
+    name == "baz"
 
   }
 
   def "Gets ReturnType"() {
     given:
-      def resolvedType = Mock(ResolvedType)
-      methodResolver.methodReturnType(_) >> resolvedType
+    def resolvedType = Mock(ResolvedType)
+    methodResolver.methodReturnType(_) >> resolvedType
+
     when:
-      def returnType = requestHandler.getReturnType()
+    def returnType = requestHandler.getReturnType()
+
     then:
-      returnType == resolvedType
+    returnType == resolvedType
   }
 
   def "Finds Annotation"() {
     when:
-      def annotation = requestHandler.findAnnotation(Api)
+    def annotation = requestHandler.findAnnotation(Api)
+
     then:
-      annotation.isPresent() == false
+    annotation.isPresent() == false
   }
 
   def "Gets Parameters"() {
     when:
-      def parameters = requestHandler.getParameters()
+    def parameters = requestHandler.getParameters()
+
     then:
-      parameters.size() == 1
+    parameters.size() == 1
 
   }
 }

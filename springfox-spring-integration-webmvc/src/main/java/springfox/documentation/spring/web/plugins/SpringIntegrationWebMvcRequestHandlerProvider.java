@@ -30,60 +30,64 @@ import springfox.documentation.spring.web.SpringIntegrationWebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toList;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
-import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
-import static springfox.documentation.spring.web.paths.Paths.ROOT;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.spi.service.contexts.Orderings.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
 @Order
 public class SpringIntegrationWebMvcRequestHandlerProvider implements RequestHandlerProvider {
-    private final List<IntegrationRequestMappingHandlerMapping> handlerMappings;
-    private final HandlerMethodResolver methodResolver;
-    private final String contextPath;
-    private SpringIntegrationParametersProvider parametersProvider;
+  private final List<IntegrationRequestMappingHandlerMapping> handlerMappings;
+  private final HandlerMethodResolver methodResolver;
+  private final String contextPath;
+  private SpringIntegrationParametersProvider parametersProvider;
 
-    @Autowired
-    public SpringIntegrationWebMvcRequestHandlerProvider(
-            Optional<ServletContext> servletContext,
-            HandlerMethodResolver methodResolver,
-            List<IntegrationRequestMappingHandlerMapping> handlerMappings,
-            SpringIntegrationParametersProvider parametersProvider) {
-        this.handlerMappings = handlerMappings;
-        this.methodResolver = methodResolver;
-        this.parametersProvider = parametersProvider;
-        this.contextPath = servletContext
-                .map(ServletContext::getContextPath)
-                .orElse(ROOT);
-    }
+  @Autowired
+  public SpringIntegrationWebMvcRequestHandlerProvider(
+      Optional<ServletContext> servletContext,
+      HandlerMethodResolver methodResolver,
+      List<IntegrationRequestMappingHandlerMapping> handlerMappings,
+      SpringIntegrationParametersProvider parametersProvider) {
+    this.handlerMappings = handlerMappings;
+    this.methodResolver = methodResolver;
+    this.parametersProvider = parametersProvider;
+    this.contextPath = servletContext
+        .map(ServletContext::getContextPath)
+        .orElse(ROOT);
+  }
 
-    @Override
-    public List<RequestHandler> requestHandlers() {
-        return nullToEmptyList(handlerMappings).stream()
-                .map(toMappingEntries())
-                .flatMap((Collection::stream))
-                .map(toRequestHandler())
-                .sorted(byPatternsCondition())
-                .collect(toList());
-    }
+  @Override
+  public List<RequestHandler> requestHandlers() {
+    return nullToEmptyList(handlerMappings).stream()
+        .map(toMappingEntries())
+        .flatMap((Collection::stream))
+        .map(toRequestHandler())
+        .sorted(byPatternsCondition())
+        .collect(toList());
+  }
 
-    private Function<IntegrationRequestMappingHandlerMapping,
-            Set<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-        return input -> {
-            Map<RequestMappingInfo, HandlerMethod> handlerMethods = input.getHandlerMethods();
-            return handlerMethods.entrySet();
-        };
-    }
+  private Function<IntegrationRequestMappingHandlerMapping,
+      Set<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+    return input -> {
+      Map<RequestMappingInfo, HandlerMethod> handlerMethods = input.getHandlerMethods();
+      return handlerMethods.entrySet();
+    };
+  }
 
-    private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
-        return input -> new SpringIntegrationWebMvcRequestHandler(
-                contextPath,
-                methodResolver,
-                input.getKey(),
-                input.getValue(),
-                parametersProvider);
-    }
+  private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
+    return input -> new SpringIntegrationWebMvcRequestHandler(
+        contextPath,
+        methodResolver,
+        input.getKey(),
+        input.getValue(),
+        parametersProvider);
+  }
 }

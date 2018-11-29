@@ -30,9 +30,10 @@ import springfox.documentation.spring.web.plugins.SpringIntegrationParametersPro
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.*;
 
 /**
  * Provides information about WebFlux based Spring Integration inbound HTTP handlers.
@@ -87,5 +88,4 @@ public class SpringIntegrationWebFluxRequestHandler extends WebFluxRequestHandle
     return parametersProvider
         .getParameters((BaseHttpInboundEndpoint) handlerMethod.getBean());
   }
-
 }

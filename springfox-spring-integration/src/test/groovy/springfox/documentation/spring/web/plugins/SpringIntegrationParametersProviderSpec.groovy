@@ -27,7 +27,7 @@ import spock.lang.Specification
 class SpringIntegrationParametersProviderSpec extends Specification {
 
   class Foo {
-    def bar;
+    def bar
   }
 
   def "Determines parameters"() {
@@ -40,22 +40,22 @@ class SpringIntegrationParametersProviderSpec extends Specification {
     }
     def headerExpressions = ["upperLower": headerExpression]
 
-    def provider = new SpringIntegrationParametersProvider();
+    def provider = new SpringIntegrationParametersProvider()
 
     given:
-      def inboundEndpoint = new BaseHttpInboundEndpoint(true);
-      def requestMapping = new RequestMapping();
-      requestMapping.setPathPatterns("/conversions/pathvariable/{upperLower}")
-      inboundEndpoint.setHeaderExpressions(headerExpressions)
-      inboundEndpoint.setPayloadExpression(payloadExpression)
-      inboundEndpoint.setRequestMapping(requestMapping)
-      inboundEndpoint.setRequestPayloadType(ResolvableType.forClass(Foo))
+    def inboundEndpoint = new BaseHttpInboundEndpoint(true)
+    def requestMapping = new RequestMapping()
+    requestMapping.setPathPatterns("/conversions/pathvariable/{upperLower}")
+    inboundEndpoint.setHeaderExpressions(headerExpressions)
+    inboundEndpoint.setPayloadExpression(payloadExpression)
+    inboundEndpoint.setRequestMapping(requestMapping)
+    inboundEndpoint.setRequestPayloadType(ResolvableType.forClass(Foo))
     when:
-      def parameters = provider.getParameters(inboundEndpoint)
+    def parameters = provider.getParameters(inboundEndpoint)
     then:
-      parameters.size() == 3
-      parameters[0].defaultName().get() == "body"
-      parameters[1].defaultName().get() == "upperLower"
-      parameters[2].defaultName().get() == "toConvert"
+    parameters.size() == 3
+    parameters[0].defaultName().get() == "body"
+    parameters[1].defaultName().get() == "upperLower"
+    parameters[2].defaultName().get() == "toConvert"
   }
 }

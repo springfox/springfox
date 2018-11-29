@@ -45,40 +45,41 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Component
 public class SpringIntegrationDocumentationPluginsBootstrapper extends AbstractDocumentationPluginsBootstrapper {
-    private static final Logger log = LoggerFactory.getLogger(SpringIntegrationDocumentationPluginsBootstrapper.class);
+  private static final Logger log = LoggerFactory.getLogger(SpringIntegrationDocumentationPluginsBootstrapper.class);
 
-    private AtomicBoolean initialized = new AtomicBoolean(false);
+  private AtomicBoolean initialized = new AtomicBoolean(false);
 
-    @Autowired
-    public SpringIntegrationDocumentationPluginsBootstrapper(
-            DocumentationPluginsManager documentationPluginsManager,
-            List<RequestHandlerProvider> handlerProviders,
-            DocumentationCache scanned,
-            ApiDocumentationScanner resourceListing,
-            TypeResolver typeResolver,
-            Defaults defaults,
-            PathProvider pathProvider,
-            Environment environment) {
-        super(documentationPluginsManager, handlerProviders, scanned, resourceListing, defaults, typeResolver, pathProvider);
+  @Autowired
+  public SpringIntegrationDocumentationPluginsBootstrapper(
+      DocumentationPluginsManager documentationPluginsManager,
+      List<RequestHandlerProvider> handlerProviders,
+      DocumentationCache scanned,
+      ApiDocumentationScanner resourceListing,
+      TypeResolver typeResolver,
+      Defaults defaults,
+      PathProvider pathProvider,
+      Environment environment) {
+    super(documentationPluginsManager, handlerProviders, scanned, resourceListing, defaults, typeResolver,
+        pathProvider);
+  }
+
+  @Override
+  @Autowired(required = false)
+  public void setCombiner(RequestHandlerCombiner combiner) {
+    super.setCombiner(combiner);
+  }
+
+  @Override
+  @Autowired(required = false)
+  public void setTypeConventions(List<AlternateTypeRuleConvention> typeConventions) {
+    super.setTypeConventions(typeConventions);
+  }
+
+  @EventListener(ContextRefreshedEvent.class)
+  public void contextRefreshedEventExecute() {
+    if (initialized.compareAndSet(false, true)) {
+      super.bootstrapDocumentationPlugins();
     }
 
-    @Override
-    @Autowired(required = false)
-    public void setCombiner(RequestHandlerCombiner combiner) {
-        super.setCombiner(combiner);
-    }
-
-    @Override
-    @Autowired(required = false)
-    public void setTypeConventions(List<AlternateTypeRuleConvention> typeConventions) {
-        super.setTypeConventions(typeConventions);
-    }
-
-    @EventListener(ContextRefreshedEvent.class)
-    public void contextRefreshedEventExecute() {
-        if (initialized.compareAndSet(false, true)) {
-            super.bootstrapDocumentationPlugins();
-        }
-
-    }
+  }
 }

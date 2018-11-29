@@ -52,41 +52,41 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   @Autowired
   public WebMvcRequestHandlerProvider(
-    Optional<ServletContext> servletContext,
-    HandlerMethodResolver methodResolver,
-    List<RequestMappingInfoHandlerMapping> handlerMappings) {
+      Optional<ServletContext> servletContext,
+      HandlerMethodResolver methodResolver,
+      List<RequestMappingInfoHandlerMapping> handlerMappings) {
     this.handlerMappings = handlerMappings;
     this.methodResolver = methodResolver;
     this.contextPath = servletContext
-      .map(ServletContext::getContextPath)
-      .orElse(ROOT);
+        .map(ServletContext::getContextPath)
+        .orElse(ROOT);
   }
 
   @Override
   public List<RequestHandler> requestHandlers() {
     return nullToEmptyList(handlerMappings).stream()
-      .filter(requestMappingInfoHandlerMapping ->
-        !("org.springframework.integration.http.inbound.IntegrationRequestMappingHandlerMapping"
-          .equals(requestMappingInfoHandlerMapping.getClass()
-            .getName())))
-      .map(toMappingEntries())
-      .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
-      .map(toRequestHandler())
-      .sorted(byPatternsCondition())
-      .collect(toList());
+        .filter(requestMappingInfoHandlerMapping ->
+            !("org.springframework.integration.http.inbound.IntegrationRequestMappingHandlerMapping"
+                  .equals(requestMappingInfoHandlerMapping.getClass()
+                      .getName())))
+        .map(toMappingEntries())
+        .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
+        .map(toRequestHandler())
+        .sorted(byPatternsCondition())
+        .collect(toList());
   }
 
   private Function<RequestMappingInfoHandlerMapping,
-    Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+      Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
     return input -> input.getHandlerMethods()
-      .entrySet();
+        .entrySet();
   }
 
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
     return input -> new WebMvcRequestHandler(
-      contextPath,
-      methodResolver,
-      input.getKey(),
-      input.getValue());
+        contextPath,
+        methodResolver,
+        input.getKey(),
+        input.getValue());
   }
 }

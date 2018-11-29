@@ -35,50 +35,50 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toList;
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
-import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 @Component
 @Order
 public class SpringIntegrationWebFluxRequestHandlerProvider implements RequestHandlerProvider {
-    private final List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings;
-    private final HandlerMethodResolver methodResolver;
-    private SpringIntegrationParametersProvider parametersProvider;
+  private final List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings;
+  private final HandlerMethodResolver methodResolver;
+  private SpringIntegrationParametersProvider parametersProvider;
 
-    @Autowired
-    public SpringIntegrationWebFluxRequestHandlerProvider(
-            HandlerMethodResolver methodResolver,
-            List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings,
-            SpringIntegrationParametersProvider parametersProvider) {
-        this.handlerMappings = handlerMappings;
-        this.methodResolver = methodResolver;
-        this.parametersProvider = parametersProvider;
-    }
+  @Autowired
+  public SpringIntegrationWebFluxRequestHandlerProvider(
+      HandlerMethodResolver methodResolver,
+      List<WebFluxIntegrationRequestMappingHandlerMapping> handlerMappings,
+      SpringIntegrationParametersProvider parametersProvider) {
+    this.handlerMappings = handlerMappings;
+    this.methodResolver = methodResolver;
+    this.parametersProvider = parametersProvider;
+  }
 
-    @Override
-    public List<RequestHandler> requestHandlers() {
-        return nullToEmptyList(handlerMappings).stream()
-                .map(toMappingEntries())
-                .flatMap((Collection::stream))
-                .map(toRequestHandler())
-                .sorted(byPatternsCondition())
-                .collect(toList());
-    }
+  @Override
+  public List<RequestHandler> requestHandlers() {
+    return nullToEmptyList(handlerMappings).stream()
+        .map(toMappingEntries())
+        .flatMap((Collection::stream))
+        .map(toRequestHandler())
+        .sorted(byPatternsCondition())
+        .collect(toList());
+  }
 
-    private Function<WebFluxIntegrationRequestMappingHandlerMapping,
-            Set<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-        return input -> {
-            Map<RequestMappingInfo, HandlerMethod> handlerMethods = input.getHandlerMethods();
-            return handlerMethods.entrySet();
-        };
-    }
+  private Function<WebFluxIntegrationRequestMappingHandlerMapping,
+      Set<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
+    return input -> {
+      Map<RequestMappingInfo, HandlerMethod> handlerMethods = input.getHandlerMethods();
+      return handlerMethods.entrySet();
+    };
+  }
 
-    private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
-        return input -> new SpringIntegrationWebFluxRequestHandler(
-                methodResolver,
-                input.getKey(),
-                input.getValue(),
-                parametersProvider);
-    }
+  private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
+    return input -> new SpringIntegrationWebFluxRequestHandler(
+        methodResolver,
+        input.getKey(),
+        input.getValue(),
+        parametersProvider);
+  }
 }

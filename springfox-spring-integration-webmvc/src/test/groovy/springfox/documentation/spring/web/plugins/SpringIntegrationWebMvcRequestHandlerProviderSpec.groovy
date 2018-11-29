@@ -33,25 +33,30 @@ import javax.servlet.http.HttpServletResponse
 
 class SpringIntegrationWebMvcRequestHandlerProviderSpec extends Specification {
   def methodResolver = Mock(HandlerMethodResolver)
-  def handler = Mock(BaseHttpInboundEndpoint);
-  def method = ReflectionUtils.findMethod(HttpRequestHandler.class,
-    "handleRequest", HttpServletRequest.class, HttpServletResponse.class);
+  def handler = Mock(BaseHttpInboundEndpoint)
+  def method = ReflectionUtils.findMethod(
+      HttpRequestHandler.class,
+      "handleRequest",
+      HttpServletRequest.class,
+      HttpServletResponse.class)
+
   def parametersProvider = Mock(SpringIntegrationParametersProvider)
 
   def "Provides request handlers"() {
     given:
-      def handlerMapping = new IntegrationRequestMappingHandlerMapping()
-      def requestMappingInfo = RequestMappingInfo.paths("/foo").build()
-      handlerMapping.registerMapping(requestMappingInfo, handler, method)
-      def handlerMappings = [handlerMapping]
+    def handlerMapping = new IntegrationRequestMappingHandlerMapping()
+    def requestMappingInfo = RequestMappingInfo.paths("/foo").build()
+    handlerMapping.registerMapping(requestMappingInfo, handler, method)
+    def handlerMappings = [handlerMapping]
 
-      def provider = new SpringIntegrationWebMvcRequestHandlerProvider(
-        Optional.empty(), methodResolver, handlerMappings, parametersProvider);
+    def provider = new SpringIntegrationWebMvcRequestHandlerProvider(
+        Optional.empty(), methodResolver, handlerMappings, parametersProvider)
 
     when:
-      def handlers = provider.requestHandlers();
+    def handlers = provider.requestHandlers()
+
     then:
-      handlers.size() == 1
-      handlers[0] instanceof SpringIntegrationWebMvcRequestHandler
+    handlers.size() == 1
+    handlers[0] instanceof SpringIntegrationWebMvcRequestHandler
   }
 }

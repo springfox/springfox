@@ -34,13 +34,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriTemplate;
 import springfox.documentation.service.ResolvedMethodParameter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
-import static org.springframework.core.annotation.AnnotationUtils.synthesizeAnnotation;
+import static java.util.Collections.*;
+import static org.springframework.core.annotation.AnnotationUtils.*;
 
 /**
  * Provides information about Spring Integration inbound HTTP handlers.
@@ -65,16 +69,16 @@ public class SpringIntegrationParametersProvider {
   private List<ResolvedMethodParameter> addRequestBodyParam(BaseHttpInboundEndpoint inboundEndpoint) {
     List<ResolvedMethodParameter> parameters = new ArrayList<>();
     ResolvableType requestPayloadType = (ResolvableType) ReflectionUtils.getFieldVal(inboundEndpoint,
-      "requestPayloadType", true);
+        "requestPayloadType", true);
     if (requestPayloadType != null) {
       ResolvedType parameterType = typeResolver.resolve(requestPayloadType.getType());
       Map<String, Object> requestBodyAttributes = new HashMap<>();
       RequestBody requestBodyAnnotation =
-        synthesizeAnnotation(requestBodyAttributes,
-          RequestBody.class, null);
+          synthesizeAnnotation(requestBodyAttributes,
+              RequestBody.class, null);
 
       ResolvedMethodParameter body = new ResolvedMethodParameter(0, "body",
-        singletonList(requestBodyAnnotation), parameterType);
+          singletonList(requestBodyAnnotation), parameterType);
       parameters.add(body);
     }
     return parameters;
@@ -82,27 +86,27 @@ public class SpringIntegrationParametersProvider {
 
   private List<ResolvedMethodParameter> addPathVariableParams(BaseHttpInboundEndpoint inboundEndpoint) {
     return Stream.of(inboundEndpoint.getRequestMapping()
-      .getPathPatterns())
-      .map(pattern -> new UriTemplate(pattern).getVariableNames())
-      .flatMap(Collection::stream)
-      .map(variableName -> new ResolvedMethodParameter(0, variableName,
-        singletonList(synthesizeAnnotation(emptyMap(), PathVariable.class, null)),
-        typeResolver.resolve(String.class)))
-      .collect(Collectors.toList());
+        .getPathPatterns())
+        .map(pattern -> new UriTemplate(pattern).getVariableNames())
+        .flatMap(Collection::stream)
+        .map(variableName -> new ResolvedMethodParameter(0, variableName,
+            singletonList(synthesizeAnnotation(emptyMap(), PathVariable.class, null)),
+            typeResolver.resolve(String.class)))
+        .collect(Collectors.toList());
   }
 
   private List<ResolvedMethodParameter> addRequestParamParams(BaseHttpInboundEndpoint inboundEndpoint) {
     List<ResolvedMethodParameter> parameters = new ArrayList<>();
 
     Expression payloadExpression = (Expression) ReflectionUtils.getFieldVal(inboundEndpoint,
-      FIELD_PAYLOAD_EXPRESSION, true);
+        FIELD_PAYLOAD_EXPRESSION, true);
     if (payloadExpression != null) {
       extractRequestParam(payloadExpression, typeResolver).ifPresent(
-        parameters::add);
+          parameters::add);
     }
     @SuppressWarnings("unchecked")
     Map<String, Expression> headerExpressions = (Map<String, Expression>) ReflectionUtils.getFieldVal(
-      inboundEndpoint, FIELD_HEADER_EXPRESSIONS, true);
+        inboundEndpoint, FIELD_HEADER_EXPRESSIONS, true);
 
     if (headerExpressions != null) {
       for (Expression headerExpression : headerExpressions.values()) {
@@ -120,17 +124,17 @@ public class SpringIntegrationParametersProvider {
     SpelNode firstChild = ast.getChild(0); // possible #requestParams, VariableReference
     if (firstChild != null && REQUEST_PARAMS_EXPRESSION_CONTEXT_VARIABLE.equals(firstChild.toStringAST())) {
       String firstIndexer = ast.getChild(1)
-        .toStringAST();// ['value'] or value, Indexer
+          .toStringAST();// ['value'] or value, Indexer
       String requestParamName = firstIndexer.replaceAll("^\\['|']", "");
       boolean required = requestParamName.equals(firstIndexer); // square brackets mean optional
       Map<String, Object> requestParamAttributes = new HashMap<>();
       requestParamAttributes.put("required", required);
       RequestParam requestParamAnnotation =
-        synthesizeAnnotation(requestParamAttributes,
-          RequestParam.class, null);
+          synthesizeAnnotation(requestParamAttributes,
+              RequestParam.class, null);
 
       ret = new ResolvedMethodParameter(0, requestParamName,
-        singletonList(requestParamAnnotation), typeResolver.resolve(String.class));
+          singletonList(requestParamAnnotation), typeResolver.resolve(String.class));
     }
     return Optional.ofNullable(ret);
   }

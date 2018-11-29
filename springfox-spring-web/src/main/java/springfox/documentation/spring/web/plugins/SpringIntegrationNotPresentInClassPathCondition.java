@@ -23,25 +23,25 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.ClassUtils;
 
-import static org.springframework.util.ClassUtils.forName;
+import static org.springframework.util.ClassUtils.*;
 
 public class SpringIntegrationNotPresentInClassPathCondition implements Condition {
-    @Override
-    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        return !isPresent(
-                "org.springframework.integration.handler.AbstractMessageHandler",
-                context.getClassLoader());
-    }
+  @Override
+  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    return !isPresent(
+        "org.springframework.integration.handler.AbstractMessageHandler",
+        context.getClassLoader());
+  }
 
-    private static boolean isPresent(String className, ClassLoader classLoader) {
-        if (classLoader == null) {
-            classLoader = ClassUtils.getDefaultClassLoader();
-        }
-        try {
-            forName(className, classLoader);
-            return true;
-        } catch (Throwable ex) {
-            return false;
-        }
+  private static boolean isPresent(String className, ClassLoader classLoader) {
+    if (classLoader == null) {
+      classLoader = ClassUtils.getDefaultClassLoader();
     }
+    try {
+      forName(className, classLoader);
+      return true;
+    } catch (Throwable ex) {
+      return false;
+    }
+  }
 }

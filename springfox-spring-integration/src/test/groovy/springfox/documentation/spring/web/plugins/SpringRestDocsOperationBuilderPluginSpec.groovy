@@ -39,19 +39,21 @@ class SpringRestDocsOperationBuilderPluginSpec extends Specification {
   def operationBuilder = new OperationBuilder(new CachingOperationNameGenerator())
 
   OperationContext operationContext = new OperationContext(
-    operationBuilder,
-    RequestMethod.GET,
-    new RequestMappingContext(documentationContext,
-      requestHandler), 0)
+      operationBuilder,
+      RequestMethod.GET,
+      new RequestMappingContext(documentationContext,
+          requestHandler), 0)
 
   def "Collects examples"() {
     given:
-      requestHandler // need to mock the name
+    requestHandler // need to mock the name
+
     when:
-      sut.apply(operationContext)
-      def operation = operationBuilder.build()
+    sut.apply(operationContext)
+    def operation = operationBuilder.build()
+
     then:
-      2 == operation.responseMessages[0].examples.size()
+    2 == operation.responseMessages[0].examples.size()
   }
 
 

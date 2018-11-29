@@ -40,13 +40,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toMap;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 1000)
@@ -57,13 +62,13 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder()
-      .responseMessages(read(context));
+        .responseMessages(read(context));
   }
 
   @Override
   public boolean supports(DocumentationType documentationType) {
     return DocumentationType.SWAGGER_12.equals(documentationType)
-      || DocumentationType.SWAGGER_2.equals(documentationType);
+        || DocumentationType.SWAGGER_2.equals(documentationType);
   }
 
   /**
@@ -77,26 +82,26 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
     try {
       PathMatchingResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
       Resource[] resources = resourceResolver.getResources(
-        "classpath*:"
-          + context.getName()
-          + "*/http-response.springfox");
+          "classpath*:"
+              + context.getName()
+              + "*/http-response.springfox");
       // TODO: restdocs in safe package name, not directly under restdocs
 
       ret = Arrays.stream(resources)
-        .map(toRawHttpResponse())
-        .filter(Objects::nonNull)
-        .collect(Collectors.collectingAndThen(
-          toMap(
-            RawHttpResponse::getStatusCode,
-            mappingResponseToResponseMessageBuilder(),
-            mergingExamples()
-          ),
-          responseMessagesMap -> responseMessagesMap.values()
-            .stream()
-            .map(ResponseMessageBuilder::build)
-            .collect(Collectors.toSet())));
+          .map(toRawHttpResponse())
+          .filter(Objects::nonNull)
+          .collect(Collectors.collectingAndThen(
+              toMap(
+                  RawHttpResponse::getStatusCode,
+                  mappingResponseToResponseMessageBuilder(),
+                  mergingExamples()
+              ),
+              responseMessagesMap -> responseMessagesMap.values()
+                  .stream()
+                  .map(ResponseMessageBuilder::build)
+                  .collect(Collectors.toSet())));
     } catch (
-      Exception e) {
+        Exception e) {
       LOG.warn("Failed to read restdocs example for {} " + context.getName() + " caused by: " + e.toString());
       ret = Collections.emptySet();
     }
@@ -113,7 +118,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
         return rawHttpResponse;
       } catch (IOException e) {
         LOG.warn("Failed to read restdocs example for {} "
-          + resource.getFilename() + " caused by: " + e.toString());
+            + resource.getFilename() + " caused by: " + e.toString());
         return null;
       }
     };
@@ -121,53 +126,51 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
 
   private BinaryOperator<ResponseMessageBuilder> mergingExamples() {
     return (leftWithSameStatusCode, rightWithSameStatusCode) ->
-      leftWithSameStatusCode.examples(rightWithSameStatusCode.build()
-        .getExamples());
+        leftWithSameStatusCode.examples(rightWithSameStatusCode.build()
+            .getExamples());
   }
 
   private Function<RawHttpResponse<Void>, ResponseMessageBuilder> mappingResponseToResponseMessageBuilder() {
-    return parsedResponse -> {
-      return new ResponseMessageBuilder()
+    return parsedResponse -> new ResponseMessageBuilder()
         .code(parsedResponse.getStatusCode())
         .examples(toExamples(parsedResponse))
         .headersWithDescription(toHeaders(parsedResponse));
-    };
   }
 
   private Map<String, Header> toHeaders(RawHttpResponse<Void> parsedResponse) {
     return parsedResponse.getHeaders()
-      .asMap()
-      .entrySet()
-      .stream()
-      .collect(toMap(
-        Map.Entry::getKey,
-        o -> new Header(o.getKey(), "", new ModelRef("string"))));
+        .asMap()
+        .entrySet()
+        .stream()
+        .collect(toMap(
+            Map.Entry::getKey,
+            o -> new Header(o.getKey(), "", new ModelRef("string"))));
   }
 
   private ArrayList<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
     return new ArrayList<>(singletonList(new Example(getContentType(parsedResponse),
-      getBody(parsedResponse))));
+        getBody(parsedResponse))));
   }
 
   private String getBody(RawHttpResponse<Void> parsedResponse) {
     return parsedResponse.getBody()
-      .map(bodyReader -> {
-        String ret = null;
-        try {
-          ret = bodyReader.asRawString(Charset.forName("utf-8"));
-        } catch (IOException e) {
-          LOG.error("failed to read response body", e);
-        }
-        return ret;
-      })
-      .orElse(null);
+        .map(bodyReader -> {
+          String ret = null;
+          try {
+            ret = bodyReader.asRawString(Charset.forName("utf-8"));
+          } catch (IOException e) {
+            LOG.error("failed to read response body", e);
+          }
+          return ret;
+        })
+        .orElse(null);
   }
 
   private String getContentType(RawHttpResponse<Void> parsedResponse) {
     return parsedResponse.getHeaders()
-      .get("Content-Type")
-      .stream()
-      .findFirst()
-      .orElse(null);
+        .get("Content-Type")
+        .stream()
+        .findFirst()
+        .orElse(null);
   }
 }
