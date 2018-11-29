@@ -62,29 +62,33 @@ class SpringIntegrationWebMvcRequestHandlerSpec extends Specification {
   def "Gets Group Name"() {
     given:
     handlerMethod.getBeanType() >> WebFluxInboundEndpoint
+
     when:
     def groupName = requestHandler.groupName()
+
     then:
     groupName == "web-flux-inbound-endpoint"
-
   }
 
   def "Gets Name"() {
     given:
     inboundEndpoint.getComponentName() >> "baz"
+
     when:
     def name = requestHandler.getName()
+
     then:
     name == "baz"
-
   }
 
   def "Gets ReturnType"() {
     given:
     def resolvedType = Mock(ResolvedType)
     methodResolver.methodReturnType(_) >> resolvedType
+
     when:
     def returnType = requestHandler.getReturnType()
+
     then:
     returnType == resolvedType
   }
@@ -92,6 +96,7 @@ class SpringIntegrationWebMvcRequestHandlerSpec extends Specification {
   def "Finds Annotation"() {
     when:
     def annotation = requestHandler.findAnnotation(Api)
+
     then:
     annotation.isPresent() == false
   }
@@ -99,6 +104,7 @@ class SpringIntegrationWebMvcRequestHandlerSpec extends Specification {
   def "Gets Parameters"() {
     when:
     def parameters = requestHandler.getParameters()
+
     then:
     parameters.size() == 1
 

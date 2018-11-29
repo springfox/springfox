@@ -50,8 +50,10 @@ class SpringIntegrationParametersProviderSpec extends Specification {
     inboundEndpoint.setPayloadExpression(payloadExpression)
     inboundEndpoint.setRequestMapping(requestMapping)
     inboundEndpoint.setRequestPayloadType(ResolvableType.forClass(Foo))
+
     when:
     def parameters = provider.getParameters(inboundEndpoint)
+
     then:
     parameters.size() == 3
     parameters[0].defaultName().get() == "body"

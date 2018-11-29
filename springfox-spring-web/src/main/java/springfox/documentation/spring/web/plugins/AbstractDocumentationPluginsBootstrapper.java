@@ -55,13 +55,15 @@ public class AbstractDocumentationPluginsBootstrapper {
   private RequestHandlerCombiner combiner;
   private List<AlternateTypeRuleConvention> typeConventions;
 
-  public AbstractDocumentationPluginsBootstrapper(DocumentationPluginsManager documentationPluginsManager,
-                                                  List<RequestHandlerProvider> handlerProviders,
-                                                  DocumentationCache scanned,
-                                                  ApiDocumentationScanner resourceListing,
-                                                  Defaults defaults,
-                                                  TypeResolver typeResolver,
-                                                  PathProvider pathProvider) {
+  public AbstractDocumentationPluginsBootstrapper(
+      DocumentationPluginsManager documentationPluginsManager,
+      List<RequestHandlerProvider> handlerProviders,
+      DocumentationCache scanned,
+      ApiDocumentationScanner resourceListing,
+      Defaults defaults,
+      TypeResolver typeResolver,
+      PathProvider pathProvider) {
+    
     this.documentationPluginsManager = documentationPluginsManager;
     this.handlerProviders = handlerProviders;
     this.scanned = scanned;
