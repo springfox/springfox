@@ -20,12 +20,9 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
@@ -45,7 +42,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Component
 public class SpringIntegrationDocumentationPluginsBootstrapper extends AbstractDocumentationPluginsBootstrapper {
-  private static final Logger log = LoggerFactory.getLogger(SpringIntegrationDocumentationPluginsBootstrapper.class);
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
@@ -57,8 +53,7 @@ public class SpringIntegrationDocumentationPluginsBootstrapper extends AbstractD
       ApiDocumentationScanner resourceListing,
       TypeResolver typeResolver,
       Defaults defaults,
-      PathProvider pathProvider,
-      Environment environment) {
+      PathProvider pathProvider) {
     super(documentationPluginsManager, handlerProviders, scanned, resourceListing, defaults, typeResolver,
         pathProvider);
   }
@@ -80,6 +75,5 @@ public class SpringIntegrationDocumentationPluginsBootstrapper extends AbstractD
     if (initialized.compareAndSet(false, true)) {
       super.bootstrapDocumentationPlugins();
     }
-
   }
 }

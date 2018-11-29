@@ -40,9 +40,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -57,7 +57,7 @@ import static java.util.stream.Collectors.*;
 @Order(Ordered.HIGHEST_PRECEDENCE + 1000)
 public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlugin {
 
-  Logger LOG = LoggerFactory.getLogger(SpringRestDocsOperationBuilderPlugin.class);
+  private Logger LOG = LoggerFactory.getLogger(SpringRestDocsOperationBuilderPlugin.class);
 
   @Override
   public void apply(OperationContext context) {
@@ -114,8 +114,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
       try (InputStream resourceAsStream = new FileInputStream(resource.getFile())) {
         RawHttp rawHttp = new RawHttp();
         // must extract the body before the stream is closed
-        RawHttpResponse<Void> rawHttpResponse = rawHttp.parseResponse(resourceAsStream).eagerly();
-        return rawHttpResponse;
+        return (RawHttpResponse<Void>) rawHttp.parseResponse(resourceAsStream).eagerly();
       } catch (IOException e) {
         LOG.warn("Failed to read restdocs example for {} "
             + resource.getFilename() + " caused by: " + e.toString());
@@ -147,9 +146,9 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
             o -> new Header(o.getKey(), "", new ModelRef("string"))));
   }
 
-  private ArrayList<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
-    return new ArrayList<>(singletonList(new Example(getContentType(parsedResponse),
-        getBody(parsedResponse))));
+  private List<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
+    return singletonList(new Example(getContentType(parsedResponse),
+        getBody(parsedResponse)));
   }
 
   private String getBody(RawHttpResponse<Void> parsedResponse) {

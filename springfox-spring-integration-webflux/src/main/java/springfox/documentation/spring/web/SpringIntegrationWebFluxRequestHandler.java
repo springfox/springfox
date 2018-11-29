@@ -19,9 +19,7 @@
 package springfox.documentation.spring.web;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.integration.http.inbound.BaseHttpInboundEndpoint;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.reactive.result.method.RequestMappingInfo;
@@ -42,9 +40,6 @@ public class SpringIntegrationWebFluxRequestHandler extends WebFluxRequestHandle
   private final HandlerMethodResolver methodResolver;
   private final HandlerMethod handlerMethod;
   private SpringIntegrationParametersProvider parametersProvider;
-
-  private final TypeResolver typeResolver = new TypeResolver();
-  private final SpelExpressionParser parser = new SpelExpressionParser();
 
   public SpringIntegrationWebFluxRequestHandler(
       HandlerMethodResolver methodResolver,
