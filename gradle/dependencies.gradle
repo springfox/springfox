@@ -82,6 +82,10 @@ ext {
           "org.springframework:spring-webflux:$spring",
           "org.springframework:spring-context:$spring",
       ],
+      springProvidedWithSpringIntegration: [
+          "org.springframework.integration:spring-integration-http:$spring",
+          "org.springframework.integration:spring-integration-webflux:$spring",
+      ],          
       springBootProvided    : [
           "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
       ],

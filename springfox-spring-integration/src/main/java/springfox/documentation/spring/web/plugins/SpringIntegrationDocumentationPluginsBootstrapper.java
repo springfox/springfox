@@ -23,8 +23,8 @@ import com.fasterxml.classmate.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.SmartLifecycle;
-import org.springframework.context.annotation.Conditional;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import springfox.documentation.PathProvider;
@@ -39,22 +39,18 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Builds and executes all DocumentationConfigurer instances found in the
- * application context, at the end of all {@link #getPhase phases} in {@link SmartLifecycle} .
- *
- * If no instances DocumentationConfigurer are found a default one is created and executed.
+ * After Spring ContextRefreshedEvent, builds and executes all DocumentationConfigurer instances found in the
+ * application context, because only after ContextRefreshedEvent the spring-integration handler mappings
+ * are initialized.
  */
 @Component
-@Conditional(SpringIntegrationNotPresentInClassPathCondition.class)
-public class DocumentationPluginsBootstrapper extends AbstractDocumentationPluginsBootstrapper implements SmartLifecycle {
-    private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
-    private static final String SPRINGFOX_DOCUMENTATION_AUTO_STARTUP = "springfox.documentation.auto-startup";
-    private final Environment environment;
+public class SpringIntegrationDocumentationPluginsBootstrapper extends AbstractDocumentationPluginsBootstrapper {
+    private static final Logger log = LoggerFactory.getLogger(SpringIntegrationDocumentationPluginsBootstrapper.class);
 
     private AtomicBoolean initialized = new AtomicBoolean(false);
 
     @Autowired
-    public DocumentationPluginsBootstrapper(
+    public SpringIntegrationDocumentationPluginsBootstrapper(
             DocumentationPluginsManager documentationPluginsManager,
             List<RequestHandlerProvider> handlerProviders,
             DocumentationCache scanned,
@@ -64,46 +60,6 @@ public class DocumentationPluginsBootstrapper extends AbstractDocumentationPlugi
             PathProvider pathProvider,
             Environment environment) {
         super(documentationPluginsManager, handlerProviders, scanned, resourceListing, defaults, typeResolver, pathProvider);
-
-        this.environment = environment;
-    }
-
-    @Override
-    public boolean isAutoStartup() {
-        String autoStartupConfig =
-                environment.getProperty(
-                        SPRINGFOX_DOCUMENTATION_AUTO_STARTUP,
-                        "true");
-        return Boolean.valueOf(autoStartupConfig);
-    }
-
-    @Override
-    public void stop(Runnable callback) {
-        callback.run();
-    }
-
-    @Override
-    public void start() {
-        if (initialized.compareAndSet(false, true)) {
-            log.info("Documentation plugins bootstrapped");
-            super.bootstrapDocumentationPlugins();
-        }
-    }
-
-    @Override
-    public void stop() {
-        initialized.getAndSet(false);
-        scanned.clear();
-    }
-
-    @Override
-    public boolean isRunning() {
-        return initialized.get();
-    }
-
-    @Override
-    public int getPhase() {
-        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -116,5 +72,13 @@ public class DocumentationPluginsBootstrapper extends AbstractDocumentationPlugi
     @Autowired(required = false)
     public void setTypeConventions(List<AlternateTypeRuleConvention> typeConventions) {
         super.setTypeConventions(typeConventions);
+    }
+
+    @EventListener(ContextRefreshedEvent.class)
+    public void contextRefreshedEventExecute() {
+        if (initialized.compareAndSet(false, true)) {
+            super.bootstrapDocumentationPlugins();
+        }
+
     }
 }
