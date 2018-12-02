@@ -23,11 +23,14 @@ import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
 
 public interface ModelReference {
+
   String getType();
 
   boolean isCollection();
 
   boolean isMap();
+  
+  boolean isCyclic();
 
   String getItemType();
 
@@ -35,5 +38,5 @@ public interface ModelReference {
 
   Optional<ModelReference> itemModel();
   
-  Optional<Integer> getModelId();
+  Optional<String> getModelId();
 }

@@ -23,10 +23,9 @@ import com.google.common.collect.ArrayListMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.RequestHandler;
-import springfox.documentation.schema.TypeNameIndexingAdapter;
 import springfox.documentation.service.ResourceGroup;
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
@@ -45,7 +44,7 @@ public class ApiListingReferenceScanner {
     ArrayListMultimap<ResourceGroup, RequestMappingContext> resourceGroupRequestMappings
         = ArrayListMultimap.create();
 
-    UniqueTypeNameAdapter uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
+    int requestMappingContextId = 0;
 
     ApiSelector selector = context.getApiSelector();
     Iterable<RequestHandler> matchingHandlers = from(context.getRequestHandlers())
@@ -57,9 +56,14 @@ public class ApiListingReferenceScanner {
           0);
 
       RequestMappingContext requestMappingContext
-          = new RequestMappingContext(context, handler, uniqueTypeNameAdapter);
+          = new RequestMappingContext(
+              String.valueOf(requestMappingContextId),
+              context,
+              handler);
 
       resourceGroupRequestMappings.put(resourceGroup, requestMappingContext);
+
+      ++requestMappingContextId;
     }
     return new ApiListingReferenceScanResult(asMap(resourceGroupRequestMappings));
   }

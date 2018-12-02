@@ -23,12 +23,13 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.*;
@@ -36,22 +37,24 @@ import static com.google.common.collect.Sets.*;
 public class OperationModelContextsBuilder {
   private final String group;
   private final DocumentationType documentationType;
-  private final UniqueTypeNameAdapter uniqueTypeNameAdapter;
+  private final String requestMappingId;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
   private final Set<ModelContext> contexts = newHashSet();
+  
+  private int parameterIndex = 0; 
 
   public OperationModelContextsBuilder(
       String group,
       DocumentationType documentationType,
-      UniqueTypeNameAdapter uniqueTypeNameAdapter,
+      String requestMappingId,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericsNamingStrategy,
       ImmutableSet<Class> ignorableParameterTypes) {
     this.group = group;
     this.documentationType = documentationType;
-    this.uniqueTypeNameAdapter = uniqueTypeNameAdapter;
+    this.requestMappingId = requestMappingId;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericsNamingStrategy = genericsNamingStrategy;
     ignorableTypes = ignorableParameterTypes;
@@ -62,17 +65,25 @@ public class OperationModelContextsBuilder {
   }
 
   public ModelContext addReturn(ResolvedType type, Optional<ResolvedType> view) {
+    String nextParameterId = String.format("%s_%s", requestMappingId, parameterIndex + 1);
     ModelContext returnValue = ModelContext.returnValue(
+        nextParameterId,
         group,
         type,
         view,
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider,
         genericsNamingStrategy,
         ignorableTypes);
-    this.contexts.add(returnValue);
-    return returnValue;
+    
+    if (this.contexts.add(returnValue)) {
+      ++parameterIndex;
+      return returnValue;
+    }
+    
+    List<ModelContext> contexts = new ArrayList<ModelContext>(this.contexts);
+    
+    return contexts.get(contexts.indexOf(returnValue));
   }
 
   public ModelContext addInputParam(ResolvedType type) {
@@ -80,18 +91,25 @@ public class OperationModelContextsBuilder {
   }
   
   public ModelContext addInputParam(ResolvedType type, Optional<ResolvedType> view, Set<ResolvedType> validationGroups) {
+    String nextParameterId = String.format("%s_%s", requestMappingId, parameterIndex + 1);
     ModelContext inputParam = ModelContext.inputParam(
+        nextParameterId,
         group,
         type,
         view,
         validationGroups,
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider,
         genericsNamingStrategy,
         ignorableTypes);
-    this.contexts.add(inputParam);
-    return inputParam;
+    if (this.contexts.add(inputParam)) {
+      ++parameterIndex;
+      return inputParam;
+    }
+    
+    List<ModelContext> contexts = new ArrayList<ModelContext>(this.contexts);
+    
+    return contexts.get(contexts.indexOf(inputParam));
   }
 
   public Set<ModelContext> build() {

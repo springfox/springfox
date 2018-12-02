@@ -122,13 +122,13 @@ public class DefaultModelProvider implements ModelProvider {
   }
 
   @Override
-  public Map<String, Model> dependencies(ModelContext modelContext) {
-    Map<String, Model> models = newHashMap();
+  public Map<ResolvedType, Model> dependencies(ModelContext modelContext) {
+    Map<ResolvedType, Model> models = newHashMap();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       ModelContext parentContext = ModelContext.fromParent(modelContext, resolvedType);
       Optional<Model> model = modelFor(parentContext).or(mapModel(parentContext, resolvedType));
       if (model.isPresent()) {
-        models.put(model.get().getId(), model.get());
+        models.put(resolvedType, model.get());
       }
     }
     return models;

@@ -76,7 +76,15 @@ public class ResolvedTypes {
       final EnumTypeDeterminer enumTypeDeterminer,
       final TypeNameExtractor typeNameExtractor) {
 
-    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext);
+    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext, false);
+  }
+  
+  public static Function<ResolvedType, ModelReference> cyclicModelRefFactory(
+      final ModelContext parentContext,
+      final EnumTypeDeterminer enumTypeDeterminer,
+      final TypeNameExtractor typeNameExtractor) {
+
+    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext, true);
   }
 
 }

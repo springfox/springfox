@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -64,7 +65,7 @@ public class CachingModelProvider implements ModelProvider {
   }
 
   @Override
-  public Map<String, Model> dependencies(ModelContext modelContext) {
+  public Map<ResolvedType, Model> dependencies(ModelContext modelContext) {
     return delegate.dependencies(modelContext);
   }
 }

@@ -29,7 +29,7 @@ public class ModelRef implements ModelReference {
   private final boolean isMap;
   private final Optional<ModelReference> itemModel;
   private final Optional<AllowableValues> allowableValues;
-  private final Optional<Integer> modelId;
+  private final Optional<String> modelId;
 
   public ModelRef(String type) {
     this(type, null, null, null);
@@ -39,7 +39,7 @@ public class ModelRef implements ModelReference {
     this(type, itemType, false);
   }
 
-  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues, Optional<Integer> modelId) {
+  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues, Optional<String> modelId) {
     this(type, itemType, allowableValues, false, modelId);
   }
 
@@ -51,7 +51,7 @@ public class ModelRef implements ModelReference {
     this(type, itemType, null, isMap, null);
   }
 
-  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap, Optional<Integer> modelId) {
+  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap, Optional<String> modelId) {
     this.type = type;
     this.isMap = isMap;
     this.allowableValues = Optional.fromNullable(allowableValues);
@@ -75,6 +75,11 @@ public class ModelRef implements ModelReference {
   }
 
   @Override
+  public boolean isCyclic() {
+    return false;
+  }
+
+  @Override
   public String getItemType() {
     return itemModel.transform(toName()).orNull();
   }
@@ -88,9 +93,9 @@ public class ModelRef implements ModelReference {
   public Optional<ModelReference> itemModel() {
     return itemModel;
   }
-  
+
   @Override
-  public Optional<Integer> getModelId() {
+  public Optional<String> getModelId() {
     return modelId;
   }
 
@@ -102,7 +107,7 @@ public class ModelRef implements ModelReference {
       }
     };
   }
-  
+
   @Override
   public int hashCode() {
     return Objects.hashCode(type, isMap, itemModel, allowableValues, modelId);
@@ -126,4 +131,5 @@ public class ModelRef implements ModelReference {
         Objects.equal(allowableValues, that.allowableValues) &&
         Objects.equal(modelId, that.modelId);
     }
+
 }

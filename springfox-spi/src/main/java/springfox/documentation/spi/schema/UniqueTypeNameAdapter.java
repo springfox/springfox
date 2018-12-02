@@ -20,7 +20,6 @@
 package springfox.documentation.spi.schema;
 
 import java.util.Map;
-import java.util.Set;
 
 import com.google.common.base.Optional;
 
@@ -30,34 +29,35 @@ public interface UniqueTypeNameAdapter {
    * Provides information about models equality
    * @return a map with Models id
    */
-  Map<Integer, Integer> getLinks();
+  Map<String, String> getLinks();
 
   /**
    * Provides information about models with same types name
    * @param modelId - id of model
-   * @return a set with Models id
+   * @return a map with Models id and sroting key
    */
-  Set<Integer> getSimilarTypes(final int modelId);
+  Map<String, String> getSimilarTypes(final String modelId);
 
   /**
    * Returns type for the model
    * @param modelId - id of model
    * @return a set with Models id
    */
-  Optional<String> getTypeName(int modelId);
+  Optional<String> getTypeName(String modelId);
 
   /**
    * Register model name to keep it unique
    * @param typeName - string representation of the models name
    * @param modelId - id of model
+   * @param sortingKey - sorting key of model
    */
-  void registerType(String typeName, int modelId);
+  void registerType(String typeName, String modelId, String sortingKey);
 
   /**
    * Sets equality of two models to make sure, that models will be treated as one
    * @param modelIdOf - id of the first model
    * @param modelIdTo - id of the second model
    */
-  void setEqualityFor(int modelIdOf, int modelIdTo);
+  void setEqualityFor(String modelIdOf, String modelIdTo);
 
 }

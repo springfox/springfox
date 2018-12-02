@@ -20,6 +20,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import org.springframework.http.MediaType;
@@ -29,16 +30,18 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.builders.ApiDescriptionBuilder;
+import springfox.documentation.schema.Model;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.*;
 
 public class RequestMappingContext {
   private final OperationModelContextsBuilder operationModelContextsBuilder;
@@ -47,9 +50,12 @@ public class RequestMappingContext {
   private final String requestMappingPattern;
   private final ApiDescriptionBuilder apiDescriptionBuilder;
 
-  public RequestMappingContext(DocumentationContext context,
-      RequestHandler handler,
-      UniqueTypeNameAdapter uniqueTypeNameAdapter) {
+  private final Map<String, Model> modelMap = newHashMap();
+
+  public RequestMappingContext(
+      String requestMappingId,
+      DocumentationContext context,
+      RequestHandler handler) {
 
     this.documentationContext = context;
     this.handler = handler;
@@ -57,7 +63,7 @@ public class RequestMappingContext {
     this.operationModelContextsBuilder = new OperationModelContextsBuilder(
         context.getGroupName(),
         context.getDocumentationType(),
-        uniqueTypeNameAdapter,
+        requestMappingId,
         context.getAlternateTypeProvider(),
         context.getGenericsNamingStrategy(),
         context.getIgnorableParameterTypes());
@@ -77,12 +83,31 @@ public class RequestMappingContext {
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
+  private RequestMappingContext(
+      DocumentationContext context,
+      RequestHandler handler,
+      OperationModelContextsBuilder operationModelContextsBuilder,
+      String requestMappingPattern,
+      Map<String, Model> knownModels) {
+
+    this.documentationContext = context;
+    this.handler = handler;
+    this.operationModelContextsBuilder = operationModelContextsBuilder;
+    this.requestMappingPattern = requestMappingPattern;
+    this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
+    modelMap.putAll(knownModels);
+  }
+
   public DocumentationContext getDocumentationContext() {
     return documentationContext;
   }
 
   public String getRequestMappingPattern() {
     return requestMappingPattern;
+  }
+
+  public ImmutableMap<String, Model> getModelMap() {
+    return ImmutableMap.copyOf(modelMap);
   }
 
   public OperationModelContextsBuilder operationModelsBuilder() {
@@ -102,8 +127,13 @@ public class RequestMappingContext {
   }
 
   public RequestMappingContext copyPatternUsing(String requestMappingPattern) {
-    return new RequestMappingContext(documentationContext, handler, operationModelContextsBuilder,
-        requestMappingPattern);
+    return new RequestMappingContext(documentationContext, handler,
+        operationModelContextsBuilder, requestMappingPattern);
+  }
+
+  public RequestMappingContext withKnownModels(Map<String, Model> knownModels) {
+    return new RequestMappingContext(documentationContext, handler,
+        operationModelContextsBuilder, requestMappingPattern, knownModels);
   }
 
   public ImmutableSet<Class> getIgnorableParameterTypes() {

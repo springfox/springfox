@@ -19,11 +19,9 @@
 
 package springfox.documentation.schema;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 import java.util.Collections;
 
 import org.slf4j.Logger;
@@ -37,30 +35,33 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
 
   private static final Logger LOG = LoggerFactory.getLogger(TypeNameIndexingAdapter.class);
 
-  private final Map<String, Set<Integer>> similarTypes = new HashMap<String, Set<Integer>>();
-  private final Map<Integer, String> modelIdCache = new HashMap<Integer, String>();
-  private final Map<Integer, Integer> links = new HashMap<Integer, Integer>();
+  private final Map<String, Map<String, String>> similarTypes = new HashMap<String, Map<String, String>>();
+  private final Map<String, String> modelIdCache = new HashMap<String, String>();
+  private final Map<String, String> links = new HashMap<String, String>();
 
   @Override
-  public Map<Integer, Integer> getLinks() {
+  public Map<String, String> getLinks() {
     return Collections.unmodifiableMap(links);
   }
 
   @Override
-  public Set<Integer> getSimilarTypes(final int modelId) {
+  public Map<String, String> getSimilarTypes(final String modelId) {
     if (modelIdCache.containsKey(modelId)) {
-      return Collections.unmodifiableSet(similarTypes.get(modelIdCache.get(modelId)));
+      return Collections.unmodifiableMap(similarTypes.get(modelIdCache.get(modelId)));
     }
-    return new TreeSet<Integer>();
+    return new TreeMap<String, String>();
   }
 
   @Override
-  public Optional<String> getTypeName(final int modelId) {
+  public Optional<String> getTypeName(final String modelId) {
     return Optional.fromNullable(modelIdCache.get(modelId));
   }
 
   @Override
-  public void registerType(final String typeName, final int modelId) {
+  public void registerType(final String typeName, final String modelId, final String sortingKey) {
+    //CHECKSTYLE:OFF
+    System.out.println("Sort key: " + sortingKey);
+    //CHECKSTYLE:ON
     if (modelIdCache.containsKey(modelId)) {
       LOG.debug("Rewriting type {} with model id: {}, because it is already registered", 
           typeName, 
@@ -68,31 +69,33 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
       similarTypes.get(modelIdCache.get(modelId)).remove(modelId);
     }
     if (similarTypes.containsKey(typeName)) {
-      similarTypes.get(typeName).add(modelId);
+      similarTypes.get(typeName).put(modelId, sortingKey);
     } else {
-      similarTypes.put(typeName, new TreeSet<Integer>(Arrays.asList(modelId)));
+      Map<String, String> typeRegistration = new TreeMap<String, String>();
+      typeRegistration.put(modelId, sortingKey);
+      similarTypes.put(typeName, typeRegistration);
     }
     modelIdCache.put(modelId, typeName);
   }
 
   @Override
-  public void setEqualityFor(final int modelIdOf, final int modelIdTo) {
+  public void setEqualityFor(final String modelIdOf, final String modelIdTo) {
     if (!modelIdCache.containsKey(modelIdOf) ||
         !modelIdCache.containsKey(modelIdTo)) {
       return;
     }
-    int id1 = getOriginal(modelIdOf);
-    int id2 = getOriginal(modelIdTo);
-    if (id1 == id2) {
+    String id1 = getOriginal(modelIdOf);
+    String id2 = getOriginal(modelIdTo);
+    if (id1.equals(id2)) {
       return;
     }
-    links.put(id1 < id2 ? id1 : id2, id1 < id2 ? id2 : id1);
+    links.put(id1.compareTo(id2) < 0 ? id1 : id2, id1.compareTo(id2) < 0 ? id2 : id1);
   }
 
-  private int getOriginal(final int modelId) {
-    int originalId = modelId;
+  private String getOriginal(final String modelId) {
+    String originalId = modelId;
     while (links.containsKey(originalId)) {
-      originalId = links.get(modelId);
+      originalId = links.get(originalId);
     }
     return originalId;
   }

@@ -43,6 +43,7 @@ import springfox.documentation.spring.web.paths.PathMappingAdjuster;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -107,8 +108,6 @@ public class ApiListingScanner {
 
   public Multimap<String, ApiListing> scan(ApiListingScanningContext context) {
     final Multimap<String, ApiListing> apiListingMap = LinkedListMultimap.create();
-    final Map<ResourceGroup, Map<String, Model>> models = apiModelReader.read(context);
-
     int position = 0;
 
     Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
@@ -128,8 +127,10 @@ public class ApiListingScanner {
       Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = newHashSet();
 
+      Map<String, Model> models = new LinkedHashMap<String, Model>();
       List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
       for (RequestMappingContext each : sortedByMethods(requestMappings)) {
+        models.putAll(apiModelReader.read(each.withKnownModels(models)));
         apiDescriptions.addAll(apiDescriptionReader.read(each));
       }
 
@@ -162,7 +163,7 @@ public class ApiListingScanner {
           .protocols(protocols)
           .securityReferences(securityReferences)
           .apis(sortedApis)
-          .models(models.get(resourceGroup))
+          .models(models)
           .position(position++)
           .availableTags(documentationContext.getTags());
 
