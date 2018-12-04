@@ -33,12 +33,12 @@ class ResolvedMethodParameterEquivalence implements BiPredicate<ResolvedMethodPa
 
   public int doHash(ResolvedMethodParameter self) {
     return Objects.hash(
-            self.defaultName(),
-            self.getParameterIndex(),
-            self.getParameterType());
+        self.defaultName(),
+        self.getParameterIndex(),
+        self.getParameterType());
   }
 
-  public Wrapper wrap(ResolvedMethodParameter input) {
+  Wrapper wrap(ResolvedMethodParameter input) {
     return new Wrapper(input, this);
   }
 
@@ -46,7 +46,7 @@ class ResolvedMethodParameterEquivalence implements BiPredicate<ResolvedMethodPa
     private final ResolvedMethodParameter parameter;
     private final ResolvedMethodParameterEquivalence equivalence;
 
-  public Wrapper(ResolvedMethodParameter parameter, ResolvedMethodParameterEquivalence equivalence) {
+    Wrapper(ResolvedMethodParameter parameter, ResolvedMethodParameterEquivalence equivalence) {
       this.parameter = parameter;
       this.equivalence = equivalence;
     }
@@ -58,7 +58,8 @@ class ResolvedMethodParameterEquivalence implements BiPredicate<ResolvedMethodPa
 
     @Override
     public boolean equals(Object other) {
-      return equivalence.equals(((Wrapper) other).equivalence) && equivalence.test(parameter, ((Wrapper) other).parameter);
+      return equivalence.equals(((Wrapper) other).equivalence) && equivalence.test(parameter,
+          ((Wrapper) other).parameter);
     }
   }
 }

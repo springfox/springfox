@@ -44,7 +44,7 @@ public class Tags {
         .collect(toList());
     List<Tag> tags =
         StreamSupport.stream(allListings.spliterator(), false)
-            .map((Function<ApiListing,Iterable<Tag>>) ApiListing::getTags)
+            .map((Function<ApiListing, Iterable<Tag>>) ApiListing::getTags)
             .flatMap(tagIterable -> StreamSupport.stream(tagIterable.spliterator(), false))
             .collect(toList());
     TreeSet<Tag> tagSet = new TreeSet<>(tagComparator());

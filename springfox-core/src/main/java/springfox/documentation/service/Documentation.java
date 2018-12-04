@@ -37,7 +37,8 @@ public class Documentation {
   private final String host;
   private final Set<String> schemes;
   private final List<VendorExtension> vendorExtensions;
-
+  
+  @SuppressWarnings("ParameterNumber")
   public Documentation(
       String groupName,
       String basePath,

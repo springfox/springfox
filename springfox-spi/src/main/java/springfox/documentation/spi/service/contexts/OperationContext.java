@@ -74,8 +74,10 @@ public class OperationContext {
 
   public List<ResponseMessage> getGlobalResponseMessages(String forHttpMethod) {
     DocumentationContext documentationContext = getDocumentationContext();
-    if (documentationContext.getGlobalResponseMessages().containsKey(RequestMethod.valueOf(forHttpMethod))) {
-      return documentationContext.getGlobalResponseMessages().get(RequestMethod.valueOf(forHttpMethod));
+    if (documentationContext.getGlobalResponseMessages()
+        .containsKey(RequestMethod.valueOf(forHttpMethod))) {
+      return documentationContext.getGlobalResponseMessages()
+          .get(RequestMethod.valueOf(forHttpMethod));
     }
     return new ArrayList<>();
   }
@@ -123,7 +125,8 @@ public class OperationContext {
   }
 
   public Set<Class> getIgnorableParameterTypes() {
-    return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+    return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(toSet(),
+        Collections::unmodifiableSet));
   }
 
   public GenericTypeNamingStrategy getGenericsNamingStrategy() {
@@ -163,7 +166,7 @@ public class OperationContext {
     return requestContext.findControllerAnnotation(annotation);
   }
 
-  public <T extends Annotation> List<T > findAllAnnotations(Class<T> annotation) {
+  public <T extends Annotation> List<T> findAllAnnotations(Class<T> annotation) {
     return requestContext.findAnnotations(annotation);
   }
 }

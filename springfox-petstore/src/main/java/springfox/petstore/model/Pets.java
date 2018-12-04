@@ -23,6 +23,10 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public class Pets {
+  private Pets() {
+    throw new UnsupportedOperationException();
+  }
+
   public static Predicate<Pet> statusIs(final String status) {
     return new Predicate<Pet>() {
       @Override

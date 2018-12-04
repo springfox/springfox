@@ -54,9 +54,9 @@ public class SwaggerMediaTypeReader implements OperationBuilderPlugin {
 
   private Set<String> asSet(String mediaTypes) {
     return Stream.of(mediaTypes.split(","))
-            .map(String::trim)
-            .filter(((Predicate<String>)String::isEmpty).negate())
-            .collect(toSet());
+        .map(String::trim)
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .collect(toSet());
   }
 
 

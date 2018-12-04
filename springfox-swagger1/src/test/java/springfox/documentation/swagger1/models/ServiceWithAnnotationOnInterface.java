@@ -34,7 +34,7 @@ public class ServiceWithAnnotationOnInterface {
     }
   }
 
-  public static interface SimpleService {
+  public interface SimpleService {
 
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses({

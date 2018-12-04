@@ -49,7 +49,8 @@ public class Operation {
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
   private final List<VendorExtension> vendorExtensions;
-
+  
+  @SuppressWarnings("ParameterNumber")
   public Operation(
       HttpMethod method,
       String summary,

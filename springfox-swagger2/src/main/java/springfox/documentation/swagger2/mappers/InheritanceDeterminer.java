@@ -30,7 +30,7 @@ import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
 class InheritanceDeterminer {
   private final Map<String, RefModel> parentLookup = new HashMap<String, RefModel>();
 
-  public InheritanceDeterminer(Map<String, Model> models) {
+  InheritanceDeterminer(Map<String, Model> models) {
     for (Model each : models.values()) {
       for (ModelReference modelReference : nullToEmptyList(each.getSubTypes())) {
         parentLookup.put(modelReference.getType(), toRefModel(each));
@@ -38,11 +38,11 @@ class InheritanceDeterminer {
     }
   }
 
-  public boolean hasParent(Model model) {
+  boolean hasParent(Model model) {
     return parentLookup.containsKey(model.getName());
   }
 
-  public RefModel parent(Model model) {
+  RefModel parent(Model model) {
     return parentLookup.get(model.getName());
   }
 

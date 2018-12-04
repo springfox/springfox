@@ -30,7 +30,7 @@ import java.util.function.BiPredicate;
 import static java.util.stream.Collectors.*;
 
 class PathAndParametersEquivalence implements BiPredicate<RequestHandler, RequestHandler> {
-  private static final ResolvedMethodParameterEquivalence parameterEquivalence
+  private static final ResolvedMethodParameterEquivalence RESOLVED_METHOD_PARAMETER_EQUIVALENCE
       = new ResolvedMethodParameterEquivalence();
 
   public boolean test(RequestHandler a, RequestHandler b) {
@@ -42,7 +42,7 @@ class PathAndParametersEquivalence implements BiPredicate<RequestHandler, Reques
 
   private Set<ResolvedMethodParameterEquivalence.Wrapper> wrapped(List<ResolvedMethodParameter> parameters) {
     return parameters.stream()
-        .map(parameterEquivalence::wrap)
+        .map(RESOLVED_METHOD_PARAMETER_EQUIVALENCE::wrap)
         .collect(toSet());
   }
 
@@ -54,7 +54,7 @@ class PathAndParametersEquivalence implements BiPredicate<RequestHandler, Reques
         wrapped(requestHandler.getParameters()));
   }
 
-  public Wrapper wrap(RequestHandler input) {
+  Wrapper wrap(RequestHandler input) {
     return new Wrapper(input, this);
   }
 
@@ -62,7 +62,7 @@ class PathAndParametersEquivalence implements BiPredicate<RequestHandler, Reques
     private final RequestHandler requestHandler;
     private final PathAndParametersEquivalence equivalence;
 
-    public Wrapper(RequestHandler requestHandler, PathAndParametersEquivalence equivalence) {
+    Wrapper(RequestHandler requestHandler, PathAndParametersEquivalence equivalence) {
       this.requestHandler = requestHandler;
       this.equivalence = equivalence;
     }

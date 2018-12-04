@@ -56,13 +56,12 @@ class ParameterAnnotationReaderSpec extends Specification {
 
   def "Parameter annotations walk up the object interface hierarchy" () {
     given:
-      ParameterAnnotationReader annotations = new ParameterAnnotationReader()
       Method method = A.class.methods.find { it.name.equals(methodName)}
       MethodParameter methodParameter = Stub(MethodParameter)
       methodParameter.getMethod() >> method
       methodParameter.getParameterIndex() >> 0
     when:
-      Optional<ApiParam> annotation = annotations.fromHierarchy(methodParameter, ApiParam.class)
+      Optional<ApiParam> annotation = ParameterAnnotationReader.fromHierarchy(methodParameter, ApiParam.class)
     then:
       annotation.isPresent() == !isEmpty(expected)
       !annotation.isPresent() || annotation.get().name() == expected

@@ -48,7 +48,7 @@ import static org.springframework.util.StringUtils.*;
 public final class ApiModelProperties {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiModelProperties.class);
   private static final Pattern RANGE_PATTERN = Pattern.compile("range([\\[(])(.*),(.*)([])])$");
-  
+
   private ApiModelProperties() {
     throw new UnsupportedOperationException();
   }
@@ -72,7 +72,8 @@ public final class ApiModelProperties {
             matcher.group(4).equals(")"));
       }
     } else if (trimmed.contains(",")) {
-      List<String> split = Stream.of(trimmed.split(",")).map(String::trim).filter(item -> !item.isEmpty()).collect(toList());
+      List<String> split =
+          Stream.of(trimmed.split(",")).map(String::trim).filter(item -> !item.isEmpty()).collect(toList());
       allowableValues = new AllowableListValues(split, "LIST");
     } else if (hasText(trimmed)) {
       List<String> singleVal = singletonList(trimmed);
@@ -113,7 +114,8 @@ public final class ApiModelProperties {
       annotation = ofNullable(AnnotationUtils.findAnnotation(((Method) annotated), ApiModelProperty.class));
     }
 
-    return annotation.map(Optional::of).orElse(ofNullable(AnnotationUtils.getAnnotation(annotated, ApiModelProperty.class)));
+    return annotation.map(Optional::of).orElse(ofNullable(AnnotationUtils.getAnnotation(annotated,
+        ApiModelProperty.class)));
   }
 
   static Function<ApiModelProperty, String> toExample() {

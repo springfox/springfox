@@ -28,6 +28,10 @@ import static java.util.Optional.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ApiListingMerger {
+  private ApiListingMerger() {
+    throw new UnsupportedOperationException();
+  }
+
   public static Optional<ApiListing> mergedApiListing(Collection<ApiListing> apiListings) {
     if (nullToEmptyList(apiListings).size() > 1) {
       ApiListing merged = new ApiListing();

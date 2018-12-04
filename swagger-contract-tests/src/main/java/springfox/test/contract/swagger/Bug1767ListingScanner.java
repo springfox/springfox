@@ -39,6 +39,7 @@ import java.util.Set;
 
 import static java.util.Collections.*;
 
+@SuppressWarnings({"WhitespaceAround", "ParenPad"})
 public class Bug1767ListingScanner implements ApiListingScannerPlugin {
 
   // tag::api-listing-plugin[]

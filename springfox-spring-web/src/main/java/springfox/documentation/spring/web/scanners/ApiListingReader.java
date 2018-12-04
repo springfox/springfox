@@ -32,7 +32,7 @@ import java.util.function.Function;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 @Component
-@Order(value= Ordered.HIGHEST_PRECEDENCE)
+@Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class ApiListingReader implements ApiListingBuilderPlugin {
   @Override
   public void apply(ApiListingContext apiListingContext) {
@@ -46,12 +46,7 @@ public class ApiListingReader implements ApiListingBuilderPlugin {
   }
 
   private Function<Class<?>, String> description() {
-    return new Function<Class<?>, String>() {
-      @Override
-      public String apply(Class<?> input) {
-        return splitCamelCase(input.getSimpleName(), " ");
-      }
-    };
+    return input -> splitCamelCase(input.getSimpleName(), " ");
   }
 
   @Override

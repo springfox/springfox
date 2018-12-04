@@ -54,7 +54,8 @@ public class SwaggerOperationTagsReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     Set<String> defaultTags = tagsProvider.tags(context);
-    Set<String> tags = Stream.concat(operationTags(context).stream(), controllerTags(context).stream()).collect(toSet());
+    Set<String> tags =
+        Stream.concat(operationTags(context).stream(), controllerTags(context).stream()).collect(toSet());
     if (tags.isEmpty()) {
       context.operationBuilder().tags(defaultTags);
     } else {

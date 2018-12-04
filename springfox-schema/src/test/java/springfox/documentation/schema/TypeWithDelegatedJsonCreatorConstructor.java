@@ -31,7 +31,9 @@ public class TypeWithDelegatedJsonCreatorConstructor {
   }
 
   @JsonCreator
-  public static TypeWithDelegatedJsonCreatorConstructor create(@JsonProperty("foo") String foo, @JsonProperty("bar") Integer bar) {
+  public static TypeWithDelegatedJsonCreatorConstructor create(
+      @JsonProperty("foo") String foo,
+      @JsonProperty("bar") Integer bar) {
     return new TypeWithDelegatedJsonCreatorConstructor(foo, bar);
   }
 

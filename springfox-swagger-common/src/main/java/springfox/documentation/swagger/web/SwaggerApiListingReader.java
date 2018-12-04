@@ -47,7 +47,9 @@ public class SwaggerApiListingReader implements ApiListingBuilderPlugin {
     Optional<? extends Class<?>> controller = apiListingContext.getResourceGroup().getControllerClass();
     if (controller.isPresent()) {
       Optional<Api> apiAnnotation = ofNullable(findAnnotation(controller.get(), Api.class));
-      String description = apiAnnotation.map(Api::description).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
+      String description =
+          apiAnnotation.map(Api::description).filter(((Predicate<String>) String::isEmpty).negate())
+              .orElse(null);
 
       Set<String> tagSet = apiAnnotation.map(tags())
           .orElse(new TreeSet<>());

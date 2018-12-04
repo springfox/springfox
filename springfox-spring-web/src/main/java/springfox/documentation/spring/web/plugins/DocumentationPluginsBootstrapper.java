@@ -46,14 +46,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Component
 @Conditional(SpringIntegrationNotPresentInClassPathCondition.class)
-public class DocumentationPluginsBootstrapper extends AbstractDocumentationPluginsBootstrapper implements SmartLifecycle {
-  private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
+public class DocumentationPluginsBootstrapper
+    extends AbstractDocumentationPluginsBootstrapper
+    implements SmartLifecycle {
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
   private static final String SPRINGFOX_DOCUMENTATION_AUTO_STARTUP = "springfox.documentation.auto-startup";
   private final Environment environment;
 
   private AtomicBoolean initialized = new AtomicBoolean(false);
 
   @Autowired
+  @SuppressWarnings("ParameterNumber")
   public DocumentationPluginsBootstrapper(
       DocumentationPluginsManager documentationPluginsManager,
       List<RequestHandlerProvider> handlerProviders,
@@ -86,7 +90,7 @@ public class DocumentationPluginsBootstrapper extends AbstractDocumentationPlugi
   @Override
   public void start() {
     if (initialized.compareAndSet(false, true)) {
-      log.info("Documentation plugins bootstrapped");
+      LOGGER.info("Documentation plugins bootstrapped");
       super.bootstrapDocumentationPlugins();
     }
   }
@@ -94,7 +98,7 @@ public class DocumentationPluginsBootstrapper extends AbstractDocumentationPlugi
   @Override
   public void stop() {
     initialized.getAndSet(false);
-    scanned.clear();
+    getScanned().clear();
   }
 
   @Override

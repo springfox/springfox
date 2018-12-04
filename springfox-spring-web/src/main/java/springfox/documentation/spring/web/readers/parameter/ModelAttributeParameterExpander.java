@@ -74,7 +74,7 @@ public class ModelAttributeParameterExpander {
   private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
-  protected DocumentationPluginsManager pluginsManager;
+  private DocumentationPluginsManager pluginsManager;
 
   @Autowired
   public ModelAttributeParameterExpander(
@@ -94,8 +94,9 @@ public class ModelAttributeParameterExpander {
     Iterable<ResolvedMethod> getters = accessors.in(context.getParamType()).stream()
         .filter(onlyValidGetters(propertyLookupByGetter.keySet())).collect(toList());
 
-    Map<String, ResolvedField> fieldsByName = StreamSupport.stream(this.fields.in(context.getParamType()).spliterator(),false)
-        .collect(toMap((ResolvedMember::getName), identity()));
+    Map<String, ResolvedField> fieldsByName =
+        StreamSupport.stream(this.fields.in(context.getParamType()).spliterator(), false)
+            .collect(toMap((ResolvedMember::getName), identity()));
 
 
     LOG.debug("Expanding parameter type: {}", context.getParamType());
@@ -111,15 +112,15 @@ public class ModelAttributeParameterExpander {
     attributes.stream()
         .filter(simpleType().negate())
         .filter(recursiveType(context).negate())
-            .forEach((each) -> {
-      LOG.debug("Attempting to expand expandable property: {}", each.getName());
-      parameters.addAll(
-          expand(
-              context.childContext(
-                  nestedParentName(context.getParentName(), each),
-                  each.getFieldType(),
-                  context.getOperationContext())));
-    });
+        .forEach((each) -> {
+          LOG.debug("Attempting to expand expandable property: {}", each.getName());
+          parameters.addAll(
+              expand(
+                  context.childContext(
+                      nestedParentName(context.getParentName(), each),
+                      each.getFieldType(),
+                      context.getOperationContext())));
+        });
 
     Stream<ModelAttributeField> collectionTypes = attributes.stream()
         .filter(isCollection().and(recursiveCollectionItemType(context.getParamType()).negate()));
@@ -166,7 +167,7 @@ public class ModelAttributeParameterExpander {
     return Stream.concat(
         modelAttributesFromFields,
         modelAttributesFromGetters)
-            .collect(toList());
+        .collect(toList());
   }
 
   private Function<ResolvedField, ModelAttributeField> toModelAttributeField(
@@ -217,9 +218,9 @@ public class ModelAttributeParameterExpander {
   private Predicate<ModelAttributeField> simpleType() {
     return isCollection().negate().and(isMap().negate())
         .and(
-            belongsToJavaPackage().or(
-            isBaseType()).or(
-            isEnum()));
+            belongsToJavaPackage()
+                .or(isBaseType())
+                .or(isEnum()));
   }
 
   private Predicate<ModelAttributeField> isCollection() {
@@ -302,4 +303,11 @@ public class ModelAttributeParameterExpander {
     return Introspector.getBeanInfo(clazz);
   }
 
+  public DocumentationPluginsManager getPluginsManager() {
+    return pluginsManager;
+  }
+
+  public void setPluginsManager(DocumentationPluginsManager pluginsManager) {
+    this.pluginsManager = pluginsManager;
+  }
 }

@@ -103,11 +103,11 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
     class PropertyExampleSerializer extends StdSerializer<Object> {
 
-      private final static Pattern JSON_NUMBER_PATTERN =
+      private static final Pattern JSON_NUMBER_PATTERN =
           Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
 
       @SuppressWarnings("unused")
-      public PropertyExampleSerializer() {
+      PropertyExampleSerializer() {
         this(Object.class);
       }
 

@@ -127,9 +127,9 @@ public abstract class ModelMapper {
   private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
     Map<String, Property> mappedProperties = new LinkedHashMap<String, Property>();
     properties.entrySet().stream().filter(voidProperties().negate())
-    .forEachOrdered(propertyEntry -> {
-      mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
-    });
+        .forEachOrdered(propertyEntry -> {
+          mappedProperties.put(propertyEntry.getKey(), mapProperty(propertyEntry.getValue()));
+        });
     return mappedProperties;
   }
 
@@ -162,6 +162,7 @@ public abstract class ModelMapper {
     return ofNullable(type.findSupertype(Map.class));
   }
 
+  @SuppressWarnings("NPathComplexity")
   private Property mapProperty(ModelProperty source) {
     Property property = modelRefToProperty(source.getModelRef());
 

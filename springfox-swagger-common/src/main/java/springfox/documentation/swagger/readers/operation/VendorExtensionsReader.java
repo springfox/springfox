@@ -48,7 +48,6 @@ import static org.springframework.util.StringUtils.*;
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class VendorExtensionsReader implements OperationBuilderPlugin {
-
   private static final Logger LOG = LoggerFactory.getLogger(VendorExtensionsReader.class);
 
   @Override
@@ -70,7 +69,7 @@ public class VendorExtensionsReader implements OperationBuilderPlugin {
   }
 
   private Function<Extension, VendorExtension> toVendorExtension() {
-    return input -> ofNullable(input.name()).filter(((Predicate<String>)String::isEmpty).negate())
+    return input -> ofNullable(input.name()).filter(((Predicate<String>) String::isEmpty).negate())
         .map(propertyExtension(input))
         .orElse(objectExtension(input));
   }

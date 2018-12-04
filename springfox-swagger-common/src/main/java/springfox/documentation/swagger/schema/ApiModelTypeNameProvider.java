@@ -40,7 +40,7 @@ public class ApiModelTypeNameProvider extends DefaultTypeNameProvider {
     String defaultTypeName = super.nameFor(type);
     if (annotation != null) {
       return ofNullable(annotation.value())
-          .filter(((Predicate<String>)String::isEmpty).negate())
+          .filter(((Predicate<String>) String::isEmpty).negate())
           .orElse(defaultTypeName);
     }
     return defaultTypeName;

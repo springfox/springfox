@@ -20,6 +20,6 @@ package springfox.documentation.spring.web.dummy.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@JsonSerialize(as= Pet.class)
+@JsonSerialize(as = Pet.class)
 public class PetWithSerializer {
 }

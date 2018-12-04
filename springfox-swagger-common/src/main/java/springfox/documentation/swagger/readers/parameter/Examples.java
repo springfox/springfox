@@ -38,11 +38,12 @@ public class Examples {
 
   public static Map<String, List<Example>> examples(io.swagger.annotations.Example example) {
     Map<String, List<Example>> examples = new HashMap<>();
-    for (ExampleProperty each: example.value()) {
+    for (ExampleProperty each : example.value()) {
       if (!isEmpty(each.value())) {
         examples.putIfAbsent(each.mediaType(), new LinkedList<>());
         examples.get(each.mediaType()).add(new Example(ofNullable(each.mediaType())
-                .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null), each.value()));
+            .filter(((Predicate<String>) String::isEmpty).negate())
+            .orElse(null), each.value()));
       }
     }
     return examples;
