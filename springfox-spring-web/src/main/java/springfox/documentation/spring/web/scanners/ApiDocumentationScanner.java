@@ -54,8 +54,8 @@ public class ApiDocumentationScanner {
 
   @Autowired
   public ApiDocumentationScanner(
-      ApiListingReferenceScanner apiListingReferenceScanner,
-      ApiListingScanner apiListingScanner) {
+          ApiListingReferenceScanner apiListingReferenceScanner,
+          ApiListingScanner apiListingScanner) {
 
     this.apiListingReferenceScanner = apiListingReferenceScanner;
     this.apiListingScanner = apiListingScanner;
@@ -64,49 +64,49 @@ public class ApiDocumentationScanner {
   public Documentation scan(DocumentationContext context) {
     ApiListingReferenceScanResult result = apiListingReferenceScanner.scan(context);
     ApiListingScanningContext listingContext = new ApiListingScanningContext(context,
-        result.getResourceGroupRequestMappings());
+            result.getResourceGroupRequestMappings());
 
     Map<String, List<ApiListing>> apiListings = apiListingScanner.scan(listingContext);
     Set<Tag> tags = toTags(apiListings);
     tags.addAll(context.getTags());
     DocumentationBuilder group = new DocumentationBuilder()
-        .name(context.getGroupName())
-        .apiListingsByResourceGroupName(apiListings)
-        .produces(context.getProduces())
-        .consumes(context.getConsumes())
-        .host(context.getHost())
-        .schemes(context.getProtocols())
-        .basePath(ROOT)
-        .extensions(context.getVendorExtentions())
-        .tags(tags);
+            .name(context.getGroupName())
+            .apiListingsByResourceGroupName(apiListings)
+            .produces(context.getProduces())
+            .consumes(context.getConsumes())
+            .host(context.getHost())
+            .schemes(context.getProtocols())
+            .basePath(context.getBasePath())
+            .extensions(context.getVendorExtentions())
+            .tags(tags);
 
     Set<ApiListingReference> apiReferenceSet = new TreeSet<>(listingReferencePathComparator());
     apiReferenceSet.addAll(apiListingReferences(apiListings, context));
 
     ResourceListing resourceListing = new ResourceListingBuilder()
-        .apiVersion(context.getApiInfo().getVersion())
-        .apis(apiReferenceSet.stream()
-            .sorted(context.getListingReferenceOrdering())
-            .collect(toList()))
-        .securitySchemes(context.getSecuritySchemes())
-        .info(context.getApiInfo())
-        .build();
+            .apiVersion(context.getApiInfo().getVersion())
+            .apis(apiReferenceSet.stream()
+                    .sorted(context.getListingReferenceOrdering())
+                    .collect(toList()))
+            .securitySchemes(context.getSecuritySchemes())
+            .info(context.getApiInfo())
+            .build();
     group.resourceListing(resourceListing);
     return group.build();
   }
 
   private Collection<? extends ApiListingReference> apiListingReferences(
-      Map<String, List<ApiListing>> apiListings,
-      DocumentationContext context) {
+          Map<String, List<ApiListing>> apiListings,
+          DocumentationContext context) {
     return apiListings.entrySet().stream().map(toApiListingReference(context)).collect(toSet());
   }
 
   private Function<Map.Entry<String, List<ApiListing>>, ApiListingReference> toApiListingReference(
-      final DocumentationContext context) {
+          final DocumentationContext context) {
 
     return input -> {
       String description = String.join(System.getProperty("line.separator"),
-          descriptions(input.getValue()));
+              descriptions(input.getValue()));
       PathAdjuster adjuster = new PathMappingAdjuster(context);
       PathProvider pathProvider = context.getPathProvider();
       String path = pathProvider.getResourceListingPath(context.getGroupName(), input.getKey());
@@ -116,8 +116,8 @@ public class ApiDocumentationScanner {
 
   private Iterable<String> descriptions(Collection<ApiListing> apiListings) {
     return apiListings.stream()
-        .map(ApiListing::getDescription)
-        .sorted(Comparator.naturalOrder()).collect(toList());
+            .map(ApiListing::getDescription)
+            .sorted(Comparator.naturalOrder()).collect(toList());
   }
 
 }
