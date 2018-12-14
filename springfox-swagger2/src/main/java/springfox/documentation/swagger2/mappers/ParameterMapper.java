@@ -29,6 +29,8 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
+import org.springframework.util.StringUtils;
+
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
@@ -54,7 +56,7 @@ public class ParameterMapper {
     BodyParameter parameter = new BodyParameter()
         .description(source.getDescription())
         .name(source.getName())
-        .schema(fromModelRef(source.getModelRef()));
+        .schema(toSchema(source));
     parameter.setIn(source.getParamType());
     parameter.setAccess(source.getParamAccess());
     parameter.setPattern(source.getPattern());
@@ -69,6 +71,20 @@ public class ParameterMapper {
 
     //TODO: swagger-core Body parameter does not have an enum property
     return parameter;
+  }
+
+  private Model toSchema(springfox.documentation.service.Parameter source) {
+    Model schema = fromModelRef(source.getModelRef());
+
+    if (!StringUtils.isEmpty(source.getScalarExample()) && !isEmptyExample(source.getScalarExample())) {
+      schema.setExample(source.getScalarExample());
+    }
+
+    return schema;
+  }
+
+  private boolean isEmptyExample(Object object) {
+    return object instanceof Example && StringUtils.isEmpty(((Example)object).getValue());
   }
 
   Model fromModelRef(ModelReference modelRef) {
