@@ -496,6 +496,11 @@ public class BugsController {
   public void bug2423(Bug2423 input) {
   }
 
+  @PostMapping("/2822")
+  public void bug2822(@ApiParam(example = "exampleMessage") @RequestBody String message) {
+    // Empty body is sufficient for testing
+  }
+
   public class Bug2423 {
     public String from;
     public String to;
