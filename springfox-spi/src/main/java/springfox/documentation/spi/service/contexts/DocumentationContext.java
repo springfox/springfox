@@ -70,36 +70,38 @@ public class DocumentationContext {
   private Set<String> produces;
   private Set<String> consumes;
   private String host;
+  private String basePath;
   private Set<String> protocols;
   private boolean isUriTemplatesEnabled;
   private List<VendorExtension> vendorExtensions;
 
   public DocumentationContext(
-      DocumentationType documentationType,
-      List<RequestHandler> handlerMappings,
-      ApiInfo apiInfo, String groupName,
-      ApiSelector apiSelector,
-      Set<Class> ignorableParameterTypes,
-      Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
-      List<Parameter> globalOperationParameter,
-      ResourceGroupingStrategy resourceGroupingStrategy,
-      PathProvider pathProvider,
-      List<SecurityContext> securityContexts,
-      List<? extends SecurityScheme> securitySchemes,
-      List<AlternateTypeRule> alternateTypeRules,
-      Comparator<ApiListingReference> listingReferenceOrdering,
-      Comparator<ApiDescription> apiDescriptionOrdering,
-      Comparator<Operation> operationOrdering,
-      Set<String> produces,
-      Set<String> consumes,
-      String host,
-      Set<String> protocols,
-      GenericTypeNamingStrategy genericsNamingStrategy,
-      Optional<String> pathMapping,
-      boolean isUriTemplatesEnabled,
-      Set<ResolvedType> additionalModels,
-      Set<Tag> tags,
-      List<VendorExtension> vendorExtensions) {
+          DocumentationType documentationType,
+          List<RequestHandler> handlerMappings,
+          ApiInfo apiInfo, String groupName,
+          ApiSelector apiSelector,
+          Set<Class> ignorableParameterTypes,
+          Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
+          List<Parameter> globalOperationParameter,
+          ResourceGroupingStrategy resourceGroupingStrategy,
+          PathProvider pathProvider,
+          List<SecurityContext> securityContexts,
+          List<? extends SecurityScheme> securitySchemes,
+          List<AlternateTypeRule> alternateTypeRules,
+          Comparator<ApiListingReference> listingReferenceOrdering,
+          Comparator<ApiDescription> apiDescriptionOrdering,
+          Comparator<Operation> operationOrdering,
+          Set<String> produces,
+          Set<String> consumes,
+          String host,
+          String basePath,
+          Set<String> protocols,
+          GenericTypeNamingStrategy genericsNamingStrategy,
+          Optional<String> pathMapping,
+          boolean isUriTemplatesEnabled,
+          Set<ResolvedType> additionalModels,
+          Set<Tag> tags,
+          List<VendorExtension> vendorExtensions) {
 
     this.documentationType = documentationType;
     this.handlerMappings = handlerMappings;
@@ -119,6 +121,7 @@ public class DocumentationContext {
     this.produces = produces;
     this.consumes = consumes;
     this.host = host;
+    this.basePath = basePath;
     this.protocols = protocols;
     this.genericsNamingStrategy = genericsNamingStrategy;
     this.pathMapping = pathMapping;
@@ -156,7 +159,7 @@ public class DocumentationContext {
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
     return globalResponseMessages;
   }
-  
+
   public List<Parameter> getGlobalRequestParameters() {
     return globalOperationParameters;
   }
@@ -208,6 +211,10 @@ public class DocumentationContext {
 
   public String getHost() {
     return host;
+  }
+
+  public String getBasePath() {
+    return basePath;
   }
 
   public Set<String> getProtocols() {

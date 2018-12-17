@@ -84,6 +84,7 @@ public class DocumentationContextBuilder {
   private boolean applyDefaultResponseMessages;
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private String host;
+  private String basePath;
   private GenericTypeNamingStrategy genericsNamingStrategy;
   private Optional<String> pathMapping;
   private boolean isUrlTemplatesEnabled;
@@ -113,11 +114,11 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder additionalResponseMessages(
-      Map<RequestMethod, List<ResponseMessage>> additionalResponseMessages) {
+          Map<RequestMethod, List<ResponseMessage>> additionalResponseMessages) {
     this.responseMessageOverrides.putAll(additionalResponseMessages);
     return this;
   }
-  
+
   public DocumentationContextBuilder additionalOperationParameters(List<Parameter> globalRequestParameters) {
     this.globalOperationParameters.addAll(nullToEmptyList(globalRequestParameters));
     return this;
@@ -177,8 +178,8 @@ public class DocumentationContextBuilder {
 
   public DocumentationContextBuilder ruleBuilders(List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders) {
     rules.addAll(ruleBuilders.stream()
-        .map(evaluator(typeResolver))
-        .collect(toList()));
+            .map(evaluator(typeResolver))
+            .collect(toList()));
     return this;
   }
 
@@ -198,7 +199,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder defaultResponseMessages(
-      Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages) {
+          Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages) {
     this.defaultResponseMessages.putAll(defaultResponseMessages);
     return this;
   }
@@ -220,6 +221,11 @@ public class DocumentationContextBuilder {
 
   public DocumentationContextBuilder host(String host) {
     this.host = defaultIfAbsent(host, this.host);
+    return this;
+  }
+
+  public DocumentationContextBuilder basePath(String basePath) {
+    this.basePath = defaultIfAbsent(basePath, "/");
     return this;
   }
 
@@ -262,35 +268,36 @@ public class DocumentationContextBuilder {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     OrderComparator.sort(rules);
     return new DocumentationContext(documentationType,
-        handlerMappings,
-        apiInfo,
-        groupName,
-        apiSelector,
-        ignorableParameterTypes,
-        responseMessages,
-        globalOperationParameters,
-        resourceGroupingStrategy,
-        pathProvider,
-        securityContexts,
-        securitySchemes,
-        rules,
-        listingReferenceOrdering,
-        apiDescriptionOrdering,
-        operationOrdering,
-        produces,
-        consumes,
-        host,
-        protocols,
-        genericsNamingStrategy,
-        pathMapping,
-        isUrlTemplatesEnabled,
-        additionalModels,
-        tags,
-        vendorExtensions);
+            handlerMappings,
+            apiInfo,
+            groupName,
+            apiSelector,
+            ignorableParameterTypes,
+            responseMessages,
+            globalOperationParameters,
+            resourceGroupingStrategy,
+            pathProvider,
+            securityContexts,
+            securitySchemes,
+            rules,
+            listingReferenceOrdering,
+            apiDescriptionOrdering,
+            operationOrdering,
+            produces,
+            consumes,
+            host,
+            basePath,
+            protocols,
+            genericsNamingStrategy,
+            pathMapping,
+            isUrlTemplatesEnabled,
+            additionalModels,
+            tags,
+            vendorExtensions);
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
-      evaluator(final TypeResolver typeResolver) {
+  evaluator(final TypeResolver typeResolver) {
 
     return input -> input.apply(typeResolver);
   }
