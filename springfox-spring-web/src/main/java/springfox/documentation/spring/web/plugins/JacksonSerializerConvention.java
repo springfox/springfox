@@ -58,32 +58,32 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   @Override
   public List<AlternateTypeRule> rules() {
-    ScanResult scanResults = new ClassGraph()
-        .whitelistPackages(packagePrefix)
-        .enableAnnotationInfo()
-        .scan();
+    try (ScanResult scanResults = new ClassGraph()
+            .whitelistPackages(packagePrefix)
+            .enableAnnotationInfo()
+            .scan()) {
+      List<Class<?>> serialized =
+          scanResults.getClassesWithAnnotation(JsonSerialize.class.getCanonicalName())
+              .loadClasses();
 
-    List<Class<?>> serialized =
-        scanResults.getClassesWithAnnotation(JsonSerialize.class.getCanonicalName())
-            .loadClasses();
+      List<Class<?>> deserialized =
+          scanResults.getClassesWithAnnotation(JsonDeserialize.class.getCanonicalName())
+              .loadClasses();
 
-    List<Class<?>> deserialized =
-        scanResults.getClassesWithAnnotation(JsonDeserialize.class.getCanonicalName())
-            .loadClasses();
-
-    List<AlternateTypeRule> rules = new ArrayList<>();
-    Stream.concat(serialized.stream(), deserialized.stream())
-        .forEachOrdered(type -> {
-          findAlternate(type).ifPresent(alternative -> {
-            rules.add(newRule(
-                resolver.resolve(type),
-                resolver.resolve(alternative), getOrder()));
-            rules.add(newRule(
-                resolver.resolve(ResponseEntity.class, type),
-                resolver.resolve(alternative), getOrder()));
+      List<AlternateTypeRule> rules = new ArrayList<>();
+      Stream.concat(serialized.stream(), deserialized.stream())
+          .forEachOrdered(type -> {
+            findAlternate(type).ifPresent(alternative -> {
+              rules.add(newRule(
+                  resolver.resolve(type),
+                  resolver.resolve(alternative), getOrder()));
+              rules.add(newRule(
+                  resolver.resolve(ResponseEntity.class, type),
+                  resolver.resolve(alternative), getOrder()));
+            });
           });
-        });
-    return rules;
+      return rules;
+    }
   }
 
   private Optional<Type> findAlternate(Class<?> type) {
