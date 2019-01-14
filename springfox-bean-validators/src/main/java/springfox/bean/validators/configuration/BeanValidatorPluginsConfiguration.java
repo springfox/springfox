@@ -26,6 +26,7 @@ import springfox.bean.validators.plugins.parameter.ExpandedParameterPatternAnnot
 import springfox.bean.validators.plugins.parameter.ExpandedParameterSizeAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.MinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.schema.IsNullAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin;
@@ -86,6 +87,11 @@ public class BeanValidatorPluginsConfiguration {
   @Bean
   public SizeAnnotationPlugin sizePlugin() {
     return new SizeAnnotationPlugin();
+  }
+
+  @Bean
+  public IsNullAnnotationPlugin isNullPlugin() {
+    return new IsNullAnnotationPlugin();
   }
 
   @Bean
