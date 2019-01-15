@@ -65,6 +65,10 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
   @Override
   public List<RequestHandler> requestHandlers() {
     return nullToEmptyList(handlerMappings).stream()
+        .filter(requestMappingInfoHandlerMapping ->
+            !("org.springframework.integration.http.inbound.IntegrationRequestMappingHandlerMapping"
+                  .equals(requestMappingInfoHandlerMapping.getClass()
+                      .getName())))
         .map(toMappingEntries())
         .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
         .map(toRequestHandler())
@@ -74,7 +78,8 @@ public class WebMvcRequestHandlerProvider implements RequestHandlerProvider {
 
   private Function<RequestMappingInfoHandlerMapping,
       Iterable<Map.Entry<RequestMappingInfo, HandlerMethod>>> toMappingEntries() {
-    return input -> input.getHandlerMethods().entrySet();
+    return input -> input.getHandlerMethods()
+        .entrySet();
   }
 
   private Function<Map.Entry<RequestMappingInfo, HandlerMethod>, RequestHandler> toRequestHandler() {
