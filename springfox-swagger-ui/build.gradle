@@ -29,7 +29,7 @@ plugins {
 }
 
 ext {
-  swaggerUiVersion = '3.17.1'
+  swaggerUiVersion = '3.19.5'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -44,8 +44,8 @@ dependencies {
 }
 
 node {
-  version = '8.11.1' // LTS
-  npmVersion = '5.8.0'
+  version = '8.12.0' // LTS
+  npmVersion = '6.4.1'
   distBaseUrl = 'https://nodejs.org/dist'
   download = true
   workDir = file("${project.buildDir}/nodejs")
@@ -76,6 +76,18 @@ task npmTest(type: NpmTask) {
 
 task npmBuild(type: NpmTask) {
   args = ['run', 'build']
+}
+
+task npmAuditFix(type: NpmTask) {
+  args = ['audit', 'fix']
+}
+
+task npmCi(type: NpmTask) {
+  dependsOn npmSetup
+  npmCommand = ["ci"]
+  inputs.file("package.json")
+  inputs.file("package-lock.json")
+  outputs.dir("node_modules")
 }
 
 task customizeSwaggerUi {
@@ -129,7 +141,13 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-npmTest.dependsOn(npm_install)
-npmBuild.dependsOn(npm_install, npmTest)
+if (project.hasProperty("local")) {
+  npmTest.dependsOn(npm_install)
+  npmBuild.dependsOn(npm_install, npmTest)
+} else {
+  npmTest.dependsOn(npmCi)
+  npmBuild.dependsOn(npmCi, npmTest)
+}
+
 customizeSwaggerUi.dependsOn(unzip, npmBuild)
 jar.dependsOn(customizeSwaggerUi)

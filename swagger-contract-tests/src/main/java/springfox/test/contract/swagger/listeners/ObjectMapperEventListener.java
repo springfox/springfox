@@ -29,7 +29,6 @@ public class ObjectMapperEventListener implements ApplicationListener<ObjectMapp
   @Override
   public void onApplicationEvent(ObjectMapperConfigured event) {
     ObjectMapper objectMapper = event.getObjectMapper();
-    objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_EMPTY_JSON_ARRAYS, true);
     objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
   }
 

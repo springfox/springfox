@@ -56,6 +56,10 @@ public class WebFluxRequestHandlerProvider implements RequestHandlerProvider {
   @Override
   public List<RequestHandler> requestHandlers() {
     return nullToEmptyList(handlerMappings).stream()
+        .filter(requestMappingInfoHandlerMapping ->
+            !("org.springframework.integration.webflux.inbound.WebFluxIntegrationRequestMappingHandlerMapping"
+                  .equals(requestMappingInfoHandlerMapping.getClass()
+                      .getName())))
         .map(toMappingEntries())
         .flatMap((entries -> StreamSupport.stream(entries.spliterator(), false)))
         .map(toRequestHandler())

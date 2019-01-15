@@ -38,6 +38,7 @@ import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.dummy.DummyControllerWithApiDescription
 import springfox.documentation.spring.web.dummy.DummyControllerWithResourcePath
 import springfox.documentation.spring.web.dummy.DummyControllerWithTags
+import springfox.documentation.spring.web.dummy.DummyDeprecatedController
 import springfox.documentation.spring.web.dummy.controllers.FancyPetService
 import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.controllers.PetService
@@ -149,6 +150,15 @@ class RequestMappingSupport {
       parameterTypes = String) {
 
     def clazz = new PetGroomingService()
+    Class c = clazz.getClass()
+    new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+  }
+
+  HandlerMethod dummyDeprecatedController(
+          String methodName = "dummyMethod",
+          Class<?>... parameterTypes = null) {
+
+    def clazz = new DummyDeprecatedController()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
