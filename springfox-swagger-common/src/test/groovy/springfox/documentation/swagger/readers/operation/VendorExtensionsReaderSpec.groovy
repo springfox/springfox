@@ -18,8 +18,8 @@
  */
 package springfox.documentation.swagger.readers.operation
 
-import springfox.documentation.service.ObjectVendorExtension
-import springfox.documentation.service.StringVendorExtension
+import springfox.documentation.core.service.ObjectVendorExtension
+import springfox.documentation.core.service.StringVendorExtension
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport

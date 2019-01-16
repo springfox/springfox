@@ -19,6 +19,8 @@
 
 package springfox.documentation.schema;
 
+import springfox.documentation.core.schema.ExampleEnum;
+
 public class ExampleWithEnums {
   private ExampleEnum exampleEnum;
 

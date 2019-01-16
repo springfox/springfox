@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Qualifier;
-import springfox.documentation.schema.ModelReference;
+import springfox.documentation.core.schema.ModelReference;
 import springfox.documentation.swagger1.dto.DataType;
 
 import java.lang.annotation.ElementType;

@@ -23,10 +23,10 @@ TIP: I switched on the excludeFieldsWithoutExposeAnnotation() which meant that n
 
 [source,java]
 ----
-.registerTypeAdapter(springfox.documentation.service.ApiListing.class, new SwaggerApiListingJsonSerializer())
+.registerTypeAdapter(ApiListing.class, new SwaggerApiListingJsonSerializer())
 .registerTypeAdapter(springfox.documentation.spring.web.json.Json.class, new SwaggerJsonSerializer())
 .registerTypeAdapter(springfox.documentation.swagger.web.SwaggerResource.class, new SwaggerResourceSerializer())
-.registerTypeAdapter(springfox.documentation.service.ResourceListing.class, new SwaggerResourceListingJsonSerializer())
+.registerTypeAdapter(ResourceListing.class, new SwaggerResourceListingJsonSerializer())
 .registerTypeAdapter(springfox.documentation.swagger.web.SwaggerResource.class, new SwaggerResourceSerializer())
 .registerTypeAdapter(springfox.documentation.swagger.web.SecurityConfiguration.class, new SwaggerSecurityConfigurationSerializer())
 .registerTypeAdapter(springfox.documentation.swagger.web.UiConfiguration.class, new SwaggerUiConfigurationSerializer());

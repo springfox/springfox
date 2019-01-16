@@ -22,6 +22,8 @@ package springfox.documentation.schema;
 import java.util.HashSet;
 import java.util.Set;
 
+import springfox.documentation.core.schema.ExampleEnum;
+
 public class SetsContainer {
   private Set<ComplexType> complexTypes;
   private Set<ExampleEnum> enums;

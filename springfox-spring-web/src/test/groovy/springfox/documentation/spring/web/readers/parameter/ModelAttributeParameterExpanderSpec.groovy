@@ -35,7 +35,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import java.beans.BeanInfo
 import java.beans.IntrospectionException
 
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 @Mixin([ServicePluginsSupport])
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {

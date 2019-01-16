@@ -19,8 +19,8 @@
 package springfox.documentation.spring.web.plugins;
 
 
-import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.service.ResolvedMethodParameter;
 
 import java.util.List;
 import java.util.Objects;

@@ -38,8 +38,8 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
-import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelReference;
+import springfox.documentation.core.schema.ModelProperty;
+import springfox.documentation.core.schema.ModelReference;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap;

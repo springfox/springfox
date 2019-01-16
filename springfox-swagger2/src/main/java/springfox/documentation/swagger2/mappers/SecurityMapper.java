@@ -20,8 +20,8 @@ package springfox.documentation.swagger2.mappers;
 
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.mapstruct.Mapper;
-import springfox.documentation.service.ResourceListing;
-import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.core.service.ResourceListing;
+import springfox.documentation.core.service.SecurityScheme;
 
 import java.util.AbstractMap;
 import java.util.HashMap;

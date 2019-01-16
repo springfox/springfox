@@ -19,6 +19,8 @@
 package springfox.documentation.schema
 
 import spock.lang.Unroll
+import springfox.documentation.core.schema.Model
+import springfox.documentation.core.schema.ModelProperty
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
@@ -69,7 +71,7 @@ class GenericTypeSpec extends SchemaSpecification {
     genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<springfox.documentation.schema.SimpleType>"
     genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "springfox.documentation.schema.ResponseEntityAlternative<springfox.documentation.schema.SimpleType>"
     genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "springfox.documentation.schema.ResponseEntityAlternative<java.util.List<springfox.documentation.schema.SimpleType>>"
-    genericCollectionWithEnum()     | "List"                                        | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
+    genericCollectionWithEnum()     | "List"                                        | "Collection«string»"                          | "java.util.Collection<ExampleEnum>"
     genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
     genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
     genericResource()               | "List"                                        | "SubclassOfResourceSupport"                   | null
@@ -160,7 +162,7 @@ class GenericTypeSpec extends SchemaSpecification {
 
   void verifyModelProperty(Model model, String propertyType, qualifiedPropertyType, propertyName) {
     assert model.getProperties().containsKey(propertyName)
-    ModelProperty modelProperty = model.properties.get(propertyName)
+      ModelProperty modelProperty = model.properties.get(propertyName)
     modelProperty.qualifiedType == qualifiedPropertyType
     def item = modelProperty.modelRef
     assert item.type == maybeTransformVoid(propertyType)

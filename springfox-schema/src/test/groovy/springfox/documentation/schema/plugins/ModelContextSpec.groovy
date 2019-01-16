@@ -21,7 +21,7 @@ package springfox.documentation.schema.plugins
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.ExampleEnum
+import springfox.documentation.core.schema.ExampleEnum
 import springfox.documentation.schema.ExampleWithEnums
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext

@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.scanners;
 
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.core.service.ResourceGroup;
 
 import java.util.Arrays;
 import java.util.Optional;

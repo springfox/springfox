@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger.web;
 
-import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.core.builders.BuilderDefaults.defaultIfAbsent;
 
 public class UiConfigurationBuilder {
 

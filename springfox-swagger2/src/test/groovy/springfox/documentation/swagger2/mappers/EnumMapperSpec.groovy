@@ -26,8 +26,8 @@ import io.swagger.models.properties.LongProperty
 import io.swagger.models.properties.StringProperty
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.service.AllowableListValues
-import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.core.service.AllowableListValues
+import springfox.documentation.core.service.AllowableRangeValues
 
 import static springfox.documentation.swagger2.mappers.EnumMapper.*
 

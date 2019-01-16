@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger2.mappers;
 
-import springfox.documentation.schema.Example;
+import springfox.documentation.core.schema.Example;
 
 import java.util.List;
 import java.util.Map;

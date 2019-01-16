@@ -84,7 +84,7 @@ subset of the services to be documented and groups them by name. Significant cha
 to provide an expressive predicate based for api selection.
 
 ```java
-  import static springfox.documentation.builders.PathSelectors.regex;
+  import static springfox.documentation.core.builders.PathSelectors.regex;
   import static com.google.common.base.Predicates.or;
 
   @Bean

@@ -32,7 +32,7 @@ import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.bean.BeanModelProperty
-import springfox.documentation.service.AllowableListValues
+import springfox.documentation.core.service.AllowableListValues
 
 import static java.util.Collections.*
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*
@@ -125,10 +125,10 @@ class BeanModelPropertySpec extends SchemaSpecification {
       methodName    | description              | required | allowableValues                                             | typeName  | qualifiedTypeName
       "getIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
       "isBoolProp"  | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
+      "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "ExampleEnum"
       "setIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
       "setBoolProp" | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
+      "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "ExampleEnum"
   }
 
   def "Respects JsonGetter annotations"() {

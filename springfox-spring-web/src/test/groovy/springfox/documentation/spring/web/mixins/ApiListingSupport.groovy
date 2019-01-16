@@ -19,10 +19,10 @@
 
 package springfox.documentation.spring.web.mixins
 
-import springfox.documentation.service.ApiListing
-import springfox.documentation.service.OAuth
-import springfox.documentation.service.ApiListingReference
-import springfox.documentation.service.ResourceListing
+import springfox.documentation.core.service.ApiListing
+import springfox.documentation.core.service.OAuth
+import springfox.documentation.core.service.ApiListingReference
+import springfox.documentation.core.service.ResourceListing
 
 class ApiListingSupport {
 

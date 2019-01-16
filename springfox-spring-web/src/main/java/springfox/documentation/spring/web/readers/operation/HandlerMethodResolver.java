@@ -29,7 +29,7 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.core.service.ResolvedMethodParameter;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;

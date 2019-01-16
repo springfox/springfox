@@ -28,8 +28,8 @@ import io.swagger.models.parameters.QueryParameter;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
-import springfox.documentation.schema.ModelReference;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.core.schema.ModelReference;
+import springfox.documentation.core.service.Parameter;
 
 import java.util.AbstractMap;
 import java.util.Map;

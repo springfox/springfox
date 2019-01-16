@@ -20,8 +20,8 @@
 package springfox.documentation.spring.web.plugins
 
 import spock.lang.Specification
-import springfox.documentation.builders.OperationBuilder
-import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.core.builders.OperationBuilder
+import springfox.documentation.core.builders.ParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DocumentationPlugin
 import springfox.documentation.spi.service.OperationBuilderPlugin

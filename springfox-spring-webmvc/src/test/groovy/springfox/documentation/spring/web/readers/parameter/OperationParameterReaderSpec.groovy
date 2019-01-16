@@ -28,7 +28,7 @@ import spock.lang.Unroll
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
-import springfox.documentation.service.Parameter
+import springfox.documentation.core.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.dummy.AlternateTypeContainer
@@ -48,7 +48,7 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
 class OperationParameterReaderSpec extends DocumentationContextSpec {

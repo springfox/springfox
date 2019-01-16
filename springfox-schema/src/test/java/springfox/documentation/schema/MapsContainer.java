@@ -21,6 +21,8 @@ package springfox.documentation.schema;
 
 import java.util.Map;
 
+import springfox.documentation.core.schema.ExampleEnum;
+
 public class MapsContainer {
   private Map<ExampleEnum, SimpleType> enumToSimpleType;
   private Map<String, SimpleType> stringToSimpleType;

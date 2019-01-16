@@ -24,14 +24,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.Operation;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.Operation;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
-import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.core.spring.wrapper.PatternsRequestCondition;
 
 import java.util.ArrayList;
 import java.util.List;

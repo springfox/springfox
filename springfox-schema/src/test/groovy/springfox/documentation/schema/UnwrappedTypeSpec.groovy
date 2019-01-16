@@ -20,6 +20,7 @@ package springfox.documentation.schema
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.core.schema.Model
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -55,7 +56,7 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(objectMapperThatUsesFields())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(
+    Model asInput = provider.modelFor(
           inputParam("group",
               UnwrappedTypeForField,
               SWAGGER_12,

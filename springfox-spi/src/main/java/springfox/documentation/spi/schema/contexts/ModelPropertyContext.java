@@ -21,7 +21,7 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import springfox.documentation.builders.ModelPropertyBuilder;
+import springfox.documentation.core.builders.ModelPropertyBuilder;
 import springfox.documentation.spi.DocumentationType;
 
 import java.lang.reflect.AnnotatedElement;

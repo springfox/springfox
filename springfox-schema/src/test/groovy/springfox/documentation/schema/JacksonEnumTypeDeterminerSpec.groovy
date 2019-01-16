@@ -21,6 +21,7 @@ package springfox.documentation.schema
 
 import spock.lang.Shared
 import spock.lang.Specification
+import springfox.documentation.core.schema.ExampleEnum
 
 class JacksonEnumTypeDeterminerSpec extends Specification {
     @Shared def enumTypeDeterminerSpec = new JacksonEnumTypeDeterminer();

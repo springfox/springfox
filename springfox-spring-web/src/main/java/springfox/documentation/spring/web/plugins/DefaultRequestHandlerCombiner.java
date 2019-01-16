@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import springfox.documentation.RequestHandler;
+import springfox.documentation.core.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerCombiner;
 
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.RequestHandler.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.core.RequestHandler.*;
+import static springfox.documentation.core.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.byOperationName;
 import static springfox.documentation.spi.service.contexts.Orderings.byPatternsCondition;
 

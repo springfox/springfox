@@ -25,10 +25,10 @@ import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.core.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.DescriptionResolver

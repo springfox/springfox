@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.readers.operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import springfox.documentation.OperationNameGenerator;
+import springfox.documentation.core.OperationNameGenerator;
 
 import java.util.HashMap;
 import java.util.Map;

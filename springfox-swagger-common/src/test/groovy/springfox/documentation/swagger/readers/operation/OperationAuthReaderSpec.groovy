@@ -19,8 +19,8 @@
 
 package springfox.documentation.swagger.readers.operation
 
-import springfox.documentation.builders.PathSelectors
-import springfox.documentation.service.AuthorizationScope
+import springfox.documentation.core.builders.PathSelectors
+import springfox.documentation.core.service.AuthorizationScope
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.SecurityContext

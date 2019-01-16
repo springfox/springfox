@@ -21,10 +21,10 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
-import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.core.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext

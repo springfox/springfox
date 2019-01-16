@@ -23,14 +23,14 @@ import com.fasterxml.classmate.ResolvedType;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
-import springfox.documentation.builders.OperationBuilder;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.core.builders.OperationBuilder;
+import springfox.documentation.core.service.Parameter;
+import springfox.documentation.core.service.ResolvedMethodParameter;
+import springfox.documentation.core.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
-import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.core.spring.wrapper.NameValueExpression;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.core.builders.BuilderDefaults.*;
 
 public class OperationContext {
   private final OperationBuilder operationBuilder;

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.NullabilityTestModel
-import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.core.builders.ModelPropertyBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 

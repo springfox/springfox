@@ -2,16 +2,17 @@ package springfox.test.contract.swaggertests
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.SecurityReference
-import springfox.documentation.service.SecurityScheme
+import springfox.documentation.core.service.AuthorizationScope
+import springfox.documentation.core.service.SecurityReference
+import springfox.documentation.core.service.SecurityScheme
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger1.annotations.EnableSwagger
 
 import static java.util.Collections.*
-import static springfox.documentation.builders.PathSelectors.*
+import static springfox.documentation.core.builders.PathSelectors.ant
+import static springfox.documentation.core.builders.PathSelectors.regex
 
 @Configuration
 @EnableSwagger

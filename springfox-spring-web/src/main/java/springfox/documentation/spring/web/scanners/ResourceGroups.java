@@ -19,8 +19,8 @@
 package springfox.documentation.spring.web.scanners;
 
 
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.ResourceGroup;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Collection;

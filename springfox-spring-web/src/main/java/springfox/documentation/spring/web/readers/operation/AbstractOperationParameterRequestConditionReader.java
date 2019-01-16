@@ -20,13 +20,13 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.AllowableListValues;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.core.builders.ParameterBuilder;
+import springfox.documentation.core.schema.ModelRef;
+import springfox.documentation.core.service.AllowableListValues;
+import springfox.documentation.core.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.core.spring.wrapper.NameValueExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +34,8 @@ import java.util.Set;
 
 import static java.util.Collections.*;
 import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.builders.Parameters.*;
-import static springfox.documentation.service.Parameter.*;
+import static springfox.documentation.core.builders.Parameters.*;
+import static springfox.documentation.core.service.Parameter.*;
 
 public abstract class AbstractOperationParameterRequestConditionReader implements OperationBuilderPlugin {
 

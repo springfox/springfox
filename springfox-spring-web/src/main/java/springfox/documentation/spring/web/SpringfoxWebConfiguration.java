@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.plugin.core.config.EnablePluginRegistries;
-import springfox.documentation.PathProvider;
+import springfox.documentation.core.PathProvider;
 import springfox.documentation.schema.configuration.ModelsConfiguration;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.spi.service.*;

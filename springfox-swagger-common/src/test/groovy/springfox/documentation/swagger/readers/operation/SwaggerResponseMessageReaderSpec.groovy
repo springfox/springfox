@@ -23,8 +23,11 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
+import springfox.documentation.core.schema.Example
+import springfox.documentation.core.schema.ModelRef
+import springfox.documentation.core.schema.ModelReference
 import springfox.documentation.schema.*
-import springfox.documentation.service.Header
+import springfox.documentation.core.service.Header
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext

@@ -32,14 +32,14 @@ import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import springfox.documentation.schema.ModelReference;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListing;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Documentation;
-import springfox.documentation.service.Header;
-import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.core.schema.ModelReference;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.ApiInfo;
+import springfox.documentation.core.service.ApiListing;
+import springfox.documentation.core.service.AuthorizationScope;
+import springfox.documentation.core.service.Documentation;
+import springfox.documentation.core.service.Header;
+import springfox.documentation.core.service.ResponseMessage;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ import java.util.function.Function;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.core.builders.BuilderDefaults.*;
 import static springfox.documentation.swagger2.mappers.ModelMapper.*;
 
 @Mapper(uses = {
@@ -92,7 +92,7 @@ public abstract class ServiceModelToSwagger2Mapper {
   })
   protected abstract Info mapApiInfo(ApiInfo from);
 
-  protected abstract Contact map(springfox.documentation.service.Contact from);
+  protected abstract Contact map(springfox.documentation.core.service.Contact from);
 
   @Mappings({
       @Mapping(target = "description", source = "notes"),
@@ -103,13 +103,13 @@ public abstract class ServiceModelToSwagger2Mapper {
       @Mapping(target = "vendorExtensions", source = "vendorExtensions"),
       @Mapping(target = "externalDocs", ignore = true)
   })
-  protected abstract Operation mapOperation(springfox.documentation.service.Operation from);
+  protected abstract Operation mapOperation(springfox.documentation.core.service.Operation from);
 
   @Mappings({
       @Mapping(target = "externalDocs", ignore = true),
       @Mapping(target = "vendorExtensions", source = "vendorExtensions")
   })
-  protected abstract Tag mapTag(springfox.documentation.service.Tag from);
+  protected abstract Tag mapTag(springfox.documentation.core.service.Tag from);
 
   protected List<Scheme> mapSchemes(List<String> from) {
     return from.stream().map(Scheme::forValue).collect(toList());
@@ -170,7 +170,7 @@ public abstract class ServiceModelToSwagger2Mapper {
 
   private Path mapOperations(ApiDescription api, Optional<Path> existingPath) {
     Path path = existingPath.orElse(new Path());
-    for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
+    for (springfox.documentation.core.service.Operation each : nullToEmptyList(api.getOperations())) {
       Operation operation = mapOperation(each);
       path.set(each.getMethod().toString().toLowerCase(), operation);
     }

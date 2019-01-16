@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import springfox.documentation.schema.ResolvedTypes;
-import springfox.documentation.service.AllowableValues;
+import springfox.documentation.core.service.AllowableValues;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 
 import java.util.Optional;

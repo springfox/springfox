@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.plugins;
 
 
-import springfox.documentation.RequestHandler;
+import springfox.documentation.core.RequestHandler;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 
 import java.util.function.Predicate;

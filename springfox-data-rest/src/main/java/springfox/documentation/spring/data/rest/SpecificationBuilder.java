@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import springfox.documentation.schema.Types;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.core.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 import java.lang.reflect.Type;

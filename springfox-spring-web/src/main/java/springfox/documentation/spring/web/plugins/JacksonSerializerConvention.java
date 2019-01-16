@@ -28,8 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.http.ResponseEntity;
-import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.schema.AlternateTypeRuleConvention;
+import springfox.documentation.core.schema.AlternateTypeRule;
+import springfox.documentation.core.schema.AlternateTypeRuleConvention;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.Optional.*;
-import static springfox.documentation.schema.AlternateTypeRules.*;
+import static springfox.documentation.core.schema.AlternateTypeRules.*;
 
 /**
  * Class to automatically detect type substitutions given the jackson serialize/deserialize annotations

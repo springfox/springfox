@@ -22,8 +22,8 @@ package springfox.documentation.swagger2.mappers;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.In;
 import io.swagger.models.auth.SecuritySchemeDefinition;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.core.service.ApiKey;
+import springfox.documentation.core.service.SecurityScheme;
 
 class ApiKeyAuthFactory implements SecuritySchemeFactory {
   @Override

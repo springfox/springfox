@@ -21,6 +21,7 @@ package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
+import springfox.documentation.core.schema.ExampleEnum
 
 import static springfox.documentation.schema.Collections.*
 

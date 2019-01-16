@@ -20,6 +20,7 @@ package springfox.documentation.schema
 
 import spock.lang.Ignore
 import spock.lang.Unroll
+import springfox.documentation.core.schema.Model
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
@@ -32,7 +33,7 @@ class SimpleTypeSpec extends SchemaSpecification {
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
-      Model asInput = modelProvider.modelFor(
+    Model asInput = modelProvider.modelFor(
           inputParam(
               "group",
               simpleType(),

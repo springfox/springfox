@@ -20,7 +20,7 @@ package springfox.petstore;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.core.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.PathSelectors.*;
+import static springfox.documentation.core.builders.PathSelectors.*;
 
 @Configuration
 public class PetStoreConfiguration {

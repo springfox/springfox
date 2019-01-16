@@ -21,10 +21,10 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import springfox.documentation.PathProvider;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.schema.AlternateTypeRuleConvention;
+import springfox.documentation.core.PathProvider;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.schema.AlternateTypeRule;
+import springfox.documentation.core.schema.AlternateTypeRuleConvention;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.RequestHandlerCombiner;
@@ -41,7 +41,7 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.core.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 public class AbstractDocumentationPluginsBootstrapper {

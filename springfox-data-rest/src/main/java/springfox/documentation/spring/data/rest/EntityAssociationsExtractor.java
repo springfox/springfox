@@ -20,7 +20,7 @@ package springfox.documentation.spring.data.rest;
 
 import org.springframework.data.mapping.SimpleAssociationHandler;
 import org.springframework.data.rest.webmvc.mapping.Associations;
-import springfox.documentation.RequestHandler;
+import springfox.documentation.core.RequestHandler;
 
 import java.util.ArrayList;
 import java.util.List;

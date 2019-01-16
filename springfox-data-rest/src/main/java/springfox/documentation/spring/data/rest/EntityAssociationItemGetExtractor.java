@@ -21,7 +21,7 @@ package springfox.documentation.spring.data.rest;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.Path;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
-import springfox.documentation.RequestHandler;
+import springfox.documentation.core.RequestHandler;
 
 import java.util.ArrayList;
 import java.util.List;

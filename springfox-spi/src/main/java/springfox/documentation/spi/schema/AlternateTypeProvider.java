@@ -20,7 +20,7 @@
 package springfox.documentation.spi.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import springfox.documentation.schema.AlternateTypeRule;
+import springfox.documentation.core.schema.AlternateTypeRule;
 
 import java.util.ArrayList;
 import java.util.List;

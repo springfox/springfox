@@ -24,10 +24,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.PatternAndSizeTestModel
-import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin
-import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin
-import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.core.builders.ModelPropertyBuilder
+import springfox.documentation.core.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 /**

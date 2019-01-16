@@ -20,6 +20,7 @@
 package springfox.documentation.schema;
 
 import io.swagger.annotations.ApiModelProperty;
+import springfox.documentation.core.schema.ExampleEnum;
 
 public class TypeWithGettersAndSetters {
   @ApiModelProperty(notes = "int Property Field", required = true)

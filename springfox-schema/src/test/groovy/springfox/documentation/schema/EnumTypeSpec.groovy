@@ -19,6 +19,8 @@
 package springfox.documentation.schema
 
 import spock.lang.Specification
+import springfox.documentation.core.schema.ExampleEnum
+import springfox.documentation.core.schema.Model
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
@@ -36,7 +38,7 @@ class EnumTypeSpec extends Specification {
       def list = Stream.of("ONE", "TWO").collect(toList())
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      Model asInput = provider.modelFor(
+    Model asInput = provider.modelFor(
           inputParam("group",
               enumType(),
               DocumentationType.SWAGGER_12,
@@ -59,7 +61,7 @@ class EnumTypeSpec extends Specification {
 
 
       modelProperty.type.erasedType == ExampleEnum
-      modelProperty.getQualifiedType() == "springfox.documentation.schema.ExampleEnum"
+      modelProperty.getQualifiedType() == "springfox.documentation.core.schema.ExampleEnum"
       modelProperty.getModelRef().type == "string"
       !modelProperty.getModelRef().collection
       modelProperty.getModelRef().itemType == null
@@ -70,7 +72,7 @@ class EnumTypeSpec extends Specification {
       def retModelPropertyOption = asReturn.getProperties().get("exampleEnum")
       def retModelProperty = retModelPropertyOption
       retModelProperty.type.erasedType == ExampleEnum
-      retModelProperty.getQualifiedType() == "springfox.documentation.schema.ExampleEnum"
+      retModelProperty.getQualifiedType() == "springfox.documentation.core.schema.ExampleEnum"
       retModelProperty.getModelRef().type == "string"
       !retModelProperty.getModelRef().collection
       retModelProperty.getModelRef().itemType == null 

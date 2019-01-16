@@ -21,7 +21,7 @@ package springfox.bean.validators.plugins;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import springfox.documentation.service.AllowableRangeValues;
+import springfox.documentation.core.service.AllowableRangeValues;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

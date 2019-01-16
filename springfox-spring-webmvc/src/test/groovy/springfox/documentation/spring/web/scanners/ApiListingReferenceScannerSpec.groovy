@@ -20,9 +20,9 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
-import springfox.documentation.RequestHandler
-import springfox.documentation.annotations.ApiIgnore
-import springfox.documentation.service.ResourceGroup
+import springfox.documentation.core.RequestHandler
+import springfox.documentation.core.annotations.ApiIgnore
+import springfox.documentation.core.service.ResourceGroup
 import springfox.documentation.spring.web.SpringGroupingStrategy
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
@@ -34,8 +34,8 @@ import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-import static springfox.documentation.builders.PathSelectors.*
-import static springfox.documentation.builders.RequestHandlerSelectors.*
+import static springfox.documentation.core.builders.PathSelectors.regex
+import static springfox.documentation.core.builders.RequestHandlerSelectors.withClassAnnotation
 
 @Mixin([AccessorAssertions, RequestMappingSupport])
 class ApiListingReferenceScannerSpec extends DocumentationContextSpec {

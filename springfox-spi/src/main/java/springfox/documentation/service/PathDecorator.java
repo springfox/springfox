@@ -20,7 +20,7 @@ package springfox.documentation.service;
 
 
 import org.springframework.plugin.core.Plugin;
-import springfox.documentation.annotations.Incubating;
+import springfox.documentation.core.annotations.Incubating;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 

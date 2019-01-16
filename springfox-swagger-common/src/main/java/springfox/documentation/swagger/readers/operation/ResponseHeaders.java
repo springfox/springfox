@@ -19,9 +19,9 @@
 package springfox.documentation.swagger.readers.operation;
 
 import io.swagger.annotations.ResponseHeader;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.ModelReference;
-import springfox.documentation.service.Header;
+import springfox.documentation.core.schema.ModelRef;
+import springfox.documentation.core.schema.ModelReference;
+import springfox.documentation.core.service.Header;
 
 import java.util.HashMap;
 import java.util.Map;

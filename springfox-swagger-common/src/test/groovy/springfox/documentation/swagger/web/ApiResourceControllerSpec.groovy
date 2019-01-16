@@ -26,9 +26,9 @@ import org.springframework.http.MediaType
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
-import springfox.documentation.builders.DocumentationBuilder
-import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.ResourceListing
+import springfox.documentation.core.builders.DocumentationBuilder
+import springfox.documentation.core.service.ApiInfo
+import springfox.documentation.core.service.ResourceListing
 import springfox.documentation.spring.web.DocumentationCache
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*

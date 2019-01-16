@@ -20,12 +20,12 @@ package springfox.test.contract.swagger;
 
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.http.HttpMethod;
-import springfox.documentation.builders.OperationBuilder;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.core.builders.OperationBuilder;
+import springfox.documentation.core.builders.ParameterBuilder;
+import springfox.documentation.core.builders.ResponseMessageBuilder;
+import springfox.documentation.core.schema.ModelRef;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.contexts.DocumentationContext;

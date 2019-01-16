@@ -19,13 +19,13 @@
 package springfox.documentation.swagger2.mappers;
 
 import io.swagger.models.RefModel;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelReference;
+import springfox.documentation.core.schema.Model;
+import springfox.documentation.core.schema.ModelReference;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.core.builders.BuilderDefaults.nullToEmptyList;
 
 class InheritanceDeterminer {
   private final Map<String, RefModel> parentLookup = new HashMap<String, RefModel>();

@@ -24,11 +24,11 @@ import org.joda.time.LocalDateTime
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
-import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.core.builders.OperationBuilder
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
-import springfox.documentation.service.Parameter
+import springfox.documentation.core.service.Parameter
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
@@ -54,7 +54,7 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport])
 class OperationParameterReaderSpec extends DocumentationContextSpec {

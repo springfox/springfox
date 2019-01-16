@@ -21,7 +21,7 @@ package springfox.springconfig;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.core.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;

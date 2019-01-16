@@ -6,8 +6,8 @@ import io.swagger.models.parameters.BodyParameter
 import io.swagger.models.parameters.QueryParameter
 import io.swagger.models.parameters.SerializableParameter
 import spock.lang.Specification
-import springfox.documentation.builders.ParameterBuilder
-import springfox.documentation.schema.ModelRef
+import springfox.documentation.core.builders.ParameterBuilder
+import springfox.documentation.core.schema.ModelRef
 
 class ParameterMapperSpec extends Specification {
   def "body parameters are mapped correctly" () {

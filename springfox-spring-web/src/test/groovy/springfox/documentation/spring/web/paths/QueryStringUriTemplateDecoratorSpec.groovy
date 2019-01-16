@@ -1,9 +1,9 @@
 package springfox.documentation.spring.web.paths
 
-import springfox.documentation.builders.ParameterBuilder
-import springfox.documentation.service.AllowableListValues
-import springfox.documentation.service.AllowableValues
-import springfox.documentation.service.Operation
+import springfox.documentation.core.builders.ParameterBuilder
+import springfox.documentation.core.service.AllowableListValues
+import springfox.documentation.core.service.AllowableValues
+import springfox.documentation.core.service.Operation
 import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec

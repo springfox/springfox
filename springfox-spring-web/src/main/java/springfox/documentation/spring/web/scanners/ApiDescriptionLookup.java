@@ -19,10 +19,10 @@
 package springfox.documentation.spring.web.scanners;
 
 import org.springframework.stereotype.Component;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.RequestHandlerKey;
-import springfox.documentation.annotations.Incubating;
-import springfox.documentation.service.ApiDescription;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.RequestHandlerKey;
+import springfox.documentation.core.annotations.Incubating;
+import springfox.documentation.core.service.ApiDescription;
 
 import java.util.HashMap;
 import java.util.Map;

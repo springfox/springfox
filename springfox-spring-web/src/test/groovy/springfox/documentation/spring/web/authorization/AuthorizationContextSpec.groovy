@@ -18,10 +18,11 @@
  */
 
 package springfox.documentation.spring.web.authorization
+
 import spock.lang.Specification
-import springfox.documentation.spring.web.mixins.AuthSupport
-import springfox.documentation.builders.PathSelectors
+import springfox.documentation.core.builders.PathSelectors
 import springfox.documentation.spi.service.contexts.SecurityContext
+import springfox.documentation.spring.web.mixins.AuthSupport
 
 @Mixin(AuthSupport)
 class AuthorizationContextSpec extends Specification {

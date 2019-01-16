@@ -27,13 +27,13 @@ import org.springframework.context.annotation.Import
 import org.springframework.hateoas.Link
 import org.springframework.hateoas.config.EnableHypermediaSupport
 import org.springframework.http.HttpMethod
-import springfox.documentation.builders.ApiInfoBuilder
-import springfox.documentation.builders.AuthorizationScopeBuilder
-import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.SecurityReference
-import springfox.documentation.service.SecurityScheme
-import springfox.documentation.service.StringVendorExtension
-import springfox.documentation.service.Tag
+import springfox.documentation.core.builders.ApiInfoBuilder
+import springfox.documentation.core.builders.AuthorizationScopeBuilder
+import springfox.documentation.core.service.AuthorizationScope
+import springfox.documentation.core.service.SecurityReference
+import springfox.documentation.core.service.SecurityScheme
+import springfox.documentation.core.service.StringVendorExtension
+import springfox.documentation.core.service.Tag
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spi.service.contexts.SecurityContext
@@ -50,8 +50,8 @@ import java.nio.ByteBuffer
 
 import static java.util.Collections.*
 import static java.util.function.Predicate.*
-import static springfox.documentation.builders.PathSelectors.*
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.builders.PathSelectors.regex
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 @Configuration
 @EnableSwagger2WebMvc

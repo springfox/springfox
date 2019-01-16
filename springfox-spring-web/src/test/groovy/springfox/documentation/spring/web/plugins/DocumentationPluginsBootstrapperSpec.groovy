@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.plugins
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Specification
-import springfox.documentation.service.Documentation
+import springfox.documentation.core.service.Documentation
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DocumentationPlugin
 import springfox.documentation.spi.service.RequestHandlerProvider

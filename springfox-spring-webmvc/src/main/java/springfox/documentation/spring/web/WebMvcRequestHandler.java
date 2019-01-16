@@ -18,26 +18,26 @@
  */
 package springfox.documentation.spring.web;
 
-import com.fasterxml.classmate.ResolvedType;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.RequestHandlerKey;
-import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
-import springfox.documentation.spring.wrapper.NameValueExpression;
-import springfox.documentation.spring.wrapper.PatternsRequestCondition;
-
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import static java.util.Optional.*;
+import com.fasterxml.classmate.ResolvedType;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.RequestHandlerKey;
+import springfox.documentation.core.service.ResolvedMethodParameter;
+import springfox.documentation.core.spring.wrapper.NameValueExpression;
+import springfox.documentation.core.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
+
+import static java.util.Optional.ofNullable;
 
 public class WebMvcRequestHandler implements RequestHandler {
   private final String contextPath;
@@ -133,7 +133,7 @@ public class WebMvcRequestHandler implements RequestHandler {
   }
 
   @Override
-  public springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
+  public springfox.documentation.core.spring.wrapper.RequestMappingInfo getRequestMapping() {
     return new WebMvcRequestMappingInfoWrapper(requestMapping);
   }
 

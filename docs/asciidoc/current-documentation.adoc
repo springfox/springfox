@@ -19,7 +19,7 @@ to this is the ability to provide an expressive predicate based for api selectio
 .Example configuration
 [source,java,linenums]
 ----
-  import static springfox.documentation.builders.PathSelectors.*;
+  import static springfox.documentation.core.builders.PathSelectors.*;
   import static com.google.common.base.Predicates.*;
 
   @Bean

@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web
 
 import spock.lang.Specification
-import springfox.documentation.builders.DocumentationBuilder
+import springfox.documentation.core.builders.DocumentationBuilder
 import springfox.documentation.spring.web.DocumentationCache
 
 class DocumentationCacheSpec extends Specification {

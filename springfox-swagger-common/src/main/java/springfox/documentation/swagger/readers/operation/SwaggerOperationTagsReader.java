@@ -38,7 +38,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.service.Tags.*;
+import static springfox.documentation.core.service.Tags.*;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)

@@ -21,13 +21,13 @@ package springfox.test.contract.swaggertests
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import springfox.documentation.builders.ImplicitGrantBuilder
-import springfox.documentation.builders.OAuthBuilder
-import springfox.documentation.service.ApiKey
-import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.GrantType
-import springfox.documentation.service.LoginEndpoint
-import springfox.documentation.service.SecurityScheme
+import springfox.documentation.core.builders.ImplicitGrantBuilder
+import springfox.documentation.core.builders.OAuthBuilder
+import springfox.documentation.core.service.ApiKey
+import springfox.documentation.core.service.AuthorizationScope
+import springfox.documentation.core.service.GrantType
+import springfox.documentation.core.service.LoginEndpoint
+import springfox.documentation.core.service.SecurityScheme
 
 import java.util.stream.Stream
 

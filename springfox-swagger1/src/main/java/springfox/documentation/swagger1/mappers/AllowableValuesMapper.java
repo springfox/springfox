@@ -21,6 +21,7 @@ package springfox.documentation.swagger1.mappers;
 
 
 import org.mapstruct.Mapper;
+import springfox.documentation.core.service.AllowableValues;
 import springfox.documentation.swagger1.dto.AllowableListValues;
 import springfox.documentation.swagger1.dto.AllowableRangeValues;
 
@@ -29,21 +30,21 @@ public abstract class AllowableValuesMapper {
 
   //Allowable values related
   public abstract AllowableListValues toSwaggerAllowableListValues(
-          springfox.documentation.service.AllowableListValues from);
+          springfox.documentation.core.service.AllowableListValues from);
 
   public abstract AllowableRangeValues toSwaggerAllowableRangeValues(
-          springfox.documentation.service.AllowableRangeValues from);
+          springfox.documentation.core.service.AllowableRangeValues from);
 
   public springfox.documentation.swagger1.dto.AllowableValues toSwaggerAllowableValues(
-          springfox.documentation.service.AllowableValues original) {
+          AllowableValues original) {
     if (original == null) {
       return null;
     }
 
-    if (original instanceof springfox.documentation.service.AllowableListValues) {
-      return toSwaggerAllowableListValues((springfox.documentation.service.AllowableListValues) original);
-    } else if (original instanceof springfox.documentation.service.AllowableRangeValues) {
-      return toSwaggerAllowableRangeValues((springfox.documentation.service.AllowableRangeValues)
+    if (original instanceof springfox.documentation.core.service.AllowableListValues) {
+      return toSwaggerAllowableListValues((springfox.documentation.core.service.AllowableListValues) original);
+    } else if (original instanceof springfox.documentation.core.service.AllowableRangeValues) {
+      return toSwaggerAllowableRangeValues((springfox.documentation.core.service.AllowableRangeValues)
               original);
     }
     throw new UnsupportedOperationException();

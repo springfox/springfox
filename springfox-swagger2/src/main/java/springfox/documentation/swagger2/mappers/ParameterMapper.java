@@ -31,8 +31,8 @@ import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.springframework.util.StringUtils;
 
-import springfox.documentation.schema.Example;
-import springfox.documentation.schema.ModelReference;
+import springfox.documentation.core.schema.Example;
+import springfox.documentation.core.schema.ModelReference;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -47,12 +47,12 @@ public class ParameterMapper {
 
   private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
 
-  public Parameter mapParameter(springfox.documentation.service.Parameter source) {
+  public Parameter mapParameter(springfox.documentation.core.service.Parameter source) {
     Parameter bodyParameter = bodyParameter(source);
     return SerializableParameterFactories.create(source).orElse(bodyParameter);
   }
 
-  private Parameter bodyParameter(springfox.documentation.service.Parameter source) {
+  private Parameter bodyParameter(springfox.documentation.core.service.Parameter source) {
     BodyParameter parameter = new BodyParameter()
         .description(source.getDescription())
         .name(source.getName())
@@ -73,7 +73,7 @@ public class ParameterMapper {
     return parameter;
   }
 
-  private Model toSchema(springfox.documentation.service.Parameter source) {
+  private Model toSchema(springfox.documentation.core.service.Parameter source) {
     Model schema = fromModelRef(source.getModelRef());
 
     if (!StringUtils.isEmpty(source.getScalarExample()) && !isEmptyExample(source.getScalarExample())) {

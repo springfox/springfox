@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.mixins
 
-import springfox.documentation.service.ApiDescription
+import springfox.documentation.core.service.ApiDescription
 
 
 class ApiDescriptionSupport {

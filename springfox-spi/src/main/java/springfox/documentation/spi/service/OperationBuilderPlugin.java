@@ -20,6 +20,7 @@
 package springfox.documentation.spi.service;
 
 import org.springframework.plugin.core.Plugin;
+import springfox.documentation.core.service.Operation;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
@@ -28,8 +29,8 @@ public interface OperationBuilderPlugin extends Plugin<DocumentationType> {
    * Implement this method to override the Operation using the OperationBuilder available in the context
    *
    * @param context - context that can be used to override the parameter attributes
-   * @see springfox.documentation.service.Operation
-   * @see springfox.documentation.builders.OperationBuilder
+   * @see Operation
+   * @see springfox.documentation.core.builders.OperationBuilder
    */
   void apply(OperationContext context);
 }

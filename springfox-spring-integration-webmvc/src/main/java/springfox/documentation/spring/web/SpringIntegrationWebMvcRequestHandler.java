@@ -23,7 +23,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.integration.http.inbound.BaseHttpInboundEndpoint;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.core.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.plugins.SpringIntegrationParametersProvider;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 

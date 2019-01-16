@@ -23,7 +23,7 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.core.service.ResolvedMethodParameter;
 
 import java.util.Collection;
 import java.util.List;

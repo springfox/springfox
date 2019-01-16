@@ -22,21 +22,22 @@ package springfox.documentation.spring.web.plugins;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.web.bind.annotation.RequestMethod;
-import springfox.documentation.PathProvider;
-import springfox.documentation.annotations.Incubating;
-import springfox.documentation.schema.AlternateTypeRule;
+import springfox.documentation.core.PathProvider;
+import springfox.documentation.core.annotations.Incubating;
+import springfox.documentation.core.schema.AlternateTypeRules;
+import springfox.documentation.core.schema.AlternateTypeRule;
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy;
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy;
-import springfox.documentation.schema.WildcardType;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.service.VendorExtension;
+import springfox.documentation.core.schema.WildcardType;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.ApiInfo;
+import springfox.documentation.core.service.ApiListingReference;
+import springfox.documentation.core.service.Operation;
+import springfox.documentation.core.service.Parameter;
+import springfox.documentation.core.service.ResponseMessage;
+import springfox.documentation.core.service.SecurityScheme;
+import springfox.documentation.core.service.Tag;
+import springfox.documentation.core.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
@@ -60,8 +61,8 @@ import java.util.stream.Stream;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.schema.AlternateTypeRules.*;
+import static springfox.documentation.core.builders.BuilderDefaults.*;
+import static springfox.documentation.core.schema.AlternateTypeRules.*;
 
 /**
  * A builder which is intended to be the primary interface into the Springfox framework.
@@ -249,7 +250,7 @@ public class Docket implements DocumentationPlugin {
    *
    * @param alternateTypeRules - rules to be applied
    * @return this Docket
-   * @see springfox.documentation.schema.AlternateTypeRules#newRule(java.lang.reflect.Type,
+   * @see AlternateTypeRules#newRule(java.lang.reflect.Type,
    * java.lang.reflect.Type)
    */
   public Docket alternateTypeRules(AlternateTypeRule... alternateTypeRules) {

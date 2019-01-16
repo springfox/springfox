@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web;
 
-import springfox.documentation.service.Documentation;
+import springfox.documentation.core.service.Documentation;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

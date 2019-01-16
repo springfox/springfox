@@ -23,8 +23,8 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.method.HandlerMethod
-import springfox.documentation.schema.Model
-import springfox.documentation.schema.ModelProperty
+import springfox.documentation.core.schema.Model
+import springfox.documentation.core.schema.ModelProperty
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext

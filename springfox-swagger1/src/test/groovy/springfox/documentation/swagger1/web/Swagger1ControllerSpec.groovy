@@ -23,10 +23,10 @@ import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.web.util.WebUtils
 import spock.lang.Unroll
-import springfox.documentation.builders.DocumentationBuilder
-import springfox.documentation.service.ApiListing
-import springfox.documentation.service.Documentation
-import springfox.documentation.service.SecurityScheme
+import springfox.documentation.core.builders.DocumentationBuilder
+import springfox.documentation.core.service.ApiListing
+import springfox.documentation.core.service.Documentation
+import springfox.documentation.core.service.SecurityScheme
 import springfox.documentation.spring.web.DocumentationCache
 import springfox.documentation.spring.web.PropertySourcedMapping
 import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping

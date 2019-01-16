@@ -22,6 +22,8 @@ package springfox.documentation.schema;
 import java.util.ArrayList;
 import java.util.List;
 
+import springfox.documentation.core.schema.ExampleEnum;
+
 public class ListsContainer {
   private List<ToSubstitute> substituted;
   private List<ComplexType> complexTypes;

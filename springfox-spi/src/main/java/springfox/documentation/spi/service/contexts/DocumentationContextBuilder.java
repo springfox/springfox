@@ -23,19 +23,19 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.core.OrderComparator;
 import org.springframework.web.bind.annotation.RequestMethod;
-import springfox.documentation.PathProvider;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.service.Tags;
-import springfox.documentation.service.VendorExtension;
+import springfox.documentation.core.PathProvider;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.schema.AlternateTypeRule;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.ApiInfo;
+import springfox.documentation.core.service.ApiListingReference;
+import springfox.documentation.core.service.Operation;
+import springfox.documentation.core.service.Parameter;
+import springfox.documentation.core.service.ResponseMessage;
+import springfox.documentation.core.service.SecurityScheme;
+import springfox.documentation.core.service.Tag;
+import springfox.documentation.core.service.Tags;
+import springfox.documentation.core.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
@@ -53,7 +53,7 @@ import java.util.TreeSet;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.core.builders.BuilderDefaults.*;
 
 public class DocumentationContextBuilder {
 

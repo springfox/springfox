@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.RequestHandler
-import springfox.documentation.RequestHandlerKey
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.RequestHandler
+import springfox.documentation.core.RequestHandlerKey
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper
 
 import java.util.stream.Stream

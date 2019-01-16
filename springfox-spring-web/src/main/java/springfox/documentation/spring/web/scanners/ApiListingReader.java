@@ -22,7 +22,7 @@ package springfox.documentation.spring.web.scanners;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.core.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;

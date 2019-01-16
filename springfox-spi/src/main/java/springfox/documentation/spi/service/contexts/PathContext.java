@@ -18,10 +18,10 @@
  */
 package springfox.documentation.spi.service.contexts;
 
-import springfox.documentation.PathProvider;
-import springfox.documentation.annotations.Incubating;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.core.PathProvider;
+import springfox.documentation.core.annotations.Incubating;
+import springfox.documentation.core.service.Operation;
+import springfox.documentation.core.service.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
