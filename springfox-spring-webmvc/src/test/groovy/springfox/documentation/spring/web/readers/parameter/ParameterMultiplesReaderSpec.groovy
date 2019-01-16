@@ -23,8 +23,8 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.builders.ParameterBuilder
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext

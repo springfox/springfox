@@ -19,6 +19,9 @@
 package springfox.documentation.schema
 
 import spock.lang.Unroll
+import springfox.documentation.core.schema.ExampleEnum
+import springfox.documentation.core.schema.Model
+import springfox.documentation.core.schema.ModelRef
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
@@ -32,7 +35,7 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = typeWithLists()
-      Model asInput = modelProvider.modelFor(inputParam("group",
+    Model asInput = modelProvider.modelFor(inputParam("group",
           sut,
           SWAGGER_12,
           alternateTypeProvider(),
@@ -51,7 +54,7 @@ class ContainerTypesSpec extends SchemaSpecification {
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == name
       modelProperty.getModelRef()
-      ModelRef item = modelProperty.getModelRef()
+    ModelRef item = modelProperty.getModelRef()
       item.type == "List"
       item.itemType == itemType
       item.collection
@@ -69,7 +72,7 @@ class ContainerTypesSpec extends SchemaSpecification {
     where:
       property          | name      | itemType      | itemQualifiedType
       "complexTypes"    | List      | 'ComplexType' | "springfox.documentation.schema.ComplexType"
-      "enums"           | List      | "string"      | "springfox.documentation.schema.ExampleEnum"
+      "enums"           | List      | "string"      | "ExampleEnum"
       "aliasOfIntegers" | List      | "int"         | "java.lang.Integer"
       "strings"         | ArrayList | "string"      | "java.lang.String"
       "objects"         | List      | "object"      | "java.lang.Object"
@@ -116,7 +119,7 @@ class ContainerTypesSpec extends SchemaSpecification {
     where:
       property          | type  | itemType      | itemQualifiedType
       "complexTypes"    | "Set" | 'ComplexType' | "springfox.documentation.schema.ComplexType"
-      "enums"           | "Set" | "string"      | "springfox.documentation.schema.ExampleEnum"
+      "enums"           | "Set" | "string"      | "ExampleEnum"
       "aliasOfIntegers" | "Set" | "int"         | "java.lang.Integer"
       "strings"         | "Set" | "string"      | "java.lang.String"
       "objects"         | "Set" | "object"      | "java.lang.Object"
@@ -163,7 +166,7 @@ class ContainerTypesSpec extends SchemaSpecification {
     where:
       property          | type          | itemType      | itemQualifiedType
       "complexTypes"    | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"
-      "enums"           | ExampleEnum[] | "string"      | "springfox.documentation.schema.ExampleEnum"
+      "enums"           | ExampleEnum[] | "string"      | "ExampleEnum"
       "aliasOfIntegers" | Integer[]     | "int"         | "java.lang.Integer"
       "strings"         | String[]      | "string"      | "java.lang.String"
       "objects"         | Object[]      | "object"      | "java.lang.Object"
@@ -212,9 +215,9 @@ class ContainerTypesSpec extends SchemaSpecification {
 
     where:
       property              | type  | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
+      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "Entry"
+      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "Entry"
+      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "Entry"
   }
 
   def "Model properties of type Map are inferred correctly on generic host"() {
@@ -260,10 +263,10 @@ class ContainerTypesSpec extends SchemaSpecification {
 
     where:
       property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
-      "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
+      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "Entry"
+      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "Entry"
+      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "Entry"
+      "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "Entry"
   }
 
   def "Model properties of type Map are inferred correctly on generic host with default rules"() {

@@ -20,9 +20,9 @@ package springfox.documentation.spi.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.plugin.core.Plugin;
-import springfox.documentation.annotations.Incubating;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.core.annotations.Incubating;
+import springfox.documentation.core.schema.Model;
+import springfox.documentation.core.schema.ModelProperty;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.List;

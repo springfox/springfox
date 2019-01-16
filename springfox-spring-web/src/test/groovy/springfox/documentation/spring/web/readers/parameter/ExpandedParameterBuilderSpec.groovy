@@ -4,8 +4,8 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.members.ResolvedField
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
-import springfox.documentation.schema.ExampleEnum
+import springfox.documentation.core.builders.ParameterBuilder
+import springfox.documentation.core.schema.ExampleEnum
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType

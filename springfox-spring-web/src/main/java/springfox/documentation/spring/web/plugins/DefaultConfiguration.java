@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
-import springfox.documentation.PathProvider;
+import springfox.documentation.core.PathProvider;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.contexts.ApiSelector;

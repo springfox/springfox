@@ -20,6 +20,7 @@
 package springfox.documentation.spi.service;
 
 import org.springframework.plugin.core.Plugin;
+import springfox.documentation.core.service.ApiListing;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 
@@ -28,8 +29,8 @@ public interface ApiListingBuilderPlugin extends Plugin<DocumentationType> {
    * Implement this method to override the ApiListing using the ApiListingBuilder
    *
    * @param apiListingContext - context that can be used to override the model property attributes
-   * @see springfox.documentation.service.ApiListing
-   * @see springfox.documentation.builders.ApiListingBuilder
+   * @see ApiListing
+   * @see springfox.documentation.core.builders.ApiListingBuilder
    */
   void apply(ApiListingContext apiListingContext);
 }

@@ -19,15 +19,16 @@
 
 package springfox.documentation.spring.web;
 
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static springfox.documentation.spring.web.paths.Paths.*;
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+
+import static springfox.documentation.spring.web.paths.Paths.maybeChompLeadingSlash;
+import static springfox.documentation.spring.web.paths.Paths.maybeChompTrailingSlash;
 
 public class WebMvcPatternsRequestConditionWrapper
-    implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
+    implements springfox.documentation.core.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
 
   private final String contextPath;
   private final PatternsRequestCondition condition;
@@ -41,8 +42,8 @@ public class WebMvcPatternsRequestConditionWrapper
   }
 
   @Override
-  public springfox.documentation.spring.wrapper.PatternsRequestCondition combine(
-      springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other) {
+  public springfox.documentation.core.spring.wrapper.PatternsRequestCondition combine(
+      springfox.documentation.core.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other) {
     if (other instanceof WebMvcPatternsRequestConditionWrapper && !this.equals(other)) {
       return new WebMvcPatternsRequestConditionWrapper(
           contextPath,

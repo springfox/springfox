@@ -21,7 +21,7 @@ package springfox.documentation.swagger2.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Qualifier;
-import springfox.documentation.service.ApiInfo;
+import springfox.documentation.core.service.ApiInfo;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

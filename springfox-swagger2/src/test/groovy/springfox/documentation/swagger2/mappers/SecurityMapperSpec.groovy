@@ -4,14 +4,14 @@ import io.swagger.models.auth.ApiKeyAuthDefinition
 import io.swagger.models.auth.BasicAuthDefinition
 import io.swagger.models.auth.OAuth2Definition
 import spock.lang.Specification
-import springfox.documentation.builders.ImplicitGrantBuilder
-import springfox.documentation.builders.OAuthBuilder
-import springfox.documentation.service.ApiKey
-import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.BasicAuth
-import springfox.documentation.service.GrantType
-import springfox.documentation.service.LoginEndpoint
-import springfox.documentation.service.ResourceListing
+import springfox.documentation.core.builders.ImplicitGrantBuilder
+import springfox.documentation.core.builders.OAuthBuilder
+import springfox.documentation.core.service.ApiKey
+import springfox.documentation.core.service.AuthorizationScope
+import springfox.documentation.core.service.BasicAuth
+import springfox.documentation.core.service.GrantType
+import springfox.documentation.core.service.LoginEndpoint
+import springfox.documentation.core.service.ResourceListing
 
 import java.util.stream.Stream
 

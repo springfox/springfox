@@ -26,15 +26,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.schema.ClassSupport;
-import springfox.documentation.schema.WildcardType;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.core.annotations.ApiIgnore;
+import springfox.documentation.core.builders.ResponseMessageBuilder;
+import springfox.documentation.core.schema.AlternateTypeRule;
+import springfox.documentation.core.schema.ClassSupport;
+import springfox.documentation.core.schema.WildcardType;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.ApiListingReference;
+import springfox.documentation.core.service.Operation;
+import springfox.documentation.core.service.ResponseMessage;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -54,7 +54,7 @@ import java.util.Set;
 import static java.util.Arrays.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import static springfox.documentation.schema.AlternateTypeRules.*;
+import static springfox.documentation.core.schema.AlternateTypeRules.*;
 
 public class Defaults {
 

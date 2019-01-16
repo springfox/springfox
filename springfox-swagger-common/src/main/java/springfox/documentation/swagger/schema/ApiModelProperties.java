@@ -25,9 +25,9 @@ import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
-import springfox.documentation.service.AllowableListValues;
-import springfox.documentation.service.AllowableRangeValues;
-import springfox.documentation.service.AllowableValues;
+import springfox.documentation.core.service.AllowableListValues;
+import springfox.documentation.core.service.AllowableRangeValues;
+import springfox.documentation.core.service.AllowableValues;
 import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.lang.reflect.AnnotatedElement;

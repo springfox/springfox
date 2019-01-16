@@ -19,10 +19,11 @@
 
 package springfox.documentation.schema
 import com.fasterxml.classmate.TypeResolver
+import springfox.documentation.core.schema.WildcardType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.service.contexts.Defaults
 
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 class AlternateTypesSupport {
 

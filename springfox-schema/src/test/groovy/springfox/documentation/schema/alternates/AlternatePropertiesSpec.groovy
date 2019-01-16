@@ -21,10 +21,10 @@ package springfox.documentation.schema.alternates
 
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
-import springfox.documentation.schema.AlternateTypeRule
+import springfox.documentation.core.schema.AlternateTypeRule
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.Model
+import springfox.documentation.core.schema.Model
 import springfox.documentation.schema.ModelProvider
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport

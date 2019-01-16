@@ -22,8 +22,8 @@ package springfox.documentation.spring.web.scanners
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
-import springfox.documentation.service.ApiDescription
-import springfox.documentation.service.Operation
+import springfox.documentation.core.service.ApiDescription
+import springfox.documentation.core.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport

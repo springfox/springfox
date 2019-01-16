@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.paths;
 
 import org.springframework.web.util.UriComponentsBuilder;
-import springfox.documentation.PathProvider;
+import springfox.documentation.core.PathProvider;
 
 import static springfox.documentation.spring.web.paths.Paths.*;
 

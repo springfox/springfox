@@ -18,12 +18,12 @@
  */
 package springfox.documentation.swagger.common;
 
-import springfox.documentation.common.SpringVersion;
+import springfox.documentation.core.common.SpringVersion;
 import springfox.documentation.service.PathAdjuster;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static springfox.documentation.common.SpringVersionCapability.*;
+import static springfox.documentation.core.common.SpringVersionCapability.*;
 
 public class XForwardPrefixPathAdjuster implements PathAdjuster {
   static final String X_FORWARDED_PREFIX = "X-Forwarded-Prefix";

@@ -23,7 +23,7 @@ class AllowableListValuesSpec extends InternalJsonSerializationSpec {
 
   def "should pass coverage"() {
     expect:
-      new springfox.documentation.service.AllowableListValues(['a'], 'string').with {
+      new springfox.documentation.core.service.AllowableListValues(['a'], 'string').with {
         getValues()
         getValueType()
       }

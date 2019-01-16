@@ -19,7 +19,7 @@
 package springfox.documentation.swagger2.mappers
 
 import spock.lang.Specification
-import springfox.documentation.schema.Example
+import springfox.documentation.core.schema.Example
 
 class ExamplesMapperSpec extends Specification {
   def "examples are mapped correctly"() {

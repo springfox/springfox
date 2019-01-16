@@ -21,6 +21,7 @@ package springfox.documentation.schema
 
 import spock.lang.Shared
 import spock.lang.Specification
+import springfox.documentation.core.schema.Model
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -36,7 +37,7 @@ class ComplexTypeSpec extends Specification {
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam("group",
+    Model asInput = provider.modelFor(inputParam("group",
           complexType(),
           SWAGGER_12,
           alternateTypeProvider(),

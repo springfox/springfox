@@ -1,7 +1,7 @@
 package springfox.documentation.swagger.web
 import spock.lang.Specification
-import springfox.documentation.builders.ApiListingBuilder
-import springfox.documentation.service.ResourceGroup
+import springfox.documentation.core.builders.ApiListingBuilder
+import springfox.documentation.core.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ApiListingContext
 import springfox.documentation.spi.service.contexts.Orderings

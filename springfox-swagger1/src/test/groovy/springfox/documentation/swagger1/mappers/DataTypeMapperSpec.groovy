@@ -20,7 +20,7 @@
 package springfox.documentation.swagger1.mappers
 
 import spock.lang.Specification
-import springfox.documentation.schema.ModelRef
+import springfox.documentation.core.schema.ModelRef
 import springfox.documentation.swagger1.mixins.MapperSupport
 
 class DataTypeMapperSpec extends Specification implements MapperSupport {

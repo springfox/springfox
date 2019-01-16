@@ -1,8 +1,8 @@
 package springfox.documentation.swagger2.mappers
 
 import spock.lang.Specification
-import springfox.documentation.builders.ApiInfoBuilder
-import springfox.documentation.service.ApiInfo
+import springfox.documentation.core.builders.ApiInfoBuilder
+import springfox.documentation.core.service.ApiInfo
 
 class LicenseMapperSpec extends Specification {
   def "License is mapped from ApiInfo" () {

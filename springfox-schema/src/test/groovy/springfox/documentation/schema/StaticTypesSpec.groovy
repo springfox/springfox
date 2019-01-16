@@ -20,6 +20,7 @@
 package springfox.documentation.schema
 
 import spock.lang.Specification
+import springfox.documentation.core.schema.Enums
 
 class StaticTypesSpec extends Specification {
   def "Static types cannot be instantiated" () {

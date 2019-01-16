@@ -23,11 +23,13 @@ import org.springframework.hateoas.Resources
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.core.schema.AlternateTypeRule
+import springfox.documentation.core.schema.WildcardType
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.service.contexts.Defaults
 
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 @Mixin(TypesForTestingSupport)
 class AlternateTypeProviderSpec extends Specification {
@@ -101,7 +103,7 @@ class AlternateTypeProviderSpec extends Specification {
       hateoasResourcesRule()                                  | resources(SimpleTypeResource)   | resolver.resolve(List, SimpleType)
   }
 
-  AlternateTypeRule hateoasResourcesRule() {
+    AlternateTypeRule hateoasResourcesRule() {
     def typeResolver = new TypeResolver()
     newRule(
         typeResolver.resolve(Resources.class, SimpleTypeResource.class),

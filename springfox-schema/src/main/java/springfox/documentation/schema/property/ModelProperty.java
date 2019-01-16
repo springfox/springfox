@@ -20,7 +20,7 @@
 package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
-import springfox.documentation.service.AllowableValues;
+import springfox.documentation.core.service.AllowableValues;
 
 public interface ModelProperty {
   String getName();

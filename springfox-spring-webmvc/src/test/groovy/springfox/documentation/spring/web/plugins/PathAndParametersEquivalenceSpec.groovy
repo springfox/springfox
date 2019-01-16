@@ -7,8 +7,8 @@ import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
 import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.RequestHandler
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.RequestHandler
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper
 import springfox.documentation.spring.web.paths.Paths
 

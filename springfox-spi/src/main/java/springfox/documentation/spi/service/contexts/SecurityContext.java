@@ -21,7 +21,7 @@ package springfox.documentation.spi.service.contexts;
 
 
 import org.springframework.http.HttpMethod;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.core.service.SecurityReference;
 
 import java.util.ArrayList;
 import java.util.List;

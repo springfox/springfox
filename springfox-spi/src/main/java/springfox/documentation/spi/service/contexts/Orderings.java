@@ -19,17 +19,17 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.service.ApiDescription;
+import springfox.documentation.core.service.ApiListingReference;
+import springfox.documentation.core.service.Operation;
+import springfox.documentation.core.service.ResourceGroup;
 import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
 
 import static java.util.Optional.*;
-import static springfox.documentation.RequestHandler.*;
+import static springfox.documentation.core.RequestHandler.*;
 
 public class Orderings {
   private Orderings() {

@@ -20,6 +20,7 @@
 package springfox.documentation.schema
 
 import spock.lang.Specification
+import springfox.documentation.core.schema.Model
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider

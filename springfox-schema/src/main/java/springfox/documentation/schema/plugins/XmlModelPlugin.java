@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.JaxbPresentInClassPathCondition;
-import springfox.documentation.schema.Xml;
+import springfox.documentation.core.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;

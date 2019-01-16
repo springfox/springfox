@@ -3,7 +3,7 @@ package springfox.documentation.spring.web.plugins
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.service.ResolvedMethodParameter
 
 class ResolvedMethodParameterEquivalenceSpec extends Specification {
   @Unroll

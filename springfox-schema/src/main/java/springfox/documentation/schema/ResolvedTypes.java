@@ -22,7 +22,9 @@ package springfox.documentation.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
-import springfox.documentation.service.AllowableValues;
+import springfox.documentation.core.schema.Enums;
+import springfox.documentation.core.schema.ModelReference;
+import springfox.documentation.core.service.AllowableValues;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;

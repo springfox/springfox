@@ -18,8 +18,8 @@
  */
 package springfox.documentation.spring.web.readers.operation;
 
-import springfox.documentation.annotations.Cacheable;
-import springfox.documentation.service.Operation;
+import springfox.documentation.core.annotations.Cacheable;
+import springfox.documentation.core.service.Operation;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import java.util.List;

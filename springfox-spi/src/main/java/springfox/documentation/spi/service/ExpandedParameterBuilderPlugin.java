@@ -20,6 +20,7 @@
 package springfox.documentation.spi.service;
 
 import org.springframework.plugin.core.Plugin;
+import springfox.documentation.core.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
@@ -28,8 +29,8 @@ public interface ExpandedParameterBuilderPlugin extends Plugin<DocumentationType
    * Implement this method to override the Parameter using ParameterBuilder available in the context
    *
    * @param context - context that can be used to override the parameter attributes
-   * @see springfox.documentation.service.Parameter
-   * @see springfox.documentation.builders.ParameterBuilder
+   * @see Parameter
+   * @see springfox.documentation.core.builders.ParameterBuilder
    */
   void apply(ParameterExpansionContext context);
 }

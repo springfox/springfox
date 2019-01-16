@@ -19,7 +19,7 @@
 package springfox.documentation.spi.service;
 
 import org.springframework.plugin.core.Plugin;
-import springfox.documentation.service.ApiDescription;
+import springfox.documentation.core.service.ApiDescription;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 
@@ -30,7 +30,7 @@ public interface ApiListingScannerPlugin extends Plugin<DocumentationType> {
    * Implement this method to manually add ApiDescriptions
    *
    * @param context - Documentation context that can be used infer documentation context
-   * @see springfox.documentation.service.ApiDescription
+   * @see ApiDescription
    * @return List of {@link ApiDescription}
    */
   List<ApiDescription> apply(DocumentationContext context);

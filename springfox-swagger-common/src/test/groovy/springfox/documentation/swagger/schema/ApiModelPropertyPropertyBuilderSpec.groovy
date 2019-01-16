@@ -28,7 +28,7 @@ import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
-import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.core.builders.ModelPropertyBuilder
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider

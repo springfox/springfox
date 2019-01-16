@@ -20,7 +20,7 @@
 package springfox.documentation.swagger1.mappers
 
 import spock.lang.Specification
-import springfox.documentation.service.AllowableValues
+import springfox.documentation.core.service.AllowableValues
 import springfox.documentation.swagger1.dto.AllowableListValues
 import springfox.documentation.swagger1.dto.AllowableRangeValues
 import springfox.documentation.swagger1.mixins.MapperSupport
@@ -28,7 +28,7 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 class AllowableValuesMapperSpec extends Specification implements MapperSupport {
   def "Maps null range input to null output"() {
     given:
-      springfox.documentation.service.AllowableRangeValues source = null
+      springfox.documentation.core.service.AllowableRangeValues source = null
       AllowableValuesMapper mapper = allowableValuesMapper()
     when:
       AllowableRangeValues dto = mapper.toSwaggerAllowableRangeValues(source)
@@ -38,7 +38,7 @@ class AllowableValuesMapperSpec extends Specification implements MapperSupport {
 
   def "Maps null list values input to null output"() {
     given:
-      springfox.documentation.service.AllowableListValues source = null
+      springfox.documentation.core.service.AllowableListValues source = null
       AllowableValuesMapper mapper = allowableValuesMapper()
     when:
       AllowableListValues dto = mapper.toSwaggerAllowableListValues(source)
@@ -48,7 +48,7 @@ class AllowableValuesMapperSpec extends Specification implements MapperSupport {
 
   def "Maps list values input when values is null"() {
     given:
-      springfox.documentation.service.AllowableListValues source = new springfox.documentation.service.AllowableListValues(null, "string")
+      springfox.documentation.core.service.AllowableListValues source = new springfox.documentation.core.service.AllowableListValues(null, "string")
       AllowableValuesMapper mapper = allowableValuesMapper()
     when:
       AllowableListValues dto = mapper.toSwaggerAllowableListValues(source)
@@ -59,7 +59,7 @@ class AllowableValuesMapperSpec extends Specification implements MapperSupport {
 
   def "Maps allowable list correctly"() {
     given:
-      springfox.documentation.service.AllowableListValues source = new springfox.documentation.service.AllowableListValues(['ONE', 'TWO'], "string")
+      springfox.documentation.core.service.AllowableListValues source = new springfox.documentation.core.service.AllowableListValues(['ONE', 'TWO'], "string")
       AllowableValuesMapper mapper = allowableValuesMapper()
     when:
       AllowableListValues dto = mapper.toSwaggerAllowableListValues(source)
@@ -70,7 +70,7 @@ class AllowableValuesMapperSpec extends Specification implements MapperSupport {
 
   def "Maps allowable ranges correctly"() {
     given:
-      springfox.documentation.service.AllowableRangeValues source = new springfox.documentation.service.AllowableRangeValues("0", "5")
+      springfox.documentation.core.service.AllowableRangeValues source = new springfox.documentation.core.service.AllowableRangeValues("0", "5")
       AllowableValuesMapper mapper = allowableValuesMapper()
     when:
       AllowableRangeValues dto = mapper.toSwaggerAllowableRangeValues(source)
@@ -81,8 +81,8 @@ class AllowableValuesMapperSpec extends Specification implements MapperSupport {
 
   def "Maps abstract values correctly correctly"() {
     given:
-      springfox.documentation.service.AllowableListValues listSource = new springfox.documentation.service.AllowableListValues(['ONE', 'TWO'], "string")
-      springfox.documentation.service.AllowableRangeValues rangeSource = new springfox.documentation.service.AllowableRangeValues("0", "5")
+      springfox.documentation.core.service.AllowableListValues listSource = new springfox.documentation.core.service.AllowableListValues(['ONE', 'TWO'], "string")
+      springfox.documentation.core.service.AllowableRangeValues rangeSource = new springfox.documentation.core.service.AllowableRangeValues("0", "5")
       AllowableValuesMapper mapper = allowableValuesMapper()
     when:
       def rangeDto = mapper.toSwaggerAllowableValues(rangeSource)

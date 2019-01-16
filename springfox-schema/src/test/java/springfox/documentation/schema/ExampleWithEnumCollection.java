@@ -21,6 +21,8 @@ package springfox.documentation.schema;
 
 import java.util.List;
 
+import springfox.documentation.core.schema.ExampleEnum;
+
 public class ExampleWithEnumCollection {
 
     private List<ExampleEnum> exampleEnums;

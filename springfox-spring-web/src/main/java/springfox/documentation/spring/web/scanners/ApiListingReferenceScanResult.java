@@ -19,7 +19,7 @@
 
 package springfox.documentation.spring.web.scanners;
 
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.core.service.ResourceGroup;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
 import java.util.List;

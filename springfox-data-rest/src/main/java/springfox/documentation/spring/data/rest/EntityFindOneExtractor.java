@@ -19,7 +19,7 @@
 package springfox.documentation.spring.data.rest;
 
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.RequestHandler;
+import springfox.documentation.core.RequestHandler;
 import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 import java.util.ArrayList;

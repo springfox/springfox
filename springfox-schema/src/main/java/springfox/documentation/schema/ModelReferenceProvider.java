@@ -20,6 +20,8 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.core.schema.ModelRef;
+import springfox.documentation.core.schema.ModelReference;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.Optional;

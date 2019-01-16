@@ -19,15 +19,15 @@
 
 package springfox.documentation.spring.web.mixins
 
-import springfox.documentation.service.AuthorizationCodeGrant
-import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.GrantType
-import springfox.documentation.service.ImplicitGrant
-import springfox.documentation.service.LoginEndpoint
-import springfox.documentation.service.OAuth
-import springfox.documentation.service.SecurityReference
-import springfox.documentation.service.TokenEndpoint
-import springfox.documentation.service.TokenRequestEndpoint
+import springfox.documentation.core.service.AuthorizationCodeGrant
+import springfox.documentation.core.service.AuthorizationScope
+import springfox.documentation.core.service.GrantType
+import springfox.documentation.core.service.ImplicitGrant
+import springfox.documentation.core.service.LoginEndpoint
+import springfox.documentation.core.service.OAuth
+import springfox.documentation.core.service.SecurityReference
+import springfox.documentation.core.service.TokenEndpoint
+import springfox.documentation.core.service.TokenRequestEndpoint
 
 import static java.util.Collections.*
 

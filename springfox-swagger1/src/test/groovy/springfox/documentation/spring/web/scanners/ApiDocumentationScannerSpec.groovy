@@ -19,17 +19,17 @@
 
 package springfox.documentation.spring.web.scanners
 
-import springfox.documentation.builders.ApiDescriptionBuilder
-import springfox.documentation.builders.ApiListingBuilder
-import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.ApiKey
-import springfox.documentation.service.Documentation
-import springfox.documentation.service.ResourceListing
+import springfox.documentation.core.builders.ApiDescriptionBuilder
+import springfox.documentation.core.builders.ApiListingBuilder
+import springfox.documentation.core.service.ApiInfo
+import springfox.documentation.core.service.ApiKey
+import springfox.documentation.core.service.Documentation
+import springfox.documentation.core.service.ResourceListing
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static springfox.documentation.builders.PathSelectors.*
+import static springfox.documentation.core.builders.PathSelectors.regex
 
 @Mixin([RequestMappingSupport])
 class ApiDocumentationScannerSpec extends DocumentationContextSpec {

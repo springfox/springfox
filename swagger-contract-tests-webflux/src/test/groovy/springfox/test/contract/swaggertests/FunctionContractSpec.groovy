@@ -36,7 +36,7 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.schema.AlternateTypeRuleConvention
+import springfox.documentation.core.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
 import static org.skyscreamer.jsonassert.JSONCompareMode.*

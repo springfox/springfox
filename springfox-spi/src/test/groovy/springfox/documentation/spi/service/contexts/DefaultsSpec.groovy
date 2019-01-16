@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.util.UriComponentsBuilder
 import spock.lang.Shared
 import spock.lang.Specification
-import springfox.documentation.annotations.ApiIgnore
+import springfox.documentation.core.annotations.ApiIgnore
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
 import java.time.*

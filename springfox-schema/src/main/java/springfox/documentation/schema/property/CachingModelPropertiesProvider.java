@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.core.schema.ModelProperty;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 

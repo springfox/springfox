@@ -2,7 +2,7 @@ package springfox.documentation.spring.web.scanners
 
 import spock.lang.Specification
 import spock.lang.Unroll
-import springfox.documentation.builders.ApiDescriptionBuilder
+import springfox.documentation.core.builders.ApiDescriptionBuilder
 
 import static springfox.documentation.spring.web.plugins.Docket.*
 

@@ -21,6 +21,7 @@ package springfox.documentation.schema;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.joda.time.LocalDate;
+import springfox.documentation.core.schema.ExampleEnum;
 
 import java.util.List;
 import java.util.Map;

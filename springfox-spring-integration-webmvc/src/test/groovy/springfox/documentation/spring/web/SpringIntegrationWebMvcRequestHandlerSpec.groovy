@@ -28,7 +28,7 @@ import org.springframework.web.HttpRequestHandler
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Specification
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spring.web.plugins.SpringIntegrationParametersProvider
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 

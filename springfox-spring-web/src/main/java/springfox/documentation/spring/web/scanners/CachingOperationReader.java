@@ -21,7 +21,7 @@ package springfox.documentation.spring.web.scanners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.Operation;
+import springfox.documentation.core.service.Operation;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.OperationCachingEquivalence;
 import springfox.documentation.spring.web.readers.operation.OperationReader;

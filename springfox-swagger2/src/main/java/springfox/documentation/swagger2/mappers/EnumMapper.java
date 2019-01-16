@@ -28,9 +28,9 @@ import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.LongProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
-import springfox.documentation.service.AllowableListValues;
-import springfox.documentation.service.AllowableRangeValues;
-import springfox.documentation.service.AllowableValues;
+import springfox.documentation.core.service.AllowableListValues;
+import springfox.documentation.core.service.AllowableRangeValues;
+import springfox.documentation.core.service.AllowableValues;
 
 import java.math.BigDecimal;
 import java.util.List;

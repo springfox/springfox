@@ -33,12 +33,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.test.context.ContextConfiguration
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
-import springfox.documentation.schema.AlternateTypeRuleConvention
+import springfox.documentation.core.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
 import static org.skyscreamer.jsonassert.JSONCompareMode.*

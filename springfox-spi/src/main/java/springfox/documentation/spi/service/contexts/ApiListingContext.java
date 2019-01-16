@@ -19,8 +19,8 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import springfox.documentation.builders.ApiListingBuilder;
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.core.builders.ApiListingBuilder;
+import springfox.documentation.core.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
 
 public class ApiListingContext {

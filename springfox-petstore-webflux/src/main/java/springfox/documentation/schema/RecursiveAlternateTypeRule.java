@@ -20,6 +20,7 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import springfox.documentation.core.schema.AlternateTypeRule;
 
 import java.util.List;
 import java.util.stream.Stream;

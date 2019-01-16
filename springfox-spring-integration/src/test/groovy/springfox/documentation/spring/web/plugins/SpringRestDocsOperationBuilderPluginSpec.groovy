@@ -20,8 +20,8 @@ package springfox.documentation.spring.web.plugins
 
 import org.springframework.web.bind.annotation.RequestMethod
 import spock.lang.Specification
-import springfox.documentation.RequestHandler
-import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.core.RequestHandler
+import springfox.documentation.core.builders.OperationBuilder
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext

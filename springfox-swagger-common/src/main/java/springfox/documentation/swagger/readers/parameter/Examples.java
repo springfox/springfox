@@ -20,7 +20,7 @@ package springfox.documentation.swagger.readers.parameter;
 
 
 import io.swagger.annotations.ExampleProperty;
-import springfox.documentation.schema.Example;
+import springfox.documentation.core.schema.Example;
 
 import java.util.HashMap;
 import java.util.LinkedList;

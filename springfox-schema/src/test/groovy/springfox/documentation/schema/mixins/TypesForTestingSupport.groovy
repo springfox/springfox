@@ -25,6 +25,8 @@ import org.springframework.hateoas.Resource
 import org.springframework.hateoas.Resources
 import org.springframework.http.ResponseEntity
 import org.springframework.ui.ModelMap
+import springfox.documentation.core.schema.Entry
+import springfox.documentation.core.schema.ExampleEnum
 import springfox.documentation.schema.*
 
 class TypesForTestingSupport {

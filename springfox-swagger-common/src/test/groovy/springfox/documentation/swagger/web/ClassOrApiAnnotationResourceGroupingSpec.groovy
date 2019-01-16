@@ -22,7 +22,7 @@ package springfox.documentation.swagger.web
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spring.wrapper.RequestMappingInfo
+import springfox.documentation.core.spring.wrapper.RequestMappingInfo
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
 @Mixin(RequestMappingSupport)

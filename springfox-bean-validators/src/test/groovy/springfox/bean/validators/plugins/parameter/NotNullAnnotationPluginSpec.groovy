@@ -22,8 +22,8 @@ import com.fasterxml.classmate.ResolvedType
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
-import springfox.documentation.builders.ParameterBuilder
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.builders.ParameterBuilder
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.DocumentationContext

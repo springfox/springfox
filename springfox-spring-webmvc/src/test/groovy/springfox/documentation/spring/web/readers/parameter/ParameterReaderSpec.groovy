@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
-import springfox.documentation.service.ResolvedMethodParameter
+import springfox.documentation.core.builders.ParameterBuilder
+import springfox.documentation.core.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationContext

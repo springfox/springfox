@@ -21,7 +21,7 @@ package springfox.documentation.spring.data.rest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import springfox.documentation.annotations.ApiIgnore;
+import springfox.documentation.core.annotations.ApiIgnore;
 
 import java.lang.annotation.Annotation;
 

@@ -29,16 +29,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.async.DeferredResult;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.WildcardType;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.Tag;
+import springfox.documentation.core.builders.ParameterBuilder;
+import springfox.documentation.core.builders.PathSelectors;
+import springfox.documentation.core.builders.RequestHandlerSelectors;
+import springfox.documentation.core.builders.ResponseMessageBuilder;
+import springfox.documentation.core.schema.ModelRef;
+import springfox.documentation.core.schema.WildcardType;
+import springfox.documentation.core.service.ApiKey;
+import springfox.documentation.core.service.AuthorizationScope;
+import springfox.documentation.core.service.SecurityReference;
+import springfox.documentation.core.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -56,7 +56,7 @@ import springfox.petstore.controller.PetController;
 import java.util.List;
 
 import static java.util.Collections.*;
-import static springfox.documentation.schema.AlternateTypeRules.*;
+import static springfox.documentation.core.schema.AlternateTypeRules.*;
 
 
 @SpringBootApplication

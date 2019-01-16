@@ -2,15 +2,15 @@ package springfox.documentation.swagger2.mappers
 
 import io.swagger.models.auth.OAuth2Definition
 import spock.lang.Specification
-import springfox.documentation.service.AuthorizationCodeGrant
-import springfox.documentation.service.AuthorizationScope
-import springfox.documentation.service.ClientCredentialsGrant
-import springfox.documentation.service.GrantType
-import springfox.documentation.service.OAuth
-import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant
-import springfox.documentation.service.SecurityScheme
-import springfox.documentation.service.TokenEndpoint
-import springfox.documentation.service.TokenRequestEndpoint
+import springfox.documentation.core.service.AuthorizationCodeGrant
+import springfox.documentation.core.service.AuthorizationScope
+import springfox.documentation.core.service.ClientCredentialsGrant
+import springfox.documentation.core.service.GrantType
+import springfox.documentation.core.service.OAuth
+import springfox.documentation.core.service.ResourceOwnerPasswordCredentialsGrant
+import springfox.documentation.core.service.SecurityScheme
+import springfox.documentation.core.service.TokenEndpoint
+import springfox.documentation.core.service.TokenRequestEndpoint
 
 import static java.util.Collections.*
 

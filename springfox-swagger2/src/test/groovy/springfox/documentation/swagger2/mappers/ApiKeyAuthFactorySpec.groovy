@@ -21,13 +21,17 @@ package springfox.documentation.swagger2.mappers
 import io.swagger.models.auth.ApiKeyAuthDefinition
 import io.swagger.models.auth.In
 import spock.lang.Specification
-import springfox.documentation.service.*
+import springfox.documentation.core.service.ApiKey
+import springfox.documentation.core.service.ListVendorExtension
+import springfox.documentation.core.service.ObjectVendorExtension
+import springfox.documentation.core.service.SecurityScheme
+import springfox.documentation.core.service.StringVendorExtension
 
 class ApiKeyAuthFactorySpec extends Specification {
 
   def "Create ApiKey scheme definition"() {
     given:
-      SecurityScheme security = new ApiKey("mykey", "key1", "header", amazonVendorExtensions())
+    SecurityScheme security = new ApiKey("mykey", "key1", "header", amazonVendorExtensions())
     and:
       ApiKeyAuthFactory factory = new ApiKeyAuthFactory()
     when:

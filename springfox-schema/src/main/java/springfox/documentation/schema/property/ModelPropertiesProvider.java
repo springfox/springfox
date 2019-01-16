@@ -21,8 +21,8 @@ package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.context.ApplicationListener;
-import springfox.documentation.annotations.Cacheable;
-import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.core.annotations.Cacheable;
+import springfox.documentation.core.schema.ModelProperty;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 

@@ -24,9 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.core.service.ResourceGroup;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.wrapper.RequestMappingInfo;
+import springfox.documentation.core.spring.wrapper.RequestMappingInfo;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 

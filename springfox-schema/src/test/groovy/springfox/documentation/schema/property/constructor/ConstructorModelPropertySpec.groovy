@@ -27,7 +27,7 @@ import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.field.FieldModelProperty
-import springfox.documentation.service.AllowableListValues
+import springfox.documentation.core.service.AllowableListValues
 
 import static java.util.Collections.*
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*

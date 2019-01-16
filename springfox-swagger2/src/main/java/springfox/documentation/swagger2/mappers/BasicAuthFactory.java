@@ -20,7 +20,7 @@ package springfox.documentation.swagger2.mappers;
 
 import io.swagger.models.auth.BasicAuthDefinition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
-import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.core.service.SecurityScheme;
 
 class BasicAuthFactory implements SecuritySchemeFactory {
   @Override

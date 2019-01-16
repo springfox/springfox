@@ -22,7 +22,7 @@ package springfox.documentation.swagger.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import springfox.documentation.service.Documentation;
+import springfox.documentation.core.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Optional.*;
-import static springfox.documentation.schema.ClassSupport.*;
+import static springfox.documentation.core.schema.ClassSupport.*;
 
 @Component
 public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvider {

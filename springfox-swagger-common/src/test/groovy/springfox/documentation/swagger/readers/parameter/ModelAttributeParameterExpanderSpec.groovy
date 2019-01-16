@@ -22,9 +22,9 @@ package springfox.documentation.swagger.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
-import springfox.documentation.schema.AlternateTypeRule
+import springfox.documentation.core.schema.AlternateTypeRule
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
-import springfox.documentation.schema.WildcardType
+import springfox.documentation.core.schema.WildcardType
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.spi.DocumentationType
@@ -39,7 +39,7 @@ import springfox.documentation.spring.web.readers.parameter.ExpansionContext
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 @Mixin([SwaggerPluginsSupport])
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {

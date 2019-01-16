@@ -22,12 +22,12 @@ import com.fasterxml.classmate.ResolvedType;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.RequestHandlerKey;
-import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.wrapper.NameValueExpression;
-import springfox.documentation.spring.wrapper.PatternsRequestCondition;
-import springfox.documentation.spring.wrapper.RequestMappingInfo;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.RequestHandlerKey;
+import springfox.documentation.core.service.ResolvedMethodParameter;
+import springfox.documentation.core.spring.wrapper.NameValueExpression;
+import springfox.documentation.core.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.core.spring.wrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

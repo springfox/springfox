@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.HandlerMapping;
-import springfox.documentation.PathProvider;
+import springfox.documentation.core.PathProvider;
 import springfox.documentation.spi.service.contexts.Defaults;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;

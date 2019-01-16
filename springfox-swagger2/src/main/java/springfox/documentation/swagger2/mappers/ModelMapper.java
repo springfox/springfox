@@ -32,11 +32,11 @@ import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
-import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.schema.ModelReference;
-import springfox.documentation.service.AllowableRangeValues;
-import springfox.documentation.service.AllowableValues;
-import springfox.documentation.service.ApiListing;
+import springfox.documentation.core.schema.ModelProperty;
+import springfox.documentation.core.schema.ModelReference;
+import springfox.documentation.core.service.AllowableRangeValues;
+import springfox.documentation.core.service.AllowableValues;
+import springfox.documentation.core.service.ApiListing;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -58,14 +58,14 @@ import static springfox.documentation.swagger2.mappers.Properties.*;
 
 @Mapper
 public abstract class ModelMapper {
-  public Map<String, Model> mapModels(Map<String, springfox.documentation.schema.Model> from) {
+  public Map<String, Model> mapModels(Map<String, springfox.documentation.core.schema.Model> from) {
     if (from == null) {
       return null;
     }
 
     Map<String, Model> map = new TreeMap<>();
     InheritanceDeterminer determiner = new InheritanceDeterminer(from);
-    for (java.util.Map.Entry<String, springfox.documentation.schema.Model> entry : from.entrySet()) {
+    for (java.util.Map.Entry<String, springfox.documentation.core.schema.Model> entry : from.entrySet()) {
       String key = entry.getKey();
       Model value;
       if (determiner.hasParent(entry.getValue())) {
@@ -79,7 +79,7 @@ public abstract class ModelMapper {
     return map;
   }
 
-  private Model mapComposedModel(RefModel parent, springfox.documentation.schema.Model source) {
+  private Model mapComposedModel(RefModel parent, springfox.documentation.core.schema.Model source) {
     ComposedModel model = new ComposedModel()
         .interfaces(singletonList(parent))
         .child(mapModel(source));
@@ -94,7 +94,7 @@ public abstract class ModelMapper {
     return model;
   }
 
-  private Model mapModel(springfox.documentation.schema.Model source) {
+  private Model mapModel(springfox.documentation.core.schema.Model source) {
     ModelImpl model = new ModelImpl()
         .description(source.getDescription())
         .discriminator(source.getDiscriminator())
@@ -147,7 +147,7 @@ public abstract class ModelMapper {
     return sortedMap;
   }
 
-  Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
+  Optional<Class> typeOfValue(springfox.documentation.core.schema.Model source) {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {
       if (mapInterface.get().getTypeParameters().size() == 2) {
@@ -214,7 +214,7 @@ public abstract class ModelMapper {
     return property;
   }
 
-  private Xml mapXml(springfox.documentation.schema.Xml xml) {
+  private Xml mapXml(springfox.documentation.core.schema.Xml xml) {
     if (xml == null) {
       return null;
     }
@@ -254,7 +254,7 @@ public abstract class ModelMapper {
   }
 
   Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
-    Map<String, springfox.documentation.schema.Model> definitions = new TreeMap<>();
+    Map<String, springfox.documentation.core.schema.Model> definitions = new TreeMap<>();
     apiListings.values().stream()
         .flatMap(Collection::stream)
         .forEachOrdered(each -> definitions.putAll(each.getModels()));

@@ -19,7 +19,7 @@
 package springfox.documentation.swagger2.mappers
 
 import io.swagger.models.properties.*
-import springfox.documentation.schema.ModelRef
+import springfox.documentation.core.schema.ModelRef
 
 import static springfox.documentation.swagger2.mappers.Properties.*
 

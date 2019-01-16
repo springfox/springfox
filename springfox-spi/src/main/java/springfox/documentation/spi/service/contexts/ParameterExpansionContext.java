@@ -22,7 +22,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
-import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.core.builders.ParameterBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterMetadataAccessor;
 

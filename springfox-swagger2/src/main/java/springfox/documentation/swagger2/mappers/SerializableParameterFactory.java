@@ -19,7 +19,7 @@
 package springfox.documentation.swagger2.mappers;
 
 import io.swagger.models.parameters.SerializableParameter;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.core.service.Parameter;
 
 interface SerializableParameterFactory {
   SerializableParameter create(Parameter parameter);

@@ -20,13 +20,13 @@
 package springfox.documentation.spi.service.contexts;
 
 
-import springfox.documentation.RequestHandler;
-import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.core.RequestHandler;
+import springfox.documentation.core.annotations.ApiIgnore;
+import springfox.documentation.core.builders.PathSelectors;
 
 import java.util.function.Predicate;
 
-import static springfox.documentation.builders.RequestHandlerSelectors.*;
+import static springfox.documentation.core.builders.RequestHandlerSelectors.*;
 
 public class ApiSelector {
   public static final ApiSelector DEFAULT

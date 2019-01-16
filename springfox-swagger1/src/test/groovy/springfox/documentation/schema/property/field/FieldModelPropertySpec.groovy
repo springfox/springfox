@@ -25,7 +25,7 @@ import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
-import springfox.documentation.service.AllowableListValues
+import springfox.documentation.core.service.AllowableListValues
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
@@ -70,7 +70,7 @@ class FieldModelPropertySpec extends SchemaSpecification {
     fieldName       || description          | isRequired | typeName             | qualifiedTypeName                                               | allowableValues
     "intProp"       || "int Property Field" | true       | "int"                | "int"                                                           | null
     "boolProp"      || null                 | false      | "boolean"            | "boolean"                                                       | null
-//    "enumProp"      || null                 | false      | "string"             | "springfox.documentation.schema.ExampleEnum"                   | ["ONE", "TWO"]
+//    "enumProp"      || null                 | false      | "string"             | "ExampleEnum"                   | ["ONE", "TWO"]
 //    "genericProp"   || null                 | false      | "GenericType«string»"| "springfox.documentation.schema.GenericType<java.lang.String>" | null
     //TODO : Fix these two
   }

@@ -24,17 +24,17 @@ import org.joda.time.LocalDate
 import org.springframework.aop.framework.AbstractSingletonProxyFactoryBean
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.http.ResponseEntity
-import springfox.documentation.builders.PathSelectors
+import springfox.documentation.core.builders.PathSelectors
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.service.ApiDescription
-import springfox.documentation.service.ApiInfo
-import springfox.documentation.service.ListVendorExtension
-import springfox.documentation.service.Parameter
-import springfox.documentation.service.ResponseMessage
-import springfox.documentation.service.SecurityScheme
-import springfox.documentation.service.Tag
-import springfox.documentation.service.VendorExtension
+import springfox.documentation.core.service.ApiDescription
+import springfox.documentation.core.service.ApiInfo
+import springfox.documentation.core.service.ListVendorExtension
+import springfox.documentation.core.service.Parameter
+import springfox.documentation.core.service.ResponseMessage
+import springfox.documentation.core.service.SecurityScheme
+import springfox.documentation.core.service.Tag
+import springfox.documentation.core.service.VendorExtension
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.SecurityContext
@@ -46,7 +46,7 @@ import static java.util.Collections.*
 import static java.util.Optional.*
 import static org.springframework.http.HttpStatus.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
-import static springfox.documentation.schema.AlternateTypeRules.*
+import static springfox.documentation.core.schema.AlternateTypeRules.*
 
 class DocketSpec extends DocumentationContextSpec {
 

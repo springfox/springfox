@@ -26,7 +26,7 @@ import org.springframework.data.rest.webmvc.alps.AlpsController;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import springfox.documentation.RequestHandler;
+import springfox.documentation.core.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;

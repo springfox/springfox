@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.core.service.ResolvedMethodParameter;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
