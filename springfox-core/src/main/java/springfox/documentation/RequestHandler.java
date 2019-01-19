@@ -77,6 +77,8 @@ public interface RequestHandler extends Comparable<RequestHandler> {
 
   <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation);
 
+  <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation);
+
   /**
    * @return request mapping info
    * @deprecated This is introduced to preserve backwards compat

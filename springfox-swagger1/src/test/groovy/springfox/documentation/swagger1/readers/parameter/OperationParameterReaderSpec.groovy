@@ -21,6 +21,7 @@ package springfox.documentation.swagger1.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
+import org.springframework.mock.env.MockEnvironment
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.method.HandlerMethod
@@ -32,6 +33,7 @@ import springfox.documentation.service.Parameter
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
+import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Example

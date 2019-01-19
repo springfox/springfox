@@ -31,6 +31,7 @@ import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 import springfox.documentation.spring.wrapper.NameValueExpression;
 import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.utils.SpringFoxAnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -147,6 +148,15 @@ public class WebFluxRequestHandler implements RequestHandler {
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     return Optional.ofNullable(AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), annotation));
+  }
+
+  @Override
+  public <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation) {
+    if (handlerMethod.getBean() instanceof Class) {
+      return SpringFoxAnnotationUtils.getAnnotationsForClassHierarchy((Class<?>) handlerMethod.getBean(), annotation);
+    } else {
+      return SpringFoxAnnotationUtils.getAnnotationsForClassHierarchy(handlerMethod.getBeanType(), annotation);
+    }
   }
 
   @Override
