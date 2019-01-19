@@ -31,15 +31,10 @@ import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
 import springfox.documentation.spring.wrapper.NameValueExpression;
 import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 import springfox.documentation.spring.wrapper.RequestMappingInfo;
+import springfox.documentation.utils.SpringFoxAnnotationUtils;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
@@ -146,6 +141,19 @@ class SpringDataRestRequestHandler implements RequestHandler {
       return ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
     }
     return empty();
+  }
+
+  @Override
+  public <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation) {
+    HandlerMethod handlerMethod = getHandlerMethod();
+    if (handlerMethod != null) {
+      if (handlerMethod.getBean() instanceof Class) {
+        return SpringFoxAnnotationUtils.getAnnotationsForClassHierarchy((Class<?>) handlerMethod.getBean(), annotation);
+      } else {
+        return SpringFoxAnnotationUtils.getAnnotationsForClassHierarchy(handlerMethod.getBeanType(), annotation);
+      }
+    }
+    return Collections.emptyList();
   }
 
   @Override

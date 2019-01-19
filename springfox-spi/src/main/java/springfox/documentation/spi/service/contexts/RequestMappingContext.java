@@ -189,6 +189,10 @@ public class RequestMappingContext {
     return handler.findControllerAnnotation(annotation);
   }
 
+  public <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation) {
+      return handler.getControllerHierarchyAnnotations(annotation);
+  }
+
   public <T extends Annotation> List<T> findAnnotations(Class<T> annotation) {
     List<T> annotations = new ArrayList<>();
     Optional<T> methodAnnotation = findAnnotation(annotation);

@@ -30,10 +30,7 @@ import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 import springfox.documentation.spring.wrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.Collections.*;
@@ -144,6 +141,16 @@ public class CombinedRequestHandler implements RequestHandler {
     return first.findControllerAnnotation(annotation)
         .map(Optional::of)
         .orElse(second.findControllerAnnotation(annotation));
+  }
+
+  @Override
+  public <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation) {
+    List<T> annotations = new ArrayList<>();
+    List<T> firstAnnotation = first.getControllerHierarchyAnnotations(annotation);
+    List<T> secondAnnotation = second.getControllerHierarchyAnnotations(annotation);
+    annotations.addAll(firstAnnotation);
+    annotations.addAll(secondAnnotation);
+    return annotations;
   }
 
   @Override

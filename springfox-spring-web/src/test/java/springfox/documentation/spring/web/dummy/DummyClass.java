@@ -331,6 +331,27 @@ public class DummyClass {
     }
   }
 
+  @ApiImplicitParams({
+          @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
+                  value = "Language", defaultValue = "EN", allowableValues = "EN,FR")
+  })
+  public interface ApiImplicitClassParamsInterface {
+
+  }
+
+  @ApiImplicitParams({
+          @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
+                  value = "Authentication token")
+  })
+  public static class ApiImplicitParamsOnClass implements ApiImplicitClassParamsInterface {
+
+    @ApiImplicitParam(name = "UserId", dataType = "string", required = true, paramType = "header", value = "ID of user")
+    public void methodWithImplicitParams() {
+      throw new UnsupportedOperationException();
+    }
+
+  }
+
   @ResponseBody
   public DummyModels.BusinessModel methodWithConcreteResponseBody() {
     return null;

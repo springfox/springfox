@@ -224,6 +224,11 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       }
 
       @Override
+      def <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation) {
+        return new ArrayList<T>()
+      }
+
+      @Override
       springfox.documentation.spring.wrapper.RequestMappingInfo getRequestMapping() {
         return null
       }

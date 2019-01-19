@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.joda.time.LocalDateTime
+import org.springframework.mock.env.MockEnvironment
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.servlet.mvc.condition.ConsumesRequestCondition
@@ -31,6 +32,7 @@ import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.dummy.AlternateTypeContainer
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.ToReplaceWithString

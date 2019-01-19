@@ -163,6 +163,10 @@ public class OperationContext {
     return requestContext.findControllerAnnotation(annotation);
   }
 
+  public <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation) {
+    return requestContext.getControllerHierarchyAnnotations(annotation);
+  }
+
   public <T extends Annotation> List<T > findAllAnnotations(Class<T> annotation) {
     return requestContext.findAnnotations(annotation);
   }

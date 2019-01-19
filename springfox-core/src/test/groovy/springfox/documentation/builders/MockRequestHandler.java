@@ -32,6 +32,7 @@ import springfox.documentation.spring.wrapper.NameValueExpression;
 import springfox.documentation.spring.wrapper.PatternsRequestCondition;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -129,6 +130,11 @@ public class MockRequestHandler implements RequestHandler {
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     return null;
+  }
+
+  @Override
+  public <T extends Annotation> List<T> getControllerHierarchyAnnotations(Class<T> annotation) {
+    return new ArrayList<>();
   }
 
   @Override
