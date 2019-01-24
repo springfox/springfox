@@ -19,18 +19,17 @@
 package springfox.bean.validators.plugins.schema;
 
 
-import javax.validation.constraints.Null;
-
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-import static springfox.bean.validators.plugins.Validators.annotationFromBean;
-import static springfox.bean.validators.plugins.Validators.annotationFromField;
+
+import javax.validation.constraints.Null;
+import java.util.Optional;
+
+import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -56,8 +55,7 @@ public class IsNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
         }
     }
 
-    @VisibleForTesting
-    Optional<Null> extractAnnotation(ModelPropertyContext context) {
-        return annotationFromBean(context, Null.class).or(annotationFromField(context, Null.class));
-    }
+  private Optional<Null> extractAnnotation(ModelPropertyContext context) {
+    return annotationFromBean(context, Null.class).map(Optional::of).orElse(annotationFromField(context, Null.class));
+  }
 }
