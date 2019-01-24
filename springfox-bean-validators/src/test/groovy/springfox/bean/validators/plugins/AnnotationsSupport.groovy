@@ -7,6 +7,9 @@ trait AnnotationsSupport {
     [ min: { -> min},
       max: { -> max}] as Size
   }
+  Null isNull() {
+    [] as Null
+  }
   NotNull notNull() {
     [] as NotNull
   }
