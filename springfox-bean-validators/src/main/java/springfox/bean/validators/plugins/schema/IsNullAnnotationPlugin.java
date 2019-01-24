@@ -35,25 +35,25 @@ import static springfox.bean.validators.plugins.Validators.*;
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
 public class IsNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
-    /**
-     * support all documentationTypes
-     */
-    @Override
-    public boolean supports(DocumentationType delimiter) {
-        // we simply support all documentationTypes!
-        return true;
-    }
+  /**
+   * support all documentationTypes
+   */
+  @Override
+  public boolean supports(DocumentationType delimiter) {
+    // we simply support all documentationTypes!
+    return true;
+  }
 
-    /**
-     * read NotNull annotation
-     */
-    @Override
-    public void apply(ModelPropertyContext context) {
-        Optional<Null> isNull = extractAnnotation(context);
-        if (isNull.isPresent()) {
-            context.getBuilder().readOnly(isNull.isPresent());
-        }
+  /**
+   * read NotNull annotation
+   */
+  @Override
+  public void apply(ModelPropertyContext context) {
+    Optional<Null> isNull = extractAnnotation(context);
+    if (isNull.isPresent()) {
+      context.getBuilder().readOnly(isNull.isPresent());
     }
+  }
 
   private Optional<Null> extractAnnotation(ModelPropertyContext context) {
     return annotationFromBean(context, Null.class).map(Optional::of).orElse(annotationFromField(context, Null.class));
