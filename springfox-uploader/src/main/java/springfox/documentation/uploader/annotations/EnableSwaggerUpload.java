@@ -19,6 +19,7 @@
 package springfox.documentation.uploader.annotations;
 
 import org.springframework.context.annotation.Import;
+import springfox.documentation.swagger2.configuration.Swagger2DocumentationWebMvcConfiguration;
 import springfox.documentation.uploader.spring.FileUploaderBeanConfiguration;
 
 import java.lang.annotation.Documented;
@@ -34,7 +35,7 @@ import java.lang.annotation.Target;
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = {java.lang.annotation.ElementType.TYPE})
 @Documented
-@Import(FileUploaderBeanConfiguration.class)
+@Import({ FileUploaderBeanConfiguration.class, Swagger2DocumentationWebMvcConfiguration.class })
 public @interface EnableSwaggerUpload {
 
 }
