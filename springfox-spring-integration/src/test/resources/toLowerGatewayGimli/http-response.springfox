@@ -1,0 +1,5 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 37
+
+{"bar":"gimli","foo":false,"count":3}

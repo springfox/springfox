@@ -30,7 +30,7 @@ ext {
 
   libs = [
 
-      test                  : [
+      test                               : [
           "org.springframework:spring-test:${spring}",
           "cglib:cglib-nodep:$cglib",
           "org.objenesis:objenesis:$objenesis",
@@ -44,7 +44,7 @@ ext {
           "org.springframework.hateoas:spring-hateoas:${springHateoas}",
           "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
       ],
-      testNoHateoas         : [
+      testNoHateoas                      : [
           "org.springframework:spring-test:${spring}",
           "cglib:cglib-nodep:$cglib",
           "org.objenesis:objenesis:$objenesis",
@@ -57,46 +57,50 @@ ext {
           "org.codehaus.groovy:groovy-all:${groovy}",
           "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
       ],
-      swagger2Core          : [
+      swagger2Core                       : [
           "io.swagger:swagger-annotations:${swagger2Core}",
           "io.swagger:swagger-models:${swagger2Core}"
       ],
-      spring                : [
+      spring                             : [
           "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
           "org.springframework.plugin:spring-plugin-metadata:${springPluginVersion}",
       ],
-      springProvided        : [
+      springProvided                     : [
           "org.springframework:spring-core:$spring",
           "org.springframework:spring-web:$spring",
           "org.springframework:spring-context:$spring",
       ],
-      springProvidedWithMvc : [
+      springProvidedWithMvc              : [
           "org.springframework:spring-core:$spring",
           "org.springframework:spring-web:$spring",
           "org.springframework:spring-webmvc:$spring",
           "org.springframework:spring-context:$spring",
       ],
-      springProvidedWithFlux: [
+      springProvidedWithFlux             : [
           "org.springframework:spring-core:$spring",
           "org.springframework:spring-web:$spring",
           "org.springframework:spring-webflux:$spring",
           "org.springframework:spring-context:$spring",
       ],
-      springBootProvided    : [
+      springProvidedWithSpringIntegration: [
+          "org.springframework.integration:spring-integration-http:$spring",
+          "org.springframework.integration:spring-integration-webflux:$spring",
+      ],
+      springBootProvided                 : [
           "org.springframework.boot:spring-boot-autoconfigure:$springBoot"
       ],
-      clientProvided        : [
+      clientProvided                     : [
           "com.fasterxml.jackson.core:jackson-core:${jackson}",
           "com.fasterxml.jackson.core:jackson-databind:${jackson}",
           "joda-time:joda-time:$joda"
       ],
-      clientProvidedServlet : [
+      clientProvidedServlet              : [
           "com.fasterxml.jackson.core:jackson-core:${jackson}",
           "com.fasterxml.jackson.core:jackson-databind:${jackson}",
           "joda-time:joda-time:$joda",
           "javax.servlet:javax.servlet-api:$servlet",
       ],
-      core                  : [
+      core                               : [
           "com.fasterxml:classmate:${classmate}",
           "org.slf4j:slf4j-api:${slf4j}",
       ]
