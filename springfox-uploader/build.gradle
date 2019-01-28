@@ -1,0 +1,27 @@
+ext {
+    limits = [
+            'instruction': 95,
+            'branch'     : 89,
+            'line'       : 95,
+            'complexity' : 90,
+            'method'     : 95,
+            'class'      : 100
+    ]
+}
+
+dependencies {
+    compile "io.github.classgraph:classgraph:$classGraph"
+    compile libs.core
+    compile libs.spring
+    compile project(':springfox-spring-web')
+    compile project(':springfox-swagger2')
+
+    provided libs.springProvided
+    provided libs.clientProvided
+    
+    testCompile "javax.validation:validation-api:$validationApiVersion"
+    testCompile libs.test
+    testCompile libs.swagger2Core
+    testCompile project(':springfox-spring-web').sourceSets.test.output
+    testCompile project(':springfox-swagger2').sourceSets.test.output
+}
