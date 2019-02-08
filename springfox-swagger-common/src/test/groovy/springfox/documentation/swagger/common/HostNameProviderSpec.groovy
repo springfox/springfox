@@ -5,8 +5,9 @@ import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
 
-import static springfox.documentation.swagger.common.HostNameProvider.*
-import static springfox.documentation.swagger.common.XForwardPrefixPathAdjuster.*
+import static java.util.Collections.emptyEnumeration
+import static springfox.documentation.swagger.common.HostNameProvider.componentsFrom
+import static springfox.documentation.swagger.common.XForwardPrefixPathAdjuster.X_FORWARDED_PREFIX
 
 class HostNameProviderSpec extends Specification {
   def "should prefix path with x-forwarded-prefix"() {
@@ -41,9 +42,11 @@ class HostNameProviderSpec extends Specification {
 
   def mockRequest(boolean addXForwardedHeaders) {
     def request = Mock(HttpServletRequest.class)
-    if(addXForwardedHeaders) {
+    if (addXForwardedHeaders) {
       request.getHeader(X_FORWARDED_PREFIX) >> "/prefix"
       request.getHeaders(X_FORWARDED_PREFIX) >> headerValues()
+    } else {
+      request.getHeaders(X_FORWARDED_PREFIX) >> emptyEnumeration()
     }
     request.headerNames >> headerNames()
     request.requestURL >> new StringBuffer("http://localhost/contextPath")
