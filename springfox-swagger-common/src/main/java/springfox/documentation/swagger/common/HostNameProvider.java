@@ -63,7 +63,10 @@ public class HostNameProvider {
     ServletUriComponentsBuilder builder = fromContextPath(request);
 
     XForwardPrefixPathAdjuster adjuster = new XForwardPrefixPathAdjuster(request);
-    builder.replacePath(adjuster.adjustedPath(basePath));
+    String adjustedPath = adjuster.adjustedPath(basePath);
+    if (!adjustedPath.equals(basePath)) {
+      builder.replacePath(adjustedPath);
+    }
     if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
       builder.path(request.getServletPath());
     }
