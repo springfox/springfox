@@ -106,6 +106,12 @@ window.onload = () => {
       \*--------------------------------------------*/
       modelPropertyMacro: null,
       parameterMacro: null,
+      /*--------------------------------------------*\
+       * Custom configs
+      \*--------------------------------------------*/
+      custom: {
+        enableCsrfSupport: configSecurity.enableCsrfSupport,
+      },
     });
 
     ui.initOAuth({
@@ -132,7 +138,9 @@ window.onload = () => {
   /* Entry Point */
   (async () => {
     await buildSystemAsync(getBaseURL());
-    await csrfSupport(getBaseURL());
+    if (window.ui.getConfigs().custom.enableCsrfSupport) {
+      await csrfSupport(getBaseURL());
+    }
   })();
 
 };

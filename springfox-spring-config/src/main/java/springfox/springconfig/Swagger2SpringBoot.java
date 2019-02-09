@@ -141,6 +141,7 @@ public class Swagger2SpringBoot {
         .scopeSeparator(",")
         .additionalQueryStringParams(null)
         .useBasicAuthenticationWithAccessCodeGrant(false)
+        .enableCsrfSupport(false)
         .build();
   }
 

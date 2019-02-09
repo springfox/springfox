@@ -59,6 +59,10 @@ public class SecurityConfiguration {
   private final String scopeSeparator;
   private final Map<String, Object> additionalQueryStringParams;
   private final Boolean useBasicAuthenticationWithAccessCodeGrant;
+  /*--------------------------------------------*\
+   * CSRF
+  \*--------------------------------------------*/
+  private final Boolean enableCsrfSupport;
 
   /**
    * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
@@ -101,6 +105,7 @@ public class SecurityConfiguration {
 
     this.additionalQueryStringParams = null;
     this.useBasicAuthenticationWithAccessCodeGrant = null;
+    this.enableCsrfSupport = null;
   }
 
   /**
@@ -120,6 +125,7 @@ public class SecurityConfiguration {
    *                                                  Password using the HTTP Basic Authentication scheme (Authorization
    *                                                  header with Basic base64encoded[client_id:client_secret]). The
    *                                                  default is false.
+   * @param enableCsrfSupport                         Enable csrf support, default is false.
    */
   public SecurityConfiguration(
       String clientId,
@@ -128,7 +134,8 @@ public class SecurityConfiguration {
       String appName,
       String scopeSeparator,
       Map<String, Object> additionalQueryStringParams,
-      Boolean useBasicAuthenticationWithAccessCodeGrant) {
+      Boolean useBasicAuthenticationWithAccessCodeGrant,
+      Boolean enableCsrfSupport) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
     this.realm = realm;
@@ -136,6 +143,7 @@ public class SecurityConfiguration {
     this.scopeSeparator = scopeSeparator;
     this.additionalQueryStringParams = additionalQueryStringParams;
     this.useBasicAuthenticationWithAccessCodeGrant = useBasicAuthenticationWithAccessCodeGrant;
+    this.enableCsrfSupport = enableCsrfSupport;
   }
 
   /**
@@ -204,5 +212,10 @@ public class SecurityConfiguration {
   @JsonProperty("useBasicAuthenticationWithAccessCodeGrant")
   public Boolean getUseBasicAuthenticationWithAccessCodeGrant() {
     return useBasicAuthenticationWithAccessCodeGrant;
+  }
+
+  @JsonProperty("enableCsrfSupport")
+  public Boolean getEnableCsrfSupport() {
+    return enableCsrfSupport;
   }
 }

@@ -43,7 +43,8 @@ class ApiResourceControllerSpec extends Specification {
     "appName": "test",
     "scopeSeparator": ",",
     "additionalQueryStringParams": {"string":"value","boolean":true,"int":1},
-    "useBasicAuthenticationWithAccessCodeGrant": false
+    "useBasicAuthenticationWithAccessCodeGrant": false,
+    "enableCsrfSupport": true
 }"""
   def ui = """{
     "apisSorter":"alpha",
@@ -92,6 +93,7 @@ class ApiResourceControllerSpec extends Specification {
           .scopeSeparator(",")
           .additionalQueryStringParams(['string': 'value', 'boolean': true, 'int': 1])
           .useBasicAuthenticationWithAccessCodeGrant(false)
+          .enableCsrfSupport(true)
           .build()
       uiConfiguration = UiConfigurationBuilder.builder()
           .deepLinking(true)
