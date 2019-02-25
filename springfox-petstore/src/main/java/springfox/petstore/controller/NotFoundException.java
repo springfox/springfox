@@ -20,6 +20,19 @@
 package springfox.petstore.controller;
 
 public class NotFoundException extends RuntimeException {
-  public NotFoundException(int i, String s) {
+  private final int code;
+  private final String description;
+
+  public NotFoundException(int code, String description) {
+    this.code = code;
+    this.description = description;
+  }
+
+  public int getCode() {
+    return code;
+  }
+
+  public String getDescription() {
+    return description;
   }
 }

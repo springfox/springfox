@@ -50,7 +50,11 @@ public class FactoryMethodProvider {
   public Optional<? extends ResolvedParameterizedMember> in(
       ResolvedType resolvedType,
       Predicate<ResolvedParameterizedMember> predicate) {
-    return Stream.concat(constructors(resolvedType).stream(), delegatedFactoryMethods(resolvedType).stream()).filter(predicate).findFirst();
+    return Stream.concat(
+        constructors(resolvedType).stream(),
+        delegatedFactoryMethods(resolvedType).stream())
+        .filter(predicate)
+        .findFirst();
   }
 
   static Predicate<ResolvedParameterizedMember> factoryMethodOf(final AnnotatedParameter parameter) {

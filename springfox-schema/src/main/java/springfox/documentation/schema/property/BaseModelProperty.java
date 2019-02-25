@@ -38,8 +38,8 @@ public abstract class BaseModelProperty implements ModelProperty {
   private final String name;
   private final BeanPropertyDefinition jacksonProperty;
   private final Optional<JsonFormat> jsonFormatAnnotation;
-  protected final TypeResolver resolver;
-  protected final AlternateTypeProvider alternateTypeProvider;
+  private final TypeResolver resolver;
+  private final AlternateTypeProvider alternateTypeProvider;
 
   public BaseModelProperty(
       String name,
@@ -108,6 +108,14 @@ public abstract class BaseModelProperty implements ModelProperty {
   @Override
   public int position() {
     return 0;
+  }
+
+  public TypeResolver getResolver() {
+    return resolver;
+  }
+
+  public AlternateTypeProvider getAlternateTypeProvider() {
+    return alternateTypeProvider;
   }
 
   public String example() {

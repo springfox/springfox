@@ -20,5 +20,5 @@
 package springfox.documentation.swagger1.dto;
 
 public interface SwaggerDataType {
-  public String getAbsoluteType();
+  String getAbsoluteType();
 }

@@ -45,12 +45,12 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.spi.service.contexts.Orderings.*;
 
 public class AbstractDocumentationPluginsBootstrapper {
-  private static final Logger log = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
-  protected final DocumentationPluginsManager documentationPluginsManager;
-  protected final List<RequestHandlerProvider> handlerProviders;
-  protected final DocumentationCache scanned;
-  protected final ApiDocumentationScanner resourceListing;
-  protected final DefaultConfiguration defaultConfiguration;
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentationPluginsBootstrapper.class);
+  private final DocumentationPluginsManager documentationPluginsManager;
+  private final List<RequestHandlerProvider> handlerProviders;
+  private final ApiDocumentationScanner resourceListing;
+  private final DefaultConfiguration defaultConfiguration;
+  private final DocumentationCache scanned;
 
   private RequestHandlerCombiner combiner;
   private List<AlternateTypeRuleConvention> typeConventions;
@@ -76,13 +76,13 @@ public class AbstractDocumentationPluginsBootstrapper {
         .spliterator(), false)
         .sorted(pluginOrdering())
         .collect(toList());
-    log.info("Found {} custom documentation plugin(s)", plugins.size());
+    LOGGER.info("Found {} custom documentation plugin(s)", plugins.size());
     for (DocumentationPlugin each : plugins) {
       DocumentationType documentationType = each.getDocumentationType();
       if (each.isEnabled()) {
         scanDocumentation(buildContext(each));
       } else {
-        log.info("Skipping initializing disabled plugin bean {} v{}",
+        LOGGER.info("Skipping initializing disabled plugin bean {} v{}",
             documentationType.getName(), documentationType.getVersion());
       }
     }
@@ -94,9 +94,9 @@ public class AbstractDocumentationPluginsBootstrapper {
 
   protected void scanDocumentation(DocumentationContext context) {
     try {
-      scanned.addDocumentation(resourceListing.scan(context));
+      getScanned().addDocumentation(resourceListing.scan(context));
     } catch (Exception e) {
-      log.error(String.format("Unable to scan documentation context %s", context.getGroupName()), e);
+      LOGGER.error(String.format("Unable to scan documentation context %s", context.getGroupName()), e);
     }
   }
 
@@ -130,5 +130,33 @@ public class AbstractDocumentationPluginsBootstrapper {
 
   public void setTypeConventions(List<AlternateTypeRuleConvention> typeConventions) {
     this.typeConventions = typeConventions;
+  }
+
+  public DocumentationPluginsManager getDocumentationPluginsManager() {
+    return documentationPluginsManager;
+  }
+
+  public List<RequestHandlerProvider> getHandlerProviders() {
+    return handlerProviders;
+  }
+
+  public ApiDocumentationScanner getResourceListing() {
+    return resourceListing;
+  }
+
+  public DefaultConfiguration getDefaultConfiguration() {
+    return defaultConfiguration;
+  }
+
+  public DocumentationCache getScanned() {
+    return scanned;
+  }
+
+  public RequestHandlerCombiner getCombiner() {
+    return combiner;
+  }
+
+  public List<AlternateTypeRuleConvention> getTypeConventions() {
+    return typeConventions;
   }
 }

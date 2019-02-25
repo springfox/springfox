@@ -37,9 +37,9 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 import javax.servlet.RequestDispatcher;
 
 public class GenericWebContextLoader extends AbstractContextLoader {
-  protected final MockServletContext servletContext;
+  private final MockServletContext servletContext;
 
-  public GenericWebContextLoader(String warRootDir, boolean isClasspathRelative) {
+  GenericWebContextLoader(String warRootDir, boolean isClasspathRelative) {
     ResourceLoader resourceLoader = isClasspathRelative ? new DefaultResourceLoader() : new FileSystemResourceLoader();
     this.servletContext = initServletContext(warRootDir, resourceLoader);
   }

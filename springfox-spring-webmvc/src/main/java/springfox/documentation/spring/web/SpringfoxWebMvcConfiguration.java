@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@SuppressWarnings("HideUtilityClassConstructor")
 public class SpringfoxWebMvcConfiguration {
   @Bean
   public static WebMvcObjectMapperConfigurer objectMapperConfigurer() {

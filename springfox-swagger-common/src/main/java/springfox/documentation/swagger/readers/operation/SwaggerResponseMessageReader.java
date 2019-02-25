@@ -60,8 +60,6 @@ import static springfox.documentation.swagger.readers.operation.ResponseHeaders.
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
-
-
   private final TypeNameExtractor typeNameExtractor;
   private final TypeResolver typeResolver;
 
@@ -83,6 +81,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     return SwaggerPluginSupport.pluginDoesApply(delimiter);
   }
 
+
+  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
   protected Set<ResponseMessage> read(OperationContext context) {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
@@ -117,13 +117,13 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                 modelRefFactory(modelContext, typeNameExtractor)
                     .apply(context.alternateFor(type.get())));
           }
-        List<Example> examples = new ArrayList<>();
-        for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
+          List<Example> examples = new ArrayList<>();
+          for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
             if (!isEmpty(exampleProperty.value())) {
               final String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
               examples.add(new Example(mediaType, exampleProperty.value()));
             }
-        }
+          }
           Map<String, Header> headers = new HashMap<>(defaultHeaders);
           headers.putAll(headers(apiResponse.responseHeaders()));
 
@@ -131,7 +131,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               .code(apiResponse.code())
               .message(apiResponse.message())
               .responseModel(responseModel.orElse(null))
-                  .examples(examples)
+              .examples(examples)
               .headersWithDescription(headers)
               .build());
         }

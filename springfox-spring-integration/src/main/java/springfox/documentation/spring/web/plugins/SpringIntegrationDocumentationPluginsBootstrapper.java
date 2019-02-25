@@ -54,7 +54,12 @@ public class SpringIntegrationDocumentationPluginsBootstrapper extends AbstractD
       TypeResolver typeResolver,
       Defaults defaults,
       PathProvider pathProvider) {
-    super(documentationPluginsManager, handlerProviders, scanned, resourceListing, defaults, typeResolver,
+    super(documentationPluginsManager,
+        handlerProviders,
+        scanned,
+        resourceListing,
+        defaults,
+        typeResolver,
         pathProvider);
   }
 

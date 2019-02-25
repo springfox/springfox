@@ -39,8 +39,8 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
   private final String swagger1Url;
   private final String swagger2Url;
 
-  boolean swagger1Available;
-  boolean swagger2Available;
+  private boolean swagger1Available;
+  private boolean swagger2Available;
 
   private final DocumentationCache documentationCache;
 
@@ -51,8 +51,9 @@ public class InMemorySwaggerResourcesProvider implements SwaggerResourcesProvide
     swagger1Url = environment.getProperty("springfox.documentation.swagger.v1.path", "/api-docs");
     swagger2Url = environment.getProperty("springfox.documentation.swagger.v2.path", "/v2/api-docs");
     swagger1Available = classByName("springfox.documentation.swagger1.web.Swagger1Controller").isPresent();
-    swagger2Available = classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
-                      || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent() ;
+    swagger2Available =
+        classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebFlux").isPresent()
+        || classByName("springfox.documentation.swagger2.web.Swagger2ControllerWebMvc").isPresent();
     this.documentationCache = documentationCache;
   }
 

@@ -40,18 +40,18 @@ public class VendorExtensionsMapper {
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {
     Map<String, Object> extensions = new TreeMap<>();
     Iterable<ListVendorExtension> listExtensions = from.stream()
-        .filter(ListVendorExtension.class::isInstance).map(each -> (ListVendorExtension)each).collect(toList());
+        .filter(ListVendorExtension.class::isInstance).map(each -> (ListVendorExtension) each).collect(toList());
     for (ListVendorExtension each : listExtensions) {
       extensions.put(each.getName(), each.getValue());
     }
     Iterable<Map<String, Object>> objectExtensions = from.stream()
-        .filter(ObjectVendorExtension.class::isInstance).map(each -> (ObjectVendorExtension)each)
+        .filter(ObjectVendorExtension.class::isInstance).map(each -> (ObjectVendorExtension) each)
         .map(toExtensionMap()).collect(toList());
     for (Map<String, Object> each : objectExtensions) {
       extensions.putAll(each);
     }
     Iterable<StringVendorExtension> propertyExtensions = from.stream()
-        .filter(StringVendorExtension.class::isInstance).map(each -> (StringVendorExtension)each).collect(toList());
+        .filter(StringVendorExtension.class::isInstance).map(each -> (StringVendorExtension) each).collect(toList());
     for (StringVendorExtension each : propertyExtensions) {
       extensions.put(each.getName(), each.getValue());
     }
@@ -71,13 +71,15 @@ public class VendorExtensionsMapper {
 
   private Map<String, Object> propertiesAsMap(ObjectVendorExtension input) {
     Map<String, Object> properties = new HashMap<>();
-    Iterable<StringVendorExtension> stringExtensions = input.getValue().stream().filter(StringVendorExtension.class::isInstance)
-            .map(each -> (StringVendorExtension)each).collect(toList());
+    Iterable<StringVendorExtension> stringExtensions =
+        input.getValue().stream().filter(StringVendorExtension.class::isInstance)
+        .map(each -> (StringVendorExtension) each).collect(toList());
     for (StringVendorExtension property : stringExtensions) {
       properties.put(property.getName(), property.getValue());
     }
-    Iterable<ObjectVendorExtension> objectExtensions = input.getValue().stream().filter(ObjectVendorExtension.class::isInstance)
-            .map(each -> (ObjectVendorExtension)each).collect(toList());
+    Iterable<ObjectVendorExtension> objectExtensions =
+        input.getValue().stream().filter(ObjectVendorExtension.class::isInstance)
+        .map(each -> (ObjectVendorExtension) each).collect(toList());
     for (ObjectVendorExtension property : objectExtensions) {
       properties.put(property.getName(), mapExtensions(property.getValue()));
     }

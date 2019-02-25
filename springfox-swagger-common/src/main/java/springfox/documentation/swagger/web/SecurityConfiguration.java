@@ -81,6 +81,7 @@ public class SecurityConfiguration {
    * @param scopeSeparator - scope separator
    */
   @Deprecated
+  @SuppressWarnings("ParameterNumber")
   public SecurityConfiguration(
       String clientId,
       String clientSecret,

@@ -9,15 +9,18 @@ buildscript {
   dependencies {
     classpath "com.github.adrianbk:gradle-jvmsrc-plugin:0.6.1"
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
-    classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
-    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.5"
-    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.8.1"
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.3"
+    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.6.0"
     classpath "org.ajoberstar:gradle-git:1.7.2"
-    classpath 'org.ajoberstar:gradle-git-publish:1.0.1'
+    classpath 'org.ajoberstar:gradle-git-publish:2.0.0'
   }
+}
+
+plugins {
+  id "net.ltgt.apt-idea" version "0.21"
 }
 
 apply from: "$rootDir/gradle/dependencies.gradle"

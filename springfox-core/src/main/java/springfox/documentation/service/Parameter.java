@@ -49,7 +49,8 @@ public class Parameter implements Ordered {
   private final Map<String, List<Example>> examples;
   private final List<VendorExtension> vendorExtensions;
   private final Boolean allowEmptyValue;
-
+  
+  @SuppressWarnings("ParameterNumber")
   public Parameter(
       String name,
       String description,

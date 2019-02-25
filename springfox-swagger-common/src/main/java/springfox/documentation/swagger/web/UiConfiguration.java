@@ -118,6 +118,7 @@ public class UiConfiguration {
    * @deprecated @since 2.6.1. Use the {@link UiConfigurationBuilder} instead
    */
   @Deprecated
+  @SuppressWarnings("ParameterNumber")
   public UiConfiguration(
       String validatorUrl,
       String docExpansion,
@@ -163,6 +164,7 @@ public class UiConfiguration {
    * @deprecated @since 2.8.0. Use the {@link UiConfigurationBuilder} instead
    */
   @Deprecated
+  @SuppressWarnings("ParameterNumber")
   public UiConfiguration(
       String validatorUrl,
       String docExpansion,
@@ -231,6 +233,7 @@ public class UiConfiguration {
    *                                 for locally deployed validators (Validator Badge). Setting it to null will disable
    *                                 validation. This parameter is relevant for Swagger 2.0 specs only.
    */
+  @SuppressWarnings("ParameterNumber")
   public UiConfiguration(
       Boolean deepLinking,
       Boolean displayOperationId,
@@ -304,6 +307,7 @@ public class UiConfiguration {
    *                                 for locally deployed validators (Validator Badge). Setting it to null will disable
    *                                 validation. This parameter is relevant for Swagger 2.0 specs only.
    */
+  @SuppressWarnings("ParameterNumber")
   public UiConfiguration(
       Boolean deepLinking,
       Boolean displayOperationId,

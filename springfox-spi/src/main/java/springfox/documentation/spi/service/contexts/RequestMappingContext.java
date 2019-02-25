@@ -142,7 +142,9 @@ public class RequestMappingContext {
   }
 
   public Set<ResolvedType> getAdditionalModels() {
-    return documentationContext.getAdditionalModels().stream().collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
+    return documentationContext.getAdditionalModels().stream()
+        .collect(collectingAndThen(toSet(),
+            Collections::unmodifiableSet));
   }
 
   public PatternsRequestCondition getPatternsCondition() {

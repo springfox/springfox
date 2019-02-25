@@ -57,7 +57,7 @@ import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 
 class Properties {
-  private static final Map<String, Function<String, ? extends Property>> typeFactory
+  private static final Map<String, Function<String, ? extends Property>> TYPE_FACTORY
       = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>("int", newInstanceOf(IntegerProperty.class)),
       new AbstractMap.SimpleEntry<>("long", newInstanceOf(LongProperty.class)),
@@ -81,7 +81,7 @@ class Properties {
 
   public static Property property(final String typeName) {
     String safeTypeName = ofNullable(typeName).orElse("");
-    return typeFactory.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
+    return TYPE_FACTORY.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
   }
 
   public static Property property(final ModelReference modelRef) {

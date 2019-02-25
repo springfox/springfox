@@ -57,7 +57,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
   @Override
   public void apply(ModelContext context) {
 
-    List<ModelReference> modelRefs =  modelRefs(context);
+    List<ModelReference> modelRefs = modelRefs(context);
 
     if (!modelRefs.isEmpty()) {
       context.getBuilder()
@@ -82,7 +82,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     JsonTypeInfo typeInfo = AnnotationUtils.getAnnotation(forClass(context), JsonTypeInfo.class);
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
-        return ofNullable(typeInfo.property()).filter(((Predicate<String>)String::isEmpty).negate())
+        return ofNullable(typeInfo.property()).filter(((Predicate<String>) String::isEmpty).negate())
             .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }

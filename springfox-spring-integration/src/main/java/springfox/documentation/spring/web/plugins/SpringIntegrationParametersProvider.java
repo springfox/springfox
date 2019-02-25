@@ -124,7 +124,7 @@ public class SpringIntegrationParametersProvider {
     SpelNode firstChild = ast.getChild(0); // possible #requestParams, VariableReference
     if (firstChild != null && REQUEST_PARAMS_EXPRESSION_CONTEXT_VARIABLE.equals(firstChild.toStringAST())) {
       String firstIndexer = ast.getChild(1)
-          .toStringAST();// ['value'] or value, Indexer
+          .toStringAST(); // ['value'] or value, Indexer
       String requestParamName = firstIndexer.replaceAll("^\\['|']", "");
       boolean required = requestParamName.equals(firstIndexer); // square brackets mean optional
       Map<String, Object> requestParamAttributes = new HashMap<>();

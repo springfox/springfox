@@ -35,7 +35,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private final TypeNameExtractor typeNameExtractor;
   private final ModelContext parentContext;
 
-  public ModelReferenceProvider(TypeNameExtractor typeNameExtractor, ModelContext parentContext) {
+  ModelReferenceProvider(TypeNameExtractor typeNameExtractor, ModelContext parentContext) {
     this.typeNameExtractor = typeNameExtractor;
     this.parentContext = parentContext;
   }

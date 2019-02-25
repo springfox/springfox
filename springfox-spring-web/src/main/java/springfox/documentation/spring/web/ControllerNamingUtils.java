@@ -31,9 +31,13 @@ public class ControllerNamingUtils {
   private static Logger log = LoggerFactory.getLogger(ControllerNamingUtils.class);
   private static final String ISO_8859_1 = "ISO-8859-1";
 
+  private ControllerNamingUtils() {
+    throw new UnsupportedOperationException();
+  }
+
   public static String pathRoot(String requestPattern) {
-    Assert.notNull(requestPattern);
-    Assert.hasText(requestPattern);
+    Assert.notNull(requestPattern, "Request pattern is required");
+    Assert.hasText(requestPattern, "Request pattern is not empty");
     log.info("Resolving path root for {}", requestPattern);
     String adjustedPattern = requestPattern.startsWith("/") ? requestPattern : "/" + requestPattern;
     int idx = adjustedPattern.indexOf("/", 1);

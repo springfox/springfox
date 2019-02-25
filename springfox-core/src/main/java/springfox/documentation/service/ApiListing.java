@@ -43,7 +43,8 @@ public class ApiListing {
   private final String description;
   private final int position;
   private final Set<Tag> tags;
-
+  
+  @SuppressWarnings("ParameterNumber")
   public ApiListing(
       String apiVersion,
       String basePath,

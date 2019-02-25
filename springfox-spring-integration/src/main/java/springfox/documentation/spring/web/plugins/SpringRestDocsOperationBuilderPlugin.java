@@ -56,8 +56,7 @@ import static java.util.stream.Collectors.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 1000)
 public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlugin {
-
-  private Logger LOG = LoggerFactory.getLogger(SpringRestDocsOperationBuilderPlugin.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SpringRestDocsOperationBuilderPlugin.class);
 
   @Override
   public void apply(OperationContext context) {

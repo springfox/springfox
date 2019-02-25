@@ -31,7 +31,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 public class HostNameProvider {
 
-  public HostNameProvider() {
+  private HostNameProvider() {
     throw new UnsupportedOperationException();
   }
 
@@ -52,7 +52,7 @@ public class HostNameProvider {
 
     builder.host(host);
     builder.port(components.getPort());
-
+    builder.scheme(components.getScheme());
     return builder.build();
   }
 

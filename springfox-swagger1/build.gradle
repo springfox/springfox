@@ -1,7 +1,3 @@
-plugins {
-  id "net.ltgt.apt-idea" version "0.18"
-}
-
 ext {
   limits = [
       'instruction': 97,

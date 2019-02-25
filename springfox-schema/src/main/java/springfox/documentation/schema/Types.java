@@ -37,7 +37,7 @@ import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
 public class Types {
-  private static final Set<String> baseTypes = Stream.of(
+  private static final Set<String> BASE_TYPES = Stream.of(
       "int",
       "date",
       "string",
@@ -52,7 +52,8 @@ public class Types {
       "biginteger",
       "bigdecimal",
       "uuid").collect(toSet());
-  private static final Map<Type, String> typeNameLookup = unmodifiableMap(Stream.of(
+
+  private static final Map<Type, String> TYPE_NAME_LOOKUP = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>(Long.TYPE, "long"),
       new AbstractMap.SimpleEntry<>(Short.TYPE, "int"),
       new AbstractMap.SimpleEntry<>(Integer.TYPE, "int"),
@@ -85,15 +86,15 @@ public class Types {
   }
 
   public static String typeNameFor(Type type) {
-    return typeNameLookup.get(type);
+    return TYPE_NAME_LOOKUP.get(type);
   }
 
   public static boolean isBaseType(String typeName) {
-    return baseTypes.contains(typeName);
+    return BASE_TYPES.contains(typeName);
   }
 
   public static boolean isBaseType(ResolvedType type) {
-    return baseTypes.contains(typeNameFor(type.getErasedType()));
+    return BASE_TYPES.contains(typeNameFor(type.getErasedType()));
   }
 
   public static boolean isVoid(ResolvedType returnType) {

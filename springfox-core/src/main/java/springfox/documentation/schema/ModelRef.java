@@ -71,7 +71,7 @@ public class ModelRef implements ModelReference {
   }
 
   @Override
-  public boolean isMap(){
+  public boolean isMap() {
     return itemModel.isPresent() && isMap;
   }
 

@@ -117,7 +117,8 @@ public class SecurityConfigurationBuilder {
    *                                                  default is false.
    * @return this
    */
-  public SecurityConfigurationBuilder useBasicAuthenticationWithAccessCodeGrant(Boolean useBasicAuthenticationWithAccessCodeGrant) {
+  public SecurityConfigurationBuilder useBasicAuthenticationWithAccessCodeGrant(
+      Boolean useBasicAuthenticationWithAccessCodeGrant) {
     this.useBasicAuthenticationWithAccessCodeGrant = useBasicAuthenticationWithAccessCodeGrant;
     return this;
   }

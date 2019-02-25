@@ -31,7 +31,6 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,8 +41,8 @@ import static java.util.Arrays.*;
 @Qualifier("default")
 public class ApiOperationReader implements OperationReader {
 
-  private static final Set<RequestMethod> allRequestMethods
-      = new LinkedHashSet<RequestMethod>(asList(RequestMethod.values()));
+  private static final Set<RequestMethod> REQUEST_METHODS
+      = new LinkedHashSet<>(asList(RequestMethod.values()));
   private final DocumentationPluginsManager pluginsManager;
   private final OperationNameGenerator nameGenerator;
 
@@ -63,7 +62,7 @@ public class ApiOperationReader implements OperationReader {
     Set<RequestMethod> supportedMethods = supportedMethods(requestMethods);
 
     //Setup response message list
-    Integer currentCount = 0;
+    int currentCount = 0;
     for (RequestMethod httpRequestMethod : supportedMethods) {
       OperationContext operationContext = new OperationContext(new OperationBuilder(nameGenerator),
           httpRequestMethod,
@@ -76,14 +75,14 @@ public class ApiOperationReader implements OperationReader {
         currentCount++;
       }
     }
-    Collections.sort(operations, outerContext.operationOrdering());
+    operations.sort(outerContext.operationOrdering());
 
     return operations;
   }
 
   private Set<RequestMethod> supportedMethods(Set<RequestMethod> requestMethods) {
     return requestMethods == null || requestMethods.isEmpty()
-           ? allRequestMethods
+           ? REQUEST_METHODS
            : requestMethods;
   }
 

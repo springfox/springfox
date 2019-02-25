@@ -84,9 +84,7 @@ task npmAuditFix(type: NpmTask) {
 
 task npmCi(type: NpmTask) {
   dependsOn npmSetup
-  npmCommand = ["ci"]
-  inputs.file("package.json")
-  inputs.file("package-lock.json")
+  args = ["ci"]
   outputs.dir("node_modules")
 }
 

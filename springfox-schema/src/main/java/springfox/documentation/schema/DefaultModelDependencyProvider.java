@@ -191,8 +191,13 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     if (isContainerType(property.getType()) || isMapType(property.getType())) {
       return new ArrayList<>();
     }
-    LOG.debug("Recursively resolving dependencies for type {}", resolvedTypeSignature(property.getType()).orElse("<null>"));
-    return new ArrayList(resolvedDependencies(ModelContext.fromParent(modelContext, property.getType())));
+    LOG.debug("Recursively resolving dependencies for type {}", resolvedTypeSignature(property.getType()).orElse(
+        "<null>"));
+    return new ArrayList<>(
+        resolvedDependencies(
+            ModelContext.fromParent(
+                modelContext,
+                property.getType())));
   }
 
   private List<ResolvedType> maybeFromCollectionElementType(ModelContext modelContext, ModelProperty property) {

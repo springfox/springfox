@@ -26,7 +26,11 @@ public abstract class GenericRestController<T extends Pet, S extends IRepository
     extends CommonRestController {
 
   @Autowired
-  protected S genericService;
+  private S genericService;
 
   public abstract ResponseEntity<T> test();
+
+  public S getGenericService() {
+    return genericService;
+  }
 }

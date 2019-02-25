@@ -53,9 +53,9 @@ public class OperationCachingEquivalence implements BiPredicate<RequestMappingCo
         requestMappingContext.key(),
         requestMappingContext.getRequestMappingPattern(),
         requestMappingContext.getGenericsNamingStrategy());
-}
+  }
 
-    public static class Wrapper {
+  public static class Wrapper {
     private final RequestMappingContext requestMappingContext;
     private final OperationCachingEquivalence equivalence;
 
@@ -67,8 +67,9 @@ public class OperationCachingEquivalence implements BiPredicate<RequestMappingCo
     @Override
     public boolean equals(Object other) {
       return equivalence.equals(((Wrapper) other).equivalence)
-              && equivalence.test(requestMappingContext, ((Wrapper)other).requestMappingContext);
+          && equivalence.test(requestMappingContext, ((Wrapper) other).requestMappingContext);
     }
+
     @Override
     public int hashCode() {
       return equivalence.doHash(requestMappingContext);

@@ -23,7 +23,7 @@ import java.util.List;
 public class GenericTypeBoundToMultiple<A, B> {
   private final A a;
   private final List<B> listOfB;
-  private final B [] arrayOfB;
+  private final B[] arrayOfB;
 
   public GenericTypeBoundToMultiple(List<B> listOfB, A a, B[] arrayOfB) {
     this.listOfB = listOfB;

@@ -46,6 +46,7 @@ public class ModelProperty {
   private final Xml xml;
   private final List<VendorExtension> vendorExtensions;
 
+  @SuppressWarnings("ParameterNumber")
   public ModelProperty(
       String name,
       ResolvedType type,
