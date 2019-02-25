@@ -84,7 +84,7 @@ public class ParameterMapper {
   }
 
   private boolean isEmptyExample(Object object) {
-    return object instanceof Example && StringUtils.isEmpty(((Example)object).getValue());
+    return object instanceof Example && StringUtils.isEmpty(((Example) object).getValue());
   }
 
   Model fromModelRef(ModelReference modelRef) {

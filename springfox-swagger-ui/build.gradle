@@ -29,7 +29,7 @@ plugins {
 }
 
 ext {
-  swaggerUiVersion = '3.19.5'
+  swaggerUiVersion = '3.20.9'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -78,8 +78,16 @@ task npmBuild(type: NpmTask) {
   args = ['run', 'build']
 }
 
+task npmAuditFixForce(type: NpmTask) {
+  args = ['audit', 'fix', '--force']
+}
+
 task npmAuditFix(type: NpmTask) {
   args = ['audit', 'fix']
+}
+
+task npmAudit(type: NpmTask) {
+  args = ['audit']
 }
 
 task npmCi(type: NpmTask) {
