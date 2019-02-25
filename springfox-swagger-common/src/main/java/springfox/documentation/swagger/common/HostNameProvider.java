@@ -52,7 +52,7 @@ public class HostNameProvider {
 
     builder.host(host);
     builder.port(components.getPort());
-
+    builder.scheme(components.getScheme());
     return builder.build();
   }
 
