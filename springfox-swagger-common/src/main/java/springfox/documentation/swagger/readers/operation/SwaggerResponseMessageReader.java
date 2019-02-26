@@ -50,12 +50,14 @@ import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Optional.*;
-import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
-import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.*;
-import static springfox.documentation.swagger.annotations.Annotations.*;
-import static springfox.documentation.swagger.readers.operation.ResponseHeaders.*;
+import static org.springframework.util.StringUtils.isEmpty;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.spi.schema.contexts.ModelContext.returnValue;
+import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.httpStatusCode;
+import static springfox.documentation.spring.web.readers.operation.ResponseMessagesReader.message;
+import static springfox.documentation.swagger.annotations.Annotations.resolvedTypeFromOperation;
+import static springfox.documentation.swagger.annotations.Annotations.resolvedTypeFromResponse;
+import static springfox.documentation.swagger.readers.operation.ResponseHeaders.headers;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -109,7 +111,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context.getIgnorableParameterTypes());
           Optional<ModelReference> responseModel = empty();
           Optional<ResolvedType> type = resolvedType(null, apiResponse);
-          if (isSuccessful(apiResponse.code())) {
+          if (isSuccessful(apiResponse.code()) && !isNoContent(apiResponse.code())) {
             type = type.map(Optional::of).orElse(operationResponse);
           }
           if (type.isPresent()) {
@@ -165,6 +167,14 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   static boolean isSuccessful(int code) {
     try {
       return HttpStatus.Series.SUCCESSFUL.equals(HttpStatus.Series.valueOf(code));
+    } catch (Exception ignored) {
+      return false;
+    }
+  }
+
+  static boolean isNoContent(int code) {
+    try {
+      return HttpStatus.NO_CONTENT.value() == code;
     } catch (Exception ignored) {
       return false;
     }
