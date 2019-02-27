@@ -92,6 +92,7 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
       property = "type"
   )
   @JsonSubTypes([
+    @JsonSubTypes.Type(value = A4, name = "a4"),
     @JsonSubTypes.Type(value = B1, name = "b1"),
     @JsonSubTypes.Type(value = B2, name = "b2")
   ])
