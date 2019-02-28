@@ -25,9 +25,9 @@ import org.springframework.core.Ordered;
 import static springfox.documentation.schema.WildcardType.*;
 
 public class AlternateTypeRule implements Ordered {
-  protected final ResolvedType original;
-  protected final ResolvedType alternate;
-  protected final int order;
+  private final ResolvedType original;
+  private final ResolvedType alternate;
+  private final int order;
 
   /**
    * Instantiates a new Alternate type rule.
@@ -83,5 +83,13 @@ public class AlternateTypeRule implements Ordered {
 
   public int getOrder() {
     return order;
+  }
+
+  public ResolvedType getOriginal() {
+    return original;
+  }
+
+  public ResolvedType getAlternate() {
+    return alternate;
   }
 }

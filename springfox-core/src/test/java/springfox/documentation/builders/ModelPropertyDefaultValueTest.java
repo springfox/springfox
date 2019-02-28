@@ -27,8 +27,8 @@ import static org.junit.Assert.assertEquals;
 
 public class ModelPropertyDefaultValueTest {
 
-    ModelPropertyBuilder propertyBuilder;
-    ModelProperty modelProperty;
+    private ModelPropertyBuilder propertyBuilder;
+    private ModelProperty modelProperty;
 
     @Before
     public void createNewPropertyBuilder() {

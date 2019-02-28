@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,18 +29,19 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
+
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationPositionReader implements OperationBuilderPlugin {
-
-  private static final Logger log = LoggerFactory.getLogger(OperationPositionReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OperationPositionReader.class);
 
   @Override
   public void apply(OperationContext context) {
     Optional<ApiOperation> apiOperation = context.findAnnotation(ApiOperation.class);
     if (apiOperation.isPresent() && apiOperation.get().position() > 0) {
       context.operationBuilder().position(apiOperation.get().position());
-      log.debug("Added operation at position: {}", apiOperation.get().position());
+      LOGGER.debug("Added operation at position: {}", apiOperation.get().position());
     }
   }
 

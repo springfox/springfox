@@ -52,7 +52,7 @@ public class OAuth extends AuthorizationType {
 
   @Override
   public String getName() {
-    return super.type;
+    return getType();
   }
 
   public List<AuthorizationScope> getScopes() {

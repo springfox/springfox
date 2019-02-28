@@ -12,17 +12,17 @@ import springfox.documentation.service.SecurityScheme
 import springfox.documentation.service.TokenEndpoint
 import springfox.documentation.service.TokenRequestEndpoint
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 
 class OAuth2AuthFactorySpec extends Specification {
   def "Maps authorization code grants" () {
     given:
-      List<GrantType> grants = newArrayList(
+      List<GrantType> grants = singletonList(
           new AuthorizationCodeGrant(
               new TokenRequestEndpoint("tre:uri", "treClient", "tre"),
               new TokenEndpoint("te:uri", "treToken")))
-      List<AuthorizationScope> scopes = newArrayList()
-      SecurityScheme security = new OAuth("oauth", newArrayList(scopes), newArrayList(grants))
+      List<AuthorizationScope> scopes = new ArrayList<>()
+      SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
     when:
@@ -36,9 +36,9 @@ class OAuth2AuthFactorySpec extends Specification {
 
   def "Maps application grant" () {
     given:
-      List<GrantType> grants = newArrayList(new ClientCredentialsGrant("token:uri"))
-      List<AuthorizationScope> scopes = newArrayList()
-      SecurityScheme security = new OAuth("oauth", newArrayList(scopes), newArrayList(grants))
+      List<GrantType> grants = singletonList(new ClientCredentialsGrant("token:uri"))
+      List<AuthorizationScope> scopes = new ArrayList<>()
+      SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
     when:
@@ -51,9 +51,9 @@ class OAuth2AuthFactorySpec extends Specification {
 
   def "Maps password grant" () {
     given:
-      List<GrantType> grants = newArrayList(new ResourceOwnerPasswordCredentialsGrant("token:uri"))
-      List<AuthorizationScope> scopes = newArrayList()
-      SecurityScheme security = new OAuth("oauth", newArrayList(scopes), newArrayList(grants))
+      List<GrantType> grants = singletonList(new ResourceOwnerPasswordCredentialsGrant("token:uri"))
+      List<AuthorizationScope> scopes = new ArrayList<>()
+      SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
     when:
@@ -66,9 +66,9 @@ class OAuth2AuthFactorySpec extends Specification {
 
   def "Throws exception when it receives an unknown grant" () {
     given:
-      List<GrantType> grants = newArrayList(new GrantType("unknown"))
-      List<AuthorizationScope> scopes = newArrayList()
-      SecurityScheme security = new OAuth("oauth", newArrayList(scopes), newArrayList(grants))
+      List<GrantType> grants = singletonList(new GrantType("unknown"))
+      List<AuthorizationScope> scopes = new ArrayList<>()
+      SecurityScheme security = new OAuth("oauth", new ArrayList(scopes), new ArrayList(grants))
     and:
       OAuth2AuthFactory factory = new OAuth2AuthFactory()
     when:

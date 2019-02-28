@@ -128,6 +128,7 @@ public class TypeWithAnnotatedGettersAndSetters implements TypeWithAnnotatedGett
     this.interfaceProp = interfaceProp;
   }
 
+  @SuppressWarnings("VisibilityModifier")
   class Foo {
     public Integer fooInt;
   }

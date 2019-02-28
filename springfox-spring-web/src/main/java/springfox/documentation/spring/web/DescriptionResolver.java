@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web;
 
-import com.google.common.base.Strings;
+
 import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
@@ -26,8 +26,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.springframework.util.StringUtils.*;
+
 public class DescriptionResolver {
-  private static final Pattern pattern = Pattern.compile("\\Q${\\E(.+?)\\Q}\\E");
+  private static final Pattern PATTERN = Pattern.compile("\\Q${\\E(.+?)\\Q}\\E");
   private final Environment environment;
   private Map<String, String> cache;
 
@@ -38,7 +40,7 @@ public class DescriptionResolver {
 
   //Thanks to http://stackoverflow.com/a/37962230/19219
   public String resolve(String expression) {
-    if (Strings.isNullOrEmpty(expression)) {
+    if (isEmpty(expression)) {
       return expression;
     }
     
@@ -48,7 +50,7 @@ public class DescriptionResolver {
 
     }
 
-    // If the expression does not start with $, then no need to do pattern
+    // If the expression does not start with $, then no need to do PATTERN
     if (!expression.startsWith("$")) {
 
       // Add to the mapping with key and value as expression
@@ -59,9 +61,8 @@ public class DescriptionResolver {
 
     }
 
-
     // Create the matcher
-    Matcher matcher = pattern.matcher(expression);
+    Matcher matcher = PATTERN.matcher(expression);
 
     // If the matching is there, then add it to the map and return the value
     if (matcher.find()) {

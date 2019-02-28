@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016-2018 the original author or authors.
+ *  Copyright 2016-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ExampleProperty;
 import io.swagger.annotations.Extension;
 import io.swagger.annotations.ExtensionProperty;
@@ -62,7 +64,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Collections.*;
+
 
 @Controller
 @RequestMapping("/features")
@@ -104,7 +107,7 @@ public class FeatureDemonstrationService {
   //Returns nested generic types
   @RequestMapping(value = "/effectives", method = RequestMethod.GET)
   private ResponseEntity<List<Example>> getEffectives() {
-    return new ResponseEntity<List<Example>>(newArrayList(new Example("Hello", 1, EnumType.ONE,
+    return new ResponseEntity<List<Example>>(singletonList(new Example("Hello", 1, EnumType.ONE,
         new NestedType("test"))),
         HttpStatus.OK);
   }
@@ -284,4 +287,22 @@ public class FeatureDemonstrationService {
     }
   }
   // end::question-27[]
+
+  @RequestMapping(value = "/1570", method = RequestMethod.POST)
+  @ApiOperation(value = "Demo using examples")
+  @ApiResponses(value = {@ApiResponse(code = 404, message = "User not found"),
+                  @ApiResponse(
+                    code = 405,
+                    message = "Validation exception",
+                    examples = @io.swagger.annotations.Example(
+                      value =  {
+                        @ExampleProperty(
+                          mediaType = "Example json",
+                          value = "{\"invalidField\": \"address\"}"),
+                        @ExampleProperty(
+                          mediaType = "Example string",
+                          value = "The first name was invalid")}))})
+  public void saveUser() {
+    //No-op
+  }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
  *
  *
  */
+
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
@@ -36,14 +37,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
@@ -76,14 +77,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
@@ -116,14 +117,14 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
       def resContext = returnValue(
           "group",
           typeToTest,
           documentationType,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
 
     when:
       def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]

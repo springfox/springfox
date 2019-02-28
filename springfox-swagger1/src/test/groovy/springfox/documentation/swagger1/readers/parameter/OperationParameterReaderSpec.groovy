@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Treeish
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.DefaultPathProvider
+import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -63,7 +65,7 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     def typeResolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     pluginsManager = swaggerServicePlugins([
-        new SwaggerDefaultConfiguration(new Defaults(), typeResolver, Mock(ServletContext))])
+        new SwaggerDefaultConfiguration(new Defaults(), typeResolver, new DefaultPathProvider())])
     plugin
         .ignoredParameterTypes(
         ServletRequest,
@@ -187,7 +189,9 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
         new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET,
         new RequestMappingContext(documentationContext(),
-            new WebMvcRequestHandler(methodResolver,
+            new WebMvcRequestHandler(
+                Paths.ROOT,
+                methodResolver,
                 requestMappingInfo("/somePath"),
                 dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))), 0)
     when:

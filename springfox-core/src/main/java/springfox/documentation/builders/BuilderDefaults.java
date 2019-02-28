@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,20 +20,18 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Enums.*;
 
 /**
@@ -53,9 +51,9 @@ public class BuilderDefaults {
    * @return Coalesces the newValue and defaultValue to return a non-null value
    */
   public static <T> T defaultIfAbsent(T newValue, T defaultValue) {
-    return Optional.fromNullable(newValue)
-        .or(Optional.fromNullable(defaultValue))
-        .orNull();
+    return ofNullable(newValue)
+        .orElse(ofNullable(defaultValue)
+        .orElse(null));
   }
 
   /**
@@ -67,9 +65,9 @@ public class BuilderDefaults {
    */
   public static <T> List<T> nullToEmptyList(Collection<T> newValue) {
     if (newValue == null) {
-      return newArrayList();
+      return new ArrayList<>();
     }
-    return newArrayList(newValue);
+    return new ArrayList<>(newValue);
   }
 
   /**
@@ -82,7 +80,7 @@ public class BuilderDefaults {
    */
   public static <K, V> Map<K, V> nullToEmptyMap(Map<K, V> newValue) {
     if (newValue == null) {
-      return newHashMap();
+      return new HashMap<>();
     }
     return newValue;
   }
@@ -95,9 +93,9 @@ public class BuilderDefaults {
    * @param <V>      - map value
    * @return non-null Map
    */
-  public static <K, V> Multimap<K, V> nullToEmptyMultimap(Multimap<K, V> newValue) {
+  public static <K, V> Map<K, List<V>> nullToEmptyMultimap(Map<K, List<V>> newValue) {
     if (newValue == null) {
-      return LinkedListMultimap.create();
+      return new HashMap<>();
     }
     return newValue;
   }
@@ -111,7 +109,7 @@ public class BuilderDefaults {
    */
   public static <T> Set<T> nullToEmptySet(Set<T> newValue) {
     if (newValue == null) {
-      return newHashSet();
+      return new HashSet<>();
     }
     return newValue;
   }
@@ -132,20 +130,6 @@ public class BuilderDefaults {
       return defaultValue;
     }
     return toReturn;
-  }
-
-  /**
-   * Returns an empty list if the newValue is null
-   *
-   * @param args - a list
-   * @param <T>      - any type
-   * @return non-null list
-   */
-  public static <T> List<T> nullVarArgsToEmptyList(T ... args) {
-    if (args == null) {
-      return newArrayList();
-    }
-    return newArrayList(args);
   }
 
   private static boolean isNotObject(ResolvedType defaultValue) {

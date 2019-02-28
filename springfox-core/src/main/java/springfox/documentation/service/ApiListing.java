@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,13 +19,15 @@
 
 package springfox.documentation.service;
 
-import com.google.common.collect.FluentIterable;
+
 import springfox.documentation.schema.Model;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static java.util.stream.Collectors.*;
 
 public class ApiListing {
   private final String apiVersion;
@@ -41,7 +43,8 @@ public class ApiListing {
   private final String description;
   private final int position;
   private final Set<Tag> tags;
-
+  
+  @SuppressWarnings("ParameterNumber")
   public ApiListing(
       String apiVersion,
       String basePath,
@@ -65,8 +68,8 @@ public class ApiListing {
     this.host = host;
     this.protocols = protocols;
     this.securityReferences = securityReferences;
-    this.apis = FluentIterable.from(apis)
-        .toSortedList(byPath());
+    this.apis = apis.stream()
+        .sorted(byPath()).collect(toList());
     this.models = models;
     this.description = description;
     this.position = position;
@@ -126,12 +129,7 @@ public class ApiListing {
   }
 
   private Comparator<ApiDescription> byPath() {
-    return new Comparator<ApiDescription>() {
-      @Override
-      public int compare(ApiDescription first, ApiDescription second) {
-        return first.getPath().compareTo(second.getPath());
-      }
-    };
+    return Comparator.comparing(ApiDescription::getPath);
   }
 
 }

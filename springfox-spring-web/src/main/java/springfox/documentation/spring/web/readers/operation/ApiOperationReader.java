@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,20 +30,19 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static java.util.Arrays.asList;
+import static java.util.Arrays.*;
 
 @Component
 @Qualifier("default")
 public class ApiOperationReader implements OperationReader {
 
-  private static final Set<RequestMethod> allRequestMethods
-      = new LinkedHashSet<RequestMethod>(asList(RequestMethod.values()));
+  private static final Set<RequestMethod> REQUEST_METHODS
+      = new LinkedHashSet<>(asList(RequestMethod.values()));
   private final DocumentationPluginsManager pluginsManager;
   private final OperationNameGenerator nameGenerator;
 
@@ -57,13 +56,13 @@ public class ApiOperationReader implements OperationReader {
 //  @Cacheable(value = "operations", keyGenerator = OperationsKeyGenerator.class)
   public List<Operation> read(RequestMappingContext outerContext) {
 
-    List<Operation> operations = newArrayList();
+    List<Operation> operations = new ArrayList<>();
 
     Set<RequestMethod> requestMethods = outerContext.getMethodsCondition();
     Set<RequestMethod> supportedMethods = supportedMethods(requestMethods);
 
     //Setup response message list
-    Integer currentCount = 0;
+    int currentCount = 0;
     for (RequestMethod httpRequestMethod : supportedMethods) {
       OperationContext operationContext = new OperationContext(new OperationBuilder(nameGenerator),
           httpRequestMethod,
@@ -76,14 +75,14 @@ public class ApiOperationReader implements OperationReader {
         currentCount++;
       }
     }
-    Collections.sort(operations, outerContext.operationOrdering());
+    operations.sort(outerContext.operationOrdering());
 
     return operations;
   }
 
   private Set<RequestMethod> supportedMethods(Set<RequestMethod> requestMethods) {
     return requestMethods == null || requestMethods.isEmpty()
-           ? allRequestMethods
+           ? REQUEST_METHODS
            : requestMethods;
   }
 

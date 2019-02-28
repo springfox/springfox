@@ -19,12 +19,16 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.*
+import springfox.documentation.schema.AlternateTypesSupport
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.ExampleWithEnums
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.TypeForTestingPropertyNames
+import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.ModelBuilderPlugin
@@ -36,7 +40,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import java.lang.reflect.AnnotatedElement
 
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -51,19 +55,19 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(propertyPlugin))
+            OrderAwarePluginRegistry.create(singletonList(propertyPlugin))
     propertyPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(modelPlugin))
+            OrderAwarePluginRegistry.create(singletonList(modelPlugin))
     modelPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-            OrderAwarePluginRegistry.create(newArrayList(namePlugin))
+            OrderAwarePluginRegistry.create(singletonList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
-        OrderAwarePluginRegistry.create(newArrayList(resourcesModelPlugin))
+        OrderAwarePluginRegistry.create(singletonList(resourcesModelPlugin))
     resourcesModelPlugin.supports(_) >> false
 
     sut = new SchemaPluginsManager(propRegistry, modelRegistry, sytheticModelRegistry)
@@ -92,7 +96,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           new AlternateTypeProvider([]),
           namingStrategy,
-          ImmutableSet.builder().build())
+          emptySet())
     and:
       context.documentationType >> SPRING_WEB
     when:
@@ -109,7 +113,7 @@ class SchemaPluginsManagerSpec extends Specification {
           SPRING_WEB,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
-          ImmutableSet.builder().build())
+          emptySet())
     and:
       context.documentationType >> SPRING_WEB
     when:

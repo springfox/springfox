@@ -18,10 +18,6 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import com.google.common.base.Equivalence;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -30,30 +26,25 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.OperationCachingEquivalence;
 import springfox.documentation.spring.web.readers.operation.OperationReader;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.function.Function;
 
 @Component
 @Qualifier("cachedOperations")
 public class CachingOperationReader implements OperationReader {
-
-  private final LoadingCache<Equivalence.Wrapper<RequestMappingContext>, List<Operation>> cache;
+  private final Map<OperationCachingEquivalence.Wrapper, List<Operation>> cache;
+  private final Function<OperationCachingEquivalence.Wrapper, List<Operation>> lookup;
 
   @Autowired
   public CachingOperationReader(@Qualifier("default") final OperationReader delegate) {
-    cache = CacheBuilder.newBuilder()
-        .maximumSize(1000)
-        .expireAfterWrite(24, TimeUnit.HOURS)
-        .build(
-            new CacheLoader<Equivalence.Wrapper<RequestMappingContext>, List<Operation>>() {
-              public List<Operation> load(Equivalence.Wrapper<RequestMappingContext> key) {
-                return delegate.read(key.get());
-              }
-            });
+    cache = new HashMap<>();
+    lookup = (key) -> delegate.read(key.get());
   }
 
   @Override
   public List<Operation> read(RequestMappingContext outerContext) {
-    return cache.getUnchecked(new OperationCachingEquivalence().wrap(outerContext));
+    return cache.computeIfAbsent(new OperationCachingEquivalence().wrap(outerContext), lookup);
   }
 }

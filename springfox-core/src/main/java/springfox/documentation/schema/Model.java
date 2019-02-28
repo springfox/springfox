@@ -38,6 +38,7 @@ public class Model {
   private final Object example;
   private final Xml xml;
 
+  @SuppressWarnings("ParameterNumber")
   public Model(
       String id,
       String name,

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ public class SecurityConfiguration {
 
   /**
    * @deprecated @since 2.8.0. This field is unused
-   * @return
    */
   @Deprecated
   private String apiKey;
@@ -82,6 +81,7 @@ public class SecurityConfiguration {
    * @param scopeSeparator - scope separator
    */
   @Deprecated
+  @SuppressWarnings("ParameterNumber")
   public SecurityConfiguration(
       String clientId,
       String clientSecret,

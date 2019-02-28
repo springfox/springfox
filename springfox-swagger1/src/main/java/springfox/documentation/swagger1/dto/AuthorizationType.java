@@ -20,8 +20,8 @@
 package springfox.documentation.swagger1.dto;
 
 public abstract class AuthorizationType {
-  protected final String type;
-  protected String name;
+  private final String type;
+  private String name;
 
   protected AuthorizationType(String type) {
     this.type = type;

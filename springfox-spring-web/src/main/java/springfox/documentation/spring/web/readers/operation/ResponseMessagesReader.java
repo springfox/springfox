@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -35,9 +34,11 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
@@ -55,7 +56,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
-    context.operationBuilder().responseMessages(newHashSet(responseMessages));
+    context.operationBuilder().responseMessages(new HashSet<>(responseMessages));
     applyReturnTypeOverride(context);
   }
 
@@ -85,7 +86,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
         .message(message)
         .responseModel(modelRef)
         .build();
-    context.operationBuilder().responseMessages(newHashSet(built));
+    context.operationBuilder().responseMessages(singleton(built));
   }
 
 

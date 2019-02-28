@@ -19,14 +19,13 @@
 
 package springfox.documentation.spi.service.contexts;
 
-import com.google.common.base.Predicate;
+
 import org.springframework.http.HttpMethod;
 import springfox.documentation.service.SecurityReference;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.base.Predicates.*;
+import java.util.function.Predicate;
 
 /**
  * A class to represent a default set of authorizations to apply to each api operation
@@ -45,7 +44,7 @@ public class SecurityContext {
 
     this.securityReferences = securityReferences;
     this.selector = selector;
-    this.methodSelector = alwaysTrue();
+    this.methodSelector = (item) -> true;
   }
 
   public SecurityContext(
@@ -67,15 +66,15 @@ public class SecurityContext {
    */
   @Deprecated
   public List<SecurityReference> securityForPath(String path) {
-    if (selector.apply(path)) {
+    if (selector.test(path)) {
       return securityReferences;
     }
     return new ArrayList<SecurityReference>();
   }
 
   public List<SecurityReference> securityForOperation(OperationContext operationContext) {
-    if (selector.apply(operationContext.requestMappingPattern())
-        && methodSelector.apply(operationContext.httpMethod())) {
+    if (selector.test(operationContext.requestMappingPattern())
+        && methodSelector.test(operationContext.httpMethod())) {
       return securityReferences;
     }
     return new ArrayList<SecurityReference>();

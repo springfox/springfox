@@ -1,14 +1,18 @@
 package springfox.documentation.spring.web.paths
-import com.google.common.base.Optional
+
+import spock.lang.Unroll
 import springfox.documentation.spi.service.contexts.PathContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
+import static java.util.Optional.*
+
 class PathSanitizerSpec extends DocumentationContextSpec {
+  @Unroll
   def "Creates path adjustment in relation to servlet mapping" () {
     given:
       def requestMappingContext = Mock(RequestMappingContext)
-      PathContext ctx = new PathContext(requestMappingContext, Optional.absent())
+      PathContext ctx = new PathContext(requestMappingContext, empty())
     and:
       requestMappingContext.getDocumentationContext() >> documentationContext()
     and:

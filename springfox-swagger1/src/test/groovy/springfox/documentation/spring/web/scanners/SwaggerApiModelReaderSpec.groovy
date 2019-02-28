@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,14 +33,16 @@ import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 import springfox.documentation.swagger1.web.SwaggerDefaultConfiguration
 
-import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
+
+import static springfox.documentation.spring.web.paths.Paths.*
 
 @Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport, SchemaPluginsSupport])
 class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
@@ -50,8 +52,13 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
   def methodResolver = new HandlerMethodResolver(new TypeResolver())
 
   def setup() {
-    pluginsManager = swaggerServicePlugins([new SwaggerDefaultConfiguration(new Defaults(), new TypeResolver(),
-        Mock(ServletContext))])
+    pluginsManager = swaggerServicePlugins([
+        new SwaggerDefaultConfiguration(
+            new Defaults(),
+            new TypeResolver(),
+            new DefaultPathProvider())
+    ])
+
     sut = new ApiModelReader(
         modelProvider(swaggerSchemaPlugins()),
         new TypeResolver()
@@ -108,7 +115,9 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
   def context(HandlerMethod handlerMethod) {
     return new RequestMappingContext(
         documentationContext(),
-        new WebMvcRequestHandler(methodResolver,
+        new WebMvcRequestHandler(
+            ROOT,
+            methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))
   }
@@ -122,7 +131,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     )
     RequestMappingContext context = new RequestMappingContext(
         documentationContext(),
-        new WebMvcRequestHandler(methodResolver,
+        new WebMvcRequestHandler(ROOT, methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))
 
@@ -151,6 +160,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
         new RequestMappingContext(
             pluginContext,
             new WebMvcRequestHandler(
+                ROOT,
                 methodResolver,
                 requestMappingInfo('/businesses/responseEntity/{businessId}'),
                 handlerMethod))
@@ -171,6 +181,7 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     RequestMappingContext context = new RequestMappingContext(
         documentationContext(),
         new WebMvcRequestHandler(
+            ROOT,
             methodResolver,
             requestMappingInfo('/somePath'),
             handlerMethod))

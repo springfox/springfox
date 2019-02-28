@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@
 package springfox.documentation.service;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
 import org.springframework.core.MethodParameter;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
+import static java.util.stream.Stream.of;
 
 public class ResolvedMethodParameter {
   private final int parameterIndex;
@@ -38,7 +40,7 @@ public class ResolvedMethodParameter {
   public ResolvedMethodParameter(String paramName, MethodParameter methodParameter, ResolvedType parameterType) {
     this(methodParameter.getParameterIndex(),
         paramName,
-        newArrayList(methodParameter.getParameterAnnotations()),
+        of(methodParameter.getParameterAnnotations()).collect(toList()),
         parameterType);
   }
 
@@ -59,11 +61,11 @@ public class ResolvedMethodParameter {
   }
 
   public boolean hasParameterAnnotation(Class<? extends Annotation> annotation) {
-    return FluentIterable.from(annotations).filter(annotation).size() > 0;
+    return annotations.stream().anyMatch(annotation::isInstance);
   }
 
-  public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
-    return FluentIterable.from(annotations).filter(annotation).first();
+  public <T extends Annotation> Optional<T> findAnnotation(final Class<T> annotation) {
+    return (Optional<T>) annotations.stream().filter(annotation::isInstance).findFirst();
   }
 
   public int getParameterIndex() {
@@ -71,7 +73,7 @@ public class ResolvedMethodParameter {
   }
 
   public Optional<String> defaultName() {
-    return Optional.fromNullable(defaultName);
+    return ofNullable(defaultName);
   }
 
   public ResolvedMethodParameter replaceResolvedParameterType(ResolvedType parameterType) {
@@ -83,7 +85,7 @@ public class ResolvedMethodParameter {
   }
 
   public ResolvedMethodParameter annotate(Annotation annotation) {
-    List<Annotation> annotations = newArrayList(this.annotations);
+    List<Annotation> annotations = new ArrayList<>(this.annotations);
     annotations.add(annotation);
     return new ResolvedMethodParameter(parameterIndex, defaultName, annotations, parameterType);
   }

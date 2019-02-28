@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 package springfox.test.contract.swaggertests
 
 import com.fasterxml.classmate.TypeResolver
+import org.joda.time.LocalDate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -41,19 +42,19 @@ import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
-import springfox.documentation.swagger2.annotations.EnableSwagger2
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc
 import springfox.petstore.PetStoreConfiguration
 import springfox.test.contract.swagger.Bug1767ListingScanner
 
 import java.nio.ByteBuffer
 
-import static com.google.common.base.Predicates.*
-import static com.google.common.collect.Lists.*
+import static java.util.Collections.*
+import static java.util.function.Predicate.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Configuration
-@EnableSwagger2
+@EnableSwagger2WebMvc
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @Import([SpringDataRestConfiguration, PetStoreConfiguration])
 class Swagger2TestConfig {
@@ -134,7 +135,7 @@ class Swagger2TestConfig {
     // end::question-27-config[]
         .securitySchemes(authorizationTypes)
         .produces(['application/xml', 'application/json'] as Set)
-        .alternateTypeRules(newRule(org.joda.time.LocalDate.class, String.class))
+        .alternateTypeRules(newRule(LocalDate.class, String.class))
         .select()
         .paths(regex("/features/.*"))
         .build()
@@ -177,7 +178,7 @@ class Swagger2TestConfig {
           .title("bugs API")
           .description("bugs API")
           .extensions(
-            newArrayList(
+             singletonList(
                 new StringVendorExtension("test", "testValue")))
           .build())
         .useDefaultResponseMessages(false)
@@ -189,7 +190,7 @@ class Swagger2TestConfig {
         [SecurityContext.builder()
              .securityReferences([new SecurityReference("petstore_auth", scopes)])
              .forPaths(regex("/bugs/2268"))
-             .forHttpMethods(equalTo(HttpMethod.GET))
+             .forHttpMethods(isEqual(HttpMethod.GET))
              .build()
         ])
         .alternateTypeRules(
@@ -347,11 +348,11 @@ class Swagger2TestConfig {
         .forCodeGeneration(true)
         .produces(['application/xml', 'application/json'] as Set)
         .select()
-        .paths(or(
-          regex("/rest/people.*"),
-          regex("/rest/tags.*"),
-          regex("/rest/categories.*"),
-          regex("/rest/addresses.*")))
+        .paths(
+          regex("/rest/people.*")
+          .or(regex("/rest/tags.*"))
+          .or(regex("/rest/categories.*"))
+          .or(regex("/rest/addresses.*")))
         .build()
   }
 }

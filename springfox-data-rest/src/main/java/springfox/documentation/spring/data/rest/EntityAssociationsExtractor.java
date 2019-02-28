@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,53 +18,35 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import org.springframework.data.mapping.Association;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimpleAssociationHandler;
 import org.springframework.data.rest.webmvc.mapping.Associations;
 import springfox.documentation.RequestHandler;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.*;
+import java.util.stream.Collectors;
 
 public class EntityAssociationsExtractor implements EntityOperationsExtractor {
 
-
   @Override
   public List<RequestHandler> extract(final EntityContext context) {
-    final List<RequestHandler> handlers = newArrayList();
-    final PersistentEntity<?, ?> entity = context.entity();
-    final Associations associations = context.getAssociations();
 
-    entity.doWithAssociations(new SimpleAssociationHandler() {
+    List<RequestHandler> handlers = new ArrayList<>();
+    Associations associations = context.getAssociations();
 
-      @Override
-      public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
-        PersistentProperty<?> property = association.getInverse();
-        if (!associations.isLinkableAssociation(property)) {
-          return;
-        }
-        final EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
-        handlers.addAll(FluentIterable.from(context.getAssociationExtractors())
-            .transformAndConcat(extractHandlers(associationContext))
-            .toList());
-      }
-    });
+    context.entity()
+        .ifPresent(entity -> entity.doWithAssociations((SimpleAssociationHandler) association -> {
+
+          if (associations.isLinkableAssociation(association)) {
+            EntityAssociationContext associationContext = new EntityAssociationContext(context, association);
+
+            handlers.addAll(context.getAssociationExtractors().stream()
+                .flatMap(extractor -> extractor.extract(associationContext).stream())
+                .collect(Collectors.toList()));
+          }
+        }));
+
     return handlers;
-  }
-
-  private Function<EntityAssociationOperationsExtractor, Iterable<RequestHandler>> extractHandlers(
-      final EntityAssociationContext associationContext) {
-    return new Function<EntityAssociationOperationsExtractor, Iterable<RequestHandler>>() {
-      @Override
-      public Iterable<RequestHandler> apply(EntityAssociationOperationsExtractor input) {
-        return input.extract(associationContext);
-      }
-    };
   }
 
 }

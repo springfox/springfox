@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,67 +18,55 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.data.mapping.Association;
-import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.data.repository.core.RepositoryMetadata;
+import org.springframework.data.rest.core.Path;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
-import org.springframework.data.rest.core.mapping.ResourceMetadata;
-import org.springframework.data.rest.webmvc.RestMediaTypes;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 public class EntityAssociationSaveExtractor implements EntityAssociationOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
-    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
-    ResourceMetadata metadata = context.associationMetadata();
-    Association<? extends PersistentProperty<?>> association = context.getAssociation();
-    PersistentProperty<?> property = association.getInverse();
-    ResourceMapping mapping = metadata.getMappingFor(property);
-    EntityContext entityContext = context.getEntityContext();
-    PersistentEntity entity = entityContext.entity();
-    TypeResolver resolver = entityContext.getTypeResolver();
-    RepositoryMetadata repository = entityContext.getRepositoryMetadata();
-    if (property.isWritable() && property.getOwner().equals(entity)) {
-      ActionSpecification update = new ActionSpecification(
-          String.format("%s%s",
-              lowerCamelCaseName(entity.getType().getSimpleName()),
-              upperCamelCaseName(property.getName())),
-          String.format("%s%s/{id}/%s",
-              entityContext.basePath(),
-              entityContext.resourcePath(),
-              mapping.getPath()),
-          newHashSet(RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.POST),
-          new HashSet<MediaType>(),
-          newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
-          null,
-          newArrayList(new ResolvedMethodParameter(
-                  0,
-                  "id",
-                  pathAnnotations("id"),
-                  resolver.resolve(repository.getIdType())),
-              new ResolvedMethodParameter(
-                  0,
-                  "body",
-                  bodyAnnotations(),
-                  property.isCollectionLike()
-                  ? resolver.resolve(List.class, String.class)
-                  : resolver.resolve(String.class))),
-          propertyResponse(property, resolver));
-      handlers.add(new SpringDataRestRequestHandler(entityContext, update));
-    }
+
+    List<RequestHandler> handlers = new ArrayList<>();
+    PersistentProperty<?> property = context.getAssociation().getInverse();
+
+    String mappingPath = context.associationMetadata()
+        .map(metadata -> metadata.getMappingFor(property))
+        .map(ResourceMapping::getPath)
+        .map(Path::toString)
+        .orElse("");
+
+    context.getEntityContext().entity()
+        .filter(entity -> property.isWritable() && property.getOwner().equals(entity))
+        .ifPresent(entity -> {
+
+          String path = String.format("%s%s/{id}/%s",
+              context.getEntityContext().basePath(),
+              context.getEntityContext().resourcePath(),
+              mappingPath);
+
+          associationAction(context, path)
+              .supportsMethod(PUT)
+              .supportsMethod(PATCH)
+              .supportsMethod(POST)
+              .consumes(TEXT_URI_LIST)
+              .consumes(SPRING_DATA_COMPACT_JSON)
+              .withParameterType(ParameterType.ID)
+              .withParameterType(ParameterType.RESOURCE)
+              .build()
+              .map(update -> new SpringDataRestRequestHandler(context.getEntityContext(), update))
+              .ifPresent(handlers::add);
+
+        });
+
     return handlers;
   }
 }

@@ -19,7 +19,6 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.Optional;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +32,12 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.Optional;
+
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
 public class OperationHttpMethodReader implements OperationBuilderPlugin {
-  private static final Logger log = LoggerFactory.getLogger(OperationHttpMethodReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OperationHttpMethodReader.class);
 
   @Override
   public void apply(OperationContext context) {
@@ -49,7 +50,7 @@ public class OperationHttpMethodReader implements OperationBuilderPlugin {
         RequestMethod.valueOf(apiMethod);
         context.operationBuilder().method(HttpMethod.valueOf(apiMethod));
       } catch (IllegalArgumentException e) {
-        log.error("Invalid http method: " + apiMethod + "Valid ones are [" + RequestMethod.values() + "]", e);
+        LOGGER.error("Invalid http method: " + apiMethod + "Valid ones are [" + RequestMethod.values() + "]", e);
       }
     }
   }

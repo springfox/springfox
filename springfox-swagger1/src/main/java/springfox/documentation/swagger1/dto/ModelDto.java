@@ -45,8 +45,17 @@ public class ModelDto {
   public ModelDto() {
   }
 
-  public ModelDto(String id, String name, String qualifiedType, Map<String, ModelPropertyDto> properties, String
-          description, String baseModel, String discriminator, List<String> subTypes) {
+
+  @SuppressWarnings("ParameterNumber")
+  public ModelDto(
+      String id,
+      String name,
+      String qualifiedType,
+      Map<String, ModelPropertyDto> properties,
+      String description,
+      String baseModel,
+      String discriminator,
+      List<String> subTypes) {
     this.id = id;
     this.name = name;
     this.qualifiedType = qualifiedType;

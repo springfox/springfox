@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.CaseFormat;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
@@ -40,24 +39,23 @@ class RequestExtractionUtils {
     throw new UnsupportedOperationException();
   }
 
-  public static String lowerCamelCaseName(String stringValue) {
-    return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, stringValue);
+  static String lowerCamelCaseName(String stringValue) {
+    return Character.toLowerCase(stringValue.charAt(0)) + stringValue.substring(1);
   }
 
-  public static String upperCamelCaseName(String stringValue) {
-    return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, stringValue);
+  static String upperCamelCaseName(String stringValue) {
+    return Character.toUpperCase(stringValue.charAt(0)) + stringValue.substring(1);
   }
 
-  public static String actionName(PersistentEntity<?, ?> entity, Method method) {
+  static String actionName(PersistentEntity<?, ?> entity, Method method) {
     return String.format("%s%s", method.getName(), entity.getType().getSimpleName());
   }
 
-
-  public static  List<Annotation> pathAnnotations(String name) {
+  static List<Annotation> pathAnnotations(String name) {
     return pathAnnotations(name, null);
   }
 
-  public static  List<Annotation> pathAnnotations(String name, HandlerMethod handler) {
+  static List<Annotation> pathAnnotations(String name, HandlerMethod handler) {
     List<Annotation> annotations = handlerAnnotations(handler);
     if (name != null) {
       annotations.add(SynthesizedAnnotations.pathVariable(name));
@@ -65,28 +63,27 @@ class RequestExtractionUtils {
     return annotations;
   }
 
-  public static  List<Annotation> bodyAnnotations(HandlerMethod handler) {
+  static List<Annotation> bodyAnnotations(HandlerMethod handler) {
     List<Annotation> annotations = handlerAnnotations(handler);
     annotations.add(SynthesizedAnnotations.REQUEST_BODY_ANNOTATION);
     return annotations;
   }
 
   private static List<Annotation> handlerAnnotations(HandlerMethod handler) {
-    List<Annotation> annotations = new ArrayList<Annotation>();
+    List<Annotation> annotations = new ArrayList<>();
     if (handler != null) {
       annotations.addAll(Arrays.asList(AnnotationUtils.getAnnotations(handler.getMethod())));
     }
     return annotations;
   }
 
-  public static  List<Annotation> bodyAnnotations() {
+  static List<Annotation> bodyAnnotations() {
     List<Annotation> annotations = handlerAnnotations(null);
     annotations.add(SynthesizedAnnotations.REQUEST_BODY_ANNOTATION);
     return annotations;
   }
 
-
-  public static String propertyIdentifierName(PersistentProperty<?> property) {
+  static String propertyIdentifierName(PersistentProperty<?> property) {
     String propertyName = property.getName();
     if (property.isCollectionLike()) {
       propertyName = property.getComponentType().getSimpleName();
@@ -96,7 +93,7 @@ class RequestExtractionUtils {
     return String.format("%sId", propertyName.toLowerCase());
   }
 
-  public static ResolvedType propertyResponse(PersistentProperty<?> property, TypeResolver resolver) {
+  static ResolvedType propertyResponse(PersistentProperty<?> property, TypeResolver resolver) {
     if (property.isCollectionLike()) {
       return resolver.resolve(Resources.class, property.getComponentType());
     } else if (property.isMap()) {
@@ -110,7 +107,7 @@ class RequestExtractionUtils {
     return resolver.resolve(Resource.class, property.getType());
   }
 
-  public static ResolvedType propertyItemResponse(PersistentProperty<?> property, TypeResolver resolver) {
+  static ResolvedType propertyItemResponse(PersistentProperty<?> property, TypeResolver resolver) {
     if (property.isCollectionLike()) {
       return resolver.resolve(Resource.class, property.getComponentType());
     } else if (property.isMap()) {

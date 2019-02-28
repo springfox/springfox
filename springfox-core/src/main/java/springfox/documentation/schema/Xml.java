@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 public class Xml {
   private String name;
@@ -101,15 +101,15 @@ public class Xml {
       return false;
     }
     Xml xml = (Xml) o;
-    return Objects.equal(name, xml.name) &&
-        Objects.equal(namespace, xml.namespace) &&
-        Objects.equal(prefix, xml.prefix) &&
-        Objects.equal(attribute, xml.attribute) &&
-        Objects.equal(wrapped, xml.wrapped);
+    return Objects.equals(name, xml.name) &&
+        Objects.equals(namespace, xml.namespace) &&
+        Objects.equals(prefix, xml.prefix) &&
+        Objects.equals(attribute, xml.attribute) &&
+        Objects.equals(wrapped, xml.wrapped);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(name, namespace, prefix, attribute, wrapped);
+    return Objects.hash(name, namespace, prefix, attribute, wrapped);
   }
 }

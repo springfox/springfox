@@ -29,9 +29,8 @@ import springfox.documentation.spi.service.RequestHandlerProvider
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spring.web.DocumentationCache
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.scanners.ApiDocumentationScanner
-
-import javax.servlet.ServletContext
 
 class DocumentationPluginsBootstrapperSpec extends Specification {
 
@@ -47,7 +46,7 @@ class DocumentationPluginsBootstrapperSpec extends Specification {
               apiGroup,
               new TypeResolver(),
               new Defaults(),
-              Mock(ServletContext),
+              new DefaultPathProvider(),
               new MockEnvironment())
 
   def setup() {

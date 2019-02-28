@@ -20,7 +20,6 @@
 package springfox.documentation.schema.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -37,7 +36,10 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Optional.*;
 
 @Component
 public class SchemaPluginsManager {
@@ -74,9 +76,9 @@ public class SchemaPluginsManager {
 
   public Optional<Model> syntheticModel(ModelContext context) {
     if (syntheticModelProviders.hasPluginFor(context)) {
-      return Optional.of(syntheticModelProviders.getPluginFor(context).create(context));
+      return of(syntheticModelProviders.getPluginFor(context).create(context));
     }
-    return Optional.absent();
+    return empty();
   }
 
   public List<ModelProperty> syntheticProperties(ModelContext context) {

@@ -18,11 +18,13 @@
  */
 package springfox.documentation.service;
 
-import com.google.common.base.Function;
+
 import org.springframework.plugin.core.Plugin;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.PathContext;
+
+import java.util.function.Function;
 
 /**
  * Path decorator is useful to create transformations from a given path based on

@@ -27,20 +27,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum EnumObjectType {
-    ONE("One", "This in an enum for number 1"), TWO("Two", "This in an enum for number 2");
+  ONE("One", "This in an enum for number 1"), TWO("Two", "This in an enum for number 2");
 
-    private String name;
-    private String description;
-    EnumObjectType(String name, String description){
-        this.name=name;
-        this.description=description;
-    }
+  private String name;
+  private String description;
 
-    public String getName() {
-        return name;
-    }
+  EnumObjectType(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
 }

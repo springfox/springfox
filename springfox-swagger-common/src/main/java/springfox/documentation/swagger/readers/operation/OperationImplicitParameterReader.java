@@ -19,9 +19,7 @@
 
 package springfox.documentation.swagger.readers.operation;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
+
 import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -36,9 +34,12 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 import static springfox.documentation.swagger.readers.parameter.Examples.*;
@@ -74,7 +75,9 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .allowMultiple(param.allowMultiple())
         .modelRef(modelRef)
         .allowableValues(allowableValueFromString(param.allowableValues()))
-        .parameterType(emptyToNull(param.paramType()))
+        .parameterType(ofNullable(param.paramType())
+            .filter(((Predicate<String>) String::isEmpty).negate())
+            .orElse(null))
         .parameterAccess(param.access())
         .order(SWAGGER_PLUGIN_ORDER)
         .scalarExample(param.example())
@@ -84,7 +87,10 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
   }
 
   private static ModelRef maybeGetModelRef(ApiImplicitParam param) {
-    String dataType = MoreObjects.firstNonNull(emptyToNull(param.dataType()), "string");
+    String dataType = ofNullable(param.dataType())
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse("string");
+
     AllowableValues allowableValues = null;
     if (isBaseType(dataType)) {
       allowableValues = allowableValueFromString(param.allowableValues());
@@ -97,10 +103,10 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
 
   private List<Parameter> readParameters(OperationContext context) {
     Optional<ApiImplicitParam> annotation = context.findAnnotation(ApiImplicitParam.class);
-    List<Parameter> parameters = Lists.newArrayList();
-    if (annotation.isPresent()) {
-      parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, annotation.get()));
-    }
+    List<Parameter> parameters = new ArrayList<>();
+    annotation.ifPresent(
+        apiImplicitParam -> parameters.add(
+            OperationImplicitParameterReader.implicitParameter(descriptions, apiImplicitParam)));
     return parameters;
   }
 

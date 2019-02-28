@@ -19,9 +19,6 @@
 
 package springfox.documentation.swagger1.web;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +41,12 @@ import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
-import static com.google.common.collect.Multimaps.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.swagger1.mappers.Mappers.*;
 import static springfox.documentation.swagger1.web.ApiListingMerger.*;
 
@@ -98,51 +98,38 @@ public class Swagger1Controller {
       String apiDeclaration,
       HttpServletRequest servletRequest) {
 
-    String groupName = Optional.fromNullable(swaggerGroup).or("default");
+    String groupName = ofNullable(swaggerGroup).orElse("default");
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    Multimap<String, springfox.documentation.service.ApiListing> apiListingMap = documentation.getApiListings();
+    Map<String, List<springfox.documentation.service.ApiListing>> apiListingMap = documentation.getApiListings();
     Map<String, Collection<ApiListing>> dtoApiListings
-        = transformEntries(apiListingMap, toApiListingDto(servletRequest, documentation.getHost(), mapper)).asMap();
+        = apiListingMap.entrySet().stream().map(toApiListingDto(servletRequest, documentation.getHost(), mapper))
+            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     Collection<ApiListing> apiListings = dtoApiListings.get(apiDeclaration);
     return mergedApiListing(apiListings)
-        .transform(toJson())
-        .transform(toResponseEntity(Json.class))
-        .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
-  }
-
-  private Function<ApiListing, Json> toJson() {
-    return new Function<ApiListing, Json>() {
-      @Override
-      public Json apply(ApiListing input) {
-        return jsonSerializer.toJson(input);
-      }
-    };
+        .map(jsonSerializer::toJson)
+        .map(toResponseEntity())
+        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
   private ResponseEntity<Json> getSwaggerResourceListing(String swaggerGroup) {
-    String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
+    String groupName = ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     springfox.documentation.service.ResourceListing listing = documentation.getResourceListing();
     ResourceListing resourceListing = mapper.toSwaggerResourceListing(listing);
 
-    return Optional.fromNullable(jsonSerializer.toJson(resourceListing))
-        .transform(toResponseEntity(Json.class))
-        .or(new ResponseEntity<Json>(HttpStatus.NOT_FOUND));
+    return ofNullable(jsonSerializer.toJson(resourceListing))
+        .map(toResponseEntity())
+        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  private <T> Function<T, ResponseEntity<T>> toResponseEntity(Class<T> clazz) {
-    return new Function<T, ResponseEntity<T>>() {
-      @Override
-      public ResponseEntity<T> apply(T input) {
-        return new ResponseEntity<T>(input, HttpStatus.OK);
-      }
-    };
+  private <T> Function<T, ResponseEntity<T>> toResponseEntity() {
+    return input -> new ResponseEntity<>(input, HttpStatus.OK);
   }
 }
