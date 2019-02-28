@@ -101,6 +101,7 @@ class ParameterMerger {
         .order(source.getOrder())
         .scalarExample(source.getScalarExample())
         .complexExamples(source.getExamples())
+        .collectionFormat(source.getCollectionFormat())
         .build();
   }
 
