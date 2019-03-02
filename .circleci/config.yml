@@ -19,13 +19,14 @@ jobs:
       #         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
-          command: ./gradlew dependencies
+          command: ./gradlew dependencies npmCi
       - run:
           name: pre-dependencies
           command: npm install codecov
       - save_cache:
           paths:
             - ~/node_modules
+            - springfox-swagger-ui/node_modules
             - ~/.m2
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
@@ -41,10 +42,11 @@ jobs:
       - run:
           name: Save test results
           command: |
-            mkdir -p ~/junit/
-            mkdir -p ~/reports/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
-            cp -R swagger-contract-tests/build/reports/tests ~/reports
+           mkdir -p ~/junit/
+           mkdir -p ~/reports/
+           find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+           cp -R swagger-contract-tests/build/reports/tests ~/reports/webmvc
+           cp -R swagger-contract-tests-webflux/build/reports/tests ~/reports/webflux
           when: always
       - store_test_results:
           path: ~/junit
