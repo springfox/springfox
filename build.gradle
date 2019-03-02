@@ -1,5 +1,4 @@
 plugins {
-  id "net.ltgt.apt-idea" version "0.21"
   id 'com.github.ben-manes.versions' version '0.21.0'
   id 'se.patrikerdes.use-latest-versions' version '0.2.8'
   id "com.jfrog.bintray" version "1.8.4"
@@ -15,6 +14,7 @@ apply from: "$rootDir/gradle/ide.gradle"
 apply plugin: 'springfox-multi-release'
 
 subprojects {
+
   //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
   apply plugin: 'idea'
