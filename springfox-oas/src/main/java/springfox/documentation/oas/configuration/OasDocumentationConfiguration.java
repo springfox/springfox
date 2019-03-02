@@ -28,24 +28,22 @@ import org.springframework.web.servlet.HandlerMapping;
 import springfox.documentation.oas.mappers.ServiceModelToOasMapper;
 import springfox.documentation.oas.web.OasController;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
+import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
 
 @Configuration
 @Import({ SpringfoxWebMvcConfiguration.class })
 @ComponentScan(basePackages = {
-    "springfox.documentation.oas.readers.schema",
-    "springfox.documentation.oas.readers.service",
-    "springfox.documentation.oas.readers.parameter",
     "springfox.documentation.oas.web",
     "springfox.documentation.oas.mappers"
 })
 public class OasDocumentationConfiguration {
-//  @Bean
-//  public JacksonModuleRegistrar swagger2Module() {
-//    return new Swagger2JacksonModule();
-//  }
+  @Bean
+  public JacksonModuleRegistrar swagger2Module() {
+    return new OpenApiJacksonModule();
+  }
 
   @Bean
   public HandlerMapping swagger2ControllerMapping(
@@ -53,7 +51,7 @@ public class OasDocumentationConfiguration {
       DocumentationCache documentationCache,
       ServiceModelToOasMapper mapper,
       JsonSerializer jsonSerializer) {
-    return new PropertySourcedRequestMappingHandlerMapping(
+    return new WebMvcPropertySourcedRequestMappingHandlerMapping(
         environment,
         new OasController(environment, documentationCache, mapper, jsonSerializer));
   }

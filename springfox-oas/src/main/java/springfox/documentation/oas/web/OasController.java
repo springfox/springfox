@@ -19,7 +19,6 @@
 
 package springfox.documentation.oas.web;
 
-import com.google.common.base.Optional;
 import io.swagger.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -41,6 +40,8 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Optional;
 
 import static org.springframework.util.MimeTypeUtils.*;
 
@@ -81,7 +82,7 @@ public class OasController {
       @RequestParam(value = "group", required = false) String swaggerGroup,
       HttpServletRequest servletRequest) {
 
-    String groupName = Optional.fromNullable(swaggerGroup).or(Docket.DEFAULT_GROUP_NAME);
+    String groupName = Optional.ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
