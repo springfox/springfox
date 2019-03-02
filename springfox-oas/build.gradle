@@ -1,3 +1,6 @@
+plugins {
+  id "net.ltgt.apt-idea" version "0.21"
+}
 ext {
   limits = [
       'instruction': 96,
