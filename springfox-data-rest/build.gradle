@@ -1,5 +1,3 @@
-group 'io.springfox'
-
 ext {
   limits = [
       'instruction': 100,
@@ -15,6 +13,7 @@ dependencies {
   compile libs.core
   compile libs.spring
   compile project(':springfox-spi')
+  compile project(':springfox-core')
   compile project(':springfox-spring-webmvc')
 
   compile "org.springframework.data:spring-data-rest-webmvc:$springDataRest"
@@ -22,7 +21,6 @@ dependencies {
 
   provided libs.springProvidedWithMvc
 
-  testCompile project(':springfox-core')
   testCompile libs.test
 }
 
