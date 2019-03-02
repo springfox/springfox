@@ -14,6 +14,8 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 configurations {
+  //Logback causing spring boot errors
+  all*.exclude group: 'ch.qos.logback'
   //Making sure we don't clash on the classpath as two controllers would be loaded
   all*.exclude group: 'org.springframework', module: 'spring-webmvc'
   all*.exclude group: 'io.springfox', module: 'springfox-spring-webmvc'

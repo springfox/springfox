@@ -46,6 +46,7 @@ node {
 }
 
 task swaggerUiDownload {
+  outputs.file(destinationZip) 
   doLast {
     download {
       src downloadUrl
