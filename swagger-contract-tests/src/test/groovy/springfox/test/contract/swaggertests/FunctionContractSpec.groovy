@@ -171,7 +171,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     'declaration-concrete-controller.json'                        | '/default/concrete-controller'
     'declaration-controller-with-no-request-mapping-service.json' | '/default/controller-with-no-request-mapping-service'
     'declaration-fancy-pet-service.json'                          | '/default/fancy-pet-service'
-//    'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
+    'declaration-feature-demonstration-service.json'              | '/default/feature-demonstration-service'
     'declaration-inherited-service-impl.json'                     | '/default/inherited-service-impl'
     'declaration-pet-grooming-service.json'                       | '/default/pet-grooming-service'
     'declaration-pet-service.json'                                | '/default/pet-service'
