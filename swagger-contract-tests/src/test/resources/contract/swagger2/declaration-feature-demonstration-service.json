@@ -223,7 +223,7 @@
                     "405": {
                         "description": "Validation exception",
                         "examples": {
-                            "Example json": "{\"invalidField\": \"address\"}",
+                            "Example json": "{'invalidField': 'address'}",
                             "Example string": "The first name was invalid"
                         }
                     }

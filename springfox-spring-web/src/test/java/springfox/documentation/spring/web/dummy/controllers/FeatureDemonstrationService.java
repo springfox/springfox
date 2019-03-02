@@ -298,7 +298,7 @@ public class FeatureDemonstrationService {
                       value =  {
                         @ExampleProperty(
                           mediaType = "Example json",
-                          value = "{\"invalidField\": \"address\"}"),
+                          value = "{'invalidField': 'address'}"),
                         @ExampleProperty(
                           mediaType = "Example string",
                           value = "The first name was invalid")}))})
