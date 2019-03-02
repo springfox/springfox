@@ -35,7 +35,6 @@ import springfox.documentation.swagger2.web.Swagger2ControllerWebFlux;
 @Import({ SpringfoxWebConfiguration.class, SpringfoxWebFluxConfiguration.class, SwaggerCommonConfiguration.class,
         Swagger2ControllerWebFlux.class })
 @ComponentScan(basePackages = {
-    "springfox.documentation.swagger2.readers.parameter",
     "springfox.documentation.swagger2.mappers"
 })
 public class Swagger2DocumentationWebFluxConfiguration {
