@@ -20,7 +20,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import io.github.classgraph.utils.ReflectionUtils;
+import nonapi.io.github.classgraph.utils.ReflectionUtils;
 import org.springframework.core.ResolvableType;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.SpelNode;
