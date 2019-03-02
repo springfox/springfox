@@ -40,11 +40,11 @@ class ParameterBuilderSpec extends Specification {
     def built = sut.build()
 
     then:
-      if (built."$property" instanceof Optional) {
-        assert built."$property" == of(value)
-      } else {
-        assert built."$property" == value
-      }
+    if (built."$property" instanceof Optional) {
+      assert built."$property" == of(value)
+    } else {
+      assert built."$property" == value
+    }
 
     where:
     builderMethod     | value                                  | property
@@ -74,11 +74,11 @@ class ParameterBuilderSpec extends Specification {
     def built = sut.build()
 
     then:
-      if (built."$property" instanceof Optional) {
-        assert built."$property" == of(value)
-      } else {
-        assert built."$property" == value
-      }
+    if (built."$property" instanceof Optional) {
+      assert built."$property" == of(value)
+    } else {
+      assert built."$property" == value
+    }
 
     where:
     builderMethod     | value                                  | property
@@ -129,28 +129,28 @@ class ParameterBuilderSpec extends Specification {
     built.allowEmptyValue == expectedAllowEmptyValue
 
     where:
-    parameterType |allowEmptyValue |  expectedAllowEmptyValue
-    "query"       |true            |  true
-    "query"       |false           |  false
-    "query"       |null            |  null
-    "formData"    |true            |  true
-    "formData"    |false           |  false
-    "formData"    |null            |  null
-    "form"        |true            |  null
-    "form"        |false           |  null
-    "form"        |null            |  null
-    "header"      |true            |  null
-    "header"      |false           |  null
-    "header"      |null            |  null
-    "cookie"      |true            |  null
-    "cookie"      |false           |  null
-    "cookie"      |null            |  null
-    "path"        |true            |  null
-    "path"        |false           |  null
-    "path"        |null            |  null
-    "body"        |true            |  null
-    "body"        |false           |  null
-    "body"        |null            |  null
+    parameterType | allowEmptyValue | expectedAllowEmptyValue
+    "query"       | true            | true
+    "query"       | false           | false
+    "query"       | null            | null
+    "formData"    | true            | true
+    "formData"    | false           | false
+    "formData"    | null            | null
+    "form"        | true            | null
+    "form"        | false           | null
+    "form"        | null            | null
+    "header"      | true            | null
+    "header"      | false           | null
+    "header"      | null            | null
+    "cookie"      | true            | null
+    "cookie"      | false           | null
+    "cookie"      | null            | null
+    "path"        | true            | null
+    "path"        | false           | null
+    "path"        | null            | null
+    "body"        | true            | null
+    "body"        | false           | null
+    "body"        | null            | null
 
   }
 }

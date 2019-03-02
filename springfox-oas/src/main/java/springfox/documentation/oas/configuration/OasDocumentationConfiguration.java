@@ -30,6 +30,7 @@ import springfox.documentation.oas.web.OasController;
 import springfox.documentation.spring.web.DocumentationCache;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
 
 @Configuration
@@ -39,10 +40,10 @@ import springfox.documentation.spring.web.json.JsonSerializer;
     "springfox.documentation.oas.mappers"
 })
 public class OasDocumentationConfiguration {
-//  @Bean
-//  public JacksonModuleRegistrar swagger2Module() {
-//    return new Swagger2JacksonModule();
-//  }
+  @Bean
+  public JacksonModuleRegistrar swagger2Module() {
+    return new OpenApiJacksonModule();
+  }
 
   @Bean
   public HandlerMapping swagger2ControllerMapping(

@@ -66,10 +66,10 @@ public class VendorExtensionsMapper {
     return input -> {
       if (!isEmpty(input.getName())) {
         Map<String, Object> map = new HashMap<>();
-          map.put(input.getName(), mapExtensions(input.getValue()));
-          return map;
-        }
-        return propertiesAsMap(input);
+        map.put(input.getName(), mapExtensions(input.getValue()));
+        return map;
+      }
+      return propertiesAsMap(input);
     };
   }
 
