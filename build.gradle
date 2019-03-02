@@ -1,49 +1,29 @@
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-    jcenter()
-  }
-
-  dependencies {
-    classpath "com.github.adrianbk:gradle-jvmsrc-plugin:0.6.1"
-    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
-    classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
-    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.3"
-    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.6.0"
-    classpath 'org.ajoberstar.grgit:grgit-core:3.0.0'
-    classpath 'org.ajoberstar:gradle-git-publish:2.0.0'
-  }
-}
-
 plugins {
   id "net.ltgt.apt-idea" version "0.21"
+  id 'com.github.ben-manes.versions' version '0.21.0'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.8'
+  id "com.jfrog.bintray" version "1.8.4"
+  id "com.jfrog.artifactory" version "4.9.3"
+  id "com.github.kt3k.coveralls" version "2.8.2"
+  id "org.asciidoctor.convert" version "1.6.0"
+  id "org.ajoberstar.grgit" version "3.0.0"
+  id "org.ajoberstar.git-publish" version "2.0.0"
 }
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/ide.gradle"
-apply plugin: 'com.github.ben-manes.versions'
-apply plugin: 'build-dashboard'
-apply plugin: 'project-report'
 apply plugin: 'springfox-multi-release'
-
-ext {
-  apiKey = System.getenv('GIT_HUB_API_KEY')
-  jdkVersion = 1.8
-}
-
-allprojects {
-  apply plugin: 'jacoco'
-}
 
 subprojects {
   //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
-  apply plugin: 'com.github.adrianbk.jvmsrc'
+  apply plugin: 'idea'
   apply plugin: 'checkstyle'
+  apply plugin: 'jacoco'
+
+  repositories {
+    jcenter()
+  }
 
   javadoc {
     options.encoding = 'UTF-8'
@@ -55,14 +35,8 @@ subprojects {
     options.compilerArgs += ["-Xlint:unchecked", "-Xlint:deprecation", "-parameters"]
   }
 
-  //Commented PMD and Findbugs as its taking too much time for very little value
-  //Perhaps run every 20 CI builds (mod of ci build number)
-//  apply from: "$rootDir/gradle/code-quality.gradle"
   if (springfox.gradlebuild.utils.ProjectDefinitions.publishable(it)) {
     apply from: "$rootDir/gradle/publishing.gradle"
-  }
-  repositories {
-    jcenter()
   }
 
   checkstyle {
@@ -71,21 +45,13 @@ subprojects {
 
   checkstyleMain.source = "src/main/java"
 
-  test {
-    maxParallelForks = 2
-  }
-
   configurations {
     provided
     compile.extendsFrom provided
   }
 
-  jvmsrc {
-    packageName "springfox"
-  }
-
-  sourceCompatibility = jdkVersion
-  targetCompatibility = jdkVersion
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
   group = 'io.springfox'
   version = project.rootProject.version
 
@@ -108,10 +74,6 @@ subprojects {
 }
 
 apply from: "$rootDir/gradle/documentation.gradle"
-
-wrapper {
-  gradleVersion = '4.10.1'
-}
 
 task codeCoverageReport(type: JacocoReport) {
 

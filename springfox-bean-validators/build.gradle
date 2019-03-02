@@ -26,12 +26,10 @@ ext {
 dependencies {
   compile libs.core
   compile libs.spring
-  compile project(':springfox-spi')
+  compile project(':springfox-spring-web')
 
   provided libs.springProvided
   provided "javax.validation:validation-api:$validationApiVersion"
 
   testCompile libs.test
-  testCompile project(':springfox-schema')
-  testCompile project(':springfox-spring-web')
 }

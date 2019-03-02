@@ -10,20 +10,21 @@ ext {
 }
 
 dependencies {
+  compile project(':springfox-spi')
+  compile project(':springfox-schema')
+  compile project(':springfox-core')
+  compile project(':springfox-spring-web')
+
   compile libs.core
   compile libs.spring
-  compile project(':springfox-spi')
-  compile project(':springfox-schema').sourceSets.main.output
-  compile project(':springfox-spring-web')
 
   provided libs.springProvidedWithMvc
   provided libs.clientProvidedServlet
 
-  testCompile "javax.validation:validation-api:$validationApiVersion"
-  testCompile project(':springfox-core')
-  testCompile project(':springfox-spring-web').sourceSets.test.output
   testCompile libs.test
   testCompile libs.swagger2Core
+  testCompile project(':springfox-spring-web').sourceSets.test.output
   testCompile project(':springfox-core').sourceSets.test.output
   testCompile project(':springfox-schema').sourceSets.test.output
+  testCompile "javax.validation:validation-api:$validationApiVersion"
 }

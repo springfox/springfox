@@ -15,14 +15,6 @@ import org.apache.tools.ant.filters.ReplaceTokens
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-buildscript {
-  repositories {
-    jcenter()
-  }
-
-}
-
 plugins {
   id "de.undercouch.download" version "3.4.3"
   id "com.moowork.node" version "1.2.0"

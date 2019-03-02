@@ -1,7 +1,3 @@
-plugins {
-  id "net.ltgt.apt" version "0.9"
-}
-
 ext {
   limits = [
       'instruction': 96,
@@ -17,17 +13,17 @@ dependencies {
   compile libs.oasCore
   compile project(':springfox-spi')
   compile project(':springfox-schema')
-  compile project(':springfox-spring-web')
+  compile project(':springfox-core')
+  compile project(':springfox-spring-webmvc')
   compile libs.core
   compile libs.spring
 
   compile "org.mapstruct:mapstruct:$mapstruct"
-  apt "org.mapstruct:mapstruct-processor:$mapstruct"
+  annotationProcessor "org.mapstruct:mapstruct-processor:$mapstruct"
   
   provided libs.springProvided
   provided libs.clientProvided
 
-  testCompile project(':springfox-core')
   testCompile project(':springfox-core').sourceSets.test.output
   testCompile project(':springfox-schema').sourceSets.test.output
   testCompile project(':springfox-spring-web').sourceSets.test.output

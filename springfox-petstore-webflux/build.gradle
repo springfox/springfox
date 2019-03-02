@@ -1,17 +1,3 @@
-ext {
-  jdkVersion = 1.8
-}
-compileJava.options.encoding = 'UTF-8'
-
-buildscript {
-  repositories {
-    jcenter()
-  }
-}
-repositories {
-  jcenter()
-}
-
 dependencies {
   compile libs.spring
   compile libs.springProvided
