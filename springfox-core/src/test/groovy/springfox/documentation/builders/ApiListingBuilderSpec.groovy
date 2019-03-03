@@ -26,8 +26,6 @@ import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.Tag
 
-import static springfox.documentation.builders.BuilderDefaults.*
-
 class ApiListingBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
@@ -104,18 +102,18 @@ class ApiListingBuilderSpec extends Specification {
     and:
       def built = sut.build()
     then:
-      built."$property" == nullToEmptySet(value as Set)
+      built."$property" == new TreeSet<>(expectedValue)
 
     where:
-    builderMethod       | value   | property
-    'appendProduces'    | ["a"]   | 'produces'
-    'appendConsumes'    | ["a"]   | 'consumes'
-    'appendProduces'    | []      | 'produces'
-    'appendConsumes'    | []      | 'consumes'
-    'appendProduces'    | [null]  | 'produces'
-    'appendConsumes'    | [null]  | 'consumes'
-    'appendProduces'    | null    | 'produces'
-    'appendConsumes'    | null    | 'consumes'
+    builderMethod       | value   | property   | expectedValue
+    'appendProduces'    | ["a"]   | 'produces' | ["a"]
+    'appendConsumes'    | ["a"]   | 'consumes' | ["a"]
+    'appendProduces'    | []      | 'produces' | []
+    'appendConsumes'    | []      | 'consumes' | []
+    'appendProduces'    | [null]  | 'produces' | []
+    'appendConsumes'    | [null]  | 'consumes' | []
+    'appendProduces'    | null    | 'produces' | []
+    'appendConsumes'    | null    | 'consumes' | []
 
   }
 
@@ -161,7 +159,7 @@ class ApiListingBuilderSpec extends Specification {
     and:
       orderingMock.sortedCopy(value) >> value
     when:
-      sut.tagNames(value as Set);
+      sut.tagNames(value as Set)
     and:
       def built = sut.build()
     then:
