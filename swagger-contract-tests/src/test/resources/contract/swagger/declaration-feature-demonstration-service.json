@@ -303,8 +303,8 @@
                     "summary": "findById",
                     "nickname": "findByIdUsingGET",
                     "produces": [
-                        "application/vnd.com.pet+json",
-                        "application/vnd.com.fancy-pet+json"
+                        "application/vnd.com.fancy-pet+json",
+                        "application/vnd.com.pet+json"
                     ],
                     "consumes": [
                         
@@ -605,15 +605,17 @@
             "description": "saveUser",
             "operations": [
                 {
+                    "method": "POST",
+                    "summary": "Demo using examples",
+                    "nickname": "saveUserUsingPOST",
+                    "produces": [
+                        "*/*"
+                    ],
                     "consumes": [
                         "application/json"
                     ],
-                    "deprecated": "false",
-                    "method": "POST",
-                    "nickname": "saveUserUsingPOST",
-                    "parameters": [],
-                    "produces": [
-                        "*/*"
+                    "parameters": [
+                        
                     ],
                     "responseMessages": [
                         {
@@ -641,7 +643,7 @@
                             "message": "Validation exception"
                         }
                     ],
-                    "summary": "Demo using examples",
+                    "deprecated": "false",
                     "type": "void"
                 }
             ],
@@ -2010,111 +2012,6 @@
         
     ],
     "models": {
-        "Entry«string,Map«string,Example»»": {
-            "description": "",
-            "id": "Entry«string,Map«string,Example»»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "List[Entry«string,Example»]"
-                }
-            }
-        },
-        "Category": {
-            "description": "",
-            "id": "Category",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "ModelWithMapProperty": {
-            "description": "Describes model with map property",
-            "id": "ModelWithMapProperty",
-            "properties": {
-                "params": {
-                    "description": "Map of params to be sent",
-                    "required": false,
-                    "type": "object"
-                }
-            }
-        },
-        "ObjectNode": {
-            "description": "",
-            "id": "ObjectNode",
-            "properties": {
-            }
-        },
-        "Entry«string,Example»": {
-            "description": "",
-            "id": "Entry«string,Example»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "Example"
-                }
-            }
-        },
-        "Truck": {
-            "description": "",
-            "id": "Truck",
-            "properties": {
-                "make": {
-                    "required": false,
-                    "type": "string"
-                },
-                "model": {
-                    "required": false,
-                    "type": "string"
-                },
-                "payloadCapacity": {
-                    "required": false,
-                    "format": "double",
-                    "type": "number"
-                }
-            }
-        },
-        "NestedType": {
-            "description": "",
-            "id": "NestedType",
-            "properties": {
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "Vehicle": {
-            "description": "",
-            "discriminator": "type",
-            "id": "Vehicle",
-            "properties": {
-                "make": {
-                    "required": false,
-                    "type": "string"
-                },
-                "model": {
-                    "required": false,
-                    "type": "string"
-                }
-            },
-            "subTypes": [
-                "Car",
-                "Truck"
-            ]
-        },
-        "ModelWithObjectNode": {
-            "description": "",
-            "id": "ModelWithObjectNode",
-            "properties": {
-                "anyObject": {
-                    "required": false,
-                    "type": "ObjectNode"
-                }
-            }
-        },
         "Car": {
             "description": "",
             "id": "Car",
@@ -2136,6 +2033,50 @@
                     "required": false,
                     "format": "double",
                     "type": "number"
+                }
+            }
+        },
+        "Category": {
+            "description": "",
+            "id": "Category",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "Entry«string,Example»": {
+            "description": "",
+            "id": "Entry«string,Example»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "Example"
+                }
+            }
+        },
+        "Entry«string,Map«string,Example»»": {
+            "description": "",
+            "id": "Entry«string,Map«string,Example»»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "List[Entry«string,Example»]"
+                }
+            }
+        },
+        "EnumObjectType": {
+            "description": "",
+            "id": "EnumObjectType",
+            "properties": {
+                "description": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
                 }
             }
         },
@@ -2205,20 +2146,6 @@
                 }
             }
         },
-        "EnumObjectType": {
-            "description": "",
-            "id": "EnumObjectType",
-            "properties": {
-                "description": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
         "FancyPet": {
             "description": "",
             "id": "FancyPet",
@@ -2245,6 +2172,44 @@
                 }
             }
         },
+        "ModelWithMapProperty": {
+            "description": "Describes model with map property",
+            "id": "ModelWithMapProperty",
+            "properties": {
+                "params": {
+                    "description": "Map of params to be sent",
+                    "required": false,
+                    "type": "object"
+                }
+            }
+        },
+        "ModelWithObjectNode": {
+            "description": "",
+            "id": "ModelWithObjectNode",
+            "properties": {
+                "anyObject": {
+                    "required": false,
+                    "type": "ObjectNode"
+                }
+            }
+        },
+        "NestedType": {
+            "description": "",
+            "id": "NestedType",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "ObjectNode": {
+            "description": "",
+            "id": "ObjectNode",
+            "properties": {
+                
+            }
+        },
         "Pet": {
             "description": "",
             "id": "Pet",
@@ -2263,6 +2228,44 @@
                     "type": "string"
                 }
             }
+        },
+        "Truck": {
+            "description": "",
+            "id": "Truck",
+            "properties": {
+                "make": {
+                    "required": false,
+                    "type": "string"
+                },
+                "model": {
+                    "required": false,
+                    "type": "string"
+                },
+                "payloadCapacity": {
+                    "required": false,
+                    "format": "double",
+                    "type": "number"
+                }
+            }
+        },
+        "Vehicle": {
+            "description": "",
+            "discriminator": "type",
+            "id": "Vehicle",
+            "properties": {
+                "make": {
+                    "required": false,
+                    "type": "string"
+                },
+                "model": {
+                    "required": false,
+                    "type": "string"
+                }
+            },
+            "subTypes": [
+                "Car",
+                "Truck"
+            ]
         }
     },
     "produces": [

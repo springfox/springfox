@@ -147,7 +147,32 @@ class ApiListingBuilderSpec extends Specification {
       [tag("test"), tag("2")] as Set    | "Description test"  | 1
   }
 
-  def tag(name) {
+  def "models are sorted by name" () {
+    given:
+    def sut = new ApiListingBuilder(Mock(Comparator))
+
+    Map<String, Model> modelMap = [
+        "HttpEntity«Resource«Pet»»": new ModelBuilder().build(),
+        "Resource«Pet»": new ModelBuilder().build(),
+        "Pet": new ModelBuilder().build()
+    ]
+    when:
+    def builtModels = sut.models(modelMap).build().models
+
+    then:
+    builtModels instanceof TreeMap
+    builtModels.eachWithIndex { Map.Entry<String, Model> entry, int i ->
+      if (i == 2) {
+        assert entry.key == "Resource«Pet»"
+      } else if (i == 0) {
+        assert entry.key == "HttpEntity«Resource«Pet»»"
+      } else if (i == 1) {
+        assert entry.key == "Pet"
+      }
+    }
+  }
+
+    def tag(name) {
     new Tag(name, "Description $name")
   }
 

@@ -1095,6 +1095,29 @@
         
     ],
     "models": {
+        "Entry«string,List«string»»": {
+            "description": "",
+            "id": "Entry«string,List«string»»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
+        "Entry«string,Pet»": {
+            "description": "",
+            "id": "Entry«string,Pet»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "type": "Pet"
+                }
+            }
+        },
         "Pet": {
             "description": "",
             "id": "Pet",
@@ -1111,29 +1134,6 @@
                 "name": {
                     "required": false,
                     "type": "string"
-                }
-            }
-        },
-        "Entry«string,Pet»": {
-            "description": "",
-            "id": "Entry«string,Pet»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "type": "Pet"
-                }
-            }
-        },
-        "Entry«string,List«string»»": {
-            "description": "",
-            "id": "Entry«string,List«string»»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
                 }
             }
         }

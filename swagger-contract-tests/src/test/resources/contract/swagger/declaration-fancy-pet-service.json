@@ -183,25 +183,6 @@
                 }
             }
         },
-        "Pet": {
-            "description": "",
-            "id": "Pet",
-            "properties": {
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
         "FancyPet": {
             "description": "",
             "id": "FancyPet",
@@ -217,6 +198,25 @@
                         "type": "Category"
                     },
                     "type": "array"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "Pet": {
+            "description": "",
+            "id": "Pet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
                 },
                 "id": {
                     "required": false,
