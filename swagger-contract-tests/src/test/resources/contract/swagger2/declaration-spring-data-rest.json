@@ -34,8 +34,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/rest/addresses": {
@@ -380,10 +380,10 @@
                 "summary": "findAllAddress",
                 "operationId": "findAllAddressUsingGET_2",
                 "produces": [
-                    "application/json",
-                    "application/hal+json",
-                    "text/uri-list",
-                    "application/x-spring-data-compact+json"
+                  "applcation/hal+json",
+                  "application/json",
+                  "application/x-spring-data-compact+json",
+                  "text/uri-list"
                 ],
                 "parameters": [
                     {
@@ -1150,10 +1150,10 @@
                 "summary": "findAllPerson",
                 "operationId": "findAllPersonUsingGET_2",
                 "produces": [
-                    "application/json",
-                    "application/hal+json",
-                    "text/uri-list",
-                    "application/x-spring-data-compact+json"
+                  "applcation/hal+json",
+                  "application/json",
+                  "application/x-spring-data-compact+json",
+                  "text/uri-list"
                 ],
                 "parameters": [
                     {
@@ -1614,10 +1614,10 @@
                 "summary": "findAllTag",
                 "operationId": "findAllTagUsingGET_2",
                 "produces": [
-                    "application/json",
-                    "application/hal+json",
-                    "text/uri-list",
-                    "application/x-spring-data-compact+json"
+                  "applcation/hal+json",
+                  "application/json",
+                  "application/x-spring-data-compact+json",
+                  "text/uri-list"
                 ],
                 "parameters": [
                     {

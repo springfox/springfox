@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/features/1367/{itemId}": {
@@ -34,8 +34,8 @@
                 "summary": "findById",
                 "operationId": "findByIdUsingGET_2",
                 "produces": [
-                    "application/vnd.com.pet+json",
-                    "application/vnd.com.fancy-pet+json"
+                    "application/vnd.com.fancy-pet+json",
+                    "application/vnd.com.pet+json"
                 ],
                 "parameters": [
                     {
