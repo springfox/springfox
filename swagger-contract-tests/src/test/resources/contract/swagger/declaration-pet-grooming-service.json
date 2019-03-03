@@ -65,8 +65,8 @@
                     "summary": "groomingFunctionThatReturnsVoid",
                     "nickname": "groomingFunctionThatReturnsVoidUsingDELETE",
                     "produces": [
-                        "application/xml",
-                        "application/json"
+                        "application/json",
+                        "application/xml"
                     ],
                     "consumes": [
                         
@@ -217,8 +217,8 @@
                     "summary": "groomingFunctionThatReturnsVoid",
                     "nickname": "groomingFunctionThatReturnsVoidUsingDELETE_1",
                     "produces": [
-                        "application/xml",
-                        "application/json"
+                        "application/json",
+                        "application/xml"
                     ],
                     "consumes": [
                         
@@ -265,8 +265,8 @@
                     "summary": "groomingFunctionThatReturnsVoid",
                     "nickname": "groomingFunctionThatReturnsVoidUsingDELETE_2",
                     "produces": [
-                        "application/xml",
-                        "application/json"
+                        "application/json",
+                        "application/xml"
                     ],
                     "consumes": [
                         

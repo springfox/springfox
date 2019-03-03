@@ -173,9 +173,9 @@
         
     ],
     "models": {
-        "Category_1": {
+        "Category": {
             "description": "",
-            "id": "Category_1",
+            "id": "Category",
             "properties": {
                 "name": {
                     "required": false,
@@ -195,7 +195,7 @@
                 "categories": {
                     "required": false,
                     "items": {
-                        "type": "Category_1"
+                        "type": "Category"
                     },
                     "type": "array"
                 },
