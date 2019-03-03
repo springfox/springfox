@@ -22,12 +22,12 @@
         }
     ],
     "schemes": [
-        "https",
-        "http"
+        "http",
+        "https"
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/api/store/search?x=CA": {

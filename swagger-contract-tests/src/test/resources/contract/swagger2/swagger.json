@@ -34,12 +34,12 @@
         }
     ],
     "schemes": [
-        "https",
-        "http"
+        "http",
+        "https"
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/api/pet": {
@@ -53,8 +53,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -98,8 +98,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -149,8 +149,8 @@
                 "description": "Multiple status values can be provided with comma-separated strings",
                 "operationId": "findPetsByStatusUsingGET_2",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -202,8 +202,8 @@
                 "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
                 "operationId": "findPetsByTagsUsingGET_2",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -249,8 +249,8 @@
                 "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
                 "operationId": "getPetByIdUsingGET_5",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -273,16 +273,16 @@
                     "400": {
                         "description": "Invalid ID supplied",
                         "headers": {
-                            "header1": {
-                                "type": "string"
-                            },
-                            "header2": {
+                            "header4": {
                                 "type": "string"
                             },
                             "header3": {
                                 "type": "string"
                             },
-                            "header4": {
+                            "header2": {
+                                "type": "string"
+                            },
+                            "header1": {
                                 "type": "string"
                             }
                         }
@@ -290,10 +290,10 @@
                     "404": {
                         "description": "Pet not found",
                         "headers": {
-                            "header3": {
+                            "header4": {
                                 "type": "string"
                             },
-                            "header4": {
+                            "header3": {
                                 "type": "string"
                             }
                         }
@@ -301,14 +301,14 @@
                 },
                 "security": [
                     {
-                        "api_key": [
-
-                        ]
-                    },
-                    {
                         "petstore_auth": [
                             "write:pets",
                             "read:pets"
+                        ]
+                    },
+                    {
+                        "api_key": [
+                            
                         ]
                     }
                 ],

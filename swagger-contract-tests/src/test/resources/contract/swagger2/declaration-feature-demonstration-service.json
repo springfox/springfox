@@ -6,7 +6,7 @@
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
         "contact": {
-
+            
         },
         "license": {
             "name": "Apache 2.0",
@@ -22,8 +22,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/features/1367/{itemId}": {
@@ -34,8 +34,8 @@
                 "summary": "findById",
                 "operationId": "findByIdUsingGET_1",
                 "produces": [
-                    "application/vnd.com.pet+json",
-                    "application/vnd.com.fancy-pet+json"
+                    "application/vnd.com.fancy-pet+json",
+                    "application/vnd.com.pet+json"
                 ],
                 "parameters": [
                     {
@@ -205,11 +205,14 @@
         },
         "/features/1570": {
             "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "Demo using examples",
+                "operationId": "saveUserUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
-                "deprecated": false,
-                "operationId": "saveUserUsingPOST_1",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -225,10 +228,7 @@
                         }
                     }
                 },
-                "summary": "Demo using examples",
-                "tags": [
-                    "feature-demonstration-service"
-                ]
+                "deprecated": false
             }
         },
         "/features/2031": {

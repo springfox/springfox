@@ -26,8 +26,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/pets/byName/{name}": {
@@ -275,8 +275,8 @@
                 "summary": "groomingFunctionThatReturnsVoid",
                 "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_4",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -507,8 +507,8 @@
                 "summary": "groomingFunctionThatReturnsVoid",
                 "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_5",
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {

@@ -19,8 +19,8 @@
         }
     ],
     "produces": [
-        "application/xml",
-        "application/json"
+        "application/json",
+        "application/xml"
     ],
     "paths": {
         "/bugs/1162": {
@@ -213,8 +213,8 @@
         "/bugs/1420": {
             "get": {
                 "tags": [
-                    "foo",
-                    "Bugs"
+                    "Bugs",
+                    "foo"
                 ],
                 "summary": "issue1420",
                 "operationId": "issue1420UsingGET_1",
@@ -460,8 +460,8 @@
                     "application/json"
                 ],
                 "produces": [
-                    "application/xml",
-                    "application/json"
+                    "application/json",
+                    "application/xml"
                 ],
                 "parameters": [
                     {
@@ -497,8 +497,8 @@
                         "required": false,
                         "type": "integer",
                         "default": 0,
-                        "allowEmptyValue": false,
-                        "format": "int32"
+                        "format": "int32",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -1470,8 +1470,8 @@
         "/bugs/2268{?$filter}": {
             "get": {
                 "tags": [
-                    "example",
-                    "Bugs"
+                    "Bugs",
+                    "example"
                 ],
                 "summary": "Get all examples",
                 "description": "Get all examples ",
@@ -1704,39 +1704,39 @@
                 "deprecated": false
             }
         },
-        "/bugs/2822":{
-            "post":{
-                "tags":[
+        "/bugs/2822": {
+            "post": {
+                "tags": [
                     "Bugs"
                 ],
-                "summary":"bug2822",
-                "operationId":"bug2822UsingPOST_1",
-                "consumes":[
+                "summary": "bug2822",
+                "operationId": "bug2822UsingPOST_1",
+                "consumes": [
                     "application/json"
                 ],
-                "parameters":[
+                "parameters": [
                     {
-                        "in":"body",
-                        "name":"message",
-                        "description":"message",
-                        "required":false,
-                        "schema":{
-                            "type":"string",
-                            "example":{
-                                "value":"exampleMessage",
-                                "mediaType":{
-                                    "present":false
+                        "in": "body",
+                        "name": "message",
+                        "description": "message",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": {
+                                "value": "exampleMessage",
+                                "mediaType": {
+                                    "present": false
                                 }
                             }
                         }
                     }
                 ],
-                "responses":{
-                    "200":{
-                        "description":"OK"
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 },
-                "deprecated":false
+                "deprecated": false
             }
         },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
