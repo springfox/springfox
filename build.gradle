@@ -13,13 +13,16 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/ide.gradle"
 apply plugin: 'springfox-multi-release'
 
+allprojects {
+  apply plugin: 'jacoco'
+}
+
 subprojects {
 
   //Not strictly groovy projects but useful for the IDE to recognise groovy test sources
   apply plugin: 'groovy' //gradle groovy plugin extends the java plugin
   apply plugin: 'idea'
   apply plugin: 'checkstyle'
-  apply plugin: 'jacoco'
 
   repositories {
     jcenter()
