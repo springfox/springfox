@@ -28,11 +28,12 @@ import springfox.documentation.service.Tag;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static java.util.function.Function.*;
@@ -49,16 +50,16 @@ public class ApiListingBuilder {
   private String host;
   private int position;
 
-  private Set<String> produces = new HashSet<>();
-  private Set<String> consumes = new HashSet<>();
-  private Set<String> protocol = new HashSet<>();
+  private Set<String> produces = new TreeSet<>();
+  private Set<String> consumes = new TreeSet<>();
+  private Set<String> protocol = new TreeSet<>();
   private List<SecurityReference> securityReferences = new ArrayList<>();
   private List<ApiDescription> apis = new ArrayList<>();
 
   private final Set<Tag> tags = new TreeSet<>(tagComparator());
-  private final Set<String> tagNames = new HashSet<>();
-  private final Map<String, Model> models = new HashMap<>();
-  private final Map<String, Tag> tagLookup = new HashMap<>();
+  private final Set<String> tagNames = new TreeSet<>();
+  private final Map<String, Model> models = new TreeMap<>();
+  private final Map<String, Tag> tagLookup = new TreeMap<>();
 
   /**
    * Update the sorting order for api descriptions
@@ -135,7 +136,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder appendProduces(List<String> produces) {
-    this.produces.addAll(nullToEmptyList(produces));
+    this.produces.addAll(nullToEmptyList(produces).stream()
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -146,7 +149,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder appendConsumes(List<String> consumes) {
-    this.consumes.addAll(nullToEmptyList(consumes));
+    this.consumes.addAll(nullToEmptyList(consumes).stream()
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -240,7 +245,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder tagNames(Set<String> tagNames) {
-    this.tagNames.addAll(nullToEmptySet(tagNames));
+    this.tagNames.addAll(nullToEmptySet(tagNames).stream()
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 

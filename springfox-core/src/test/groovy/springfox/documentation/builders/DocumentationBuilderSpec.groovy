@@ -20,6 +20,7 @@
 package springfox.documentation.builders
 
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ListVendorExtension
 import springfox.documentation.service.ResourceListing
@@ -28,7 +29,8 @@ import springfox.documentation.service.VendorExtension
 
 
 class DocumentationBuilderSpec extends Specification {
-  def "Setting properties on the builder with non-null values"() {
+  @Unroll
+  def "Setting #builderMethod on the builder with non-null values"() {
     given:
     def sut = new DocumentationBuilder()
 
@@ -48,20 +50,21 @@ class DocumentationBuilderSpec extends Specification {
     }
 
     where:
-    builderMethod                    | value                       | property
-    'name'                           | 'group1'                    | 'groupName'
-    'apiListingsByResourceGroupName' | multiMap()                  | 'apiListings'
-    'resourceListing'                | Mock(ResourceListing)       | 'resourceListing'
-    'basePath'                       | 'urn:some-path'             | 'basePath'
-    'produces'                       | ['application/json'] as Set | 'produces'
-    'consumes'                       | ['application/json'] as Set | 'consumes'
-    'host'                           | 'host1'                     | 'host'
-    'schemes'                        | ['http'] as Set             | 'schemes'
-    'tags'                           | ['pet'] as Set              | 'tags'
-    'extensions'                     | extensions()                | 'vendorExtensions'
+    builderMethod                    | value                          | property
+    'name'                           | 'group1'                       | 'groupName'
+    'apiListingsByResourceGroupName' | multiMap()                     | 'apiListings'
+    'resourceListing'                | Mock(ResourceListing)          | 'resourceListing'
+    'basePath'                       | 'urn:some-path'                | 'basePath'
+    'produces'                       | ['application/json'] as Set    | 'produces'
+    'consumes'                       | ['application/json'] as Set    | 'consumes'
+    'host'                           | 'host1'                        | 'host'
+    'schemes'                        | ['http'] as Set                | 'schemes'
+    'tags'                           | [new Tag("Pet", "Pet")] as Set | 'tags'
+    'extensions'                     | extensions()                   | 'vendorExtensions'
   }
 
-  def "Setting builder properties to null values preserves existing values"() {
+  @Unroll
+  def "Setting #builderMethod to null values preserves existing values"() {
     given:
     def sut = new DocumentationBuilder()
 
@@ -82,16 +85,16 @@ class DocumentationBuilderSpec extends Specification {
     }
 
     where:
-    builderMethod                    | value                       | property
-    'name'                           | 'group1'                    | 'groupName'
-    'apiListingsByResourceGroupName' | multiMap()                  | 'apiListings'
-    'resourceListing'                | Mock(ResourceListing)       | 'resourceListing'
-    'basePath'                       | 'urn:some-path'             | 'basePath'
-    'produces'                       | ['application/json'] as Set | 'produces'
-    'consumes'                       | ['application/json'] as Set | 'consumes'
-    'host'                           | 'host1'                     | 'host'
-    'schemes'                        | ['http'] as Set             | 'schemes'
-    'tags'                           | ['pet'] as Set              | 'tags'
+    builderMethod                    | value                          | property
+    'name'                           | 'group1'                       | 'groupName'
+    'apiListingsByResourceGroupName' | multiMap()                     | 'apiListings'
+    'resourceListing'                | Mock(ResourceListing)          | 'resourceListing'
+    'basePath'                       | 'urn:some-path'                | 'basePath'
+    'produces'                       | ['application/json'] as Set    | 'produces'
+    'consumes'                       | ['application/json'] as Set    | 'consumes'
+    'host'                           | 'host1'                        | 'host'
+    'schemes'                        | ['http'] as Set                | 'schemes'
+    'tags'                           | [new Tag("pet", "pet")] as Set | 'tags'
   }
 
   def "Setting ordered tags should preserve ordering"() {

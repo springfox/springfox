@@ -20,6 +20,7 @@
 package springfox.documentation.service;
 
 
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.schema.ModelReference;
 
@@ -32,7 +33,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.*;
 
-public class Operation {
+public class Operation implements Ordered {
   private final HttpMethod method;
   private final String summary;
   private final String notes;
@@ -49,7 +50,7 @@ public class Operation {
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
   private final List<VendorExtension> vendorExtensions;
-  
+
   @SuppressWarnings("ParameterNumber")
   public Operation(
       HttpMethod method,
@@ -163,5 +164,10 @@ public class Operation {
 
   private Comparator<Parameter> byParameterName() {
     return Comparator.comparing(Parameter::getName);
+  }
+
+  @Override
+  public int getOrder() {
+    return position;
   }
 }

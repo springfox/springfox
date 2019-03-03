@@ -29,24 +29,27 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
+import static springfox.documentation.service.Tags.*;
 
 public class DocumentationBuilder {
   private String groupName;
   private Map<String, List<ApiListing>> apiListings = new TreeMap<>(Comparator.naturalOrder());
   private ResourceListing resourceListing;
-  private Set<Tag> tags = new LinkedHashSet<>();
+  private Set<Tag> tags = new TreeSet<>(tagComparator());
   private String basePath;
-  private Set<String> produces = new LinkedHashSet<>();
-  private Set<String> consumes = new LinkedHashSet<>();
+  private Set<String> produces = new TreeSet<>();
+  private Set<String> consumes = new TreeSet<>();
   private String host;
-  private Set<String> schemes = new LinkedHashSet<>();
+  private Set<String> schemes = new TreeSet<>();
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
   private List<Server> servers = new ArrayList<>();
   private DocumentationReference documentationReference;
@@ -107,7 +110,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder tags(Set<Tag> tags) {
-    this.tags.addAll(nullToEmptySet(tags));
+    this.tags.addAll(nullToEmptySet(tags).stream()
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -118,7 +123,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder produces(Set<String> mediaTypes) {
-    this.produces.addAll(nullToEmptySet(mediaTypes));
+    this.produces.addAll(nullToEmptySet(mediaTypes).stream()
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -129,7 +136,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder consumes(Set<String> mediaTypes) {
-    this.consumes.addAll(nullToEmptySet(mediaTypes));
+    this.consumes.addAll(nullToEmptySet(mediaTypes).stream()
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
@@ -153,7 +162,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder schemes(Set<String> schemes) {
-    this.schemes.addAll(nullToEmptySet(schemes));
+    this.schemes.addAll(nullToEmptySet(schemes).stream()
+        .filter(Objects::nonNull)
+        .collect(toSet()));
     return this;
   }
 
