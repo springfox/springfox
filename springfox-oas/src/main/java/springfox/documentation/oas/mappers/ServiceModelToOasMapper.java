@@ -18,13 +18,13 @@
  */
 package springfox.documentation.oas.mappers;
 
-import io.swagger.oas.models.ExternalDocumentation;
-import io.swagger.oas.models.OpenAPI;
-import io.swagger.oas.models.info.Contact;
-import io.swagger.oas.models.info.Info;
-import io.swagger.oas.models.servers.Server;
-import io.swagger.oas.models.servers.ServerVariable;
-import io.swagger.oas.models.tags.Tag;
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.servers.ServerVariable;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
