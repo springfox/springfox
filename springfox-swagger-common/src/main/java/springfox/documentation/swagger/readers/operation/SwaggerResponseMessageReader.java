@@ -68,7 +68,6 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   private final DescriptionResolver descriptions;
 
   @Autowired
-<<<<<<< HEAD
   public SwaggerResponseMessageReader(
       EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor,
@@ -209,7 +208,10 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   }
   
   private String resolvedValue(String value) {
-    if(!isEmpty(value) && value.charAt(0) == '$' && value.charAt(1) == '{' && value.charAt(value.length() - 1) == '}') {
+    if (!isEmpty(value) &&
+            value.charAt(0) == '$' &&
+            value.charAt(1) == '{' &&
+            value.charAt(value.length() - 1) == '}') {
       return descriptions.resolve(value);
     }
     return value;
