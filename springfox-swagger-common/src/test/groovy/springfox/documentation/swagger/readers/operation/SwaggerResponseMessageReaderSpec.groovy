@@ -244,14 +244,13 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
     examplesMatch(responseMessages[0].examples, examples)
 
     where:
-    methodName                    | examples
-    "operationWithNoExamples"     | []
-    "operationWithOneExample"     | [new Example("mediaType", "value")]
-    "operationWithTwoExamples"    | [new Example("mediaType1", "value1"), new Example("mediaType2", "value2")]
-    "operationWithEmptyExample"   | [new Example("mediaType1", "value1")]
-    "operationWithResolvedValue"  | [new Example("mediaType", "this is an example.")]
-    "operationWithInvalidProperty"| [new Example("mediaType", "\${resolvedValue")]
-
+    methodName                      | examples
+    "operationWithNoExamples"       | []
+    "operationWithOneExample"       | [new Example("mediaType", "value")]
+    "operationWithTwoExamples"      | [new Example("mediaType1", "value1"), new Example("mediaType2", "value2")]
+    "operationWithEmptyExample"     | [new Example("mediaType1", "value1")]
+    "operationWithResolvedValue"    | [new Example("mediaType", "this is an example.")]
+    "operationWithInvalidProperties"| [new Example("mediaType", "\${resolvedValue"), new Example(null, "\$resolvedValue}")]
   }
 
   boolean examplesMatch(List<Example> examples, List<Example> expectedExamples) {
