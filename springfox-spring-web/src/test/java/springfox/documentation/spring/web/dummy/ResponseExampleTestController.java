@@ -68,4 +68,23 @@ public class ResponseExampleTestController {
         // An endpoint with an Example that has an empty value
     }
 
+    @ApiOperation(value = "operationWithResolvedValue")
+    @ApiResponses(value =
+            {
+                    @ApiResponse(code = 200, message = "", examples = @Example(
+                            value = @ExampleProperty(
+                                    value = "${resolvedValue}", mediaType = "mediaType")))})
+    public void operationWithResolvedValue() {
+        // An endpoint with an Example which contains a property value named 'resolvedValue'
+    }
+
+    @ApiOperation(value = "operationWithInvalidProperty")
+    @ApiResponses(value =
+            {
+                    @ApiResponse(code = 200, message = "", examples = @Example(
+                            value = @ExampleProperty(
+                                    value = "${resolvedValue", mediaType = "mediaType")))})
+    public void operationWithInvalidProperty() {
+        // An endpoint with an Example which contains a invalid property name
+    }
 }
