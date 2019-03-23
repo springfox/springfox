@@ -25,6 +25,7 @@ import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.VendorExtension;
@@ -68,6 +69,7 @@ public class OperationBuilder {
   private boolean isHidden;
   private ModelReference responseModel;
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private Set<Response> responses = new HashSet<>();
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;
@@ -203,14 +205,27 @@ public class OperationBuilder {
   }
 
 
+
   /**
+   * @deprecated @since 3.0.0
    * Updates the response messages
-   *
+   * Use @see {@link OperationBuilder#responses(Set)}
    * @param responseMessages - new response messages to be merged with existing response messages
    * @return this
    */
+  @Deprecated
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
     this.responseMessages = new HashSet<>(mergeResponseMessages(responseMessages));
+    return this;
+  }
+
+  /**
+   * Updates the response messages
+   * @param responses - new response messages to be merged with existing response messages
+   * @return this
+   */
+  public OperationBuilder responses(Set<Response> responses) {
+    this.responses = new HashSet<>(responses);
     return this;
   }
 
@@ -236,12 +251,15 @@ public class OperationBuilder {
     return this;
   }
 
+
   /**
+   * @deprecated @since 3.0.0
    * Updates the reference to the response model
-   *
+   * Use @see {@link OperationBuilder#responses(Set)}
    * @param responseType = response type model reference
    * @return this
    */
+  @Deprecated
   public OperationBuilder responseModel(ModelReference responseType) {
     this.responseModel = defaultIfAbsent(responseType, this.responseModel);
     return this;
@@ -285,6 +303,7 @@ public class OperationBuilder {
         protocol,
         securityReferences,
         parameters,
+        responses,
         responseMessages,
         deprecated,
         isHidden,

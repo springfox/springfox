@@ -48,6 +48,7 @@ public class Operation implements Ordered {
   private final Map<String, List<AuthorizationScope>> securityReferences;
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
+  private final Set<Response> responses;
   private final String deprecated;
   private final List<VendorExtension> vendorExtensions;
 
@@ -65,6 +66,7 @@ public class Operation implements Ordered {
       Set<String> protocol,
       List<SecurityReference> securityReferences,
       List<Parameter> parameters,
+      Set<Response> responses,
       Set<ResponseMessage> responseMessages,
       String deprecated,
       boolean isHidden,
@@ -80,6 +82,7 @@ public class Operation implements Ordered {
     this.produces = produces;
     this.consumes = consumes;
     this.protocol = protocol;
+    this.responses = responses;
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
     this.parameters = parameters.stream()
@@ -93,6 +96,12 @@ public class Operation implements Ordered {
     return isHidden;
   }
 
+  /**
+   * @deprecated @since 3.0.0
+   * Use @see {@link Operation#getResponses()}
+   * @return model reference
+   */
+  @Deprecated
   public ModelReference getResponseModel() {
     return responseModel;
   }
@@ -146,8 +155,18 @@ public class Operation implements Ordered {
     return parameters;
   }
 
+  /**
+   * @deprecated @since 3.0.0
+   * Use @see {@link Operation#getResponses()}
+   * @return model reference
+   */
+  @Deprecated
   public Set<ResponseMessage> getResponseMessages() {
     return responseMessages;
+  }
+
+  public Set<Response> getResponses() {
+    return responses;
   }
 
   public String getDeprecated() {
