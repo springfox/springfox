@@ -25,6 +25,10 @@ import springfox.documentation.schema.ModelReference;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @deprecated - Use @see {@link Response} instead going forward
+ */
+@Deprecated
 public class ResponseMessage {
   private final int code;
   private final String message;
