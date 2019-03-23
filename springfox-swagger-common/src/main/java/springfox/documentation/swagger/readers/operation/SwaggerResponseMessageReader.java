@@ -31,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.Example;
+import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Header;
@@ -141,9 +142,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
             if (!isEmpty(exampleProperty.value())) {
               final String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
-              examples.add(new Example(
-                  mediaType,
-                  exampleProperty.value()));
+              examples.add(new ExampleBuilder().withMediaType(mediaType).withValue(exampleProperty.value()).build());
             }
           }
           Map<String, Header> headers = new HashMap<>(defaultHeaders);

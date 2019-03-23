@@ -158,4 +158,11 @@ public class BuilderDefaults {
     }
     return current;
   }
+
+  public static String emptyToNull(String test) {
+    if (test != null && test.length() == 0) {
+      return null;
+    }
+    return test;
+  }
 }

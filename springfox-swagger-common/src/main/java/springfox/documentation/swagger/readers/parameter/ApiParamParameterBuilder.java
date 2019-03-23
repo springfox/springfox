@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
-import springfox.documentation.schema.Example;
+import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -79,7 +79,9 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .allowMultiple(annotation.allowMultiple())
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
-          .scalarExample(new Example(annotation.example()))
+          .scalarExample(new ExampleBuilder()
+              .withValue(annotation.example())
+              .build())
           .complexExamples(examples(annotation.examples()))
           .hidden(annotation.hidden())
           .collectionFormat(annotation.collectionFormat())

@@ -29,6 +29,7 @@ import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpResponse;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.Example;
+import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
@@ -145,8 +146,10 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
   }
 
   private List<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
-    return singletonList(new Example(getContentType(parsedResponse),
-        getBody(parsedResponse)));
+    return singletonList(new ExampleBuilder()
+        .withMediaType(getContentType(parsedResponse))
+        .withValue(getBody(parsedResponse))
+        .build());
   }
 
   private String getBody(RawHttpResponse<Void> parsedResponse) {
