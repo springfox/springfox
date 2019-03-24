@@ -20,7 +20,7 @@
                             "description": "toCreate",
                             "name": "body",
                             "paramType": "body",
-                            "type": "Resource_3«Pet»",
+                            "type": "Resource«Pet»",
                             "required": true
                         }
                     ],
@@ -79,7 +79,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "HttpEntity«Resource_2«Pet»»"
+                            "responseModel": "HttpEntity«Resource«Pet»»"
                         },
                         {
                             "code": 204,
@@ -99,7 +99,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "HttpEntity«Resource_2«Pet»»"
+                    "type": "HttpEntity«Resource«Pet»»"
                 }
             ],
             "path": "/foo/delete-t/{id}"
@@ -131,7 +131,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "Resource_2«Pet»"
+                            "responseModel": "Resource«Pet»_1"
                         },
                         {
                             "code": 401,
@@ -151,7 +151,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "Resource_2«Pet»"
+                    "type": "Resource«Pet»_1"
                 }
             ],
             "path": "/foo/get-t/{id}"
@@ -162,9 +162,9 @@
         
     ],
     "models": {
-        "Resource_2«Pet»": {
+        "Resource«Pet»": {
             "description": "",
-            "id": "Resource_2«Pet»",
+            "id": "Resource«Pet»",
             "properties": {
                 "age": {
                     "required": false,
@@ -188,19 +188,19 @@
                 }
             }
         },
-        "HttpEntity«Resource_2«Pet»»": {
+        "HttpEntity«Resource«Pet»»": {
             "description": "",
-            "id": "HttpEntity«Resource_2«Pet»»",
+            "id": "HttpEntity«Resource«Pet»»",
             "properties": {
                 "body": {
                     "required": false,
-                    "type": "Resource_2«Pet»"
+                    "type": "Resource«Pet»_1"
                 }
             }
         },
-        "Link_2": {
+        "Link_1": {
             "description": "",
-            "id": "Link_2",
+            "id": "Link_1",
             "properties": {
                 "deprecation": {
                     "required": false,
@@ -232,9 +232,9 @@
                 }
             }
         },
-        "Link_1": {
+        "Link": {
             "description": "",
-            "id": "Link_1",
+            "id": "Link",
             "properties": {
                 "deprecation": {
                     "required": false,
@@ -270,9 +270,9 @@
                 }
             }
         },
-        "Resource_3«Pet»": {
+        "Resource«Pet»_1": {
             "description": "",
-            "id": "Resource_3«Pet»",
+            "id": "Resource«Pet»_1",
             "properties": {
                 "age": {
                     "required": false,
@@ -286,7 +286,7 @@
                 "links": {
                     "required": false,
                     "items": {
-                        "type": "Link_2"
+                        "type": "Link"
                     },
                     "type": "array"
                 },

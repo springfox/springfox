@@ -248,7 +248,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry_4«string,Pet»]",
+                            "type": "List[Entry«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -276,7 +276,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry_4«string,Pet»]"
+                    "type": "List[Entry«string,Pet»]"
                 }
             ],
             "path": "/pets/echo"
@@ -587,7 +587,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry_11«string,List«string»»]"
+                    "type": "List[Entry«string,List«string»»]"
                 }
             ],
             "path": "/pets/nameToNickNamesMap"
@@ -680,7 +680,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry_4«string,Pet»]",
+                            "type": "List[Entry«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -732,7 +732,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry_4«string,Pet»]",
+                            "type": "List[Entry«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -784,7 +784,7 @@
                             "description": "someInput",
                             "name": "body",
                             "paramType": "body",
-                            "type": "List[Entry_4«string,Pet»]",
+                            "type": "List[Entry«string,Pet»]",
                             "required": true
                         }
                     ],
@@ -1095,9 +1095,9 @@
         
     ],
     "models": {
-        "Entry_11«string,List«string»»": {
+        "Entry«string,List«string»»": {
             "description": "",
-            "id": "Entry_11«string,List«string»»",
+            "id": "Entry«string,List«string»»",
             "properties": {
                 "key": {
                     "required": false,
@@ -1127,9 +1127,9 @@
                 }
             }
         },
-        "Entry_4«string,Pet»": {
+        "Entry«string,Pet»": {
             "description": "",
-            "id": "Entry_4«string,Pet»",
+            "id": "Entry«string,Pet»",
             "properties": {
                 "key": {
                     "required": false,

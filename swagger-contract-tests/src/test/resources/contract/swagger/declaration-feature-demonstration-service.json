@@ -1605,7 +1605,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "List[Entry_7«string,Map«string,Example»»]"
+                    "type": "List[Entry«string,Map«string,Example»»]"
                 }
             ],
             "path": "/features/mapOfMapOfExample"
@@ -1960,12 +1960,13 @@
         }
     ],
     "basePath": "/",
-    "consumes": [
+    "consumes":[
         
     ],
     "models": {
         "ModelWithMapProperty": {
             "description": "Describes model with map property",
+            "discriminator": "Describes model with map property",
             "id": "ModelWithMapProperty",
             "properties": {
                 "params": {
@@ -1982,9 +1983,9 @@
                 
             }
         },
-        "Entry_5«string,Example»": {
+        "Entry«string,Example»": {
             "description": "",
-            "id": "Entry_5«string,Example»",
+            "id": "Entry«string,Example»",
             "properties": {
                 "key": {
                     "required": false,
@@ -2011,13 +2012,13 @@
                 }
             }
         },
-        "Entry_7«string,Map«string,Example»»": {
+        "Entry«string,Map«string,Example»»": {
             "description": "",
-            "id": "Entry_7«string,Map«string,Example»»",
+            "id": "Entry«string,Map«string,Example»»",
             "properties": {
                 "key": {
                     "required": false,
-                    "type": "List[Entry_5«string,Example»]"
+                    "type": "List[Entry«string,Example»]"
                 }
             }
         },
@@ -2033,7 +2034,6 @@
         },
         "Vehicle": {
             "description": "",
-            "discriminator": "type",
             "id": "Vehicle",
             "properties": {
                 "make": {
@@ -2046,6 +2046,8 @@
                 }
             },
             "subTypes": [
+                "Car",
+                "Truck",
                 "Car",
                 "Truck"
             ]

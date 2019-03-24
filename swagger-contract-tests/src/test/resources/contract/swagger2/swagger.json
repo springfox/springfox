@@ -63,7 +63,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet_2"
+                            "$ref": "#/definitions/Pet_1"
                         }
                     }
                 ],
@@ -108,7 +108,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet_2"
+                            "$ref": "#/definitions/Pet_1"
                         }
                     }
                 ],
@@ -174,7 +174,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet_1"
+                                "$ref": "#/definitions/Pet_2"
                             }
                         }
                     },
@@ -221,7 +221,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet_1"
+                                "$ref": "#/definitions/Pet_2"
                             }
                         }
                     },
@@ -267,7 +267,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet_1"
+                            "$ref": "#/definitions/Pet_2"
                         }
                     },
                     "400": {
@@ -493,7 +493,7 @@
                         "description": "Created user object",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/User_2"
+                            "$ref": "#/definitions/User_1"
                         }
                     }
                 ],
@@ -501,7 +501,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User_1"
+                            "$ref": "#/definitions/User"
                         }
                     }
                 },
@@ -530,7 +530,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User_2"
+                                "$ref": "#/definitions/User"
                             }
                         }
                     }
@@ -539,7 +539,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User_1"
+                            "$ref": "#/definitions/User"
                         }
                     }
                 },
@@ -568,7 +568,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User_2"
+                                "$ref": "#/definitions/User"
                             }
                         }
                     }
@@ -670,7 +670,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User_1"
+                            "$ref": "#/definitions/User"
                         }
                     },
                     "400": {
@@ -832,7 +832,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet_3"
+                            "$ref": "#/definitions/Pet"
                         }
                     }
                 },
@@ -857,20 +857,7 @@
         }
     },
     "definitions": {
-        "Category_1": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "Category_1"
-        },
-        "Category_2": {
+        "Category": {
             "type": "object",
             "required": [
                 "id"
@@ -884,7 +871,20 @@
                     "type": "string"
                 }
             },
-            "title": "Category_2"
+            "title": "Category"
+        },
+        "Category_1": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Category_1"
         },
         "Order": {
             "type": "object",
@@ -924,7 +924,60 @@
             },
             "title": "Order"
         },
+        "Pet": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "Pet"
+        },
         "Pet_1": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/Category"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photoUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "description": "pet status in the store",
+                    "enum": [
+                        "available",
+                        "pending",
+                        "sold"
+                    ]
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    }
+                }
+            },
+            "title": "Pet_1"
+        },
+        "Pet_2": {
             "type": "object",
             "properties": {
                 "category": {
@@ -963,60 +1016,7 @@
                     }
                 }
             },
-            "title": "Pet_1"
-        },
-        "Pet_2": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "$ref": "#/definitions/Category_2"
-                },
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "photoUrls": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "status": {
-                    "type": "string",
-                    "description": "pet status in the store",
-                    "enum": [
-                        "available",
-                        "pending",
-                        "sold"
-                    ]
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Tag"
-                    }
-                }
-            },
             "title": "Pet_2"
-        },
-        "Pet_3": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "Pet_3"
         },
         "Tag": {
             "type": "object",
@@ -1031,7 +1031,7 @@
             },
             "title": "Tag"
         },
-        "User_1": {
+        "User": {
             "type": "object",
             "properties": {
                 "email": {
@@ -1065,9 +1065,9 @@
                     "type": "string"
                 }
             },
-            "title": "User_1"
+            "title": "User"
         },
-        "User_2": {
+        "User_1": {
             "type": "object",
             "properties": {
                 "email": {
@@ -1098,7 +1098,7 @@
                     "type": "string"
                 }
             },
-            "title": "User_2"
+            "title": "User_1"
         }
     }
 }

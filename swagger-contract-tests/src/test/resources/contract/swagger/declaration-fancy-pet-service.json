@@ -185,7 +185,7 @@
                 "categories": {
                     "required": false,
                     "items": {
-                        "type": "Category_3"
+                        "type": "Category_1"
                     },
                     "type": "array"
                 },
@@ -199,9 +199,9 @@
                 }
             }
         },
-        "Category_3": {
+        "Category_1": {
             "description": "",
-            "id": "Category_3",
+            "id": "Category_1",
             "properties": {
                 "name": {
                     "required": false,

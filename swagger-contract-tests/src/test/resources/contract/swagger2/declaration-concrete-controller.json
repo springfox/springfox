@@ -43,7 +43,7 @@
                         "description": "toCreate",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Resource_2«Pet»"
+                            "$ref": "#/definitions/Resource«Pet»"
                         }
                     }
                 ],
@@ -75,7 +75,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/HttpEntity«Resource_1«Pet»»"
+                            "$ref": "#/definitions/HttpEntity«Resource«Pet»»"
                         }
                     },
                     "405": {
@@ -105,7 +105,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Resource_1«Pet»"
+                            "$ref": "#/definitions/Resource«Pet»_1"
                         }
                     },
                     "405": {
@@ -133,14 +133,14 @@
         }
     },
     "definitions": {
-        "HttpEntity«Resource_1«Pet»»": {
+        "HttpEntity«Resource«Pet»»": {
             "type": "object",
             "properties": {
                 "body": {
-                    "$ref": "#/definitions/Resource_1«Pet»"
+                    "$ref": "#/definitions/Resource«Pet»_1"
                 }
             },
-            "title": "HttpEntity«Resource_1«Pet»»"
+            "title": "HttpEntity«Resource«Pet»»"
         },
         "Link_1": {
             "type": "object",
@@ -213,7 +213,7 @@
                 "wrapped": false
             }
         },
-        "Link_2": {
+        "Link": {
             "type": "object",
             "properties": {
                 "deprecation": {
@@ -273,7 +273,7 @@
                     }
                 }
             },
-            "title": "Link_2",
+            "title": "Link",
             "xml": {
                 "name": "link",
                 "namespace": "http://www.w3.org/2005/Atom",
@@ -297,7 +297,7 @@
             },
             "title": "Pet"
         },
-        "Resource_1«Pet»": {
+        "Resource«Pet»_1": {
             "type": "object",
             "properties": {
                 "age": {
@@ -323,14 +323,14 @@
                     "type": "string"
                 }
             },
-            "title": "Resource_1«Pet»",
+            "title": "Resource«Pet»_1",
             "xml": {
                 "name": "Resource«Pet»",
                 "attribute": false,
                 "wrapped": false
             }
         },
-        "Resource_2«Pet»": {
+        "Resource«Pet»": {
             "type": "object",
             "properties": {
                 "age": {
@@ -343,14 +343,14 @@
                 "links": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Link_2"
+                        "$ref": "#/definitions/Link"
                     }
                 },
                 "name": {
                     "type": "string"
                 }
             },
-            "title": "Resource_2«Pet»",
+            "title": "Resource«Pet»",
             "xml": {
                 "name": "Resource«Pet»",
                 "attribute": false,
