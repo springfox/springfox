@@ -19,84 +19,81 @@
 
 package springfox.documentation.schema;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 
 import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
+
+import static com.google.common.collect.Maps.newHashMap;
 
 public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
 
   private static final Logger LOG = LoggerFactory.getLogger(TypeNameIndexingAdapter.class);
 
-  private final Map<String, Map<String, String>> similarTypes = new HashMap<String, Map<String, String>>();
-  private final Map<String, String> modelIdCache = new HashMap<String, String>();
-  private final Map<String, String> links = new HashMap<String, String>();
+  private final Map<String, String> knownNames = newHashMap();
 
   @Override
-  public Map<String, String> getLinks() {
-    return Collections.unmodifiableMap(links);
+  public Map<String, String> getNames() {
+    return ImmutableMap.copyOf(knownNames);
   }
 
   @Override
-  public Map<String, String> getSimilarTypes(final String modelId) {
-    if (modelIdCache.containsKey(modelId)) {
-      return Collections.unmodifiableMap(similarTypes.get(modelIdCache.get(modelId)));
+  public Optional<String> getTypeName(String modelId) {
+    return Optional.fromNullable(knownNames.get(modelId));
+  }
+
+  private boolean checkTypeRegistration(String typeName, String modelId) {
+    if (knownNames.containsKey(modelId)) {
+      if (!knownNames.get(modelId).equals(typeName)) {
+        LOG.info("Rewriting type {} with model id: {} is not allowed, because it is already registered", typeName,
+            modelId);
+        throw new IllegalStateException("Model already registered with different name.");
+      } else {
+        return true;
+      }
     }
-    return new TreeMap<String, String>();
+
+    return false;
   }
 
   @Override
-  public Optional<String> getTypeName(final String modelId) {
-    return Optional.fromNullable(modelIdCache.get(modelId));
-  }
-
-  @Override
-  public void registerType(final String typeName, final String modelId, final String sortingKey) {
-    //CHECKSTYLE:OFF
-    System.out.println("Sort key: " + sortingKey);
-    //CHECKSTYLE:ON
-    if (modelIdCache.containsKey(modelId)) {
-      LOG.debug("Rewriting type {} with model id: {}, because it is already registered", 
-          typeName, 
-          modelId);
-      similarTypes.get(modelIdCache.get(modelId)).remove(modelId);
-    }
-    if (similarTypes.containsKey(typeName)) {
-      similarTypes.get(typeName).put(modelId, sortingKey);
-    } else {
-      Map<String, String> typeRegistration = new TreeMap<String, String>();
-      typeRegistration.put(modelId, sortingKey);
-      similarTypes.put(typeName, typeRegistration);
-    }
-    modelIdCache.put(modelId, typeName);
-  }
-
-  @Override
-  public void setEqualityFor(final String modelIdOf, final String modelIdTo) {
-    if (!modelIdCache.containsKey(modelIdOf) ||
-        !modelIdCache.containsKey(modelIdTo)) {
+  public void registerType(String typeName, String modelId) {
+    if (checkTypeRegistration(typeName, modelId)) {
       return;
     }
-    String id1 = getOriginal(modelIdOf);
-    String id2 = getOriginal(modelIdTo);
-    if (id1.equals(id2)) {
-      return;
-    }
-    links.put(id1.compareTo(id2) < 0 ? id1 : id2, id1.compareTo(id2) < 0 ? id2 : id1);
+    knownNames.put(modelId, typeName);
   }
 
-  private String getOriginal(final String modelId) {
-    String originalId = modelId;
-    while (links.containsKey(originalId)) {
-      originalId = links.get(originalId);
+  @Override
+  public void registerUniqueType(String typeName, String modelId) {
+    if (checkTypeRegistration(typeName, modelId)) {
+      return;
     }
-    return originalId;
+    Integer nameIndex = 0;
+    String tempName = typeName;
+    while (knownNames.values().contains(tempName)) {
+      ++nameIndex;
+      tempName = String.format("%s_%s", typeName, nameIndex);
+    }
+    knownNames.put(modelId, tempName);
   }
+
+  @Override
+  public void setEqualityFor(String modelIdOf, String modelIdTo) {
+    if (!knownNames.containsKey(modelIdTo)) {
+      LOG.warn("Model with model id: {} was not found, because it is not registered", modelIdTo);
+      throw new IllegalStateException("Model was not found");
+    }
+    if (knownNames.containsKey(modelIdOf) && !knownNames.get(modelIdOf).equals(knownNames.get(modelIdTo))) {
+      LOG.warn("Model with model id: {} already has equality to other model", modelIdTo);
+      throw new IllegalStateException("Model already has equality to other model");
+    }
+    knownNames.put(modelIdOf, knownNames.get(modelIdTo));
+  }
+
 }

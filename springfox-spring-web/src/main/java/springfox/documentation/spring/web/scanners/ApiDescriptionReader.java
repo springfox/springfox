@@ -65,7 +65,8 @@ public class ApiDescriptionReader {
     for (String path : matchingPaths(selector, patternsCondition)) {
       String methodName = outerContext.getName();
       try {
-        RequestMappingContext operationContext = outerContext.copyPatternUsing(path);
+        RequestMappingContext operationContext = outerContext.copyPatternUsing(path)
+            .withKnownModels(outerContext.getModelMap());
 
         List<Operation> operations = operationReader.read(operationContext);
         if (operations.size() > 0) {

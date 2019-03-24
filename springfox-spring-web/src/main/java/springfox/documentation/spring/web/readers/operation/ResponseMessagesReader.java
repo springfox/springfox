@@ -20,6 +20,8 @@ package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -27,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
@@ -36,7 +39,11 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import static com.google.common.collect.Sets.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
@@ -74,20 +81,25 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     String message = message(context);
     ModelReference modelRef = null;
     if (!isVoid(returnType)) {
-      ModelContext modelContext = ModelContext.withAdjustedTypeName(
-          context.operationModelsBuilder().addReturn(
-              returnType,
-              Optional.<ResolvedType>absent()));
-      modelRef = modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor).apply(returnType);
+      ModelContext modelContext = context.operationModelsBuilder().addReturn(returnType,
+          Optional.<ResolvedType>absent());
+
+      final Map<String, String> knownNames = new HashMap<String, String>();
+      FluentIterable.from(
+          Optional.fromNullable(context.getKnownModels().get(modelContext.getParameterId())).or(new HashSet<Model>()))
+          .forEach(new Consumer<Model>() {
+            @Override
+            public void accept(Model model) {
+              knownNames.put(model.getId(), model.getName());
+            }
+          });
+
+      modelRef = modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor, knownNames).apply(returnType);
     }
-    ResponseMessage built = new ResponseMessageBuilder()
-        .code(httpStatusCode)
-        .message(message)
-        .responseModel(modelRef)
+    ResponseMessage built = new ResponseMessageBuilder().code(httpStatusCode).message(message).responseModel(modelRef)
         .build();
     context.operationBuilder().responseMessages(newHashSet(built));
   }
-
 
   public static int httpStatusCode(OperationContext context) {
     Optional<ResponseStatus> responseStatus = context.findAnnotation(ResponseStatus.class);

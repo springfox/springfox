@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.operation;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import springfox.documentation.schema.Model;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -38,6 +41,11 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
@@ -68,15 +76,26 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
       return;
     }
 
-    ModelContext modelContext = ModelContext.withAdjustedTypeName(context.operationModelsBuilder().addReturn(
+    ModelContext modelContext = context.operationModelsBuilder().addReturn(
         returnType,
-        Optional.<ResolvedType>absent()));
+        Optional.<ResolvedType>absent());
 
-    String responseTypeName = nameExtractor.typeName(modelContext);
+    final Map<String, String> knownNames = new HashMap<String, String>();
+    FluentIterable.from(
+        Optional.fromNullable(context.getKnownModels().get(modelContext.getParameterId())).or(new HashSet<Model>()))
+        .forEach(new Consumer<Model>() {
+          @Override
+          public void accept(Model model) {
+            knownNames.put(model.getId(), model.getName());
+          }
+        });
+
+    String responseTypeName = nameExtractor.typeName(modelContext, knownNames);
     log.debug("Setting response class to:" + responseTypeName);
 
     context.operationBuilder()
-            .responseModel(modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor).apply(returnType));
+            .responseModel(
+                modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor, knownNames).apply(returnType));
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {

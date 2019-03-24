@@ -26,37 +26,41 @@ import springfox.documentation.service.AllowableValues;
 
 public class ModelRef implements ModelReference {
   private final String type;
+  private final Optional<String> typeSignature;
   private final boolean isMap;
   private final Optional<ModelReference> itemModel;
   private final Optional<AllowableValues> allowableValues;
   private final Optional<String> modelId;
 
   public ModelRef(String type) {
-    this(type, null, null, null);
+    this(type, null, null, null, null);
   }
 
   public ModelRef(String type, ModelReference itemType) {
     this(type, itemType, false);
   }
 
-  public ModelRef(String type, ModelReference itemType, AllowableValues allowableValues, Optional<String> modelId) {
-    this(type, itemType, allowableValues, false, modelId);
+  public ModelRef(String type, String typeSignature, ModelReference itemType, AllowableValues allowableValues,
+      String modelId) {
+    this(type, typeSignature, itemType, allowableValues, false, modelId);
   }
 
   public ModelRef(String type, AllowableValues allowableValues) {
-    this(type, null, allowableValues, null);
+    this(type, null, null, allowableValues, null);
   }
 
   public ModelRef(String type, ModelReference itemType, boolean isMap) {
-    this(type, itemType, null, isMap, null);
+    this(type, null, itemType, null, isMap, null);
   }
 
-  public ModelRef(String type, ModelReference itemModel, AllowableValues allowableValues, boolean isMap, Optional<String> modelId) {
+  public ModelRef(String type, String typeSignature, ModelReference itemModel, AllowableValues allowableValues,
+      boolean isMap, String modelId) {
     this.type = type;
+    this.typeSignature = Optional.fromNullable(typeSignature);
     this.isMap = isMap;
     this.allowableValues = Optional.fromNullable(allowableValues);
     this.itemModel = Optional.fromNullable(itemModel);
-    this.modelId = modelId;
+    this.modelId = Optional.fromNullable(modelId);
   }
 
   @Override
@@ -65,18 +69,18 @@ public class ModelRef implements ModelReference {
   }
 
   @Override
+  public Optional<String> getTypeSignature() {
+    return typeSignature;
+  }
+
+  @Override
   public boolean isCollection() {
     return itemModel.isPresent() && !isMap;
   }
 
   @Override
-  public boolean isMap(){
+  public boolean isMap() {
     return itemModel.isPresent() && isMap;
-  }
-
-  @Override
-  public boolean isCyclic() {
-    return false;
   }
 
   @Override
@@ -110,7 +114,7 @@ public class ModelRef implements ModelReference {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(type, isMap, itemModel, allowableValues, modelId);
+    return Objects.hashCode(type, typeSignature, isMap, itemModel, allowableValues, modelId.isPresent());
   }
 
   @Override
@@ -125,11 +129,9 @@ public class ModelRef implements ModelReference {
 
     ModelRef that = (ModelRef) o;
 
-    return Objects.equal(type, that.type) &&
-        Objects.equal(isMap, that.isMap) &&
-        Objects.equal(itemModel, that.itemModel) &&
-        Objects.equal(allowableValues, that.allowableValues) &&
-        Objects.equal(modelId, that.modelId);
-    }
+    return Objects.equal(type, that.type) && Objects.equal(typeSignature, that.typeSignature)
+        && Objects.equal(isMap, that.isMap) && Objects.equal(itemModel, that.itemModel)
+        && Objects.equal(allowableValues, that.allowableValues) && modelId.isPresent() == that.modelId.isPresent();
+  }
 
 }

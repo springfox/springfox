@@ -25,6 +25,7 @@ import com.google.common.base.Objects;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.*;
@@ -175,7 +176,7 @@ public class ModelProperty {
         pattern,
         defaultValue,
         xml,
-        vendorExtensions);
+        Collections.unmodifiableList(vendorExtensions));
   }
 
   @Override

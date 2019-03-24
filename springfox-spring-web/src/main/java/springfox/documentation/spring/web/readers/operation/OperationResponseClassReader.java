@@ -19,6 +19,8 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import springfox.documentation.schema.Model;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.spi.DocumentationType;
@@ -37,6 +40,11 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -63,14 +71,25 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
     ViewProviderPlugin viewProvider = 
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
-    ModelContext modelContext = ModelContext.withAdjustedTypeName(context.operationModelsBuilder().addReturn(
+    ModelContext modelContext = context.operationModelsBuilder().addReturn(
         returnType,
-        viewProvider.viewFor(returnType, context)));
+        viewProvider.viewFor(returnType, context));
+
+    final Map<String, String> knownNames = new HashMap<String, String>();
+    FluentIterable.from(
+        Optional.fromNullable(context.getKnownModels().get(modelContext.getParameterId())).or(new HashSet<Model>()))
+        .forEach(new Consumer<Model>() {
+          @Override
+          public void accept(Model model) {
+            knownNames.put(model.getId(), model.getName());
+          }
+        });
 
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to: {}", responseTypeName);
 
-    context.operationBuilder().responseModel(modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor).apply(returnType));
+    context.operationBuilder().responseModel(
+        modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor, knownNames).apply(returnType));
   }
 
   @Override

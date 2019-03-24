@@ -80,7 +80,7 @@ public class ModelContext {
     this.view = view;
     this.validationGroups = copyOf(validationGroups);
     this.modelBuilder =
-        new ModelBuilder(String.format("%s_%s", parameterId, type.getSignature()));
+        new ModelBuilder(String.format("%s_%s", parameterId, type.getBriefDescription()));
   }
 
   private ModelContext(ModelContext parentContext, ResolvedType input) {
@@ -97,7 +97,7 @@ public class ModelContext {
     this.registeredTypes = parentContext.registeredTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
     this.modelBuilder =
-        new ModelBuilder(String.format("%s_%s", parameterId, input.getSignature()));
+        new ModelBuilder(String.format("%s_%s", parameterId, input.getBriefDescription()));
   }
 
   /**
@@ -108,10 +108,17 @@ public class ModelContext {
   }
   
   /**
+   * @return parameter id behind this context
+   */
+  public String getParameterId() {
+    return parameterId;
+  }
+  
+  /**
    * @return type id behind this context
    */
   public String getTypeId() {
-    return modelBuilder.build().getId();
+    return String.format("%s_%s", parameterId, type.getBriefDescription());
   }
 
   /**
@@ -289,41 +296,7 @@ public class ModelContext {
   public void seen(ResolvedType resolvedType) {
     seenTypes.add(resolvedType);
   }
- /* 
-  public String getSignature() throws NoSuchAlgorithmException {
-
-    MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-
-    messageDigest.update(new StringBuilder("[")
-      .append(type.getSignature())
-      .append("][")
-      .append(returnType)
-      .append("][")
-      .append(view.isPresent()?view.get().getSignature():"")
-      .append("][")
-      .append(groupName)
-      .append("][")
-      .append(
-        Joiner.on("|").join(
-          new TreeSet<String>(
-            FluentIterable.from(validationGroups).transform(
-              new Function<ResolvedType, String>() {
-                @Override
-                public String apply(ResolvedType input) {
-                  return input.getSignature();
-                }
-              })
-             .toSet())))
-      .append("][")
-      .append(documentationType.toString())
-      .append("][")
-      .append(namingStrategy())
-      .append("]")
-      .toString().getBytes());
-    
-    return new String(messageDigest.digest());
-  }
-*/
+ 
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -337,6 +310,7 @@ public class ModelContext {
     ModelContext that = (ModelContext) o;
 
     return
+        Objects.equal(parameterId, that.parameterId) &&
         Objects.equal(groupName, that.groupName) &&
         Objects.equal(type, that.type) &&
         Objects.equal(view, that.view) &&
@@ -357,6 +331,7 @@ public class ModelContext {
   @Override
   public int hashCode() {
     return Objects.hashCode(
+        parameterId,
         groupName,
         type,
         view,

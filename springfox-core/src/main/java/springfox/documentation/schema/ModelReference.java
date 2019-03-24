@@ -26,17 +26,17 @@ public interface ModelReference {
 
   String getType();
 
+  Optional<String> getTypeSignature();
+
   boolean isCollection();
 
   boolean isMap();
-  
-  boolean isCyclic();
 
   String getItemType();
 
   AllowableValues getAllowableValues();
 
   Optional<ModelReference> itemModel();
-  
+
   Optional<String> getModelId();
 }

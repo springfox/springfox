@@ -20,6 +20,7 @@ package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
@@ -28,10 +29,11 @@ import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
+import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Sets.*;
 
 public class OperationModelContextsBuilder {
@@ -41,7 +43,7 @@ public class OperationModelContextsBuilder {
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
   private final ImmutableSet<Class> ignorableTypes;
-  private final Set<ModelContext> contexts = newHashSet();
+  private final Set<ModelContext> contexts = newLinkedHashSet();
   
   private int parameterIndex = 0; 
 
@@ -65,25 +67,25 @@ public class OperationModelContextsBuilder {
   }
 
   public ModelContext addReturn(ResolvedType type, Optional<ResolvedType> view) {
-    String nextParameterId = String.format("%s_%s", requestMappingId, parameterIndex + 1);
-    ModelContext returnValue = ModelContext.returnValue(
-        nextParameterId,
-        group,
-        type,
-        view,
-        documentationType,
-        alternateTypeProvider,
-        genericsNamingStrategy,
-        ignorableTypes);
-    
-    if (this.contexts.add(returnValue)) {
+    Optional<ModelContext> context = 
+        from(contexts).filter(sameContext(type, view, new HashSet<ResolvedType>(), true)).first();
+
+    if (context.isPresent()) {
+      return context.get();
+    } else {
+      ModelContext returnValue = ModelContext.returnValue(
+          String.format("%s_%s", requestMappingId, parameterIndex),
+          group,
+          type,
+          view,
+          documentationType,
+          alternateTypeProvider,
+          genericsNamingStrategy,
+          ignorableTypes);
+      this.contexts.add(returnValue);
       ++parameterIndex;
       return returnValue;
     }
-    
-    List<ModelContext> contexts = new ArrayList<ModelContext>(this.contexts);
-    
-    return contexts.get(contexts.indexOf(returnValue));
   }
 
   public ModelContext addInputParam(ResolvedType type) {
@@ -91,28 +93,41 @@ public class OperationModelContextsBuilder {
   }
   
   public ModelContext addInputParam(ResolvedType type, Optional<ResolvedType> view, Set<ResolvedType> validationGroups) {
-    String nextParameterId = String.format("%s_%s", requestMappingId, parameterIndex + 1);
-    ModelContext inputParam = ModelContext.inputParam(
-        nextParameterId,
-        group,
-        type,
-        view,
-        validationGroups,
-        documentationType,
-        alternateTypeProvider,
-        genericsNamingStrategy,
-        ignorableTypes);
-    if (this.contexts.add(inputParam)) {
+    validationGroups = newHashSet(validationGroups);
+    Optional<ModelContext> context = from(contexts).filter(sameContext(type, view, validationGroups, false)).first();
+
+    if (context.isPresent()) {
+      return context.get();
+    } else {
+      ModelContext inputParam = ModelContext.inputParam(
+          String.format("%s_%s", requestMappingId, parameterIndex),
+          group,
+          type,
+          view,
+          validationGroups,
+          documentationType,
+          alternateTypeProvider,
+          genericsNamingStrategy,
+          ignorableTypes);
+      this.contexts.add(inputParam);
       ++parameterIndex;
       return inputParam;
     }
-    
-    List<ModelContext> contexts = new ArrayList<ModelContext>(this.contexts);
-    
-    return contexts.get(contexts.indexOf(inputParam));
   }
 
   public Set<ModelContext> build() {
-    return ImmutableSet.copyOf(contexts);
+    return Collections.unmodifiableSet(contexts);
   }
+
+  private Predicate<? super ModelContext> sameContext(final ResolvedType type, final Optional<ResolvedType> view,
+      final Set<ResolvedType> validationGroups, final boolean isReturnType) {
+    return new Predicate<ModelContext>() {
+      @Override
+      public boolean apply(ModelContext context) {
+        return context.getType().equals(type) && context.getView().equals(view)
+            && context.getValidationGroups().equals(validationGroups) && context.isReturnType() == isReturnType;
+      }
+    };
+  }
+
 }

@@ -50,31 +50,21 @@ public class RequestMappingContext {
   private final String requestMappingPattern;
   private final ApiDescriptionBuilder apiDescriptionBuilder;
 
-  private final Map<String, Model> modelMap = newHashMap();
+  private final Map<String, Set<Model>> modelMap = newHashMap();
 
-  public RequestMappingContext(
-      String requestMappingId,
-      DocumentationContext context,
-      RequestHandler handler) {
+  public RequestMappingContext(String requestMappingId, DocumentationContext context, RequestHandler handler) {
 
     this.documentationContext = context;
     this.handler = handler;
     this.requestMappingPattern = "";
-    this.operationModelContextsBuilder = new OperationModelContextsBuilder(
-        context.getGroupName(),
-        context.getDocumentationType(),
-        requestMappingId,
-        context.getAlternateTypeProvider(),
-        context.getGenericsNamingStrategy(),
-        context.getIgnorableParameterTypes());
+    this.operationModelContextsBuilder = new OperationModelContextsBuilder(context.getGroupName(),
+        context.getDocumentationType(), requestMappingId, context.getAlternateTypeProvider(),
+        context.getGenericsNamingStrategy(), context.getIgnorableParameterTypes());
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
-  private RequestMappingContext(
-      DocumentationContext context,
-      RequestHandler handler,
-      OperationModelContextsBuilder operationModelContextsBuilder,
-      String requestMappingPattern) {
+  private RequestMappingContext(DocumentationContext context, RequestHandler handler,
+      OperationModelContextsBuilder operationModelContextsBuilder, String requestMappingPattern) {
 
     this.documentationContext = context;
     this.handler = handler;
@@ -83,12 +73,9 @@ public class RequestMappingContext {
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
-  private RequestMappingContext(
-      DocumentationContext context,
-      RequestHandler handler,
-      OperationModelContextsBuilder operationModelContextsBuilder,
-      String requestMappingPattern,
-      Map<String, Model> knownModels) {
+  private RequestMappingContext(DocumentationContext context, RequestHandler handler,
+      OperationModelContextsBuilder operationModelContextsBuilder, String requestMappingPattern,
+      Map<String, Set<Model>> knownModels) {
 
     this.documentationContext = context;
     this.handler = handler;
@@ -106,7 +93,7 @@ public class RequestMappingContext {
     return requestMappingPattern;
   }
 
-  public ImmutableMap<String, Model> getModelMap() {
+  public ImmutableMap<String, Set<Model>> getModelMap() {
     return ImmutableMap.copyOf(modelMap);
   }
 
@@ -127,13 +114,13 @@ public class RequestMappingContext {
   }
 
   public RequestMappingContext copyPatternUsing(String requestMappingPattern) {
-    return new RequestMappingContext(documentationContext, handler,
-        operationModelContextsBuilder, requestMappingPattern);
+    return new RequestMappingContext(documentationContext, handler, operationModelContextsBuilder,
+        requestMappingPattern);
   }
 
-  public RequestMappingContext withKnownModels(Map<String, Model> knownModels) {
-    return new RequestMappingContext(documentationContext, handler,
-        operationModelContextsBuilder, requestMappingPattern, knownModels);
+  public RequestMappingContext withKnownModels(Map<String, Set<Model>> knownModels) {
+    return new RequestMappingContext(documentationContext, handler, operationModelContextsBuilder,
+        requestMappingPattern, knownModels);
   }
 
   public ImmutableSet<Class> getIgnorableParameterTypes() {
@@ -208,7 +195,6 @@ public class RequestMappingContext {
   public ResolvedType getReturnType() {
     return handler.getReturnType();
   }
-
 
   public RequestHandlerKey key() {
     return handler.key();

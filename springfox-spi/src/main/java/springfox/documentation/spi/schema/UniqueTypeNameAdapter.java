@@ -26,37 +26,48 @@ import com.google.common.base.Optional;
 public interface UniqueTypeNameAdapter {
 
   /**
-   * Provides information about models equality
-   * @return a map with Models id
+   * Provides information about model names
+   * 
+   * @return a map with Models id and name
    */
-  Map<String, String> getLinks();
-
-  /**
-   * Provides information about models with same types name
-   * @param modelId - id of model
-   * @return a map with Models id and sroting key
-   */
-  Map<String, String> getSimilarTypes(final String modelId);
+  Map<String, String> getNames();
 
   /**
    * Returns type for the model
-   * @param modelId - id of model
-   * @return a set with Models id
+   * 
+   * @param modelId
+   *          - id of model
+   * @return Optional of a model names
    */
   Optional<String> getTypeName(String modelId);
 
   /**
-   * Register model name to keep it unique
-   * @param typeName - string representation of the models name
-   * @param modelId - id of model
-   * @param sortingKey - sorting key of model
+   * Add model name as is without adjusting
+   * 
+   * @param typeName
+   *          - string representation of the models name
+   * @param modelId
+   *          - id of model
    */
-  void registerType(String typeName, String modelId, String sortingKey);
+  void registerType(String typeName, String modelId);
+
+  /**
+   * Register model name to keep it unique
+   * 
+   * @param typeName
+   *          - string representation of the models name
+   * @param modelId
+   *          - id of model
+   */
+  void registerUniqueType(String typeName, String modelId);
 
   /**
    * Sets equality of two models to make sure, that models will be treated as one
-   * @param modelIdOf - id of the first model
-   * @param modelIdTo - id of the second model
+   * 
+   * @param modelIdOf
+   *          - id of the current model
+   * @param modelIdTo
+   *          - id of the existing model
    */
   void setEqualityFor(String modelIdOf, String modelIdTo);
 

@@ -29,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.condition.NameValueExpression;
 import springfox.documentation.builders.OperationBuilder;
+import springfox.documentation.schema.Model;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.service.ResponseMessage;
@@ -38,6 +39,7 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Lists.*;
@@ -109,6 +111,10 @@ public class OperationContext {
   
   public OperationModelContextsBuilder operationModelsBuilder() {
     return requestContext.operationModelsBuilder();
+  }
+  
+  public Map<String, Set<Model>> getKnownModels() {
+    return requestContext.getModelMap();
   }
 
   public DocumentationType getDocumentationType() {

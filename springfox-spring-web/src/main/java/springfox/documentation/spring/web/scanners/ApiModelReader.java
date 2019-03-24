@@ -19,9 +19,14 @@
 
 package springfox.documentation.spring.web.scanners;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Ordering;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,30 +35,38 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import springfox.documentation.builders.ModelBuilder;
+import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelProvider;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
-import springfox.documentation.service.ResourceGroup;
+import springfox.documentation.schema.TypeNameIndexingAdapter;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Consumer;
 
 import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newTreeMap;
 import static com.google.common.collect.Sets.newHashSet;
 import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
 
 @Component
-public class ApiModelReader  {
+public class ApiModelReader {
   private static final Logger LOG = LoggerFactory.getLogger(ApiModelReader.class);
   private final ModelProvider modelProvider;
   private final TypeResolver typeResolver;
@@ -62,11 +75,9 @@ public class ApiModelReader  {
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ApiModelReader(@Qualifier("cachedModels") ModelProvider modelProvider,
-          TypeResolver typeResolver,
-          DocumentationPluginsManager pluginsManager,
-          EnumTypeDeterminer enumTypeDeterminer,
-          TypeNameExtractor typeNameExtractor) {
+  public ApiModelReader(@Qualifier("cachedModels") ModelProvider modelProvider, TypeResolver typeResolver,
+      DocumentationPluginsManager pluginsManager, EnumTypeDeterminer enumTypeDeterminer,
+      TypeNameExtractor typeNameExtractor) {
     this.modelProvider = modelProvider;
     this.typeResolver = typeResolver;
     this.pluginsManager = pluginsManager;
@@ -74,195 +85,476 @@ public class ApiModelReader  {
     this.typeNameExtractor = typeNameExtractor;
   }
 
-  public Map<ResourceGroup, Map<String, Model>> read(ApiListingScanningContext apiListingScanningContext) {
-    Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
-            = apiListingScanningContext.getRequestMappingsByResourceGroup();
+  @SuppressWarnings("rawtypes")
+  public Map<String, Set<Model>> read(RequestMappingContext context) {
+    Map<String, Set<Model>> mergedModelMap = newTreeMap();
+    final UniqueTypeNameAdapter adapter = new TypeNameIndexingAdapter();
 
-    Map<ResourceGroup, List<Model>> modelMap = newHashMap();
-    Map<String, ModelContext> contextMap = newHashMap();
-    for (ResourceGroup resourceGroup: requestMappingsByResourceGroup.keySet()) {
-      modelMap.put(resourceGroup, new ArrayList<Model>());
-      for (RequestMappingContext context: requestMappingsByResourceGroup.get(resourceGroup)) {
-        Set<Class> ignorableTypes = newHashSet(context.getIgnorableParameterTypes());
-        Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
-        for (ModelContext rootContext : modelContexts) {
-          Map<String, Model> modelBranch = newHashMap();
-          markIgnorablesAsHasSeen(typeResolver, ignorableTypes, rootContext);
-          Optional<Model> pModel = modelProvider.modelFor(rootContext);
-          if (pModel.isPresent()) {
-            LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models",
-                pModel.get().getId(),
-                pModel.get().getName());
-            modelBranch.put(pModel.get().getId(), pModel.get());
-          } else {
-            LOG.debug("Did not find any parameter models for {}", rootContext.getType());
-          }
-          modelBranch.putAll(modelProvider.dependencies(rootContext));
-          for (String modelName: modelBranch.keySet()) {
-            ModelContext childContext = 
-                ModelContext.fromParent(rootContext, modelBranch.get(modelName).getType());
-            contextMap.put(String.valueOf(childContext.hashCode()), childContext);
-          }         
-          modelMap.get(resourceGroup)
-            .addAll(mergeModelBranch(toModelTypeMap(modelMap), modelBranch, contextMap));
-        }
+    Set<Class> ignorableTypes = context.getIgnorableParameterTypes();
+    Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
+
+    Map<String, Set<Model>> modelMap = newHashMap(context.getModelMap());
+    for (Set<Model> modelList : modelMap.values()) {
+      for (Model model : modelList) {
+        adapter.registerType(model.getName(), model.getId());
       }
     }
 
-    return updateTypeNames(modelMap, contextMap);
+    MergingContext mergingContext = populateTypes(modelMap, Optional.<MergingContext>absent());
+
+    for (ModelContext rootContext : modelContexts) {
+      Map<String, Model> modelBranch = newHashMap();
+      final Map<String, ModelContext> contextMap = newHashMap();
+      markIgnorablesAsHasSeen(typeResolver, ignorableTypes, rootContext);
+      Optional<Model> pModel = modelProvider.modelFor(rootContext);
+      List<String> branchRoots = new ArrayList<String>();
+      if (pModel.isPresent()) {
+        LOG.debug("Generated parameter model id: {}, name: {}, schema: {} models", pModel.get().getId(),
+            pModel.get().getName());
+        modelBranch.put(pModel.get().getId(), pModel.get());
+        contextMap.put(pModel.get().getId(), rootContext);
+        branchRoots.add(rootContext.getTypeId());
+      } else {
+        branchRoots = findBranchRoots(rootContext);
+        LOG.debug("Did not find any parameter models for {}", rootContext.getType());
+      }
+
+      Map<ResolvedType, Model> dependencies = modelProvider.dependencies(rootContext);
+      for (ResolvedType type : dependencies.keySet()) {
+        ModelContext childContext = ModelContext.fromParent(rootContext, type);
+        modelBranch.put(dependencies.get(type).getId(), dependencies.get(type));
+        contextMap.put(dependencies.get(type).getId(), childContext);
+      }
+
+      if (modelBranch.isEmpty()) {
+        continue;
+      }
+      mergingContext = mergingContext.withNewBranch(modelBranch, contextMap);
+      for (String rootId : branchRoots) {
+        if (modelBranch.containsKey(rootId)) {
+          mergeModelBranch(adapter, mergingContext.toRootId(rootId));
+        }
+      }
+
+      Map<String, Set<Model>> currentModelMap = new HashMap<String, Set<Model>>();
+      currentModelMap.put(rootContext.getParameterId(), updateModels(modelBranch.values(), contextMap, adapter));
+      mergingContext = populateTypes(currentModelMap, Optional.of(mergingContext));
+      mergedModelMap.putAll(currentModelMap);
+    }
+
+    return Collections.unmodifiableMap(mergedModelMap);
   }
 
-  private List<Model> mergeModelBranch(Map<String, List<Model>> modelTypeMap,
-          Map<String, Model> modelBranch,
-          Map<String, ModelContext> contextMap) {
-    Map<String, Model> modelsToCompare;
-    List<Model> newModels = new ArrayList<Model>();
-    while((modelsToCompare = modelsWithoutRefs(modelBranch)).size() > 0) {
-      Iterator<Map.Entry<String, Model>> it = modelsToCompare.entrySet().iterator();
-      outer: while (it.hasNext()) {
-        Map.Entry<String, Model> entry = it.next();
-        Model model_for = entry.getValue();
-        String modelForTypeName = model_for.getType().getErasedType().getName();
-        if (!modelTypeMap.containsKey(modelForTypeName)) {
-          continue outer;
+  private Set<ComparisonCondition> mergeModelBranch(UniqueTypeNameAdapter adapter, MergingContext mergingContext) {
+
+    Model rootModel = mergingContext.getRootModel();
+    final Set<String> nodes = newHashSet();
+    for (ModelReference modelReference : rootModel.getSubTypes()) {
+      Optional<String> modelId = getModelId(modelReference);
+
+      if (modelId.isPresent() && mergingContext.containsModel(modelId.get())) {
+        nodes.add(modelId.get());
+      }
+    }
+
+    final ModelContext rootModelContext = mergingContext.getModelContext(mergingContext.getRootId());
+    for (ResolvedType type : rootModel.getType().getTypeParameters()) {
+      String modelId = ModelContext.fromParent(rootModelContext, rootModelContext.alternateFor(type)).getTypeId();
+      if (mergingContext.containsModel(modelId)) {
+        nodes.add(modelId);
+      }
+    }
+
+    for (ModelProperty modelProperty : rootModel.getProperties().values()) {
+      Optional<String> modelId = getModelId(modelProperty.getModelRef());
+
+      if (modelId.isPresent() && mergingContext.containsModel(modelId.get())) {
+        nodes.add(modelId.get());
+      }
+    }
+
+    Optional<ComparisonCondition> currentComparisonCondition = Optional.absent();
+    Set<String> sameModels = newHashSet();
+    Set<Model> modelsToCompare = newHashSet();
+
+    if (!nodes.isEmpty()) {
+      mergingContext = mergeNodes(nodes, adapter, mergingContext);
+      modelsToCompare.addAll(buildModels(adapter, mergingContext));
+    } else {
+      modelsToCompare.add(rootModel);
+    }
+
+    for (Model modelFor : modelsToCompare) {
+      Optional<String> sameModel = findSameModels(modelFor, mergingContext);
+
+      if (sameModel.isPresent()) {
+        sameModels.add(sameModel.get());
+      }
+    }
+
+    if (!sameModels.isEmpty()) {
+      currentComparisonCondition = Optional
+          .of(new ComparisonCondition(mergingContext.getRootId(), sameModels, mergingContext.getDependencies()));
+    }
+
+    return mergeConditions(currentComparisonCondition, adapter, mergingContext);
+
+  }
+
+  private MergingContext mergeNodes(final Set<String> nodes, final UniqueTypeNameAdapter adapter,
+      final MergingContext mergingContext) {
+
+    boolean allowableToSearchTheSame = true;
+    final Map<String, Set<String>> comparisonConditions = newHashMap();
+    final Set<String> comparedParemeters = new HashSet<String>();
+
+    Set<ComparisonCondition> dependencies = newHashSet();
+    final Set<String> currentDependencies = new HashSet<String>();
+
+    for (final String modelId : nodes) {
+      if (adapter.getTypeName(modelId).isPresent()) {
+        continue;
+      }
+
+      if (!mergingContext.hasSeenBefore(modelId)) {
+        Set<ComparisonCondition> newDependencies = mergeModelBranch(adapter, mergingContext.toRootId(modelId));
+
+        if (newDependencies.isEmpty()) {
+          allowableToSearchTheSame = false;
+          continue;
         }
-        List<Model> models = modelTypeMap.get(modelForTypeName);
-        for (Model model_to : models) {
-          if (!model_for.getId().equals(model_to.getId())
-              && model_for.equalsIgnoringName(model_to)) {
-            it.remove();
-            //Putting back "correct" model to be present in the listing.
-            //Needs for Swagger 1.2 because it show listings separately,
-            //and doesn't merge all models in to one single map.
-            newModels.add(model_to);
-            ModelContext context_to = contextMap.get(model_to.getId());
-            context_to.assumeEqualsTo(contextMap.get(model_for.getId()));
-            modelBranch = adjustLinksFor(modelBranch, model_for.getId(), contextMap.get(model_to.getId()));
-            continue outer;
+
+        for (ComparisonCondition condition : newDependencies) {
+          checkCondition(condition, false);
+          if (!condition.getConditions().isEmpty()) {
+            dependencies.add(condition);
+            currentDependencies.addAll(condition.getConditions());
           }
         }
-      }
-      newModels.addAll(modelsToCompare.values());
-    }
-    newModels.addAll(modelBranch.values());
-    return newModels;
-  }
 
-  private Map<String, Model> modelsWithoutRefs(Map<String, Model> modelBranch) {
-    Map<String, Model> modelsWithoutRefs = newHashMap();
-    first: for (Map.Entry<String, Model> entry_model : modelBranch.entrySet()) {
-      Model model = entry_model.getValue();
-      if (!model.getSubTypes().isEmpty()) {
-        for (ModelReference modelReference: model.getSubTypes()) {
-          Optional<Integer> modelId = getModelId(modelReference);
-          if (modelId.isPresent() && 
-              modelBranch.containsKey(String.valueOf(modelId.get()))) {
-            continue first;
-          }
-        }
-      }
-      for (Map.Entry<String, ModelProperty> entry_property : 
-        model.getProperties().entrySet()) {
-        ModelProperty property = entry_property.getValue();
-        Optional<Integer> modelId = getModelId(property.getModelRef());
-        if (modelId.isPresent() && 
-            modelBranch.containsKey(String.valueOf(modelId.get()))) {
-          continue first;
-        }
-      }
-      modelsWithoutRefs.put(model.getId(), model);
-    }
-    modelBranch.keySet().removeAll(modelsWithoutRefs.keySet());
-    return modelsWithoutRefs;
-  }
+        ComparisonCondition currentCondition = currentCondition(modelId, newDependencies);
+        Set<String> parametersTo = FluentIterable.from(currentCondition.getModelsTo())
+            .transform(new Function<String, String>() {
+              public String apply(String modelId) {
+                return mergingContext.getModelParameter(modelId);
+              }
+            }).toSet();
 
-  private Map<String, List<Model>> toModelTypeMap(Map<ResourceGroup, List<Model>> modelMap) {
-    Map<String, List<Model>> modelTypeMap = newHashMap();
-    for(Map.Entry<ResourceGroup, List<Model>> entry : modelMap.entrySet()) {
-      for (Model model: entry.getValue()) {
-        String typeName = model.getType().getErasedType().getName();
-        if (modelTypeMap.containsKey(typeName)) {
-          modelTypeMap.get(typeName).add(model);
+        if (currentCondition.getConditions().isEmpty()) {
+          comparisonConditions.put(modelId, Collections.unmodifiableSet(parametersTo));
         } else {
-          modelTypeMap.put(typeName, new ArrayList<Model>(Arrays.asList(new Model[] {model})));
+          comparisonConditions.put(modelId, new HashSet<String>());
+
+          if (!allowableToSearchTheSame) {
+            continue;
+          }
+
+          if (comparedParemeters.isEmpty()) {
+            comparedParemeters.addAll(parametersTo);
+          } else {
+            comparedParemeters.retainAll(parametersTo);
+          }
+
+          if (comparedParemeters.isEmpty()) {
+            allowableToSearchTheSame = false;
+          }
+        }
+      } else {
+        currentDependencies.add(modelId);
+
+        if (!allowableToSearchTheSame) {
+          continue;
+        }
+
+        comparisonConditions.put(modelId, new HashSet<String>());
+        String modelForTypeName = mergingContext.getModel(modelId).getType().getErasedType().getName();
+        Set<Model> similarTypeModels = mergingContext.getSimilarTypeModels(modelForTypeName);
+        Set<String> candidateParameters = new HashSet<String>(
+            FluentIterable.from(similarTypeModels).transform(new Function<Model, String>() {
+              public String apply(Model model) {
+                return mergingContext.getModelParameter(model.getId());
+              }
+            }).toSet());
+
+        if (comparedParemeters.isEmpty()) {
+          comparedParemeters.addAll(candidateParameters);
+        } else {
+          comparedParemeters.retainAll(candidateParameters);
+        }
+
+        if (comparedParemeters.isEmpty()) {
+          allowableToSearchTheSame = false;
         }
       }
     }
-    return ImmutableMap.copyOf(modelTypeMap);
+
+    if (allowableToSearchTheSame) {
+      comparisonConditions.putAll(populateComparisonConditions(comparisonConditions, comparedParemeters));
+
+      dependencies = FluentIterable.from(dependencies)
+          .transform(new Function<ComparisonCondition, ComparisonCondition>() {
+            public ComparisonCondition apply(ComparisonCondition condition) {
+              HashSet<String> tempConditions = newHashSet(condition.getConditions());
+              tempConditions.remove(mergingContext.getRootId());
+              Set<String> modelsTo = FluentIterable.from(condition.getModelsTo()).filter(new Predicate<String>() {
+                public boolean apply(String modelId) {
+                  return comparedParemeters.contains(mergingContext.getModelParameter(modelId));
+                }
+              }).toSet();
+
+              return new ComparisonCondition(condition.getModelFor(), modelsTo, tempConditions);
+            }
+          }).toSet();
+    } else {
+      comparisonConditions.clear();
+    }
+
+    return mergingContext.populateDependencies(comparisonConditions, currentDependencies, dependencies);
   }
 
-  private Map<String, Model> adjustLinksFor(Map<String, Model> branch,
-          String id_for,
-          ModelContext modelContext) {
-    Map<String, Model> updatedBranch = newHashMap();
-    for(Map.Entry<String, Model> entry : branch.entrySet()) {
-      Model model = entry.getValue();
-   // same to subTypes
+  private ComparisonCondition currentCondition(final String modelId, final Set<ComparisonCondition> newDependencies) {
+    FluentIterable<ComparisonCondition> iterableConditions = FluentIterable.from(newDependencies)
+        .filter(new Predicate<ComparisonCondition>() {
+          public boolean apply(ComparisonCondition comparisonCondition) {
+            return comparisonCondition.getModelFor().equals(modelId);
+          }
+        });
+
+    if (iterableConditions.size() > 1) {
+      throw new IllegalStateException("Ambiguous conditions for one model.");
+    }
+
+    Optional<ComparisonCondition> currentConditionOptional = iterableConditions.first();
+
+    if (!currentConditionOptional.isPresent()) {
+      throw new IllegalStateException("Condition is not present.");
+    }
+
+    return currentConditionOptional.get();
+  }
+
+  private Map<String, Set<String>> populateComparisonConditions(Map<String, Set<String>> comparisonConditions,
+      Set<String> comparedParemeters) {
+    Map<String, Set<String>> populatedComparisonConditions = newHashMap(comparisonConditions);
+    for (String modelId : populatedComparisonConditions.keySet()) {
+
+      if (populatedComparisonConditions.get(modelId).isEmpty()) {
+        populatedComparisonConditions.put(modelId,
+            Collections.unmodifiableSet(new TreeSet<String>(comparedParemeters)));
+      }
+    }
+
+    return populatedComparisonConditions;
+  }
+
+  private Set<Model> buildModels(UniqueTypeNameAdapter adapter, MergingContext mergingContext) {
+    Map<String, Set<String>> parametersMatching = mergingContext.getParametersMatching();
+    Model rootModel = mergingContext.getRootModel();
+    ModelBuilder rootModelBuilder = new ModelBuilder(rootModel);
+    Set<Model> sameModels = newHashSet();
+
+    if (parametersMatching.isEmpty()) {
+      return newHashSet();
+    }
+
+    final int parametersCount = Ordering.<Integer>natural()
+        .max(FluentIterable.from(parametersMatching.values()).transform(new Function<Set<String>, Integer>() {
+          public Integer apply(Set<String> set) {
+            return set.size();
+          }
+        }).toList());
+
+    for (int paramIndex = 0; paramIndex < parametersCount; paramIndex++) {
       List<ModelReference> subTypes = new ArrayList<ModelReference>();
-      for (ModelReference oldModelRef: model.getSubTypes()) {
-        Optional<Integer> modelId = getModelId(oldModelRef);
-        if (modelId.isPresent() && 
-            String.valueOf(modelId.get()).equals(id_for)) {
-          subTypes.add(modelRefFactory(
-              ModelContext.withAdjustedTypeName(
-                  modelContext), enumTypeDeterminer, typeNameExtractor).apply(modelContext.getType()));
-        } else {
-          subTypes.add(oldModelRef);
+      Iterator<ModelReference> it = rootModel.getSubTypes().iterator();
+      while (it.hasNext()) {
+        ModelReference modelReference = it.next();
+        Optional<String> modelId = getModelId(modelReference);
+
+        if (modelId.isPresent()) {
+
+          if (!parametersMatching.containsKey(modelId.get())) {
+            continue;
+          }
+
+          modelReference = modelRefFunction(paramIndex, modelId.get(), adapter, mergingContext)
+              .apply(mergingContext.getModel(modelId.get()).getType());
         }
+        subTypes.add(modelReference);
       }
-      for (Map.Entry<String, ModelProperty> property_entry : model.getProperties().entrySet()) {
-        ModelProperty property = property_entry.getValue();
-        Optional<Integer> modelId = getModelId(property.getModelRef());
-        if (modelId.isPresent() && 
-            String.valueOf(modelId.get()).equals(id_for)) {
-          property.updateModelRef(modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor));
-          break;
+
+      Map<String, ModelProperty> newProperties = newHashMap();
+      for (String propertyName : rootModel.getProperties().keySet()) {
+        ModelProperty property = rootModel.getProperties().get(propertyName);
+        ModelReference modelReference = property.getModelRef();
+        Optional<String> modelId = getModelId(modelReference);
+
+        if (modelId.isPresent()) {
+
+          if (!parametersMatching.containsKey(modelId.get())) {
+            continue;
+          }
+
+          property = new ModelPropertyBuilder(property).build()
+              .updateModelRef(modelRefFunction(paramIndex, modelId.get(), adapter, mergingContext));
         }
+        newProperties.put(propertyName, property);
       }
-      updatedBranch.put(entry.getKey(), updateModel(model, model.getName(), subTypes));
+
+      sameModels.add(rootModelBuilder.properties(newProperties).subTypes(subTypes).build());
     }
-    return updatedBranch;
+
+    return sameModels;
   }
 
-  private Map<ResourceGroup, Map<String, Model>> updateTypeNames(Map<ResourceGroup, List<Model>> modelMap,
-          Map<String, ModelContext> contextMap) {
-    Map<ResourceGroup, Map<String, Model>> updatedModelMap = newHashMap();
-    for (ResourceGroup resourceGroup: modelMap.keySet()) {
-      Map<String, Model> updatedModels = newHashMap();
-      for (Model model: modelMap.get(resourceGroup)) {
-        for (String propertyName: model.getProperties().keySet()) {
-          ModelProperty property = model.getProperties().get(propertyName);
-          Optional<Integer> modelId = getModelId(property.getModelRef());
-          if (modelId.isPresent() && 
-              contextMap.containsKey(String.valueOf(modelId.get()))) {
-            property.updateModelRef(modelRefFactory(
-                ModelContext.withAdjustedTypeName(
-                    contextMap.get(String.valueOf(modelId.get()))), enumTypeDeterminer, typeNameExtractor));
-          }
-        }
-        List<ModelReference> subTypes = new ArrayList<ModelReference>();
-        for (ModelReference oldModelRef: model.getSubTypes()) {
-          Optional<Integer> modelId = getModelId(oldModelRef);
-          if (modelId.isPresent() && 
-              contextMap.containsKey(String.valueOf(modelId.get()))) {
-            ModelContext modelContext = contextMap.get(String.valueOf(modelId.get()));
-            subTypes.add(modelRefFactory(
-                ModelContext.withAdjustedTypeName(
-                    modelContext), enumTypeDeterminer, typeNameExtractor).apply(modelContext.getType()));
-          } else {
-            subTypes.add(oldModelRef);
-          }
-        }
-        String name = typeNameExtractor.typeName(
-            ModelContext.withAdjustedTypeName(contextMap.get(model.getId())));
-        updatedModels.put(name, updateModel(model, name, subTypes));
-      }
-      updatedModelMap.put(resourceGroup, updatedModels);
-    }
-    return updatedModelMap;
+  private Function<ResolvedType, ModelReference> modelRefFunction(int paramIndex, String modelId,
+      UniqueTypeNameAdapter adapter, MergingContext mergingContext) {
+
+    Map<String, Set<String>> parametersMatching = mergingContext.getParametersMatching();
+    List<String> parameters = Ordering.natural().sortedCopy(parametersMatching.get(modelId));
+    String parameter = parameters.size() == 1 ? parameters.get(0) : parameters.get(paramIndex);
+    ModelContext context = pseudoContext(parameter, mergingContext.getModelContext(modelId));
+
+    return modelRefFactory(context, enumTypeDeterminer, typeNameExtractor, adapter.getNames());
   }
 
-  private Optional<Integer> getModelId(ModelReference ref) {
+  private List<String> findBranchRoots(ModelContext rootContext) {
+    List<String> roots = new ArrayList<String>();
+
+    ResolvedType resolvedType = rootContext.alternateFor(rootContext.getType());
+    if (resolvedType.isArray()) {
+      ResolvedType elementType = resolvedType.getArrayElementType();
+      roots.addAll(findBranchRoots(ModelContext.fromParent(rootContext, elementType)));
+    } else if (resolvedType.findSupertype(Map.class) != null || resolvedType.findSupertype(Collection.class) != null) {
+      for (ResolvedType parameter : resolvedType.getTypeParameters()) {
+        roots.addAll(findBranchRoots(ModelContext.fromParent(rootContext, parameter)));
+      }
+    } else {
+      roots.add(ModelContext.fromParent(rootContext, resolvedType).getTypeId());
+    }
+
+    return roots;
+  }
+
+  private Optional<String> findSameModels(final Model model_for, final MergingContext mergingContext) {
+    String modelForTypeName = model_for.getType().getErasedType().getName();
+    Set<Model> models = mergingContext.getSimilarTypeModels(modelForTypeName);
+    for (Model model_to : models) {
+      if (model_for.equalsIgnoringName(model_to)) {
+        return Optional.of(model_to.getId());
+      }
+    }
+
+    return Optional.absent();
+  }
+
+  private Set<ComparisonCondition> mergeConditions(Optional<ComparisonCondition> currentComparisonCondition,
+      UniqueTypeNameAdapter adapter, MergingContext mergingContext) {
+
+    Set<ComparisonCondition> dependencies = newHashSet(mergingContext.getComparisonConditions());
+    if (currentComparisonCondition.isPresent()) {
+      ComparisonCondition currentCondition = currentComparisonCondition.get();
+      dependencies.add(currentCondition);
+
+      if (currentCondition.getConditions().isEmpty()) {
+        for (ComparisonCondition depComparisonCondition : dependencies) {
+          checkCondition(depComparisonCondition, true);
+          adapter.setEqualityFor(depComparisonCondition.getModelFor(),
+              new ArrayList<String>(depComparisonCondition.getModelsTo()).get(0));
+        }
+      } else {
+        Set<ComparisonCondition> newDependencies = new HashSet<ComparisonCondition>();
+        for (ComparisonCondition depComparisonCondition : dependencies) {
+          Set<String> conditions = new HashSet<String>(depComparisonCondition.getConditions());
+          conditions.remove(currentCondition.getModelFor());
+          conditions.addAll(currentCondition.getConditions());
+          newDependencies.add(new ComparisonCondition(depComparisonCondition.getModelFor(),
+              depComparisonCondition.getModelsTo(), conditions));
+        }
+        return newDependencies;
+      }
+    } else {
+      adapter.registerUniqueType(mergingContext.getRootModel().getName(), mergingContext.getRootId());
+      for (ComparisonCondition depComparisonCondition : dependencies) {
+        if (!depComparisonCondition.getConditions().isEmpty()) {
+          String modelId = depComparisonCondition.getModelFor();
+          adapter.registerUniqueType(mergingContext.getModel(modelId).getName(), modelId);
+        }
+      }
+    }
+
+    if (!currentComparisonCondition.isPresent()) {
+      return newHashSet();
+    } else {
+      return newHashSet(currentComparisonCondition.get());
+    }
+
+  }
+
+  private Model updateModel(Model model, Map<String, ModelContext> contextMap, UniqueTypeNameAdapter adapter) {
+    for (String propertyName : model.getProperties().keySet()) {
+      ModelProperty property = model.getProperties().get(propertyName);
+      Optional<String> modelId = getModelId(property.getModelRef());
+
+      if (modelId.isPresent() && contextMap.containsKey(modelId.get())) {
+        property.updateModelRef(
+            modelRefFactory(contextMap.get(modelId.get()), enumTypeDeterminer, typeNameExtractor, adapter.getNames()));
+      }
+    }
+    List<ModelReference> subTypes = new ArrayList<ModelReference>();
+    for (ModelReference oldModelRef : model.getSubTypes()) {
+      Optional<String> modelId = getModelId(oldModelRef);
+
+      if (modelId.isPresent() && contextMap.containsKey(modelId.get())) {
+        ModelContext modelContext = contextMap.get(modelId.get());
+        subTypes.add(modelRefFactory(modelContext, enumTypeDeterminer, typeNameExtractor, adapter.getNames())
+            .apply(modelContext.getType()));
+      } else {
+        subTypes.add(oldModelRef);
+      }
+    }
+    String name = typeNameExtractor.typeName(contextMap.get(model.getId()), adapter.getNames());
+
+    return new ModelBuilder(model).name(name).subTypes(subTypes).build();
+  }
+
+  private Set<Model> updateModels(final Collection<Model> models, final Map<String, ModelContext> contextMap,
+      final UniqueTypeNameAdapter adapter) {
+    FluentIterable.from(models).forEach(new Consumer<Model>() {
+      public void accept(Model model) {
+
+        if (!adapter.getTypeName(model.getId()).isPresent()) {
+          adapter.registerUniqueType(model.getName(), model.getId());
+        }
+      }
+    });
+
+    return FluentIterable.from(models).transform(new Function<Model, Model>() {
+
+      public Model apply(Model model) {
+        return updateModel(model, contextMap, adapter);
+      }
+    }).toSet();
+  }
+
+  @SuppressWarnings("rawtypes")
+  ModelContext pseudoContext(String parameterId, ModelContext context) {
+    return ModelContext.inputParam(parameterId, context.getGroupName(), context.getType(),
+        Optional.<ResolvedType>absent(), new HashSet<ResolvedType>(), context.getDocumentationType(),
+        context.getAlternateTypeProvider(), context.getGenericNamingStrategy(),
+        ImmutableSet.copyOf(new HashSet<Class>()));
+  }
+
+  private void checkCondition(ComparisonCondition condition, boolean conditionalPresenceCheck) {
+    if (conditionalPresenceCheck && !condition.getConditions().isEmpty()) {
+      throw new IllegalStateException("Equality with conditions is not allowed.");
+    }
+    if (condition.getConditions().isEmpty() && condition.getModelsTo().size() > 1) {
+      throw new IllegalStateException("Ambiguous models equality when conditions is empty.");
+    }
+  }
+
+  private Optional<String> getModelId(ModelReference ref) {
     ModelReference refT = ref;
     while (true) {
       if (refT.getModelId().isPresent()) {
@@ -275,28 +567,46 @@ public class ApiModelReader  {
       }
     }
   }
-  
-  private Model updateModel(Model oldModel, String newName, List<ModelReference> newSubTypes) {
-    return new ModelBuilder(oldModel.getId())
-                   .name(newName)
-                   .type(oldModel.getType())
-                   .qualifiedType(oldModel.getQualifiedType())
-                   .properties(oldModel.getProperties())
-                   .description(oldModel.getDescription())
-                   .baseModel(oldModel.getBaseModel())
-                   .discriminator(oldModel.getDiscriminator())
-                   .subTypes(newSubTypes)
-                   .example(oldModel.getExample())
-                   .xml(oldModel.getXml())
-                   .build();
-  }
 
-  private void markIgnorablesAsHasSeen(TypeResolver typeResolver,
-                                       Set<Class> ignorableParameterTypes,
-                                       ModelContext modelContext) {
+  @SuppressWarnings("rawtypes")
+  private void markIgnorablesAsHasSeen(TypeResolver typeResolver, Set<Class> ignorableParameterTypes,
+      ModelContext modelContext) {
 
     for (Class ignorableParameterType : ignorableParameterTypes) {
       modelContext.seen(typeResolver.resolve(ignorableParameterType));
     }
+  }
+
+  private static MergingContext populateTypes(Map<String, Set<Model>> modelMap,
+      Optional<MergingContext> existsContext) {
+    Map<String, Set<Model>> typedModelMap = newHashMap();
+    Map<String, Model> uniqueModels = newHashMap();
+    Map<String, String> parameterModelMap = newHashMap();
+    if (existsContext.isPresent()) {
+      MergingContext mergingContext = existsContext.get();
+      typedModelMap.putAll(mergingContext.getTypedModelMap());
+      parameterModelMap.putAll(mergingContext.getModelIdToParameterId());
+    }
+
+    for (String parameterId : modelMap.keySet()) {
+      for (Model model : modelMap.get(parameterId)) {
+        uniqueModels.put(model.getName(), model);
+        parameterModelMap.put(model.getId(), parameterId);
+      }
+    }
+
+    for (Model model : uniqueModels.values()) {
+      String rawType = model.getType().getErasedType().getName();
+
+      if (typedModelMap.containsKey(rawType)) {
+        typedModelMap.put(rawType, ImmutableSet.<Model>builder().add(model).addAll(typedModelMap.get(rawType)).build());
+      } else {
+        typedModelMap.put(rawType, ImmutableSet.<Model>builder().add(model).build());
+      }
+
+    }
+
+    return new MergingContext("", typedModelMap, parameterModelMap, new HashMap<String, Model>(),
+        new HashMap<String, ModelContext>());
   }
 }

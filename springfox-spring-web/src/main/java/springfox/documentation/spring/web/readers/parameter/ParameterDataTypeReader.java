@@ -21,6 +21,8 @@ package springfox.documentation.spring.web.readers.parameter;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import com.google.common.collect.FluentIterable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -47,7 +50,10 @@ import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -59,11 +65,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final SchemaPluginsManager pluginsManager;
 
   @Autowired
-  public ParameterDataTypeReader(
-      SchemaPluginsManager pluginsManager,
-      TypeNameExtractor nameExtractor,
-      TypeResolver resolver,
-      EnumTypeDeterminer enumTypeDeterminer) {
+  public ParameterDataTypeReader(SchemaPluginsManager pluginsManager, TypeNameExtractor nameExtractor,
+      TypeResolver resolver, EnumTypeDeterminer enumTypeDeterminer) {
     this.nameExtractor = nameExtractor;
     this.resolver = resolver;
     this.enumTypeDeterminer = enumTypeDeterminer;
@@ -98,20 +101,26 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         LOG.warn("Trying to infer dataType {}", parameterType);
       }
     }
-    
-    ViewProviderPlugin viewProvider = 
-        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
-   
-    ModelContext modelContext = ModelContext.withAdjustedTypeName
-        (context.getOperationContext().operationModelsBuilder().addInputParam(
-            parameterType,
-            viewProvider.viewFor(parameterType, methodParameter),
-            new HashSet<ResolvedType>()));
 
-    context.parameterBuilder()
-        .type(parameterType)
-        .modelRef(Optional.fromNullable(modelRef)
-            .or(modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor).apply(parameterType)));
+    ViewProviderPlugin viewProvider = pluginsManager
+        .viewProvider(context.getDocumentationContext().getDocumentationType());
+
+    ModelContext modelContext = context.getOperationContext().operationModelsBuilder().addInputParam(parameterType,
+        viewProvider.viewFor(parameterType, methodParameter), new HashSet<ResolvedType>());
+
+    final Map<String, String> knownNames = new HashMap<String, String>();
+    FluentIterable
+        .from(Optional.fromNullable(context.getOperationContext().getKnownModels().get(modelContext.getParameterId()))
+            .or(new HashSet<Model>()))
+        .forEach(new Consumer<Model>() {
+          @Override
+          public void accept(Model model) {
+            knownNames.put(model.getId(), model.getName());
+          }
+        });
+
+    context.parameterBuilder().type(parameterType).modelRef(Optional.fromNullable(modelRef)
+        .or(modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor, knownNames).apply(parameterType)));
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {
@@ -121,6 +130,6 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
   private boolean treatAsAString(ResolvedType parameterType) {
     return !(isBaseType(typeNameFor(parameterType.getErasedType()))
-                 || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
+        || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
   }
 }
