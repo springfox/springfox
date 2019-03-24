@@ -30,7 +30,7 @@ import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.builders.OperationBuilder
-import springfox.documentation.schema.TypeNameIndexingAdapter
+import springfox.documentation.schema.Model
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -179,16 +179,17 @@ class RequestMappingSupport {
       handlerMethod,
       operationIndex = 0,
       requestMapping =  requestMappingInfo("/somePath"),
-      httpMethod = RequestMethod.GET) {
+      httpMethod = RequestMethod.GET,
+      knownModels = new HashMap<String, List<Model>>()) {
     new OperationContext(
         new OperationBuilder(new CachingOperationNameGenerator()),
         httpMethod,
         new RequestMappingContext(
+            "0",
             context,
             new WebMvcRequestHandler(new HandlerMethodResolver(new TypeResolver()),
                 requestMapping,
-                handlerMethod),
-            new TypeNameIndexingAdapter()),
+                handlerMethod)).withKnownModels(knownModels),
         operationIndex)
   }
 }

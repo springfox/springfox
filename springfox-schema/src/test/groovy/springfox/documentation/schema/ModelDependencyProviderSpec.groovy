@@ -28,18 +28,17 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelDependencyProviderSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
   @Unroll
   def "dependencies are inferred correctly"() {
     given:
     def context = inputParam(
+        "0_0",
         "group",
         resolver.resolve(modelType),
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -47,12 +46,12 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     def dependentTypeNames = dependentTypes.collect() {
       typeNameExtractor.typeName(
           inputParam(
+              "0_0",
               "group",
               it,
               Optional.absent(),
               new HashSet<>(),
               documentationType,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -86,11 +85,11 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
   def "dependencies are inferred correctly for return parameters"() {
     given:
     def context = returnValue(
+        "0_0",
         "group",
         resolver.resolve(modelType),
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -98,11 +97,11 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     def dependentTypeNames = dependentTypes.collect() {
       typeNameExtractor.typeName(
           returnValue(
+              "0_0",
               "group",
               it,
               Optional.absent(),
               documentationType,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))

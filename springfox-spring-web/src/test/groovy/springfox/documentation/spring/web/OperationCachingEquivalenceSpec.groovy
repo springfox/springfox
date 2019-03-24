@@ -37,7 +37,6 @@ import spock.lang.Specification
 import springfox.documentation.RequestHandler
 import springfox.documentation.RequestHandlerKey
 import springfox.documentation.service.ResolvedMethodParameter
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
@@ -68,13 +67,13 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       documentationContext.getGenericsNamingStrategy() >> Mock(GenericTypeNamingStrategy)
     and:
       def first = new RequestMappingContext(
+          "0",
           documentationContext,
-          new WebMvcRequestHandler(methodResolver, firstMapping, anyMethod),
-          Mock(UniqueTypeNameAdapter))
+          new WebMvcRequestHandler(methodResolver, firstMapping, anyMethod))
       def second = new RequestMappingContext(
+          "0",
           documentationContext,
-          new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod),
-          Mock(UniqueTypeNameAdapter))
+          new WebMvcRequestHandler(methodResolver, secondMapping, anyMethod))
     then:
       sut.doEquivalent(first, second)
   }
@@ -83,13 +82,13 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
     given:
       OperationCachingEquivalence sut = new OperationCachingEquivalence()
       def first = new RequestMappingContext(
+          "0",
           Mock(DocumentationContext),
-          requestHandler(firstKey),
-          Mock(UniqueTypeNameAdapter))
+          requestHandler(firstKey))
       def second = new RequestMappingContext(
+          "0",
           Mock(DocumentationContext),
-          requestHandler(secondKey),
-          Mock(UniqueTypeNameAdapter))
+          requestHandler(secondKey))
     expect:
       sut.doEquivalent(first, second) == outcome
     where:
@@ -118,19 +117,19 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
       documentationContext.getGenericsNamingStrategy() >> Mock(GenericTypeNamingStrategy)
     and:
       def first = new RequestMappingContext(
+        "0",
         documentationContext,
         new WebMvcRequestHandler(
             methodResolver,
             firstMapping,
-            anyMethod),
-        Mock(UniqueTypeNameAdapter))
+            anyMethod))
       def second = new RequestMappingContext(
+        "0",
         documentationContext,
         new WebMvcRequestHandler(
             methodResolver,
             secondMapping,
-            anyMethod),
-        Mock(UniqueTypeNameAdapter))
+            anyMethod))
     then:
       !sut.doEquivalent(first, second)
   }

@@ -24,7 +24,6 @@ import com.google.common.collect.LinkedListMultimap
 import springfox.documentation.builders.ApiDescriptionBuilder
 import springfox.documentation.builders.ApiListingBuilder
 import springfox.documentation.service.*
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -133,11 +132,11 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .pathProvider(pathProvider)
         .configure(contextBuilder)
 
-    RequestMappingContext requestMappingContext = new RequestMappingContext(documentationContext(),
+    RequestMappingContext requestMappingContext = new RequestMappingContext("0_0",
+        documentationContext(),
         new WebMvcRequestHandler(
             new HandlerMethodResolver(new TypeResolver()),
-            requestMappingInfo("somePath/"), dummyHandlerMethod()),
-        Mock(UniqueTypeNameAdapter))
+            requestMappingInfo("somePath/"), dummyHandlerMethod()))
 
     and:
     def mockListingRef = Mock(ApiListingReference)

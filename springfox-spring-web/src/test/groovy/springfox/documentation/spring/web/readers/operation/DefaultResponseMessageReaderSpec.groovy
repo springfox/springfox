@@ -26,6 +26,7 @@ import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.Model
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResponseMessage
@@ -95,7 +96,15 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
 
   def "Methods with return type containing a model should override the success response code"() {
     given:
-      OperationContext operationContext = operationContext(documentationContext(), dummyHandlerMethod('methodWithConcreteResponseBody'))
+      def knownModels = new HashMap<String, List<Model>>();
+      knownModels.put("0_0", new ArrayList<Model>());
+      OperationContext operationContext =
+          operationContext(documentationContext(),
+              dummyHandlerMethod('methodWithConcreteResponseBody'),
+              0,
+              requestMappingInfo("/somePath"),
+              RequestMethod.GET,
+              knownModels)
 
     when:
       sut.apply(operationContext)

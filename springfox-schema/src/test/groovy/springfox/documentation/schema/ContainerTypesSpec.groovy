@@ -18,8 +18,10 @@
  */
 package springfox.documentation.schema
 
+import com.google.common.base.Function
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet
+import com.google.common.collect.Maps;
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -30,24 +32,23 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ContainerTypesSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   def "Model properties of type List, are inferred correctly"() {
     given:
       def sut = resolver.resolve(typeWithLists())
-      Model asInput = modelProvider.modelFor(inputParam("group",
+      Model asInput = modelProvider.modelFor(inputParam("0_0",
+          "group",
           sut,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
+      Model asReturn = modelProvider.modelFor(returnValue("0_0",
+          "group",
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -86,20 +87,20 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties are inferred correctly"() {
     given:
       def sut = resolver.resolve(typeWithSets())
-      Model asInput = modelProvider.modelFor(inputParam("group",
+      Model asInput = modelProvider.modelFor(inputParam("0_0",
+          "group",
           sut,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
+      Model asReturn = modelProvider.modelFor(returnValue("0_0",
+          "group",
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -138,20 +139,20 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type Arrays are inferred correctly for #property"() {
     given:
       def sut = resolver.resolve(typeWithArrays())
-      Model asInput = modelProvider.modelFor(inputParam("group",
+      Model asInput = modelProvider.modelFor(inputParam("0_0",
+          "group",
           sut,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
+      Model asReturn = modelProvider.modelFor(returnValue("0_0",
+          "group",
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -193,20 +194,20 @@ class ContainerTypesSpec extends SchemaSpecification {
   def "Model properties of type Map are inferred correctly"() {
     given:
       def sut = resolver.resolve(mapsContainer())
-      Model asInput = modelProvider.modelFor(inputParam("group",
+      Model asInput = modelProvider.modelFor(inputParam("0_0",
+          "group",
           sut,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateRulesWithWildcardMap(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
+      Model asReturn = modelProvider.modelFor(returnValue("0_0",
+          "group",
           sut,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateRulesWithWildcardMap(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -243,29 +244,37 @@ class ContainerTypesSpec extends SchemaSpecification {
     given:
       def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam("group",
+      def modelContext = inputParam("0_0",
+          "group",
           sut,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateRulesWithWildcardMap(),
           namingStrategy,
           ImmutableSet.builder().build())
-      Model asInput = modelProvider.dependencies(modelContext).get("-1642237480")
+      List<Model> asInputModels = new ArrayList(modelProvider.dependencies(modelContext).values())
 
-    def returnContext = returnValue("group",
+    def returnContext = returnValue("0_0",
+        "group",
         sut,
         Optional.absent(),
         SWAGGER_12,
-        uniqueTypeNameAdapter,
         alternateRulesWithWildcardMap(),
         namingStrategy,
         ImmutableSet.builder().build())
-      Model asReturn = modelProvider.dependencies(returnContext).get("-1642237666")
+      List<Model> asReturnModels = new ArrayList(modelProvider.dependencies(returnContext).values())
 
     expect:
-      asInput.getName() == "MapsContainer"
+      Model asInput = null
+      for (int i=0; i < asInputModels.size(); i++) {
+        if (asInputModels.get(i).getName().equals("MapsContainer")) {
+          asInput = asInputModels.get(i)
+          break;
+        }
+      }
+
+      asInput != null;
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
       modelProperty.type.erasedType == type
@@ -275,6 +284,15 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemRef
       item.collection
 
+      Model asReturn = null
+      for (int i=0; i < asReturnModels.size(); i++) {
+        if (asReturnModels.get(i).getName().equals("MapsContainer")) {
+          asReturn = asReturnModels.get(i)
+          break;
+        }
+      }
+
+      asReturn != null;
       asReturn.getName() == "MapsContainer"
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
@@ -297,28 +315,37 @@ class ContainerTypesSpec extends SchemaSpecification {
     given:
       def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam("group",
+      def modelContext = inputParam("0_0",
+          "group",
           sut,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_2,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      Model asInput = modelProvider.dependencies(modelContext).get("-1613667911")
+      List<Model> asInputModels = new ArrayList(modelProvider.dependencies(modelContext).values())
 
-      def returnContext = returnValue("group",
+      def returnContext = returnValue("0_0",
+          "group",
           sut,
           Optional.absent(),
           SWAGGER_2,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
-      Model asReturn = modelProvider.dependencies(returnContext).get("-1613668097")
+      List<Model> asReturnModels = new ArrayList(modelProvider.dependencies(returnContext).values())
 
     expect:
+      Model asInput = null
+      for (int i=0; i < asInputModels.size(); i++) {
+        if (asInputModels.get(i).getName().equals("MapsContainer")) {
+          asInput = asInputModels.get(i)
+          break;
+        }
+      }
+
+      asInput != null;
       asInput.getName() == "MapsContainer"
       asInput.getProperties().containsKey(property)
       def modelProperty = asInput.getProperties().get(property)
@@ -329,7 +356,15 @@ class ContainerTypesSpec extends SchemaSpecification {
       item.itemType == itemRef
       !item.collection
 
-      asReturn.getName() == "MapsContainer"
+      Model asReturn = null
+      for (int i=0; i < asReturnModels.size(); i++) {
+        if (asReturnModels.get(i).getName().equals("MapsContainer")) {
+          asReturn = asReturnModels.get(i)
+          break;
+        }
+      }
+
+      asReturn != null;
       asReturn.getProperties().containsKey(property)
       def retModelProperty = asReturn.getProperties().get(property)
       retModelProperty.type.erasedType == type

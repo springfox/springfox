@@ -30,26 +30,25 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class GenericTypeSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
   @Unroll
   def "Generic property on a generic types is inferred correctly for types"() {
     given:
     def inputContext = inputParam(
+        "0_0",
         "group",
         modelType,
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
-    def returnContext = returnValue("group",
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -86,20 +85,20 @@ class GenericTypeSpec extends SchemaSpecification {
   def "Void generic type bindings are rendered correctly"() {
     given:
     def inputContext = inputParam(
+        "0_0",
         "group",
         modelType,
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
-    def returnContext = returnValue("group",
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
@@ -125,22 +124,22 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-    def inputContext = inputParam("group",
+    def inputContext = inputParam("0_0",
+        "group",
         modelType,
         Optional.absent(),
         new HashSet<>(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())
     Model asInput = modelProvider.modelFor(inputContext).get()
 
-    def returnContext = returnValue("group",
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
         Optional.absent(),
         documentationType,
-        uniqueTypeNameAdapter,
         alternateTypeProvider(),
         namingStrategy,
         ImmutableSet.builder().build())

@@ -29,7 +29,9 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Types.*;
@@ -71,20 +73,18 @@ public class ResolvedTypes {
     });
   }
 
-  public static Function<ResolvedType, ModelReference> modelRefFactory(
-      final ModelContext parentContext,
-      final EnumTypeDeterminer enumTypeDeterminer,
-      final TypeNameExtractor typeNameExtractor) {
+  public static Function<ResolvedType, ModelReference> modelRefFactory(final ModelContext parentContext,
+      final EnumTypeDeterminer enumTypeDeterminer, final TypeNameExtractor typeNameExtractor,
+      final Map<String, String> knownNames) {
 
-    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext, false);
+    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext, knownNames);
   }
-  
-  public static Function<ResolvedType, ModelReference> cyclicModelRefFactory(
-      final ModelContext parentContext,
-      final EnumTypeDeterminer enumTypeDeterminer,
-      final TypeNameExtractor typeNameExtractor) {
 
-    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext, true);
+  public static Function<ResolvedType, ModelReference> modelRefFactory(final ModelContext parentContext,
+      final EnumTypeDeterminer enumTypeDeterminer, final TypeNameExtractor typeNameExtractor) {
+
+    return new ModelReferenceProvider(typeNameExtractor, enumTypeDeterminer, parentContext,
+        new HashMap<String, String>());
   }
 
 }

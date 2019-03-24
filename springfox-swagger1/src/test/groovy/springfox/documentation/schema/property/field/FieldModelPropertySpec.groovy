@@ -24,7 +24,6 @@ import com.google.common.collect.ImmutableSet
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -37,17 +36,15 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
 class FieldModelPropertySpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def typeNameAdapter = new TypeNameIndexingAdapter()
-
   def "Extracting information from resolved fields" () {
     given:
       def modelContext = inputParam(
+          "0_0",       
           "group",
           resolver.resolve(TypeWithGettersAndSetters),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -87,12 +84,12 @@ class FieldModelPropertySpec extends SchemaSpecification {
     given:
       def typeToTest = TypeWithGettersAndSetters
       def modelContext = inputParam(
+          "0_0",
           "group",
           resolver.resolve(typeToTest),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())

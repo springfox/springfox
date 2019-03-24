@@ -20,10 +20,10 @@
 package springfox.documentation.swagger1.web
 
 import com.fasterxml.classmate.TypeResolver
+
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -53,12 +53,12 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
                 [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
         )
         RequestMappingContext mappingContext = new RequestMappingContext(
+            "0",
             documentationContext(),
             new WebMvcRequestHandler(
                 new HandlerMethodResolver(new TypeResolver()),
                 requestMappingInfo,
-                dummyHandlerMethod()),
-            Mock(UniqueTypeNameAdapter))
+                dummyHandlerMethod()))
         operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
       when:
         def descriptionList = sut.read(mappingContext)

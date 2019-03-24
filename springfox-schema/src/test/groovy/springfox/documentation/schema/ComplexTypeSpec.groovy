@@ -32,26 +32,23 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ComplexTypeSpec extends Specification {
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  @Shared
-  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
-  
   def "complex type properties are inferred correctly"() {
     given:
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam("group",
+      Model asInput = provider.modelFor(inputParam("0_0",
+          "group",
           resolver.resolve(complexType()),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(returnValue("group",
+      Model asReturn = provider.modelFor(returnValue("0_0",
+          "group",
           resolver.resolve(complexType()),
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -87,20 +84,20 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = resolver.resolve(recursiveType())
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam("group",
+      Model asInput = provider.modelFor(inputParam("0_0",
+          "group",
           complexType,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(returnValue("group",
+      Model asReturn = provider.modelFor(returnValue("0_0",
+          "group",
           complexType,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
@@ -133,20 +130,20 @@ class ComplexTypeSpec extends Specification {
     given:
       def complexType = resolver.resolve(inheritedComplexType())
       def provider = defaultModelProvider()
-      Model asInput = provider.modelFor(inputParam("group",
+      Model asInput = provider.modelFor(inputParam("0_0",
+          "group",
           complexType,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(returnValue("group",
+      Model asReturn = provider.modelFor(returnValue("0_0",
+          "group",
           complexType,
           Optional.absent(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())).get()

@@ -16,7 +16,7 @@ trait GitTaggingSupport {
     if (proc.exitValue() == 0) {
       return proc.text.trim()
     }
-    return ""
+    return "2.9.3"
   }
 
   def createAnnotatedTag(Project project, BuildInfo buildInfo) {

@@ -24,7 +24,6 @@ import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -35,12 +34,12 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class CachingModelPropertiesProviderSpec extends Specification {
   def "Implementation caches the invocations"() {
     given:
-    def context = inputParam("group",
+    def context = inputParam("0_0",
+        "group",
         resolver.resolve(complexType()),
         Optional.absent(),
         new HashSet<>(),
         DocumentationType.SWAGGER_2,
-        new TypeNameIndexingAdapter(),
         new AlternateTypeProvider([]),
         new CodeGenGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())
@@ -58,12 +57,12 @@ class CachingModelPropertiesProviderSpec extends Specification {
 
   def "When cache miss occurs"() {
     given:
-    def context = inputParam("group",
+    def context = inputParam("0_0",
+        "group",
         resolver.resolve(complexType()),
         Optional.absent(),
         new HashSet<>(),
         DocumentationType.SWAGGER_2,
-        new TypeNameIndexingAdapter(),
         new AlternateTypeProvider([]),
         new CodeGenGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())

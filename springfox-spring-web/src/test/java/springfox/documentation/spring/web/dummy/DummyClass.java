@@ -55,6 +55,8 @@ import springfox.documentation.spring.web.dummy.models.MapFancyPet;
 import springfox.documentation.spring.web.dummy.models.Pet;
 import springfox.documentation.spring.web.dummy.models.PetWithJsonView;
 import springfox.documentation.spring.web.dummy.models.Pirate;
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithConditions;
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter;
 import springfox.documentation.spring.web.dummy.models.Treeish;
 import springfox.documentation.spring.web.dummy.models.SameFancyPet;
 
@@ -439,7 +441,19 @@ public class DummyClass {
   }
 
   @ResponseBody
-  public void methodToTestBidrectionalRecursiveTypes(@RequestBody Pirate model) {
+  public Pirate methodToTestBidrectionalRecursiveTypes(@RequestBody Pirate model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public RecursiveTypeWithConditions methodToTestBidrectionalRecursiveTypesWithConditions(
+          @RequestBody RecursiveTypeWithConditions model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public RecursiveTypeWithNonEqualsConditionsOuter methodToTestBidrectionalRecursiveTypesWithNonEqualsConditions(
+          @RequestBody RecursiveTypeWithNonEqualsConditionsOuter model) {
     throw new UnsupportedOperationException();
   }
 

@@ -14,7 +14,6 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -154,12 +153,12 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
 
   ModelContext modelContext(Type type) {
     ModelContext.inputParam(
+        "0_0",
         "test",
         resolver.resolve(type),
         Optional.absent(),
         new HashSet<>(),
         DocumentationType.SWAGGER_2,
-        new TypeNameIndexingAdapter(),
         new AlternateTypeProvider([]),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.of()

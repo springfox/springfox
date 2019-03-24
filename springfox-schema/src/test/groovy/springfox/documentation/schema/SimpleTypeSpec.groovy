@@ -30,27 +30,26 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class SimpleTypeSpec extends SchemaSpecification {
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
-  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
       Model asInput = modelProvider.modelFor(
           inputParam(
+              "0_0",
               "group",
               resolver.resolve(simpleType()),
               Optional.absent(),
               new HashSet<>(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
-          returnValue("group",
+          returnValue("0_0",
+              "group",
               resolver.resolve(simpleType()),
               Optional.absent(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -104,22 +103,22 @@ class SimpleTypeSpec extends SchemaSpecification {
     given:
       Model asInput = modelProvider.modelFor(
           inputParam(
+              "0_0",
               "group",
               resolver.resolve(typeWithConstructor()),
               Optional.absent(),
               new HashSet<>(),
               documentationType,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
+              "0_0",
               "group",
               resolver.resolve(typeWithConstructor()),
               Optional.absent(),
               documentationType,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -147,22 +146,22 @@ class SimpleTypeSpec extends SchemaSpecification {
     given:
       Model asInput = modelProvider.modelFor(
           inputParam(
+              "0_0",
               "group",
               resolver.resolve(typeWithJsonPropertyAnnotation()),
               Optional.absent(),
               new HashSet<>(),
               documentationType,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = modelProvider.modelFor(
           returnValue(
+              "0_0",
               "group",
               resolver.resolve(typeWithJsonPropertyAnnotation()),
               Optional.absent(),
               documentationType,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()

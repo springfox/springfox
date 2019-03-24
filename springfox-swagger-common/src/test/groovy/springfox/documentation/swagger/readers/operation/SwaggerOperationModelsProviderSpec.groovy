@@ -18,9 +18,9 @@
  */
 package springfox.documentation.swagger.readers.operation
 import com.fasterxml.classmate.TypeResolver
+
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -36,12 +36,12 @@ class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
           [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
       )
       RequestMappingContext requestContext = new RequestMappingContext(
+          "0",
           documentationContext(),
           new WebMvcRequestHandler(
               methodResolver,
               requestMappingInfo,
-              dummyHandlerMethod(operationName)),
-          Mock(UniqueTypeNameAdapter))
+              dummyHandlerMethod(operationName)))
       SwaggerOperationModelsProvider sut = new SwaggerOperationModelsProvider(new TypeResolver())
     when:
       sut.apply(requestContext)

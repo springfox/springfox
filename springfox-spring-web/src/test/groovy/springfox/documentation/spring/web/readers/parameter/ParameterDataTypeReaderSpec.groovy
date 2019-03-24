@@ -31,8 +31,8 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.Model
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
@@ -60,10 +60,12 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   def operationModelContextsBuilder  = new OperationModelContextsBuilder(
       "group",
       DocumentationType.SWAGGER_12,
-      new TypeNameIndexingAdapter(),
+      "0",
       Mock(AlternateTypeProvider),
       Mock(GenericTypeNamingStrategy),
       ImmutableSet.builder().build())
+
+  def knownModels = new HashMap<String, List<Model>>();
 
   ParameterDataTypeReader sut = new ParameterDataTypeReader(
       defaultSchemaPlugins(),
@@ -84,10 +86,13 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       ResolvedMethodParameter resolvedMethodParameter =
           new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      knownModels.put("0_0", new ArrayList<Model>());
+
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
                   Stub(OperationContext){
-                      operationModelsBuilder() >> operationModelContextsBuilder})
+                      operationModelsBuilder() >> operationModelContextsBuilder
+                      getKnownModels() >> knownModels})
 
     when:
       sut.apply(parameterContext)
@@ -142,11 +147,13 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       ResolvedMethodParameter resolvedMethodParameter =
           new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      
+      knownModels.put("0_0", new ArrayList<Model>());
+
       ParameterContext parameterContext =
           new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
               Stub(OperationContext){
-                  operationModelsBuilder() >> operationModelContextsBuilder})
+                  operationModelsBuilder() >> operationModelContextsBuilder
+                  getKnownModels() >> knownModels})
 
     when:
       sut.apply(parameterContext)
@@ -163,10 +170,13 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       ResolvedMethodParameter resolvedMethodParameter =
           new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      knownModels.put("0_0", new ArrayList<Model>());
+
       ParameterContext parameterContext =
               new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
                   Stub(OperationContext){
-                      operationModelsBuilder() >> operationModelContextsBuilder})
+                      operationModelsBuilder() >> operationModelContextsBuilder
+                      getKnownModels() >> knownModels})
 
     when:
       PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

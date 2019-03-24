@@ -31,12 +31,12 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class CachingModelProviderSpec extends Specification {
   def "Implementation caches the invocations" () {
     given:
-      def context = inputParam("group",
+      def context = inputParam("0_0",
+          "group",
           resolver.resolve(complexType()),
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -52,12 +52,12 @@ class CachingModelProviderSpec extends Specification {
 
   def "Cache misses do not not result in errors" () {
     given:
-      def context = inputParam("group",
+      def context = inputParam("0_0",
+          "group",
           resolver.resolve(complexType()),
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

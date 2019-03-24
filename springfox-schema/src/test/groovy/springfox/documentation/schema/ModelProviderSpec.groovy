@@ -19,8 +19,8 @@
 package springfox.documentation.schema
 
 import com.google.common.base.Function
-import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
+import com.google.common.base.Optional
+import com.google.common.collect.Maps
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.ImmutableSet
 import org.springframework.http.HttpHeaders
@@ -36,7 +36,6 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ModelProviderSpec extends Specification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
   def getNames = 
       new Function<Model, String>() {
         public String apply(Model model) {
@@ -46,12 +45,12 @@ class ModelProviderSpec extends Specification {
     given:
       ModelProvider sut = defaultModelProvider()
       def context = inputParam(
+          "0_0",
           "group",
           modelType,
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -73,12 +72,12 @@ class ModelProviderSpec extends Specification {
       ModelProvider provider = defaultModelProvider()
       def dependentTypeNames = Maps.uniqueIndex(provider.dependencies(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(modelType),
             Optional.absent(),
             new HashSet<>(),
             SWAGGER_12,
-            uniqueTypeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).values(), getNames)

@@ -35,24 +35,23 @@ class EnumTypeSpec extends Specification {
       def list = newArrayList("ONE", "TWO")
       def provider = defaultModelProvider()
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
       Model asInput = provider.modelFor(
-          inputParam("group",
+          inputParam("0_0",
+              "group",
               resolver.resolve(enumType()),
               Optional.absent(),
               new HashSet<>(),
               DocumentationType.SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = provider.modelFor(
-          returnValue("group",
+          returnValue("0_0",
+              "group",
               resolver.resolve(enumType()),
               Optional.absent(),
               DocumentationType.SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()

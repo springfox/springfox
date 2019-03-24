@@ -32,7 +32,6 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.TypeWithJsonFormat
 import springfox.documentation.schema.TypeWithSetterButNoGetter
 import springfox.documentation.schema.TypeWithJsonView
@@ -82,22 +81,22 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
     def inputValue = sut.propertiesFor(
         type,
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             type,
             Optional.absent(),
             new HashSet<>(),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             type,
             Optional.absent(),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
@@ -137,22 +136,22 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
     def inputValue = sut.propertiesFor(
         type,
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             type,
             Optional.absent(),
             new HashSet<>(),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             type,
             Optional.absent(),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
@@ -192,20 +191,20 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     sut.onApplicationEvent(objectMapperConfigured)
 
     and:
-    def inputContext = inputParam("group",
+    def inputContext = inputParam("0_0",
+        "group",
         type,
         Optional.absent(),
         new HashSet<>(),
         SPRING_WEB,
-        new TypeNameIndexingAdapter(),
         new AlternateTypeProvider(newArrayList()),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())
-    def returnContext = returnValue("group",
+    def returnContext = returnValue("0_0",
+        "group",
         type,
         Optional.absent(),
         SPRING_WEB,
-        new TypeNameIndexingAdapter(),
         new AlternateTypeProvider(newArrayList()),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())
@@ -254,22 +253,22 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
     def inputValue = sut.propertiesFor(
         type,
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             type,
             Optional.absent(),
             new HashSet<>(),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             type,
             Optional.absent(),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
@@ -313,22 +312,22 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
     def inputValue = sut.propertiesFor(
         type,
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             type,
             Optional.of(typeResolver.resolve(Views.FirstView.class)),
             new HashSet<>(),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             type,
             Optional.of(typeResolver.resolve(Views.FirstView.class)),
             SPRING_WEB,
-            new TypeNameIndexingAdapter(),
             new AlternateTypeProvider(newArrayList()),
             new DefaultGenericTypeNamingStrategy(),
             ImmutableSet.builder().build()))

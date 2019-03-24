@@ -24,19 +24,19 @@ import java.util.Map;
 
 public class ModelWithSameNameClasses {
     
-  FancyPet fancyPet;
+  private FancyPet fancyPet;
     
-  SameFancyPet moreFancyPet;
+  private SameFancyPet moreFancyPet;
     
-  List<FancyPet> fancyPets;
+  private List<FancyPet> fancyPets;
     
-  Map<String, SameFancyPet> fancyPetsMap;
+  private Map<String, SameFancyPet> fancyPetsMap;
     
-  List<List<List<FancyPet[]>>> crazyFancyPets;
+  private List<List<List<FancyPet[]>>> crazyFancyPets;
     
-  List<List<List<SameFancyPet[]>>> weirdFancyPets;
+  private List<List<List<SameFancyPet[]>>> weirdFancyPets;
     
-  Map<String, List<List<SameFancyPet>>> madFancyPets;
+  private Map<String, List<List<SameFancyPet>>> madFancyPets;
 
   public FancyPet getFancyPet() {
     return fancyPet;

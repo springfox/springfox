@@ -29,7 +29,6 @@ import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.SchemaSpecification
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
@@ -46,17 +45,16 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class BeanModelPropertySpec extends SchemaSpecification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  def typeNameAdapter = new TypeNameIndexingAdapter()
   @Unroll
   def "Extracting information from resolved properties #methodName"() {
     given:
       Class typeToTest = TypeWithGettersAndSetters
-      def modelContext = inputParam("group",
+      def modelContext = inputParam("0_0",
+          "group",
           resolver.resolve(typeToTest),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -96,12 +94,12 @@ class BeanModelPropertySpec extends SchemaSpecification {
   def "Extracting information from ApiModelProperty annotation"() {
     given:
       Class typeToTest = TypeWithAnnotatedGettersAndSetters
-      def modelContext = inputParam("group",
+      def modelContext = inputParam("0_0",
+          "group",
           resolver.resolve(typeToTest),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -145,12 +143,12 @@ class BeanModelPropertySpec extends SchemaSpecification {
 
     given:
       Class typeToTest = typeForTestingJsonGetterAnnotation()
-      def modelContext = inputParam("group",
+      def modelContext = inputParam("0_0",
+          "group",
           resolver.resolve(typeToTest),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           alternateTypeProvider(),
           namingStrategy,
           ImmutableSet.builder().build())

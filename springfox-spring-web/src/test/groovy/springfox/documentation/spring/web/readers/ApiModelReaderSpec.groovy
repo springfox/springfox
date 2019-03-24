@@ -22,6 +22,10 @@ package springfox.documentation.spring.web.readers
 import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.collect.Maps;
+import java.util.function.Consumer
+import com.google.common.base.Function
+import com.google.common.collect.FluentIterable;
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.plugin.core.OrderAwarePluginRegistry
@@ -32,8 +36,8 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
+import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
@@ -48,6 +52,8 @@ import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.PetWithJsonView
 import springfox.documentation.spring.web.dummy.models.Pirate
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithConditions
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter
 import springfox.documentation.spring.web.dummy.models.SameFancyPet
 import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -99,19 +105,31 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     resourceGroup = new ResourceGroup("businesses", DummyClass)
   }
 
+  def requestMappingContext(HandlerMethod handlerMethod, String path) {
+    return new RequestMappingContext(
+        "0",
+        documentationContext(),
+        new WebMvcRequestHandler(methodResolver, requestMappingInfo('/somePath'),
+            handlerMethod))
+  }
+
+  def Function<Model, String> toModelMap = new Function<Model, String>(){
+          public String apply(Model model) {
+              return model.getName();
+          }};
+
   def "Method return type model"() {
     given:
-      def listingContext = apiListingContext(dummyHandlerMethod('methodWithConcreteResponseBody'), '/somePath')
-
+      RequestMappingContext context = requestMappingContext(dummyHandlerMethod('methodWithConcreteResponseBody'), '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
-
+      def modelsMap = sut.read(context)
     then:
-      modelsMap.containsKey(resourceGroup)
-      Map<String, Model> models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      Map<String, Model> models = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+
       models.size() == 1
       Model model = models.get('BusinessModel')
-      model.id == '-229259865'
+      model.id == '0_0_springfox.documentation.spring.web.dummy.DummyModels$BusinessModel'
       model.getName() == 'BusinessModel'
       model.getQualifiedType() == 'springfox.documentation.spring.web.dummy.DummyModels$BusinessModel'
 
@@ -130,20 +148,6 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       item.itemType == null
   }
 
-  def apiListingContext(HandlerMethod handlerMethod, String path) {
-    def requestMappingContext = new RequestMappingContext(
-        documentationContext(),
-        new WebMvcRequestHandler(
-            methodResolver,
-            requestMappingInfo(path), handlerMethod),
-        new TypeNameIndexingAdapter())
-
-    def resourceGroupRequestMappings = newHashMap()
-    resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
-    
-    return new ApiListingScanningContext(documentationContext(), resourceGroupRequestMappings)
-  }
-
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodParameterWithRequestBodyAnnotation',
@@ -151,13 +155,14 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      Map<String, Model> models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+
       models.size() == 1 // instead of 3
       Model model = models.get("BusinessModel")
       model.getName().equals("BusinessModel")
@@ -171,13 +176,14 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      Map<String, Model> models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+
       models.size() == 1 // instead of 3
       Model model = models.get("BusinessModel")
       model.getName().equals("BusinessModel")
@@ -191,14 +197,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      Map<String, Model> models = modelsMap.get(resourceGroup)
-      models.size() == 0 // instead of 3
+      modelsMap.isEmpty() // instead of 3
 
   }
 
@@ -209,9 +213,12 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       RequestMappingContext context = requestMappingContext(handlerMethod)
 
     when:
-      def models = sut.read(context)
+      def modelsMap = sut.read(context)
 
     then:
+      modelsMap.containsKey("0")
+      Map<String, Model> models = Maps.uniqueIndex(modelsMap.get("0"), toModelMap)
+    
       models.size() == 2
       models.containsKey("Entry«string,Pet»")
       models.containsKey("Pet")
@@ -226,15 +233,13 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
     and:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
      
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
-      models.size() == 0
+      modelsMap.isEmpty()
 
   }
 
@@ -243,22 +248,26 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
-      models.size() == 2
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+
+      models_1.size() == 1
+      models_2.size() == 1
 
       String baseModelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
 
-      models.containsKey(baseModelName + '_1')
-      models.containsKey(baseModelName + '_2')
+      models_1.containsKey(baseModelName)
+      models_2.containsKey(baseModelName + '_1')
 
-      Model model_1 = models.get(baseModelName + '_1')
+      Model model_1 = models_1.get(baseModelName)
 
       Map modelProperties_1 = model_1.getProperties()
 
@@ -266,7 +275,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelProperties_1.containsKey('visibleForSerialize')
       modelProperties_1.containsKey('alwaysVisible')
 
-      Model model_2 = models.get(baseModelName + '_2')
+      Model model_2 = models_2.get(baseModelName + '_1')
 
       Map modelProperties_2 = model_2.getProperties()
 
@@ -280,25 +289,28 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSerializeOnlyPropInReturnAndRequestBodyParam',
               DummyModels.ModelWithSerializeOnlyProperty
       )
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     and:
       def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(),
               new TypeResolver(), defaultWebPlugins(), new JacksonEnumTypeDeterminer(), typeNameExtractor)
     when:
-      def modelsMap = snakeCaseReader.read(listingContext)
+      def modelsMap = snakeCaseReader.read(context)
 
     then:    
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
 
-      models.size() == 2
+      models_1.size() == 1
+      models_2.size() == 1
 
       String baseModelName = DummyModels.ModelWithSerializeOnlyProperty.class.simpleName
 
-      models.containsKey(baseModelName + '_1')
-      models.containsKey(baseModelName + '_2')
+      models_1.containsKey(baseModelName)
+      models_2.containsKey(baseModelName + '_1')
 
-      Model model_1 = models[baseModelName + '_1']
+      Model model_1 = models_1[baseModelName]
 
       Map modelProperties_1 = model_1.getProperties()
 
@@ -306,7 +318,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelProperties_1.containsKey('visible_for_serialize')
       modelProperties_1.containsKey('always_visible')
       
-      Model model_2 = models[baseModelName + '_2']
+      Model model_2 = models_2[baseModelName + '_1']
 
       Map modelProperties_2 = model_2.getProperties()
 
@@ -318,23 +330,26 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Test to verify issue #283"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestFoobarDto', FoobarDto)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
 
-      models.size() == 2
+      models_1.size() == 1
+      models_2.size() == 1
 
       String baseModelName = FoobarDto.simpleName
 
-      models.containsKey(baseModelName + '_1')
-      models.containsKey(baseModelName + '_2')
+      models_1.containsKey(baseModelName)
+      models_2.containsKey(baseModelName + '_1')
 
-      Model model_1 = models[baseModelName + '_1']
+      Model model_1 = models_1[baseModelName]
 
       Map modelProperties_1 = model_1.getProperties()
       
@@ -342,7 +357,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelProperties_1.containsKey('visibleForSerialize')
       modelProperties_1.containsKey('foobar')
 
-      Model model_2 = models[baseModelName + '_2']
+      Model model_2 = models_2[baseModelName + '_1']
 
       Map modelProperties_2 = model_2.getProperties()
 
@@ -354,44 +369,228 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Test to verify issue #1196"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypes', Pirate)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sut.read(listingContext)
-      
-    then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
-    and:  
-      Model pirate = models[Pirate.simpleName]
-      Model monkey = models[Monkey.simpleName]
-    and:
-      models.size() == 2
-    and:
-      pirate != null
-      monkey != null
-    and:
-      pirate.getProperties().containsKey('monkey')
-      monkey.getProperties().containsKey('pirate')
+      def modelsMap = sut.read(context)
 
+    then:
+      modelsMap.containsKey("0_1")
+      modelsMap.containsKey("0_0")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+    and:  
+      Model pirate_1 = models_1[Pirate.simpleName]
+      Model monkey_1 = models_1[Monkey.simpleName]
+    and:
+      models_1.size() == 2
+    and:
+      pirate_1 != null
+      monkey_1 != null
+    and:
+      pirate_1.getProperties().containsKey('monkey')
+      ModelReference modelRef_1 = pirate_1.getProperties().get('monkey').getModelRef()
+      modelRef_1.getModelId().get().equals("0_0_springfox.documentation.spring.web.dummy.models.Monkey")
+
+      monkey_1.getProperties().containsKey('pirate')
+      ModelReference modelRef_2 = monkey_1.getProperties().get('pirate').getModelRef()
+      modelRef_2.getModelId().get().equals("0_0_springfox.documentation.spring.web.dummy.models.Pirate")
+
+    and:
+      Model pirate_2 = models_2[Pirate.simpleName]
+      Model monkey_2 = models_2[Monkey.simpleName]
+    and:
+      models_2.size() == 2
+    and:
+      pirate_2 != null
+      monkey_2 != null
+    and:
+      pirate_2.getProperties().containsKey('monkey')
+      ModelReference modelRef_3 = pirate_2.getProperties().get('monkey').getModelRef()
+      modelRef_3.getModelId().get().equals("0_1_springfox.documentation.spring.web.dummy.models.Monkey")
+
+      monkey_2.getProperties().containsKey('pirate')
+      ModelReference modelRef_4 = monkey_2.getProperties().get('pirate').getModelRef()
+      modelRef_4.getModelId().get().equals("0_1_springfox.documentation.spring.web.dummy.models.Pirate")
+
+  }
+
+  def "Test to verify that recursive type same for serialization and deserialization"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypesWithConditions',
+            RecursiveTypeWithConditions)
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+
+    when:
+      def modelsMap = sut.read(context)
+
+    then:
+      modelsMap.containsKey("0_1")
+      modelsMap.containsKey("0_0")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+
+    and:
+      Model recursiveTypeWithConditions_1 = models_1[RecursiveTypeWithConditions.simpleName]
+      Model monkey_1 = models_1[Monkey.simpleName]
+      Model pirate_1 = models_1[Pirate.simpleName]
+    and:
+      models_1.size() == 3
+    and:
+      recursiveTypeWithConditions_1 != null
+      pirate_1 != null
+      monkey_1 != null
+    and:
+      recursiveTypeWithConditions_1.getProperties().containsKey('monkey')
+      ModelReference modelRef_1 = recursiveTypeWithConditions_1.getProperties().get('monkey').getModelRef()
+      modelRef_1.getModelId().get().equals("0_0_springfox.documentation.spring.web.dummy.models.Monkey")
+      modelRef_1.getType().equals('Monkey')
+
+      monkey_1.getProperties().containsKey('pirate')
+      ModelReference modelRef_2 = monkey_1.getProperties().get('pirate').getModelRef()
+      modelRef_2.getModelId().get().equals("0_0_springfox.documentation.spring.web.dummy.models.Pirate")
+      modelRef_2.getType().equals('Pirate')
+
+      pirate_1.getProperties().containsKey('monkey')
+      ModelReference modelRef_3 = pirate_1.getProperties().get('monkey').getModelRef()
+      modelRef_3.getModelId().get().equals("0_0_springfox.documentation.spring.web.dummy.models.Monkey")
+      modelRef_3.getType().equals('Monkey')
+
+    and:
+      Model recursiveTypeWithConditions_2 = models_2[RecursiveTypeWithConditions.simpleName + '_1']
+      Model monkey_2 = models_2[Monkey.simpleName]
+      Model pirate_2 = models_2[Pirate.simpleName]
+    and:
+      models_2.size() == 3
+    and:
+      recursiveTypeWithConditions_2 != null
+      pirate_2 != null
+      monkey_2 != null
+    and:
+      recursiveTypeWithConditions_2.getProperties().containsKey('monkey')
+      ModelReference modelRef_4 = recursiveTypeWithConditions_2.getProperties().get('monkey').getModelRef()
+      modelRef_4.getModelId().get().equals("0_1_springfox.documentation.spring.web.dummy.models.Monkey")
+      modelRef_4.getType().equals('Monkey')
+
+      recursiveTypeWithConditions_2.getProperties().containsKey('conditionalProperty')
+
+      monkey_2.getProperties().containsKey('pirate')
+      ModelReference modelRef_5 = monkey_2.getProperties().get('pirate').getModelRef()
+      modelRef_5.getModelId().get().equals("0_1_springfox.documentation.spring.web.dummy.models.Pirate")
+      modelRef_5.getType().equals('Pirate')
+
+      pirate_2.getProperties().containsKey('monkey')
+      ModelReference modelRef_6 = pirate_2.getProperties().get('monkey').getModelRef()
+      modelRef_6.getModelId().get().equals("0_1_springfox.documentation.spring.web.dummy.models.Monkey")
+      modelRef_6.getType().equals('Monkey')
+
+  }
+
+  def "Test to verify that recursive type different for serialization and deserialization"() {
+    given:
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypesWithNonEqualsConditions',
+            RecursiveTypeWithNonEqualsConditionsOuter)
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+
+    when:
+      def modelsMap = sut.read(context)
+
+    then:
+      modelsMap.containsKey("0_1")
+      modelsMap.containsKey("0_0")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+
+    and:
+      Model recursiveTypeWithConditionsOuter_1 = models_1['RecursiveTypeWithNonEqualsConditionsOuter']
+      Model recursiveTypeWithConditionsMiddle_1 = models_1['RecursiveTypeWithNonEqualsConditionsMiddle']
+      Model recursiveTypeWithConditionsInner_1 = models_1['RecursiveTypeWithNonEqualsConditionsInner']
+    and:
+      models_1.size() == 3
+    and:
+      recursiveTypeWithConditionsOuter_1 != null
+      recursiveTypeWithConditionsMiddle_1 != null
+      recursiveTypeWithConditionsInner_1 != null
+
+    and:
+      recursiveTypeWithConditionsOuter_1.getProperties().size() == 1
+
+      recursiveTypeWithConditionsOuter_1.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsMiddle')
+      ModelReference modelRef_1 = recursiveTypeWithConditionsOuter_1.getProperties()
+            .get('recursiveTypeWithNonEqualsConditionsMiddle').getModelRef()
+      modelRef_1.getModelId().get()
+            .equals("0_0_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddle")
+      modelRef_1.getType().equals('RecursiveTypeWithNonEqualsConditionsMiddle')
+
+      recursiveTypeWithConditionsMiddle_1.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsInner')
+      ModelReference modelRef_2 = recursiveTypeWithConditionsMiddle_1.getProperties()
+            .get('recursiveTypeWithNonEqualsConditionsInner').getModelRef()
+      modelRef_2.getModelId().get()
+           .equals("0_0_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsInner")
+      modelRef_2.getType().equals('RecursiveTypeWithNonEqualsConditionsInner')
+
+      recursiveTypeWithConditionsInner_1.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsOuter')
+      ModelReference modelRef_3 = recursiveTypeWithConditionsInner_1.getProperties()
+           .get('recursiveTypeWithNonEqualsConditionsOuter').getModelRef()
+      modelRef_3.getModelId().get()
+            .equals("0_0_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter")
+      modelRef_3.getType().equals('RecursiveTypeWithNonEqualsConditionsOuter')
+
+    and:
+      Model recursiveTypeWithConditionsOuter_2 = models_2['RecursiveTypeWithNonEqualsConditionsOuter_1']
+      Model recursiveTypeWithConditionsMiddle_2 = models_2['RecursiveTypeWithNonEqualsConditionsMiddle_1']
+      Model recursiveTypeWithConditionsInner_2 = models_2['RecursiveTypeWithNonEqualsConditionsInner_1']
+    and:
+      models_2.size() == 3
+    and:
+      recursiveTypeWithConditionsOuter_2 != null
+      recursiveTypeWithConditionsMiddle_2 != null
+      recursiveTypeWithConditionsInner_2 != null
+
+    and:
+      recursiveTypeWithConditionsOuter_2.getProperties().size() == 2
+
+      recursiveTypeWithConditionsOuter_2.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsMiddle')
+      ModelReference modelRef_4 = recursiveTypeWithConditionsOuter_2.getProperties()
+            .get('recursiveTypeWithNonEqualsConditionsMiddle').getModelRef()
+      modelRef_4.getModelId().get()
+            .equals("0_1_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddle")
+      modelRef_4.getType().equals('RecursiveTypeWithNonEqualsConditionsMiddle_1')
+
+      recursiveTypeWithConditionsMiddle_2.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsInner')
+      ModelReference modelRef_5 = recursiveTypeWithConditionsMiddle_2.getProperties()
+            .get('recursiveTypeWithNonEqualsConditionsInner').getModelRef()
+      modelRef_5.getModelId().get()
+           .equals("0_1_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsInner")
+      modelRef_5.getType().equals('RecursiveTypeWithNonEqualsConditionsInner_1')
+
+      recursiveTypeWithConditionsInner_2.getProperties().containsKey('recursiveTypeWithNonEqualsConditionsOuter')
+      ModelReference modelRef_6 = recursiveTypeWithConditionsInner_2.getProperties()
+           .get('recursiveTypeWithNonEqualsConditionsOuter').getModelRef()
+      modelRef_6.getModelId().get()
+            .equals("0_1_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter")
+      modelRef_6.getType().equals('RecursiveTypeWithNonEqualsConditionsOuter_1')
   }
 
   def "Test to verify that duplicate class names in different packages will be prodused as different models (#182)"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestIssue182', Pet)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
 
-      Model pet_1 = models["Pet_1"]
-      Model pet_2 = models["Pet_2"]
+      Model pet_1 = models_1["Pet"]
+      Model pet_2 = models_2["Pet_1"]
 
-      models.size() == 2
+      models_1.size() == 1
+      models_2.size() == 1
     and:
       pet_1 != null
       pet_1.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.Pet");
@@ -414,58 +613,93 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSerializationAndDeserialization', 
               Map)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
 
-      Model fancyPet = models["FancyPet"]
-      Model category = models["Category"]
+      Model fancyPet_1 = models_1["FancyPet"]
+      Model category_1 = models_1["Category"]
 
-      models.size() == 2
-    and:
-      fancyPet != null
-      fancyPet.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.FancyPet");
+      Model fancyPet_2 = models_2["FancyPet"]
+      Model category_2 = models_2["Category"]
 
-      category != null
-      category.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.Category");
+      models_1.size() == 2
+      models_2.size() == 2
     and:
-      fancyPet.getProperties().size() == 4
-      fancyPet.getProperties().containsKey('id')
-      fancyPet.getProperties().containsKey('name')
-      fancyPet.getProperties().containsKey('age')
-      fancyPet.getProperties().containsKey('categories')
+      fancyPet_1 != null
+      fancyPet_1.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.FancyPet");
+
+      category_1 != null
+      category_1.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.Category");
     and:
-      category.getProperties().size() == 1
-      category.getProperties().containsKey('name')
+      fancyPet_1.getProperties().size() == 4
+      fancyPet_1.getProperties().containsKey('id')
+      fancyPet_1.getProperties().containsKey('name')
+      fancyPet_1.getProperties().containsKey('age')
+      fancyPet_1.getProperties().containsKey('categories')
+    and:
+      ModelReference modelRef_1 = fancyPet_1.getProperties().get('categories').getModelRef()
+      modelRef_1.isCollection();
+      modelRef_1.itemModel().get()
+          .getModelId().get().equals("0_0_springfox.documentation.spring.web.dummy.models.Category")
+    and:
+      category_1.getProperties().size() == 1
+      category_1.getProperties().containsKey('name')
+
+    and:
+      fancyPet_2 != null
+      fancyPet_1.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.FancyPet");
+
+      category_2 != null
+      category_1.qualifiedType.equals("springfox.documentation.spring.web.dummy.models.Category");
+    and:
+      fancyPet_2.getProperties().size() == 4
+      fancyPet_2.getProperties().containsKey('id')
+      fancyPet_2.getProperties().containsKey('name')
+      fancyPet_2.getProperties().containsKey('age')
+      fancyPet_2.getProperties().containsKey('categories')
+    and:
+      ModelReference modelRef_2 = fancyPet_2.getProperties().get('categories').getModelRef()
+      modelRef_2.isCollection();
+      modelRef_2.itemModel().get()
+          .getModelId().get().equals("0_1_springfox.documentation.spring.web.dummy.models.Category")
+    and:
+      category_2.getProperties().size() == 1
+      category_2.getProperties().containsKey('name')
 
   }
 
   def "Test to verify that different class for serialization and deserialization will be produced as two models"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestSameClassesWithDifferentProperties', SameFancyPet)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
 
-      Model category_1 = models["SameCategory_1"]
-      Model category_2 = models["SameCategory_2"]
+      Model category_1 = models_1["SameCategory"]
+      Model category_2 = models_2["SameCategory_1"]
 
-      Model mapFancyPet = models["MapFancyPet"]
+      Model mapFancyPet = models_1["MapFancyPet"]
 
-      Model fancyPet_1 = models["SameFancyPet_1"]
-      Model fancyPet_2 = models["SameFancyPet_2"]
+      Model fancyPet_1 = models_1["SameFancyPet"]
+      Model fancyPet_2 = models_2["SameFancyPet_1"]
 
-      models.size() == 5
+      models_1.size() == 3
+      models_2.size() == 2
     and:
       category_1 != null
       category_2 != null
@@ -504,19 +738,22 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Test to verify that @JsonView works correctly with DEFAULT_VIEW_INCLUSION (issues #563, #807, #895"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestJsonView', PetWithJsonView)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
 
-      Model pet_1 = models["PetWithJsonView_1"]
-      Model pet_2 = models["PetWithJsonView_2"]
+      Model pet_1 = models_1["PetWithJsonView"]
+      Model pet_2 = models_2["PetWithJsonView_1"]
 
-      models.size() == 2
+      models_1.size() == 1
+      models_2.size() == 1
     and:
       pet_1 != null
       pet_2 != null
@@ -535,19 +772,22 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Test to verify that @JsonView works correctly without DEFAULT_VIEW_INCLUSION (issues #563, #807, #895"() {
     given:
       HandlerMethod handlerMethod = dummyHandlerMethod('methodToTestJsonView', PetWithJsonView)
-      ApiListingScanningContext listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
 
     when:
-      def modelsMap = sutSpecial.read(listingContext)
+      def modelsMap = sutSpecial.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
 
-      Model pet_1 = models["PetWithJsonView_1"]
-      Model pet_2 = models["PetWithJsonView_2"]
+      Model pet_1 = models_1["PetWithJsonView"]
+      Model pet_2 = models_2["PetWithJsonView_1"]
 
-      models.size() == 2
+      models_1.size() == 1
+      models_2.size() == 1
     and:
       pet_1 != null
       pet_2 != null

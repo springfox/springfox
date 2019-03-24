@@ -55,26 +55,25 @@ class UnwrappedTypeSpec extends Specification {
     given:
       def provider = defaultModelProvider(objectMapperThatUsesFields())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
     when:
       Model asInput = provider.modelFor(
-          inputParam("group",
+          inputParam("0_0",
+              "group",
               resolver.resolve(UnwrappedTypeForField),
               Optional.absent(),
               new HashSet<>(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
           .get()
       Model asReturn = provider.modelFor(
-          returnValue("group",
+          returnValue("0_0",
+              "group",
               resolver.resolve(UnwrappedTypeForField),
               Optional.absent(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -110,26 +109,25 @@ class UnwrappedTypeSpec extends Specification {
     given:
     def provider = defaultModelProvider(objectMapperThatUsesFields())
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
-    def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
 
     when:
     Model asInput = provider.modelFor(
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             resolver.resolve(UnwrappedTypeForFieldWithGetter),
             Optional.absent(),
             new HashSet<>(),
             SWAGGER_12,
-            uniqueTypeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
         .get()
     Model asReturn = provider.modelFor(
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             resolver.resolve(UnwrappedTypeForFieldWithGetter),
             Optional.absent(),
             SWAGGER_12,
-            uniqueTypeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -166,24 +164,23 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(
         objectMapperThatUsesGetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
     when:
       Model asInput = provider.modelFor(
-          inputParam("group",
+          inputParam("0_0",
+              "group",
               resolver.resolve(UnwrappedTypeForGetter),
               Optional.absent(),
               new HashSet<>(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = provider.modelFor(
-          returnValue("group",
+          returnValue("0_0",
+              "group",
               resolver.resolve(UnwrappedTypeForGetter),
               Optional.absent(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
@@ -219,24 +216,23 @@ class UnwrappedTypeSpec extends Specification {
       def provider = defaultModelProvider(
         objectMapperThatUsesSetters())
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
     when:
       Model asInput = provider.modelFor(
-          inputParam("group",
+          inputParam("0_0",
+              "group",
               resolver.resolve(UnwrappedTypeForSetter),
               Optional.absent(),
               new HashSet<>(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()
       Model asReturn = provider.modelFor(
-          returnValue("group",
+          returnValue("0_0",
+              "group",
               resolver.resolve(UnwrappedTypeForSetter),
               Optional.absent(),
               SWAGGER_12,
-              uniqueTypeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build())).get()

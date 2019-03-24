@@ -26,7 +26,6 @@ import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
@@ -48,12 +47,12 @@ class ApiModelBuilderSpec extends Specification {
     given:
       ApiModelBuilder sut = new ApiModelBuilder(resolver, Mock(TypeNameExtractor), Mock(EnumTypeDeterminer))
       ModelContext context = ModelContext.inputParam(
+          "0",
           "group",
           resolver.resolve(type),
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_12,
-          new TypeNameIndexingAdapter(),
           new AlternateTypeProvider([]),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

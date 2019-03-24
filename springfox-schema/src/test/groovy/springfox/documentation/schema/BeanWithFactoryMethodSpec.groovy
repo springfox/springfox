@@ -35,21 +35,21 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def sut = defaultModelProvider()
       def typeToTest = resolver.resolve(typeWithConstructorProperties())
       def reqContext = inputParam(
+          "0_0",
           "group",
           typeToTest,
           Optional.absent(),
           new HashSet<>(),
           documentationType,
-          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
       def resContext = returnValue(
+          "0_0",
           "group",
           typeToTest,
           Optional.absent(),
           documentationType,
-          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -80,21 +80,21 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def sut = defaultModelProvider()
       def typeToTest = resolver.resolve(typeWithDelegatedConstructor())
       def reqContext = inputParam(
+          "0_0",
           "group",
           typeToTest,
           Optional.absent(),
           new HashSet<>(),
           documentationType,
-          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
       def resContext = returnValue(
+          "0_0",
           "group",
           typeToTest,
           Optional.absent(),
           documentationType,
-          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
@@ -125,21 +125,21 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       def sut = defaultModelProvider()
       def typeToTest = resolver.resolve(typeWithDelegatedConstructor())
       def reqContext = inputParam(
+          "0_0",
           "group",
           typeToTest,
           Optional.absent(),
           new HashSet<>(),
           documentationType,
-          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())
       def resContext = returnValue(
+          "0_0",
           "group",
           typeToTest,
           Optional.absent(),
           documentationType,
-          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

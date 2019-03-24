@@ -93,14 +93,13 @@ class SchemaPluginsManagerSpec extends Specification {
   def "enriches model when plugins are found"() {
     given:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
       def context = inputParam(
+          "0_0",
           "group",
           resolver.resolve(TypeForTestingPropertyNames),
           Optional.absent(),
           new HashSet<>(),
           SPRING_WEB,
-          uniqueTypeNameAdapter,
           new AlternateTypeProvider([]),
           namingStrategy,
           ImmutableSet.builder().build())
@@ -114,14 +113,13 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model name when plugins are found"() {
     given:
-      def uniqueTypeNameAdapter = new TypeNameIndexingAdapter();
       def context = inputParam(
+          "0_0",
           "group",
           resolver.resolve(ExampleWithEnums),
           Optional.absent(),
           new HashSet<>(),
           SPRING_WEB,
-          uniqueTypeNameAdapter,
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

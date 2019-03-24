@@ -29,7 +29,6 @@ import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.bean.AccessorsProvider
 import springfox.documentation.schema.property.field.FieldProvider
 import springfox.documentation.service.Parameter
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
@@ -187,12 +186,12 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     OperationContext operationContext = new OperationContext(
         new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET,
-        new RequestMappingContext(documentationContext(),
+        new RequestMappingContext("0",
+            documentationContext(),
             new WebMvcRequestHandler(
                 methodResolver,
                 requestMappingInfo("/somePath"),
-                dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class)),
-            Mock(UniqueTypeNameAdapter)),
+                dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))),
         0)
     when:
     sut.apply(operationContext)

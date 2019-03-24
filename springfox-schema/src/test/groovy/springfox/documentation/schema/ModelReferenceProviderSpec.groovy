@@ -36,12 +36,12 @@ class ModelReferenceProviderSpec extends Specification {
     given:
       def resolver = new TypeResolver()
       def modelContext = inputParam(
+          "0_0",
           "group",
           resolver.resolve(TypeWithMapOfMaps),
           Optional.absent(),
           new HashSet<>(),
           DocumentationType.SWAGGER_2,
-          new TypeNameIndexingAdapter(),
           alternateTypeProvider(),
           new DefaultGenericTypeNamingStrategy(),
           ImmutableSet.builder().build())

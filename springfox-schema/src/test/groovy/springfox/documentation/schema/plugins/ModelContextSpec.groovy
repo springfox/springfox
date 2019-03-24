@@ -30,7 +30,6 @@ import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.ExampleWithEnums
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -48,18 +47,16 @@ class ModelContextSpec extends Specification {
   AlternateTypeProvider provider = Mock(AlternateTypeProvider)
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
-  @Shared
-  def typeNameAdapter = new TypeNameIndexingAdapter()
 
   def "ModelContext equals works as expected"() {
     given:
       ModelContext context = inputParam(
+          "0_0",
           "group",
           resolver.resolve(ExampleEnum),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
@@ -75,23 +72,23 @@ class ModelContextSpec extends Specification {
   }
 
   def inputParam(ResolvedType ofType) {
-    inputParam("group",
+    inputParam("0_0",
+        "group",
         ofType,
         Optional.absent(),
         new HashSet<>(),
         SWAGGER_12,
-        typeNameAdapter,
         provider,
         namingStrategy,
         ImmutableSet.builder().build())
   }
 
   def returnValue(ResolvedType ofType) {
-    returnValue("group",
+    returnValue("0_0",
+        "group",
         ofType,
         Optional.absent(),
         SWAGGER_12,
-        typeNameAdapter,
         provider,
         namingStrategy,
         ImmutableSet.builder().build())
@@ -99,29 +96,29 @@ class ModelContextSpec extends Specification {
 
   def "ModelContext hashcode generated takes into account immutable values"() {
     given:
-      ModelContext context = inputParam("group",
+      ModelContext context = inputParam("0_0",
+          "group",
           resolver.resolve(ExampleEnum),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
-      ModelContext other = inputParam("group",
+      ModelContext other = inputParam("0_0",
+          "group",
           resolver.resolve(ExampleEnum),
           Optional.absent(),
           new HashSet<>(),
           SWAGGER_12,
-          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())
-      ModelContext otherReturn = returnValue("group",
+      ModelContext otherReturn = returnValue("0_0",
+          "group",
           resolver.resolve(ExampleEnum),
           Optional.absent(),
           SWAGGER_12,
-          typeNameAdapter,
           provider,
           namingStrategy,
           ImmutableSet.builder().build())

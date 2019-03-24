@@ -18,14 +18,18 @@
  */
 package springfox.documentation.swagger2.mappers
 
+import com.fasterxml.classmate.ResolvedType
+import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.google.common.collect.ImmutableSet
+import com.google.common.collect.Maps
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
 import io.swagger.models.properties.StringProperty
 import org.mapstruct.factory.Mappers
 import spock.lang.Unroll
+import springfox.documentation.builders.ModelBuilder
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
@@ -34,7 +38,6 @@ import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.SimpleType
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
@@ -50,18 +53,23 @@ import static springfox.documentation.swagger2.mappers.ModelMapper.*
 class ModelMapperSpec extends SchemaSpecification {
 
   def namingStrategy = new CodeGenGenericTypeNamingStrategy()
-  def typeNameAdapter = new TypeNameIndexingAdapter()
+
+  def getIds =
+  new Function<Model, String>() {
+    public String apply(Model model) {
+      return model.getId();
+    }}
 
   def "models are serialized correctly"() {
     given:
     Model model = modelProvider.modelFor(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(typeToTest),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -88,12 +96,12 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
       Model model = modelProvider.modelFor(
           inputParam(
+              "0_0",
               "group",
               resolver.resolve(typeWithVoidLists()),
               Optional.absent(),
               new HashSet<>(),
               DocumentationType.SWAGGER_2,
-              typeNameAdapter,
               alternateTypeProvider(),
               namingStrategy,
               ImmutableSet.builder().build()))
@@ -114,50 +122,50 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependences are inferred correctly for list of map of string to string"() {
     given:
-    Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<ResolvedType, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(listOfMapOfStringToString()),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
 
     when:
-    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(Maps.uniqueIndex(modelMap.values(), getIds))
 
     then:
-      mapped.containsKey("1484189964")
+      mapped.containsKey("0_0_java.util.Map<java.lang.String,java.lang.String>")
     and:
-      def mappedModel = mapped.get("1484189964")
+      def mappedModel = mapped.get("0_0_java.util.Map<java.lang.String,java.lang.String>")
       mappedModel.name.equals("MapOfstringAndstring")
       mappedModel.additionalProperties instanceof StringProperty
   }
 
   def "model dependencies are inferred correctly for list of ModelMap"() {
     given:
-    Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<ResolvedType, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(listOfModelMap()),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
 
     when:
-    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(Maps.uniqueIndex(modelMap.values(), getIds))
 
     then:
-      mapped.containsKey("1038962798")
+      mapped.containsKey("0_0_org.springframework.ui.ModelMap")
     and:
-      def mappedModel = mapped.get("1038962798")
+      def mappedModel = mapped.get("0_0_org.springframework.ui.ModelMap")
       mappedModel.name.equals("ModelMap")
       mappedModel.additionalProperties instanceof ObjectProperty
 
@@ -165,26 +173,26 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of map of string to Simpletype"() {
     given:
-    Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<ResolvedType, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(listOfMapOfStringToSimpleType()),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
 
     when:
-    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(Maps.uniqueIndex(modelMap.values(), getIds))
 
     then:
-      mapped.containsKey("-1575815720")
-      mapped.containsKey("1620190715")
+      mapped.containsKey("0_0_java.util.Map<java.lang.String,springfox.documentation.schema.SimpleType>")
+      mapped.containsKey("0_0_springfox.documentation.schema.SimpleType")
     and:
-      def mappedModel = mapped.get("-1575815720")
+      def mappedModel = mapped.get("0_0_java.util.Map<java.lang.String,springfox.documentation.schema.SimpleType>")
       mappedModel.name.equals("MapOfstringAndSimpleType")
       mappedModel.additionalProperties instanceof RefProperty
 
@@ -192,14 +200,14 @@ class ModelMapperSpec extends SchemaSpecification {
 
   def "model dependencies are inferred correctly for list of erased map"() {
     given:
-    Map<String, Model> modelMap = modelProvider.dependencies(
+    Map<ResolvedType, Model> modelMap = modelProvider.dependencies(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(listOfErasedMap()),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build()))
@@ -215,12 +223,12 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
     Model model = modelProvider.modelFor(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(genericClassOfType(Void)),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -256,12 +264,12 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
     Model model = modelProvider.modelFor(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(simpleType()),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -272,7 +280,10 @@ class ModelMapperSpec extends SchemaSpecification {
 
     and: "we add a fake allowable range"
     def intObject = model.properties.get("anObjectInt")
-    model.properties.put("anObjectInt", updatedIntObject(intObject))
+    def properteis = new HashMap(model.properties)
+    properteis.put("anObjectInt", updatedIntObject(intObject))
+    model = new ModelBuilder(model).properties(properteis).build()
+    modelMap.put("test", model)
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
@@ -375,12 +386,12 @@ class ModelMapperSpec extends SchemaSpecification {
     given:
     Model model = modelProvider.modelFor(
         inputParam(
+            "0_0",
             "group",
             resolver.resolve(simpleType()),
             Optional.absent(),
             new HashSet<>(),
             DocumentationType.SWAGGER_2,
-            typeNameAdapter,
             alternateTypeProvider(),
             namingStrategy,
             ImmutableSet.builder().build())).get()
@@ -391,7 +402,10 @@ class ModelMapperSpec extends SchemaSpecification {
 
     and: "we add a fake allowable range"
     def stringObject = model.properties.get("aString")
-    model.properties.put("aString", updatedStringObject(stringObject))
+    def properties = new HashMap(model.properties)
+    properties.put("aString", updatedStringObject(stringObject))
+    model = new ModelBuilder(model).properties(properties).build()
+    modelMap.put("test", model)
 
     when:
     def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)

@@ -163,12 +163,12 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     def resolver = new TypeResolver()
     ModelContext modelContext = inputParam(
+        "0_0",
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
         Optional.absent(),
         new HashSet<>(),
         SWAGGER_12,
-        new TypeNameIndexingAdapter(),
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())
@@ -214,12 +214,12 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     def resolver = new TypeResolver()
     ModelContext modelContext = inputParam(
+        "0_0",
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
         Optional.absent(),
         new HashSet<>(),
         SWAGGER_12,
-        new TypeNameIndexingAdapter(),
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
         ImmutableSet.builder().build())

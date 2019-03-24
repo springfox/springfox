@@ -20,18 +20,20 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
+import com.google.common.base.Function
+
 import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.method.HandlerMethod
+import com.google.common.collect.Maps;
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.TypeNameIndexingAdapter
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -81,20 +83,34 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
     resourceGroup = new ResourceGroup("businesses", DummyClass)
   }
 
+  def requestMappingContext(HandlerMethod handlerMethod, String path) {
+    return new RequestMappingContext(
+        "0",
+        documentationContext(),
+        new WebMvcRequestHandler(methodResolver, requestMappingInfo('/somePath'),
+            handlerMethod))
+  }
+
+  def Function<Model, String> toModelMap = new Function<Model, String>(){
+          public String apply(Model model) {
+              return model.getName();
+          }};
+
   def "Annotated model"() {
     given:
-      def listingContext = apiListingContext(dummyHandlerMethod('methodWithModelPropertyAnnotations'), '/somePath')
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithModelPropertyAnnotations')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
-      models.size() == 2
+      modelsMap.containsKey("0_0")
+      Map<String, Model> models = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      models.size() == 1
      
       models.containsKey('AnnotatedBusinessModel')
       Model model = models.get('AnnotatedBusinessModel')
-      model.id == '-1161799015'
+      model.id == '0_0_springfox.documentation.spring.web.dummy.DummyModels$AnnotatedBusinessModel'
       model.getName() == 'AnnotatedBusinessModel'
       model.getQualifiedType() == 'springfox.documentation.spring.web.dummy.DummyModels$AnnotatedBusinessModel'
 
@@ -110,44 +126,31 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
   def "Should pull models from Api Operation response class"() {
     given:
-      def listingContext = apiListingContext(dummyHandlerMethod('methodApiResponseClass'), '/somePath')
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodApiResponseClass')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
-      models.size() == 2
+      modelsMap.containsKey("0_1")
+      Map<String, Model> models = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+      models.size() == 1
 
       models['FunkyBusiness'].getQualifiedType() == 'springfox.documentation.spring.web.dummy.DummyModels$FunkyBusiness'
   }
 
   def "Should pull models from operation's ApiResponse annotations"() {
     given:
-     def listingContext = apiListingContext(dummyHandlerMethod('methodAnnotatedWithApiResponse'), '/somePath')
+      HandlerMethod handlerMethod = dummyHandlerMethod('methodAnnotatedWithApiResponse')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_2")
+      Map<String, Model> models = Maps.uniqueIndex(modelsMap.get("0_2"), toModelMap)
 
       models.size() == 1
       models['RestError'].getQualifiedType() == 'springfox.documentation.spring.web.dummy.RestError'
-  }
-
-  def apiListingContext(HandlerMethod handlerMethod, String path) {
-    def requestMappingContext = new RequestMappingContext(
-        documentationContext(),
-        new WebMvcRequestHandler(
-            methodResolver,
-            requestMappingInfo(path),
-            handlerMethod),
-        new TypeNameIndexingAdapter())
-
-    def resourceGroupRequestMappings = newHashMap()
-    resourceGroupRequestMappings.put(resourceGroup, [requestMappingContext])
-    
-    return new ApiListingScanningContext(documentationContext(), resourceGroupRequestMappings)
   }
 
   def "should only generate models for request parameters that are annotated with Springs RequestBody"() {
@@ -157,17 +160,22 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
               HttpServletResponse.class,
               DummyModels.AnnotatedBusinessModel.class
       )
-      def listingContext = apiListingContext(handlerMethod, '/somePath')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      !modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      modelsMap.containsKey("0_2")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_2"), toModelMap)
 
-      models.size() == 2 // instead of 3
-      models.containsKey("BusinessModel")
-      models.containsKey("RestError") // from class-level annotation.
+      models_1.size() == 1
+      models_1.containsKey("BusinessModel")
+
+      models_2.size() == 1
+      models_2.containsKey("RestError") // from class-level annotation.
 
   }
 
@@ -179,16 +187,14 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
 
     and:
       HandlerMethod handlerMethod = handlerMethodIn(BusinessService, 'getResponseEntity', String)
-      def listingContext = apiListingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
 
-      models.size() == 0
+      modelsMap.isEmpty()
 
   }
 
@@ -197,23 +203,30 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       HandlerMethod handlerMethod = dummyHandlerMethod('methodWithSameAnnotatedModelInReturnAndRequestBodyParam',
               DummyModels.AnnotatedBusinessModel
       )
-      def listingContext = apiListingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
+      RequestMappingContext context = requestMappingContext(handlerMethod, '/businesses/responseEntity/{businessId}')
 
     when:
-      def modelsMap = sut.read(listingContext)
+      def modelsMap = sut.read(context)
 
     then:
-      modelsMap.containsKey(resourceGroup)
-      def models = modelsMap.get(resourceGroup)
+      modelsMap.containsKey("0_0")
+      modelsMap.containsKey("0_1")
+      modelsMap.containsKey("0_2")
+      Map<String, Model> models_0 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_2"), toModelMap)
 
-      models.size() == 2
-      models.containsKey('RestError') // from class-level annotation.
+      models_0.size() == 1
+      models_1.size() == 1
 
       String modelName = DummyModels.AnnotatedBusinessModel.class.simpleName
 
-      models.containsKey(modelName)
+      models_0.containsKey(modelName)
+      models_1.containsKey(modelName)
 
-      Model model = models[modelName]
+      Model model = models_1[modelName]
+
+      model.equalsIgnoringName(models_0[modelName])
 
       Map modelProperties = model.getProperties()
 
@@ -226,6 +239,9 @@ class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
       
       ModelProperty numEmployeesProperty = modelProperties['numEmployees']
       numEmployeesProperty .getDescription().equals('Total number of current employees')
+
+      models_2.size() == 1
+      models_2.containsKey('RestError') // from class-level annotation.
 
   }
 

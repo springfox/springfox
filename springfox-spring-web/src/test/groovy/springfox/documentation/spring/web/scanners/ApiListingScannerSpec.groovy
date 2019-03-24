@@ -21,12 +21,12 @@ package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
 import com.google.common.collect.Multimap
+
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
@@ -247,12 +247,12 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
     RequestMappingContext requestMappingContext =
         new RequestMappingContext(
+            "0",
             context,
             new WebMvcRequestHandler(
                 methodResolver,
                 requestMappingInfo,
-                dummyHandlerMethod(methodName)),
-                Mock(UniqueTypeNameAdapter))
+                dummyHandlerMethod(methodName)))
     requestMappingContext
   }
 

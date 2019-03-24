@@ -48,6 +48,7 @@ class ModelRefSpec extends Specification {
       ModelReference model = new ModelRef("string")
     expect:
       model.equals(testModel) == expectedEquality
+      testModel.equals(model) == expectedEquality
       model.equals(model)
       !model.equals(null)
       !model.equals(new Object())
@@ -55,14 +56,17 @@ class ModelRefSpec extends Specification {
       (model.hashCode() == testModel.hashCode()) == expectedEquality
       model.hashCode() == model.hashCode()
     where:
-      testModel                                                                                          | expectedEquality
-      new ModelRef("string")                                                                             | true
-      new ModelRef("string", null as ModelReference)                                                     | true
-      new ModelRef("integer", null, true)                                                                | false
-      new ModelRef("string", null, true)                                                                 | false
-      new ModelRef("string", new ModelRef("List"), false)                                                | false
-      new ModelRef("string", new ModelRef("Map"), new AllowableRangeValues("3", "5"), Optional.of(3434)) | false
-      new ModelRef("string", null, new AllowableRangeValues("3", "5"), Optional.of(3434))                | false
-      new ModelRef("string", null, null, Optional.of(3434))                                              | false
+      testModel                                                                     | expectedEquality
+      new ModelRef("string")                                                        | true
+      new ModelRef("string", null as ModelReference)                                | true
+      new ModelRef("integer", null, true)                                           | false
+      new ModelRef("string", null, true)                                            | false
+      new ModelRef("string", new AllowableRangeValues("3", "5"))                    | false
+      new ModelRef("string", new ModelRef("List"), false)                           | false
+      new ModelRef("string", "java.lang.String", new ModelRef("Map"), null, "3434") | false
+      new ModelRef("string", "java.lang.String", null, null, "3434")                | false
+      new ModelRef("string", "java.lang.String", null, null, "3434")                | false
+      new ModelRef("string", null, null, null, "3434")                              | false
+      new ModelRef("string", "java.lang.String", null, null, null)                  | false
   }
 }

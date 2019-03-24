@@ -20,11 +20,11 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
+
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
-import springfox.documentation.spi.schema.UniqueTypeNameAdapter
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -52,12 +52,12 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
     )
     RequestMappingContext mappingContext = new RequestMappingContext(
+        "0",
         documentationContext(),
         new WebMvcRequestHandler(
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo,
-            dummyHandlerMethod()),
-        Mock(UniqueTypeNameAdapter))
+            dummyHandlerMethod()))
     operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
 
     when:
@@ -96,12 +96,12 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         "/doesNotMatterForThisTest",
         [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}')])
     RequestMappingContext mappingContext = new RequestMappingContext(
+        "0",
         documentationContext(),
         new WebMvcRequestHandler(
             new HandlerMethodResolver(new TypeResolver()),
             requestMappingInfo,
-            dummyHandlerMethod()),
-        Mock(UniqueTypeNameAdapter))
+            dummyHandlerMethod()))
     operationReader.read(_) >> { throw new StackOverflowError("ouch") }
 
     when:
