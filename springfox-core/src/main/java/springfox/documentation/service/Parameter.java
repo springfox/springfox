@@ -27,6 +27,7 @@ import springfox.documentation.schema.ModelReference;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class Parameter implements Ordered {
   public static final int DEFAULT_PRECEDENCE = 0;
@@ -39,7 +40,7 @@ public class Parameter implements Ordered {
   private final ModelReference modelRef;
   private final ResolvedType type;
   private final AllowableValues allowableValues;
-  private final String paramType;
+  private final ParameterType paramType;
   private final String paramAccess;
   private final Boolean hidden;
   private final String pattern;
@@ -49,6 +50,9 @@ public class Parameter implements Ordered {
   private final Map<String, List<Example>> examples;
   private final List<VendorExtension> vendorExtensions;
   private final Boolean allowEmptyValue;
+  private final ParameterStyle style;
+  private final Boolean explode;
+  private final Boolean allowReserved;
   
   @SuppressWarnings("ParameterNumber")
   public Parameter(
@@ -61,7 +65,7 @@ public class Parameter implements Ordered {
       ModelReference modelRef,
       ResolvedType type,
       AllowableValues allowableValues,
-      String paramType,
+      ParameterType paramType,
       String paramAccess,
       boolean hidden,
       String pattern,
@@ -69,7 +73,10 @@ public class Parameter implements Ordered {
       int order,
       Object scalarExample,
       Map<String, List<Example>> examples,
-      List<VendorExtension> vendorExtensions) {
+      List<VendorExtension> vendorExtensions,
+      ParameterStyle style,
+      Boolean explode,
+      Boolean allowReserved) {
 
     this.description = description;
     this.defaultValue = defaultValue;
@@ -89,10 +96,13 @@ public class Parameter implements Ordered {
     this.scalarExample = scalarExample;
     this.examples = examples;
     this.vendorExtensions = vendorExtensions;
+    this.style = style;
+    this.explode = explode;
+    this.allowReserved = allowReserved;
   }
 
   public Optional<ResolvedType> getType() {
-    return type;
+    return Optional.ofNullable(type);
   }
 
   public String getName() {
@@ -120,7 +130,39 @@ public class Parameter implements Ordered {
   }
 
   public String getParamType() {
-    return paramType;
+    return paramType.getIn();
+  }
+
+  public Boolean getRequired() {
+    return required;
+  }
+
+  public Boolean getAllowMultiple() {
+    return allowMultiple;
+  }
+
+  public Boolean getHidden() {
+    return hidden;
+  }
+
+  public List<VendorExtension> getVendorExtensions() {
+    return vendorExtensions;
+  }
+
+  public Boolean getAllowEmptyValue() {
+    return allowEmptyValue;
+  }
+
+  public ParameterStyle getStyle() {
+    return style;
+  }
+
+  public Boolean getExplode() {
+    return explode;
+  }
+
+  public Boolean getAllowReserved() {
+    return allowReserved;
   }
 
   public String getParamAccess() {
@@ -166,11 +208,28 @@ public class Parameter implements Ordered {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("Parameter{");
-    sb.append("name='").append(name).append('\'');
-    sb.append(", description='").append(description).append('\'');
-    sb.append(", order='").append(order).append('\'');
-    sb.append('}');
-    return sb.toString();
+    return new StringJoiner(", ", Parameter.class.getSimpleName() + "[", "]")
+        .add("name='" + name + "'")
+        .add("description='" + description + "'")
+        .add("defaultValue='" + defaultValue + "'")
+        .add("required=" + required)
+        .add("allowMultiple=" + allowMultiple)
+        .add("modelRef=" + modelRef)
+        .add("type=" + type)
+        .add("allowableValues=" + allowableValues)
+        .add("paramType=" + paramType)
+        .add("paramAccess='" + paramAccess + "'")
+        .add("hidden=" + hidden)
+        .add("pattern='" + pattern + "'")
+        .add("collectionFormat='" + collectionFormat + "'")
+        .add("order=" + order)
+        .add("scalarExample=" + scalarExample)
+        .add("examples=" + examples)
+        .add("vendorExtensions=" + vendorExtensions)
+        .add("allowEmptyValue=" + allowEmptyValue)
+        .add("style=" + style)
+        .add("explode=" + explode)
+        .add("allowReserved=" + allowReserved)
+        .toString();
   }
 }

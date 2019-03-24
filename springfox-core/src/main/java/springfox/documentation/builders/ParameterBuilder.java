@@ -25,6 +25,8 @@ import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ParameterStyle;
+import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class ParameterBuilder {
   private boolean required;
   private boolean allowMultiple;
   private AllowableValues allowableValues;
-  private String paramType;
+  private ParameterType paramType;
   private String paramAccess;
   private ResolvedType type;
   private ModelReference modelRef;
@@ -57,6 +59,9 @@ public class ParameterBuilder {
   private int order = Ordered.LOWEST_PRECEDENCE;
   private Object scalarExample;
   private Map<String, List<Example>> examples = new HashMap<>();
+  private ParameterStyle style;
+  private Boolean explode;
+  private Boolean allowReserved;
 
   /**
    * Copy builder
@@ -151,11 +156,23 @@ public class ParameterBuilder {
 
   /**
    * Updates the type of parameter
-   *
+   * @deprecated @since 3.0.0. Use @see {@link ParameterBuilder#parameterType(ParameterType)} instead
    * @param paramType - Could be header, cookie, body, query etc.
    * @return this
    */
+  @Deprecated
   public ParameterBuilder parameterType(String paramType) {
+    this.paramType = defaultIfAbsent(ParameterType.valueOf(paramType), this.paramType);
+    return this;
+  }
+
+  /**
+   * Updates the type of parameter
+   * @since 3.0.0
+   * @param paramType - Could be header, cookie, body, query etc.
+   * @return this
+   */
+  public ParameterBuilder parameterType(ParameterType paramType) {
     this.paramType = defaultIfAbsent(paramType, this.paramType);
     return this;
   }
@@ -274,6 +291,42 @@ public class ParameterBuilder {
     return this;
   }
 
+
+  /**
+   * @since 3.0.0
+   * @param style https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#style-values
+   * @return this
+   */
+  public ParameterBuilder style(ParameterStyle style) {
+    this.style = style;
+    return this;
+  }
+
+  /**
+   * @since 3.0.0
+   * @param explode When this is true, parameter values of type array or object generate separate parameters
+   *                for each value of the array or key-value pair of the map. For other types of parameters
+   *                this property has no effect. When style is form, the default value is true. For all other
+   *                styles, the default value is false.
+   * @return this
+   */
+  public ParameterBuilder explode(Boolean explode) {
+    this.explode = explode;
+    return this;
+  }
+
+  /**
+   * @since 3.0.0
+   * @param allowReserved Determines whether the parameter value SHOULD allow reserved characters, as defined
+   *                     by RFC3986 :/?#[]@!$&'()*+,;= to be included without percent-encoding. This property
+   *                      only applies to parameters with an in value of query. The default value is false.
+   * @return this
+   */
+  public ParameterBuilder allowReserved(Boolean allowReserved) {
+    this.allowReserved = allowReserved;
+    return this;
+  }
+
   public Parameter build() {
     if (!PARAMETER_TYPES_ALLOWING_EMPTY_VALUE.contains(paramType)) {
       allowEmptyValue = null;
@@ -296,6 +349,9 @@ public class ParameterBuilder {
         order,
         scalarExample,
         examples,
-        vendorExtensions);
+        vendorExtensions,
+        style,
+        explode,
+        allowReserved);
   }
 }
