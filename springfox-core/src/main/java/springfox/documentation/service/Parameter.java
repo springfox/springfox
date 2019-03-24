@@ -37,7 +37,7 @@ public class Parameter implements Ordered {
   private final Boolean required;
   private final Boolean allowMultiple;
   private final ModelReference modelRef;
-  private final Optional<ResolvedType> type;
+  private final ResolvedType type;
   private final AllowableValues allowableValues;
   private final String paramType;
   private final String paramAccess;
@@ -59,7 +59,7 @@ public class Parameter implements Ordered {
       boolean allowMultiple,
       Boolean allowEmptyValue,
       ModelReference modelRef,
-      Optional<ResolvedType> type,
+      ResolvedType type,
       AllowableValues allowableValues,
       String paramType,
       String paramAccess,

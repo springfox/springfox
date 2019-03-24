@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Optional.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
@@ -287,7 +286,7 @@ public class ParameterBuilder {
         allowMultiple,
         allowEmptyValue,
         modelRef,
-        ofNullable(type),
+        type,
         allowableValues,
         paramType,
         paramAccess,
