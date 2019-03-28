@@ -20,6 +20,7 @@
 package springfox.documentation.builders;
 
 import com.fasterxml.classmate.ResolvedType;
+
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
@@ -105,7 +106,9 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder properties(Map<String, ModelProperty> properties) {
-    this.properties.putAll(nullToEmptyMap(properties));
+    if (properties != null) {
+      this.properties = newHashMap(properties);
+    }
     return this;
   }
 
@@ -151,7 +154,7 @@ public class ModelBuilder {
    */
   public ModelBuilder subTypes(List<ModelReference> subTypes) {
     if (subTypes != null) {
-      this.subTypes.addAll(subTypes);
+      this.subTypes = newArrayList(subTypes);
     }
     return this;
   }

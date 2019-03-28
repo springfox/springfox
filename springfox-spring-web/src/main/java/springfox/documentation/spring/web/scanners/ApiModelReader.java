@@ -372,35 +372,23 @@ public class ApiModelReader {
         Optional<String> modelId = getModelId(modelReference);
 
         if (modelId.isPresent()) {
-
-          if (!parametersMatching.containsKey(modelId.get())) {
-            continue;
-          }
-
           modelReference = modelRefFunction(paramIndex, modelId.get(), adapter, mergingContext)
               .apply(mergingContext.getModel(modelId.get()).getType());
         }
         subTypes.add(modelReference);
       }
 
-      Map<String, ModelProperty> newProperties = newHashMap();
+      Map<String, ModelProperty> newProperties = newHashMap(rootModel.getProperties());
       for (String propertyName : rootModel.getProperties().keySet()) {
         ModelProperty property = rootModel.getProperties().get(propertyName);
         ModelReference modelReference = property.getModelRef();
         Optional<String> modelId = getModelId(modelReference);
 
         if (modelId.isPresent()) {
-
-          if (!parametersMatching.containsKey(modelId.get())) {
-            continue;
-          }
-
-          property = new ModelPropertyBuilder(property).build()
-              .updateModelRef(modelRefFunction(paramIndex, modelId.get(), adapter, mergingContext));
+          newProperties.put(propertyName, new ModelPropertyBuilder(property).build()
+              .updateModelRef(modelRefFunction(paramIndex, modelId.get(), adapter, mergingContext)));
         }
-        newProperties.put(propertyName, property);
       }
-
       sameModels.add(rootModelBuilder.properties(newProperties).subTypes(subTypes).build());
     }
 
@@ -411,9 +399,14 @@ public class ApiModelReader {
       UniqueTypeNameAdapter adapter, MergingContext mergingContext) {
 
     Map<String, Set<String>> parametersMatching = mergingContext.getParametersMatching();
-    List<String> parameters = Ordering.natural().sortedCopy(parametersMatching.get(modelId));
-    String parameter = parameters.size() == 1 ? parameters.get(0) : parameters.get(paramIndex);
-    ModelContext context = pseudoContext(parameter, mergingContext.getModelContext(modelId));
+    ModelContext context;
+    if (parametersMatching.containsKey(modelId)) {
+      List<String> parameters = Ordering.natural().sortedCopy(parametersMatching.get(modelId));
+      String parameter = parameters.size() == 1 ? parameters.get(0) : parameters.get(paramIndex);
+      context = pseudoContext(parameter, mergingContext.getModelContext(modelId));
+    } else {
+      context = mergingContext.getModelContext(modelId);
+    }
 
     return modelRefFactory(context, enumTypeDeterminer, typeNameExtractor, adapter.getNames());
   }
@@ -436,11 +429,11 @@ public class ApiModelReader {
     return roots;
   }
 
-  private Optional<String> findSameModels(final Model model_for, final MergingContext mergingContext) {
-    String modelForTypeName = model_for.getType().getErasedType().getName();
+  private Optional<String> findSameModels(final Model modelFor, final MergingContext mergingContext) {
+    String modelForTypeName = modelFor.getType().getErasedType().getName();
     Set<Model> models = mergingContext.getSimilarTypeModels(modelForTypeName);
     for (Model model_to : models) {
-      if (model_for.equalsIgnoringName(model_to)) {
+      if (modelFor.equalsIgnoringName(model_to)) {
         return Optional.of(model_to.getId());
       }
     }

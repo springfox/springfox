@@ -2047,8 +2047,6 @@
             },
             "subTypes": [
                 "Car",
-                "Truck",
-                "Car",
                 "Truck"
             ]
         },
