@@ -100,7 +100,7 @@ public class ApiModelReader {
       }
     }
 
-    MergingContext mergingContext = populateTypes(modelMap, Optional.<MergingContext>absent());
+    MergingContext mergingContext = populateTypes(modelMap);
 
     for (ModelContext rootContext : modelContexts) {
       Map<String, Model> modelBranch = newHashMap();
@@ -136,10 +136,10 @@ public class ApiModelReader {
         }
       }
 
-      Map<String, Set<Model>> currentModelMap = new HashMap<String, Set<Model>>();
-      currentModelMap.put(rootContext.getParameterId(), updateModels(modelBranch.values(), contextMap, adapter));
-      mergingContext = populateTypes(currentModelMap, Optional.of(mergingContext));
-      mergedModelMap.putAll(currentModelMap);
+      Set<Model> updatedModels = updateModels(modelBranch.values(), contextMap, adapter);
+      mergedModelMap.put(rootContext.getParameterId(), updatedModels);
+      modelMap.put(rootContext.getParameterId(), updatedModels);
+      mergingContext = populateTypes(modelMap);
     }
 
     return Collections.unmodifiableMap(mergedModelMap);
@@ -570,16 +570,10 @@ public class ApiModelReader {
     }
   }
 
-  private static MergingContext populateTypes(Map<String, Set<Model>> modelMap,
-      Optional<MergingContext> existsContext) {
+  private static MergingContext populateTypes(Map<String, Set<Model>> modelMap) {
     Map<String, Set<Model>> typedModelMap = newHashMap();
     Map<String, Model> uniqueModels = newHashMap();
     Map<String, String> parameterModelMap = newHashMap();
-    if (existsContext.isPresent()) {
-      MergingContext mergingContext = existsContext.get();
-      typedModelMap.putAll(mergingContext.getTypedModelMap());
-      parameterModelMap.putAll(mergingContext.getModelIdToParameterId());
-    }
 
     for (String parameterId : modelMap.keySet()) {
       for (Model model : modelMap.get(parameterId)) {
