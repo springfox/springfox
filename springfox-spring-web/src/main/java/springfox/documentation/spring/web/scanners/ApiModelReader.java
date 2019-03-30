@@ -469,10 +469,8 @@ public class ApiModelReader {
     } else {
       adapter.registerUniqueType(mergingContext.getRootModel().getName(), mergingContext.getRootId());
       for (ComparisonCondition depComparisonCondition : dependencies) {
-        if (!depComparisonCondition.getConditions().isEmpty()) {
-          String modelId = depComparisonCondition.getModelFor();
-          adapter.registerUniqueType(mergingContext.getModel(modelId).getName(), modelId);
-        }
+        String modelId = depComparisonCondition.getModelFor();
+        adapter.registerUniqueType(mergingContext.getModel(modelId).getName(), modelId);
       }
     }
 

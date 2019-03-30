@@ -572,7 +572,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelRef_6.getType().equals('RecursiveTypeWithNonEqualsConditionsOuter_1')
   }
 
-  def "Test to verify that recursive type asame with known types"() {
+  def "Test to verify that recursive type same with known types"() {
     given:
       HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypesWithConditions',
             RecursiveTypeWithConditions)
