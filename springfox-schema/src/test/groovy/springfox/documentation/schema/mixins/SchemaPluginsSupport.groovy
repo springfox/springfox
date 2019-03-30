@@ -16,17 +16,22 @@
  *
  *
  */
-
 package springfox.documentation.schema.mixins
+
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
+import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.JacksonJsonViewProvider
+import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.plugins.PropertyDiscriminatorBasedInheritancePlugin
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.ViewProviderPlugin
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
+import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 
 import static com.google.common.collect.Lists.*
@@ -39,8 +44,17 @@ class SchemaPluginsSupport {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
             OrderAwarePluginRegistry.create(newArrayList())
 
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+            OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
+            new TypeResolver(),
+            modelNameRegistry,
+            new JacksonEnumTypeDeterminer())
+
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(newArrayList())
+            OrderAwarePluginRegistry.create(
+              newArrayList(new PropertyDiscriminatorBasedInheritancePlugin(
+                new TypeResolver(), new JacksonEnumTypeDeterminer(), typeNameExtractor)))
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
             OrderAwarePluginRegistry.create(newArrayList(new JacksonJsonViewProvider(new TypeResolver())))

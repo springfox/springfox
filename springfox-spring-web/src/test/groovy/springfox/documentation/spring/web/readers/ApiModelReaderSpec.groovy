@@ -105,9 +105,9 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     resourceGroup = new ResourceGroup("businesses", DummyClass)
   }
 
-  def requestMappingContext(HandlerMethod handlerMethod, String path) {
+  def requestMappingContext(HandlerMethod handlerMethod, String path, String paramId = "0") {
     return new RequestMappingContext(
-        "0",
+        paramId,
         documentationContext(),
         new WebMvcRequestHandler(methodResolver, requestMappingInfo('/somePath'),
             handlerMethod))
@@ -570,6 +570,123 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
       modelRef_6.getModelId().get()
             .equals("0_1_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter")
       modelRef_6.getType().equals('RecursiveTypeWithNonEqualsConditionsOuter_1')
+  }
+
+  def "Test to verify that recursive type asame with known types"() {
+    given:
+      HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypesWithConditions',
+            RecursiveTypeWithConditions)
+      RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+
+      HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypesWithNonEqualsConditions',
+            RecursiveTypeWithNonEqualsConditionsOuter)
+      RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+
+      HandlerMethod handlerMethodThird = dummyHandlerMethod('methodToTestBidrectionalRecursiveTypesWithKnownTypes',
+           RecursiveTypeWithConditions)
+      RequestMappingContext contextThird = requestMappingContext(handlerMethodThird, '/somePath', "2")
+
+    when:
+      def modelsMap = newHashMap(sut.read(contextFirst))
+      modelsMap.putAll(sut.read(contextSecond.withKnownModels(modelsMap)))
+      modelsMap.putAll(sut.read(contextThird.withKnownModels(modelsMap)))
+
+    then:
+      modelsMap.containsKey("0_1")
+      modelsMap.containsKey("0_0")
+      Map<String, Model> models_1 = Maps.uniqueIndex(modelsMap.get("0_0"), toModelMap)
+      Map<String, Model> models_2 = Maps.uniqueIndex(modelsMap.get("0_1"), toModelMap)
+   
+      modelsMap.containsKey("1_1")
+      modelsMap.containsKey("1_0")
+      Map<String, Model> models_3 = Maps.uniqueIndex(modelsMap.get("1_0"), toModelMap)
+      Map<String, Model> models_4 = Maps.uniqueIndex(modelsMap.get("1_1"), toModelMap)
+
+      modelsMap.containsKey("2_1")
+      modelsMap.containsKey("2_0")
+      Map<String, Model> models_5 = Maps.uniqueIndex(modelsMap.get("2_0"), toModelMap)
+      Map<String, Model> models_6 = Maps.uniqueIndex(modelsMap.get("2_1"), toModelMap)
+
+    and:
+      Model recursiveTypeWithConditions_1 = models_1[RecursiveTypeWithConditions.simpleName]
+      Model monkey_1 = models_1[Monkey.simpleName]
+      Model pirate_1 = models_1[Pirate.simpleName]
+      Model recursiveTypeWithConditions_2 = models_2[RecursiveTypeWithConditions.simpleName + '_1']
+      Model monkey_2 = models_2[Monkey.simpleName]
+      Model pirate_2 = models_2[Pirate.simpleName]
+
+      Model recursiveTypeWithConditionsOuter_1 = models_3['RecursiveTypeWithNonEqualsConditionsOuter']
+      Model recursiveTypeWithConditionsMiddle_1 = models_3['RecursiveTypeWithNonEqualsConditionsMiddle']
+      Model recursiveTypeWithConditionsInner_1 = models_3['RecursiveTypeWithNonEqualsConditionsInner']
+      Model recursiveTypeWithConditionsOuter_2 = models_4['RecursiveTypeWithNonEqualsConditionsOuter_1']
+      Model recursiveTypeWithConditionsMiddle_2 = models_4['RecursiveTypeWithNonEqualsConditionsMiddle_1']
+      Model recursiveTypeWithConditionsInner_2 = models_4['RecursiveTypeWithNonEqualsConditionsInner_1']
+
+      Model recursiveTypeWithConditionsOuter_3 = models_5['RecursiveTypeWithNonEqualsConditionsOuter']
+      Model recursiveTypeWithConditionsMiddle_3 = models_5['RecursiveTypeWithNonEqualsConditionsMiddle']
+      Model recursiveTypeWithConditionsInner_3 = models_5['RecursiveTypeWithNonEqualsConditionsInner']
+      Model recursiveTypeWithNonEqualsConditionsOuterWithSubTypes = 
+                                       models_5["RecursiveTypeWithNonEqualsConditionsOuterWithSubTypes"]
+      Model recursiveTypeWithConditions_3 = models_5[RecursiveTypeWithConditions.simpleName]
+      Model monkey_3 = models_5[Monkey.simpleName]
+      Model pirate_3 = models_5[Pirate.simpleName]
+
+      Model recursiveTypeWithConditions_4 = models_6[RecursiveTypeWithConditions.simpleName + '_1']
+      Model monkey_4 = models_6[Monkey.simpleName]
+      Model pirate_4 = models_6[Pirate.simpleName]
+    and:
+      models_1.size() == 3
+      models_2.size() == 3
+
+      models_3.size() == 3
+      models_4.size() == 3
+
+      models_5.size() == 7
+      models_6.size() == 3
+    and:
+      recursiveTypeWithConditions_1 != null
+      pirate_1 != null
+      monkey_1 != null
+      recursiveTypeWithConditions_2 != null
+      pirate_2 != null
+      monkey_2 != null
+
+      recursiveTypeWithConditionsOuter_1 != null
+      recursiveTypeWithConditionsMiddle_1 != null
+      recursiveTypeWithConditionsInner_1 != null
+      recursiveTypeWithConditionsOuter_2 != null
+      recursiveTypeWithConditionsMiddle_2 != null
+      recursiveTypeWithConditionsInner_2 != null
+
+      recursiveTypeWithConditionsOuter_3 != null
+      recursiveTypeWithConditionsMiddle_3 != null
+      recursiveTypeWithConditionsInner_3 != null
+      recursiveTypeWithNonEqualsConditionsOuterWithSubTypes != null
+      recursiveTypeWithConditions_3 != null
+      pirate_3 != null
+      monkey_3 != null
+
+      recursiveTypeWithConditions_4 != null
+      pirate_4 != null
+      monkey_4 != null
+
+    and:
+      recursiveTypeWithConditionsOuter_3.equalsIgnoringName(recursiveTypeWithConditionsOuter_1)
+      recursiveTypeWithConditionsMiddle_3.equalsIgnoringName(recursiveTypeWithConditionsMiddle_1)
+      recursiveTypeWithConditionsInner_3.equalsIgnoringName(recursiveTypeWithConditionsInner_1)
+      recursiveTypeWithNonEqualsConditionsOuterWithSubTypes.getProperties().size() == 1
+      recursiveTypeWithNonEqualsConditionsOuterWithSubTypes.getSubTypes().size() == 1
+      ModelReference modelRef = recursiveTypeWithNonEqualsConditionsOuterWithSubTypes.getSubTypes().get(0)
+      modelRef.getModelId().get()
+            .equals("2_0_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithConditions")
+      modelRef.getType().equals('RecursiveTypeWithConditions')
+      recursiveTypeWithConditions_3.equalsIgnoringName(recursiveTypeWithConditions_1)
+
+      recursiveTypeWithConditions_4.equalsIgnoringName(recursiveTypeWithConditions_2)
+      pirate_3.equalsIgnoringName(pirate_1) && pirate_3.equalsIgnoringName(pirate_2)
+      pirate_4.equalsIgnoringName(pirate_1) && pirate_4.equalsIgnoringName(pirate_2)
+      monkey_3.equalsIgnoringName(monkey_1) && monkey_3.equalsIgnoringName(monkey_2)
+      monkey_4.equalsIgnoringName(monkey_1) && monkey_4.equalsIgnoringName(monkey_2)
   }
 
   def "Test to verify that duplicate class names in different packages will be prodused as different models (#182)"() {
