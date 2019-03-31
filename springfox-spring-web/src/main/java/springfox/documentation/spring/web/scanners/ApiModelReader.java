@@ -232,6 +232,10 @@ public class ApiModelReader {
           }
         }
 
+        if (!allowableToSearchTheSame) {
+          continue;
+        }
+
         ComparisonCondition currentCondition = currentCondition(modelId, newDependencies);
         Set<String> parametersTo = FluentIterable.from(currentCondition.getModelsTo())
             .transform(new Function<String, String>() {
@@ -244,10 +248,6 @@ public class ApiModelReader {
           comparisonConditions.put(modelId, Collections.unmodifiableSet(parametersTo));
         } else {
           comparisonConditions.put(modelId, new HashSet<String>());
-
-          if (!allowableToSearchTheSame) {
-            continue;
-          }
 
           if (comparedParemeters.isEmpty()) {
             comparedParemeters.addAll(parametersTo);
