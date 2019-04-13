@@ -1,10 +1,18 @@
 allprojects {
   apply plugin: "idea"
+  apply plugin: 'org.jetbrains.gradle.plugin.idea-ext'
 //  apply plugin: "eclipse"
 }
 
 idea {
   project {
+    settings {
+      compiler {
+        javac {
+          javacAdditionalOptions "-Amapstruct.defaultComponentModel=spring -Amapstruct.unmappedTargetPolicy=ERROR"
+        }
+      }
+    }
     languageLevel = '1.8'
     vcs = 'Git'
     ipr {

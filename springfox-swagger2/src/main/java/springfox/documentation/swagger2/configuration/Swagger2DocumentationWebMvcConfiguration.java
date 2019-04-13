@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.configuration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
@@ -33,16 +32,23 @@ import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
+import springfox.documentation.swagger2.mappers.LicenseMapper;
+import springfox.documentation.swagger2.mappers.LicenseMapperImpl;
+import springfox.documentation.swagger2.mappers.ModelMapper;
+import springfox.documentation.swagger2.mappers.ModelMapperImpl;
+import springfox.documentation.swagger2.mappers.ParameterMapper;
+import springfox.documentation.swagger2.mappers.ParameterMapperImpl;
+import springfox.documentation.swagger2.mappers.SecurityMapper;
+import springfox.documentation.swagger2.mappers.SecurityMapperImpl;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
+import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2MapperImpl;
+import springfox.documentation.swagger2.mappers.VendorExtensionsMapper;
+import springfox.documentation.swagger2.mappers.VendorExtensionsMapperImpl;
 import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 
 @Configuration
 @ConditionalOnClass(name = "springfox.documentation.spring.web.SpringfoxWebMvcConfiguration")
 @Import({ SpringfoxWebConfiguration.class, SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
-@ComponentScan(basePackages = {
-    "springfox.documentation.swagger2.readers.parameter",
-    "springfox.documentation.swagger2.mappers"
-})
 public class Swagger2DocumentationWebMvcConfiguration {
   @Bean
   public JacksonModuleRegistrar swagger2Module() {
@@ -58,5 +64,35 @@ public class Swagger2DocumentationWebMvcConfiguration {
     return new WebMvcPropertySourcedRequestMappingHandlerMapping(
         environment,
         new Swagger2ControllerWebMvc(environment, documentationCache, mapper, jsonSerializer));
+  }
+  
+  @Bean
+  public ModelMapper modelMapper() {
+    return new ModelMapperImpl();
+  }
+  
+  @Bean
+  public ParameterMapper parameterMapper() {
+    return new ParameterMapperImpl();
+  }
+  
+  @Bean
+  public SecurityMapper securityMapper() {
+    return new SecurityMapperImpl();
+  }
+  
+  @Bean
+  public LicenseMapper licenseMapper() {
+    return new LicenseMapperImpl();
+  }
+  
+  @Bean
+  public VendorExtensionsMapper vendorExtensionsMapper() {
+    return new VendorExtensionsMapperImpl();
+  }
+  
+  @Bean
+  public ServiceModelToSwagger2Mapper serviceModelToSwagger2Mapper() {
+    return new ServiceModelToSwagger2MapperImpl();
   }
 }

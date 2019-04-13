@@ -39,6 +39,15 @@ dependencies {
   testCompile libs.test
 }
 
+idea {
+
+  module {
+    sourceDirs += project.file('out/production/classes/generated')
+    generatedSourceDirs += project.file('out/production/classes/generated')
+    testSourceDirs += project.file('out/production/classes/generated_tests')
+  }
+}
+
 
 compileJava {
   options.compilerArgs += [
