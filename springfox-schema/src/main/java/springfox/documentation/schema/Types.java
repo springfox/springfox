@@ -36,6 +36,11 @@ import java.util.stream.Stream;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
+/**
+ * @deprecated use @see {@link ScalarType} instead
+ * @since 3.0.0
+ */
+@Deprecated
 public class Types {
   private static final Set<String> BASE_TYPES = Stream.of(
       "int",

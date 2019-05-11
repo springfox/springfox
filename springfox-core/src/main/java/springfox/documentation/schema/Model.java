@@ -25,6 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @deprecated
+ * @since 3.0.0 use
+ */
+@Deprecated
 public class Model {
 
   private final String id;

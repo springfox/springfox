@@ -25,6 +25,8 @@ import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestBody;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
@@ -32,6 +34,7 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +73,9 @@ public class OperationBuilder {
   private ModelReference responseModel;
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
   private Set<Response> responses = new HashSet<>();
+  private Set<RequestParameter> requestParameters =
+      new TreeSet<>(defaultRequestParameterComparator());
+  private RequestBody body;
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;
@@ -194,8 +200,11 @@ public class OperationBuilder {
    * Updates the input parameters this operation needs
    *
    * @param parameters - input parameter definitions
+   * @deprecated - Use @see {@link OperationBuilder#requestParameters(Set)}
+   *
    * @return this
    */
+  @Deprecated
   public OperationBuilder parameters(final List<Parameter> parameters) {
     List<Parameter> source = nullToEmptyList(parameters);
     List<Parameter> destination = new ArrayList<>(this.parameters);
@@ -222,10 +231,11 @@ public class OperationBuilder {
   /**
    * Updates the response messages
    * @param responses - new response messages to be merged with existing response messages
+   * @since 3.0.0
    * @return this
    */
   public OperationBuilder responses(Set<Response> responses) {
-    this.responses = new HashSet<>(responses);
+    this.responses.addAll(responses);
     return this;
   }
 
@@ -287,6 +297,32 @@ public class OperationBuilder {
     return this;
   }
 
+
+  /**
+   * Updates the operation request body
+   *
+   * @param requestBody - operation extensions
+   * @since 3.0.0
+   * @return this
+   */
+  public OperationBuilder requestBody(RequestBody requestBody) {
+    this.body = requestBody;
+    return this;
+  }
+
+  /**
+   * Updates the operation response body
+   *
+   * @param parameters - operation extensions
+   * @since 3.0.0
+   * @return this
+   */
+  public OperationBuilder requestParameters(Set<RequestParameter> parameters) {
+    this.requestParameters.addAll(parameters);
+    return this;
+  }
+
+
   public Operation build() {
     String uniqueOperationId = nameGenerator.startingWith(uniqueOperationIdStem());
 
@@ -303,11 +339,13 @@ public class OperationBuilder {
         protocol,
         securityReferences,
         parameters,
-        responses,
         responseMessages,
         deprecated,
         isHidden,
-        vendorExtensions);
+        vendorExtensions,
+        requestParameters,
+        body,
+        responses);
   }
 
   private Set<String> adjustConsumableMediaTypes() {
@@ -359,4 +397,7 @@ public class OperationBuilder {
     return merged;
   }
 
+  private Comparator<RequestParameter> defaultRequestParameterComparator() {
+    return (p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName());
+  }
 }

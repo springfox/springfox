@@ -29,6 +29,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
 
+/**
+ * @deprecated @since 3.0.0 Use @see
+ */
+@Deprecated
 public class Parameter implements Ordered {
   public static final int DEFAULT_PRECEDENCE = 0;
   
@@ -130,7 +134,10 @@ public class Parameter implements Ordered {
   }
 
   public String getParamType() {
-    return paramType.getIn();
+    if (paramType != null) {
+      return paramType.getIn();
+    }
+    return null;
   }
 
   public Boolean getRequired() {
@@ -147,10 +154,6 @@ public class Parameter implements Ordered {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
-  }
-
-  public Boolean getAllowEmptyValue() {
-    return allowEmptyValue;
   }
 
   public ParameterStyle getStyle() {

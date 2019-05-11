@@ -39,8 +39,8 @@ import java.util.Map;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ParameterBuilder {
-  private static final Collection<String> PARAMETER_TYPES_ALLOWING_EMPTY_VALUE =
-      Arrays.asList("query", "formData");
+  private static final Collection<ParameterType> PARAMETER_TYPES_ALLOWING_EMPTY_VALUE =
+      Arrays.asList(ParameterType.QUERY, ParameterType.FORMDATA);
   private String name;
   private String description;
   private String defaultValue;
@@ -162,7 +162,9 @@ public class ParameterBuilder {
    */
   @Deprecated
   public ParameterBuilder parameterType(String paramType) {
-    this.paramType = defaultIfAbsent(ParameterType.valueOf(paramType), this.paramType);
+    if (paramType != null && paramType.length() > 0) {
+      this.paramType = defaultIfAbsent(ParameterType.valueOf(paramType.toUpperCase()), this.paramType);
+    }
     return this;
   }
 

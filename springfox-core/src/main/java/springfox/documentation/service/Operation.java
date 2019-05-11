@@ -48,6 +48,8 @@ public class Operation implements Ordered {
   private final Map<String, List<AuthorizationScope>> securityReferences;
   private final List<Parameter> parameters;
   private final Set<ResponseMessage> responseMessages;
+  private final Set<RequestParameter> requestParameters;
+  private final RequestBody body;
   private final Set<Response> responses;
   private final String deprecated;
   private final List<VendorExtension> vendorExtensions;
@@ -66,11 +68,13 @@ public class Operation implements Ordered {
       Set<String> protocol,
       List<SecurityReference> securityReferences,
       List<Parameter> parameters,
-      Set<Response> responses,
       Set<ResponseMessage> responseMessages,
       String deprecated,
       boolean isHidden,
-      Collection<VendorExtension> vendorExtensions) {
+      Collection<VendorExtension> vendorExtensions,
+      Set<RequestParameter> requestParameters,
+      RequestBody body,
+      Set<Response> responses) {
 
     this.method = method;
     this.summary = summary;
@@ -82,6 +86,7 @@ public class Operation implements Ordered {
     this.produces = produces;
     this.consumes = consumes;
     this.protocol = protocol;
+    this.requestParameters = requestParameters;
     this.responses = responses;
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
@@ -89,6 +94,7 @@ public class Operation implements Ordered {
         .sorted(byOrder().thenComparing(byParameterName())).collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
+    this.body = body;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
@@ -188,5 +194,13 @@ public class Operation implements Ordered {
   @Override
   public int getOrder() {
     return position;
+  }
+
+  public Set<RequestParameter> getRequestParameters() {
+    return requestParameters;
+  }
+
+  public RequestBody getBody() {
+    return body;
   }
 }

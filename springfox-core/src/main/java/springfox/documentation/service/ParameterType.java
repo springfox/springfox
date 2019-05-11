@@ -4,7 +4,12 @@ public enum ParameterType {
   QUERY("query"),
   HEADER("header"),
   PATH("path"),
-  COOKIE("cookie");
+  COOKIE("cookie"),
+  FORM("form"),
+  @Deprecated
+  FORMDATA("formData"),
+  @Deprecated
+  BODY("body");
 
   private String in;
 

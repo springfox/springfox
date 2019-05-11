@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.builders.ExampleBuilder;
+import springfox.documentation.schema.Example;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -66,6 +67,12 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
             apiParam.map(ApiParam::allowableValues).orElse("")));
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
+      Example example = null;
+      if (annotation.example().length() > 0) {
+        example = new ExampleBuilder()
+            .withValue(annotation.example())
+            .build();
+      }
       context.parameterBuilder().name(ofNullable(annotation.name())
           .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
           .description(ofNullable(descriptions.resolve(annotation.value()))
@@ -79,9 +86,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .allowMultiple(annotation.allowMultiple())
           .allowEmptyValue(annotation.allowEmptyValue())
           .required(annotation.required())
-          .scalarExample(new ExampleBuilder()
-              .withValue(annotation.example())
-              .build())
+          .scalarExample(example)
           .complexExamples(examples(annotation.examples()))
           .hidden(annotation.hidden())
           .collectionFormat(annotation.collectionFormat())

@@ -5,8 +5,8 @@ public enum ParameterStyle {
   LABEL("label"),
   FORM("form"),
   SIMPLE("simple"),
-  SPACE_DELIMITED("spaceDelimited"),
-  PIPE_DELIMITED("pipeDelimited"),
+  SPACEDELIMITED("spaceDelimited"),
+  PIPEDELIMITED("pipeDelimited"),
   DEEPOBJECT("deepObject");
 
   private String value;
@@ -16,6 +16,11 @@ public enum ParameterStyle {
   }
 
   public String getValue() {
+    return value;
+  }
+
+  @Override
+  public String toString() {
     return value;
   }
 }

@@ -1,26 +1,29 @@
 package springfox.documentation.service;
 
 import springfox.documentation.schema.Example;
-import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelSpecification;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MediaType {
-  private final Model model;
+  private final org.springframework.http.MediaType mediaType;
+  private final ModelSpecification model;
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   public MediaType(
-      Model model,
+      org.springframework.http.MediaType mediaType,
+      ModelSpecification model,
       List<Example> examples,
       List<VendorExtension> vendorExtensions) {
+    this.mediaType = mediaType;
     this.model = model;
     this.examples.addAll(examples);
     this.vendorExtensions.addAll(vendorExtensions);
   }
 
-  public Model getModel() {
+  public ModelSpecification getModel() {
     return model;
   }
 
@@ -30,5 +33,9 @@ public class MediaType {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  public org.springframework.http.MediaType getMediaType() {
+    return mediaType;
   }
 }

@@ -1,6 +1,7 @@
 package springfox.documentation.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -51,5 +52,22 @@ public class Response {
 
   public String getDescription() {
     return description;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Response response = (Response) o;
+    return Objects.equals(code, response.code);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(code);
   }
 }

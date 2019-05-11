@@ -18,15 +18,16 @@
  */
 package springfox.documentation.schema;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.StringJoiner;
 
 import static java.util.Optional.*;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Example {
   private final String id;
   private final String summary;
@@ -113,14 +114,6 @@ public class Example {
 
   @Override
   public String toString() {
-    return new StringJoiner(", ", Example.class.getSimpleName() + "[", "]")
-        .add("id='" + id + "'")
-        .add("summary='" + summary + "'")
-        .add("description='" + description + "'")
-        .add("value=" + value)
-        .add("externalValue='" + externalValue + "'")
-        .add("mediaType='" + mediaType + "'")
-        .add("extensions=" + extensions)
-        .toString();
+    return String.valueOf(value);
   }
 }
