@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * If no instances DocumentationConfigurer are found a default one is created and executed.
  */
 @Component
-@Conditional(SpringIntegrationNotPresentInClassPathCondition.class)
+@Conditional(SpringIntegrationPluginNotPresentInClassPathCondition.class)
 public class DocumentationPluginsBootstrapper
     extends AbstractDocumentationPluginsBootstrapper
     implements SmartLifecycle {

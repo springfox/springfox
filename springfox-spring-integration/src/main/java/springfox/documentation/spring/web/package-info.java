@@ -41,7 +41,7 @@
  * <p>
  * Changes in existing code:
  * <ul>
- * <li>{@code @Conditional(SpringIntegrationNotPresentInClassPathCondition.class)} on
+ * <li>{@code @Conditional(SpringIntegrationPluginNotPresentInClassPathCondition.class)} on
  * {@link springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper} to avoid bootstrapping
  * the documentation plugins twice</li>
  * <li>Filter for Integration Handler Mappings in WebMvcRequestHandlerProvider and WebFluxRequestHandlerProvider</li>
