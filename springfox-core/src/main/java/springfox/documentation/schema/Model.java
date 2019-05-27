@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Model {
 
@@ -107,5 +108,28 @@ public class Model {
 
   public Xml getXml() {
     return xml;
+  }
+
+  @SuppressWarnings("CyclomaticComplexity")
+  public boolean equalsIgnoringName(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Model that = (Model) o;
+
+    return Objects.equals(type, that.type) &&
+        Objects.equals(qualifiedType, that.qualifiedType) &&
+        Objects.equals(properties, that.properties) &&
+        Objects.equals(description, that.description) &&
+        Objects.equals(baseModel, that.baseModel) &&
+        Objects.equals(discriminator, that.discriminator) &&
+        Objects.equals(subTypes, that.subTypes) &&
+        Objects.equals(example, that.example) &&
+        Objects.equals(xml, that.xml);
   }
 }

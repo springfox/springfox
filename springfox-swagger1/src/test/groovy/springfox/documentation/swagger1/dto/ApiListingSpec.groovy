@@ -119,7 +119,7 @@ class ApiListingSpec extends InternalJsonSerializationSpec {
   "models" : {
     "someModel" : {
       "description" : "desc",
-      "id" : "id",
+      "id" : "name",
       "properties" : {
         "aprop" : {
           "description" : "pdesc",

@@ -30,12 +30,15 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Collections.*;
@@ -46,10 +49,14 @@ import static springfox.documentation.schema.Types.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ResponseMessagesReader implements OperationBuilderPlugin {
 
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ResponseMessagesReader(TypeNameExtractor typeNameExtractor) {
+  public ResponseMessagesReader(
+      EnumTypeDeterminer enumTypeDeterminer,
+      TypeNameExtractor typeNameExtractor) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
@@ -72,23 +79,27 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     String message = message(context);
     ModelReference modelRef = null;
     if (!isVoid(returnType)) {
-      ModelContext modelContext = ModelContext.returnValue(
-          context.getGroupName(),
+      ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
-          context.getDocumentationType(),
-          context.getAlternateTypeProvider(),
-          context.getGenericsNamingStrategy(),
-          context.getIgnorableParameterTypes());
-      modelRef = modelRefFactory(modelContext, typeNameExtractor).apply(returnType);
+          Optional.empty());
+
+      Map<String, String> knownNames = new HashMap<>();
+      Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
+          .orElse(new HashSet<>())
+          .forEach(model -> knownNames.put(
+              model.getId(),
+              model.getName()));
+
+      modelRef = modelRefFactory(
+          modelContext,
+          enumTypeDeterminer,
+          typeNameExtractor,
+          knownNames).apply(returnType);
     }
-    ResponseMessage built = new ResponseMessageBuilder()
-        .code(httpStatusCode)
-        .message(message)
-        .responseModel(modelRef)
+    ResponseMessage built = new ResponseMessageBuilder().code(httpStatusCode).message(message).responseModel(modelRef)
         .build();
     context.operationBuilder().responseMessages(singleton(built));
   }
-
 
   public static int httpStatusCode(OperationContext context) {
     Optional<ResponseStatus> responseStatus = context.findAnnotation(ResponseStatus.class);

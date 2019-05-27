@@ -167,8 +167,11 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     def resolver = new TypeResolver()
     ModelContext modelContext = inputParam(
+        "0_0",
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        Optional.empty(),
+        new HashSet<>(),
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
@@ -188,7 +191,11 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     and:
     def enriched = context.getBuilder().build()
-    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    enriched.updateModelRef(
+        modelRefFactory(
+            modelContext,
+            new JacksonEnumTypeDeterminer(),
+            typeNameExtractor))
 
     then:
     enriched.allowableValues?.values == null
@@ -211,8 +218,11 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     def resolver = new TypeResolver()
     ModelContext modelContext = inputParam(
+        "0_0",
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        Optional.empty(),
+        new HashSet<>(),
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
@@ -235,7 +245,11 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     and:
     def enriched = context.getBuilder().build()
-    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    enriched.updateModelRef(
+        modelRefFactory(
+            modelContext,
+            new JacksonEnumTypeDeterminer(),
+            typeNameExtractor))
 
     then:
     enriched.allowableValues?.values == null

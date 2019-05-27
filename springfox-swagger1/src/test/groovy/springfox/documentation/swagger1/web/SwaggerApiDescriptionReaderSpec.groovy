@@ -44,12 +44,14 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
     def operationReader = Mock(ApiOperationReader)
     ApiDescriptionReader sut =
         new ApiDescriptionReader(operationReader, defaultWebPlugins(), new ApiDescriptionLookup())
+
     and:
     plugin.pathProvider(pathProvider)
     RequestMappingInfo requestMappingInfo = requestMappingInfo("/doesNotMatterForThisTest",
         [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
     )
     RequestMappingContext mappingContext = new RequestMappingContext(
+        "0",
         documentationContext(),
         new WebMvcRequestHandler(
             ROOT,
@@ -57,6 +59,7 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
             requestMappingInfo,
             dummyHandlerMethod()))
     operationReader.read(_) >> [Mock(Operation), Mock(Operation)]
+
     when:
     def descriptionList = sut.read(mappingContext)
 
@@ -91,6 +94,5 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
     "/foo/bar:{baz}"           | "/foo/bar:{baz}"
     "/foo:{foo}/bar:{baz}"     | "/foo:{foo}/bar:{baz}"
     "/foo/bar:{baz:\\w+}"      | "/foo/bar:{baz}"
-
   }
 }

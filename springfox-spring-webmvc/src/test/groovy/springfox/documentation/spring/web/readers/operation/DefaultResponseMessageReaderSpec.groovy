@@ -26,6 +26,7 @@ import org.springframework.plugin.core.PluginRegistry
 import org.springframework.web.bind.annotation.RequestMethod
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.Model
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResponseMessage
@@ -47,117 +48,122 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
         new TypeResolver(),
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
-    sut = new ResponseMessagesReader(typeNameExtractor)
+    sut = new ResponseMessagesReader(new JacksonEnumTypeDeterminer(), typeNameExtractor)
   }
 
   def "Should add default response messages"() {
     given:
-      OperationContext operationContext =
-          operationContext(documentationContext(),
-              handlerMethod,
-              0,
-              requestMappingInfo("/somePath"),
-              currentHttpMethod)
+    OperationContext operationContext =
+        operationContext(documentationContext(),
+            handlerMethod,
+            0,
+            requestMappingInfo("/somePath"),
+            currentHttpMethod)
     when:
-      sut.apply(operationContext)
+    sut.apply(operationContext)
     and:
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
 
     then:
-      def allResponses = responseMessages.collect { it.code }
-      assert ecpectedCodes.size() == allResponses.intersect(ecpectedCodes).size()
+    def allResponses = responseMessages.collect { it.code }
+    assert ecpectedCodes.size() == allResponses.intersect(ecpectedCodes).size()
     and:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
     where:
-      currentHttpMethod | handlerMethod        | ecpectedCodes
-      RequestMethod.GET | dummyHandlerMethod() | [200, 404, 403, 401]
+    currentHttpMethod | handlerMethod        | ecpectedCodes
+    RequestMethod.GET | dummyHandlerMethod() | [200, 404, 403, 401]
   }
 
   def "swagger annotation should override when using default reader"() {
     given:
-      OperationContext operationContext =
-          operationContext(
-              documentationContext(),
-              dummyHandlerMethod('methodWithApiResponses'))
+    OperationContext operationContext =
+        operationContext(
+            documentationContext(),
+            dummyHandlerMethod('methodWithApiResponses'))
 
     when:
-      sut.apply(operationContext)
+    sut.apply(operationContext)
     and:
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
 
     then:
-      responseMessages.size() == 4
-      def annotatedResponse = responseMessages.find { it.code == 413 }
-      annotatedResponse == null
+    responseMessages.size() == 4
+    def annotatedResponse = responseMessages.find { it.code == 413 }
+    annotatedResponse == null
   }
 
 
   def "Methods with return type containing a model should override the success response code"() {
     given:
-      OperationContext operationContext =
-          operationContext(
-              documentationContext(),
-              dummyHandlerMethod('methodWithConcreteResponseBody'))
+    def knownModels = new HashMap<String, List<Model>>()
+    knownModels.put("0_0", new HashSet<Model>())
+    OperationContext operationContext =
+        operationContext(documentationContext(),
+            dummyHandlerMethod('methodWithConcreteResponseBody'),
+            0,
+            requestMappingInfo("/somePath"),
+            RequestMethod.GET,
+            knownModels)
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
     then:
-      ResponseMessage responseMessage = responseMessages.find { it.code == 200 }
-      responseMessage.getCode() == 200
-      responseMessage.getResponseModel().type == 'BusinessModel'
-      responseMessage.getMessage() == "OK"
+    ResponseMessage responseMessage = responseMessages.find { it.code == 200 }
+    responseMessage.getCode() == 200
+    responseMessage.getResponseModel().type == 'BusinessModel'
+    responseMessage.getMessage() == "OK"
   }
 
   def "Methods with return type containing a container model should override the success response code"() {
     given:
-      OperationContext operationContext =
-          operationContext(documentationContext(), dummyHandlerMethod('methodWithListOfBusinesses'))
+    OperationContext operationContext =
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithListOfBusinesses'))
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
     then:
-      ResponseMessage responseMessage = responseMessages.find { it.code == 200 }
-      responseMessage.getCode() == 200
-      responseMessage.getResponseModel().type == 'List'
-      responseMessage.getResponseModel().itemType == 'BusinessModel'
-      responseMessage.getMessage() == "OK"
+    ResponseMessage responseMessage = responseMessages.find { it.code == 200 }
+    responseMessage.getCode() == 200
+    responseMessage.getResponseModel().type == 'List'
+    responseMessage.getResponseModel().itemType == 'BusinessModel'
+    responseMessage.getMessage() == "OK"
   }
 
   def "Methods with return type containing ResponseStatus annotation"() {
     given:
-      OperationContext operationContext =
-          operationContext(documentationContext(), dummyHandlerMethod('methodWithResponseStatusAnnotation'))
+    OperationContext operationContext =
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithResponseStatusAnnotation'))
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
     then:
-      ResponseMessage responseMessage = responseMessages.find { it.code == 202 }
-      responseMessage.getCode() == HttpStatus.ACCEPTED.value()
-      responseMessage.getResponseModel().type == 'BusinessModel'
-      responseMessage.getMessage() == "Accepted request"
+    ResponseMessage responseMessage = responseMessages.find { it.code == 202 }
+    responseMessage.getCode() == HttpStatus.ACCEPTED.value()
+    responseMessage.getResponseModel().type == 'BusinessModel'
+    responseMessage.getMessage() == "Accepted request"
   }
 
   def "Methods with return type containing ResponseStatus annotation and empty reason message"() {
     given:
-      OperationContext operationContext =
-          operationContext(documentationContext(), dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'))
+    OperationContext operationContext =
+        operationContext(documentationContext(), dummyHandlerMethod('methodWithResponseStatusAnnotationAndEmptyReason'))
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
-      def responseMessages = operation.responseMessages
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
     then:
-      ResponseMessage responseMessage = responseMessages.find { it.code == 204 }
-      responseMessage.getCode() == HttpStatus.NO_CONTENT.value()
-      responseMessage.getMessage() == HttpStatus.NO_CONTENT.reasonPhrase
+    ResponseMessage responseMessage = responseMessages.find { it.code == 204 }
+    responseMessage.getCode() == HttpStatus.NO_CONTENT.value()
+    responseMessage.getMessage() == HttpStatus.NO_CONTENT.reasonPhrase
   }
 }

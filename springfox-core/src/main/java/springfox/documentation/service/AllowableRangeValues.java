@@ -19,17 +19,29 @@
 
 package springfox.documentation.service;
 
+import java.util.Objects;
+
 public class AllowableRangeValues implements AllowableValues {
   private final String min;
   private final String max;
   private final Boolean exclusiveMin;
   private final Boolean exclusiveMax;
 
-  public AllowableRangeValues(String min, String max) {
-    this(min, null, max, null);
+  public AllowableRangeValues(
+      String min,
+      String max) {
+    this(
+        min,
+        null,
+        max,
+        null);
   }
 
-  public AllowableRangeValues(String min, Boolean exclusiveMin, String max, Boolean exclusiveMax) {
+  public AllowableRangeValues(
+      String min,
+      Boolean exclusiveMin,
+      String max,
+      Boolean exclusiveMax) {
     this.min = min;
     this.max = max;
     this.exclusiveMin = exclusiveMin;
@@ -50,5 +62,32 @@ public class AllowableRangeValues implements AllowableValues {
 
   public Boolean getExclusiveMax() {
     return exclusiveMax;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        min,
+        max,
+        exclusiveMin,
+        exclusiveMax);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    AllowableRangeValues that = (AllowableRangeValues) o;
+
+    return Objects.equals(min, that.min)
+        && Objects.equals(max, that.max)
+        && Objects.equals(exclusiveMin, that.exclusiveMin)
+        && Objects.equals(exclusiveMax, that.exclusiveMax);
   }
 }

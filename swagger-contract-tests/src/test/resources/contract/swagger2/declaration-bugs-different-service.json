@@ -2104,6 +2104,7 @@
             "required": [
                 "longitude"
             ],
+            "discriminator": "Test 1777",
             "properties": {
                 "longitude": {
                     "type": "number",

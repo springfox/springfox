@@ -54,32 +54,81 @@ public class Types {
       "uuid").collect(toSet());
 
   private static final Map<Type, String> TYPE_NAME_LOOKUP = unmodifiableMap(Stream.of(
-      new AbstractMap.SimpleEntry<>(Long.TYPE, "long"),
-      new AbstractMap.SimpleEntry<>(Short.TYPE, "int"),
-      new AbstractMap.SimpleEntry<>(Integer.TYPE, "int"),
-      new AbstractMap.SimpleEntry<>(Double.TYPE, "double"),
-      new AbstractMap.SimpleEntry<>(Float.TYPE, "float"),
-      new AbstractMap.SimpleEntry<>(Byte.TYPE, "byte"),
-      new AbstractMap.SimpleEntry<>(Boolean.TYPE, "boolean"),
-      new AbstractMap.SimpleEntry<>(Character.TYPE, "string"),
-
-      new AbstractMap.SimpleEntry<>(Date.class, "date-time"),
-      new AbstractMap.SimpleEntry<>(java.sql.Date.class, "date"),
-      new AbstractMap.SimpleEntry<>(String.class, "string"),
-      new AbstractMap.SimpleEntry<>(Object.class, "object"),
-      new AbstractMap.SimpleEntry<>(Long.class, "long"),
-      new AbstractMap.SimpleEntry<>(Integer.class, "int"),
-      new AbstractMap.SimpleEntry<>(Short.class, "int"),
-      new AbstractMap.SimpleEntry<>(Double.class, "double"),
-      new AbstractMap.SimpleEntry<>(Float.class, "float"),
-      new AbstractMap.SimpleEntry<>(Boolean.class, "boolean"),
-      new AbstractMap.SimpleEntry<>(Byte.class, "byte"),
-      new AbstractMap.SimpleEntry<>(BigDecimal.class, "bigdecimal"),
-      new AbstractMap.SimpleEntry<>(BigInteger.class, "biginteger"),
-      new AbstractMap.SimpleEntry<>(Currency.class, "string"),
-      new AbstractMap.SimpleEntry<>(UUID.class, "uuid"),
-      new AbstractMap.SimpleEntry<>(MultipartFile.class, "__file"))
-      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
+      new AbstractMap.SimpleEntry<>(
+          Long.TYPE,
+          "long"),
+      new AbstractMap.SimpleEntry<>(
+          Short.TYPE,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Integer.TYPE,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Double.TYPE,
+          "double"),
+      new AbstractMap.SimpleEntry<>(
+          Float.TYPE,
+          "float"),
+      new AbstractMap.SimpleEntry<>(
+          Byte.TYPE,
+          "byte"),
+      new AbstractMap.SimpleEntry<>(
+          Boolean.TYPE,
+          "boolean"),
+      new AbstractMap.SimpleEntry<>(
+          Character.TYPE,
+          "string"),
+      new AbstractMap.SimpleEntry<>(
+          Date.class,
+          "date-time"),
+      new AbstractMap.SimpleEntry<>(
+          java.sql.Date.class,
+          "date"),
+      new AbstractMap.SimpleEntry<>(
+          String.class,
+          "string"),
+      new AbstractMap.SimpleEntry<>(
+          Object.class,
+          "object"),
+      new AbstractMap.SimpleEntry<>(
+          Long.class,
+          "long"),
+      new AbstractMap.SimpleEntry<>(
+          Integer.class,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Short.class,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Double.class,
+          "double"),
+      new AbstractMap.SimpleEntry<>(
+          Float.class,
+          "float"),
+      new AbstractMap.SimpleEntry<>(
+          Boolean.class,
+          "boolean"),
+      new AbstractMap.SimpleEntry<>(
+          Byte.class,
+          "byte"),
+      new AbstractMap.SimpleEntry<>(
+          BigDecimal.class,
+          "bigdecimal"),
+      new AbstractMap.SimpleEntry<>(
+          BigInteger.class,
+          "biginteger"),
+      new AbstractMap.SimpleEntry<>(
+          Currency.class,
+          "string"),
+      new AbstractMap.SimpleEntry<>(
+          UUID.class,
+          "uuid"),
+      new AbstractMap.SimpleEntry<>(
+          MultipartFile.class,
+          "__file"))
+                                                                                .collect(toMap(
+                                                                                    Map.Entry::getKey,
+                                                                                    Map.Entry::getValue)));
 
   private Types() {
     throw new UnsupportedOperationException();

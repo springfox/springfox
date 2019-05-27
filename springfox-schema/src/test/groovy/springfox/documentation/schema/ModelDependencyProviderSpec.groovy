@@ -32,8 +32,11 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
   def "dependencies are inferred correctly"() {
     given:
     def context = inputParam(
+        "0_0",
         "group",
-        modelType,
+        resolver.resolve(modelType),
+        Optional.empty(),
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
@@ -42,8 +45,11 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     def dependentTypeNames = dependentTypes.collect() {
       typeNameExtractor.typeName(
           inputParam(
+              "0_0",
               "group",
               it,
+              Optional.empty(),
+              new HashSet<>(),
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
@@ -78,8 +84,10 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
   def "dependencies are inferred correctly for return parameters"() {
     given:
     def context = returnValue(
+        "0_0",
         "group",
-        modelType,
+        resolver.resolve(modelType),
+        Optional.empty(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
@@ -88,8 +96,10 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     def dependentTypeNames = dependentTypes.collect() {
       typeNameExtractor.typeName(
           returnValue(
+              "0_0",
               "group",
               it,
+              Optional.empty(),
               documentationType,
               alternateTypeProvider(),
               namingStrategy,
@@ -119,6 +129,5 @@ class ModelDependencyProviderSpec extends SchemaSpecification {
     listOfErasedMap()               | []
     nestedMaps()                    | ["ApplicationLang", "Language", "LanguageResponse", "LanguageText", "List"]
   }
-
 
 }

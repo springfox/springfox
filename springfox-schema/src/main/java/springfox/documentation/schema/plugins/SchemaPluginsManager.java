@@ -29,6 +29,7 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
@@ -45,7 +46,8 @@ import static java.util.Optional.*;
 public class SchemaPluginsManager {
   private final PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers;
   private final PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers;
-  private final PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders;
+  private final PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders;
+    private final PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders;
 
   @Autowired
   public SchemaPluginsManager(
@@ -53,10 +55,13 @@ public class SchemaPluginsManager {
           PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers,
       @Qualifier("modelBuilderPluginRegistry")
           PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers,
+      @Qualifier("viewProviderPluginRegistry")
+          PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders,
       @Qualifier("syntheticModelProviderPluginRegistry")
           PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders) {
     this.propertyEnrichers = propertyEnrichers;
     this.modelEnrichers = modelEnrichers;
+    this.viewProviders = viewProviders;
     this.syntheticModelProviders = syntheticModelProviders;
   }
 
@@ -72,6 +77,10 @@ public class SchemaPluginsManager {
       enricher.apply(context);
     }
     return context.getBuilder().build();
+  }
+
+  public ViewProviderPlugin viewProvider(DocumentationType documentationType) {
+    return viewProviders.getPluginFor(documentationType);
   }
 
   public Optional<Model> syntheticModel(ModelContext context) {

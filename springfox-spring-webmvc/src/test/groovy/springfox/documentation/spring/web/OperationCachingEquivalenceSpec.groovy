@@ -48,89 +48,103 @@ import java.lang.annotation.Annotation
 class OperationCachingEquivalenceSpec extends Specification implements HandlerMethodsSupport {
   def methodResolver = new HandlerMethodResolver(new TypeResolver())
 
-  def "Two request handlers backed by the same method must be equal" () {
+  def "Two request handlers backed by the same method must be equal"() {
     given:
-      OperationCachingEquivalence sut = new OperationCachingEquivalence()
-      def documentationContext = Mock(DocumentationContext)
-      def firstMapping = requestMapping(
-          paths("/a"),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE),
-          methods(RequestMethod.GET))
-      def secondMapping = requestMapping(
-          paths("/a"),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE),
-          methods(RequestMethod.GET))
-      def anyMethod = methodWithParent()
+    OperationCachingEquivalence sut = new OperationCachingEquivalence()
+    def documentationContext = Mock(DocumentationContext)
+    def firstMapping = requestMapping(
+        paths("/a"),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE),
+        methods(RequestMethod.GET))
+    def secondMapping = requestMapping(
+        paths("/a"),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE),
+        methods(RequestMethod.GET))
+    def anyMethod = methodWithParent()
     when:
-      documentationContext.getGenericsNamingStrategy() >> Mock(GenericTypeNamingStrategy)
+    documentationContext.getGenericsNamingStrategy() >> Mock(GenericTypeNamingStrategy)
     and:
-      def first = new RequestMappingContext(
-          documentationContext,
-          new WebMvcRequestHandler(Paths.ROOT, methodResolver, firstMapping, anyMethod))
-      def second = new RequestMappingContext(
-          documentationContext,
-          new WebMvcRequestHandler(Paths.ROOT, methodResolver, secondMapping, anyMethod))
-    then:
-      sut.test(first, second)
-  }
-
-  def "One or the other is null" () {
-    given:
-      OperationCachingEquivalence sut = new OperationCachingEquivalence()
-      def first = new RequestMappingContext(
-          Mock(DocumentationContext),
-          requestHandler(firstKey))
-      def second = new RequestMappingContext(
-          Mock(DocumentationContext),
-          requestHandler(secondKey))
-    expect:
-      sut.test(first, second) == outcome
-    where:
-      firstKey  | secondKey | outcome
-      null      | null      | true
-      "a"       | null      | false
-      null      | "b"       | false
-  }
-
-  def "Two request handlers backed by different methods must NOT be equal" () {
-    given:
-      OperationCachingEquivalence sut = new OperationCachingEquivalence()
-      def documentationContext = Mock(DocumentationContext)
-      def firstMapping = requestMapping(
-          paths("/ab"),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_ATOM_XML_VALUE),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE),
-          methods(RequestMethod.PATCH))
-      def secondMapping = requestMapping(
-          paths("/a"),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE),
-          mediaTypes(MediaType.APPLICATION_JSON_VALUE),
-          methods(RequestMethod.GET))
-      def anyMethod = methodWithParent()
-    when:
-      documentationContext.getGenericsNamingStrategy() >> Mock(GenericTypeNamingStrategy)
-    and:
-      def first = new RequestMappingContext(
+    def first = new RequestMappingContext(
+        "0",
         documentationContext,
         new WebMvcRequestHandler(Paths.ROOT, methodResolver, firstMapping, anyMethod))
-      def second = new RequestMappingContext(
+    def second = new RequestMappingContext(
+        "0",
         documentationContext,
         new WebMvcRequestHandler(Paths.ROOT, methodResolver, secondMapping, anyMethod))
     then:
-      !sut.test(first, second)
+    sut.test(first, second)
   }
 
-  def paths(String ... paths) {
+  def "One or the other is null"() {
+    given:
+    OperationCachingEquivalence sut = new OperationCachingEquivalence()
+    def first = new RequestMappingContext(
+        "0",
+        Mock(DocumentationContext),
+        requestHandler(firstKey))
+    def second = new RequestMappingContext(
+        "0",
+        Mock(DocumentationContext),
+        requestHandler(secondKey))
+    expect:
+    sut.test(first, second) == outcome
+    where:
+    firstKey | secondKey | outcome
+    null     | null      | true
+    "a"      | null      | false
+    null     | "b"       | false
+  }
+
+  def "Two request handlers backed by different methods must NOT be equal"() {
+    given:
+    OperationCachingEquivalence sut = new OperationCachingEquivalence()
+    def documentationContext = Mock(DocumentationContext)
+    def firstMapping = requestMapping(
+        paths("/ab"),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_ATOM_XML_VALUE),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE),
+        methods(RequestMethod.PATCH))
+    def secondMapping = requestMapping(
+        paths("/a"),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE),
+        mediaTypes(MediaType.APPLICATION_JSON_VALUE),
+        methods(RequestMethod.GET))
+    def anyMethod = methodWithParent()
+    when:
+    documentationContext.getGenericsNamingStrategy() >> Mock(GenericTypeNamingStrategy)
+    and:
+    def first = new RequestMappingContext(
+        "0",
+        documentationContext,
+        new WebMvcRequestHandler(
+            Paths.ROOT,
+            methodResolver,
+            firstMapping,
+            anyMethod))
+    def second = new RequestMappingContext(
+        "0",
+        documentationContext,
+        new WebMvcRequestHandler(
+            Paths.ROOT,
+            methodResolver,
+            secondMapping,
+            anyMethod))
+    then:
+    !sut.test(first, second)
+  }
+
+  def paths(String... paths) {
     paths
   }
 
-  def mediaTypes(String ... mediaTypes) {
+  def mediaTypes(String... mediaTypes) {
     mediaTypes
   }
 
-  def methods(RequestMethod ... methods) {
+  def methods(RequestMethod... methods) {
     methods
   }
 
@@ -144,7 +158,7 @@ class OperationCachingEquivalenceSpec extends Specification implements HandlerMe
         new ConsumesRequestCondition(consumes),
         new ProducesRequestCondition(produces),
         custom
-      )
+    )
   }
 
   def requestHandler(def handlerKey) {

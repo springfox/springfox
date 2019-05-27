@@ -20,7 +20,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,26 +28,29 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
-
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
   private static final Logger LOG = LoggerFactory.getLogger(OperationModelsProvider.class);
-  private final TypeResolver typeResolver;
+  private final SchemaPluginsManager pluginsManager;
 
   @Autowired
-  public OperationModelsProvider(TypeResolver typeResolver) {
-    this.typeResolver = typeResolver;
+  public OperationModelsProvider(SchemaPluginsManager pluginsManager) {
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
@@ -73,24 +75,62 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   private void collectFromReturnType(RequestMappingContext context) {
     ResolvedType modelType = context.getReturnType();
     modelType = context.alternateFor(modelType);
-    LOG.debug("Adding return parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));
-    context.operationModelsBuilder().addReturn(modelType);
+    LOG.debug(
+        "Adding return parameter of type {}",
+        resolvedTypeSignature(modelType).orElse("<null>"));
+
+    context.operationModelsBuilder().addReturn(
+        modelType,
+        viewForReturn(
+            context,
+            modelType));
   }
 
   private void collectParameters(RequestMappingContext context) {
-
-
-    LOG.debug("Reading parameters models for handlerMethod |{}|", context.getName());
+    LOG.debug(
+        "Reading parameters models for handlerMethod |{}|",
+        context.getName());
 
     List<ResolvedMethodParameter> parameterTypes = context.getParameters();
     for (ResolvedMethodParameter parameterType : parameterTypes) {
-        if (parameterType.hasParameterAnnotation(RequestBody.class)
-            || parameterType.hasParameterAnnotation(RequestPart.class)) {
-          ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
-          LOG.debug("Adding input parameter of type {}", resolvedTypeSignature(modelType).orElse("<null>"));
-          context.operationModelsBuilder().addInputParam(modelType);
-        }
+      if (parameterType.hasParameterAnnotation(RequestBody.class)
+          || parameterType.hasParameterAnnotation(RequestPart.class)) {
+        ResolvedType modelType = context.alternateFor(parameterType.getParameterType());
+        LOG.debug(
+            "Adding input parameter of type {}",
+            resolvedTypeSignature(modelType).orElse("<null>"));
+        context.operationModelsBuilder().addInputParam(
+            modelType,
+            viewForParameter(
+                context,
+                modelType,
+                parameterType),
+            new HashSet<>());
+      }
     }
-    LOG.debug("Finished reading parameters models for handlerMethod |{}|", context.getName());
+    LOG.debug(
+        "Finished reading parameters models for handlerMethod |{}|",
+        context.getName());
+  }
+
+  private Optional<ResolvedType> viewForReturn(
+      RequestMappingContext context,
+      ResolvedType regularModel) {
+    ViewProviderPlugin viewProvider =
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
+    return viewProvider.viewFor(
+        regularModel,
+        context);
+  }
+
+  private Optional<ResolvedType> viewForParameter(
+      RequestMappingContext context,
+      ResolvedType modelType,
+      ResolvedMethodParameter parameter) {
+    ViewProviderPlugin viewProvider =
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
+    return viewProvider.viewFor(
+        modelType,
+        parameter);
   }
 }

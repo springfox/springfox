@@ -105,12 +105,12 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     List<ResolvedType> dependencies = new ArrayList<>(resolvedTypeParameters(modelContext, resolvedType));
     dependencies.addAll(resolvedArrayElementType(modelContext, resolvedType));
     dependencies.addAll(resolvedMapType(modelContext, resolvedType));
+    dependencies.addAll(resolvedSubclasses(modelContext, resolvedType));
     dependencies.addAll(resolvedPropertiesAndFields(modelContext, resolvedType));
-    dependencies.addAll(resolvedSubclasses(resolvedType));
     return dependencies;
   }
 
-  private Collection<? extends ResolvedType> resolvedSubclasses(ResolvedType resolvedType) {
+  private Collection<? extends ResolvedType> resolvedSubclasses(ModelContext modelContext, ResolvedType resolvedType) {
     JsonSubTypes subTypes = AnnotationUtils.findAnnotation(
         resolvedType.getErasedType(),
         JsonSubTypes.class);
@@ -118,7 +118,9 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     List<ResolvedType> subclasses = new ArrayList<ResolvedType>();
     if (subTypes != null) {
       for (JsonSubTypes.Type each : subTypes.value()) {
-        subclasses.add(typeResolver.resolve(each.value()));
+        ResolvedType type = typeResolver.resolve(each.value());
+        subclasses.add(modelContext.alternateFor(type));
+        subclasses.addAll(resolvedPropertiesAndFields(ModelContext.fromParent(modelContext, type), type));
       }
     }
     return subclasses;

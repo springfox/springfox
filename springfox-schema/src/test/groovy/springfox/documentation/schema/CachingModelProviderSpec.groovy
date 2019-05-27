@@ -25,22 +25,24 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
 import static java.util.Collections.*
-import static java.util.Optional.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)
 class CachingModelProviderSpec extends Specification {
   def "Implementation caches the invocations" () {
     given:
-      def context = inputParam("group",
-          complexType(),
+      def context = inputParam("0_0",
+          "group",
+          resolver.resolve(complexType()),
+          Optional.empty(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
           emptySet())
       def model = aModel()
       def mock = Mock(ModelProvider) {
-        modelFor(context) >> of(model)
+        modelFor(context) >> Optional.of(model)
       }
     when:
       def sut = new CachingModelProvider(mock)
@@ -50,8 +52,11 @@ class CachingModelProviderSpec extends Specification {
 
   def "Cache misses do not not result in errors" () {
     given:
-      def context = inputParam("group",
-          complexType(),
+      def context = inputParam("0_0",
+          "group",
+          resolver.resolve(complexType()),
+          Optional.empty(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_2,
           new AlternateTypeProvider([]),
           new CodeGenGenericTypeNamingStrategy(),
