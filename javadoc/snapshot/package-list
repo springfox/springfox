@@ -6,6 +6,10 @@ springfox.documentation
 springfox.documentation.annotations
 springfox.documentation.builders
 springfox.documentation.common
+springfox.documentation.oas.annotations
+springfox.documentation.oas.configuration
+springfox.documentation.oas.mappers
+springfox.documentation.oas.web
 springfox.documentation.schema
 springfox.documentation.schema.configuration
 springfox.documentation.schema.plugins
