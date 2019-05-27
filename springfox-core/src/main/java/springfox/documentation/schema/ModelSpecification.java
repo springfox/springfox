@@ -10,14 +10,12 @@ public class ModelSpecification {
   private CollectionSpecification collection;
   private MapSpecification map;
   private ReferenceModelSpecification reference;
-  private String name;
-  private String namespace;
+  private ModelKey modelKey;
   private ModelFacets facets;
 
   @SuppressWarnings("ParameterNumber")
   public ModelSpecification(
-      String namespace,
-      String name,
+      ModelKey modelKey,
       ModelFacets facets,
       ScalarModelSpecification scalar,
       CompoundModelSpecification compound,
@@ -25,22 +23,17 @@ public class ModelSpecification {
       MapSpecification map,
       ReferenceModelSpecification reference) {
     ensureValidSpecification(scalar, compound, reference, collection, map);
-    this.namespace = namespace;
+    this.modelKey = modelKey;
     this.collection = collection;
     this.facets = facets;
     this.map = map;
-    this.name = name;
     this.scalar = scalar;
     this.compound = compound;
     this.reference = reference;
   }
 
-  public String getNamespace() {
-    return namespace;
-  }
-
-  public String getName() {
-    return name;
+  public ModelKey getModelKey() {
+    return modelKey;
   }
 
   public Optional<ScalarModelSpecification> getScalar() {

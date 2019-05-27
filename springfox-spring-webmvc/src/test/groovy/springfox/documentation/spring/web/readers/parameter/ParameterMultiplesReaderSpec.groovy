@@ -23,7 +23,6 @@ import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -53,8 +52,8 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec {
       ResolvedMethodParameter resolvedMethodParameter =
           new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
       ParameterContext parameterContext = new ParameterContext(
-          resolvedMethodParameter,
-          new ParameterBuilder(),
+          resolvedMethodParameter
+          ,
           documentationContext(),
           Mock(GenericTypeNamingStrategy),
           Mock(OperationContext))

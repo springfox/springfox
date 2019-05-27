@@ -22,7 +22,6 @@ import com.fasterxml.classmate.ResolvedType
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -45,8 +44,8 @@ class NotNullAnnotationPluginSpec extends Specification implements AnnotationsSu
       def resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [annotation], Mock(ResolvedType))
       ParameterContext context = new ParameterContext(
-          resolvedMethodParameter,
-          new ParameterBuilder(),
+          resolvedMethodParameter
+          ,
           Mock(DocumentationContext),
           Mock(GenericTypeNamingStrategy),
           Mock(OperationContext))

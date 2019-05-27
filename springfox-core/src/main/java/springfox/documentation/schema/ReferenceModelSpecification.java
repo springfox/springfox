@@ -1,13 +1,13 @@
 package springfox.documentation.schema;
 
 public class ReferenceModelSpecification {
-  private final ModelSpecificationKey reference;
+  private final ModelKey modelKey;
 
-  public ReferenceModelSpecification(ModelSpecificationKey reference) {
-    this.reference = reference;
+  public ReferenceModelSpecification(ModelKey modelKey) {
+    this.modelKey = modelKey;
   }
 
-  public ModelSpecificationKey getReference() {
-    return reference;
+  public ModelKey getKey() {
+    return modelKey;
   }
 }

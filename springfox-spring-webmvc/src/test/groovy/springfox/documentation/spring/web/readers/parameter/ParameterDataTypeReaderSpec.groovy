@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
@@ -84,6 +83,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "Parameter types #paramType"() {
     given:
+<<<<<<< HEAD
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
@@ -95,6 +95,14 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
             })
+=======
+      ResolvedMethodParameter resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext =
+              new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
+                  Mock(OperationContext))
+>>>>>>> WIP
 
     when:
     sut.apply(parameterContext)
@@ -146,6 +154,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
 
   def "RequestParam Map types"() {
     given:
+<<<<<<< HEAD
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
@@ -157,6 +166,14 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
             })
+=======
+      ResolvedMethodParameter resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext =
+          new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
+              Mock(OperationContext))
+>>>>>>> WIP
 
     when:
     sut.apply(parameterContext)
@@ -170,6 +187,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
 
   def "Container Parameter types"() {
     given:
+<<<<<<< HEAD
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
@@ -181,6 +199,14 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
             })
+=======
+      ResolvedMethodParameter resolvedMethodParameter =
+          new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
+      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+      ParameterContext parameterContext =
+              new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
+                  Mock(OperationContext))
+>>>>>>> WIP
 
     when:
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =

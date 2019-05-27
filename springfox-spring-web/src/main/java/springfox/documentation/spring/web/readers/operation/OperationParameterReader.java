@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
@@ -89,7 +88,6 @@ public class OperationParameterReader implements OperationBuilderPlugin {
       if (!shouldIgnore(methodParameter, alternate, context.getIgnorableParameterTypes())) {
 
         ParameterContext parameterContext = new ParameterContext(methodParameter,
-            new ParameterBuilder(),
             context.getDocumentationContext(),
             context.getGenericsNamingStrategy(),
             context);

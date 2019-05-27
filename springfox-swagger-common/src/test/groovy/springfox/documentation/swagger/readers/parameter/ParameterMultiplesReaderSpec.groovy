@@ -25,7 +25,6 @@ import io.swagger.annotations.ApiParam
 import org.springframework.core.MethodParameter
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
@@ -50,7 +49,7 @@ class ParameterMultiplesReaderSpec extends DocumentationContextSpec implements A
     ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
     ResolvedMethodParameter resolvedMethodParameter = new ResolvedMethodParameter("", methodParameter, resolvedType)
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
         documentationContext(), genericNamingStrategy, Mock(OperationContext))
 
     when:

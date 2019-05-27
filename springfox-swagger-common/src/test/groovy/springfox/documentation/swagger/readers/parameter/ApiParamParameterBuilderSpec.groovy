@@ -24,7 +24,6 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.core.MethodParameter
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.AllowableListValues
@@ -51,8 +50,8 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
         new TypeResolver().resolve(handlerMethod.methodParameters[0].getParameterType()))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter,
-        new ParameterBuilder(),
+        resolvedMethodParameter
+        ,
         documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
@@ -84,8 +83,8 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext =
         new ParameterContext(
-            resolvedMethodParameter,
-            new ParameterBuilder(),
+            resolvedMethodParameter
+            ,
             documentationContext(),
             genericNamingStrategy,
             Mock(OperationContext))
@@ -113,8 +112,8 @@ class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements A
     def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter,
-        new ParameterBuilder(),
+        resolvedMethodParameter
+        ,
         documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))

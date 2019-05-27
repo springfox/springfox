@@ -22,7 +22,6 @@ package springfox.documentation.swagger.readers.parameter
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
@@ -46,7 +45,7 @@ class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAn
     def resolvedMethodParameter =
         new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
         documentationContext(), genericNamingStrategy, Mock(OperationContext))
     def sut = stubbedParamBuilder()
 

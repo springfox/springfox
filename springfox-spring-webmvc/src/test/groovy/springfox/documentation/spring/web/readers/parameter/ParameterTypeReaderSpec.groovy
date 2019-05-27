@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -55,7 +54,7 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
     and:
     operationContext.consumes() >> consumes
     operationContext.httpMethod() >> httpMethod
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
         documentationContext(), Mock(GenericTypeNamingStrategy), operationContext)
 
     when:

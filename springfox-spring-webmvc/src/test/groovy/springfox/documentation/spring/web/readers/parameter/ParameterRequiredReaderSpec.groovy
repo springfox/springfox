@@ -25,7 +25,6 @@ import org.springframework.mock.env.MockEnvironment
 import org.springframework.web.bind.annotation.PathVariable
 import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.common.SpringVersion
 import springfox.documentation.common.Version
 import springfox.documentation.service.ResolvedMethodParameter
@@ -67,8 +66,8 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
             new TypeResolver().resolve(Object.class))
     ParameterContext parameterContext =
         new ParameterContext(
-            resolvedMethodParameter,
-            new ParameterBuilder(),
+            resolvedMethodParameter
+            ,
             documentationContext(),
             Mock(GenericTypeNamingStrategy),
             operation)
@@ -131,8 +130,8 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
         paramAnnotations,
         new TypeResolver().resolve(Object.class))
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter,
-        new ParameterBuilder(),
+        resolvedMethodParameter
+        ,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
         Mock(OperationContext))

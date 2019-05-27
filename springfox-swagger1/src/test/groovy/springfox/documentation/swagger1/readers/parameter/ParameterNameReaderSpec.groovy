@@ -21,7 +21,6 @@ package springfox.documentation.swagger1.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -52,7 +51,7 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
     and: "mocks are setup"
       operationContext.consumes() >> []
     and: "documentationContext is setup"
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
           documentationContext(), genericNamingStrategy, operationContext)
     when:
       def sut = nameReader(apiParam)

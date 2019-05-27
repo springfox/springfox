@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -51,7 +50,7 @@ class ParameterReaderSpec extends DocumentationContextSpec {
     given:
       def resolvedMethodParameter =
           new ResolvedMethodParameter(0, "", [apiParamAnnotation, reqParamAnnot], Mock(ResolvedType))
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
           documentationContext(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
       parameterPlugin.apply(parameterContext)
@@ -73,8 +72,8 @@ class ParameterReaderSpec extends DocumentationContextSpec {
       HandlerMethod method = new HandlerMethod(bean, ParamNameClazzSpecimen.methods.find {it.name.equals(methodName)})
       def resolvedMethodParameter  = new ResolvedMethodParameter("someName", method.getMethodParameters().first(),
           resolvedBeanType)
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter, new ParameterBuilder(),
-        documentationContext(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
+          documentationContext(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
     when:
       parameterPlugin.apply(parameterContext)
 

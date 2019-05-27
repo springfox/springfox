@@ -28,8 +28,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ScalarModelSpecification;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.schema.ScalarTypes;
+import springfox.documentation.schema.SimpleParameterSpecification;
+import springfox.documentation.schema.SimpleParameterSpecificationBuilder;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -82,20 +89,31 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     ResolvedType parameterType = methodParameter.getParameterType();
     parameterType = context.alternateFor(parameterType);
     ModelReference modelRef = null;
+    ModelSpecificationBuilder model = new ModelSpecificationBuilder();
     if (methodParameter.hasParameterAnnotation(PathVariable.class) && treatAsAString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");
-    } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
-      modelRef = new ModelRef(
-          "",
-          new ModelRef("string"),
-          true);
+      model.withScalar(new ScalarModelSpecification(ScalarType.STRING));
+   } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
+      modelRef = new ModelRef("", new ModelRef("string"), true);
+      ModelSpecificationBuilder map = new ModelSpecificationBuilder();
+      model.withMap(
+          new MapSpecification(
+              new ModelSpecificationBuilder()
+                  .withScalar(ScalarType.STRING)
+                  .build(),
+              new ModelSpecificationBuilder()
+                  .withScalar(ScalarType.STRING)
+                  .build());
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");
+      model.withScalar(ScalarType.STRING);
     }
     if (!methodParameter.hasParameterAnnotations()) {
       String typeName = typeNameFor(parameterType.getErasedType());
+      ScalarTypes.builtInScalarType(parameterType.getErasedType())
+          .ifPresent(model::withScalar);
       if (isBaseType(typeName)) {
         modelRef = new ModelRef(typeName);
       } else {
@@ -116,22 +134,24 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                 methodParameter),
             new HashSet<>());
 
-    final Map<String, String> knownNames = new HashMap<>();
+    Map<String, String> knownNames = new HashMap<>();
     Optional.ofNullable(context.getOperationContext().getKnownModels().get(modelContext.getParameterId()))
         .orElse(new HashSet<>())
-        .forEach(model -> knownNames.put(
-            model.getId(),
-            model.getName()));
+        .forEach(m -> knownNames.put(
+            m.getId(),
+            m.getName()));
 
     context.parameterBuilder()
         .type(parameterType)
-        .modelRef(
-            Optional.ofNullable(modelRef)
-                .orElse(modelRefFactory(
-                    modelContext,
-                    enumTypeDeterminer,
-                    nameExtractor,
-                    knownNames).apply(parameterType)));
+        .modelRef(Optional.ofNullable(modelRef)
+            .orElse(modelRefFactory(
+                modelContext,
+                enumTypeDeterminer,
+                nameExtractor).apply(parameterType)));
+    context.requestParameterBuilder()
+        .withParameterSpecification(
+            new SimpleParameterSpecificationBuilder()
+                .build());
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {
