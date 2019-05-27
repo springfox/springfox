@@ -45,6 +45,9 @@ public class ApiListingReferenceScanner {
 
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings
         = new HashMap<>();
+
+    int requestMappingContextId = 0;
+
     ApiSelector selector = context.getApiSelector();
     Iterable<RequestHandler> matchingHandlers = context.getRequestHandlers().stream()
         .filter(selector.getRequestHandlerSelector()).collect(toList());
@@ -55,10 +58,17 @@ public class ApiListingReferenceScanner {
           0);
 
       RequestMappingContext requestMappingContext
-          = new RequestMappingContext(context, handler);
+          = new RequestMappingContext(
+          String.valueOf(requestMappingContextId),
+          context,
+          handler);
 
-      resourceGroupRequestMappings.putIfAbsent(resourceGroup, new ArrayList<>());
+      resourceGroupRequestMappings.putIfAbsent(
+          resourceGroup,
+          new ArrayList<>());
       resourceGroupRequestMappings.get(resourceGroup).add(requestMappingContext);
+
+      ++requestMappingContextId;
     }
     return new ApiListingReferenceScanResult(resourceGroupRequestMappings);
   }

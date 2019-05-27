@@ -49,12 +49,12 @@ import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.*
 
 @Mixin([
-        RequestMappingSupport,
-        AuthSupport,
-        ModelProviderForServiceSupport,
-        ServicePluginsSupport,
-        ApiDescriptionSupport,
-        SchemaPluginsSupport])
+    RequestMappingSupport,
+    AuthSupport,
+    ModelProviderForServiceSupport,
+    ServicePluginsSupport,
+    ApiDescriptionSupport,
+    SchemaPluginsSupport])
 class ApiListingScannerSpec extends DocumentationContextSpec {
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
@@ -64,14 +64,14 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
   def setup() {
     SecurityContext securityContext = SecurityContext.builder()
-            .securityReferences(defaultAuth())
-            .forPaths(regex('/anyPath.*'))
-            .build()
+        .securityReferences(defaultAuth())
+        .forPaths(regex('/anyPath.*'))
+        .build()
 
     contextBuilder.withResourceGroupingStrategy(new SpringGroupingStrategy())
     plugin
-            .securityContexts(singletonList(securityContext))
-            .configure(contextBuilder)
+        .securityContexts(singletonList(securityContext))
+        .configure(contextBuilder)
     apiDescriptionReader = Mock(ApiDescriptionReader)
     apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
@@ -122,17 +122,17 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
 
     and:
     def sut = new ApiListingScanner(
-            apiDescriptionReader,
-            apiModelReader,
-            customWebPlugins(
-                    [],
-                    [],
-                    [],
-                    [],
-                    [],
-                    [],
-                    [additionalListingsScanner()]
-            ))
+        apiDescriptionReader,
+        apiModelReader,
+        customWebPlugins(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [additionalListingsScanner()]
+        ))
 
     when:
     def scanned = sut.scan(listingContext)
@@ -150,17 +150,17 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     plugin.groupName("different-group")
     def context = documentationContext()
     def sut = new ApiListingScanner(
-            apiDescriptionReader,
-            apiModelReader,
-            customWebPlugins(
-                    [],
-                    [],
-                    [],
-                    [],
-                    [],
-                    [],
-                    [additionalListingsScanner()]
-            ))
+        apiDescriptionReader,
+        apiModelReader,
+        customWebPlugins(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [additionalListingsScanner()]
+        ))
 
     and:
     RequestMappingContext requestMappingContext = requestMapping(context)
@@ -190,8 +190,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
     def requestMappingContext = requestMapping(context, "dummyMethod")
     def resourceGroupRequestMappings = new HashMap<>()
     resourceGroupRequestMappings.put(
-            new ResourceGroup("resourcePath", DummyControllerWithResourcePath),
-            [requestMappingContext])
+        new ResourceGroup("resourcePath", DummyControllerWithResourcePath),
+        [requestMappingContext])
 
     listingContext = new ApiListingScanningContext(context, resourceGroupRequestMappings)
 
@@ -228,8 +228,8 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   }
 
   def listingContext(
-          RequestMappingContext requestMappingContext,
-          DocumentationContext context) {
+      RequestMappingContext requestMappingContext,
+      DocumentationContext context) {
 
     ResourceGroup resourceGroup = new ResourceGroup("businesses", DummyClass)
     Map<ResourceGroup, List<RequestMappingContext>> resourceGroupRequestMappings = new HashMap<>()
@@ -238,19 +238,20 @@ class ApiListingScannerSpec extends DocumentationContextSpec {
   }
 
   def requestMapping(
-          DocumentationContext context,
-          String methodName = "methodWithConcreteResponseBody",
-          String path = "/businesses") {
+      DocumentationContext context,
+      String methodName = "methodWithConcreteResponseBody",
+      String path = "/businesses") {
 
     RequestMappingInfo requestMappingInfo = requestMappingInfo(path)
     RequestMappingContext requestMappingContext =
-            new RequestMappingContext(
-                    context,
-                    new WebMvcRequestHandler(
-                        Paths.ROOT,
-                        methodResolver,
-                        requestMappingInfo,
-                        dummyHandlerMethod(methodName)))
+        new RequestMappingContext(
+            "0",
+            context,
+            new WebMvcRequestHandler(
+                Paths.ROOT,
+                methodResolver,
+                requestMappingInfo,
+                dummyHandlerMethod(methodName)))
     requestMappingContext
   }
 

@@ -23,10 +23,13 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -68,9 +71,26 @@ public class ResolvedTypes {
 
   public static Function<ResolvedType, ModelReference> modelRefFactory(
       final ModelContext parentContext,
+      final EnumTypeDeterminer enumTypeDeterminer,
+      final TypeNameExtractor typeNameExtractor,
+      final Map<String, String> knownNames) {
+
+    return new ModelReferenceProvider(
+        typeNameExtractor,
+        enumTypeDeterminer,
+        parentContext,
+        knownNames);
+  }
+
+  public static Function<ResolvedType, ModelReference> modelRefFactory(
+      final ModelContext parentContext,
+      final EnumTypeDeterminer enumTypeDeterminer,
       final TypeNameExtractor typeNameExtractor) {
 
-    return new ModelReferenceProvider(typeNameExtractor, parentContext);
+    return new ModelReferenceProvider(typeNameExtractor,
+                                      enumTypeDeterminer,
+                                      parentContext,
+                                      new HashMap<>());
   }
 
 }

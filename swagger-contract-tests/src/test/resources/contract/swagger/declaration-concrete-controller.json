@@ -131,7 +131,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "Resource«Pet»"
+                            "responseModel": "Resource«Pet»_1"
                         },
                         {
                             "code": 401,
@@ -151,7 +151,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "Resource«Pet»"
+                    "type": "Resource«Pet»_1"
                 }
             ],
             "path": "/foo/get-t/{id}"
@@ -162,9 +162,9 @@
         
     ],
     "models": {
-        "Pet": {
+        "Resource«Pet»": {
             "description": "",
-            "id": "Pet",
+            "id": "Resource«Pet»",
             "properties": {
                 "age": {
                     "required": false,
@@ -175,7 +175,58 @@
                     "required": false,
                     "type": "string"
                 },
+                "links": {
+                    "required": false,
+                    "items": {
+                        "type": "Link_1"
+                    },
+                    "type": "array"
+                },
                 "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "HttpEntity«Resource«Pet»»": {
+            "description": "",
+            "id": "HttpEntity«Resource«Pet»»",
+            "properties": {
+                "body": {
+                    "required": false,
+                    "type": "Resource«Pet»_1"
+                }
+            }
+        },
+        "Link_1": {
+            "description": "",
+            "id": "Link_1",
+            "properties": {
+                "deprecation": {
+                    "required": false,
+                    "type": "string"
+                },
+                "href": {
+                    "required": false,
+                    "type": "string"
+                },
+                "hreflang": {
+                    "required": false,
+                    "type": "string"
+                },
+                "media": {
+                    "required": false,
+                    "type": "string"
+                },
+                "rel": {
+                    "required": false,
+                    "type": "string"
+                },
+                "title": {
+                    "required": false,
+                    "type": "string"
+                },
+                "type": {
                     "required": false,
                     "type": "string"
                 }
@@ -219,9 +270,9 @@
                 }
             }
         },
-        "Resource«Pet»": {
+        "Resource«Pet»_1": {
             "description": "",
-            "id": "Resource«Pet»",
+            "id": "Resource«Pet»_1",
             "properties": {
                 "age": {
                     "required": false,
@@ -245,13 +296,22 @@
                 }
             }
         },
-        "HttpEntity«Resource«Pet»»": {
+        "Pet": {
             "description": "",
-            "id": "HttpEntity«Resource«Pet»»",
+            "id": "Pet",
             "properties": {
-                "body": {
+                "age": {
                     "required": false,
-                    "type": "Resource«Pet»"
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
                 }
             }
         }

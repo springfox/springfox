@@ -24,6 +24,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.OperationBuilder;
+import springfox.documentation.schema.Model;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.service.ResponseMessage;
@@ -36,6 +37,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -104,6 +106,14 @@ public class OperationContext {
     return requestContext.getDocumentationContext();
   }
 
+  public OperationModelContextsBuilder operationModelsBuilder() {
+    return requestContext.operationModelsBuilder();
+  }
+
+  public Map<String, Set<Model>> getKnownModels() {
+    return requestContext.getModelMap();
+  }
+
   public DocumentationType getDocumentationType() {
     return getDocumentationContext().getDocumentationType();
   }
@@ -125,7 +135,8 @@ public class OperationContext {
   }
 
   public Set<Class> getIgnorableParameterTypes() {
-    return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(toSet(),
+    return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(
+        toSet(),
         Collections::unmodifiableSet));
   }
 

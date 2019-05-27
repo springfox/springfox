@@ -43,125 +43,135 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class BeanModelPropertySpec extends SchemaSpecification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+
   @Unroll
   def "Extracting information from resolved properties #methodName"() {
     given:
-      Class typeToTest = TypeWithGettersAndSetters
-      def modelContext = inputParam("group",
-          typeToTest,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())
-      def method = accessorMethod(typeToTest, methodName)
-      def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
+    Class typeToTest = TypeWithGettersAndSetters
+    def modelContext = inputParam("0_0",
+        "group",
+        resolver.resolve(typeToTest),
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
+    def method = accessorMethod(typeToTest, methodName)
+    def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
-      ObjectMapper mapper = new ObjectMapper()
-      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(propertyDefinition, true, namingStrategy, "")
-      def sut = new BeanModelProperty(
-          propName,
-          method,
-          new TypeResolver(),
-          alternateTypeProvider(),
-          propertyDefinition)
+    ObjectMapper mapper = new ObjectMapper()
+    def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+    String propName = name(propertyDefinition, true, namingStrategy, "")
+    def sut = new BeanModelProperty(
+        propName,
+        method,
+        new TypeResolver(),
+        alternateTypeProvider(),
+        propertyDefinition)
 
 
     expect:
-      sut.propertyDescription() == null
-      !sut.required
-      sut.isReadOnly()
-      typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
-      sut.qualifiedTypeName() == qualifiedTypeName
-      sut.allowableValues() == null
+    sut.propertyDescription() == null
+    !sut.required
+    sut.isReadOnly()
+    typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
+    sut.qualifiedTypeName() == qualifiedTypeName
+    sut.allowableValues() == null
 
 
     where:
-      methodName    |  required | typeName  | qualifiedTypeName
-      "getIntProp"  |  true     | "int"     | "int"
-      "isBoolProp"  |  false    | "boolean" | "boolean"
-      "setIntProp"  |  true     | "int"     | "int"
-      "setBoolProp" |  false    | "boolean" | "boolean"
+    methodName    | required | typeName  | qualifiedTypeName
+    "getIntProp"  | true     | "int"     | "int"
+    "isBoolProp"  | false    | "boolean" | "boolean"
+    "setIntProp"  | true     | "int"     | "int"
+    "setBoolProp" | false    | "boolean" | "boolean"
   }
 
   @Ignore("Fix this via the plugin manager")
   def "Extracting information from ApiModelProperty annotation"() {
     given:
-      Class typeToTest = TypeWithAnnotatedGettersAndSetters
-      def modelContext = inputParam("group",
-          typeToTest,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())
-      def method = accessorMethod(typeToTest, methodName)
-      def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
+    Class typeToTest = TypeWithAnnotatedGettersAndSetters
+    def modelContext = inputParam("0_0",
+        "group",
+        resolver.resolve(typeToTest),
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
+    def method = accessorMethod(typeToTest, methodName)
+    def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
-      ObjectMapper mapper = new ObjectMapper()
-      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(propertyDefinition, true, namingStrategy, "")
-      def sut = new BeanModelProperty(
-          propName,
-          method,
-          new TypeResolver(),
-          alternateTypeProvider(),
-          propertyDefinition)
+    ObjectMapper mapper = new ObjectMapper()
+    def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+    String propName = name(propertyDefinition, true, namingStrategy, "")
+    def sut = new BeanModelProperty(
+        propName,
+        method,
+        new TypeResolver(),
+        alternateTypeProvider(),
+        propertyDefinition)
 
     expect:
-      sut.propertyDescription() == description
-      sut.required == required
-      !sut.isReadOnly()
-      typeNameExtractor.typeName(modelContext) == typeName
-      sut.qualifiedTypeName() == qualifiedTypeName
+    sut.propertyDescription() == description
+    sut.required == required
+    !sut.isReadOnly()
+    typeNameExtractor.typeName(modelContext) == typeName
+    sut.qualifiedTypeName() == qualifiedTypeName
 
-      if (allowableValues) {
-        sut.allowableValues().getValues() == allowableValues.getValues()
-        sut.allowableValues().getValueType() == allowableValues.getValueType()
-      }
-    
+    if (allowableValues) {
+      sut.allowableValues().getValues() == allowableValues.getValues()
+      sut.allowableValues().getValueType() == allowableValues.getValueType()
+    }
+
     where:
-      methodName    | description              | required | allowableValues                                             | typeName  | qualifiedTypeName
-      "getIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
-      "isBoolProp"  | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
-      "setIntProp"  | "int Property Field"     | true     | null                                                        | "int"     | "int"
-      "setBoolProp" | "bool Property Getter"   | false    | null                                                        | "boolean" | "boolean"
-      "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
+    methodName    | description              | required | allowableValues                                                            | typeName  | qualifiedTypeName
+    "getIntProp"  | "int Property Field"     | true     | null                                                                       | "int"     | "int"
+    "isBoolProp"  | "bool Property Getter"   | false    | null                                                                       | "boolean" | "boolean"
+    "getEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
+    "setIntProp"  | "int Property Field"     | true     | null                                                                       | "int"     | "int"
+    "setBoolProp" | "bool Property Getter"   | false    | null                                                                       | "boolean" | "boolean"
+    "setEnumProp" | "enum Prop Getter value" | true     | new AllowableListValues(Stream.of("ONE", "TWO").collect(toList()), "LIST") | "string"  | "springfox.documentation.schema.ExampleEnum"
   }
 
   def "Respects JsonGetter annotations"() {
 
     given:
-      Class typeToTest = typeForTestingJsonGetterAnnotation()
-      def modelContext = inputParam("group",
-          typeToTest,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())
-      def method = accessorMethod(typeToTest, methodName)
-      def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
+    Class typeToTest = typeForTestingJsonGetterAnnotation()
+    def modelContext = inputParam("0_0",
+        "group",
+        resolver.resolve(typeToTest),
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
+    def method = accessorMethod(typeToTest, methodName)
+    def propertyDefinition = beanPropertyDefinition(typeToTest, methodName)
 
-      ObjectMapper mapper = new ObjectMapper()
-      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(propertyDefinition, true, namingStrategy, "")
-      def sut = new BeanModelProperty(
-          propName,
-          method,
-          new TypeResolver(),
-          alternateTypeProvider(),
-          propertyDefinition)
+    ObjectMapper mapper = new ObjectMapper()
+    def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+    String propName = name(propertyDefinition, true, namingStrategy, "")
+    def sut = new BeanModelProperty(
+        propName,
+        method,
+        new TypeResolver(),
+        alternateTypeProvider(),
+        propertyDefinition)
 
     expect:
-      typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
-      sut.qualifiedTypeName() == qualifiedTypeName
-      sut.allowableValues() == null
+    typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
+    sut.qualifiedTypeName() == qualifiedTypeName
+    sut.allowableValues() == null
 
     where:
-      methodName || typeName | qualifiedTypeName
-      "value1"   || "string" | "java.lang.String"
+    methodName || typeName | qualifiedTypeName
+    "value1"   || "string" | "java.lang.String"
   }
 }

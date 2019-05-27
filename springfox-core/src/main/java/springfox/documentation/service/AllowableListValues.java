@@ -20,6 +20,7 @@
 package springfox.documentation.service;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AllowableListValues implements AllowableValues {
   private final List<String> values;
@@ -36,5 +37,26 @@ public class AllowableListValues implements AllowableValues {
 
   public String getValueType() {
     return valueType;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(values, valueType);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    AllowableListValues that = (AllowableListValues) o;
+
+    return Objects.equals(values, that.values) &&
+        Objects.equals(valueType, that.valueType);
   }
 }

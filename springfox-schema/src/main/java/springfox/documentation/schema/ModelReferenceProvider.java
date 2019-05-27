@@ -19,9 +19,13 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.types.ResolvedPrimitiveType;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -29,21 +33,31 @@ import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
 class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final ModelContext parentContext;
+  private final Map<String, String> knownNames;
 
-  ModelReferenceProvider(TypeNameExtractor typeNameExtractor, ModelContext parentContext) {
+  ModelReferenceProvider(
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer,
+      ModelContext parentContext,
+      Map<String, String> knownNames) {
     this.typeNameExtractor = typeNameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.parentContext = parentContext;
+    this.knownNames = new HashMap<>(knownNames);
   }
 
   @Override
   public ModelReference apply(ResolvedType type) {
     return collectionReference(type)
-        .map(Optional::of).orElse(mapReference(type))
+        .map(Optional::of)
+        .orElse(mapReference(type))
         .orElse(modelReference(type));
   }
 
@@ -54,15 +68,24 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     if (MultipartFile.class.isAssignableFrom(type.getErasedType())) {
       return new ModelRef("__file");
     }
-    String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-    return new ModelRef(typeName, allowableValues(type));
+    String typeName = typeName(type);
+    return new ModelRef(
+        typeName,
+        type.getBriefDescription(),
+        null,
+        allowableValues(type),
+        modelId(fromParent(
+            parentContext,
+            type)));
   }
 
   private Optional<ModelReference> mapReference(ResolvedType type) {
     if (isMapType(type)) {
       ResolvedType mapValueType = mapValueType(type);
-      String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return of(new ModelRef(typeName, apply(mapValueType), true));
+      return Optional.of(new ModelRef(
+          typeName(type),
+          apply(mapValueType),
+          true));
     }
     return empty();
   }
@@ -70,13 +93,32 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
   private Optional<ModelReference> collectionReference(ResolvedType type) {
     if (isContainerType(type)) {
       ResolvedType collectionElementType = collectionElementType(type);
-      String typeName = typeNameExtractor.typeName(fromParent(parentContext, type));
-      return of(
-          new ModelRef(
-              typeName,
-              apply(collectionElementType),
-              allowableValues(collectionElementType)));
+
+      return Optional.of(new ModelRef(
+          typeName(type),
+          null,
+          apply(collectionElementType),
+          allowableValues(collectionElementType),
+          null));
     }
     return empty();
+  }
+
+  private String typeName(ResolvedType type) {
+    ModelContext context = fromParent(
+        parentContext,
+        type);
+    return typeNameExtractor.typeName(
+        context,
+        knownNames);
+  }
+
+  private String modelId(ModelContext context) {
+    ResolvedType type = context.getType();
+    if (type instanceof ResolvedPrimitiveType || isBaseType(type) || isVoid(type)
+        || enumTypeDeterminer.isEnum(type.getErasedType())) {
+      return null;
+    }
+    return context.getTypeId();
   }
 }

@@ -48,7 +48,10 @@ class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
         operationContext(documentationContext(), handlerMethod)
 
     SwaggerOperationResponseClassReader sut =
-        new SwaggerOperationResponseClassReader(new TypeResolver(), typeNameExtractor)
+        new SwaggerOperationResponseClassReader(
+            new TypeResolver(),
+            new JacksonEnumTypeDeterminer(),
+            typeNameExtractor)
 
     when:
     sut.apply(operationContext)

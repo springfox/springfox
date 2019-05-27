@@ -32,7 +32,7 @@
 
 
     <!-- Along with the SuppressWarningsHolder module, enables support for @SuppressWarnigns annotation -->
-    <module name="SuppressWarningsFilter" />
+    <module name="SuppressWarningsFilter"/>
 
     <!-- Checks whether files end with a new line.                        -->
     <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
@@ -75,6 +75,12 @@
         <module name="ParameterNumber">
             <property name="ignoreOverriddenMethods" value="true"/>
         </module>
+        <!--        <module name="CyclomaticComplexity">-->
+        <!--            <property name="max" value="16"/>-->
+        <!--        </module>-->
+        <!--<module name="NPathComplexity">-->
+        <!--<property name="max" value="50"/>-->
+        <!--</module>-->
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->

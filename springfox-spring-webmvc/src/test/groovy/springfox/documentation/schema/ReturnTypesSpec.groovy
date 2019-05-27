@@ -64,10 +64,12 @@ class ReturnTypesSpec extends Specification {
     expect:
       def namingStrategy = new DefaultGenericTypeNamingStrategy()
       def modelResponseClass = sut.typeName(
-          returnValue("group",
+          returnValue("0_0",
+              "group",
               new TypeResolver().resolve(
                   GenericType.class,
                   clazz),
+              Optional.empty(),
               SWAGGER_12,
               alternateTypeProvider(),
               namingStrategy,

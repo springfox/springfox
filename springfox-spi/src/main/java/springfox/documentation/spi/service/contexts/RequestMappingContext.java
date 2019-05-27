@@ -51,19 +51,22 @@ public class RequestMappingContext {
   private final String requestMappingPattern;
   private final ApiDescriptionBuilder apiDescriptionBuilder;
 
-  private final Map<String, Model> modelMap = new HashMap<>();
+  private final Map<String, Set<Model>> modelMap = new HashMap<>();
 
-  public RequestMappingContext(DocumentationContext context, RequestHandler handler) {
+  public RequestMappingContext(
+      String requestMappingId,
+      DocumentationContext context,
+      RequestHandler handler) {
 
     this.documentationContext = context;
     this.handler = handler;
     this.requestMappingPattern = "";
-    this.operationModelContextsBuilder = new OperationModelContextsBuilder(
-        context.getGroupName(),
-        context.getDocumentationType(),
-        context.getAlternateTypeProvider(),
-        context.getGenericsNamingStrategy(),
-        context.getIgnorableParameterTypes());
+    this.operationModelContextsBuilder = new OperationModelContextsBuilder(context.getGroupName(),
+                                                                           context.getDocumentationType(),
+                                                                           requestMappingId,
+                                                                           context.getAlternateTypeProvider(),
+                                                                           context.getGenericsNamingStrategy(),
+                                                                           context.getIgnorableParameterTypes());
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
@@ -85,9 +88,9 @@ public class RequestMappingContext {
       RequestHandler handler,
       OperationModelContextsBuilder operationModelContextsBuilder,
       String requestMappingPattern,
-      Map<String, Model> knownModels) {
+      Map<String, Set<Model>> knownModels) {
 
-    documentationContext = context;
+    this.documentationContext = context;
     this.handler = handler;
     this.operationModelContextsBuilder = operationModelContextsBuilder;
     this.requestMappingPattern = requestMappingPattern;
@@ -103,7 +106,7 @@ public class RequestMappingContext {
     return requestMappingPattern;
   }
 
-  public Map<String, Model> getModelMap() {
+  public Map<String, Set<Model>> getModelMap() {
     return unmodifiableMap(modelMap);
   }
 
@@ -124,13 +127,18 @@ public class RequestMappingContext {
   }
 
   public RequestMappingContext copyPatternUsing(String requestMappingPattern) {
-    return new RequestMappingContext(documentationContext, handler, operationModelContextsBuilder,
-        requestMappingPattern);
+    return new RequestMappingContext(documentationContext,
+                                     handler,
+                                     operationModelContextsBuilder,
+                                     requestMappingPattern);
   }
 
-  public RequestMappingContext withKnownModels(Map<String, Model> knownModels) {
-    return new RequestMappingContext(documentationContext, handler,
-        operationModelContextsBuilder, requestMappingPattern, knownModels);
+  public RequestMappingContext withKnownModels(Map<String, Set<Model>> knownModels) {
+    return new RequestMappingContext(documentationContext,
+                                     handler,
+                                     operationModelContextsBuilder,
+                                     requestMappingPattern,
+                                     knownModels);
   }
 
   public Set<Class> getIgnorableParameterTypes() {
@@ -143,7 +151,8 @@ public class RequestMappingContext {
 
   public Set<ResolvedType> getAdditionalModels() {
     return documentationContext.getAdditionalModels().stream()
-        .collect(collectingAndThen(toSet(),
+        .collect(collectingAndThen(
+            toSet(),
             Collections::unmodifiableSet));
   }
 
@@ -187,7 +196,7 @@ public class RequestMappingContext {
     return handler.findAnnotation(annotation);
   }
 
-  public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
+  <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     return handler.findControllerAnnotation(annotation);
   }
 
@@ -203,7 +212,6 @@ public class RequestMappingContext {
   public ResolvedType getReturnType() {
     return handler.getReturnType();
   }
-
 
   public RequestHandlerKey key() {
     return handler.key();

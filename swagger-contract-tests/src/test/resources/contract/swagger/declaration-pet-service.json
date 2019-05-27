@@ -1095,6 +1095,19 @@
         
     ],
     "models": {
+        "Entry«string,List«string»»": {
+            "description": "",
+            "id": "Entry«string,List«string»»",
+            "properties": {
+                "key": {
+                    "required": false,
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            }
+        },
         "Pet": {
             "description": "",
             "id": "Pet",
@@ -1121,19 +1134,6 @@
                 "key": {
                     "required": false,
                     "type": "Pet"
-                }
-            }
-        },
-        "Entry«string,List«string»»": {
-            "description": "",
-            "id": "Entry«string,List«string»»",
-            "properties": {
-                "key": {
-                    "required": false,
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
                 }
             }
         }
