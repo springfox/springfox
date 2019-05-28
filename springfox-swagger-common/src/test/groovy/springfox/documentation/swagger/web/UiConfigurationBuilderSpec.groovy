@@ -43,7 +43,9 @@ class UiConfigurationBuilderSpec extends Specification {
       "    \"tagsSorter\": \"alpha\",\n" +
       "    \"supportedSubmitMethods\": [\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\"," +
       "\"trace\"],\n" +
-      "    \"validatorUrl\": \"\"\n" +
+      "    \"validatorUrl\": \"\",\n" +
+      "    \"enableCsrf\": true,\n" +
+      "    \"csrfExcludedUrls\": []\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

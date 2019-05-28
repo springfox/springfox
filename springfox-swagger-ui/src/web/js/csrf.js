@@ -3,17 +3,29 @@
  * @param baseUrl
  * @returns {Promise<void>}
  */
-export default async function patchRequestInterceptor(baseUrl) {
+export default async function patchRequestInterceptor(baseUrl, csrfExcludeUrls) {
   try {
     const result = await getCsrf(baseUrl);
 
     if (result) {
+
       window.ui.getConfigs().requestInterceptor = request => {
-        request.headers[result.headerName] = result.token;
+
+        var include = true;
+        // exclude the csrf header for all urls starting with the any of the excludeurls
+        for (var i = 0, len = csrfExcludeUrls.length; i < len; i++) {
+          if(request.url.indexOf(csrfExcludeUrls[i]) === 0){
+            include = false;
+            break;
+          }
+        }
+        if(include) {
+          request.headers[result.headerName] = result.token;
+        }
         // console.debug(request);
         return request;
       };
-      console.debug('Successfully added csrf header for all requests');
+      console.debug('Successfully added csrf header for all requests except ' + excludeUrls );
     } else {
       console.debug('No csrf token can be found');
     }

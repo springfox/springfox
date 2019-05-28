@@ -160,6 +160,8 @@ public class Swagger2SpringBoot {
         .tagsSorter(TagsSorter.ALPHA)
         .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
         .validatorUrl(null)
+        .enableCsrf(true)
+        .csrfExcludedUrls(UiConfiguration.Constants.NO_CSRF_EXCLUDES)
         .build();
   }
 

@@ -62,7 +62,9 @@ class ApiResourceControllerSpec extends Specification {
     "showExtensions": false,
     "tagsSorter": "alpha",
     "supportedSubmitMethods":["get","put","post","delete","options","head","patch","trace"],
-    "validatorUrl": "/validate"
+    "validatorUrl": "/validate",
+    "enableCsrf": true,
+    "csrfExcludedUrls": []
 }"""
   def resources = """[
         {
