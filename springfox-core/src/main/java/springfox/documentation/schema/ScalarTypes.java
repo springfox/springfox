@@ -45,6 +45,10 @@ public class ScalarTypes {
       new AbstractMap.SimpleEntry<>(MultipartFile.class, ScalarType.BINARY))
       .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
+  private ScalarTypes() {
+    throw new UnsupportedOperationException();
+  }
+
   public static Optional<ScalarType> builtInScalarType(Type forType) {
     return Optional.ofNullable(SCALAR_TYPE_LOOKUP.getOrDefault(
         forType,

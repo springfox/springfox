@@ -83,26 +83,17 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
   @Unroll
   def "Parameter types #paramType"() {
     given:
-<<<<<<< HEAD
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
-    knownModels.put("0_0", new HashSet<Model>());
+    knownModels.put("0_0", new HashSet<Model>())
 
     ParameterContext parameterContext =
-        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+        new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
             })
-=======
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
-                  Mock(OperationContext))
->>>>>>> WIP
 
     when:
     sut.apply(parameterContext)
@@ -154,26 +145,17 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
 
   def "RequestParam Map types"() {
     given:
-<<<<<<< HEAD
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
     knownModels.put("0_0", new HashSet<Model>())
 
     ParameterContext parameterContext =
-        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+        new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
             })
-=======
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext =
-          new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
-              Mock(OperationContext))
->>>>>>> WIP
 
     when:
     sut.apply(parameterContext)
@@ -187,26 +169,18 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
 
   def "Container Parameter types"() {
     given:
-<<<<<<< HEAD
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
     def namingStrategy = new DefaultGenericTypeNamingStrategy()
     knownModels.put("0_0", new HashSet<Model>())
 
     ParameterContext parameterContext =
-        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+        new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
             Stub(OperationContext) {
               operationModelsBuilder() >> operationModelContextsBuilder
               getKnownModels() >> knownModels
             })
-=======
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, documentationContext(), namingStrategy,
-                  Mock(OperationContext))
->>>>>>> WIP
+
 
     when:
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
@@ -224,7 +198,6 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
     then:
     parameterContext.parameterBuilder().build().modelRef.type == "List"
     parameterContext.parameterBuilder().build().modelRef.itemType == "string"
-
   }
 
 }

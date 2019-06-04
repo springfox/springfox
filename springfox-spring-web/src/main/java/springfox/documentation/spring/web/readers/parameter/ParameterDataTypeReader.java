@@ -35,7 +35,6 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
-import springfox.documentation.schema.SimpleParameterSpecification;
 import springfox.documentation.schema.SimpleParameterSpecificationBuilder;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
@@ -104,7 +103,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                   .build(),
               new ModelSpecificationBuilder()
                   .withScalar(ScalarType.STRING)
-                  .build());
+                  .build()));
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");

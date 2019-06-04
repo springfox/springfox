@@ -31,8 +31,6 @@ class ApiListingBuilderSpec extends Specification {
     given:
       def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
-    and:
-      orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -61,8 +59,6 @@ class ApiListingBuilderSpec extends Specification {
     given:
       def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
-    and:
-      orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -93,8 +89,6 @@ class ApiListingBuilderSpec extends Specification {
     given:
       def orderingMock = Mock(Comparator)
       def sut = new ApiListingBuilder(orderingMock)
-    and:
-      orderingMock.sortedCopy(value) >> value
     when:
       sut."$builderMethod"(value)
     and:
@@ -152,9 +146,9 @@ class ApiListingBuilderSpec extends Specification {
     def sut = new ApiListingBuilder(Mock(Comparator))
 
     Map<String, Model> modelMap = [
-        "HttpEntity«Resource«Pet»»": new ModelBuilder().build(),
-        "Resource«Pet»": new ModelBuilder().build(),
-        "Pet": new ModelBuilder().build()
+        "HttpEntity«Resource«Pet»»": new ModelBuilder("1").build(),
+        "Resource«Pet»": new ModelBuilder("2").build(),
+        "Pet": new ModelBuilder("3").build()
     ]
     when:
     def builtModels = sut.models(modelMap).build().models

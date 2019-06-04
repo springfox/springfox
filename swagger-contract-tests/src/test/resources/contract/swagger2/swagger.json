@@ -63,7 +63,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet_1"
+                            "$ref": "#/definitions/Pet"
                         }
                     }
                 ],
@@ -108,7 +108,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet_1"
+                            "$ref": "#/definitions/Pet"
                         }
                     }
                 ],
@@ -493,7 +493,7 @@
                         "description": "Created user object",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/User_1"
+                            "$ref": "#/definitions/User"
                         }
                     }
                 ],
