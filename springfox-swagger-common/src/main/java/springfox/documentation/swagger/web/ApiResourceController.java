@@ -20,13 +20,23 @@
 package springfox.documentation.swagger.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 import springfox.documentation.annotations.ApiIgnore;
+import springfox.documentation.swagger.common.EnvIndicator;
+import springfox.documentation.swagger.csrf.CsrfTokenLoader;
+import springfox.documentation.swagger.csrf.CsrfTokenWebFluxLoader;
+import springfox.documentation.swagger.csrf.CsrfTokenWebMvcLoader;
+import springfox.documentation.swagger.csrf.MirrorCsrfToken;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static java.util.Optional.*;
@@ -37,35 +47,74 @@ import static java.util.Optional.*;
 public class ApiResourceController {
 
 
-  @Autowired(required = false)
-  private SecurityConfiguration securityConfiguration;
-  @Autowired(required = false)
-  private UiConfiguration uiConfiguration;
+    @Autowired(required = false)
+    private SecurityConfiguration securityConfiguration;
+    @Autowired(required = false)
+    private UiConfiguration uiConfiguration;
 
-  private final SwaggerResourcesProvider swaggerResources;
+    private final SwaggerResourcesProvider swaggerResources;
 
-  @Autowired
-  public ApiResourceController(SwaggerResourcesProvider swaggerResources) {
-    this.swaggerResources = swaggerResources;
-  }
+    @Autowired
+    public ApiResourceController(SwaggerResourcesProvider swaggerResources) {
+        this.swaggerResources = swaggerResources;
+    }
 
-  @RequestMapping(value = "/configuration/security")
-  @ResponseBody
-  public ResponseEntity<SecurityConfiguration> securityConfiguration() {
-    return new ResponseEntity<>(
-        ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
-  }
+    @RequestMapping(value = "/configuration/security")
+    @ResponseBody
+    public ResponseEntity<SecurityConfiguration> securityConfiguration() {
+        return new ResponseEntity<>(
+                ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
+    }
 
-  @RequestMapping(value = "/configuration/ui")
-  @ResponseBody
-  public ResponseEntity<UiConfiguration> uiConfiguration() {
-    return new ResponseEntity<>(
-        ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
-  }
+    @RequestMapping(value = "/configuration/ui")
+    @ResponseBody
+    public ResponseEntity<UiConfiguration> uiConfiguration() {
+        return new ResponseEntity<>(
+                ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK);
+    }
 
-  @RequestMapping
-  @ResponseBody
-  public ResponseEntity<List<SwaggerResource>> swaggerResources() {
-    return new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK);
-  }
+    @RequestMapping
+    @ResponseBody
+    public ResponseEntity<List<SwaggerResource>> swaggerResources() {
+        return new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK);
+    }
+
+    /**
+     * Common behavior of fetching csrf token
+     *
+     * @param loader the fetcher
+     * @return the appropriate ResponseEntity
+     */
+    private <T> ResponseEntity<T> doLoadCsrfToken(CsrfTokenLoader<T> loader) {
+        if (loader.isCorsRequest()) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(
+                of(ofNullable(uiConfiguration).orElseGet(
+                        UiConfigurationBuilder.builder()::build))
+                        .map(UiConfiguration::getCsrfStrategy)
+                        .map(csrfStrategy ->
+                                csrfStrategy.loadCsrfToken(loader))
+                        .orElse(null), HttpStatus.OK);
+    }
+
+    @RestController
+    @ConditionalOnClass(name = EnvIndicator.WEB_MVC_INDICATOR)
+    public class CsrfWebMvcController {
+
+        @RequestMapping("/swagger-resources/csrf")
+        public ResponseEntity<MirrorCsrfToken> csrf(HttpServletRequest request) {
+            return doLoadCsrfToken(CsrfTokenWebMvcLoader.wrap(request));
+        }
+    }
+
+    @RestController
+    @ConditionalOnClass(name = EnvIndicator.WEB_FLUX_INDICATOR)
+    public class CsrfWebFluxController {
+
+        @RequestMapping("/swagger-resources/csrf")
+        public ResponseEntity<Mono<MirrorCsrfToken>> csrf(ServerWebExchange exchange) {
+            return doLoadCsrfToken(CsrfTokenWebFluxLoader.wrap(exchange));
+        }
+    }
 }

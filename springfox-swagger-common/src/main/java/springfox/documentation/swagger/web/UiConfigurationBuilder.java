@@ -18,6 +18,8 @@
  */
 package springfox.documentation.swagger.web;
 
+import springfox.documentation.swagger.csrf.CsrfStrategy;
+
 import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
 
 public class UiConfigurationBuilder {
@@ -43,6 +45,7 @@ public class UiConfigurationBuilder {
   \*--------------------------------------------*/
   private String[] supportedSubmitMethods;
   private String validatorUrl;
+  private CsrfStrategy csrfStrategy;
 
   private UiConfigurationBuilder() {
   }
@@ -66,7 +69,8 @@ public class UiConfigurationBuilder {
         defaultIfAbsent(showExtensions, false),
         defaultIfAbsent(tagsSorter, TagsSorter.ALPHA),
         defaultIfAbsent(supportedSubmitMethods, UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS),
-        defaultIfAbsent(validatorUrl, null)
+        defaultIfAbsent(validatorUrl, null),
+        defaultIfAbsent(csrfStrategy, CsrfStrategy.DEFAULT_STRATEGY)
     );
   }
 
@@ -212,6 +216,26 @@ public class UiConfigurationBuilder {
    */
   public UiConfigurationBuilder validatorUrl(String validatorUrl) {
     this.validatorUrl = validatorUrl;
+    return this;
+  }
+
+  /**
+   * @param csrfStrategy
+   *    The csrf strategy you are using. Could be {@link CsrfStrategy#NONE} if there's none csrf strategy.
+   * @return this
+   * @see CsrfStrategy#of(CsrfStrategy.TokenStore, String, String, String)
+   */
+  public UiConfigurationBuilder csrfStrategy(CsrfStrategy csrfStrategy) {
+    this.csrfStrategy = csrfStrategy;
+    return this;
+  }
+
+  /**
+   * Disable the csrf support by setting the csrfStrategy to {@link CsrfStrategy#NONE}
+   * @return this
+   */
+  public UiConfigurationBuilder disableCsrf(){
+    this.csrfStrategy(CsrfStrategy.NONE);
     return this;
   }
 }

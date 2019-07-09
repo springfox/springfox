@@ -22,6 +22,7 @@ package springfox.documentation.swagger.web;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import springfox.documentation.swagger.csrf.CsrfStrategy;
 
 import static java.util.Optional.*;
 
@@ -48,6 +49,7 @@ public class UiConfiguration {
   private final Boolean showExtensions;
   private final TagsSorter tagsSorter;
   private final String validatorUrl;
+  private final CsrfStrategy csrfStrategy;
   /**
    * @deprecated @since 2.8.0. This field is unused
    */
@@ -193,6 +195,7 @@ public class UiConfiguration {
     this.operationsSorter = OperationsSorter.of(apisSorter);
     this.showExtensions = false;
     this.tagsSorter = TagsSorter.of(apisSorter);
+    this.csrfStrategy = CsrfStrategy.DEFAULT_STRATEGY;
   }
 
   /**
@@ -262,7 +265,8 @@ public class UiConfiguration {
         showExtensions,
         tagsSorter,
         Constants.DEFAULT_SUBMIT_METHODS,
-        validatorUrl);
+        validatorUrl,
+        CsrfStrategy.DEFAULT_STRATEGY);
   }
 
   /**
@@ -306,6 +310,7 @@ public class UiConfiguration {
    *                                 validator. You can use this parameter to set a different validator URL, for example
    *                                 for locally deployed validators (Validator Badge). Setting it to null will disable
    *                                 validation. This parameter is relevant for Swagger 2.0 specs only.
+   * @param csrfStrategy             {@link CsrfStrategy#of(CsrfStrategy.TokenStore, String, String, String)}
    */
   @SuppressWarnings("ParameterNumber")
   public UiConfiguration(
@@ -322,7 +327,8 @@ public class UiConfiguration {
       Boolean showExtensions,
       TagsSorter tagsSorter,
       String[] supportedSubmitMethods,
-      String validatorUrl) {
+      String validatorUrl,
+      CsrfStrategy csrfStrategy) {
     this.apisSorter = "alpha";
     this.deepLinking = deepLinking;
     this.displayOperationId = displayOperationId;
@@ -338,6 +344,7 @@ public class UiConfiguration {
     this.tagsSorter = tagsSorter;
     this.supportedSubmitMethods = supportedSubmitMethods;
     this.validatorUrl = validatorUrl;
+    this.csrfStrategy = csrfStrategy;
   }
 
   /**
@@ -448,6 +455,11 @@ public class UiConfiguration {
   @JsonProperty("validatorUrl")
   public String getValidatorUrl() {
     return ofNullable(validatorUrl).orElse("");
+  }
+
+  @JsonProperty("csrfStrategy")
+  public CsrfStrategy getCsrfStrategy() {
+    return csrfStrategy;
   }
 
   public static class Constants {

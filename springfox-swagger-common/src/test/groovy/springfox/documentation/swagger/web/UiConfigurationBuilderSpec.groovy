@@ -43,7 +43,12 @@ class UiConfigurationBuilderSpec extends Specification {
       "    \"tagsSorter\": \"alpha\",\n" +
       "    \"supportedSubmitMethods\": [\"get\",\"put\",\"post\",\"delete\",\"options\",\"head\",\"patch\"," +
       "\"trace\"],\n" +
-      "    \"validatorUrl\": \"\"\n" +
+      "    \"validatorUrl\": \"\",\n" +
+      "    \"csrfStrategy\": {\n" +
+      "        \"tokenStore\": \"SESSION\",\n" +
+      "        \"parameterName\": \"_csrf\",\n" +
+      "        \"headerName\": \"X-CSRF-TOKEN\"\n" +
+      "    }\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

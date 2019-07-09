@@ -16,10 +16,12 @@ dependencies {
   compile project(':springfox-spring-web')
   compile libs.core
   compile libs.spring
+  compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: springBoot
 
   provided libs.springProvided
   provided libs.clientProvided
   provided libs.springProvidedWithMvc
+  provided group: 'io.projectreactor', name: 'reactor-core', version: '3.2.6.RELEASE'
 
   testCompile project(':springfox-core')
   testCompile project(':springfox-core').sourceSets.test.output
