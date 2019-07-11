@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class MirrorCsrfToken {
 
+    public static final MirrorCsrfToken EMPTY = new MirrorCsrfToken("", "", "");
+
     private final String token;
 
     private final String parameterName;

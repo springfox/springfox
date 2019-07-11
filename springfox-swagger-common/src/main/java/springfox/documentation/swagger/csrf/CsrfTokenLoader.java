@@ -27,6 +27,11 @@ public interface CsrfTokenLoader<T> {
     boolean isCorsRequest();
 
     /**
+     * Load an empty MirrorCsrfToken instance
+     */
+    T loadEmptiness();
+
+    /**
      * Load the csrf token from cookie using the given csrf strategy.
      * By default, the client always load the csrf token from cookie
      * locally, but we still provide an approach for future use.

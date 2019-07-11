@@ -80,14 +80,14 @@ public class ApiResourceController {
     }
 
     /**
-     * Common behavior of fetching csrf token
+     * Common behavior of loading csrf token
      *
-     * @param loader the fetcher
+     * @param loader the loader
      * @return the appropriate ResponseEntity
      */
     private <T> ResponseEntity<T> doLoadCsrfToken(CsrfTokenLoader<T> loader) {
         if (loader.isCorsRequest()) {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(loader.loadEmptiness(), HttpStatus.OK);
         }
         return new ResponseEntity<>(
                 of(ofNullable(uiConfiguration).orElseGet(
@@ -95,7 +95,7 @@ public class ApiResourceController {
                         .map(UiConfiguration::getCsrfStrategy)
                         .map(csrfStrategy ->
                                 csrfStrategy.loadCsrfToken(loader))
-                        .orElse(null), HttpStatus.OK);
+                        .orElse(loader.loadEmptiness()), HttpStatus.OK);
     }
 
     @RestController

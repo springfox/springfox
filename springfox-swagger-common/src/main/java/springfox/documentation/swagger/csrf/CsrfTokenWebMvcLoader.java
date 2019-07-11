@@ -36,6 +36,11 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
     }
 
     @Override
+    public MirrorCsrfToken loadEmptiness() {
+        return MirrorCsrfToken.EMPTY;
+    }
+
+    @Override
     public MirrorCsrfToken loadFromCookie(CsrfStrategy strategy) {
         Cookie cookie = WebUtils.getCookie(request, strategy.getKeyName());
         if (cookie == null || !StringUtils.hasText(cookie.getValue())) {
