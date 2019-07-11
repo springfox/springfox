@@ -1,5 +1,6 @@
 package springfox.documentation.swagger.csrf;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import springfox.documentation.swagger.common.EnvIndicator;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
@@ -145,7 +146,7 @@ public class CsrfStrategy {
         return headerName;
     }
 
-    @JsonProperty("keyName")
+    @JsonIgnore
     public String getKeyName() {
         return keyName;
     }
