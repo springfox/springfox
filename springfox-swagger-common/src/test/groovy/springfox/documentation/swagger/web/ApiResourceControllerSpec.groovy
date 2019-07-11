@@ -94,7 +94,6 @@ class ApiResourceControllerSpec extends Specification {
 
   def setup() {
     sut = new ApiResourceController(inMemorySwaggerResources())
-    scbuilder =
     sut.with {
       securityConfiguration = SecurityConfigurationBuilder.builder()
           .clientId("client")
