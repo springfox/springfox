@@ -19,7 +19,7 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
      */
     private final HttpServletRequest request;
 
-    public final CsrfTokenAccesser accesser;
+    private final CsrfTokenAccesser accesser;
 
     public CsrfTokenWebMvcLoader(HttpServletRequest request, CsrfTokenAccesser accesser) {
         this.request = request;
@@ -63,7 +63,9 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
 
     private MirrorCsrfToken tryLoadFromRequest(CsrfStrategy strategy) {
         String token = tryAccess(request, strategy.getBackupKeyName());
-        if (StringUtils.isEmpty(token)) return this.loadEmptiness();
+        if (StringUtils.isEmpty(token)) {
+            return this.loadEmptiness();
+        }
         return createMirrorCsrfToken(strategy, token);
     }
 

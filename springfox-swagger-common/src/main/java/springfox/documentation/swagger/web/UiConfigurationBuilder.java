@@ -234,7 +234,7 @@ public class UiConfigurationBuilder {
    * Disable the csrf support by setting the csrfStrategy to {@link CsrfStrategy#NONE}
    * @return this
    */
-  public UiConfigurationBuilder disableCsrf(){
+  public UiConfigurationBuilder disableCsrf() {
     this.csrfStrategy(CsrfStrategy.NONE);
     return this;
   }

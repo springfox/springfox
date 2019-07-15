@@ -63,7 +63,8 @@ public class ApiResourceController {
     @ResponseBody
     public ResponseEntity<SecurityConfiguration> securityConfiguration() {
         return new ResponseEntity<>(
-                ofNullable(securityConfiguration).orElse(SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
+                ofNullable(securityConfiguration).orElse(
+                        SecurityConfigurationBuilder.builder().build()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/configuration/ui")

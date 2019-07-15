@@ -3,7 +3,6 @@ package springfox.documentation.swagger.csrf;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import springfox.documentation.swagger.common.ClassUtils;
-import springfox.documentation.swagger.web.UiConfigurationBuilder;
 
 /**
  * The csrf strategy that you are using.
@@ -14,7 +13,7 @@ import springfox.documentation.swagger.web.UiConfigurationBuilder;
  * If you are not using spring-security's csrf support, this
  * strategy might still be compatible with your own csrf strategy,
  * but it's not guaranteed, and you need to configure your strategy
- * using {@link UiConfigurationBuilder#csrfStrategy(CsrfStrategy)}
+ * using {@link springfox.documentation.swagger.web.UiConfigurationBuilder#csrfStrategy(CsrfStrategy)}
  *
  * @author liuxy
  */

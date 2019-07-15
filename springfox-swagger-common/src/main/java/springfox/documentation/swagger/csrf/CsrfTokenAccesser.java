@@ -31,7 +31,7 @@ public class CsrfTokenAccesser {
         try {
             Class<?> csrfTokenClass =
                     ClassUtils.forName(csrfTokenType);
-            if(csrfTokenClass != null){
+            if (csrfTokenClass != null) {
                 accessMethod = csrfTokenClass.getMethod("getToken");
             }
         } catch (NoSuchMethodException ignored) {
@@ -58,8 +58,7 @@ public class CsrfTokenAccesser {
         }
         try {
             return (String) getter.invoke(csrfToken);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException | InvocationTargetException ignored) {
         }
         return null;
     }
