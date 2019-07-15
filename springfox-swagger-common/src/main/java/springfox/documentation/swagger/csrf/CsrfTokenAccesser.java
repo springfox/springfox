@@ -1,5 +1,7 @@
 package springfox.documentation.swagger.csrf;
 
+import springfox.documentation.swagger.common.ClassUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -9,6 +11,12 @@ import java.lang.reflect.Method;
  * @author liuxy
  */
 public class CsrfTokenAccesser {
+
+    public static final CsrfTokenAccesser WEB_MVC_ACCESSER =
+            new CsrfTokenAccesser("org.springframework.security.web.csrf.CsrfToken");
+
+    public static final CsrfTokenAccesser WEB_FLUX_ACCESSER =
+            new CsrfTokenAccesser("org.springframework.security.web.server.csrf.CsrfToken");
 
     /**
      * The getter method that can access any csrfToken and get the token string
@@ -22,9 +30,11 @@ public class CsrfTokenAccesser {
         Method accessMethod = null;
         try {
             Class<?> csrfTokenClass =
-                    Class.forName(csrfTokenType);
-            accessMethod = csrfTokenClass.getMethod("getToken");
-        } catch (ClassNotFoundException | NoSuchMethodException ignored) {
+                    ClassUtils.forName(csrfTokenType);
+            if(csrfTokenClass != null){
+                accessMethod = csrfTokenClass.getMethod("getToken");
+            }
+        } catch (NoSuchMethodException ignored) {
         }
         this.getter = accessMethod;
     }

@@ -2,7 +2,7 @@ package springfox.documentation.swagger.csrf;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import springfox.documentation.swagger.common.EnvIndicator;
+import springfox.documentation.swagger.common.ClassUtils;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
 
 /**
@@ -32,24 +32,15 @@ public class CsrfStrategy {
      * <p>
      * It depends.
      */
-    public static final CsrfStrategy SESSION;
-
-    static {
-        String sessionKey;
-        try {
-            // Try to forName the webMvc's indicator
-            Class.forName(EnvIndicator.WEB_MVC_INDICATOR);
-            sessionKey = "org.springframework.security.web.csrf." +
-                    "HttpSessionCsrfTokenRepository.CSRF_TOKEN";
-        } catch (ClassNotFoundException ignored) {
-            sessionKey = "org.springframework.security.web.server.csrf." +
-                    "WebSessionServerCsrfTokenRepository.CSRF_TOKEN";
-        }
-        SESSION = of(TokenStore.SESSION,
-                "_csrf",
-                "X-CSRF-TOKEN",
-                sessionKey);
-    }
+    public static final CsrfStrategy SESSION =
+            of(TokenStore.SESSION,
+                    "_csrf",
+                    "X-CSRF-TOKEN",
+                    ClassUtils.isMvc()
+                            ? "org.springframework.security.web.csrf." +
+                            "HttpSessionCsrfTokenRepository.CSRF_TOKEN"
+                            : "org.springframework.security.web.server.csrf." +
+                            "WebSessionServerCsrfTokenRepository.CSRF_TOKEN");
 
     /**
      * The default csrf strategy of both spring-security's CsrfFilter

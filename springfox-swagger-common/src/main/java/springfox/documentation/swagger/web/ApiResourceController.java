@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.swagger.common.EnvIndicator;
+import springfox.documentation.swagger.common.ClassUtils;
 import springfox.documentation.swagger.csrf.CsrfTokenLoader;
 import springfox.documentation.swagger.csrf.CsrfTokenWebFluxLoader;
 import springfox.documentation.swagger.csrf.CsrfTokenWebMvcLoader;
@@ -99,7 +99,7 @@ public class ApiResourceController {
     }
 
     @RestController
-    @ConditionalOnClass(name = EnvIndicator.WEB_MVC_INDICATOR)
+    @ConditionalOnClass(name = ClassUtils.WEB_MVC_INDICATOR)
     public class CsrfWebMvcController {
 
         @RequestMapping("/swagger-resources/csrf")
@@ -109,7 +109,7 @@ public class ApiResourceController {
     }
 
     @RestController
-    @ConditionalOnClass(name = EnvIndicator.WEB_FLUX_INDICATOR)
+    @ConditionalOnClass(name = ClassUtils.WEB_FLUX_INDICATOR)
     public class CsrfWebFluxController {
 
         @RequestMapping("/swagger-resources/csrf")
