@@ -70,11 +70,6 @@ class ApiResourceControllerSpec extends Specification {
     }
 }"""
 
-  def csrfToken = """{
-    "parameterName": "_csrf",
-    "headerName": "X-CSRF-TOKEN"
-}"""
-
   def resources = """[
         {
             "name": "test",
@@ -168,13 +163,6 @@ class ApiResourceControllerSpec extends Specification {
     mockMvc.perform(get("/swagger-resources")
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(content().json(resources))
-  }
-
-  def "Csrf is available"() {
-    expect:
-    mockMvc.perform(get("/swagger-resources/csrf")
-        .accept(MediaType.APPLICATION_JSON))
-        .andExpect(content().json(csrfToken, false))
   }
 
   def "Verify that the property naming strategy does not affect output"() {

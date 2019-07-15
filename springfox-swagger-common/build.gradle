@@ -29,7 +29,12 @@ dependencies {
   testCompile project(':springfox-spring-web').sourceSets.test.output
   testCompile project(':springfox-spring-webmvc').sourceSets.test.output
   testCompile project(':springfox-spring-webmvc')
+  testCompile project(':springfox-spring-webflux')
 
-  testCompile libs.test
+  testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.0'
+  testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.0'
+
+
+  testCompile libs.test.findAll { !(it ==~ /.*mockito-core.*/)}
   testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
 }
