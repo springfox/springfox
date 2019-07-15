@@ -44,8 +44,7 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
     public MirrorCsrfToken loadFromCookie(CsrfStrategy strategy) {
         Cookie cookie = WebUtils.getCookie(request, strategy.getKeyName());
         if (cookie == null || !StringUtils.hasText(cookie.getValue())) {
-            return createMirrorCsrfToken(strategy,
-                    tryAccess(request, strategy.getParameterName()));
+            return tryLoadFromRequest(strategy);
         }
         return createMirrorCsrfToken(strategy, cookie.getValue());
 
@@ -56,10 +55,16 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
         Object csrfToken = request.getSession(true)
                 .getAttribute(strategy.getKeyName());
         if (csrfToken == null) {
-            return createMirrorCsrfToken(strategy, tryAccess(request, strategy.getParameterName()));
+            return tryLoadFromRequest(strategy);
         } else {
             return createMirrorCsrfToken(strategy, accesser.access(csrfToken));
         }
+    }
+
+    private MirrorCsrfToken tryLoadFromRequest(CsrfStrategy strategy) {
+        String token = tryAccess(request, strategy.getBackupKeyName());
+        if (StringUtils.isEmpty(token)) return this.loadEmptiness();
+        return createMirrorCsrfToken(strategy, token);
     }
 
     /**
@@ -69,11 +74,11 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
      * @param request the HttpServletRequest
      * @return The token string, or null
      */
-    private String tryAccess(HttpServletRequest request, String parameterName) {
+    private String tryAccess(HttpServletRequest request, String backupKeyName) {
         if (!accesser.accessible()) {
             return null; // fail fast
         }
-        Object lazyToken = request.getAttribute(parameterName);
+        Object lazyToken = request.getAttribute(backupKeyName);
         if (lazyToken == null) {
             return null;
         }

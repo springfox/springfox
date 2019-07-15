@@ -33,14 +33,18 @@ public class CsrfStrategy {
      * It depends.
      */
     public static final CsrfStrategy SESSION =
-            of(TokenStore.SESSION,
+            ClassUtils.isMvc()
+                    ? of(TokenStore.SESSION,
                     "_csrf",
                     "X-CSRF-TOKEN",
-                    ClassUtils.isMvc()
-                            ? "org.springframework.security.web.csrf." +
-                            "HttpSessionCsrfTokenRepository.CSRF_TOKEN"
-                            : "org.springframework.security.web.server.csrf." +
-                            "WebSessionServerCsrfTokenRepository.CSRF_TOKEN");
+                    "org.springframework.security.web.csrf." +
+                            "HttpSessionCsrfTokenRepository.CSRF_TOKEN")
+                    : of(TokenStore.SESSION,
+                    "_csrf",
+                    "X-CSRF-TOKEN",
+                    "org.springframework.security.web.server.csrf." +
+                            "WebSessionServerCsrfTokenRepository.CSRF_TOKEN",
+                    "org.springframework.security.web.server.csrf.CsrfToken");
 
     /**
      * The default csrf strategy of both spring-security's CsrfFilter
@@ -51,7 +55,8 @@ public class CsrfStrategy {
             of(TokenStore.COOKIE,
                     "_csrf",
                     "X-CSRF-TOKEN",
-                    "XSRF-TOKEN");
+                    "XSRF-TOKEN",
+                    ClassUtils.isMvc() ? null : "org.springframework.security.web.server.csrf.CsrfToken");
 
     /**
      * The default strategy which is the `session` strategy by default
@@ -65,6 +70,35 @@ public class CsrfStrategy {
     private final String headerName;
 
     private final String keyName;
+
+    private final String backupKeyName;
+
+    /**
+     * As this method does not take a backupKeyName as an arguement, the
+     * `parameterName` would be happy to take the place
+     *
+     * @return CsrfStrategy instance
+     * @see CsrfStrategy#of(TokenStore, String, String, String, String)
+     * @see CsrfStrategy#CsrfStrategy(TokenStore, String, String, String, String)
+     */
+    public static CsrfStrategy of(TokenStore tokenStore,
+                                  String parameterName,
+                                  String headerName,
+                                  String keyName) {
+        return new CsrfStrategy(tokenStore, parameterName, headerName, keyName, parameterName);
+    }
+
+    /**
+     * @return CsrfStrategy instance
+     * @see CsrfStrategy#CsrfStrategy(TokenStore, String, String, String, String)
+     */
+    public static CsrfStrategy of(TokenStore tokenStore,
+                                  String parameterName,
+                                  String headerName,
+                                  String keyName,
+                                  String backupKeyName) {
+        return new CsrfStrategy(tokenStore, parameterName, headerName, keyName, backupKeyName);
+    }
 
     /**
      * @param tokenStore    Specify the way of the actual csrf token being stored
@@ -84,24 +118,25 @@ public class CsrfStrategy {
      *                      using spring-security's csrf mechanism, you might need
      *                      to do the same thing on your own.
      * @param keyName       When the tokenStore is `session`, this is the session's
-     *                      attribution key and when `cookie` the cookie's name
-     * @return CsrfStrategy instance
+     *                      attribution key and when `cookie` the cookie's name.
+     * @param backupKeyName A backup keyName when there's no csrf token could be
+     *                      found via `keyName`. It must be a key of the csrf token
+     *                      in the {@link javax.servlet.ServletRequest}'s or
+     *                      {@link org.springframework.web.server.ServerWebExchange}'s
+     *                      attributes, By default, the `parameterName` is considered
+     *                      to take the role.
      */
-    public static CsrfStrategy of(TokenStore tokenStore,
-                                  String parameterName,
-                                  String headerName,
-                                  String keyName) {
-        return new CsrfStrategy(tokenStore, parameterName, headerName, keyName);
-    }
-
     private CsrfStrategy(TokenStore tokenStore,
                          String parameterName,
                          String headerName,
-                         String keyName) {
+                         String keyName,
+                         String backupKeyName) {
         this.tokenStore = tokenStore;
         this.parameterName = parameterName;
         this.headerName = headerName;
         this.keyName = keyName;
+        this.backupKeyName =
+                backupKeyName == null ? parameterName : backupKeyName;
     }
 
     /**
@@ -140,6 +175,11 @@ public class CsrfStrategy {
     @JsonIgnore
     public String getKeyName() {
         return keyName;
+    }
+
+    @JsonIgnore
+    public String getBackupKeyName() {
+        return backupKeyName;
     }
 
     public enum TokenStore {

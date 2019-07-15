@@ -12,8 +12,6 @@ import java.util.Map;
 
 public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfToken>> {
 
-    private static final String REQ_ATTR_NAME = "org.springframework.security.web.server.csrf.CsrfToken";
-
     private final ServerWebExchange exchange;
     private final CsrfTokenAccesser accesser;
 
@@ -42,8 +40,8 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
                 .getCookies().getFirst(strategy.getKeyName());
         if (cookie == null || !StringUtils.hasText(cookie.getValue())) {
             return this.fromAttributes(exchange.getAttributes(),
-                    REQ_ATTR_NAME,
-                    strategy);
+                    strategy.getBackupKeyName(),
+                    strategy).switchIfEmpty(this.loadEmptiness());
         }
         return Mono.just(this.createMirrorCsrfToken(strategy, cookie.getValue()));
     }
@@ -56,7 +54,7 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
                         this.fromAttributes(a, strategy.getKeyName(), strategy))
                 .switchIfEmpty(this.fromAttributes(
                         exchange.getAttributes(),
-                        REQ_ATTR_NAME,
+                        strategy.getBackupKeyName(),
                         strategy))
                 .switchIfEmpty(this.loadEmptiness());
     }
