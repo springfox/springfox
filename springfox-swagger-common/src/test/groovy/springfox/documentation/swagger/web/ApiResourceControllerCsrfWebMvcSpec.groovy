@@ -3,7 +3,9 @@ package springfox.documentation.swagger.web
 import org.mockito.Mockito
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import spock.lang.Shared
 import springfox.documentation.swagger.common.ClassUtils
 import springfox.documentation.swagger.csrf.CsrfStrategy
 
@@ -16,6 +18,9 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     CsrfStrategy strategy
     MockMvc mvc
+    Closure<MockHttpServletRequestBuilder> edit = {
+        MockHttpServletRequestBuilder builder -> builder
+    }
 
     void derive(CsrfStrategy strategy) {
         this.strategy = strategy
@@ -24,6 +29,25 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
                     new ApiResourceController.CsrfWebMvcController(it))
                     .build()
         }
+    }
+
+    def givenSessionAttribute() {
+        edit = { builder ->
+            builder.sessionAttr("org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN",
+                    new FakeCsrfToken())
+        }
+    }
+
+    def givenAttribute() {
+        edit = { builder ->
+            builder.requestAttr(strategy.parameterName, new FakeCsrfToken())
+        }
+    }
+
+    def expecting(String json) {
+        mvc.perform(edit(get(ENDPOINT)
+                .accept(MediaType.APPLICATION_JSON)))
+                .andExpect(content().json(json))
     }
 
     @Override
@@ -37,64 +61,72 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
         derive(CsrfStrategy.NONE)
 
         expect:
-        mvc.perform(get(ENDPOINT).accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(emptyCsrfToken))
+        expecting(emptyCsrfToken)
     }
 
     def "WebMvc - csrf tokens stored in session"() {
         given:
         derive(CsrfStrategy.SESSION)
+        givenSessionAttribute()
 
         expect:
-        mvc.perform(get(ENDPOINT)
-                .sessionAttr("org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN",
-                        new FakeCsrfToken())
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(csrfToken))
+        expecting(csrfToken)
     }
 
     def "WebMvc - csrf tokens not stored in session yet, but been temporarily stashed in request"() {
         given:
         derive(CsrfStrategy.SESSION)
+        givenAttribute()
 
         expect:
-        mvc.perform(get(ENDPOINT)
-                .requestAttr(strategy.parameterName, new FakeCsrfToken())
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(csrfToken))
+        expecting(csrfToken)
     }
 
     def "WebMvc - csrf tokens stored in cookie"() {
         given:
         derive(CsrfStrategy.COOKIE)
+        edit = { builder ->
+            builder.cookie(new Cookie(strategy.keyName, TOKEN))
+        }
 
         expect:
-        mvc.perform(get(ENDPOINT)
-                .cookie(new Cookie(strategy.keyName, TOKEN))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(csrfToken))
+        expecting(csrfToken)
     }
 
     def "WebMvc - csrf tokens not stored in cookie yet, but been temporarily stashed in request"() {
         given:
         derive(CsrfStrategy.COOKIE)
+        givenAttribute()
 
         expect:
-        mvc.perform(get(ENDPOINT)
-                .requestAttr(strategy.parameterName, new FakeCsrfToken())
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(csrfToken))
+        expecting(csrfToken)
     }
 
-    def "WebMvc - cors requests should be prohibited"() {
+    def "WebMvc - csrf is configured to be stored in cookie, but none is stored anywhere"() {
+        given:
+        derive(CsrfStrategy.COOKIE)
+
+        expect:
+        expecting(emptyCsrfToken)
+    }
+
+    def "WebMvc - csrf is configured to be stored in session, but none is stored anywhere"() {
         given:
         derive(CsrfStrategy.SESSION)
 
         expect:
-        mvc.perform(get(ENDPOINT)
-                .requestAttr(strategy.parameterName, new FakeCsrfToken())
-                .header("Origin", "http://foreign.origin.com")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(emptyCsrfToken))
+        expecting(emptyCsrfToken)
+    }
+
+    def "WebMvc - cors requests should get an empty csrf token"() {
+        given:
+        derive(CsrfStrategy.SESSION)
+        edit = { builder ->
+            builder.requestAttr(strategy.parameterName, new FakeCsrfToken())
+                    .header("Origin", "http://foreign.origin.com")
+        }
+
+        expect:
+        expecting(emptyCsrfToken)
     }
 }

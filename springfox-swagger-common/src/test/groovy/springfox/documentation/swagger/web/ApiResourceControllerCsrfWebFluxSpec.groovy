@@ -6,7 +6,6 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.WebFilter
 import reactor.core.publisher.Mono
-import spock.lang.Shared
 import springfox.documentation.swagger.common.ClassUtils
 import springfox.documentation.swagger.csrf.CsrfStrategy
 
@@ -17,9 +16,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
         Closure<Mono<?>> cl
     }
 
-    @Shared
     Bridge bridge = new Bridge()
-
     CsrfStrategy strategy
     WebTestClient flux
 
@@ -38,6 +35,36 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
         }
     }
 
+    def givenSessionAttribute() {
+        bridge.with {
+            cl = { ServerWebExchange e ->
+                e.getSession().doOnNext({ s ->
+                    s.getAttributes().put(
+                            "org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository.CSRF_TOKEN",
+                            new FakeCsrfToken())
+                })
+            }
+        }
+    }
+
+    def givenAttribute() {
+        bridge.with {
+            cl = { ServerWebExchange e ->
+                e.getAttributes().put(
+                        "org.springframework.security.web.server.csrf.CsrfToken",
+                        Mono.just(new FakeCsrfToken()))
+                Mono.empty()
+            }
+        }
+    }
+
+    def expecting(json) {
+        flux.get().accept(MediaType.APPLICATION_JSON)
+                .uri(ENDPOINT)
+                .exchange()
+                .expectBody().json(json)
+    }
+
     @Override
     def setupSpec() {
         Mockito.when(ClassUtils.isMvc()).thenReturn(false)
@@ -52,51 +79,25 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
         derive(CsrfStrategy.NONE)
 
         expect:
-        flux.get().accept(MediaType.APPLICATION_JSON)
-                .uri(ENDPOINT)
-                .exchange()
-                .expectBody().json(emptyCsrfToken)
-
+        expecting(emptyCsrfToken)
     }
 
     def "WebFlux - csrf tokens stored in session"() {
         given:
         derive(CsrfStrategy.SESSION)
-        bridge.with {
-            cl = { ServerWebExchange e ->
-                e.getSession().doOnNext({ s ->
-                    s.getAttributes().put(
-                            "org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository.CSRF_TOKEN",
-                            new FakeCsrfToken())
-                })
-            }
-        }
+        givenSessionAttribute()
 
         expect:
-        flux.get()
-                .accept(MediaType.APPLICATION_JSON)
-                .uri(ENDPOINT)
-                .exchange()
-                .expectBody().json(csrfToken)
+        expecting(csrfToken)
     }
 
     def "WebFlux - csrf tokens not stored in session yet, but been temporarily stashed in request"() {
         given:
         derive(CsrfStrategy.SESSION)
-        bridge.with {
-            cl = { ServerWebExchange e ->
-                e.getAttributes().put(
-                        "org.springframework.security.web.server.csrf.CsrfToken",
-                        Mono.just(new FakeCsrfToken()))
-                Mono.empty()
-            }
-        }
+        givenAttribute()
 
         expect:
-        flux.get().accept(MediaType.APPLICATION_JSON)
-                .uri(ENDPOINT)
-                .exchange()
-                .expectBody().json(csrfToken)
+        expecting(csrfToken)
     }
 
     def "WebFlux - csrf tokens stored in cookie"() {
@@ -114,34 +115,32 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
     def "WebFlux - csrf tokens not stored in cookie yet, but been temporarily stashed in request"() {
         given:
         derive(CsrfStrategy.COOKIE)
-        bridge.with {
-            cl = { ServerWebExchange e ->
-                e.getAttributes().put(
-                        "org.springframework.security.web.server.csrf.CsrfToken",
-                        Mono.just(new FakeCsrfToken()))
-                Mono.empty()
-            }
-        }
+        givenAttribute()
 
         expect:
-        flux.get().accept(MediaType.APPLICATION_JSON)
-                .uri(ENDPOINT)
-                .exchange()
-                .expectBody().json(csrfToken)
+        expecting(csrfToken)
     }
 
-    def "WebFlux - cors requests should be prohibited"() {
+    def "WebFlux - csrf is configured to be stored in cookie, but none is stored anywhere"() {
+        given:
+        derive(CsrfStrategy.COOKIE)
+
+        expect:
+        expecting(emptyCsrfToken)
+    }
+
+    def "WebFlux - csrf is configured to be stored in session, but none is stored anywhere"() {
         given:
         derive(CsrfStrategy.SESSION)
-        bridge.with {
-            cl = { ServerWebExchange e ->
-                e.getSession().doOnNext({ s ->
-                    s.getAttributes().put(
-                            "org.springframework.security.web.server.csrf.WebSessionServerCsrfTokenRepository.CSRF_TOKEN",
-                            new FakeCsrfToken())
-                })
-            }
-        }
+
+        expect:
+        expecting(emptyCsrfToken)
+    }
+
+    def "WebFlux - cors requests should get an empty csrf token"() {
+        given:
+        derive(CsrfStrategy.SESSION)
+        givenSessionAttribute()
 
         expect:
         flux.get().header("Origin", "http://foreign.origin.com")

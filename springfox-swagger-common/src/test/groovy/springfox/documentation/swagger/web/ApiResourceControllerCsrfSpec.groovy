@@ -22,7 +22,7 @@ import springfox.documentation.swagger.csrf.CsrfStrategy
 @PrepareForTest([ClassUtils.class])
 class ApiResourceControllerCsrfSpec extends Specification {
 
-    static final TOKEN = "9d38280b-f58a-4dbd-9054-c118b0577622"
+    protected static final TOKEN = "9d38280b-f58a-4dbd-9054-c118b0577622"
 
     class FakeCsrfToken {
         @SuppressWarnings("unused")
