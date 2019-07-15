@@ -12,17 +12,18 @@ import java.util.Map;
 
 public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfToken>> {
 
+    private static final String REQ_ATTR_NAME = "org.springframework.security.web.server.csrf.CsrfToken";
+
     private final ServerWebExchange exchange;
+    private final CsrfTokenAccesser accesser;
 
-    public static final CsrfTokenAccesser accesser =
-            new CsrfTokenAccesser("org.springframework.security.web.server.csrf.CsrfToken");
-
-    private CsrfTokenWebFluxLoader(ServerWebExchange exchange) {
+    public CsrfTokenWebFluxLoader(ServerWebExchange exchange, CsrfTokenAccesser accesser) {
         this.exchange = exchange;
+        this.accesser = accesser;
     }
 
     public static CsrfTokenWebFluxLoader wrap(ServerWebExchange exchange) {
-        return new CsrfTokenWebFluxLoader(exchange);
+        return new CsrfTokenWebFluxLoader(exchange, CsrfTokenAccesser.WEB_FLUX_ACCESSER);
     }
 
     @Override
@@ -40,7 +41,9 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
         HttpCookie cookie = exchange.getRequest()
                 .getCookies().getFirst(strategy.getKeyName());
         if (cookie == null || !StringUtils.hasText(cookie.getValue())) {
-            return Mono.empty();
+            return this.fromAttributes(exchange.getAttributes(),
+                    REQ_ATTR_NAME,
+                    strategy);
         }
         return Mono.just(this.createMirrorCsrfToken(strategy, cookie.getValue()));
     }
@@ -53,8 +56,9 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
                         this.fromAttributes(a, strategy.getKeyName(), strategy))
                 .switchIfEmpty(this.fromAttributes(
                         exchange.getAttributes(),
-                        "org.springframework.security.web.server.csrf.CsrfToken",
-                        strategy));
+                        REQ_ATTR_NAME,
+                        strategy))
+                .switchIfEmpty(this.loadEmptiness());
     }
 
     /**
@@ -68,7 +72,7 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
     public Mono<MirrorCsrfToken> fromAttributes(Map<String, Object> attributes,
                                                 String attributeName,
                                                 CsrfStrategy strategy) {
-        if(!accesser.accessible()) {
+        if (!accesser.accessible()) {
             return Mono.empty(); // fail fast
         }
         return Mono.just(attributes)
@@ -80,6 +84,7 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
                         ? (Mono<?>) tup.getT2()
                         : Mono.just(tup.getT2()))
                 .map(accesser::access)
-                .map(t -> createMirrorCsrfToken(strategy, t));
+                .map(t -> createMirrorCsrfToken(strategy, t))
+                .switchIfEmpty(Mono.empty());
     }
 }

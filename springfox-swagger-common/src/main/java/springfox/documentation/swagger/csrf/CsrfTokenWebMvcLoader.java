@@ -19,15 +19,15 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
      */
     private final HttpServletRequest request;
 
-    public static final CsrfTokenAccesser accesser =
-            new CsrfTokenAccesser("org.springframework.security.web.csrf.CsrfToken");
+    public final CsrfTokenAccesser accesser;
 
-    private CsrfTokenWebMvcLoader(HttpServletRequest request) {
+    public CsrfTokenWebMvcLoader(HttpServletRequest request, CsrfTokenAccesser accesser) {
         this.request = request;
+        this.accesser = accesser;
     }
 
     public static CsrfTokenWebMvcLoader wrap(HttpServletRequest request) {
-        return new CsrfTokenWebMvcLoader(request);
+        return new CsrfTokenWebMvcLoader(request, CsrfTokenAccesser.WEB_MVC_ACCESSER);
     }
 
     @Override
