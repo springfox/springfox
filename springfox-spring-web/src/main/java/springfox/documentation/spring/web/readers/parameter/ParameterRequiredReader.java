@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -45,7 +46,7 @@ import java.util.function.Predicate;
 import static java.util.Optional.*;
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
   private final SpringVersion springVersion;
   private final DescriptionResolver descriptions;
@@ -99,6 +100,9 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
       }
     }
 
+    Optional<ApiParam> apiParam = methodParameter.findAnnotation(ApiParam.class);
+    apiParam.ifPresent(param -> requiredSet.add(param.required()));
+
     Optional<RequestBody> requestBody = methodParameter.findAnnotation(RequestBody.class);
     requestBody.ifPresent(body -> requiredSet.add(!optional && body.required()));
 
@@ -118,7 +122,8 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   @SuppressWarnings("squid:S1872")
   boolean isOptional(ResolvedMethodParameter methodParameter) {
-    return "com.google.common.base.Optional".equals(methodParameter.getParameterType().getErasedType().getName());
+    String paramType = methodParameter.getParameterType().getErasedType().getName();
+    return "com.google.common.base.Optional".equals(paramType) || "java.util.Optional".equals(paramType);
   }
 
   private boolean isRequired(RequestParam annotation) {

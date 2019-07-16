@@ -92,11 +92,11 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
     [apiParam(false), pathVariableOptional()]               | "4.3.3.RELEASE" | "/path/{optional-param}" | true
     [apiParam(false), pathVariableOptional()]               | "4.3.3.RELEASE" | "/path"                  | false
     [apiParam(true), pathVariableOptional()]                | "4.3.3.RELEASE" | "/path/{optional-param}" | true
-    [apiParam(true), pathVariableOptional()]                | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(true), pathVariableOptional()]                | "4.3.3.RELEASE" | "/path"                  | true
     [apiParam(false), requestHeader(false, "", "")]         | "4.3.3.RELEASE" | "/path"                  | false
     [requestHeader(true, "", "")]                           | "4.3.3.RELEASE" | "/path"                  | true
     [requestHeader(false, "", "")]                          | "4.3.3.RELEASE" | "/path"                  | false
-    [apiParam(true)]                                        | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(true)]                                        | "4.3.3.RELEASE" | "/path"                  | true
     [apiParam(false)]                                       | "4.3.3.RELEASE" | "/path"                  | false
     [requestParam(true, "", DEFAULT_NONE)]                  | "4.3.3.RELEASE" | "/path"                  | true
     [requestParam(true, "", "")]                            | "4.3.3.RELEASE" | "/path"                  | false
@@ -110,7 +110,7 @@ class ParameterRequiredReaderSpec extends DocumentationContextSpec implements Pa
     [requestPart(true, "")]                                 | "4.3.3.RELEASE" | "/path"                  | true
     []                                                      | "4.3.3.RELEASE" | "/path"                  | false
     [null]                                                  | "4.3.3.RELEASE" | "/path"                  | false
-    [apiParam(true), requestParam(false, "", DEFAULT_NONE)] | "4.3.3.RELEASE" | "/path"                  | false
+    [apiParam(true), requestParam(false, "", DEFAULT_NONE)] | "4.3.3.RELEASE" | "/path"                  | true
     [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "4.3.3.RELEASE" | "/path"                  | true
     [apiParam(false), requestParam(true, "", DEFAULT_NONE)] | "4.3.3.RELEASE" | "/path"                  | true
   }

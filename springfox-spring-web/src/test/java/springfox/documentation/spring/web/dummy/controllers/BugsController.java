@@ -306,6 +306,8 @@ public class BugsController {
   public ResponseEntity<String> getProperty(
       @ApiParam(name = "propertyKey", value = "Key of the property", required = true)
       @PathVariable("propertyKey") Key propertyKey,
+      //environmentKey *will* be required, as PathVariables default to required=true
+      //the ApiParam required=false is really just restating the default for that annotation
       @ApiParam(name = "environmentKey", value = "Key of the environment", required = false)
       @PathVariable("environmentKey") Key environmentKey
   ) {

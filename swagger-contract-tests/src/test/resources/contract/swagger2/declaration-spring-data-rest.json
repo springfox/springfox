@@ -537,7 +537,7 @@
                         "name": "name",
                         "in": "query",
                         "description": "name parameter",
-                        "required": false,
+                        "required": true,
                         "type": "string",
                         "allowEmptyValue": false
                     }
@@ -1127,7 +1127,7 @@
                         "name": "lastName",
                         "in": "query",
                         "description": "lastName parameter",
-                        "required": false,
+                        "required": true,
                         "type": "string",
                         "allowEmptyValue": false
                     }

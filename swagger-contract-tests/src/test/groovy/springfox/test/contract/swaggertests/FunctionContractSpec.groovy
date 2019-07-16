@@ -22,6 +22,9 @@ package springfox.test.contract.swaggertests
 import com.fasterxml.classmate.TypeResolver
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
+import org.skyscreamer.jsonassert.JSONCompare
+import org.skyscreamer.jsonassert.JSONCompareResult
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -48,6 +51,7 @@ import static org.springframework.boot.test.context.SpringBootTest.*
 @ContextConfiguration(classes = Config)
 class FunctionContractSpec extends Specification implements FileAccess {
 
+  def log = LoggerFactory.getLogger("FunctionContractSpec")
   @Shared
   def http = new TestRestTemplate()
 
@@ -73,6 +77,10 @@ class FunctionContractSpec extends Specification implements FileAccess {
     maybeWriteToFile(
         "/contract/swagger2/$contractFile",
         raw.replace("localhost:$port", "localhost:__PORT__"))
+//    JSONCompareResult result = JSONCompare.compareJSON(withPortReplaced, raw, NON_EXTENSIBLE)
+//    if (result.failed()) {
+//      log.error(result.getMessage())
+//    }
     JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
 
     where:
@@ -163,6 +171,13 @@ class FunctionContractSpec extends Specification implements FileAccess {
     maybeWriteToFile(
         "/contract/swagger/$contractFile",
         raw.replace("localhost:$port", "localhost:__PORT__"))
+
+    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+    JSONCompareResult result = JSONCompare.compareJSON(withPortReplaced, raw, NON_EXTENSIBLE)
+    if (result.failed()) {
+      log.error(result.getMessage())
+    }
+
     JSONAssert.assertEquals(contract, raw, NON_EXTENSIBLE)
 
     where:
