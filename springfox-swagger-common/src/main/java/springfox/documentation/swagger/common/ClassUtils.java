@@ -36,7 +36,7 @@ public class ClassUtils {
 
     public static final String WEB_FLUX_INDICATOR = "org.springframework.web.reactive.BindingContext";
 
-    public static final String WEB_MVC_INDICATOR = "javax.servlet.http.HttpServletRequest";
+    public static final String WEB_MVC_INDICATOR = "org.springframework.web.servlet.DispatcherServlet";
 
     public static Class<?> forName(String qualifiedName) {
         try {
