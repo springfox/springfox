@@ -101,6 +101,7 @@ public class ApiResourceController {
 
     @RestController
     @ConditionalOnClass(name = ClassUtils.WEB_MVC_INDICATOR)
+    @ApiIgnore
     public class CsrfWebMvcController {
 
         @RequestMapping("/swagger-resources/csrf")
@@ -111,6 +112,7 @@ public class ApiResourceController {
 
     @RestController
     @ConditionalOnClass(name = ClassUtils.WEB_FLUX_INDICATOR)
+    @ApiIgnore
     public class CsrfWebFluxController {
 
         @RequestMapping("/swagger-resources/csrf")
