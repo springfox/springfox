@@ -43,6 +43,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import javax.validation.constraints.NotNull;
+
 import static java.util.Optional.*;
 
 @Component
@@ -88,6 +90,9 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
     Optional<RequestHeader> requestHeader = methodParameter.findAnnotation(RequestHeader.class);
     requestHeader.ifPresent(header -> requiredSet.add(!optional && header.required()));
+
+    Optional<NotNull> notNull = methodParameter.findAnnotation(NotNull.class);
+    notNull.ifPresent(nonnull -> requiredSet.add(true));
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {

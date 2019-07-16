@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RequestPart
 
+import javax.validation.constraints.NotNull
+
 trait ParameterAnnotationSupport {
   RequestParam requestParam(required, value, defaultValue) {
     [
@@ -50,5 +52,11 @@ trait ParameterAnnotationSupport {
     [
         required: { -> required }
     ] as ApiParam
+  }
+
+  NotNull notNull() {
+    [
+         message: { -> "" }
+    ] as NotNull
   }
 }
