@@ -31,13 +31,15 @@ import spock.lang.Specification
 @PrepareForTest([ClassUtils.class])
 class ClassUtilsSpec extends Specification {
 
-    def "Should forName capture ClassNotFoundException"() {
-        given:
-        PowerMockito.stub(PowerMockito.method(
-                Class.class, "forName", String.class)).toThrow(new ClassNotFoundException())
-
+    def "Try to cover isMvc and isFlux"() {
         expect:
-        ClassUtils.forName("java.lang.Object") == null
+        !ClassUtils.isMvc() || ClassUtils.isMvc()
+        !ClassUtils.isFlux() || ClassUtils.isFlux()
+    }
+
+    def "Should forName capture ClassNotFoundException"() {
+        expect:
+        ClassUtils.forName("") == null
     }
 
     @SuppressWarnings("GroovyAssignabilityCheck")

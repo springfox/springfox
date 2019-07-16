@@ -18,18 +18,9 @@
  */
 package springfox.documentation.swagger.csrf
 
-import org.junit.runner.RunWith
-import org.powermock.core.classloader.annotations.PrepareForTest
-import org.powermock.modules.junit4.PowerMockRunner
-import org.powermock.modules.junit4.PowerMockRunnerDelegate
-import org.spockframework.runtime.Sputnik
 import spock.lang.FailsWith
 import spock.lang.Specification
-import springfox.documentation.swagger.common.ClassUtils
 
-@RunWith(PowerMockRunner.class)
-@PowerMockRunnerDelegate(Sputnik.class)
-@PrepareForTest([ClassUtils.class])
 class CsrfTokenAccesserSpec extends Specification {
 
     class FakeCsrfToken {
@@ -45,7 +36,7 @@ class CsrfTokenAccesserSpec extends Specification {
         }
     }
 
-    def "When the csrfTokenClass is null"() {
+    def "When the csrfTokenClass could not be found"() {
         given:
         def accesser = new CsrfTokenAccesser("")
 
