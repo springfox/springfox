@@ -99,9 +99,13 @@ class ApiResourceControllerCsrfSpec extends Specification {
     @SuppressWarnings("GroovyAccessibility")
     <T> T derive(CsrfStrategy strategy, Closure<T> cl) {
         cl(apiResourceController.with {
-            uiConfiguration = UiConfigurationBuilder.builder()
-                    .csrfStrategy(strategy)
-                    .build()
+            def builder = UiConfigurationBuilder.builder()
+            if(CsrfStrategy.NONE == strategy) {
+                builder.disableCsrf()
+            } else {
+                builder.csrfStrategy(strategy)
+            }
+            uiConfiguration = builder.build()
             it
         })
     }

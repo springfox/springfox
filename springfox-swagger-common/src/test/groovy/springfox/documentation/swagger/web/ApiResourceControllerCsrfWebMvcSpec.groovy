@@ -72,6 +72,12 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
         Mockito.when(ClassUtils.isMvc()).thenReturn(true)
     }
 
+    def cleanup() {
+        edit = {
+            MockHttpServletRequestBuilder builder -> builder
+        }
+    }
+
     @SuppressWarnings("GroovyAccessibility")
     def "WebMvc - csrf token not supported"() {
         given:
