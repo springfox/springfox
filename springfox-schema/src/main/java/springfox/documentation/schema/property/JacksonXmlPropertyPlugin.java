@@ -46,7 +46,7 @@ public class JacksonXmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   public void apply(ModelPropertyContext context) {
     Optional<JacksonXmlProperty> propertyAnnotation = findAnnotation(context, JacksonXmlProperty.class);
 
-    if(propertyAnnotation.isPresent()) {
+    if (propertyAnnotation.isPresent()) {
       if (propertyAnnotation.get().isAttribute()) {
         context.getBuilder()
             .xml(new Xml()
