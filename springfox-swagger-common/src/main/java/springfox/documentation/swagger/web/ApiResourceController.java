@@ -104,9 +104,15 @@ public class ApiResourceController {
     @ApiIgnore
     public class CsrfWebMvcController {
 
+        private final CsrfTokenWebMvcLoader loader;
+
+        public CsrfWebMvcController(@Autowired(required = false) CsrfTokenWebMvcLoader loader) {
+            this.loader = (loader == null ? CsrfTokenWebMvcLoader.defaultOne() : loader);
+        }
+
         @RequestMapping("/swagger-resources/csrf")
         public ResponseEntity<MirrorCsrfToken> csrf(HttpServletRequest request) {
-            return doLoadCsrfToken(CsrfTokenWebMvcLoader.wrap(request));
+            return doLoadCsrfToken(loader.wrap(request));
         }
     }
 
@@ -115,9 +121,15 @@ public class ApiResourceController {
     @ApiIgnore
     public class CsrfWebFluxController {
 
+        private final CsrfTokenWebFluxLoader loader;
+
+        public CsrfWebFluxController(@Autowired(required = false) CsrfTokenWebFluxLoader loader) {
+            this.loader = (loader == null ? CsrfTokenWebFluxLoader.defaultOne() : loader);
+        }
+
         @RequestMapping("/swagger-resources/csrf")
         public ResponseEntity<Mono<MirrorCsrfToken>> csrf(ServerWebExchange exchange) {
-            return doLoadCsrfToken(CsrfTokenWebFluxLoader.wrap(exchange));
+            return doLoadCsrfToken(loader.wrap(exchange));
         }
     }
 }

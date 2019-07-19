@@ -39,11 +39,12 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
         MockHttpServletRequestBuilder builder -> builder
     }
 
+    @SuppressWarnings("GroovyAssignabilityCheck")
     void derive(CsrfStrategy strategy) {
         this.strategy = strategy
         mvc = derive(this.strategy) {
             MockMvcBuilders.standaloneSetup(
-                    new ApiResourceController.CsrfWebMvcController(it))
+                    new ApiResourceController.CsrfWebMvcController(it, null))
                     .build()
         }
     }

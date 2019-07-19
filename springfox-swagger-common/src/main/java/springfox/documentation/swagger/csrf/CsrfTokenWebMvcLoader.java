@@ -36,22 +36,26 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
     /**
      * The request
      */
-    private final HttpServletRequest request;
+    private static final ThreadLocal<HttpServletRequest> req = new ThreadLocal<>();
 
     private final CsrfTokenAccesser accesser;
 
-    public CsrfTokenWebMvcLoader(HttpServletRequest request, CsrfTokenAccesser accesser) {
-        this.request = request;
+    public CsrfTokenWebMvcLoader(CsrfTokenAccesser accesser) {
         this.accesser = accesser;
     }
 
-    public static CsrfTokenWebMvcLoader wrap(HttpServletRequest request) {
-        return new CsrfTokenWebMvcLoader(request, CsrfTokenAccesser.WEB_MVC_ACCESSER);
+    public static CsrfTokenWebMvcLoader defaultOne() {
+        return new CsrfTokenWebMvcLoader(DefaultCsrfTokenAccesser.WEB_MVC_ACCESSER);
+    }
+
+    public CsrfTokenWebMvcLoader wrap(HttpServletRequest request) {
+        req.set(request);
+        return this;
     }
 
     @Override
     public boolean isCorsRequest() {
-        return CorsUtils.isCorsRequest(request);
+        return CorsUtils.isCorsRequest(req.get());
     }
 
     @Override
@@ -61,7 +65,7 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
 
     @Override
     public MirrorCsrfToken loadFromCookie(CsrfStrategy strategy) {
-        Cookie cookie = WebUtils.getCookie(request, strategy.getKeyName());
+        Cookie cookie = WebUtils.getCookie(req.get(), strategy.getKeyName());
         if (cookie == null || !StringUtils.hasText(cookie.getValue())) {
             return tryLoadFromRequest(strategy);
         }
@@ -71,7 +75,7 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
 
     @Override
     public MirrorCsrfToken loadFromSession(CsrfStrategy strategy) {
-        Object csrfToken = request.getSession(true)
+        Object csrfToken = req.get().getSession(true)
                 .getAttribute(strategy.getKeyName());
         if (csrfToken == null) {
             return tryLoadFromRequest(strategy);
@@ -81,7 +85,7 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
     }
 
     private MirrorCsrfToken tryLoadFromRequest(CsrfStrategy strategy) {
-        String token = tryAccess(request, strategy.getBackupKeyName());
+        String token = tryAccess(req.get(), strategy.getBackupKeyName());
         if (StringUtils.isEmpty(token)) {
             return this.loadEmptiness();
         }
@@ -96,7 +100,7 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
      * @return The token string, or null
      */
     private String tryAccess(HttpServletRequest request, String backupKeyName) {
-        if (!accesser.accessible()) {
+        if (!accesser.available()) {
             return null; // fail fast
         }
         Object lazyToken = request.getAttribute(backupKeyName);

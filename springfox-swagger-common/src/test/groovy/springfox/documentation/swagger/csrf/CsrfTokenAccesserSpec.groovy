@@ -38,38 +38,38 @@ class CsrfTokenAccesserSpec extends Specification {
 
     def "When the csrfTokenClass could not be found"() {
         given:
-        def accesser = new CsrfTokenAccesser("")
+        def accesser = new DefaultCsrfTokenAccesser("")
 
         expect:
-        !accesser.accessible()
+        !accesser.available()
         accesser.access(new Object()) == null
     }
 
     def "When the csrfTokenClass contains none `getToken` method"() {
         given:
-        def accesser = new CsrfTokenAccesser("java.lang.Object")
+        def accesser = new DefaultCsrfTokenAccesser("java.lang.Object")
 
         expect:
-        !accesser.accessible()
+        !accesser.available()
         accesser.access(new Object()) == null
     }
 
     @FailsWith(IllegalArgumentException.class)
     def "When the accesser tries to access a different object"() {
         given:
-        def accesser = new CsrfTokenAccesser(FakeCsrfToken.class.getName())
+        def accesser = new DefaultCsrfTokenAccesser(FakeCsrfToken.class.getName())
 
         expect:
-        accesser.accessible()
+        accesser.available()
         accesser.access(new Object())
     }
 
     def "When the accessed object throws an exception"() {
         given:
-        def accesser = new CsrfTokenAccesser(ExceptionalCsrfToken.class.getName())
+        def accesser = new DefaultCsrfTokenAccesser(ExceptionalCsrfToken.class.getName())
 
         expect:
-        accesser.accessible()
+        accesser.available()
         accesser.access(new ExceptionalCsrfToken()) == null
     }
 }

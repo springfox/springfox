@@ -38,11 +38,12 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
     CsrfStrategy strategy
     WebTestClient flux
 
+    @SuppressWarnings("GroovyAssignabilityCheck")
     void derive(CsrfStrategy strategy) {
         this.strategy = strategy
         flux = derive(this.strategy) {
             WebTestClient.bindToController(
-                    new ApiResourceController.CsrfWebFluxController(it))
+                    new ApiResourceController.CsrfWebFluxController(it, null))
                     .webFilter({ exchange, chain ->
                         Mono.justOrEmpty(bridge.cl)
                                 .flatMap({ cl -> cl(exchange) })

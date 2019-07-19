@@ -11,7 +11,7 @@ import spock.lang.Specification
 class CsrfTokenWebFluxLoaderSpec extends Specification {
 
     static final CsrfStrategy strategy = CsrfStrategy.COOKIE
-    def exchange
+    ServerWebExchange exchange
     def cookies
 
     def setup() {
@@ -29,8 +29,7 @@ class CsrfTokenWebFluxLoaderSpec extends Specification {
         given:
         cookies.getFirst(strategy.keyName) >>
                 new HttpCookie(strategy.keyName, "")
-        def loader = new CsrfTokenWebFluxLoader(exchange,
-                new CsrfTokenAccesser(""))
+        def loader = new CsrfTokenWebFluxLoader(new DefaultCsrfTokenAccesser("")).wrap(exchange)
 
         expect:
         loader.loadFromCookie(strategy).doOnNext({

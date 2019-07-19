@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest
 class CsrfTokenWebMvcLoaderSpec extends Specification {
 
     static final CsrfStrategy strategy = CsrfStrategy.COOKIE
-    def request
+    HttpServletRequest request
 
     def setup() {
         request = Mock(HttpServletRequest)
@@ -19,8 +19,7 @@ class CsrfTokenWebMvcLoaderSpec extends Specification {
     def "When cookie's value is empty and accesser is incapable"() {
         given:
         request.getCookies() >> [new Cookie(strategy.keyName, "")]
-        def loader = new CsrfTokenWebMvcLoader(
-                request, new CsrfTokenAccesser(""))
+        def loader = new CsrfTokenWebMvcLoader(new DefaultCsrfTokenAccesser("")).wrap(request)
 
         expect:
         JSONAssert.assertEquals(

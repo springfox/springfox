@@ -31,21 +31,25 @@ import java.util.Map;
 
 public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfToken>> {
 
-    private final ServerWebExchange exchange;
+    private static final ThreadLocal<ServerWebExchange> exch = new ThreadLocal<>();
     private final CsrfTokenAccesser accesser;
 
-    public CsrfTokenWebFluxLoader(ServerWebExchange exchange, CsrfTokenAccesser accesser) {
-        this.exchange = exchange;
+    public CsrfTokenWebFluxLoader(CsrfTokenAccesser accesser) {
         this.accesser = accesser;
     }
 
-    public static CsrfTokenWebFluxLoader wrap(ServerWebExchange exchange) {
-        return new CsrfTokenWebFluxLoader(exchange, CsrfTokenAccesser.WEB_FLUX_ACCESSER);
+    public static CsrfTokenWebFluxLoader defaultOne() {
+        return new CsrfTokenWebFluxLoader(DefaultCsrfTokenAccesser.WEB_FLUX_ACCESSER);
+    }
+
+    public CsrfTokenWebFluxLoader wrap(ServerWebExchange exchange) {
+        exch.set(exchange);
+        return this;
     }
 
     @Override
     public boolean isCorsRequest() {
-        return CorsUtils.isCorsRequest(exchange.getRequest());
+        return CorsUtils.isCorsRequest(exch.get().getRequest());
     }
 
     @Override
@@ -55,10 +59,10 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
 
     @Override
     public Mono<MirrorCsrfToken> loadFromCookie(CsrfStrategy strategy) {
-        HttpCookie cookie = exchange.getRequest()
+        HttpCookie cookie = exch.get().getRequest()
                 .getCookies().getFirst(strategy.getKeyName());
         if (cookie == null || !StringUtils.hasText(cookie.getValue())) {
-            return this.fromAttributes(exchange.getAttributes(),
+            return this.fromAttributes(exch.get().getAttributes(),
                     strategy.getBackupKeyName(),
                     strategy).switchIfEmpty(this.loadEmptiness());
         }
@@ -67,12 +71,12 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
 
     @Override
     public Mono<MirrorCsrfToken> loadFromSession(CsrfStrategy strategy) {
-        return exchange.getSession()
+        return exch.get().getSession()
                 .map(WebSession::getAttributes)
                 .flatMap(a ->
                         this.fromAttributes(a, strategy.getKeyName(), strategy))
                 .switchIfEmpty(this.fromAttributes(
-                        exchange.getAttributes(),
+                        exch.get().getAttributes(),
                         strategy.getBackupKeyName(),
                         strategy))
                 .switchIfEmpty(this.loadEmptiness());
@@ -89,7 +93,7 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
     public Mono<MirrorCsrfToken> fromAttributes(Map<String, Object> attributes,
                                                 String attributeName,
                                                 CsrfStrategy strategy) {
-        if (!accesser.accessible()) {
+        if (!accesser.available()) {
             return Mono.empty(); // fail fast
         }
         return Mono.just(attributes)
