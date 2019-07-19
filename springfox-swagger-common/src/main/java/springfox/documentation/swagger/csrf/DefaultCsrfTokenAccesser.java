@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
  *
  * @author liuxy
  */
-public class DefaultCsrfTokenAccesser implements CsrfTokenAccesser{
+public class DefaultCsrfTokenAccesser implements CsrfTokenAccesser {
 
     public static final DefaultCsrfTokenAccesser WEB_MVC_ACCESSER =
             new DefaultCsrfTokenAccesser("org.springframework.security.web.csrf.CsrfToken");

@@ -36,7 +36,7 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
     /**
      * The request
      */
-    private static final ThreadLocal<HttpServletRequest> req = new ThreadLocal<>();
+    private final ThreadLocal<HttpServletRequest> req = new ThreadLocal<>();
 
     private final CsrfTokenAccesser accesser;
 

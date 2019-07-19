@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfToken>> {
 
-    private static final ThreadLocal<ServerWebExchange> exch = new ThreadLocal<>();
+    private final ThreadLocal<ServerWebExchange> exch = new ThreadLocal<>();
     private final CsrfTokenAccesser accesser;
 
     public CsrfTokenWebFluxLoader(CsrfTokenAccesser accesser) {
