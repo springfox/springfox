@@ -32,7 +32,7 @@ import java.util.Optional;
 import static springfox.bean.validators.plugins.Validators.*;
 
 @Component
-@Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
+@Order(BEAN_VALIDATOR_PLUGIN_ORDER)
 public class IsNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
 
   /**
