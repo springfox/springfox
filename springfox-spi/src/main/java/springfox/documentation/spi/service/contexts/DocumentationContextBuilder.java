@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,8 +65,8 @@ public class DocumentationContextBuilder {
   private final List<AlternateTypeRule> rules = new ArrayList<>();
   private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap<>();
   private final Set<String> protocols = new HashSet<>();
-  private final Set<String> produces = new HashSet<>();
-  private final Set<String> consumes = new HashSet<>();
+  private final Set<String> produces = new LinkedHashSet<>();
+  private final Set<String> consumes = new LinkedHashSet<>();
   private final Set<ResolvedType> additionalModels = new HashSet<>();
   private final Set<Tag> tags = new TreeSet<>(Tags.tagComparator());
   private List<VendorExtension> vendorExtensions = new ArrayList<VendorExtension>();

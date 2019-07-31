@@ -50,10 +50,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -77,8 +79,8 @@ public class Docket implements DocumentationPlugin {
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList<>();
   private final Set<Class> ignorableParameterTypes = new HashSet<>();
   private final Set<String> protocols = new HashSet<>();
-  private final Set<String> produces = new HashSet<>();
-  private final Set<String> consumes = new HashSet<>();
+  private final Set<String> produces = new LinkedHashSet<>();
+  private final Set<String> consumes = new LinkedHashSet<>();
   private final Set<ResolvedType> additionalModels = new HashSet<>();
   private final Set<Tag> tags = new HashSet<>();
 
