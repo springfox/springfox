@@ -19,12 +19,16 @@
 package springfox.documentation.swagger2.mappers
 
 import spock.lang.Specification
+import springfox.documentation.service.VendorExtension
 import springfox.documentation.service.ListVendorExtension
 import springfox.documentation.service.ObjectVendorExtension
 import springfox.documentation.service.StringVendorExtension
 
 class VendorExtensionsMapperSpec extends Specification {
-
+  class Person {
+    String name;
+    int age;
+  }
   def second() {
     def second = new ObjectVendorExtension("x-test2")
     second.with {
@@ -45,11 +49,25 @@ class VendorExtensionsMapperSpec extends Specification {
     new ListVendorExtension("x-test3", [1, 3])
   }
 
+  def fourth() {
+    new VendorExtension() {
+      def getValue() {
+        Person person = new Person()
+        person.name = "test"
+        person.age = 1
+        return person
+      }
+      String getName() {
+        "x-test4"
+      }
+    }
+  }
+
   def "mapper works as expected" () {
     given:
       VendorExtensionsMapper sut = new VendorExtensionsMapper()
     when:
-      def mapped = sut.mapExtensions([first(), second(), third()])
+      def mapped = sut.mapExtensions([first(), second(), third(), fourth()])
     then:
       mapped.containsKey("x-test1")
       mapped["x-test1"] == "value1"
@@ -59,5 +77,10 @@ class VendorExtensionsMapperSpec extends Specification {
     and:
       mapped.containsKey("x-test3")
       mapped["x-test3"] == [1, 3]
+    and:
+      mapped.containsKey("x-test4")
+      Person p = mapped["x-test4"]
+      p.name == "test"
+      p.age == 1
   }
 }
