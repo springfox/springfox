@@ -41,7 +41,12 @@ class UiConfigurationSpec extends Specification {
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"validatorUrl\": \"validator:urn\"\n" +
+      "    \"validatorUrl\": \"validator:urn\",\n" +
+      "    \"csrfStrategy\": {\n" +
+      "        \"tokenStore\": \"SESSION\",\n" +
+      "        \"parameterName\": \"_csrf\",\n" +
+      "        \"headerName\": \"X-CSRF-TOKEN\"\n" +
+      "    }\n" +
       "}"
 
   def uiConfigWithoutValidatorUrl = new UiConfiguration(null, UiConfiguration.Constants.NO_SUBMIT_METHODS)
@@ -60,7 +65,12 @@ class UiConfigurationSpec extends Specification {
       "    \"operationsSorter\": \"alpha\",\n" +
       "    \"showExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
-      "    \"validatorUrl\": \"\"\n" +
+      "    \"validatorUrl\": \"\",\n" +
+      "    \"csrfStrategy\": {\n" +
+      "        \"tokenStore\": \"SESSION\",\n" +
+      "        \"parameterName\": \"_csrf\",\n" +
+      "        \"headerName\": \"X-CSRF-TOKEN\"\n" +
+      "    }\n" +
       "}"
 
   def "Renders non-null values using default ObjectMapper"() {

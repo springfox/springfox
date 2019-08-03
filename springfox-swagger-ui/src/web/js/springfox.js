@@ -1,5 +1,6 @@
 import csrfSupport from './csrf';
 
+let csrfStrategy = null;
 window.onload = () => {
 
   const buildSystemAsync = async (baseUrl) => {
@@ -41,7 +42,8 @@ window.onload = () => {
           resource.url = baseUrl + resource.url;
         }
       });
-
+      
+      csrfStrategy = configUI.csrfStrategy;
       window.ui = getUI(baseUrl, resources, configUI, configSecurity);
     } catch (e) {
       const retryURL = await prompt(
@@ -132,7 +134,7 @@ window.onload = () => {
   /* Entry Point */
   (async () => {
     await buildSystemAsync(getBaseURL());
-    await csrfSupport(getBaseURL());
+    await csrfSupport(getBaseURL(), csrfStrategy);
   })();
 
 };

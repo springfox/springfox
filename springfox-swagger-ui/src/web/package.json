@@ -4,6 +4,7 @@
   "description": "Automated JSON API documentation for APIs built with Spring",
   "scripts": {
     "test": "jest",
+    "coverage": "jest --collect-coverage",
     "dev": "webpack --mode development --config webpack.config.js --progress --watch",
     "build": "webpack --mode production --config webpack.config.js --progress",
     "browserslist": "browserslist 'last 2 versions'"

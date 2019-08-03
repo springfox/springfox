@@ -1,12 +1,17 @@
 import 'babel-polyfill';
-import patchRequestInterceptor, {getCsrf} from './csrf';
+import patchRequestInterceptor, {TokenStore, getCsrf} from './csrf';
 import fetchMock from 'fetch-mock';
 import { FetchError } from 'node-fetch';
 
 const baseUrl = 'http://mock.com';
-const headerName = 'X-XSRF-TOKEN';
-const cookieName = 'XSRF-TOKEN';
 const token = 'b11d3ee4-51d4-4eda-9980-6c07e527eb44';
+const strategy = {
+  tokenStore: TokenStore.COOKIE,
+  parameterName: "_csrf",
+  headerName: "X-XSRF-TOKEN",
+  keyName: "XSRF-TOKEN"
+};
+const endpoint = `${baseUrl}/swagger-resources/csrf`;
 
 afterEach(() => {
   fetchMock.reset();
@@ -19,74 +24,122 @@ afterEach(() => {
       });
 });
 
-async function expectOk() {
-  const response = await getCsrf(baseUrl);
+async function expectOk(strategy) {
+  const response = await getCsrf(baseUrl, strategy);
   expect(response.token).toBe(token);
-  expect(response.headerName).toBe(headerName);
+  expect(response.headerName).toBe(strategy.headerName);
 }
 
-/*
- * 1 2 3: get from meta, get from endpoint, get from cookie
- * x: mock csrf not found
- * o: mock found!
- * ?: mock not define
- */
+/**====================*
+ * patching ability    *
+ *====================**/
 
-test('x x x', async () => {
-  fetchMock.mock(`${baseUrl}/`, 404);
-  fetchMock.mock(`${baseUrl}/csrf`, 404);
-
-  const response = await getCsrf(baseUrl);
-  expect(response).toBe(undefined);
+test('the patcher function should catch no errors', async () => {
+  // Make sure this function will not throw any exception.
+  await patchRequestInterceptor(baseUrl, strategy);
 });
 
-test('o ? ?', async () => {
-  fetchMock.mock(`${baseUrl}/`, `<html><head><title>Title</title>
-  <meta name="_csrf" content="${token}">
-  <meta name="_csrf_header" content="${headerName}">
-</head><body></body></html>`);
+test('no strategy specified', async () => {
+  const config = {requestInterceptor: (a => a)}
+  const configGetter = jest.fn().mockImplementation(() => {return config});
+  window.ui = {
+    getConfigs: configGetter
+  }
 
-  await expectOk();
+  await patchRequestInterceptor(baseUrl);
+  expect(configGetter).not.toBeCalled();
 });
 
-test('x o ?', async () => {
-  fetchMock.mock(`${baseUrl}/`, `<html><head><title>No Meta</title></head><body></body></html>`);
-  fetchMock.mock(`${baseUrl}/csrf`, { headerName, token });
+test('no token could be acquired', async () => {
+  fetchMock.mock(endpoint, `{"token":null,"parameterName":"${strategy.parameterName}","headerName":"${strategy.headerName}"}`);
+  strategy.tokenStore = TokenStore.SESSION;
 
-  await expectOk();
+  await patchRequestInterceptor(baseUrl, strategy);
 });
 
-test('x x o', async () => {
-  fetchMock.mock(`${baseUrl}/`, 404);
-  fetchMock.mock(`${baseUrl}/csrf`, 404);
+test('when everything is properly set, the patcher and patched function should both work', async () => {
+  // mock
+  const config = {requestInterceptor: (a => a)}
+  const configGetter = jest.fn().mockImplementation(() => {return config});
+  window.ui = {
+    getConfigs: configGetter
+  }
+  fetchMock.mock(endpoint, `{"token":"${token}","parameterName":"${strategy.parameterName}","headerName":"${strategy.headerName}"}`);
+  strategy.tokenStore = TokenStore.SESSION;
+  
+  // patcher function
+  await patchRequestInterceptor(baseUrl, strategy);
+  expect(configGetter).toBeCalledTimes(1);
+
+  // patched function
+  let request = window.ui.getConfigs().requestInterceptor.call(this, {headers: {}});
+  expect(request.headers[strategy.headerName]).toBe(token);
+});
+
+/**===============*
+ * normal tests   *
+ *===============**/
+
+test('csrf token not supported, but the user still configured the strategy to be cookie-store typed', async () => {
+  fetchMock.mock(endpoint, `{"token":null,"parameterName":"${strategy.parameterName}","headerName":"${strategy.headerName}"}`);
+  strategy.tokenStore = TokenStore.COOKIE;
+
+  const response = await getCsrf(baseUrl, strategy);
+  expect(response).toBeUndefined();
+});
+
+test('cookie-store typed csrf token is locked-n-loaded', async () => {
   document.cookie = 'first=hi';
-  document.cookie = `${cookieName}=${token}`;
+  document.cookie = `${strategy.keyName}=${token}`;
   document.cookie = 'last=hi';
-  await expectOk();
+  strategy.tokenStore = TokenStore.COOKIE;
+
+  await expectOk(strategy);
 });
 
-test('x wrong-json ?', async () => {
-  fetchMock.mock(`${baseUrl}/`, 404);
-  fetchMock.mock(`${baseUrl}/csrf`, {
-    nothing: 'nothing'
-  });
+test('session-store typed csrf token is locked-n-loaded', async () => {
+  fetchMock.mock(endpoint, `{"token":"${token}","parameterName":"${strategy.parameterName}","headerName":"${strategy.headerName}"}`);
+  strategy.tokenStore = TokenStore.SESSION;
 
-  const response = await getCsrf(baseUrl);
-  expect(response).toBe(undefined);
+  await expectOk(strategy);
 });
 
-test('x invalid-json ?', async () => {
-  fetchMock.mock(`${baseUrl}/`, 404);
-  fetchMock.mock(`${baseUrl}/csrf`, 'bla bla bla');
+test('token-store specified incorrectly', async () => {
+  fetchMock.mock(endpoint, `{"token":"${token}","parameterName":"${strategy.parameterName}","headerName":"${strategy.headerName}"}`);
+  strategy.tokenStore = "Moo~";
+
+  const response = await getCsrf(baseUrl, strategy);
+  expect(response).toBeNull();
+});
+
+test('token-store specified as NONE', async () => {
+  fetchMock.mock(endpoint, `{"token":"${token}","parameterName":"${strategy.parameterName}","headerName":"${strategy.headerName}"}`);
+  strategy.tokenStore = TokenStore.NONE;
+
+  const response = await getCsrf(baseUrl, strategy);
+  expect(response).toBeNull();
+});
+
+/**==========================*
+ * malformed response tests  *
+ *==========================**/
+
+test('response status code is not 200', async () => {
+  fetchMock.mock(endpoint, 403);
+  strategy.tokenStore = TokenStore.COOKIE; // this can cover more methods
+
+  const response = await getCsrf(baseUrl, strategy);
+  expect(response).toBeUndefined();
+});
+
+test('malformed json response', async () => {
+  fetchMock.mock(endpoint, "bla bla bla");
 
   let error;
   try {
-    await getCsrf(baseUrl)
+    await getCsrf(baseUrl, strategy)
   } catch (e) {
     error = e;
   }
   expect(error).toBeInstanceOf(FetchError);
-
-  // Make sure this function will not throw exception.
-  await patchRequestInterceptor(baseUrl);
 });
