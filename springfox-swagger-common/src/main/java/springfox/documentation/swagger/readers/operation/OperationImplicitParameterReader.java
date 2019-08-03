@@ -82,6 +82,7 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .order(SWAGGER_PLUGIN_ORDER)
         .scalarExample(param.example())
         .complexExamples(examples(param.examples()))
+        .collectionFormat(param.collectionFormat())
         .build();
   }
 
