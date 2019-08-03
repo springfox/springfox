@@ -103,6 +103,10 @@ task customizeSwaggerUi {
       into("${buildDir}/${swaggerUiExplodedDir}")
     }
     copy {
+      from("${projectDir}/src/web/dist/springfox.js.map")
+      into("${buildDir}/${swaggerUiExplodedDir}")
+    }
+    copy {
       from("${projectDir}/src/web/css/springfox.css")
       into("${buildDir}/${swaggerUiExplodedDir}")
     }
