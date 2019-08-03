@@ -157,6 +157,7 @@ public class Swagger2SpringBoot {
         .maxDisplayedTags(null)
         .operationsSorter(OperationsSorter.ALPHA)
         .showExtensions(false)
+        .showCommonExtensions(false)
         .tagsSorter(TagsSorter.ALPHA)
         .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
         .validatorUrl(null)

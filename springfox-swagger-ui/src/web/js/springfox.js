@@ -91,6 +91,7 @@ window.onload = () => {
       maxDisplayedTags: configUI.maxDisplayedTags,
       operationsSorter: configUI.operationsSorter,
       showExtensions: configUI.showExtensions,
+      showCommonExtensions: configUI.showCommonExtensions,
       tagSorter: configUI.tagSorter,
       /*--------------------------------------------*\
        * Network

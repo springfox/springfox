@@ -36,6 +36,7 @@ public class UiConfigurationBuilder {
   private Integer maxDisplayedTags;
   private OperationsSorter operationsSorter;
   private Boolean showExtensions;
+  private Boolean showCommonExtensions;
   private TagsSorter tagsSorter;
 
   /*--------------------------------------------*\
@@ -64,6 +65,7 @@ public class UiConfigurationBuilder {
         defaultIfAbsent(maxDisplayedTags, null),
         defaultIfAbsent(operationsSorter, OperationsSorter.ALPHA),
         defaultIfAbsent(showExtensions, false),
+        defaultIfAbsent(showCommonExtensions, false),
         defaultIfAbsent(tagsSorter, TagsSorter.ALPHA),
         defaultIfAbsent(supportedSubmitMethods, UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS),
         defaultIfAbsent(validatorUrl, null)
@@ -178,6 +180,16 @@ public class UiConfigurationBuilder {
    */
   public UiConfigurationBuilder showExtensions(Boolean showExtensions) {
     this.showExtensions = showExtensions;
+    return this;
+  }
+  
+  /**
+   * @param showCommonExtensions     Controls the display of extensions (pattern, maxLength, minLength, maximum, 
+   *                                 minimum) fields and values for Parameters.
+   * @return this
+   */
+  public UiConfigurationBuilder showCommonExtensions(Boolean showCommonExtensions) {
+    this.showCommonExtensions = showCommonExtensions;
     return this;
   }
 
