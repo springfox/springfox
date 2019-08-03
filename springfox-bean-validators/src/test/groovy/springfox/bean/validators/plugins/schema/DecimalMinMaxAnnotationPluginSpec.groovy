@@ -22,7 +22,6 @@ import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.DecimalMinMaxTestModel
-import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
@@ -42,7 +41,7 @@ class DecimalMinMaxAnnotationPluginSpec extends Specification {
       def sut = new DecimalMinMaxAnnotationPlugin()
       def element = DecimalMinMaxTestModel.getDeclaredField(propertyName)
       def context = new ModelPropertyContext(
-          new ModelPropertyBuilder(),
+          new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
           element,
           new TypeResolver(),
           DocumentationType.SWAGGER_12)

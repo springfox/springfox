@@ -42,7 +42,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
     def sut = new NotNullAnnotationPlugin()
     def element = NullabilityTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(),
+        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
         element,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
@@ -71,7 +71,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
         new ModelPropertyBuilder(),
         beanProperty,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        DocumentationType.SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
 
     when:
     sut.apply(context)

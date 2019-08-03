@@ -26,11 +26,13 @@ import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
-import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
@@ -86,13 +88,32 @@ public class SchemaPluginsManager {
       return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.create(context));
   }
 
+  public ModelSpecification modelSpecification(ModelContext context) {
+    for (ModelBuilderPlugin enricher : modelEnrichers.getPluginsFor(context.getDocumentationType())) {
+      enricher.apply(context);
+    }
+    return context.getModelSpecificationBuilder().build();
+  }
+
+  public Optional<ModelSpecification> syntheticModelSpecification(ModelContext context) {
+    return syntheticModelProviders.getPluginFor(context)
+                                  .map(p -> p.createModelSpecification(context));
+  }
+
   public List<ModelProperty> syntheticProperties(ModelContext context) {
       return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.properties(context))
           .orElseGet(ArrayList::new);
   }
 
   public Set<ResolvedType> dependencies(ModelContext context) {
-    return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.dependencies(context))
-        .orElseGet(HashSet::new);
+    return syntheticModelProviders.getPluginFor(context)
+                                  .map(plugin -> plugin.dependencies(context))
+                                  .orElseGet(HashSet::new);
+  }
+
+  public List<PropertySpecification> syntheticPropertySpecifications(ModelContext context) {
+    return syntheticModelProviders.getPluginFor(context)
+                                  .map(p -> p.propertySpecifications(context))
+                                  .orElse(new ArrayList<>());
   }
 }

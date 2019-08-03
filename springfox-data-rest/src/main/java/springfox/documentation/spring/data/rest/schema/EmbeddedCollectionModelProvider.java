@@ -23,8 +23,12 @@ import com.fasterxml.classmate.TypeResolver;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.LinkRelationProvider;
 import springfox.documentation.builders.ModelPropertyBuilder;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
@@ -95,6 +99,39 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
             .description("Resource collection")
             .build()
             .updateModelRef(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)));
+  }
+
+  @Override
+  public ModelSpecification createModelSpecification(ModelContext context) {
+    return null;
+  }
+
+  @Override
+  public List<PropertySpecification> propertySpecifications(ModelContext context) {
+    ResolvedType resourceType = resolver.resolve(context.getType());
+    List<ResolvedType> typeParameters = resourceType.getTypeParameters();
+    Class<?> type = typeParameters.get(0).getErasedType();
+    return singletonList(
+        new PropertySpecificationBuilder()
+            .withName(relProvider.getCollectionResourceRelFor(type))
+            .withType(new ModelSpecificationBuilder(String.format(
+                "%s_%s",
+                context.getParameterId(),
+                "List"))
+                          .build())
+        .build();
+        //TODO:
+//            .qualifiedType(Resources.class.getName())
+//            .position(0)
+//            .required(true)
+//            .isHidden(false)
+//            .description("Resource collection")
+//            .build()
+//            .updateModelRef(modelRefFactory(
+//                context,
+//                enumTypeDeterminer,
+//                typeNameExtractor)));
+    ;
   }
 
   @Override

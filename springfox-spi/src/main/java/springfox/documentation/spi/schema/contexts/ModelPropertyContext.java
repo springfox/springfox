@@ -22,44 +22,64 @@ package springfox.documentation.spi.schema.contexts;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import springfox.documentation.builders.ModelPropertyBuilder;
+import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.spi.DocumentationType;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.Optional;
 
-import static java.util.Optional.*;
-
 public class ModelPropertyContext {
   private final ModelPropertyBuilder builder;
+  private final PropertySpecificationBuilder specificationBuilder;
   private final TypeResolver resolver;
-  private final Optional<BeanPropertyDefinition> beanPropertyDefinition;
-  private final Optional<AnnotatedElement> annotatedElement;
+  private final BeanPropertyDefinition beanPropertyDefinition;
+  private final AnnotatedElement annotatedElement;
   private final DocumentationType documentationType;
 
   public ModelPropertyContext(
       ModelPropertyBuilder builder,
+      PropertySpecificationBuilder specificationBuilder,
       AnnotatedElement annotatedElement,
       TypeResolver resolver,
       DocumentationType documentationType) {
+    this(
+        builder,
+        specificationBuilder,
+        resolver,
+        null,
+        annotatedElement,
+        documentationType);
 
-    this.builder = builder;
-    this.resolver = resolver;
-    this.annotatedElement = ofNullable(annotatedElement);
-    this.beanPropertyDefinition = empty();
-    this.documentationType = documentationType;
   }
 
   public ModelPropertyContext(
       ModelPropertyBuilder builder,
       BeanPropertyDefinition beanPropertyDefinition,
       TypeResolver resolver,
-      DocumentationType documentationType) {
+      DocumentationType documentationType,
+      PropertySpecificationBuilder specificationBuilder) {
+    this(
+        builder,
+        specificationBuilder,
+        resolver,
+        beanPropertyDefinition,
+        null,
+        documentationType);
+  }
 
+  private ModelPropertyContext(
+      ModelPropertyBuilder builder,
+      PropertySpecificationBuilder specificationBuilder,
+      TypeResolver resolver,
+      BeanPropertyDefinition beanPropertyDefinition,
+      AnnotatedElement annotatedElement,
+      DocumentationType documentationType) {
     this.builder = builder;
+    this.specificationBuilder = specificationBuilder;
     this.resolver = resolver;
-    this.beanPropertyDefinition = ofNullable(beanPropertyDefinition);
+    this.beanPropertyDefinition = beanPropertyDefinition;
+    this.annotatedElement = annotatedElement;
     this.documentationType = documentationType;
-    annotatedElement = empty();
   }
 
   /**
@@ -83,14 +103,14 @@ public class ModelPropertyContext {
    * @return annotated element that this model property is annotated with
    */
   public Optional<AnnotatedElement> getAnnotatedElement() {
-    return annotatedElement;
+    return Optional.ofNullable(annotatedElement);
   }
 
   /**
    * @return bean property definition for this model property
    */
   public Optional<BeanPropertyDefinition> getBeanPropertyDefinition() {
-    return beanPropertyDefinition;
+    return Optional.ofNullable(beanPropertyDefinition);
   }
 
   /**

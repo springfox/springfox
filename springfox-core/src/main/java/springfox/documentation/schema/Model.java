@@ -27,7 +27,7 @@ import java.util.Objects;
 
 /**
  * @deprecated
- * @since 3.0.0 use
+ * @since 3.0.0 use {@link ModelSpecification} instead
  */
 @Deprecated
 public class Model {

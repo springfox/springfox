@@ -40,12 +40,7 @@ public class MediaTypeBuilder {
     return this;
   }
 
-  public MediaType createMediaType() {
-    return new springfox.documentation.service.MediaTypeBuilder()
-        .withMediaType(mediaType)
-        .withModel(model)
-        .withExamples(examples)
-        .withVendorExtensions(vendorExtensions)
-        .createMediaType();
+  public MediaType build() {
+    return new MediaType(mediaType, model, examples, vendorExtensions);
   }
 }

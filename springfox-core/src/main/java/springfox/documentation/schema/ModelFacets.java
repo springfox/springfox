@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelFacets {
+  private final ModelKey modelKey;
   private final String title;
   private final String description;
   private final Boolean nullable;
@@ -16,6 +17,7 @@ public class ModelFacets {
   private final List<VendorExtension> extensions = new ArrayList<>();
 
   public ModelFacets(
+      ModelKey modelKey,
       String title,
       String description,
       Boolean nullable,
@@ -23,6 +25,7 @@ public class ModelFacets {
       DocumentationReference externalDocumentation,
       List<Example> examples,
       List<VendorExtension> extensions) {
+    this.modelKey = modelKey;
     this.title = title;
     this.nullable = nullable;
     this.deprecated = deprecated;
@@ -30,6 +33,10 @@ public class ModelFacets {
     this.description = description;
     this.examples.addAll(examples);
     this.extensions.addAll(extensions);
+  }
+
+  public ModelKey getModelKey() {
+    return modelKey;
   }
 
   public String getTitle() {

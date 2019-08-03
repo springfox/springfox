@@ -1,5 +1,7 @@
 package springfox.documentation.schema;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class CompoundModelSpecification {
@@ -7,12 +9,11 @@ public class CompoundModelSpecification {
   private final Integer maxProperties;
   private final Integer minProperties;
 
-
   public CompoundModelSpecification(
-      List<PropertySpecification> properties,
+      Collection<PropertySpecification> properties,
       Integer maxProperties,
       Integer minProperties) {
-    this.properties = properties;
+    this.properties = new ArrayList<>(properties);
     this.maxProperties = maxProperties;
     this.minProperties = minProperties;
   }

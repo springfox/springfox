@@ -10,20 +10,22 @@ public class ModelSpecification {
   private CollectionSpecification collection;
   private MapSpecification map;
   private ReferenceModelSpecification reference;
-  private ModelKey modelKey;
   private ModelFacets facets;
+  private String sourceIdentifier;
+  private String name;
 
   @SuppressWarnings("ParameterNumber")
   public ModelSpecification(
-      ModelKey modelKey,
+      String sourceIdentifier,
+      String name,
       ModelFacets facets,
       ScalarModelSpecification scalar,
       CompoundModelSpecification compound,
       CollectionSpecification collection,
       MapSpecification map,
       ReferenceModelSpecification reference) {
+    this.sourceIdentifier = sourceIdentifier;
     ensureValidSpecification(scalar, compound, reference, collection, map);
-    this.modelKey = modelKey;
     this.collection = collection;
     this.facets = facets;
     this.map = map;
@@ -32,8 +34,8 @@ public class ModelSpecification {
     this.reference = reference;
   }
 
-  public ModelKey getModelKey() {
-    return modelKey;
+  public String getSourceIdentifier() {
+    return sourceIdentifier;
   }
 
   public Optional<ScalarModelSpecification> getScalar() {
@@ -68,5 +70,9 @@ public class ModelSpecification {
     if (specCount != 1) {
       throw new IllegalArgumentException("Only one of the specifications should be non null");
     }
+  }
+
+  public String getName() {
+    return name;
   }
 }

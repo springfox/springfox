@@ -44,7 +44,7 @@ class PatternAnnotationPluginSpec extends Specification {
     def sut = new PatternAnnotationPlugin()
     def element = PatternTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(),
+        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
         element,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
@@ -73,7 +73,7 @@ class PatternAnnotationPluginSpec extends Specification {
         new ModelPropertyBuilder(),
         beanProperty,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        DocumentationType.SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
 
     when:
     sut.apply(context)

@@ -86,7 +86,7 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model property when plugins are found"() {
     given:
-    def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), Mock(AnnotatedElement),
+    def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), new springfox.documentation.builders.PropertySpecificationBuilder(), Mock(AnnotatedElement),
         new TypeResolver(), SPRING_WEB)
     when:
     sut.property(context)

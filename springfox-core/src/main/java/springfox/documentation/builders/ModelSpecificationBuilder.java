@@ -4,14 +4,14 @@ import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelFacets;
-import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 
 public class ModelSpecificationBuilder {
-  private ModelKey modelKey;
+  private final String sourceIdentifier;
+  private String name;
   private ModelFacets facets;
   private ScalarModelSpecification scalar;
   private CompoundModelSpecification compound;
@@ -19,15 +19,16 @@ public class ModelSpecificationBuilder {
   private MapSpecification map;
   private ReferenceModelSpecification reference;
 
-  public ModelSpecificationBuilder() {
+  public ModelSpecificationBuilder(String sourceIdentifier) {
+    this.sourceIdentifier = sourceIdentifier;
   }
 
-  public ModelSpecificationBuilder withModelKey(ModelKey modelKey) {
-    this.modelKey = modelKey;
+  public ModelSpecificationBuilder withName(String name) {
+    this.name = name;
     return this;
   }
 
-  public ModelSpecificationBuilder withModelKey(ModelFacets facets) {
+  public ModelSpecificationBuilder withFacets(ModelFacets facets) {
     this.facets = facets;
     return this;
   }
@@ -88,7 +89,8 @@ public class ModelSpecificationBuilder {
 
   public ModelSpecification build() {
     return new ModelSpecification(
-        modelKey,
+        sourceIdentifier,
+        name,
         facets,
         scalar,
         compound,

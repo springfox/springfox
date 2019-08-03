@@ -47,7 +47,7 @@ class XmlPropertyPluginSpec extends Specification {
     def plugin = new XmlPropertyPlugin()
     def property = XmlTypeModel.getDeclaredField("strings")
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(),
+        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
         property,
         new TypeResolver(),
         DocumentationType.SWAGGER_2)

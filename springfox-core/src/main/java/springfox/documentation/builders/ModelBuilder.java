@@ -34,6 +34,11 @@ import java.util.Map;
 import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
+/**
+ * @deprecated
+ * @since 3.0.0 use {@link ModelSpecificationBuilder} instead
+ */
+@Deprecated
 public class ModelBuilder {
   private final String id;
   private String name;

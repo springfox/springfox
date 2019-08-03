@@ -75,7 +75,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         new ModelPropertyBuilder(),
         properties.find { it.name == property },
         new TypeResolver(),
-        SWAGGER_12)
+        SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
 
     when:
     sut.apply(context)
@@ -105,7 +105,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
     def properties = beanDescription.findProperties()
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(),
+        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
         properties.find { it.name == property }.getter.annotated,
         new TypeResolver(),
         SWAGGER_12)
@@ -138,7 +138,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
     def properties = beanDescription.findProperties()
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(),
+        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
         properties.find { it.name == property }.getter.annotated,
         new TypeResolver(),
         SWAGGER_12)
@@ -182,7 +182,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
-    def context = new ModelPropertyContext(new ModelPropertyBuilder(),
+    def context = new ModelPropertyContext(new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
         properties.find { it.name == property }.getter.annotated, resolver,
         SWAGGER_12)
 
@@ -233,7 +233,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
-    def context = new ModelPropertyContext(new ModelPropertyBuilder(),
+    def context = new ModelPropertyContext(new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
         properties.find { it.name == property }.getter.annotated, resolver,
         SWAGGER_12)
 

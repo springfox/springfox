@@ -61,12 +61,13 @@ public class RequestMappingContext {
     this.documentationContext = context;
     this.handler = handler;
     this.requestMappingPattern = "";
-    this.operationModelContextsBuilder = new OperationModelContextsBuilder(context.getGroupName(),
-                                                                           context.getDocumentationType(),
-                                                                           requestMappingId,
-                                                                           context.getAlternateTypeProvider(),
-                                                                           context.getGenericsNamingStrategy(),
-                                                                           context.getIgnorableParameterTypes());
+    this.operationModelContextsBuilder = new OperationModelContextsBuilder(
+        context.getGroupName(),
+        context.getDocumentationType(),
+        requestMappingId,
+        context.getAlternateTypeProvider(),
+        context.getGenericsNamingStrategy(),
+        context.getIgnorableParameterTypes());
     this.apiDescriptionBuilder = new ApiDescriptionBuilder(documentationContext.operationOrdering());
   }
 
@@ -127,18 +128,20 @@ public class RequestMappingContext {
   }
 
   public RequestMappingContext copyPatternUsing(String requestMappingPattern) {
-    return new RequestMappingContext(documentationContext,
-                                     handler,
-                                     operationModelContextsBuilder,
-                                     requestMappingPattern);
+    return new RequestMappingContext(
+        documentationContext,
+        handler,
+        operationModelContextsBuilder,
+        requestMappingPattern);
   }
 
   public RequestMappingContext withKnownModels(Map<String, Set<Model>> knownModels) {
-    return new RequestMappingContext(documentationContext,
-                                     handler,
-                                     operationModelContextsBuilder,
-                                     requestMappingPattern,
-                                     knownModels);
+    return new RequestMappingContext(
+        documentationContext,
+        handler,
+        operationModelContextsBuilder,
+        requestMappingPattern,
+        knownModels);
   }
 
   public Set<Class> getIgnorableParameterTypes() {

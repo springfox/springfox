@@ -25,6 +25,8 @@ import org.springframework.hateoas.Link;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
@@ -121,6 +123,16 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
                 typeNameExtractor))
                     )
         .collect(toList());
+  }
+
+  @Override
+  public ModelSpecification createModelSpecification(ModelContext context) {
+    return null;
+  }
+
+  @Override
+  public List<PropertySpecification> propertySpecifications(ModelContext context) {
+    return null;
   }
 
   @Override
