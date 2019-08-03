@@ -55,7 +55,7 @@ public class Enums {
       if (jsonValue.isPresent() && !isEmpty(jsonValue.get())) {
         return jsonValue.get();
       }
-      return input.toString();
+      return ((Enum) input).name();
     });
   }
   @SuppressWarnings("PMD")

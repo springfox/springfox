@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2016 the original author or authors.
+ *  Copyright 2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,28 +16,21 @@
  *
  *
  */
+
 package springfox.documentation.schema;
 
-/**
- *
- * A real life example of this would be org.springframework.http.HttpStatus
- *
- * @author Alexandru-Constantin Bledea
- * @since Sep 12, 2016
- */
-public enum DuplicateRepresentationEnum {
+public enum EnumWithOverridenToString {
+    ONE("one-string"),
+    TWO("two-string");
 
-  ONE,
-  TWO,
+    private final String customName;
 
-  @Deprecated
-  one,
-  @Deprecated
-  two;
+    EnumWithOverridenToString(String customName) {
+        this.customName = customName;
+    }
 
-  @Override
-  public String toString() {
-    return name().toLowerCase();
-  }
-
+    @Override
+    public String toString() {
+        return customName;
+    }
 }
