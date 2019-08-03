@@ -25,11 +25,12 @@ import org.springframework.util.ClassUtils;
 
 import static org.springframework.util.ClassUtils.*;
 
-public class SpringIntegrationNotPresentInClassPathCondition implements Condition {
+public class SpringIntegrationPluginNotPresentInClassPathCondition implements Condition {
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
     return !isPresent(
-        "org.springframework.integration.handler.AbstractMessageHandler",
+        "springfox.documentation.spring.web.plugins" +
+            ".SpringIntegrationDocumentationPluginsBootstrapper",
         context.getClassLoader());
   }
 
