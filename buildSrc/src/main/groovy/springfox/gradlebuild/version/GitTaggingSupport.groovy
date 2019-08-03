@@ -5,13 +5,13 @@ import springfox.gradlebuild.BuildInfo
 
 trait GitTaggingSupport {
 
-  String lastAnnotatedTag() {
-    def proc = "git describe --exact-match".execute();
+  String lastAnnotatedTag(Project project) {
+    def proc = "git -C ${project.getRootDir().toString()} describe --exact-match".execute();
     proc.waitFor();
     if (proc.exitValue() == 0) {
       return proc.text.trim()
     }
-    proc = "git describe".execute()
+    proc = "git -C ${project.getRootDir().toString()} describe".execute()
     proc.waitFor()
     if (proc.exitValue() == 0) {
       return proc.text.trim()
