@@ -263,20 +263,10 @@ public abstract class ModelMapper {
   }
 
   private Function<ModelProperty, String> propertyName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
+    return input -> input.getName();
   }
 
   private Predicate<ModelProperty> requiredProperty() {
-    return new Predicate<ModelProperty>() {
-      @Override
-      public boolean test(ModelProperty input) {
-        return input.isRequired();
-      }
-    };
+    return input -> input.isRequired();
   }
 }
