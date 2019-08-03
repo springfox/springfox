@@ -5,9 +5,9 @@ import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
 
-import static java.util.Collections.emptyEnumeration
-import static springfox.documentation.swagger.common.HostNameProvider.componentsFrom
-import static springfox.documentation.swagger.common.XForwardPrefixPathAdjuster.X_FORWARDED_PREFIX
+import static java.util.Collections.*
+import static springfox.documentation.swagger.common.HostNameProvider.*
+import static springfox.documentation.swagger.common.XForwardPrefixPathAdjuster.*
 
 class HostNameProviderSpec extends Specification {
   def "should prefix path with x-forwarded-prefix"() {
