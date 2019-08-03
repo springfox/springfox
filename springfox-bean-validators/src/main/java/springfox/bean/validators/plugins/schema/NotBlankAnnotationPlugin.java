@@ -46,7 +46,7 @@ public class NotBlankAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   /**
-   * read NotNull annotation
+   * read NotBlank annotation
    */
   @Override
   public void apply(ModelPropertyContext context) {
@@ -57,6 +57,8 @@ public class NotBlankAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private Optional<NotBlank> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, NotBlank.class).map(Optional::of).orElse(annotationFromField(context, NotBlank.class));
+    return annotationFromBean(context, NotBlank.class)
+        .map(Optional::of)
+        .orElse(annotationFromField(context, NotBlank.class));
   }
 }
