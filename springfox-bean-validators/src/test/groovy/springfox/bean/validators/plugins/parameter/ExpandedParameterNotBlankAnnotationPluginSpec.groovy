@@ -11,9 +11,9 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterMetadataAccessor
 
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.NotBlank
 
-class ExpandedParameterNotNullAnnotationPluginSpec
+class ExpandedParameterNotBlankAnnotationPluginSpec
     extends Specification
     implements AnnotationsSupport, ReflectionSupport {
   @Shared
@@ -21,16 +21,16 @@ class ExpandedParameterNotNullAnnotationPluginSpec
 
   def "Always supported"() {
     expect:
-    new ExpandedParameterNotNullAnnotationPlugin().supports(types)
+    new ExpandedParameterNotBlankAnnotationPlugin().supports(types)
 
     where:
     types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@NotNull annotations are reflected in the model for #fieldName"() {
+  def "@NotBlank annotations are reflected in the model for #fieldName"() {
     given:
-    def sut = new ExpandedParameterNotNullAnnotationPlugin()
+    def sut = new ExpandedParameterNotBlankAnnotationPlugin()
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
@@ -57,7 +57,7 @@ class ExpandedParameterNotNullAnnotationPluginSpec
 
   class Subject {
     String noAnnotation
-    @NotNull
+    @NotBlank
     String annotated
   }
 }
