@@ -20,7 +20,7 @@ package springfox.documentation.swagger.web;
 
 import java.util.Map;
 
-import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class SecurityConfigurationBuilder {
 
@@ -45,14 +45,30 @@ public class SecurityConfigurationBuilder {
 
   public SecurityConfiguration build() {
     return new SecurityConfiguration(
-        defaultIfAbsent(clientId, null),
-        defaultIfAbsent(clientSecret, null),
-        defaultIfAbsent(realm, null),
-        defaultIfAbsent(appName, null),
-        defaultIfAbsent(scopeSeparator, null),
-        defaultIfAbsent(additionalQueryStringParams, null),
-        defaultIfAbsent(useBasicAuthenticationWithAccessCodeGrant, null),
-        defaultIfAbsent(enableCsrfSupport, null)
+        defaultIfAbsent(
+            clientId,
+            null),
+        defaultIfAbsent(
+            clientSecret,
+            null),
+        defaultIfAbsent(
+            realm,
+            null),
+        defaultIfAbsent(
+            appName,
+            null),
+        defaultIfAbsent(
+            scopeSeparator,
+            null),
+        defaultIfAbsent(
+            additionalQueryStringParams,
+            null),
+        defaultIfAbsent(
+            useBasicAuthenticationWithAccessCodeGrant,
+            null),
+        defaultIfAbsent(
+            enableCsrfSupport,
+            null)
     );
   }
 
@@ -126,7 +142,8 @@ public class SecurityConfigurationBuilder {
   }
 
   /**
-   * @param enableCsrfSupport Try to find csrf token and add it to the header of all requests by patching the requestInterceptor.
+   * @param enableCsrfSupport Try to find csrf token and add it to the header of all requests
+   *                          by patching the requestInterceptor.
    * @return this
    */
   public SecurityConfigurationBuilder enableCsrfSupport(Boolean enableCsrfSupport) {

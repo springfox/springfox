@@ -68,21 +68,27 @@ public class SecurityConfiguration {
    * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
    */
   private SecurityConfiguration() {
-    this(null, null, null, null, null, ApiKeyVehicle.HEADER, "api_key", ",");
+    this(
+        null,
+        null,
+        null,
+        null,
+        null,
+        ApiKeyVehicle.HEADER,
+        "api_key",
+        ",");
   }
 
   /**
-   *
-   * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
-   *
-   * @param clientId - client id
-   * @param clientSecret - client secret
-   * @param realm - realm
-   * @param appName - application name
-   * @param apiKey - api key
-   * @param apiKeyVehicle - how the api key is transmitted
-   * @param apiKeyName - name of the api key
+   * @param clientId       - client id
+   * @param clientSecret   - client secret
+   * @param realm          - realm
+   * @param appName        - application name
+   * @param apiKey         - api key
+   * @param apiKeyVehicle  - how the api key is transmitted
+   * @param apiKeyName     - name of the api key
    * @param scopeSeparator - scope separator
+   * @deprecated @since 2.8.0. Use the {@link SecurityConfigurationBuilder} instead
    */
   @Deprecated
   @SuppressWarnings("ParameterNumber")
@@ -123,11 +129,12 @@ public class SecurityConfiguration {
    *                                                  tokenUrl.
    * @param useBasicAuthenticationWithAccessCodeGrant Only activated for the accessCode flow. During the
    *                                                  authorization_code request to the tokenUrl, pass the Client
-   *                                                  Password using the HTTP Basic Authentication scheme (Authorization
-   *                                                  header with Basic base64encoded[client_id:client_secret]). The
-   *                                                  default is false.
+   *                                                  Password using the HTTP Basic Authentication scheme
+   *                                                  (Authorization header with Basic
+   *                                                  base64encoded[client_id:client_secret]). The default is false.
    * @param enableCsrfSupport                         Enable csrf support, default is false.
    */
+  @SuppressWarnings("ParameterNumber")
   public SecurityConfiguration(
       String clientId,
       String clientSecret,
@@ -148,8 +155,8 @@ public class SecurityConfiguration {
   }
 
   /**
-   * @deprecated @since 2.8.0
    * @return apiKey
+   * @deprecated @since 2.8.0
    */
   @Deprecated
   @JsonProperty("apiKey")
@@ -158,8 +165,8 @@ public class SecurityConfiguration {
   }
 
   /**
-   * @deprecated @since 2.8.0
    * @return apiKeyName
+   * @deprecated @since 2.8.0
    */
   @Deprecated
   @JsonProperty("apiKeyName")
@@ -168,8 +175,8 @@ public class SecurityConfiguration {
   }
 
   /**
-   * @deprecated @since 2.8.0
    * @return apiKeyVehicle - header, cookie etc.
+   * @deprecated @since 2.8.0
    */
   @Deprecated
   @JsonProperty("apiKeyVehicle")
