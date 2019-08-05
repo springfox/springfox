@@ -1,6 +1,7 @@
 package springfox.documentation.swagger.common
 
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.common.SpringVersion
 import springfox.documentation.common.Version
 
@@ -14,7 +15,7 @@ class XForwardPrefixPathAdjusterSpec extends Specification {
     def request = Mock(HttpServletRequest.class)
     request.getHeader(XForwardPrefixPathAdjuster.X_FORWARDED_PREFIX) >> "/prefix"
     def springVersion = Mock(SpringVersion.class)
-    springVersion.getVersion() >> Version.parse("4.3.15.RELEASE");
+    springVersion.getVersion() >> Version.parse("4.3.15.RELEASE")
 
     when:
     def result = new XForwardPrefixPathAdjuster(request, springVersion).adjustedPath("/basePath")
@@ -28,7 +29,7 @@ class XForwardPrefixPathAdjusterSpec extends Specification {
     def request = Mock(HttpServletRequest.class)
     request.getHeader(XForwardPrefixPathAdjuster.X_FORWARDED_PREFIX) >> "/prefix"
     def springVersion = Mock(SpringVersion.class)
-    springVersion.getVersion() >> Version.parse("4.3.14.RELEASE");
+    springVersion.getVersion() >> Version.parse("4.3.14.RELEASE")
 
     when:
     def result = new XForwardPrefixPathAdjuster(request, springVersion).adjustedPath("/basePath")
@@ -47,5 +48,21 @@ class XForwardPrefixPathAdjusterSpec extends Specification {
 
     then:
     result == "/basePath"
+  }
+
+  @Unroll
+  def "When prefix is #prefix"() {
+    given:
+    def request = Mock(HttpServletRequest.class)
+    request.getHeader(XForwardPrefixPathAdjuster.X_FORWARDED_PREFIX) >> prefix
+
+    when:
+    def result = new XForwardPrefixPathAdjuster(request).adjustedPath("/basePath")
+
+    then:
+    result == "/"
+
+    where:
+    prefix << ["", "/"]
   }
 }

@@ -56,11 +56,10 @@ class EnumsSpec extends Specification {
       thrown(UnsupportedOperationException)
   }
 
-  def "we shouldn't have duplicate enum representations"() {
+  def "enums should be represented by name() rather than the value of toString()"() {
     given:
-    def expected = Arrays.asList("one", "two")
+    def expected = Arrays.asList("ONE", "TWO")
     expect:
-    expected.equals(Enums.getEnumValues(DuplicateRepresentationEnum))
+    expected.equals(Enums.getEnumValues(EnumWithOverridenToString))
   }
-
 }

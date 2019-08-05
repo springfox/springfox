@@ -23,6 +23,7 @@ import springfox.documentation.service.PathAdjuster;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.common.SpringVersionCapability.*;
 
 public class XForwardPrefixPathAdjuster implements PathAdjuster {
@@ -44,6 +45,7 @@ public class XForwardPrefixPathAdjuster implements PathAdjuster {
   public String adjustedPath(String path) {
     String prefix = request.getHeader(X_FORWARDED_PREFIX);
     if (prefix != null) {
+      prefix = isEmpty(prefix) ? "/" : prefix;
       if (!supportsXForwardPrefixHeader(springVersion.getVersion())) {
         return prefix + path;
       } else {

@@ -18,28 +18,9 @@
  */
 package springfox.documentation.schema;
 
-import org.springframework.context.annotation.Condition;
-import org.springframework.context.annotation.ConditionContext;
-import org.springframework.core.type.AnnotatedTypeMetadata;
-import org.springframework.util.ClassUtils;
-
-import static org.springframework.util.ClassUtils.*;
-
-public class JaxbPresentInClassPathCondition implements Condition {
+public class JaxbPresentInClassPathCondition extends ClassPresentInClassPathCondition {
   @Override
-  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-    return isPresent("javax.xml.bind.annotation.XmlElement", context.getClassLoader());
-  }
-
-  private static boolean isPresent(String className, ClassLoader classLoader) {
-    if (classLoader == null) {
-      classLoader = ClassUtils.getDefaultClassLoader();
-    }
-    try {
-      forName(className, classLoader);
-      return true;
-    } catch (Throwable ex) {
-      return false;
-    }
+  protected String getClassName() {
+    return "javax.xml.bind.annotation.XmlElement";
   }
 }

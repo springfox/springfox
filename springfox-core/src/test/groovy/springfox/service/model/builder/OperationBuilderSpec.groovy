@@ -31,6 +31,8 @@ import springfox.documentation.service.ResponseMessage
 import springfox.documentation.service.SecurityReference
 import springfox.documentation.service.VendorExtension
 
+import java.util.stream.Collectors
+
 import static java.util.Collections.*
 
 class OperationBuilderSpec extends Specification {
@@ -48,7 +50,21 @@ class OperationBuilderSpec extends Specification {
       .examples([new Example("application/json", "{\"foo\":  42}")])
       .build()
 
-  def "Merges response messages when new response messages are applied"() {
+  def "Parameters are ordered by order first, then alphabetically" () {
+    when:
+      sut.parameters(Arrays.asList(
+        new ParameterBuilder().name("a").order(2).build(),
+        new ParameterBuilder().name("b").order(2).build(),
+        new ParameterBuilder().name("z").order(1).build(),
+        new ParameterBuilder().name("y").order(1).build()
+      ))
+    and:
+      def operation = sut.build()
+    then:
+      operation.parameters.stream().map { it.name }.collect(Collectors.toList()) == Arrays.asList("y", "z", "a", "b")
+  }
+
+  def "Merges response messages when new response messages are applied" () {
     given:
     sut.responseMessages(singleton(partialOk))
     when:

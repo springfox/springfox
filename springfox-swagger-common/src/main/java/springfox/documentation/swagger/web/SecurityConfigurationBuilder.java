@@ -20,7 +20,7 @@ package springfox.documentation.swagger.web;
 
 import java.util.Map;
 
-import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class SecurityConfigurationBuilder {
 
@@ -34,6 +34,7 @@ public class SecurityConfigurationBuilder {
   private String scopeSeparator;
   private Map<String, Object> additionalQueryStringParams;
   private Boolean useBasicAuthenticationWithAccessCodeGrant;
+  private Boolean enableCsrfSupport;
 
   private SecurityConfigurationBuilder() {
   }
@@ -44,13 +45,30 @@ public class SecurityConfigurationBuilder {
 
   public SecurityConfiguration build() {
     return new SecurityConfiguration(
-        defaultIfAbsent(clientId, null),
-        defaultIfAbsent(clientSecret, null),
-        defaultIfAbsent(realm, null),
-        defaultIfAbsent(appName, null),
-        defaultIfAbsent(scopeSeparator, null),
-        defaultIfAbsent(additionalQueryStringParams, null),
-        defaultIfAbsent(useBasicAuthenticationWithAccessCodeGrant, null)
+        defaultIfAbsent(
+            clientId,
+            null),
+        defaultIfAbsent(
+            clientSecret,
+            null),
+        defaultIfAbsent(
+            realm,
+            null),
+        defaultIfAbsent(
+            appName,
+            null),
+        defaultIfAbsent(
+            scopeSeparator,
+            null),
+        defaultIfAbsent(
+            additionalQueryStringParams,
+            null),
+        defaultIfAbsent(
+            useBasicAuthenticationWithAccessCodeGrant,
+            null),
+        defaultIfAbsent(
+            enableCsrfSupport,
+            null)
     );
   }
 
@@ -120,6 +138,16 @@ public class SecurityConfigurationBuilder {
   public SecurityConfigurationBuilder useBasicAuthenticationWithAccessCodeGrant(
       Boolean useBasicAuthenticationWithAccessCodeGrant) {
     this.useBasicAuthenticationWithAccessCodeGrant = useBasicAuthenticationWithAccessCodeGrant;
+    return this;
+  }
+
+  /**
+   * @param enableCsrfSupport Try to find csrf token and add it to the header of all requests
+   *                          by patching the requestInterceptor.
+   * @return this
+   */
+  public SecurityConfigurationBuilder enableCsrfSupport(Boolean enableCsrfSupport) {
+    this.enableCsrfSupport = enableCsrfSupport;
     return this;
   }
 }

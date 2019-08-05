@@ -29,8 +29,8 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
   }
 
   @Override
-  SemanticVersion current() {
-    parseTransform(lastAnnotatedTag(), "")
+  SemanticVersion current(Project project) {
+    parseTransform(lastAnnotatedTag(project), "")
   }
 
   @Override

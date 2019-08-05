@@ -13,6 +13,9 @@ trait AnnotationsSupport {
   NotNull notNull() {
     [] as NotNull
   }
+  NotBlank notBlank() {
+    [] as NotBlank
+  }
   Min min(value) {
     [value: { -> value}] as Min
   }

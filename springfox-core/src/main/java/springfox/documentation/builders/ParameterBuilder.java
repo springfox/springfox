@@ -79,7 +79,8 @@ public class ParameterBuilder {
         .hidden(other.isHidden())
         .allowEmptyValue(other.isAllowEmptyValue())
         .order(other.getOrder())
-        .vendorExtensions(other.getVendorExtentions());
+        .vendorExtensions(other.getVendorExtentions())
+        .collectionFormat(other.getCollectionFormat());
   }
 
   /**
