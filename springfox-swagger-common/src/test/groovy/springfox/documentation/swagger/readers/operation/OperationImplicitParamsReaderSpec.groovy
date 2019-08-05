@@ -82,5 +82,6 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
     dummyHandlerMethod('methodWithApiImplicitParamAndAllowMultiple', Integer.class) | 2
     dummyHandlerMethod('methodWithApiImplicitParams', Integer.class)                | 3
     handlerMethodIn(apiImplicitParamsClass(), 'methodWithApiImplicitParam')         | 2
+    dummyHandlerMethodIn(apiImplicitParamsAllowMultipleClass(), 'methodWithApiImplicitParam')   | 3
   }
 }
