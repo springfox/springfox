@@ -36,6 +36,7 @@ class BeanValidatorPluginsConfigurationSpec extends Specification {
         def config = new BeanValidatorPluginsConfiguration()
         when:
         def minMaxPlugin = config.minMaxPlugin()
+        def isNullPlugin = config.isNullPlugin()
         def notNullPlugin = config.notNullPlugin()
         def patternPlugin = config.patternPlugin()
         def sizePlugin = config.sizePlugin()
@@ -53,6 +54,7 @@ class BeanValidatorPluginsConfigurationSpec extends Specification {
 
         then:
         minMaxPlugin instanceof  MinMaxAnnotationPlugin
+        isNullPlugin instanceof IsNullAnnotationPlugin
         notNullPlugin instanceof  NotNullAnnotationPlugin
         patternPlugin instanceof PatternAnnotationPlugin
         sizePlugin instanceof  SizeAnnotationPlugin
