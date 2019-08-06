@@ -267,13 +267,13 @@ abstract class SpecificationBuilder {
               0,
               configuration.getPageParamName(),
               Collections.EMPTY_LIST,
-              typeResolver.resolve(String.class)));
+              typeResolver.resolve(Integer.class)));
           //noinspection unchecked
           withParameter(new ResolvedMethodParameter(
               1,
               configuration.getLimitParamName(),
               Collections.EMPTY_LIST,
-              typeResolver.resolve(String.class)));
+              typeResolver.resolve(Integer.class)));
           //noinspection unchecked
           withParameter(new ResolvedMethodParameter(
               2,
