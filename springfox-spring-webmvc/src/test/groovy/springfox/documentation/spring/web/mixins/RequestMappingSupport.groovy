@@ -86,6 +86,16 @@ class RequestMappingSupport {
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
+  HandlerMethod dummyHandlerMethodIn(
+      Class<?> aClass,
+      String methodName = "dummyMethod",
+      Class<?>... parameterTypes = null) {
+
+    def clazz = aClass.newInstance()
+    Class c = clazz.getClass()
+    new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+  }
+
   HandlerMethod handlerMethodIn(
       Class<?> aClass,
       String methodName = "dummyMethod",
@@ -170,6 +180,10 @@ class RequestMappingSupport {
 
   def apiImplicitParamsClass() {
     DummyClass.ApiImplicitParamsClass.class;
+  }
+
+  def apiImplicitParamsAllowMultipleClass() {
+    DummyClass.ApiImplicitParamsAllowMultipleClass.class;
   }
 
   HandlerMethod ignorableHandlerMethod() {

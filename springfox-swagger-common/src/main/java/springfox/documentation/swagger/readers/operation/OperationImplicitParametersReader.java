@@ -34,7 +34,6 @@ import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 
@@ -59,12 +58,14 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
   }
 
   private List<Parameter> readParameters(OperationContext context) {
-    Optional<ApiImplicitParams> annotation = context.findAnnotation(ApiImplicitParams.class);
+    List<ApiImplicitParams> annotations = context.findAllAnnotations(ApiImplicitParams.class);
 
     List<Parameter> parameters = new ArrayList<>();
-    if (annotation.isPresent()) {
-      for (ApiImplicitParam param : annotation.get().value()) {
-        parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, param));
+    if (!annotations.isEmpty()) {
+      for (ApiImplicitParams annotation : annotations) {
+          for (ApiImplicitParam param : annotation.value()) {
+            parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, param));
+          }
       }
     }
 

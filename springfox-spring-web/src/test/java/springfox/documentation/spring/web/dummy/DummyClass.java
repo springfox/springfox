@@ -347,6 +347,15 @@ public class DummyClass {
     }
   }
 
+  @ApiImplicitParams({
+          @ApiImplicitParam(name = "common-header", dataType = "string", required = true, paramType = "header")
+  })
+  public class ApiImplicitParamsAllowMultipleClass implements ApiImplicitParamsInterface {
+    @Override
+    public void methodWithApiImplicitParam() {
+    }
+  }
+
   @ResponseBody
   public DummyModels.BusinessModel methodWithConcreteResponseBody() {
     return null;
