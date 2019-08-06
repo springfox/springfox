@@ -130,6 +130,10 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
   def 'should honor swagger resource listing'() {
     given:
+    def lineSeparator = System.getProperty("line.separator")
+            .replace('\r', "\\r")
+            .replace('\n', "\\n")
+    
     def http = new TestRestTemplate()
     RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs"))
         .accept(MediaType.APPLICATION_JSON)
@@ -138,11 +142,12 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
     when:
     def response = http.exchange(request, String)
+    def lineSeparatorNeutralized = response.body.replace(lineSeparator, "\\n")
 
     then:
     response.statusCode == HttpStatus.OK
 
-    JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
+    JSONAssert.assertEquals(contract, lineSeparatorNeutralized, NON_EXTENSIBLE)
   }
 
   @Unroll
