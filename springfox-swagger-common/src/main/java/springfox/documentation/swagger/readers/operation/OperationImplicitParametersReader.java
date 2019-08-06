@@ -61,13 +61,11 @@ public class OperationImplicitParametersReader implements OperationBuilderPlugin
     List<ApiImplicitParams> annotations = context.findAllAnnotations(ApiImplicitParams.class);
 
     List<Parameter> parameters = new ArrayList<>();
-    if (annotations != null && !annotations.isEmpty()) {
+    if (!annotations.isEmpty()) {
       for (ApiImplicitParams annotation : annotations) {
-        if (annotation != null) {
           for (ApiImplicitParam param : annotation.value()) {
             parameters.add(OperationImplicitParameterReader.implicitParameter(descriptions, param));
           }
-        }
       }
     }
 
