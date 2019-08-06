@@ -71,7 +71,6 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
         def resolvers = []
         configurer.addArgumentResolvers(resolvers)
 
-        this.strategy = strategy
         mvc = MockMvcBuilders.standaloneSetup(apiResourceController)
                 .setCustomArgumentResolvers(*resolvers).build()
     }

@@ -78,7 +78,6 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
         def configuer = new CsrfWebFluxConfigurer()
         configuer.registerDefaultLoader()
 
-        this.strategy = strategy
         flux = WebTestClient.bindToController(apiResourceController)
                 .webFilter({ exchange, chain ->
                     Mono.justOrEmpty(bridge.cl)
