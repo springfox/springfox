@@ -1,4 +1,4 @@
-package springfox.documentation.swagger.csrf
+package springfox.documentation.spring.web.csrf
 
 import groovy.json.JsonOutput
 import org.skyscreamer.jsonassert.JSONAssert

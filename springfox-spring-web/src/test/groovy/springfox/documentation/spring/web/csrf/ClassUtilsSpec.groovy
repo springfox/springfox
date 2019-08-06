@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.documentation.swagger.common
+package springfox.documentation.spring.web.csrf
 
 import org.junit.runner.RunWith
 import org.powermock.api.mockito.PowerMockito

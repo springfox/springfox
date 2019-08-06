@@ -23,8 +23,10 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import springfox.documentation.swagger.common.ClassUtils
-import springfox.documentation.swagger.csrf.CsrfStrategy
+import spock.lang.Shared
+import springfox.documentation.spring.web.csrf.ClassUtils
+import springfox.documentation.spring.web.csrf.CsrfStrategy
+import springfox.documentation.spring.web.csrf.CsrfWebMvcConfigurer
 
 import javax.servlet.http.Cookie
 
@@ -33,20 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec {
 
-    CsrfStrategy strategy
+    @Shared
     MockMvc mvc
+    @Shared
     Closure<MockHttpServletRequestBuilder> edit = {
         MockHttpServletRequestBuilder builder -> builder
-    }
-
-    @SuppressWarnings("GroovyAssignabilityCheck")
-    void derive(CsrfStrategy strategy) {
-        this.strategy = strategy
-        mvc = derive(this.strategy) {
-            MockMvcBuilders.standaloneSetup(
-                    new ApiResourceController.CsrfWebMvcController(it, null))
-                    .build()
-        }
     }
 
     def givenSessionAttribute() {
@@ -68,9 +61,25 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
                 .andExpect(content().json(json))
     }
 
+    @SuppressWarnings("GroovyAssignabilityCheck")
     @Override
     def setupSpec() {
+        setup()
+
+        def configurer = new CsrfWebMvcConfigurer()
+        configurer.registerDefaultLoader()
+        def resolvers = []
+        configurer.addArgumentResolvers(resolvers)
+
+        this.strategy = strategy
+        mvc = MockMvcBuilders.standaloneSetup(apiResourceController)
+                .setCustomArgumentResolvers(*resolvers).build()
+    }
+
+    def setup() {
+        powerMock()
         Mockito.when(ClassUtils.isMvc()).thenReturn(true)
+        Mockito.when(ClassUtils.isFlux()).thenReturn(false)
     }
 
     def cleanup() {
@@ -82,7 +91,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
     @SuppressWarnings("GroovyAccessibility")
     def "WebMvc - csrf token not supported"() {
         given:
-        derive(CsrfStrategy.NONE)
+        using(CsrfStrategy.NONE)
 
         expect:
         expecting(emptyCsrfToken)
@@ -90,7 +99,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     def "WebMvc - csrf tokens stored in session"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
         givenSessionAttribute()
 
         expect:
@@ -99,7 +108,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     def "WebMvc - csrf tokens not stored in session yet, but been temporarily stashed in request"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
         givenAttribute()
 
         expect:
@@ -108,7 +117,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     def "WebMvc - csrf tokens stored in cookie"() {
         given:
-        derive(CsrfStrategy.COOKIE)
+        using(CsrfStrategy.COOKIE)
         edit = { builder ->
             builder.cookie(new Cookie(strategy.keyName, TOKEN))
         }
@@ -119,7 +128,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     def "WebMvc - csrf tokens not stored in cookie yet, but been temporarily stashed in request"() {
         given:
-        derive(CsrfStrategy.COOKIE)
+        using(CsrfStrategy.COOKIE)
         givenAttribute()
 
         expect:
@@ -128,7 +137,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     def "WebMvc - csrf is configured to be stored in cookie, but none is stored anywhere"() {
         given:
-        derive(CsrfStrategy.COOKIE)
+        using(CsrfStrategy.COOKIE)
 
         expect:
         expecting(emptyCsrfToken)
@@ -136,7 +145,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     def "WebMvc - csrf is configured to be stored in session, but none is stored anywhere"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
 
         expect:
         expecting(emptyCsrfToken)
@@ -144,7 +153,7 @@ class ApiResourceControllerCsrfWebMvcSpec extends ApiResourceControllerCsrfSpec 
 
     def "WebMvc - cors requests should get an empty csrf token"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
         edit = { builder ->
             builder.requestAttr(strategy.parameterName, new FakeCsrfToken())
                     .header("Origin", "http://foreign.origin.com")

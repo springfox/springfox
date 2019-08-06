@@ -17,9 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger.csrf;
-
-import springfox.documentation.swagger.common.ClassUtils;
+package springfox.documentation.spring.web.csrf;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

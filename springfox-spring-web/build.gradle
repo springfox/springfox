@@ -21,7 +21,11 @@ dependencies {
 
   testCompile "javax.validation:validation-api:$validationApiVersion"
   testCompile project(':springfox-core')
+
   testCompile libs.test
+  testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.0'
+  testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.0'
+
   testCompile libs.swagger2Core
   testCompile project(':springfox-core').sourceSets.test.output
   testCompile project(':springfox-schema').sourceSets.test.output

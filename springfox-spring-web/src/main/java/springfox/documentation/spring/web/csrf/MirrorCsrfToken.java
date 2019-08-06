@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger.csrf;
+package springfox.documentation.spring.web.csrf;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

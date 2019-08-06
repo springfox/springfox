@@ -20,21 +20,14 @@
 package springfox.documentation.swagger.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 import springfox.documentation.annotations.ApiIgnore;
-import springfox.documentation.swagger.common.ClassUtils;
-import springfox.documentation.swagger.csrf.CsrfTokenLoader;
-import springfox.documentation.swagger.csrf.CsrfTokenWebFluxLoader;
-import springfox.documentation.swagger.csrf.CsrfTokenWebMvcLoader;
-import springfox.documentation.swagger.csrf.MirrorCsrfToken;
+import springfox.documentation.spring.web.csrf.CsrfTokenLoader;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -51,6 +44,8 @@ public class ApiResourceController {
     private SecurityConfiguration securityConfiguration;
     @Autowired(required = false)
     private UiConfiguration uiConfiguration;
+    @Autowired(required = false)
+    private CsrfTokenLoader<?> loader;
 
     private final SwaggerResourcesProvider swaggerResources;
 
@@ -81,12 +76,23 @@ public class ApiResourceController {
     }
 
     /**
-     * Common behavior of loading csrf token
+     * This method depends indirectly on `springfox-spring-webmvc`
+     * or `springfox-spring-webflux`, there should be one and only
+     * one of them added as per your context.
      *
-     * @param loader the loader
-     * @return the appropriate ResponseEntity
+     * @param request be null in case of `springfox-spring-webflux`
+     * @param exchange be null in case of `springfox-spring-webmvc`
      */
-    private <T> ResponseEntity<T> doLoadCsrfToken(CsrfTokenLoader<T> loader) {
+    @RequestMapping("csrf")
+    @ResponseBody
+    private ResponseEntity<?> csrf(HttpServletRequest request, ServerWebExchange exchange) {
+        this.loader = loader == null ? CsrfTokenLoader.DefaultOne.get() : loader;
+        if (loader == null) {
+            throw new UnsupportedOperationException(
+                    String.format("No %s could be found, please check your dependencies",
+                            CsrfTokenLoader.class.getName()));
+        }
+        loader.wrap(request == null ? exchange : request);
         if (loader.isCorsRequest()) {
             return new ResponseEntity<>(loader.loadEmptiness(), HttpStatus.OK);
         }
@@ -95,41 +101,8 @@ public class ApiResourceController {
                         UiConfigurationBuilder.builder()::build))
                         .map(UiConfiguration::getCsrfStrategy)
                         .map(csrfStrategy ->
-                                csrfStrategy.loadCsrfToken(loader))
+                                (Object) csrfStrategy.loadCsrfToken(loader))
                         .orElse(loader.loadEmptiness()), HttpStatus.OK);
     }
 
-    @RestController
-    @ConditionalOnClass(name = ClassUtils.WEB_MVC_INDICATOR)
-    @ApiIgnore
-    public class CsrfWebMvcController {
-
-        private final CsrfTokenWebMvcLoader loader;
-
-        public CsrfWebMvcController(@Autowired(required = false) CsrfTokenWebMvcLoader loader) {
-            this.loader = (loader == null ? CsrfTokenWebMvcLoader.defaultOne() : loader);
-        }
-
-        @RequestMapping("/swagger-resources/csrf")
-        public ResponseEntity<MirrorCsrfToken> csrf(HttpServletRequest request) {
-            return doLoadCsrfToken(loader.wrap(request));
-        }
-    }
-
-    @RestController
-    @ConditionalOnClass(name = ClassUtils.WEB_FLUX_INDICATOR)
-    @ApiIgnore
-    public class CsrfWebFluxController {
-
-        private final CsrfTokenWebFluxLoader loader;
-
-        public CsrfWebFluxController(@Autowired(required = false) CsrfTokenWebFluxLoader loader) {
-            this.loader = (loader == null ? CsrfTokenWebFluxLoader.defaultOne() : loader);
-        }
-
-        @RequestMapping("/swagger-resources/csrf")
-        public ResponseEntity<Mono<MirrorCsrfToken>> csrf(ServerWebExchange exchange) {
-            return doLoadCsrfToken(loader.wrap(exchange));
-        }
-    }
 }

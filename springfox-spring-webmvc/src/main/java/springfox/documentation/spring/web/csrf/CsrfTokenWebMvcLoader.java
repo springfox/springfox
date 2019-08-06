@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger.csrf;
+package springfox.documentation.spring.web.csrf;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsUtils;
@@ -48,8 +48,8 @@ public class CsrfTokenWebMvcLoader implements CsrfTokenLoader<MirrorCsrfToken> {
         return new CsrfTokenWebMvcLoader(DefaultCsrfTokenAccesser.WEB_MVC_ACCESSER);
     }
 
-    public CsrfTokenWebMvcLoader wrap(HttpServletRequest request) {
-        req.set(request);
+    public CsrfTokenWebMvcLoader wrap(Object request) {
+        req.set((HttpServletRequest) request);
         return this;
     }
 

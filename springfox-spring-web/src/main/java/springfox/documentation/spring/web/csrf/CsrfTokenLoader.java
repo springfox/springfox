@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger.csrf;
+package springfox.documentation.spring.web.csrf;
 
 /**
  * The csrf token loader
@@ -68,4 +68,32 @@ public interface CsrfTokenLoader<T> {
      */
     T loadFromSession(CsrfStrategy strategy);
 
+    CsrfTokenLoader<T> wrap(Object requestOrExchange);
+
+    /**
+     * <p>
+     * The default csrf token loader to use
+     * </p>
+     * <p>
+     * It can be registered via `set` and retrieved via `get`
+     * There is and should be *NO* need to carry multiple loaders
+     * at the same time.
+     * </p>
+     */
+    class DefaultOne {
+
+        private DefaultOne() {
+            throw new UnsupportedOperationException();
+        }
+
+        private static CsrfTokenLoader<?> defaultOne = null;
+
+        public static void set(CsrfTokenLoader<?> loader) {
+            defaultOne = loader;
+        }
+
+        public static CsrfTokenLoader<?> get() {
+            return defaultOne;
+        }
+    }
 }

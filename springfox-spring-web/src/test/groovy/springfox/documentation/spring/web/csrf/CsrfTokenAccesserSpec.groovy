@@ -16,7 +16,7 @@
  *
  *
  */
-package springfox.documentation.swagger.csrf
+package springfox.documentation.spring.web.csrf
 
 import spock.lang.FailsWith
 import spock.lang.Specification

@@ -24,8 +24,10 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.WebFilter
 import reactor.core.publisher.Mono
-import springfox.documentation.swagger.common.ClassUtils
-import springfox.documentation.swagger.csrf.CsrfStrategy
+import spock.lang.Shared
+import springfox.documentation.spring.web.csrf.ClassUtils
+import springfox.documentation.spring.web.csrf.CsrfStrategy
+import springfox.documentation.spring.web.csrf.CsrfWebFluxConfigurer
 
 
 class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec {
@@ -34,25 +36,10 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
         Closure<Mono<?>> cl
     }
 
+    @Shared
     Bridge bridge = new Bridge()
-    CsrfStrategy strategy
+    @Shared
     WebTestClient flux
-
-    @SuppressWarnings("GroovyAssignabilityCheck")
-    void derive(CsrfStrategy strategy) {
-        this.strategy = strategy
-        flux = derive(this.strategy) {
-            WebTestClient.bindToController(
-                    new ApiResourceController.CsrfWebFluxController(it, null))
-                    .webFilter({ exchange, chain ->
-                        Mono.justOrEmpty(bridge.cl)
-                                .flatMap({ cl -> cl(exchange) })
-                                .switchIfEmpty(Mono.empty())
-                                .then(chain.filter(exchange))
-                    } as WebFilter)
-                    .build()
-        }
-    }
 
     def givenSessionAttribute() {
         bridge.with {
@@ -86,6 +73,26 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     @Override
     def setupSpec() {
+        setup()
+
+        def configuer = new CsrfWebFluxConfigurer()
+        configuer.registerDefaultLoader()
+
+        this.strategy = strategy
+        flux = WebTestClient.bindToController(apiResourceController)
+                .webFilter({ exchange, chain ->
+                    Mono.justOrEmpty(bridge.cl)
+                            .flatMap({ cl -> cl(exchange) })
+                            .switchIfEmpty(Mono.empty())
+                            .then(chain.filter(exchange))
+                } as WebFilter)
+                .argumentResolvers({ c -> configuer.configureArgumentResolvers(c) })
+                .build()
+    }
+
+    def setup() {
+        powerMock()
+        Mockito.when(ClassUtils.isFlux()).thenReturn(true)
         Mockito.when(ClassUtils.isMvc()).thenReturn(false)
     }
 
@@ -95,7 +102,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - csrf token not supported"() {
         given:
-        derive(CsrfStrategy.NONE)
+        using(CsrfStrategy.NONE)
 
         expect:
         expecting(emptyCsrfToken)
@@ -103,7 +110,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - csrf tokens stored in session"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
         givenSessionAttribute()
 
         expect:
@@ -112,7 +119,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - csrf tokens not stored in session yet, but been temporarily stashed in request"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
         givenAttribute()
 
         expect:
@@ -121,7 +128,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - csrf tokens stored in cookie"() {
         given:
-        derive(CsrfStrategy.COOKIE)
+        using(CsrfStrategy.COOKIE)
 
         expect:
         flux.get().cookie(strategy.keyName, TOKEN)
@@ -133,7 +140,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - csrf tokens not stored in cookie yet, but been temporarily stashed in request"() {
         given:
-        derive(CsrfStrategy.COOKIE)
+        using(CsrfStrategy.COOKIE)
         givenAttribute()
 
         expect:
@@ -142,7 +149,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - csrf is configured to be stored in cookie, but none is stored anywhere"() {
         given:
-        derive(CsrfStrategy.COOKIE)
+        using(CsrfStrategy.COOKIE)
 
         expect:
         expecting(emptyCsrfToken)
@@ -150,7 +157,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - csrf is configured to be stored in session, but none is stored anywhere"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
 
         expect:
         expecting(emptyCsrfToken)
@@ -158,7 +165,7 @@ class ApiResourceControllerCsrfWebFluxSpec extends ApiResourceControllerCsrfSpec
 
     def "WebFlux - cors requests should get an empty csrf token"() {
         given:
-        derive(CsrfStrategy.SESSION)
+        using(CsrfStrategy.SESSION)
         givenSessionAttribute()
 
         expect:

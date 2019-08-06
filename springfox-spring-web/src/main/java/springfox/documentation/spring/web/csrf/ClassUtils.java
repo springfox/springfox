@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger.common;
+package springfox.documentation.spring.web.csrf;
 
 /**
  * * Indicators that are used to sense the current environment

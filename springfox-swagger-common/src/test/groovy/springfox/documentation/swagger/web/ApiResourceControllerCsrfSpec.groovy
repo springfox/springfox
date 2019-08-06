@@ -32,8 +32,8 @@ import springfox.documentation.builders.DocumentationBuilder
 import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.ResourceListing
 import springfox.documentation.spring.web.DocumentationCache
-import springfox.documentation.swagger.common.ClassUtils
-import springfox.documentation.swagger.csrf.CsrfStrategy
+import springfox.documentation.spring.web.csrf.ClassUtils
+import springfox.documentation.spring.web.csrf.CsrfStrategy
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(Sputnik.class)
@@ -65,6 +65,8 @@ class ApiResourceControllerCsrfSpec extends Specification {
 
     @Shared
     ApiResourceController apiResourceController
+    @Shared
+    CsrfStrategy strategy
 
     @SuppressWarnings(["GroovyAccessibility", "GroovyAssignabilityCheck"])
     def setupSpec() {
@@ -88,26 +90,30 @@ class ApiResourceControllerCsrfSpec extends Specification {
                     it
                 })
 
+    }
+
+    @SuppressWarnings("GroovyAssignabilityCheck")
+    def powerMock() {
         PowerMockito.mockStatic(ClassUtils.class)
         Mockito.when(ClassUtils.forName("org.springframework.security.web.server.csrf.CsrfToken"))
                 .thenReturn(FakeCsrfToken.class)
         Mockito.when(ClassUtils.forName("org.springframework.security.web.csrf.CsrfToken"))
                 .thenReturn(FakeCsrfToken.class)
-
     }
 
     @SuppressWarnings("GroovyAccessibility")
-    <T> T derive(CsrfStrategy strategy, Closure<T> cl) {
-        cl(apiResourceController.with {
-            def builder = UiConfigurationBuilder.builder()
-            if(CsrfStrategy.NONE == strategy) {
-                builder.disableCsrf()
-            } else {
-                builder.csrfStrategy(strategy)
-            }
+    def using(CsrfStrategy strategy) {
+        this.strategy = strategy
+        def builder = UiConfigurationBuilder.builder()
+        if (CsrfStrategy.NONE == strategy) {
+            builder.disableCsrf()
+        } else {
+            builder.csrfStrategy(strategy)
+        }
+        apiResourceController.with {
             uiConfiguration = builder.build()
             it
-        })
+        }
     }
 
 }

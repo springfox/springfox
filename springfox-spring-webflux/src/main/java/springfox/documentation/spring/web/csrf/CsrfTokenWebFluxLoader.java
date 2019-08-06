@@ -17,7 +17,7 @@
  *
  */
 
-package springfox.documentation.swagger.csrf;
+package springfox.documentation.spring.web.csrf;
 
 import org.springframework.http.HttpCookie;
 import org.springframework.util.StringUtils;
@@ -42,8 +42,8 @@ public class CsrfTokenWebFluxLoader implements CsrfTokenLoader<Mono<MirrorCsrfTo
         return new CsrfTokenWebFluxLoader(DefaultCsrfTokenAccesser.WEB_FLUX_ACCESSER);
     }
 
-    public CsrfTokenWebFluxLoader wrap(ServerWebExchange exchange) {
-        exch.set(exchange);
+    public CsrfTokenWebFluxLoader wrap(Object exchange) {
+        exch.set((ServerWebExchange) exchange);
         return this;
     }
 

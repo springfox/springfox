@@ -22,7 +22,7 @@ package springfox.documentation.swagger.web;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import springfox.documentation.swagger.csrf.CsrfStrategy;
+import springfox.documentation.spring.web.csrf.CsrfStrategy;
 
 import static java.util.Optional.*;
 

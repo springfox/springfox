@@ -18,7 +18,7 @@
  */
 package springfox.documentation.swagger.web;
 
-import springfox.documentation.swagger.csrf.CsrfStrategy;
+import springfox.documentation.spring.web.csrf.CsrfStrategy;
 
 import static springfox.documentation.builders.BuilderDefaults.defaultIfAbsent;
 
