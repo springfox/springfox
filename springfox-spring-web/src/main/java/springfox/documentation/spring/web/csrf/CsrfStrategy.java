@@ -95,25 +95,12 @@ public class CsrfStrategy {
      *
      * @return CsrfStrategy instance
      * @see CsrfStrategy#of(TokenStore, String, String, String, String)
-     * @see CsrfStrategy#CsrfStrategy(TokenStore, String, String, String, String)
      */
     public static CsrfStrategy of(TokenStore tokenStore,
                                   String parameterName,
                                   String headerName,
                                   String keyName) {
-        return new CsrfStrategy(tokenStore, parameterName, headerName, keyName, parameterName);
-    }
-
-    /**
-     * @return CsrfStrategy instance
-     * @see CsrfStrategy#CsrfStrategy(TokenStore, String, String, String, String)
-     */
-    public static CsrfStrategy of(TokenStore tokenStore,
-                                  String parameterName,
-                                  String headerName,
-                                  String keyName,
-                                  String backupKeyName) {
-        return new CsrfStrategy(tokenStore, parameterName, headerName, keyName, backupKeyName);
+        return of(tokenStore, parameterName, headerName, keyName, parameterName);
     }
 
     /**
@@ -142,6 +129,14 @@ public class CsrfStrategy {
      *                      attributes, By default, the `parameterName` is considered
      *                      to take the role.
      */
+    public static CsrfStrategy of(TokenStore tokenStore,
+                                  String parameterName,
+                                  String headerName,
+                                  String keyName,
+                                  String backupKeyName) {
+        return new CsrfStrategy(tokenStore, parameterName, headerName, keyName, backupKeyName);
+    }
+
     private CsrfStrategy(TokenStore tokenStore,
                          String parameterName,
                          String headerName,
