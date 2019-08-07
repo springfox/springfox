@@ -16,22 +16,22 @@
  *
  *
  */
-package springfox.documentation.spring.web.plugins;
+package springfox.documentation.schema;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.ClassUtils;
 
-import static org.springframework.util.ClassUtils.*;
+import static org.springframework.util.ClassUtils.forName;
 
-public class SpringIntegrationNotPresentInClassPathCondition implements Condition {
+public abstract class ClassPresentInClassPathCondition implements Condition {
   @Override
   public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-    return !isPresent(
-        "org.springframework.integration.handler.AbstractMessageHandler",
-        context.getClassLoader());
+    return isPresent(getClassName(), context.getClassLoader());
   }
+
+  protected abstract String getClassName();
 
   private static boolean isPresent(String className, ClassLoader classLoader) {
     if (classLoader == null) {

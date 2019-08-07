@@ -47,7 +47,7 @@ public class DataTypeMapper {
 
   @OperationType
   public DataType operationTypeFromModelRef(ModelReference modelRef) {
-    if (modelRef !=null) {
+    if (modelRef != null) {
       return new DataType(operationTypeName(modelRef));
     }
     return null;

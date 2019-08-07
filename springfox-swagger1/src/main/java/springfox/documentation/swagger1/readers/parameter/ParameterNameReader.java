@@ -43,7 +43,7 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     String paramType = findParameterType(context);
     String name = null;
     if (apiParam.isPresent()) {
-      name = ofNullable(apiParam.get().name()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null);
+      name = ofNullable(apiParam.get().name()).filter(((Predicate<String>) String::isEmpty).negate()).orElse(null);
     }
     context.parameterBuilder().name(maybeOverrideName(name, paramType));
   }

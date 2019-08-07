@@ -34,7 +34,7 @@ class ModelSpec extends InternalJsonSerializationSpec {
   "baseModel" : "bModel",
   "description" : "desc",
   "discriminator" : "discrim",
-  "id" : "id",
+  "id" : "name",
   "properties" : {
     "propK" : "propV"
   },
@@ -50,7 +50,7 @@ class ModelSpec extends InternalJsonSerializationSpec {
     expect:
       writePretty(model) == """{
   "description" : "desc",
-  "id" : "id",
+  "id" : "name",
   "properties" : {
     "propK" : "propV"
   }

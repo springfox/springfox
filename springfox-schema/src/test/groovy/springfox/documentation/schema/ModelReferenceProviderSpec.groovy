@@ -31,26 +31,29 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(AlternateTypesSupport)
 class ModelReferenceProviderSpec extends Specification {
-  def "Map of Maps is rendered correctly" () {
+  def "Map of Maps is rendered correctly"() {
     given:
-      def modelContext = inputParam(
-          "group",
-          TypeWithMapOfMaps,
-          DocumentationType.SWAGGER_2,
-          alternateTypeProvider(),
-          new DefaultGenericTypeNamingStrategy(),
-          emptySet())
-      def resolver = new TypeResolver()
-      def typeNameExtractor = aTypeNameExtractor(resolver)
+    def resolver = new TypeResolver()
+    def modelContext = inputParam(
+        "0_0",
+        "group",
+        resolver.resolve(TypeWithMapOfMaps),
+        Optional.empty(),
+        new HashSet<>(),
+        DocumentationType.SWAGGER_2,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        emptySet())
+    def typeNameExtractor = aTypeNameExtractor(resolver)
     when:
-      def sut = modelRefFactory(modelContext, typeNameExtractor)
-          .apply(resolver.resolve(
+    def sut = modelRefFactory(modelContext, new JacksonEnumTypeDeterminer(), typeNameExtractor)
+        .apply(resolver.resolve(
             Map,
             resolver.resolve(String),
             resolver.resolve(Map, String, Foo)))
     then:
-      //TODO: Elaborate this test
-      sut.itemModel().isPresent()
+    //TODO: Elaborate this test
+    sut.itemModel().isPresent()
   }
 
   def aTypeNameExtractor(TypeResolver resolver) {
@@ -65,11 +68,11 @@ class ModelReferenceProviderSpec extends Specification {
 
 
   class TypeWithMapOfMaps {
-    public Map<String, Map<String, Foo>> innerMap;
+    public Map<String, Map<String, Foo>> innerMap
   }
 
   class Foo {
-    public Integer fooInt;
+    public Integer fooInt
   }
 
 }

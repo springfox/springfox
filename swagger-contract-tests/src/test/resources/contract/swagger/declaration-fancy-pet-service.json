@@ -173,9 +173,35 @@
         
     ],
     "models": {
-        "Category": {
+        "FancyPet": {
             "description": "",
-            "id": "Category",
+            "id": "FancyPet",
+            "properties": {
+                "age": {
+                    "required": false,
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "categories": {
+                    "required": false,
+                    "items": {
+                        "type": "Category_1"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "required": false,
+                    "type": "string"
+                },
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
+        "Category_1": {
+            "description": "",
+            "id": "Category_1",
             "properties": {
                 "name": {
                     "required": false,
@@ -191,32 +217,6 @@
                     "required": false,
                     "format": "int32",
                     "type": "integer"
-                },
-                "id": {
-                    "required": false,
-                    "type": "string"
-                },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "FancyPet": {
-            "description": "",
-            "id": "FancyPet",
-            "properties": {
-                "age": {
-                    "required": false,
-                    "format": "int32",
-                    "type": "integer"
-                },
-                "categories": {
-                    "required": false,
-                    "items": {
-                        "type": "Category"
-                    },
-                    "type": "array"
                 },
                 "id": {
                     "required": false,

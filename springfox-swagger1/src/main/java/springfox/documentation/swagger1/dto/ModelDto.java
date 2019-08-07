@@ -21,6 +21,7 @@ package springfox.documentation.swagger1.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,9 @@ import java.util.TreeMap;
 
 public class ModelDto {
 
-  private String id;
   @JsonIgnore
+  private String id;
+  @JsonProperty("id")
   private String name;
   @JsonIgnore
   private String qualifiedType;
@@ -45,8 +47,17 @@ public class ModelDto {
   public ModelDto() {
   }
 
-  public ModelDto(String id, String name, String qualifiedType, Map<String, ModelPropertyDto> properties, String
-          description, String baseModel, String discriminator, List<String> subTypes) {
+
+  @SuppressWarnings("ParameterNumber")
+  public ModelDto(
+      String id,
+      String name,
+      String qualifiedType,
+      Map<String, ModelPropertyDto> properties,
+      String description,
+      String baseModel,
+      String discriminator,
+      List<String> subTypes) {
     this.id = id;
     this.name = name;
     this.qualifiedType = qualifiedType;

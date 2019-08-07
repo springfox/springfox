@@ -22,10 +22,10 @@ package springfox.documentation.schema;
 import java.math.BigDecimal;
 
 public class ComplexType {
-  String name;
-  int age;
-  Category category;
-  BigDecimal customType;
+  private String name;
+  private int age;
+  private Category category;
+  private BigDecimal customType;
 
   public String getName() {
     return name;

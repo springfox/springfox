@@ -68,12 +68,12 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
         new SwaggerDefaultConfiguration(new Defaults(), typeResolver, new DefaultPathProvider())])
     plugin
         .ignoredParameterTypes(
-        ServletRequest,
-        ServletResponse,
-        HttpServletRequest,
-        HttpServletResponse,
-        BindingResult, ServletContext,
-        DummyModels.Ignorable.class)
+            ServletRequest,
+            ServletResponse,
+            HttpServletRequest,
+            HttpServletResponse,
+            BindingResult, ServletContext,
+            DummyModels.Ignorable.class)
         .alternateTypeRules(newRule(typeResolver.resolve(LocalDateTime), typeResolver.resolve(String)))
         .configure(contextBuilder)
 
@@ -188,12 +188,14 @@ class OperationParameterReaderSpec extends DocumentationContextSpec {
     OperationContext operationContext = new OperationContext(
         new OperationBuilder(new CachingOperationNameGenerator()),
         RequestMethod.GET,
-        new RequestMappingContext(documentationContext(),
+        new RequestMappingContext("0",
+            documentationContext(),
             new WebMvcRequestHandler(
                 Paths.ROOT,
                 methodResolver,
                 requestMappingInfo("/somePath"),
-                dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))), 0)
+                dummyHandlerMethod('methodWithTreeishModelAttribute', Treeish.class))),
+        0)
     when:
     sut.apply(operationContext)
     def operation = operationContext.operationBuilder().build()

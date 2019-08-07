@@ -67,12 +67,14 @@ class ApiOperationReaderSpec extends DocumentationContextSpec {
 
     HandlerMethod handlerMethod = dummyHandlerMethod()
 
-    RequestMappingContext context = new RequestMappingContext(documentationContext(),
+    RequestMappingContext context = new RequestMappingContext("0",
+        documentationContext(),
         new WebMvcRequestHandler(
             Paths.ROOT,
             methodResolver,
             requestMappingInfo,
             handlerMethod))
+
     when:
     def operations = sut.read(context)
 

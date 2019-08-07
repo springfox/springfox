@@ -45,7 +45,7 @@ import static springfox.documentation.swagger2.mappers.Properties.*;
 @Mapper
 public class ParameterMapper {
 
-  private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
+  private static final VendorExtensionsMapper VENDOR_EXTENSIONS_MAPPER = new VendorExtensionsMapper();
 
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
     Parameter bodyParameter = bodyParameter(source);
@@ -61,7 +61,7 @@ public class ParameterMapper {
     parameter.setAccess(source.getParamAccess());
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
-    parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
+    parameter.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getVendorExtentions()));
     for (Entry<String, List<Example>> each : source.getExamples().entrySet()) {
       Optional<Example> example = each.getValue().stream().findFirst();
       if (example.isPresent() && example.get().getValue() != null) {
@@ -84,7 +84,7 @@ public class ParameterMapper {
   }
 
   private boolean isEmptyExample(Object object) {
-    return object instanceof Example && StringUtils.isEmpty(((Example)object).getValue());
+    return object instanceof Example && StringUtils.isEmpty(((Example) object).getValue());
   }
 
   Model fromModelRef(ModelReference modelRef) {

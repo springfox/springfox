@@ -20,7 +20,10 @@
 package springfox.documentation.spring.web.mixins
 
 import com.fasterxml.classmate.TypeResolver
+
+import groovy.lang.Mixin
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.PathDecorator
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spi.service.DefaultsProviderPlugin
@@ -45,6 +48,7 @@ import static java.util.stream.Collectors.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
+@Mixin([SchemaPluginsSupport])
 class ServicePluginsSupport {
 
   DocumentationPluginsManager defaultWebPlugins() {
@@ -57,7 +61,7 @@ class ServicePluginsSupport {
     plugins.parameterPlugins = create([new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])
     plugins.resourceGroupingStrategies = create([])
-    plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
+    plugins.operationModelsProviders = create([new OperationModelsProvider(defaultSchemaPlugins())])
     plugins.defaultsProviders = create([])
     plugins.apiListingScanners = create([])
     plugins.pathDecorators = create([
@@ -89,7 +93,7 @@ class ServicePluginsSupport {
     plugins.parameterPlugins = create(paramPlugins)
     plugins.operationBuilderPlugins = create(operationPlugins)
     plugins.resourceGroupingStrategies = create(groupingStrategyPlugins)
-    plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
+    plugins.operationModelsProviders = create([new OperationModelsProvider(defaultSchemaPlugins())])
     plugins.defaultsProviders = create(defaultProviderPlugins)
     plugins.pathDecorators = create(pathDecorators)
     plugins.apiListingScanners = create(listingScanners)

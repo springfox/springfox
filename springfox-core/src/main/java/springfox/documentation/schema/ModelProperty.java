@@ -24,10 +24,13 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 
+//CHECKSTYLE:OFF CyclomaticComplexityCheck
 public class ModelProperty {
   private final String name;
   private final ResolvedType type;
@@ -46,6 +49,7 @@ public class ModelProperty {
   private final Xml xml;
   private final List<VendorExtension> vendorExtensions;
 
+  @SuppressWarnings("ParameterNumber")
   public ModelProperty(
       String name,
       ResolvedType type,
@@ -77,7 +81,7 @@ public class ModelProperty {
     this.pattern = pattern;
     this.defaultValue = defaultValue;
     this.xml = xml;
-    this.vendorExtensions = new ArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public String getName() {
@@ -140,7 +144,7 @@ public class ModelProperty {
   public String getDefaultValue() {
     return defaultValue;
   }
-  
+
   public Xml getXml() {
     return xml;
   }
@@ -153,4 +157,88 @@ public class ModelProperty {
   public Boolean isAllowEmptyValue() {
     return allowEmptyValue;
   }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        name,
+        type,
+        qualifiedType,
+        position,
+        required,
+        isHidden,
+        readOnly,
+        allowableValues,
+        description,
+        allowableValues,
+        modelRef,
+        example,
+        pattern,
+        defaultValue,
+        xml,
+        Collections.unmodifiableList(vendorExtensions));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ModelProperty that = (ModelProperty) o;
+
+    return Objects.equals(
+        name,
+        that.name) &&
+        Objects.equals(
+            type,
+            that.type) &&
+        Objects.equals(
+            qualifiedType,
+            that.qualifiedType) &&
+        Objects.equals(
+            position,
+            that.position) &&
+        Objects.equals(
+            required,
+            that.required) &&
+        Objects.equals(
+            isHidden,
+            that.isHidden) &&
+        Objects.equals(
+            readOnly,
+            that.readOnly) &&
+        Objects.equals(
+            description,
+            that.description) &&
+        Objects.equals(
+            allowableValues,
+            that.allowableValues) &&
+        Objects.equals(
+            modelRef,
+            that.modelRef) &&
+        Objects.equals(
+            example,
+            that.example) &&
+        Objects.equals(
+            pattern,
+            that.pattern) &&
+        Objects.equals(
+            xml,
+            that.xml) &&
+        Objects.equals(
+            allowEmptyValue,
+            that.allowEmptyValue) &&
+        Objects.equals(
+            defaultValue,
+            that.defaultValue) &&
+        Objects.equals(
+            vendorExtensions,
+            that.vendorExtensions);
+  }
 }
+//CHECKSTYLE:ON

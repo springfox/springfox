@@ -57,9 +57,9 @@ class ModelProviderForServiceSupport {
   ModelProvider modelProvider(
       SchemaPluginsManager pluginsManager = defaultSchemaPlugins(),
       TypeResolver typeResolver = new TypeResolver(),
-      EnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer()) {
+      EnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer(),
+      ObjectMapper objectMapper = new ObjectMapper()) {
 
-    def objectMapper = new ObjectMapper()
     def typeNameExtractor = typeNameExtractor()
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
 
@@ -68,7 +68,7 @@ class ModelProviderForServiceSupport {
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, typeNameExtractor)
+        pluginsManager, enumTypeDeterminer, typeNameExtractor)
 
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider =
@@ -102,7 +102,7 @@ class ModelProviderForServiceSupport {
 
     def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, typeNameExtractor)
+        pluginsManager, new JacksonEnumTypeDeterminer(), typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider =
         new DefaultModelDependencyProvider(

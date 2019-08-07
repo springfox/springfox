@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.web.plugins
 
+import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -31,21 +32,26 @@ class OperationModelsBuilderSpec extends Specification {
   OperationModelContextsBuilder sut =
       new OperationModelContextsBuilder("group",
           DocumentationType.SWAGGER_12,
+          "0",
           Mock(AlternateTypeProvider),
           Mock(GenericTypeNamingStrategy),
           emptySet())
 
-  def "Manages a unique set of model contexts" () {
+  def "Manages a unique set of model contexts"() {
     given:
-      sut.addInputParam(Example)
+    sut.addInputParam(new TypeResolver().resolve(Example))
+
     when:
-      def models = sut.build()
+    def models = sut.build()
+
     then:
-      models.size() == 1
+    models.size() == 1
 
     and:
-      sut.addInputParam(Example).build().size() == 1
-      sut.addReturn(Example).build().size() == 2
+    sut.addInputParam(new TypeResolver().resolve(Example))
+    sut.build().size() == 1
+    sut.addReturn(new TypeResolver().resolve(Example))
+    sut.build().size() == 2
   }
 
 }

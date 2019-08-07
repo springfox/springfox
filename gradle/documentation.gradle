@@ -14,6 +14,7 @@ gitPublish {
   preserve {
     include '**/*'
   }
+  
   contents {
     from "${buildDir}/all-docs"
   }

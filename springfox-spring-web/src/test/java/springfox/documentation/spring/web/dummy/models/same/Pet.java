@@ -17,25 +17,34 @@
  *
  */
 
-package springfox.documentation.schema;
+package springfox.documentation.spring.web.dummy.models.same;
 
+public class Pet {
+  private String id;
+  private String name;
+  private int age;
 
-import springfox.documentation.spi.DocumentationType;
-
-public class ModelNameContext {
-  private final Class<?> type;
-  private final DocumentationType documentationType;
-
-  public ModelNameContext(Class<?> type, DocumentationType documentationType) {
-    this.type = type;
-    this.documentationType = documentationType;
+  public String getId() {
+    return id;
   }
 
-  public Class<?> getType() {
-    return type;
+  public void setId(String id) {
+    this.id = id;
   }
 
-  public DocumentationType getDocumentationType() {
-    return documentationType;
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public void setAge(int age) {
+    this.age = age;
   }
 }

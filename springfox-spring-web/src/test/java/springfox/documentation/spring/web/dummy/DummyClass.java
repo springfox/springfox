@@ -19,6 +19,7 @@
 
 package springfox.documentation.spring.web.dummy;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -42,11 +43,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
+import springfox.documentation.schema.Views;
 import springfox.documentation.spring.web.dummy.DummyModels.Ignorable;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
+import springfox.documentation.spring.web.dummy.models.FancyPet;
 import springfox.documentation.spring.web.dummy.models.FoobarDto;
+import springfox.documentation.spring.web.dummy.models.MapFancyPet;
+import springfox.documentation.spring.web.dummy.models.Pet;
+import springfox.documentation.spring.web.dummy.models.PetWithJsonView;
 import springfox.documentation.spring.web.dummy.models.Pirate;
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithConditions;
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter;
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuterWithSubTypes;
+import springfox.documentation.spring.web.dummy.models.SameFancyPet;
 import springfox.documentation.spring.web.dummy.models.Treeish;
 
 import javax.servlet.ServletRequest;
@@ -56,10 +66,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(produces = {"application/json"}, consumes = {"application/json", "application/xml"})
+@RequestMapping(produces = { "application/json" }, consumes = { "application/json", "application/xml" })
 @ApiResponses({
-  @ApiResponse(code = 404, response = RestError.class, message = "Not Found")
-})
+                  @ApiResponse(code = 404, response = RestError.class, message = "Not Found")
+              })
 public class DummyClass {
 
 
@@ -76,7 +86,9 @@ public class DummyClass {
     throw new UnsupportedOperationException();
   }
 
-  public void methodWithTwoArgs(int a, String b) {
+  public void methodWithTwoArgs(
+      int a,
+      String b) {
     throw new UnsupportedOperationException();
   }
 
@@ -135,7 +147,7 @@ public class DummyClass {
   }
 
   @ApiOperation(value = "", produces = "application/xml, application/json", consumes = "application/xml, " +
-          "application/json")
+      "application/json")
   public void methodWithMultipleMediaTypes() {
     throw new UnsupportedOperationException();
   }
@@ -156,27 +168,28 @@ public class DummyClass {
   }
 
   @ApiResponses({
-          @ApiResponse(code = 201, response = Void.class, message = "Rule Scheduled successfully"),
-          @ApiResponse(code = 500, response = RestError.class, message = "Internal Server Error"),
-          @ApiResponse(code = 406, response = RestError.class, message = "Not acceptable")})
+                    @ApiResponse(code = 201, response = Void.class, message = "Rule Scheduled successfully"),
+                    @ApiResponse(code = 500, response = RestError.class, message = "Internal Server Error"),
+                    @ApiResponse(code = 406, response = RestError.class, message = "Not acceptable") })
   public void methodAnnotatedWithApiResponse() {
     throw new UnsupportedOperationException();
   }
 
   @ApiOperation(value = "methodWithExtensions",
-      extensions = {
-          @Extension(properties = @ExtensionProperty(name="x-test1", value="value1")),
-          @Extension(name="test2", properties = @ExtensionProperty(name="name2", value="value2"))
-      }
+                extensions = {
+                    @Extension(properties = @ExtensionProperty(name = "x-test1", value = "value1")),
+                    @Extension(name = "test2", properties = @ExtensionProperty(name = "name2", value = "value2"))
+                }
   )
   public void methodWithExtensions() {
     throw new UnsupportedOperationException();
   }
 
   @ApiOperation(value = "SomeVal",
-      authorizations = @Authorization(value = "oauth2",
-          scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
-          }))
+                authorizations = @Authorization(value = "oauth2",
+                                                scopes = { @AuthorizationScope(scope = "scope",
+                                                                               description = "scope description")
+                                                }))
   public void methodWithAuth() {
     throw new UnsupportedOperationException();
   }
@@ -282,50 +295,62 @@ public class DummyClass {
   }
 
   @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-          value = "Authentication token")
+                    value = "Authentication token")
   public void methodWithApiImplicitParam() {
     throw new UnsupportedOperationException();
   }
 
   @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-          value = "Authentication token")
+                    value = "Authentication token")
   public void methodWithApiImplicitParamAndInteger(Integer integer) {
     throw new UnsupportedOperationException();
   }
 
   @ApiImplicitParam(name = "Authentication", dataType = "Example", required = true, paramType = "header",
-      value = "Authentication token")
+                    value = "Authentication token")
   public void methodWithApiImplicitParamAndExample(Integer integer) {
     throw new UnsupportedOperationException();
   }
 
   @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-      value = "Authentication token", allowMultiple = true)
+                    value = "Authentication token", allowMultiple = true)
   public void methodWithApiImplicitParamAndAllowMultiple(Integer integer) {
     throw new UnsupportedOperationException();
   }
 
   @ApiImplicitParams({
-          @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
-                  value = "Language", defaultValue = "EN", allowableValues = "EN,FR"),
-          @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-                  value = "Authentication token")
-  })
+                         @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
+                                           value = "Language", defaultValue = "EN", allowableValues = "EN,FR"),
+                         @ApiImplicitParam(name = "Authentication",
+                                           dataType = "string",
+                                           required = true,
+                                           paramType = "header",
+                                           value = "Authentication token")
+                     })
   public void methodWithApiImplicitParams(Integer integer) {
     throw new UnsupportedOperationException();
   }
 
   public interface ApiImplicitParamsInterface {
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
-                    value = "Language", defaultValue = "EN", allowableValues = "EN,FR")
-    })
+                           @ApiImplicitParam(name = "lang", dataType = "string", required = true, paramType = "query",
+                                             value = "Language", defaultValue = "EN", allowableValues = "EN,FR")
+                       })
     @ApiImplicitParam(name = "Authentication", dataType = "string", required = true, paramType = "header",
-            value = "Authentication token")
+                      value = "Authentication token")
     void methodWithApiImplicitParam();
   }
 
   public static class ApiImplicitParamsClass implements ApiImplicitParamsInterface {
+    @Override
+    public void methodWithApiImplicitParam() {
+    }
+  }
+
+  @ApiImplicitParams({
+          @ApiImplicitParam(name = "common-header", dataType = "string", required = true, paramType = "header")
+  })
+  public class ApiImplicitParamsAllowMultipleClass implements ApiImplicitParamsInterface {
     @Override
     public void methodWithApiImplicitParam() {
     }
@@ -379,33 +404,33 @@ public class DummyClass {
   }
 
   public void methodParameterWithRequestBodyAnnotation(
-          @RequestBody DummyModels.BusinessModel model,
-          HttpServletResponse response,
-          DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
+      @RequestBody DummyModels.BusinessModel model,
+      HttpServletResponse response,
+      DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
     throw new UnsupportedOperationException();
   }
 
   public void methodParameterWithRequestPartAnnotation(
-          @RequestPart DummyModels.BusinessModel model,
-          HttpServletResponse response,
-          DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
+      @RequestPart DummyModels.BusinessModel model,
+      HttpServletResponse response,
+      DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
     throw new UnsupportedOperationException();
   }
 
   public void methodParameterWithRequestPartAnnotationOnSimpleType(
-          @RequestPart String model,
-          HttpServletResponse response,
-          DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
+      @RequestPart String model,
+      HttpServletResponse response,
+      DummyModels.AnnotatedBusinessModel annotatedBusinessModel) {
     throw new UnsupportedOperationException();
   }
 
   @ResponseBody
   public DummyModels.AnnotatedBusinessModel methodWithSameAnnotatedModelInReturnAndRequestBodyParam(
-          @RequestBody DummyModels.AnnotatedBusinessModel model) {
+      @RequestBody DummyModels.AnnotatedBusinessModel model) {
     return null;
   }
 
-  @ApiResponses({@ApiResponse(code = 413, message = "a message")})
+  @ApiResponses({ @ApiResponse(code = 413, message = "a message") })
   public void methodWithApiResponses() {
     throw new UnsupportedOperationException();
   }
@@ -420,7 +445,7 @@ public class DummyClass {
 
   @ResponseBody
   public DummyModels.ModelWithSerializeOnlyProperty methodWithSerializeOnlyPropInReturnAndRequestBodyParam(
-          @RequestBody DummyModels.ModelWithSerializeOnlyProperty model) {
+      @RequestBody DummyModels.ModelWithSerializeOnlyProperty model) {
     return null;
   }
 
@@ -430,7 +455,47 @@ public class DummyClass {
   }
 
   @ResponseBody
-  public void methodToTestBidrectionalRecursiveTypes(@RequestBody Pirate model) {
+  public Pirate methodToTestBidirectionalRecursiveTypes(@RequestBody Pirate model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public RecursiveTypeWithConditions methodToTestBidirectionalRecursiveTypesWithConditions(
+      @RequestBody RecursiveTypeWithConditions model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public RecursiveTypeWithNonEqualsConditionsOuter methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions(
+      @RequestBody RecursiveTypeWithNonEqualsConditionsOuter model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public RecursiveTypeWithNonEqualsConditionsOuterWithSubTypes methodToTestBidirectionalRecursiveTypesWithKnownTypes(
+      @RequestBody RecursiveTypeWithConditions model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public Pet methodToTestIssue182(@RequestBody springfox.documentation.spring.web.dummy.models.same.Pet pet) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public Map<String, List<FancyPet>> methodToTestSerializationAndDeserialization(
+      @RequestBody Map<String, FancyPet> pet) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public MapFancyPet methodToTestSameClassesWithDifferentProperties(@RequestBody SameFancyPet fancyPet) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  @JsonView(Views.SecondView.class)
+  public PetWithJsonView methodToTestJsonView(@RequestBody @JsonView(Views.FirstView.class) PetWithJsonView pet) {
     throw new UnsupportedOperationException();
   }
 
@@ -439,7 +504,7 @@ public class DummyClass {
     SERVICE(2);
     private int value;
 
-    private BusinessType(int value) {
+    BusinessType(int value) {
       this.value = value;
     }
 
@@ -452,11 +517,15 @@ public class DummyClass {
   }
 
   public class MethodsWithSameName {
-    public ResponseEntity methodToTest(Integer integer, Parent child) {
+    public ResponseEntity methodToTest(
+        Integer integer,
+        Parent child) {
       return null;
     }
 
-    public void methodToTest(Integer integer, Child child) {
+    public void methodToTest(
+        Integer integer,
+        Child child) {
       throw new UnsupportedOperationException();
     }
 
@@ -467,7 +536,9 @@ public class DummyClass {
       return null;
     }
 
-    public DTO<String>[] loadDetails(String id, Date since) {
+    public DTO<String>[] loadDetails(
+        String id,
+        Date since) {
       return null;
     }
   }
@@ -484,5 +555,3 @@ public class DummyClass {
 
   }
 }
-
-

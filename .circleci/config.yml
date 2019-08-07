@@ -14,9 +14,9 @@ jobs:
       - checkout
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
-#      - run:
-#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-#         command: sudo chmod +x ./gradlew
+      #      - run:
+      #         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+      #         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
           command: ./gradlew dependencies
@@ -41,10 +41,10 @@ jobs:
       - run:
           name: Save test results
           command: |
-           mkdir -p ~/junit/
-           mkdir -p ~/reports/
-           find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
-           cp -R swagger-contract-tests/build/reports/tests ~/reports
+            mkdir -p ~/junit/
+            mkdir -p ~/reports/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+            cp -R swagger-contract-tests/build/reports/tests ~/reports
           when: always
       - store_test_results:
           path: ~/junit

@@ -42,14 +42,14 @@ class ResourcePathProvider {
     return ofNullable(
         controllerClass()
             .map(resourcePathExtractor())
-            .filter(((Predicate<String>)String::isEmpty).negate())
+            .filter(((Predicate<String>) String::isEmpty).negate())
             .orElse(null));
   }
 
   private Function<Class<?>, String> resourcePathExtractor() {
     return input -> {
       Optional<String> path = Arrays.stream(paths(input))
-          .findFirst().filter(((Predicate<String>)String::isEmpty)
+          .findFirst().filter(((Predicate<String>) String::isEmpty)
               .negate());
       if (!path.isPresent()) {
         return "";

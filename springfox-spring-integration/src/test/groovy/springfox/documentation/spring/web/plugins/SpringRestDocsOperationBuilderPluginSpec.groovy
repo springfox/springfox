@@ -41,8 +41,11 @@ class SpringRestDocsOperationBuilderPluginSpec extends Specification {
   OperationContext operationContext = new OperationContext(
       operationBuilder,
       RequestMethod.GET,
-      new RequestMappingContext(documentationContext,
-          requestHandler), 0)
+      new RequestMappingContext(
+          "0",
+          documentationContext,
+          requestHandler),
+      0)
 
   def "Collects examples"() {
     given:

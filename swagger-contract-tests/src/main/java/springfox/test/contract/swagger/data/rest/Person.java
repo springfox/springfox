@@ -39,14 +39,14 @@ public class Person {
 
   private String firstName;
   private String lastName;
-  
+
   @OneToOne
   @JoinColumn(name = "address_id")
-  @RestResource(path = "personAddress", rel="address")
+  @RestResource(path = "personAddress", rel = "address")
   private Address address;
 
   @ManyToOne
-  @JoinColumn(name="category_id")
+  @JoinColumn(name = "category_id")
   private Category category;
 
   @ManyToMany(mappedBy = "people")

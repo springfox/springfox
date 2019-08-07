@@ -33,26 +33,28 @@ import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.swagger.common.HostNameProvider.*;
 
 public class Mappers {
-  public static Function<Map.Entry<String, List<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>
-    toApiListingDto(
-        final HttpServletRequest servletRequest,
-        final String host,
-        final ServiceModelToSwaggerMapper mapper) {
 
-    return new Function<Map.Entry<String, List<springfox.documentation.service.ApiListing>>, Map.Entry<String, List<ApiListing>>>() {
-      @Override
-      public Map.Entry<String, List<ApiListing>> apply(Map.Entry<String, List<springfox.documentation.service.ApiListing>> entry) {
-        List<ApiListing> newApiListings = entry.getValue().stream().map(value -> {
-          ApiListing apiListing = mapper.toSwaggerApiListing(value);
-          UriComponents uriComponents = componentsFrom(servletRequest, apiListing.getBasePath());
-          apiListing.setBasePath(adjustedBasePath(uriComponents, host, apiListing.getBasePath()));
-          return apiListing;
-        }).collect(toList());
-        return new AbstractMap.SimpleEntry<>(entry.getKey(), newApiListings);
-      }
-    };
+  private Mappers() {
+    throw new UnsupportedOperationException();
   }
 
+  public static Function<Map.Entry<String, List<springfox.documentation.service.ApiListing>>, Map.Entry<String,
+      List<ApiListing>>>
+  toApiListingDto(
+      final HttpServletRequest servletRequest,
+      final String host,
+      final ServiceModelToSwaggerMapper mapper) {
+
+    return entry -> {
+      List<ApiListing> newApiListings = entry.getValue().stream().map(value -> {
+        ApiListing apiListing = mapper.toSwaggerApiListing(value);
+        UriComponents uriComponents = componentsFrom(servletRequest, apiListing.getBasePath());
+        apiListing.setBasePath(adjustedBasePath(uriComponents, host, apiListing.getBasePath()));
+        return apiListing;
+      }).collect(toList());
+      return new AbstractMap.SimpleEntry<>(entry.getKey(), newApiListings);
+    };
+  }
 
 
   private static String adjustedBasePath(

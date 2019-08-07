@@ -28,6 +28,7 @@ import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 
 @Configuration
 @ComponentScan(basePackages = {
@@ -37,7 +38,8 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
     ModelBuilderPlugin.class,
     ModelPropertyBuilderPlugin.class,
     TypeNameProviderPlugin.class,
-    SyntheticModelProviderPlugin.class
+    SyntheticModelProviderPlugin.class,
+    ViewProviderPlugin.class,
 })
 public class ModelsConfiguration {
   @Bean

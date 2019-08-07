@@ -12,6 +12,7 @@ ext {
 dependencies {
   compile project(':springfox-core')
   compile project(':springfox-spi')
+  provided "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson}"
   testCompile libs.test
   testCompile project(':springfox-core').sourceSets.test.output
 }

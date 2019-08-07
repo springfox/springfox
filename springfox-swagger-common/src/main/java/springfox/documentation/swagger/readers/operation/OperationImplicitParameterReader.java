@@ -75,17 +75,20 @@ public class OperationImplicitParameterReader implements OperationBuilderPlugin 
         .allowMultiple(param.allowMultiple())
         .modelRef(modelRef)
         .allowableValues(allowableValueFromString(param.allowableValues()))
-        .parameterType(ofNullable(param.paramType()).filter(((Predicate<String>)String::isEmpty).negate()).orElse(null))
+        .parameterType(ofNullable(param.paramType())
+            .filter(((Predicate<String>) String::isEmpty).negate())
+            .orElse(null))
         .parameterAccess(param.access())
         .order(SWAGGER_PLUGIN_ORDER)
         .scalarExample(param.example())
         .complexExamples(examples(param.examples()))
+        .collectionFormat(param.collectionFormat())
         .build();
   }
 
   private static ModelRef maybeGetModelRef(ApiImplicitParam param) {
     String dataType = ofNullable(param.dataType())
-        .filter(((Predicate<String>)String::isEmpty).negate())
+        .filter(((Predicate<String>) String::isEmpty).negate())
         .orElse("string");
 
     AllowableValues allowableValues = null;

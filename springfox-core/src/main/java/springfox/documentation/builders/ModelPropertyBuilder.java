@@ -48,6 +48,28 @@ public class ModelPropertyBuilder {
   private Boolean allowEmptyValue;
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
 
+  public ModelPropertyBuilder() {
+    
+  }
+
+  public ModelPropertyBuilder(ModelProperty modelProperty) {
+    this.type = modelProperty.getType();
+    this.qualifiedType = modelProperty.getQualifiedType();
+    this.position = modelProperty.getPosition();
+    this.required = modelProperty.isRequired();
+    this.readOnly = modelProperty.isReadOnly();
+    this.description = modelProperty.getDescription();
+    this.allowableValues = modelProperty.getAllowableValues();
+    this.name = modelProperty.getName();
+    this.isHidden = modelProperty.isHidden();
+    this.example = modelProperty.getExample();
+    this.pattern = modelProperty.getPattern();
+    this.defaultValue = modelProperty.getDefaultValue();
+    this.xml = modelProperty.getXml();
+    this.allowEmptyValue = modelProperty.isAllowEmptyValue();
+    this.vendorExtensions.addAll(modelProperty.getVendorExtensions());
+  }
+
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
     return this;

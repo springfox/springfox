@@ -20,6 +20,7 @@ package springfox.documentation.schema.property
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
@@ -30,8 +31,10 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeWithJsonFormat
+import springfox.documentation.schema.TypeWithJsonView
 import springfox.documentation.schema.TypeWithSetterButNoGetter
 import springfox.documentation.schema.UnwrappedType
+import springfox.documentation.schema.Views
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.schema.property.bean.AccessorsProvider
@@ -63,27 +66,34 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
+        new JacksonEnumTypeDeterminer(),
         typeNameExtractor)
     ResolvedType type = typeResolver.resolve(TypeWithSetterButNoGetter)
 
     and:
-    def objectMapperConfigured = new ObjectMapperConfigured(this, new ObjectMapper())
+    ObjectMapper mapper = new ObjectMapper()
+    mapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION)
+    def objectMapperConfigured = new ObjectMapperConfigured(this, mapper)
     namingStrategy.onApplicationEvent(objectMapperConfigured)
     sut.onApplicationEvent(objectMapperConfigured)
-
     when:
     def inputValue = sut.propertiesFor(
         type,
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             type,
+            Optional.empty(),
+            new HashSet<>(),
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
             emptySet()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             type,
+            Optional.empty(),
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
@@ -111,6 +121,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
+        new JacksonEnumTypeDeterminer(),
         typeNameExtractor)
     ResolvedType type = typeResolver.resolve(UnwrappedType)
 
@@ -120,20 +131,24 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         new ObjectMapper())
     namingStrategy.onApplicationEvent(objectMapperConfigured)
     sut.onApplicationEvent(objectMapperConfigured)
-
     when:
     def inputValue = sut.propertiesFor(
         type,
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             type,
+            Optional.empty(),
+            new HashSet<>(),
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
             emptySet()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             type,
+            Optional.empty(),
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
@@ -162,6 +177,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
+        new JacksonEnumTypeDeterminer(),
         typeNameExtractor)
     ResolvedType type = typeResolver.resolve(UnwrappedType)
 
@@ -173,14 +189,20 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     sut.onApplicationEvent(objectMapperConfigured)
 
     and:
-    def inputContext = inputParam("group",
+    def inputContext = inputParam("0_0",
+        "group",
         type,
+        Optional.empty(),
+        new HashSet<>(),
         SPRING_WEB,
         new AlternateTypeProvider(new ArrayList<>()),
         new DefaultGenericTypeNamingStrategy(),
         emptySet())
-    def returnContext = returnValue("group",
+
+    def returnContext = returnValue("0_0",
+        "group",
         type,
+        Optional.empty(),
         SPRING_WEB,
         new AlternateTypeProvider(new ArrayList<>()),
         new DefaultGenericTypeNamingStrategy(),
@@ -216,6 +238,7 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
+        new JacksonEnumTypeDeterminer(),
         typeNameExtractor)
     ResolvedType type = typeResolver.resolve(TypeWithJsonFormat)
 
@@ -229,16 +252,21 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
     when:
     def inputValue = sut.propertiesFor(
         type,
-        inputParam("group",
+        inputParam("0_0",
+            "group",
             type,
+            Optional.empty(),
+            new HashSet<>(),
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
             emptySet()))
     def returnValue = sut.propertiesFor(
         type,
-        returnValue("group",
+        returnValue("0_0",
+            "group",
             type,
+            Optional.empty(),
             SPRING_WEB,
             new AlternateTypeProvider(new ArrayList<>()),
             new DefaultGenericTypeNamingStrategy(),
@@ -246,10 +274,71 @@ class OptimizedModelPropertiesProviderSpec extends Specification {
 
     then:
     def inputProp = inputValue.find({ it.name == "localDate" })
-    inputProp.type.erasedType.equals(String.class)
-    inputProp.example.equals("MM-dd-yyyy")
+    inputProp.type.erasedType == String.class
+    inputProp.example == "MM-dd-yyyy"
     def returnProp = returnValue.find({ it.name == "localDate" })
-    returnProp.type.erasedType.equals(String.class)
-    returnProp.example.equals("MM-dd-yyyy")
+    returnProp.type.erasedType == String.class
+    returnProp.example == "MM-dd-yyyy"
+  }
+
+  def "model with @JsonView are detected correctly"() {
+    given:
+    TypeResolver typeResolver = new TypeResolver()
+    BeanPropertyNamingStrategy namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
+        typeResolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
+    OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
+        new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver),
+        new FactoryMethodProvider(typeResolver),
+        typeResolver,
+        namingStrategy,
+        defaultSchemaPlugins(),
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor)
+    ResolvedType type = typeResolver.resolve(TypeWithJsonView)
+
+    and:
+    def objectMapperConfigured = new ObjectMapperConfigured(
+        this,
+        new ObjectMapper())
+    namingStrategy.onApplicationEvent(objectMapperConfigured)
+    sut.onApplicationEvent(objectMapperConfigured)
+    when:
+    def inputValue = sut.propertiesFor(
+        type,
+        inputParam("0_0",
+            "group",
+            type,
+            Optional.of(typeResolver.resolve(Views.FirstView.class)),
+            new HashSet<>(),
+            SPRING_WEB,
+            new AlternateTypeProvider([]),
+            new DefaultGenericTypeNamingStrategy(),
+            emptySet()))
+    def returnValue = sut.propertiesFor(
+        type,
+        returnValue("0_0",
+            "group",
+            type,
+            Optional.of(typeResolver.resolve(Views.FirstView.class)),
+            SPRING_WEB,
+            new AlternateTypeProvider([]),
+            new DefaultGenericTypeNamingStrategy(),
+            emptySet()))
+
+    then:
+    def inputProp = inputValue.find({ it.name == "foo" })
+    inputProp.type.erasedType == String.class
+    null != inputValue.find({ it.name == "propertyWithoutView" })
+    inputProp.type.erasedType == String.class
+    def returnProp = returnValue.find({ it.name == "foo" })
+    returnProp.type.erasedType == String.class
+    null != inputValue.find({ it.name == "propertyWithoutView" })
+    inputProp.type.erasedType == String.class
   }
 }

@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
+
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
 import springfox.documentation.service.ApiDescription
@@ -49,6 +50,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}', '/somePath/{businessId:\\d+}')]
     )
     RequestMappingContext mappingContext = new RequestMappingContext(
+        "0",
         documentationContext(),
         new WebMvcRequestHandler(
             Paths.ROOT,
@@ -93,6 +95,7 @@ class ApiDescriptionReaderSpec extends DocumentationContextSpec {
         "/doesNotMatterForThisTest",
         [patternsRequestCondition: patternsRequestCondition('/somePath/{businessId}')])
     RequestMappingContext mappingContext = new RequestMappingContext(
+        "0",
         documentationContext(),
         new WebMvcRequestHandler(
             Paths.ROOT,

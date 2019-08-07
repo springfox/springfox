@@ -19,25 +19,58 @@
 
 package springfox.documentation.schema
 
+
 import spock.lang.Specification
 import spock.lang.Unroll
+import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.AllowableValues
 
 class ModelRefSpec extends Specification {
   @Unroll
-  def "map types are reflected correctly" () {
+  def "map types are reflected correctly"() {
     expect:
-      model.isCollection() == isCollection
-      model.isMap() == isMap
+    model.isCollection() == isCollection
+    model.isMap() == isMap
+
     where:
-      model                                               | isCollection | isMap
-      new ModelRef("string")                              | false        | false
-      new ModelRef("string", null as ModelReference)      | false        | false
-      new ModelRef("string", null, true)                  | false        | false
-      new ModelRef("string", new ModelRef("List"), true)  | false        | true
-      new ModelRef("string", new ModelRef("List"), false) | true         | false
-      new ModelRef("string", new ModelRef("Map"), true)   | false        | true
-      new ModelRef("string", new ModelRef("Map"), false)  | true         | false
-      new ModelRef("string", Mock(AllowableValues))       | false         | false
+    model                                               | isCollection | isMap
+    new ModelRef("string")                              | false        | false
+    new ModelRef("string", null as ModelReference)      | false        | false
+    new ModelRef("string", null, true)                  | false        | false
+    new ModelRef("string", new ModelRef("List"), true)  | false        | true
+    new ModelRef("string", new ModelRef("List"), false) | true         | false
+    new ModelRef("string", new ModelRef("Map"), true)   | false        | true
+    new ModelRef("string", new ModelRef("Map"), false)  | true         | false
+    new ModelRef("string", Mock(AllowableValues))       | false        | false
+  }
+
+  def ".equals and .hashCode works as expected"() {
+    given:
+    ModelReference model = new ModelRef("string")
+
+    expect:
+    model.equals(testModel) == expectedEquality
+    testModel.equals(model) == expectedEquality
+    model.equals(model)
+    !model.equals(null)
+    !model.equals(new Object())
+
+    and:
+    (model.hashCode() == testModel.hashCode()) == expectedEquality
+    model.hashCode() == model.hashCode()
+
+    where:
+    testModel                                                                     | expectedEquality
+    new ModelRef("string")                                                        | true
+    new ModelRef("string", null as ModelReference)                                | true
+    new ModelRef("integer", null, true)                                           | false
+    new ModelRef("string", null, true)                                            | false
+    new ModelRef("string", new AllowableRangeValues("3", "5"))                    | false
+    new ModelRef("string", new ModelRef("List"), false)                           | false
+    new ModelRef("string", "java.lang.String", new ModelRef("Map"), null, "3434") | false
+    new ModelRef("string", "java.lang.String", null, null, "3434")                | false
+    new ModelRef("string", "java.lang.String", null, null, "3434")                | false
+    new ModelRef("string", null, null, null, "3434")                              | false
+    new ModelRef("string", "java.lang.String", null, null, null)                  | false
   }
 }

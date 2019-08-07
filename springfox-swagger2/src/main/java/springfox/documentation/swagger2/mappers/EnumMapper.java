@@ -41,6 +41,10 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 
 public class EnumMapper {
+  private EnumMapper() {
+    throw new UnsupportedOperationException();
+  }
+
   static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {
     if (allowableValues instanceof AllowableListValues) {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
@@ -72,7 +76,7 @@ public class EnumMapper {
   }
 
   static BigDecimal safeBigDecimal(String doubleString) {
-    if (doubleString == null){
+    if (doubleString == null) {
       return null;
     }
     try {
@@ -83,7 +87,7 @@ public class EnumMapper {
   }
 
   static Integer safeInteger(String doubleString) {
-    if (doubleString == null){
+    if (doubleString == null) {
       return null;
     }
     try {
@@ -131,7 +135,9 @@ public class EnumMapper {
   }
 
   private static <T extends Number> List<T> convert(List<String> values, Class<T> toType) {
-    return values.stream().map(converterOfType(toType)).filter(Optional::isPresent).map(Optional::get).collect(toList());
+    return values.stream().map(converterOfType(toType))
+        .filter(Optional::isPresent).map(Optional::get)
+        .collect(toList());
   }
 
   @SuppressWarnings("unchecked")

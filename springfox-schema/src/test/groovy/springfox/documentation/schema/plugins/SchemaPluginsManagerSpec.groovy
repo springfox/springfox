@@ -29,12 +29,14 @@ import springfox.documentation.schema.ExampleWithEnums
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeForTestingPropertyNames
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.schema.ViewProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
@@ -44,7 +46,7 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(AlternateTypesSupport)
+@Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class SchemaPluginsManagerSpec extends Specification {
   SchemaPluginsManager sut
   TypeNameExtractor typeNames
@@ -52,25 +54,30 @@ class SchemaPluginsManagerSpec extends Specification {
   def modelPlugin = Mock(ModelBuilderPlugin)
   def namePlugin = Mock(TypeNameProviderPlugin)
   def resourcesModelPlugin = Mock(SyntheticModelProviderPlugin)
+  def viewProviderPlugin = Mock(ViewProviderPlugin)
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-            OrderAwarePluginRegistry.create(singletonList(propertyPlugin))
+        OrderAwarePluginRegistry.create(singletonList(propertyPlugin))
     propertyPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-            OrderAwarePluginRegistry.create(singletonList(modelPlugin))
+        OrderAwarePluginRegistry.create(singletonList(modelPlugin))
     modelPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-            OrderAwarePluginRegistry.create(singletonList(namePlugin))
+        OrderAwarePluginRegistry.create(singletonList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
 
-    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> sytheticModelRegistry =
+    PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderPlugin =
+        OrderAwarePluginRegistry.create([viewProviderPlugin])
+    namePlugin.supports(SPRING_WEB) >> true
+
+    PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
         OrderAwarePluginRegistry.create(singletonList(resourcesModelPlugin))
     resourcesModelPlugin.supports(_) >> false
 
-    sut = new SchemaPluginsManager(propRegistry, modelRegistry, sytheticModelRegistry)
+    sut = new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderPlugin, syntheticModelRegistry)
     typeNames = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
@@ -79,46 +86,52 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model property when plugins are found"() {
     given:
-      def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), Mock(AnnotatedElement),
-              new TypeResolver(), SPRING_WEB)
+    def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), Mock(AnnotatedElement),
+        new TypeResolver(), SPRING_WEB)
     when:
-      sut.property(context)
+    sut.property(context)
     then:
-      1 * propertyPlugin.apply(context)
+    1 * propertyPlugin.apply(context)
   }
 
   def "enriches model when plugins are found"() {
     given:
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      def context = inputParam(
-          "group",
-          TypeForTestingPropertyNames,
-          SPRING_WEB,
-          new AlternateTypeProvider([]),
-          namingStrategy,
-          emptySet())
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    def context = inputParam(
+        "0_0",
+        "group",
+        resolver.resolve(TypeForTestingPropertyNames),
+        Optional.empty(),
+        new HashSet<>(),
+        SPRING_WEB,
+        new AlternateTypeProvider([]),
+        namingStrategy,
+        emptySet())
     and:
-      context.documentationType >> SPRING_WEB
+    context.documentationType >> SPRING_WEB
     when:
-      sut.model(context)
+    sut.model(context)
     then:
-      1 * modelPlugin.apply(context)
+    1 * modelPlugin.apply(context)
   }
 
   def "enriches model name when plugins are found"() {
     given:
-      def context = inputParam(
-          "group",
-          ExampleWithEnums,
-          SPRING_WEB,
-          alternateTypeProvider(),
-          new DefaultGenericTypeNamingStrategy(),
-          emptySet())
+    def context = inputParam(
+        "0_0",
+        "group",
+        resolver.resolve(ExampleWithEnums),
+        Optional.empty(),
+        new HashSet<>(),
+        SPRING_WEB,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        emptySet())
     and:
-      context.documentationType >> SPRING_WEB
+    context.documentationType >> SPRING_WEB
     when:
-      typeNames.typeName(context)
+    typeNames.typeName(context)
     then:
-      1 * namePlugin.nameFor(_)
+    1 * namePlugin.nameFor(_)
   }
 }

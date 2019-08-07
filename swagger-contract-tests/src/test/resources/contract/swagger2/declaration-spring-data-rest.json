@@ -1703,6 +1703,7 @@
             "required": [
                 "addresses"
             ],
+            "discriminator": "Embedded collection of Address",
             "properties": {
                 "addresses": {
                     "type": "array",
@@ -1713,17 +1714,18 @@
                 }
             },
             "title": "EmbeddedCollectionOfAddress",
-            "description": "Embedded collection of Address",
             "xml": {
                 "name": "content",
                 "wrapped": true
-            }
+            },
+            "description": "Embedded collection of Address"
         },
         "EmbeddedCollectionOfPerson": {
             "type": "object",
             "required": [
                 "people"
             ],
+            "discriminator": "Embedded collection of Person",
             "properties": {
                 "people": {
                     "type": "array",
@@ -1734,6 +1736,10 @@
                 }
             },
             "title": "EmbeddedCollectionOfPerson",
+            "xml": {
+                "name": "content",
+                "wrapped": true
+            },
             "description": "Embedded collection of Person"
         },
         "EmbeddedCollectionOfTag": {
@@ -1741,6 +1747,7 @@
             "required": [
                 "tags"
             ],
+            "discriminator": "Embedded collection of Tag",
             "properties": {
                 "tags": {
                     "type": "array",
@@ -1751,11 +1758,11 @@
                 }
             },
             "title": "EmbeddedCollectionOfTag",
-            "description": "Embedded collection of Tag",
             "xml": {
                 "name": "content",
                 "wrapped": true
-            }
+            },
+            "description": "Embedded collection of Tag"
         },
         "Link": {
             "type": "object",
@@ -1820,7 +1827,13 @@
                     }
                 }
             },
-            "title": "Link"
+            "title": "Link",
+            "xml": {
+                "name": "link",
+                "namespace": "http://www.w3.org/2005/Atom",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "Person": {
             "type": "object",
@@ -1888,7 +1901,12 @@
                     "type": "string"
                 }
             },
-            "title": "ResourceOfAddress"
+            "title": "ResourceOfAddress",
+            "xml": {
+                "name": "ResourceOfAddress",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "ResourceOfPerson": {
             "type": "object",
@@ -1964,7 +1982,12 @@
                     }
                 }
             },
-            "title": "ResourceOfTag"
+            "title": "ResourceOfTag",
+            "xml": {
+                "name": "ResourceOfTag",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "ResourcesOfAddress": {
             "type": "object",
@@ -1972,6 +1995,7 @@
                 "_embedded",
                 "_links"
             ],
+            "discriminator": "Resources of Address",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfAddress"
@@ -1985,12 +2009,12 @@
                 }
             },
             "title": "ResourcesOfAddress",
-            "description": "Resources of Address",
             "xml": {
                 "name": "entities",
                 "attribute": false,
                 "wrapped": false
-            }
+            },
+            "description": "Resources of Address"
         },
         "ResourcesOfPerson": {
             "type": "object",
@@ -1998,6 +2022,7 @@
                 "_embedded",
                 "_links"
             ],
+            "discriminator": "Resources of Person",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfPerson"
@@ -2011,6 +2036,11 @@
                 }
             },
             "title": "ResourcesOfPerson",
+            "xml": {
+                "name": "entities",
+                "attribute": false,
+                "wrapped": false
+            },
             "description": "Resources of Person"
         },
         "ResourcesOfTag": {
@@ -2019,6 +2049,7 @@
                 "_embedded",
                 "_links"
             ],
+            "discriminator": "Resources of Tag",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfTag"
@@ -2032,12 +2063,12 @@
                 }
             },
             "title": "ResourcesOfTag",
-            "description": "Resources of Tag",
             "xml": {
                 "name": "entities",
                 "attribute": false,
                 "wrapped": false
-            }
+            },
+            "description": "Resources of Tag"
         },
         "Tag": {
             "type": "object",

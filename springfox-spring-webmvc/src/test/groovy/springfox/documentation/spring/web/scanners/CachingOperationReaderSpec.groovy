@@ -19,6 +19,7 @@
 package springfox.documentation.spring.web.scanners
 
 import com.fasterxml.classmate.TypeResolver
+
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.Operation
@@ -39,6 +40,7 @@ class CachingOperationReaderSpec extends DocumentationContextSpec {
 
     def context = documentationContext()
     def requestMappingContext = new RequestMappingContext(
+        "0",
         context,
         new WebMvcRequestHandler(Paths.ROOT, methodResolver,
             requestMappingInfo,

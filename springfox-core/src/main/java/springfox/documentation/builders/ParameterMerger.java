@@ -34,7 +34,7 @@ class ParameterMerger {
   private final List<Parameter> destination;
   private final List<Parameter> source;
 
-  public ParameterMerger(List<Parameter> destination, List<Parameter> source) {
+  ParameterMerger(List<Parameter> destination, List<Parameter> source) {
     this.destination = new ArrayList<>(destination);
     this.source = new ArrayList<>(source);
   }
@@ -75,7 +75,7 @@ class ParameterMerger {
     for (Parameter newParam : newParams) {
       Optional<Parameter> original = existingParameters.stream().filter(withName(newParam.getName())).findFirst();
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
-        if (newParam.getOrder() > original.get().getOrder()){
+        if (newParam.getOrder() > original.get().getOrder()) {
           parameters.add(merged(newParam, original.get()));
         } else {
           parameters.add(merged(original.get(), newParam));
@@ -101,6 +101,7 @@ class ParameterMerger {
         .order(source.getOrder())
         .scalarExample(source.getScalarExample())
         .complexExamples(source.getExamples())
+        .collectionFormat(source.getCollectionFormat())
         .build();
   }
 

@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import patchRequestInterceptor, {getCsrf} from './csrf';
 import fetchMock from 'fetch-mock';
 import { FetchError } from 'node-fetch';

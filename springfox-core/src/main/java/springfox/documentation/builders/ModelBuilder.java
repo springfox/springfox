@@ -26,6 +26,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.Xml;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelBuilder {
-  private String id;
+  private final String id;
   private String name;
   private String qualifiedType;
   private String description;
@@ -48,14 +49,31 @@ public class ModelBuilder {
   private List<ModelReference> subTypes = new ArrayList<>();
 
   /**
-   * Updates the Id of the model, usually the type name
+   * Constructor with the model
+   *
+   * @param model - existing model
+   */
+  public ModelBuilder(Model model) {
+    this.id = model.getId();
+    this.name = model.getName();
+    this.qualifiedType = model.getQualifiedType();
+    this.description = model.getDescription();
+    this.baseModel = model.getBaseModel();
+    this.discriminator = model.getDescription();
+    this.modelType = model.getType();
+    this.example = model.getExample();
+    this.xml = model.getXml();
+    this.properties.putAll(model.getProperties());
+    this.subTypes.addAll(model.getSubTypes());
+  }
+
+  /**
+   * Constructor with the Id of the model
    *
    * @param id - identifier for the model
-   * @return this
    */
-  public ModelBuilder id(String id) {
-    this.id = defaultIfAbsent(id, this.id);
-    return this;
+  public ModelBuilder(String id) {
+    this.id = id;
   }
 
   /**
@@ -65,7 +83,9 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder name(String name) {
-    this.name = defaultIfAbsent(name, this.name);
+    this.name = defaultIfAbsent(
+        name,
+        this.name);
     return this;
   }
 
@@ -76,7 +96,9 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder qualifiedType(String qualifiedType) {
-    this.qualifiedType = defaultIfAbsent(qualifiedType, this.qualifiedType);
+    this.qualifiedType = defaultIfAbsent(
+        qualifiedType,
+        this.qualifiedType);
     return this;
   }
 
@@ -87,7 +109,9 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder properties(Map<String, ModelProperty> properties) {
-    this.properties.putAll(nullToEmptyMap(properties));
+    if (properties != null) {
+      this.properties = new HashMap<>(properties);
+    }
     return this;
   }
 
@@ -98,7 +122,9 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder description(String description) {
-    this.description = defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(
+        description,
+        this.description);
     return this;
   }
 
@@ -109,7 +135,9 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder baseModel(String baseModel) {
-    this.baseModel = defaultIfAbsent(baseModel, this.baseModel);
+    this.baseModel = defaultIfAbsent(
+        baseModel,
+        this.baseModel);
     return this;
   }
 
@@ -120,7 +148,9 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder discriminator(String discriminator) {
-    this.discriminator = defaultIfAbsent(discriminator, this.discriminator);
+    this.discriminator = defaultIfAbsent(
+        discriminator,
+        this.discriminator);
     return this;
   }
 
@@ -133,7 +163,7 @@ public class ModelBuilder {
    */
   public ModelBuilder subTypes(List<ModelReference> subTypes) {
     if (subTypes != null) {
-      this.subTypes.addAll(subTypes);
+      this.subTypes = new ArrayList<>(subTypes);
     }
     return this;
   }
@@ -147,7 +177,9 @@ public class ModelBuilder {
    */
   @Deprecated
   public ModelBuilder example(String example) {
-    this.example = defaultIfAbsent(example, this.example);
+    this.example = defaultIfAbsent(
+        example,
+        this.example);
     return this;
   }
 
@@ -159,7 +191,9 @@ public class ModelBuilder {
    * @since 2.8.1
    */
   public ModelBuilder example(Object example) {
-    this.example = defaultIfAbsent(example, this.example);
+    this.example = defaultIfAbsent(
+        example,
+        this.example);
     return this;
   }
 
@@ -170,12 +204,16 @@ public class ModelBuilder {
    * @return this
    */
   public ModelBuilder type(ResolvedType modelType) {
-    this.modelType = defaultIfAbsent(modelType, this.modelType);
+    this.modelType = defaultIfAbsent(
+        modelType,
+        this.modelType);
     return this;
   }
 
   public ModelBuilder xml(Xml xml) {
-    this.xml = defaultIfAbsent(xml, this.xml);
+    this.xml = defaultIfAbsent(
+        xml,
+        this.xml);
     return this;
   }
 
@@ -188,11 +226,11 @@ public class ModelBuilder {
         name,
         modelType,
         qualifiedType,
-        properties,
+        Collections.unmodifiableMap(properties),
         description,
         baseModel,
         discriminator,
-        subTypes,
+        Collections.unmodifiableList(subTypes),
         example,
         xml);
   }

@@ -39,6 +39,7 @@ class UiConfigurationSpec extends Specification {
       "    \"docExpansion\": \"none\",\n" +
       "    \"filter\": false,\n" +
       "    \"operationsSorter\": \"alpha\",\n" +
+      "    \"showCommonExtensions\": false,\n" +
       "    \"showExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
       "    \"validatorUrl\": \"validator:urn\"\n" +
@@ -58,6 +59,7 @@ class UiConfigurationSpec extends Specification {
       "    \"docExpansion\": \"none\",\n" +
       "    \"filter\": false,\n" +
       "    \"operationsSorter\": \"alpha\",\n" +
+      "    \"showCommonExtensions\": false,\n" +
       "    \"showExtensions\": false,\n" +
       "    \"tagsSorter\": \"alpha\",\n" +
       "    \"validatorUrl\": \"\"\n" +

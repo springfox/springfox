@@ -52,7 +52,8 @@ class EntityServicesProvider implements RequestHandlerProvider {
   private final String contextPath;
 
   @Autowired
-  public EntityServicesProvider(
+  @SuppressWarnings("ParameterNumber")
+  EntityServicesProvider(
       ServletContext servletContext,
       RepositoryRestConfiguration configuration,
       ResourceMappings mappings,

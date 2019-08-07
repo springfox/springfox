@@ -29,289 +29,361 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ContainerTypesSpec extends SchemaSpecification {
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+
   def "Model properties of type List, are inferred correctly"() {
     given:
-      def sut = typeWithLists()
-      Model asInput = modelProvider.modelFor(inputParam("group",
-          sut,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
-          sut,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())).get()
+    def sut = resolver.resolve(typeWithLists())
+    Model asInput = modelProvider.modelFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+    Model asReturn = modelProvider.modelFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
 
     expect:
-      asInput.getName() == "ListsContainer"
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      modelProperty.type.erasedType == name
-      modelProperty.getModelRef()
-      ModelRef item = modelProperty.getModelRef()
-      item.type == "List"
-      item.itemType == itemType
-      item.collection
+    asInput.getName() == "ListsContainer"
+    asInput.getProperties().containsKey(property)
+    def modelProperty = asInput.getProperties().get(property)
+    modelProperty.type.erasedType == name
+    modelProperty.getModelRef()
+    ModelRef item = modelProperty.getModelRef()
+    item.type == "List"
+    item.itemType == itemType
+    item.collection
 
-      asReturn.getName() == "ListsContainer"
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.type.erasedType == name
-      retModelProperty.getModelRef()
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == "List"
-      retItem.itemType == itemType
-      retItem.collection
+    asReturn.getName() == "ListsContainer"
+    asReturn.getProperties().containsKey(property)
+    def retModelProperty = asReturn.getProperties().get(property)
+    retModelProperty.type.erasedType == name
+    retModelProperty.getModelRef()
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == "List"
+    retItem.itemType == itemType
+    retItem.collection
 
     where:
-      property          | name      | itemType      | itemQualifiedType
-      "complexTypes"    | List      | 'ComplexType' | "springfox.documentation.schema.ComplexType"
-      "enums"           | List      | "string"      | "springfox.documentation.schema.ExampleEnum"
-      "aliasOfIntegers" | List      | "int"         | "java.lang.Integer"
-      "strings"         | ArrayList | "string"      | "java.lang.String"
-      "objects"         | List      | "object"      | "java.lang.Object"
-      "substituted"     | List      | "Substituted" | "springfox.documentation.schema.Substituted"
+    property          | name      | itemType      | itemQualifiedType
+    "complexTypes"    | List      | 'ComplexType' | "springfox.documentation.schema.ComplexType"
+    "enums"           | List      | "string"      | "springfox.documentation.schema.ExampleEnum"
+    "aliasOfIntegers" | List      | "int"         | "java.lang.Integer"
+    "strings"         | ArrayList | "string"      | "java.lang.String"
+    "objects"         | List      | "object"      | "java.lang.Object"
+    "substituted"     | List      | "Substituted" | "springfox.documentation.schema.Substituted"
   }
 
   def "Model properties are inferred correctly"() {
     given:
-      def sut = typeWithSets()
-      Model asInput = modelProvider.modelFor(inputParam("group",
-          sut,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
-          sut,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())).get()
+    def sut = resolver.resolve(typeWithSets())
+    Model asInput = modelProvider.modelFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    Model asReturn = modelProvider.modelFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
 
     expect:
-      asInput.getName() == "SetsContainer"
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      containerType(modelProperty.getType()) == type
-      modelProperty.getModelRef()
-      ModelRef item = modelProperty.getModelRef()
-      item.type == type
-      item.itemType == itemType
-      item.collection
+    asInput.getName() == "SetsContainer"
+    asInput.getProperties().containsKey(property)
+    def modelProperty = asInput.getProperties().get(property)
+    containerType(modelProperty.getType()) == type
+    modelProperty.getModelRef()
+    ModelRef item = modelProperty.getModelRef()
+    item.type == type
+    item.itemType == itemType
+    item.collection
 
-      asReturn.getName() == "SetsContainer"
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      containerType(retModelProperty.type) == type
-      retModelProperty.getModelRef()
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == type
-      retItem.itemType == itemType
-      retItem.collection
+    asReturn.getName() == "SetsContainer"
+    asReturn.getProperties().containsKey(property)
+    def retModelProperty = asReturn.getProperties().get(property)
+    containerType(retModelProperty.type) == type
+    retModelProperty.getModelRef()
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == type
+    retItem.itemType == itemType
+    retItem.collection
 
     where:
-      property          | type  | itemType      | itemQualifiedType
-      "complexTypes"    | "Set" | 'ComplexType' | "springfox.documentation.schema.ComplexType"
-      "enums"           | "Set" | "string"      | "springfox.documentation.schema.ExampleEnum"
-      "aliasOfIntegers" | "Set" | "int"         | "java.lang.Integer"
-      "strings"         | "Set" | "string"      | "java.lang.String"
-      "objects"         | "Set" | "object"      | "java.lang.Object"
+    property          | type  | itemType      | itemQualifiedType
+    "complexTypes"    | "Set" | 'ComplexType' | "springfox.documentation.schema.ComplexType"
+    "enums"           | "Set" | "string"      | "springfox.documentation.schema.ExampleEnum"
+    "aliasOfIntegers" | "Set" | "int"         | "java.lang.Integer"
+    "strings"         | "Set" | "string"      | "java.lang.String"
+    "objects"         | "Set" | "object"      | "java.lang.Object"
   }
 
   @Unroll
   def "Model properties of type Arrays are inferred correctly for #property"() {
     given:
-      def sut = typeWithArrays()
-      Model asInput = modelProvider.modelFor(inputParam("group",
-          sut,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
-          sut,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())).get()
+    def sut = resolver.resolve(typeWithArrays())
+    Model asInput = modelProvider.modelFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    Model asReturn = modelProvider.modelFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
 
     expect:
-      asInput.getName() == "ArraysContainer"
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      modelProperty.type.erasedType == type
-      modelProperty.getModelRef()
-      ModelRef item = modelProperty.getModelRef()
-      item.type == "Array"
-      item.itemType == itemType
-      item.collection
+    asInput.getName() == "ArraysContainer"
+    asInput.getProperties().containsKey(property)
+    def modelProperty = asInput.getProperties().get(property)
+    modelProperty.type.erasedType == type
+    modelProperty.getModelRef()
+    ModelRef item = modelProperty.getModelRef()
+    item.type == "Array"
+    item.itemType == itemType
+    item.collection
 
-      asReturn.getName() == "ArraysContainer"
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.type.erasedType == type
-      retModelProperty.getModelRef()
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == "Array"
-      retItem.itemType == itemType
-      retItem.collection
+    asReturn.getName() == "ArraysContainer"
+    asReturn.getProperties().containsKey(property)
+    def retModelProperty = asReturn.getProperties().get(property)
+    retModelProperty.type.erasedType == type
+    retModelProperty.getModelRef()
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == "Array"
+    retItem.itemType == itemType
+    retItem.collection
 
     where:
-      property          | type          | itemType      | itemQualifiedType
-      "complexTypes"    | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"
-      "enums"           | ExampleEnum[] | "string"      | "springfox.documentation.schema.ExampleEnum"
-      "aliasOfIntegers" | Integer[]     | "int"         | "java.lang.Integer"
-      "strings"         | String[]      | "string"      | "java.lang.String"
-      "objects"         | Object[]      | "object"      | "java.lang.Object"
-      "bytes"           | byte[]        | "byte"        | "byte"
-      "substituted"     | Substituted[] | "Substituted" | "springfox.documentation.schema.Substituted"
-      "arrayOfArrayOfInts"| int[][]     | "Array"       | "Array"
-      "arrayOfListOfStrings"| List[]    | "List"        | "Array"
+    property               | type          | itemType      | itemQualifiedType
+    "complexTypes"         | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"
+    "enums"                | ExampleEnum[] | "string"      | "springfox.documentation.schema.ExampleEnum"
+    "aliasOfIntegers"      | Integer[]     | "int"         | "java.lang.Integer"
+    "strings"              | String[]      | "string"      | "java.lang.String"
+    "objects"              | Object[]      | "object"      | "java.lang.Object"
+    "bytes"                | byte[]        | "byte"        | "byte"
+    "substituted"          | Substituted[] | "Substituted" | "springfox.documentation.schema.Substituted"
+    "arrayOfArrayOfInts"   | int[][]       | "Array"       | "Array"
+    "arrayOfListOfStrings" | List[]        | "List"        | "Array"
   }
 
   def "Model properties of type Map are inferred correctly"() {
     given:
-      def sut = mapsContainer()
-      Model asInput = modelProvider.modelFor(inputParam("group",
-          sut,
-          SWAGGER_12,
-          alternateRulesWithWildcardMap(),
-          namingStrategy,
-          emptySet())).get()
-      Model asReturn = modelProvider.modelFor(returnValue("group",
-          sut,
-          SWAGGER_12,
-          alternateRulesWithWildcardMap(),
-          namingStrategy,
-          emptySet())).get()
+    def sut = resolver.resolve(mapsContainer())
+    Model asInput = modelProvider.modelFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateRulesWithWildcardMap(),
+        namingStrategy,
+        emptySet())).get()
+
+    Model asReturn = modelProvider.modelFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateRulesWithWildcardMap(),
+        namingStrategy,
+        emptySet())).get()
 
     expect:
-      asInput.getName() == "MapsContainer"
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      modelProperty.type.erasedType == type
-      modelProperty.getModelRef()
-      ModelRef item = modelProperty.getModelRef()
-      item.type == "List"
-      item.itemType == itemRef
-      item.collection
+    asInput.getName() == "MapsContainer"
+    asInput.getProperties().containsKey(property)
+    def modelProperty = asInput.getProperties().get(property)
+    modelProperty.type.erasedType == type
+    modelProperty.getModelRef()
+    ModelRef item = modelProperty.getModelRef()
+    item.type == "List"
+    item.itemType == itemRef
+    item.collection
 
-      asReturn.getName() == "MapsContainer"
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.type.erasedType == type
-      retModelProperty.getModelRef()
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == "List"
-      retItem.itemType == itemRef
-      retItem.collection
+    asReturn.getName() == "MapsContainer"
+    asReturn.getProperties().containsKey(property)
+    def retModelProperty = asReturn.getProperties().get(property)
+    retModelProperty.type.erasedType == type
+    retModelProperty.getModelRef()
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == "List"
+    retItem.itemType == itemRef
+    retItem.collection
 
     where:
-      property              | type  | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
+    property              | type | itemRef                      | itemQualifiedType
+    "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
+    "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
+    "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
   }
 
   def "Model properties of type Map are inferred correctly on generic host"() {
     given:
-      def sut = genericTypeOfMapsContainer()
+    def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam("group",
-          sut,
-          SWAGGER_12,
-          alternateRulesWithWildcardMap(),
-          namingStrategy,
-          emptySet())
-      Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
-
-    def returnContext = returnValue("group",
+    def modelContext = inputParam("0_0",
+        "group",
         sut,
+        Optional.empty(),
+        new HashSet<>(),
         SWAGGER_12,
         alternateRulesWithWildcardMap(),
         namingStrategy,
         emptySet())
-      Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
+
+    List<Model> asInputModels = new ArrayList(modelProvider.dependencies(modelContext).values())
+
+    def returnContext = returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateRulesWithWildcardMap(),
+        namingStrategy,
+        emptySet())
+
+    List<Model> asReturnModels = new ArrayList(modelProvider.dependencies(returnContext).values())
 
     expect:
-      asInput.getName() == "MapsContainer"
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      modelProperty.type.erasedType == type
-      modelProperty.getModelRef()
-      ModelRef item = modelProperty.getModelRef()
-      item.type == "List"
-      item.itemType == itemRef
-      item.collection
+    Model asInput = null
+    for (int i = 0; i < asInputModels.size(); i++) {
+      if (asInputModels.get(i).getName().equals("MapsContainer")) {
+        asInput = asInputModels.get(i)
+        break
+      }
+    }
 
-      asReturn.getName() == "MapsContainer"
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.type.erasedType == type
-      retModelProperty.getModelRef()
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == "List"
-      retItem.itemType == itemRef
-      retItem.collection
+    asInput != null
+    asInput.getProperties().containsKey(property)
+    def modelProperty = asInput.getProperties().get(property)
+    modelProperty.type.erasedType == type
+    modelProperty.getModelRef()
+    ModelRef item = modelProperty.getModelRef()
+    item.type == "List"
+    item.itemType == itemRef
+    item.collection
+
+    Model asReturn = null
+    for (int i = 0; i < asReturnModels.size(); i++) {
+      if (asReturnModels.get(i).getName().equals("MapsContainer")) {
+        asReturn = asReturnModels.get(i)
+        break
+      }
+    }
+
+    asReturn != null
+    asReturn.getName() == "MapsContainer"
+    asReturn.getProperties().containsKey(property)
+    def retModelProperty = asReturn.getProperties().get(property)
+    retModelProperty.type.erasedType == type
+    retModelProperty.getModelRef()
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == "List"
+    retItem.itemType == itemRef
+    retItem.collection
 
     where:
-      property              | type   | itemRef                      | itemQualifiedType
-      "enumToSimpleType"    | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "stringToSimpleType"  | List | "Entry«string,SimpleType»"   | "springfox.documentation.schema.Entry"
-      "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
-      "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
+    property                       | type | itemRef                                | itemQualifiedType
+    "enumToSimpleType"             | List | "Entry«string,SimpleType»"             | "springfox.documentation.schema.Entry"
+    "stringToSimpleType"           | List | "Entry«string,SimpleType»"             | "springfox.documentation.schema.Entry"
+    "complexToSimpleType"          | List | "Entry«Category,SimpleType»"           | "springfox.documentation.schema.Entry"
+    "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
   }
 
   def "Model properties of type Map are inferred correctly on generic host with default rules"() {
     given:
-      def sut = genericTypeOfMapsContainer()
+    def sut = genericTypeOfMapsContainer()
 
-      def modelContext = inputParam("group",
-          sut,
-          SWAGGER_2,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())
-      Model asInput = modelProvider.dependencies(modelContext).get("MapsContainer")
+    def modelContext = inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_2,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
 
-      def returnContext = returnValue("group",
-          sut,
-          SWAGGER_2,
-          alternateTypeProvider(),
-          namingStrategy,
-          emptySet())
-      Model asReturn = modelProvider.dependencies(returnContext).get("MapsContainer")
+    List<Model> asInputModels = new ArrayList(modelProvider.dependencies(modelContext).values())
+
+    def returnContext = returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_2,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
+
+    List<Model> asReturnModels = new ArrayList(modelProvider.dependencies(returnContext).values())
 
     expect:
-      asInput.getName() == "MapsContainer"
-      asInput.getProperties().containsKey(property)
-      def modelProperty = asInput.getProperties().get(property)
-      modelProperty.type.erasedType == type
-      modelProperty.getModelRef()
-      ModelRef item = modelProperty.getModelRef()
-      item.type == itemType
-      item.itemType == itemRef
-      !item.collection
+    Model asInput = null
+    for (int i = 0; i < asInputModels.size(); i++) {
+      if (asInputModels.get(i).getName().equals("MapsContainer")) {
+        asInput = asInputModels.get(i)
+        break
+      }
+    }
 
-      asReturn.getName() == "MapsContainer"
-      asReturn.getProperties().containsKey(property)
-      def retModelProperty = asReturn.getProperties().get(property)
-      retModelProperty.type.erasedType == type
-      retModelProperty.getModelRef()
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == itemType
-      retItem.itemType == itemRef
-      !retItem.collection
+    asInput != null
+    asInput.getName() == "MapsContainer"
+    asInput.getProperties().containsKey(property)
+    def modelProperty = asInput.getProperties().get(property)
+    modelProperty.type.erasedType == type
+    modelProperty.getModelRef()
+    ModelRef item = modelProperty.getModelRef()
+    item.type == itemType
+    item.itemType == itemRef
+    !item.collection
+
+    Model asReturn = null
+    for (int i = 0; i < asReturnModels.size(); i++) {
+      if (asReturnModels.get(i).getName().equals("MapsContainer")) {
+        asReturn = asReturnModels.get(i)
+        break
+      }
+    }
+
+    asReturn != null
+    asReturn.getProperties().containsKey(property)
+    def retModelProperty = asReturn.getProperties().get(property)
+    retModelProperty.type.erasedType == type
+    retModelProperty.getModelRef()
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == itemType
+    retItem.itemType == itemRef
+    !retItem.collection
 
     where:
-      property                       | type   | itemRef                  | itemType
-      "enumToSimpleType"             | Map    | "SimpleType"             | "Map«string,SimpleType»"
-      "stringToSimpleType"           | Map    | "SimpleType"             | "Map«string,SimpleType»"
-      "complexToSimpleType"          | Map    | "SimpleType"             | "Map«Category,SimpleType»"
-      "mapOfmapOfStringToSimpleType" | Map    | "Map«string,SimpleType»" | "Map«string,Map«string,SimpleType»»"
+    property                       | type | itemRef                  | itemType
+    "enumToSimpleType"             | Map  | "SimpleType"             | "Map«string,SimpleType»"
+    "stringToSimpleType"           | Map  | "SimpleType"             | "Map«string,SimpleType»"
+    "complexToSimpleType"          | Map  | "SimpleType"             | "Map«Category,SimpleType»"
+    "mapOfmapOfStringToSimpleType" | Map  | "Map«string,SimpleType»" | "Map«string,Map«string,SimpleType»»"
   }
 }

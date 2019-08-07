@@ -22,11 +22,12 @@ import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiModel
 import spock.lang.Shared
 import spock.lang.Specification
+import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 import springfox.documentation.spi.schema.contexts.ModelContext
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 
 import static java.util.Collections.*
 
@@ -35,7 +36,7 @@ class ApiModelBuilderSpec extends Specification {
 
   def "Should all swagger documentation types"() {
     given:
-      def sut = new ApiModelBuilder(resolver, Mock(TypeNameExtractor))
+      def sut = new ApiModelBuilder(resolver, Mock(TypeNameExtractor), Mock(EnumTypeDeterminer))
     expect:
       !sut.supports(DocumentationType.SPRING_WEB)
       sut.supports(DocumentationType.SWAGGER_12)
@@ -44,10 +45,13 @@ class ApiModelBuilderSpec extends Specification {
 
   def "Api model builder parses ApiModel annotation as expected" () {
     given:
-      ApiModelBuilder sut = new ApiModelBuilder(resolver, Mock(TypeNameExtractor))
+      ApiModelBuilder sut = new ApiModelBuilder(resolver, Mock(TypeNameExtractor), Mock(EnumTypeDeterminer))
       ModelContext context = ModelContext.inputParam(
+          "0",
           "group",
-          type,
+          resolver.resolve(type),
+          Optional.empty(),
+          new HashSet<>(),
           DocumentationType.SWAGGER_12,
           new AlternateTypeProvider([]),
           new DefaultGenericTypeNamingStrategy(),

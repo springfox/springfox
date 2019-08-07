@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.*;
 
 @JsonPropertyOrder({
-        "method", "summary", "notes", "type", "nickname", "produces",
-        "consumes", "parameters", "responseMessages", "deprecated"
+    "method", "summary", "notes", "type", "nickname", "produces",
+    "consumes", "parameters", "responseMessages", "deprecated"
 })
 public class Operation {
   private String method;
@@ -65,6 +65,7 @@ public class Operation {
   public Operation() {
   }
 
+  @SuppressWarnings("ParameterNumber")
   public Operation(
       String method,
       String summary,
@@ -91,7 +92,9 @@ public class Operation {
     this.authorizations = toAuthorizationsMap(authorizations);
     this.parameters = parameters.stream()
         .sorted(byName()).collect(toList());
-    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(() -> new TreeSet<>(responseMessageOrdering())));
+    this.responseMessages =
+        responseMessages.stream()
+            .collect(Collectors.toCollection(() -> new TreeSet<>(responseMessageOrdering())));
     this.deprecated = deprecated;
   }
 
@@ -190,7 +193,9 @@ public class Operation {
   }
 
   public void setResponseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = responseMessages.stream().collect(Collectors.toCollection(()->new TreeSet<>(responseMessageOrdering())));
+    this.responseMessages =
+        responseMessages.stream()
+            .collect(Collectors.toCollection(() -> new TreeSet<>(responseMessageOrdering())));
   }
 
   public String getDeprecated() {

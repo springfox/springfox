@@ -29,34 +29,40 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)
 class CachingModelDependencyProviderSpec extends Specification {
-  def "Implementation caches the invocations" () {
+  def "Implementation caches the invocations"() {
     given:
-      def context = inputParam("group",
-          complexType(),
-          DocumentationType.SWAGGER_2,
-          new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy(),
-          emptySet())
-      def mock = Mock(ModelDependencyProvider) {
-        dependentModels(context) >> singleton(aResolvedType())
-      }
+    def context = inputParam("0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        new HashSet<>(),
+        DocumentationType.SWAGGER_2,
+        new AlternateTypeProvider([]),
+        new CodeGenGenericTypeNamingStrategy(),
+        emptySet())
+    def mock = Mock(ModelDependencyProvider) {
+      dependentModels(context) >> singleton(aResolvedType())
+    }
     when:
-      def sut = new CachingModelDependencyProvider(mock)
+    def sut = new CachingModelDependencyProvider(mock)
     then:
-      sut.dependentModels(context) == sut.dependentModels(context)
+    sut.dependentModels(context) == sut.dependentModels(context)
   }
 
-  def "Cache misses are handled correctly" () {
+  def "Cache misses are handled correctly"() {
     given:
-      def context = inputParam("group",
-          complexType(),
-          DocumentationType.SWAGGER_2,
-          new AlternateTypeProvider([]),
-          new CodeGenGenericTypeNamingStrategy(),
-          emptySet())
-      def mock = Mock(ModelDependencyProvider) {
-        dependentModels(context) >> { throw new NullPointerException() }
-      }
+    def context = inputParam("0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        new HashSet<>(),
+        DocumentationType.SWAGGER_2,
+        new AlternateTypeProvider([]),
+        new CodeGenGenericTypeNamingStrategy(),
+        emptySet())
+    def mock = Mock(ModelDependencyProvider) {
+      dependentModels(context) >> { throw new NullPointerException() }
+    }
     when:
     def sut = new CachingModelDependencyProvider(mock)
     then:
