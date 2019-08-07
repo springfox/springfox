@@ -68,8 +68,11 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec {
     where:
     annotations                               | type            | consumes                      | httpMethod      | expected
     [[:] as PathVariable]                     | Integer         | []                            | HttpMethod.GET  | "path"
-    [[:] as ModelAttribute]                   | Integer         | []                            | HttpMethod.GET  | "body"
-    [[:] as ModelAttribute]                   | Example         | []                            | HttpMethod.GET  | "body"
+    [[:] as ModelAttribute]                   | Example         | []                            | HttpMethod.GET  | "query"
+    [[:] as ModelAttribute]                   | Example         | []                            | HttpMethod.POST | "query"
+    [[:] as ModelAttribute]                   | Example         | [APPLICATION_JSON]            | HttpMethod.GET  | "query"
+    [[:] as ModelAttribute]                   | Example         | [APPLICATION_JSON]            | HttpMethod.POST | "query"
+    [[:] as ModelAttribute]                   | Example         | [APPLICATION_FORM_URLENCODED] | HttpMethod.POST | "form"
     [[:] as RequestHeader]                    | Integer         | []                            | HttpMethod.GET  | "header"
     [[:] as RequestParam]                     | Integer         | []                            | HttpMethod.GET  | "query"
     [[:] as RequestParam]                     | Integer         | []                            | HttpMethod.POST | "query"

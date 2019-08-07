@@ -42,6 +42,10 @@ public class ParameterNameReader implements ParameterBuilderPlugin {
     Optional<ApiParam> apiParam = context.resolvedMethodParameter().findAnnotation(ApiParam.class);
     String paramType = findParameterType(context);
     String name = null;
+    Optional<String> defaultName = context.resolvedMethodParameter().defaultName();
+    if (defaultName.isPresent()) {
+      name = defaultName.get();
+    }
     if (apiParam.isPresent()) {
       name = ofNullable(apiParam.get().name()).filter(((Predicate<String>) String::isEmpty).negate()).orElse(null);
     }

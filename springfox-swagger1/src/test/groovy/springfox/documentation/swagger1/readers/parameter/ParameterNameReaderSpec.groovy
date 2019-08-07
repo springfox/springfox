@@ -21,6 +21,7 @@ package springfox.documentation.swagger1.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import io.swagger.annotations.ApiParam
+import org.springframework.web.bind.annotation.RequestBody
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.service.ResolvedMethodParameter
@@ -47,7 +48,7 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
     given:
       def operationContext = Mock(OperationContext)
       def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParam], new TypeResolver().resolve(Object.class))
+          new ResolvedMethodParameter(0, defaultName, [apiParam, requestBody], new TypeResolver().resolve(Object.class))
       def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     and: "mocks are setup"
       operationContext.consumes() >> []
@@ -60,9 +61,12 @@ class ParameterNameReaderSpec extends DocumentationContextSpec {
     then:
       parameterContext.parameterBuilder().build().name == expectedName
     where:
-      apiParam                                                            | paramType | expectedName
-      [name: { -> "bodyParam" }, value: { -> "body Param"}] as ApiParam   | "body"    | "body"
-      null                                                                | "body"    | "body"
+      defaultName            | apiParam                                                            | requestBody         | paramType | expectedName
+      null                   | [name: { -> "bodyParam" }, value: { -> "body Param"}] as ApiParam   | null                | "query"   | "bodyParam"
+      "methodParameterName"  | [name: { -> "bodyParam" }, value: { -> "body Param"}] as ApiParam   | []  as RequestBody  | "body"    | "body"
+      null                   | null                                                                | []  as RequestBody  | "body"    | "body"
+      "methodParameterName"  | null                                                                | []  as RequestBody  | "body"    | "body"
+      "methodParameterName"  | null                                                                | null                | "query"   | "methodParameterName"
   }
 
   def nameReader(annotation) {
