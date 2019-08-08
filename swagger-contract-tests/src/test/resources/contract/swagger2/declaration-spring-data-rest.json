@@ -391,14 +391,16 @@
                         "in": "query",
                         "description": "page",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "size",
                         "in": "query",
                         "description": "size",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "sort",
@@ -1159,14 +1161,16 @@
                         "in": "query",
                         "description": "page",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "size",
                         "in": "query",
                         "description": "size",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "sort",
@@ -1621,14 +1625,16 @@
                         "in": "query",
                         "description": "page",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "size",
                         "in": "query",
                         "description": "size",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "sort",
