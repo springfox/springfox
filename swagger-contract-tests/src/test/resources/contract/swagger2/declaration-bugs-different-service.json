@@ -1710,7 +1710,7 @@
                         "in":"body",
                         "name":"message",
                         "description":"message",
-                        "required":false,
+                        "required":true,
                         "schema":{
                             "type":"string",
                             "example":{
@@ -1976,7 +1976,7 @@
                         "name": "year",
                         "in": "query",
                         "description": "year",
-                        "required": true,
+                        "required": false,
                         "type": "integer",
                         "format": "int32"
                     }
@@ -2004,7 +2004,7 @@
                         "name": "environmentKey",
                         "in": "path",
                         "description": "Key of the environment",
-                        "required": false,
+                        "required": true,
                         "type": "string"
                     },
                     {

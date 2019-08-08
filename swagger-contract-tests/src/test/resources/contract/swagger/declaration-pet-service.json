@@ -304,7 +304,7 @@
                             "paramType": "query",
                             "format": "int32",
                             "type": "integer",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
@@ -356,7 +356,7 @@
                             "paramType": "query",
                             "format": "int32",
                             "type": "integer",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
@@ -407,7 +407,7 @@
                             "paramType": "query",
                             "format": "int64",
                             "type": "integer",
-                            "required": false
+                            "required": true
                         }
                     ],
                     "responseMessages": [
