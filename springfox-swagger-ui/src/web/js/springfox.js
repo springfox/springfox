@@ -51,8 +51,12 @@ $(function() {
     var relativeLocation = springfox.getBaseUrl();
 
     $('#input_baseUrl').hide();
-
-    $.getJSON(relativeLocation + "/swagger-resources", function(data) {
+    // support path filter
+    var search  = window.location.search;
+    if(!search){
+        search = "";
+    }
+    $.getJSON(relativeLocation + "/swagger-resources"+search, function(data) {
 
       var $urlDropdown = $('#select_baseUrl');
       $urlDropdown.empty();

@@ -26,7 +26,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springfox.documentation.annotations.ApiIgnore;
+import springfox.documentation.swagger.util.SwaggerUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -63,8 +65,10 @@ public class ApiResourceController {
 
   @RequestMapping
   @ResponseBody
-  public ResponseEntity<List<SwaggerResource>> swaggerResources() {
-    return new ResponseEntity<List<SwaggerResource>>(swaggerResources.get(), HttpStatus.OK);
+  public ResponseEntity<List<SwaggerResource>> swaggerResources(HttpServletRequest request) {
+    List<SwaggerResource> resources = swaggerResources.get();
+    SwaggerUtils.queryPropagation(request,resources);
+    return new ResponseEntity<List<SwaggerResource>>(resources, HttpStatus.OK);
   }
 
 }

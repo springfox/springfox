@@ -39,6 +39,7 @@ import springfox.documentation.spring.web.PropertySourcedMapping;
 import springfox.documentation.spring.web.json.Json;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.util.SwaggerUtils;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,6 +91,9 @@ public class Swagger2Controller {
       return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
+    //path filter
+    SwaggerUtils.filter(servletRequest,swagger);
+
     UriComponents uriComponents = componentsFrom(servletRequest, swagger.getBasePath());
     swagger.basePath(Strings.isNullOrEmpty(uriComponents.getPath()) ? "/" : uriComponents.getPath());
     if (isNullOrEmpty(swagger.getHost())) {

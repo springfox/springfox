@@ -33,9 +33,10 @@ import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
 import springfox.documentation.spring.web.PropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.swagger2.web.Swagger2Controller;
+import springfox.documentation.swagger2.web.SwaggerInterfaceFilter;
 
 @Configuration
-@Import({ SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
+@Import({ SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class, SwaggerInterfaceFilter.class})
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.readers.parameter",
     "springfox.documentation.swagger2.mappers"
