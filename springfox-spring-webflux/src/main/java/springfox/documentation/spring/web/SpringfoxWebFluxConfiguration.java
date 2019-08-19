@@ -21,8 +21,11 @@ package springfox.documentation.spring.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import springfox.documentation.spring.web.csrf.CsrfWebFluxConfigurer;
 
 @Configuration
+@Import({CsrfWebFluxConfigurer.class})
 @SuppressWarnings("HideUtilityClassConstructor")
 public class SpringfoxWebFluxConfiguration {
 
