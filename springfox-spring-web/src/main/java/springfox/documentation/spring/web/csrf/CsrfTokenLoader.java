@@ -88,7 +88,7 @@ public interface CsrfTokenLoader<T> {
 
         private static CsrfTokenLoader<?> defaultOne = null;
 
-        public static void set(CsrfTokenLoader<?> loader) {
+        static void set(CsrfTokenLoader<?> loader) {
             defaultOne = loader;
         }
 
