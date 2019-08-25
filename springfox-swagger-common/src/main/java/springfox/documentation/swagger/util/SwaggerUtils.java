@@ -1,15 +1,15 @@
 package springfox.documentation.swagger.util;
 
+import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import io.swagger.models.Swagger;
+import io.swagger.models.Tag;
 import org.springframework.util.StringUtils;
 import springfox.documentation.swagger.web.SwaggerResource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author chenyicheng
@@ -29,8 +29,34 @@ public abstract class SwaggerUtils {
             Map<String, Path> pathMap = new HashMap<String, Path>();
             pathMap.put(path, pathObj);
             swagger.setPaths(pathMap);
+
+            //filter tags
+            filterTags(request, swagger, pathObj);
+
         }
 
+        return swagger;
+    }
+
+    public static Swagger filterTags(HttpServletRequest request, Swagger swagger, Path path) {
+        if (path == null) {
+            swagger.setTags(null);
+            return null;
+        }
+        Set<Tag> tags = new HashSet<Tag>();
+        List<Operation> operations = path.getOperations();
+        for (Operation operation : operations) {
+            List<String> operationTags = operation.getTags();
+            if (operationTags == null) {
+                continue;
+            }
+            for (String operationTag : operationTags) {
+                Tag tag = swagger.getTag(operationTag);
+                tags.add(tag);
+            }
+
+        }
+        swagger.setTags(new ArrayList<Tag>(tags));
         return swagger;
     }
 

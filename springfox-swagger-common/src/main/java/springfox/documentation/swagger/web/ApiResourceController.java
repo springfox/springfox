@@ -58,9 +58,9 @@ public class ApiResourceController {
 
   @RequestMapping(value = "/configuration/ui")
   @ResponseBody
-  public ResponseEntity<UiConfiguration> uiConfiguration() {
-    return new ResponseEntity<UiConfiguration>(
-        Optional.fromNullable(uiConfiguration).or(UiConfiguration.DEFAULT), HttpStatus.OK);
+  public ResponseEntity<UiConfiguration> uiConfiguration(HttpServletRequest request) {
+    UiConfiguration uiConfig = Optional.fromNullable(uiConfiguration).or(UiConfiguration.DEFAULT);
+    return new ResponseEntity<UiConfiguration>(uiConfig, HttpStatus.OK);
   }
 
   @RequestMapping

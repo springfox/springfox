@@ -3,6 +3,7 @@ package springfox.documentation.swagger2.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -23,6 +24,10 @@ import java.io.IOException;
 @WebFilter(filterName = "swaggerInterfaceFilter", urlPatterns = {"/**"})
 public class SwaggerInterfaceFilter extends OncePerRequestFilter {
 
+    public final static String API_DOCS_1 = "api-docs=1";
+    public final static String API_DOCS_TRUE = "api-docs=true";
+    public final static String DMED = "defaultModelsExpandDepth=-1";
+
 
     private static final Logger logger = LoggerFactory.getLogger(SwaggerInterfaceFilter.class);
 
@@ -32,7 +37,21 @@ public class SwaggerInterfaceFilter extends OncePerRequestFilter {
         String api_docs = request.getParameter("api-docs");
         if (Boolean.valueOf(api_docs) || "1".equals(api_docs)) {
             String baseURL = getBaseURL(request);
-            response.sendRedirect(baseURL + "/swagger-ui.html?path=" + request.getRequestURI());
+            String location = baseURL + "/swagger-ui.html?path=" + request.getRequestURI();
+            String query = request.getQueryString();
+            if (StringUtils.hasLength(query)) {
+                if (query.contains(API_DOCS_1)) {
+                    query = query.replaceAll(API_DOCS_1, DMED);
+                } else {
+                    query = query.replaceAll(API_DOCS_TRUE, DMED);
+                }
+                location = location + "&" + query;
+
+                if (!query.contains("docExpansion")) {
+                    location = location + "&docExpansion=list";
+                }
+            }
+            response.sendRedirect(location);
         } else {
             filterChain.doFilter(request, response);
         }
@@ -41,7 +60,7 @@ public class SwaggerInterfaceFilter extends OncePerRequestFilter {
 
     @Override
     public void afterPropertiesSet() throws ServletException {
-        logger.info("swaggerInterfaceFilter initialize.");
+        logger.info("swaggerInterfaceFilter initialize...");
     }
 
 

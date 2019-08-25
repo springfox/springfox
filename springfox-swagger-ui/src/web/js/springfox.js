@@ -56,6 +56,7 @@ $(function() {
     if(!search){
         search = "";
     }
+    configURLParams(window.swaggerUi);
     $.getJSON(relativeLocation + "/swagger-resources"+search, function(data) {
 
       var $urlDropdown = $('#select_baseUrl');
@@ -98,7 +99,6 @@ $(function() {
         log("Unable to Load SwaggerUI");
       },
     });
-
     initializeBaseUrl();
 
     function addApiKeyAuthorization(security) {
@@ -144,6 +144,17 @@ $(function() {
         " then the base url is http://example.org/api/. Please enter the location manually: ",
         window.location.href);
     window.springfox.uiConfig(onSuccess, onError);
+  }
+  //load user url Search Params
+  function configURLParams() {
+    var urlObj  = new URL(window.location);
+    var searchParams  = urlObj.searchParams;
+    if(searchParams){
+      var docExpansion = searchParams.get("docExpansion");
+      if(docExpansion){
+        window.swaggerUi.options.docExpansion = docExpansion;
+      }
+    }
   }
 
 });
