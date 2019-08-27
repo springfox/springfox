@@ -526,7 +526,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/User_1"
                             }
                         }
                     }
@@ -564,7 +564,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/User_1"
                             }
                         }
                     }
