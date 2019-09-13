@@ -1288,7 +1288,6 @@
         },
         "ModelWithMapProperty": {
             "type": "object",
-            "discriminator": "Describes model with map property",
             "properties": {
                 "params": {
                     "type": "object",
@@ -1365,6 +1364,7 @@
         },
         "Vehicle": {
             "type": "object",
+            "discriminator": "type",
             "properties": {
                 "make": {
                     "type": "string"
