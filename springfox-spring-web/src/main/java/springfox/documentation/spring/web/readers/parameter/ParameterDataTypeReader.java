@@ -88,20 +88,20 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     ResolvedType parameterType = methodParameter.getParameterType();
     parameterType = context.alternateFor(parameterType);
     ModelReference modelRef = null;
-    ModelSpecificationBuilder model = new ModelSpecificationBuilder();
+    ModelSpecificationBuilder model = new ModelSpecificationBuilder("TODO");
     if (methodParameter.hasParameterAnnotation(PathVariable.class) && treatAsAString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");
       model.withScalar(new ScalarModelSpecification(ScalarType.STRING));
    } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
       modelRef = new ModelRef("", new ModelRef("string"), true);
-      ModelSpecificationBuilder map = new ModelSpecificationBuilder();
+      ModelSpecificationBuilder map = new ModelSpecificationBuilder("TODO");
       model.withMap(
           new MapSpecification(
-              new ModelSpecificationBuilder()
+              new ModelSpecificationBuilder("TODO")
                   .withScalar(ScalarType.STRING)
                   .build(),
-              new ModelSpecificationBuilder()
+              new ModelSpecificationBuilder("TODO")
                   .withScalar(ScalarType.STRING)
                   .build()));
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {

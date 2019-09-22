@@ -595,12 +595,17 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(fieldModelProperty.getName())
-        .withType(fieldModelProperty.getType())
-        .withQualifiedType(fieldModelProperty.qualifiedTypeName())
+        .withType(new ModelSpecificationBuilder(
+            String.format("%s_%s", modelContext.getParameterId(), "String"))
+                      .withReference(new ReferenceModelSpecification(
+                          new ModelKey(
+                              fieldModelProperty.getType().getErasedType().getPackage().getName(),
+                              typeNameExtractor.typeName(modelContext))))
+                      .build())
         .withPosition(fieldModelProperty.position())
         .withRequired(fieldModelProperty.isRequired())
         .withDescription(fieldModelProperty.propertyDescription())
-        .withAllowableValues(fieldModelProperty.allowableValues())
+//        .withFacets(fieldModelProperty.allowableValues()) //TODO: Allowable values
         .withExample(fieldModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(
@@ -783,13 +788,18 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         propertyName);
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(parameterModelProperty.getName())
-        .withType(parameterModelProperty.getType())
-        .withQualifiedType(parameterModelProperty.qualifiedTypeName())
+        .withType(new ModelSpecificationBuilder(
+            String.format("%s_%s", modelContext.getParameterId(), "String"))
+                      .withReference(new ReferenceModelSpecification(
+                          new ModelKey(
+                              parameterModelProperty.getType().getErasedType().getPackage().getName(),
+                              typeNameExtractor.typeName(modelContext))))
+                      .build())
         .withPosition(parameterModelProperty.position())
         .withRequired(parameterModelProperty.isRequired())
         .withIsHidden(false)
         .withDescription(parameterModelProperty.propertyDescription())
-        .withAllowableValues(parameterModelProperty.allowableValues())
+//        .withFacets(parameterModelProperty.allowableValues())
         .withExample(parameterModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(

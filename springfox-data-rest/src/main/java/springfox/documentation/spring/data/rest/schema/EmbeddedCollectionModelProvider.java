@@ -119,7 +119,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
                 context.getParameterId(),
                 "List"))
                           .build())
-        .build();
+        .build());
         //TODO:
 //            .qualifiedType(Resources.class.getName())
 //            .position(0)
@@ -131,7 +131,6 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
 //                context,
 //                enumTypeDeterminer,
 //                typeNameExtractor)));
-    ;
   }
 
   @Override

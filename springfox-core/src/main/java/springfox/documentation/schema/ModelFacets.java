@@ -16,6 +16,7 @@ public class ModelFacets {
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
 
+  @SuppressWarnings("ParameterNumber")
   public ModelFacets(
       ModelKey modelKey,
       String title,
