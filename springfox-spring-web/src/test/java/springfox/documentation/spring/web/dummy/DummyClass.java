@@ -505,7 +505,8 @@ public class DummyClass {
   }
 
   @ResponseBody
-  public List<DummyModels.BusinessModel> methodToTestOrdering(@RequestBody SameFancyPet fancyPet, @RequestParam String id) {
+  public List<DummyModels.BusinessModel> methodToTestOrdering(@RequestBody SameFancyPet fancyPet,
+      @RequestParam String id) {
     throw new UnsupportedOperationException();
   }
 
