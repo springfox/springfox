@@ -499,6 +499,21 @@ public class DummyClass {
     throw new UnsupportedOperationException();
   }
 
+  @ResponseBody
+  public List<DummyModels.BusinessModel> methodToTestOrdering(@RequestBody SameFancyPet fancyPet) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public List<DummyModels.BusinessModel> methodToTestOrdering(@RequestBody SameFancyPet fancyPet, @RequestParam String id) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public List<DummyModels.BusinessModel> methodToTestOrdering(@RequestParam String id) {
+    throw new UnsupportedOperationException();
+  }
+
   public enum BusinessType {
     PRODUCT(1),
     SERVICE(2);

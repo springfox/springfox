@@ -863,7 +863,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_4",
+                "operationId": "personTagsUsingGET_5",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -976,7 +976,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_4",
+                "operationId": "personTagsUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1047,7 +1047,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_5",
+                "operationId": "personTagsUsingGET_4",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1083,7 +1083,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_5",
+                "operationId": "personTagsUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1356,7 +1356,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_4",
+                "operationId": "tagPeopleUsingGET_5",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -1469,7 +1469,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_4",
+                "operationId": "tagPeopleUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1540,7 +1540,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_5",
+                "operationId": "tagPeopleUsingGET_4",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1576,7 +1576,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_5",
+                "operationId": "tagPeopleUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"

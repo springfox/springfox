@@ -20,7 +20,7 @@
                             "description": "toCreate",
                             "name": "body",
                             "paramType": "body",
-                            "type": "Resource«Pet»",
+                            "type": "Resource«Pet»_1",
                             "required": true
                         }
                     ],
@@ -131,7 +131,7 @@
                         {
                             "code": 200,
                             "message": "OK",
-                            "responseModel": "Resource«Pet»_1"
+                            "responseModel": "Resource«Pet»"
                         },
                         {
                             "code": 401,
@@ -151,7 +151,7 @@
                         }
                     ],
                     "deprecated": "false",
-                    "type": "Resource«Pet»_1"
+                    "type": "Resource«Pet»"
                 }
             ],
             "path": "/foo/get-t/{id}"
@@ -178,7 +178,7 @@
                 "links": {
                     "required": false,
                     "items": {
-                        "type": "Link_1"
+                        "type": "Link"
                     },
                     "type": "array"
                 },
@@ -194,7 +194,7 @@
             "properties": {
                 "body": {
                     "required": false,
-                    "type": "Resource«Pet»_1"
+                    "type": "Resource«Pet»"
                 }
             }
         },
@@ -286,7 +286,7 @@
                 "links": {
                     "required": false,
                     "items": {
-                        "type": "Link"
+                        "type": "Link_1"
                     },
                     "type": "array"
                 },

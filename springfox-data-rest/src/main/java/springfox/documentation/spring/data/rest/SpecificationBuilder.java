@@ -196,6 +196,7 @@ abstract class SpecificationBuilder {
               getProduces(),
               getConsumes(),
               null,
+              getType(),
               getParameters(),
               returnType(resolver))
           );
@@ -208,6 +209,10 @@ abstract class SpecificationBuilder {
       return String.format("%s%s",
           lowerCamelCaseName(entity.getType().getSimpleName()),
           upperCamelCaseName(property.getName()));
+    }
+
+    private Class<?> getType() {
+      return context.getEntityContext().entity().get().getType();
     }
 
     private ResolvedType returnType(TypeResolver resolver) {
@@ -305,6 +310,7 @@ abstract class SpecificationBuilder {
               getProduces(),
               getConsumes(),
               handlerMethod,
+              getType(),
               inputParameters(),
               inferReturnType(context, handlerMethod))
           );
@@ -347,6 +353,10 @@ abstract class SpecificationBuilder {
       return methodResolver.methodParameters(handler).stream()
           .map(EntityActionSpecificationBuilder::transferResolvedMethodParameter)
           .collect(Collectors.toList());
+    }
+
+    private Class<?> getType() {
+      return context.entity().get().getType();
     }
 
     private List<ResolvedMethodParameter> inputParameters() {
