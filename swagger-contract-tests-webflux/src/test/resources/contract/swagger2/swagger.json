@@ -59,7 +59,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/Pet_1"
                         }
                     }
                 ],
@@ -104,7 +104,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/Pet_1"
                         }
                     }
                 ],
@@ -170,7 +170,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet_1"
+                                "$ref": "#/definitions/Pet"
                             }
                         }
                     },
@@ -217,7 +217,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet_1"
+                                "$ref": "#/definitions/Pet"
                             }
                         }
                     },
@@ -263,7 +263,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet_1"
+                            "$ref": "#/definitions/Pet"
                         }
                     },
                     "400": {
@@ -834,9 +834,6 @@
     "definitions": {
         "Category": {
             "type": "object",
-            "required": [
-                "id"
-            ],
             "properties": {
                 "id": {
                     "type": "integer",
@@ -850,6 +847,9 @@
         },
         "Category_1": {
             "type": "object",
+            "required": [
+                "id"
+            ],
             "properties": {
                 "id": {
                     "type": "integer",
@@ -909,6 +909,10 @@
                     "type": "integer",
                     "format": "int64"
                 },
+                "identifier": {
+                    "type": "integer",
+                    "format": "int64"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -943,10 +947,6 @@
                     "$ref": "#/definitions/Category_1"
                 },
                 "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "identifier": {
                     "type": "integer",
                     "format": "int64"
                 },
