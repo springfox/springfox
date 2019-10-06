@@ -19,14 +19,17 @@
 
 package springfox.bean.validators.plugins;
 
+import java.util.Optional;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Negative;
+import javax.validation.constraints.NegativeOrZero;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.service.AllowableRangeValues;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
-import java.util.Optional;
 
 public class RangeAnnotations {
   private static final Logger LOG = LoggerFactory.getLogger(RangeAnnotations.class);
@@ -48,33 +51,69 @@ public class RangeAnnotations {
     return String.valueOf(Math.max(0, Math.min(size.max(), Integer.MAX_VALUE)));
   }
 
-  public static AllowableRangeValues allowableRange(Optional<Min> min, Optional<Max> max) {
+  public static Optional<AllowableRangeValues> allowableRange(
+      Optional<Min> min,
+      Optional<Positive> positive,
+      Optional<PositiveOrZero> positiveOrZero,
+      Optional<Max> max,
+      Optional<Negative> negative,
+      Optional<NegativeOrZero> negativeOrZero) {
+    Long minValue = minValue(min, positive, positiveOrZero);
+    Long maxValue = maxValue(max, negative, negativeOrZero);
+
     AllowableRangeValues myvalues = null;
 
-    if (min.isPresent() && max.isPresent()) {
-      LOG.debug("@Min+@Max detected: adding AllowableRangeValues to field ");
+    if (minValue != null && maxValue != null) {
+      LOG.debug("@Min / @Positive / @PositiveOrZero + @Max / @Negative / @NegativeOrZero detected: "
+          + "adding AllowableRangeValues to field ");
       myvalues = new AllowableRangeValues(
-          Double.toString(min.get().value()),
+          Double.toString(minValue),
           false,
-          Double.toString(max.get().value()),
+          Double.toString(maxValue),
           false);
 
-    } else if (min.isPresent()) {
-      LOG.debug("@Min detected: adding AllowableRangeValues to field ");
+    } else if (minValue != null) {
+      LOG.debug("@Min / @Positive / @PositiveOrZero detected: adding AllowableRangeValues to field ");
       myvalues = new AllowableRangeValues(
-          Double.toString(min.get().value()),
+          Double.toString(minValue),
           false,
           null,
           null);
 
-    } else if (max.isPresent()) {
-      LOG.debug("@Max detected: adding AllowableRangeValues to field ");
+    } else if (maxValue != null) {
+      LOG.debug("@Max / @Negative / @NegativeOrZero detected: adding AllowableRangeValues to field ");
       myvalues = new AllowableRangeValues(
           null,
           null,
-          Double.toString(max.get().value()),
+          Double.toString(maxValue),
           false);
     }
-    return myvalues;
+    return Optional.ofNullable(myvalues);
+  }
+
+  private static Long maxValue(final Optional<Max> max, final Optional<Negative> negative,
+      final Optional<NegativeOrZero> negativeOrZero) {
+    final Long maxValue;
+    if (negativeOrZero.isPresent()) {
+      maxValue = 0L;
+    } else if (negative.isPresent()) {
+      maxValue = -1L;
+    } else {
+      maxValue = max.map(Max::value).orElse(null);
+    }
+    return maxValue;
+  }
+
+  private static Long minValue(final Optional<Min> min, final Optional<Positive> positive,
+      final Optional<PositiveOrZero> positiveOrZero) {
+    final Long minValue;
+    if (positiveOrZero.isPresent()) {
+      minValue = 0L;
+    } else if (positive.isPresent()) {
+      minValue = 1L;
+    } else {
+      minValue = min.map(Min::value).orElse(null);
+    }
+    return minValue;
   }
 }

@@ -18,21 +18,22 @@
  */
 package springfox.bean.validators.plugins.parameter;
 
+import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Negative;
+import javax.validation.constraints.NegativeOrZero;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
-import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import java.util.Optional;
-
-import static springfox.bean.validators.plugins.RangeAnnotations.*;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
@@ -47,16 +48,16 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
 
   @Override
   public void apply(ParameterExpansionContext context) {
-
-    Optional<Min> min = context.findAnnotation(Min.class);
-
-    Optional<Max> max = context.findAnnotation(Max.class);
-
-    if (min.isPresent() || max.isPresent()) {
-      AllowableRangeValues values = allowableRange(min, max);
-      LOG.debug("Adding allowable range: min({}) - max({}}", values.getMin(), values.getMax());
+    allowableRange(
+        context.findAnnotation(Min.class),
+        context.findAnnotation(Positive.class),
+        context.findAnnotation(PositiveOrZero.class),
+        context.findAnnotation(Max.class),
+        context.findAnnotation(Negative.class),
+        context.findAnnotation(NegativeOrZero.class))
+        .ifPresent(values -> {
+      LOG.debug("Adding allowable range: min({}) - max({}", values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);
-    }
+        });
   }
-
 }

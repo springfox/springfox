@@ -16,6 +16,12 @@ trait AnnotationsSupport {
   Min min(value) {
     [value: { -> value}] as Min
   }
+  Negative negative() {
+    []  as Negative
+  }
+  NegativeOrZero negativeOrZero() {
+    [] as NegativeOrZero
+  }
   DecimalMin decimalMin(value) {
     [value: { -> value}] as DecimalMin
   }
@@ -24,6 +30,12 @@ trait AnnotationsSupport {
   }
   DecimalMax decimalMax(value) {
     [value: { -> value}] as DecimalMax
+  }
+  Positive positive() {
+    [] as Positive
+  }
+  PositiveOrZero positiveOrZero() {
+    [] as PositiveOrZero
   }
   Pattern pattern(regexp) {
     [regexp: { -> regexp}] as Pattern

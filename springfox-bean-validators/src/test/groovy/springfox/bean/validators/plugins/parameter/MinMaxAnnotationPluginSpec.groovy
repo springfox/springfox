@@ -45,10 +45,18 @@ class MinMaxAnnotationPluginSpec extends Specification implements AnnotationsSup
       range?.min == expectedMin
       range?.exclusiveMin == exclusiveMin
     where:
-      scenario        | expectedMin | exclusiveMin | expectedMax | exclusiveMax | annotations
-      "noAnnotation"  | null        | null         | null        | null         | []
-      "onlyMin"       | "10.0"      | false        | null        | null         | [min(10L)]
-      "onlyMax"       | null        | null         | "20.0"      | false        | [max(20L)]
-      "both"          | "10.0"      | false        | "20.0"      | false        | [min(10L), max(20L)]
+      scenario            | expectedMin | exclusiveMin | expectedMax | exclusiveMax | annotations
+      "noAnnotation"      | null        | null         | null        | null         | []
+      "onlyMin"           | "10.0"      | false        | null        | null         | [min(10L)]
+      "onlyMax"           | null        | null         | "20.0"      | false        | [max(20L)]
+      "both"              | "10.0"      | false        | "20.0"      | false        | [min(10L), max(20L)]
+      "positive"          | "1.0"       | false        | null        | null         | [positive()]
+      "positiveOrZero"    | "0.0"       | false        | null        | null         | [positiveOrZero()]
+      "negative"          | null        | null         | "-1.0"      | false        | [negative()]
+      "negativeOrZero"    | null        | null         | "0.0"       | false        | [negativeOrZero()]
+      "positiveMax"       | "1.0"       | false        | "20.0"      | false        | [positive(), max(20L)]
+      "positiveOrZeroMax" | "0.0"       | false        | "20.0"      | false        | [positiveOrZero(), max(20L)]
+      "negativeMin"       | "-30.0"     | false        | "-1.0"      | false        | [negative(), min(-30L)]
+      "negativeOrZeroMin" | "-30.0"     | false        | "0.0"       | false        | [negativeOrZero(), min(-30L)]
   }
 }
