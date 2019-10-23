@@ -88,7 +88,7 @@ public class Swagger2ControllerWebFlux {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     Swagger swagger = mapper.mapDocumentation(documentation);
-    swagger.basePath("/");
+    swagger.basePath(isEmpty(request.getPath().contextPath().value()) ? "/" : request.getPath().contextPath().value());
     if (isEmpty(swagger.getHost())) {
       swagger.host(request.getURI().getAuthority());
     }
