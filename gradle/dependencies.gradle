@@ -6,7 +6,7 @@ ext {
   equalsverifierVersion = '3.1.5'
   groovy = "2.5.4"
   jacocoVersion = '0.8.1'
-  jackson = '2.9.8'
+  jackson = '2.10.0'
   joda = "2.10.1"
   jsonPath = "2.4.0"
   jsonAssert = "1.5.0"
@@ -18,13 +18,13 @@ ext {
   slf4j = "1.7.25"
   snakeyaml = '1.23'
   spock = "1.3-RC1-groovy-2.5"
-  spring = "5.1.5.RELEASE"
-  springIntegration = "5.1.3.RELEASE"
+  spring = "5.2.0.RELEASE"
+  springIntegration = "5.2.0.RELEASE"
   springHateoas = "0.25.1.RELEASE"
   springDataRest = "3.1.5.RELEASE"
-  springPluginVersion = "1.2.0.RELEASE"
+  springPluginVersion = "2.0.0.RELEASE"
   swagger2Core = "1.5.20"
-  springBoot = "2.1.3.RELEASE"
+  springBoot = "2.2.0.RELEASE"
   springfoxRfc6570Version = "1.0.0"
   undercouch = "3.4.3"
   validationApiVersion = '2.0.1.Final'

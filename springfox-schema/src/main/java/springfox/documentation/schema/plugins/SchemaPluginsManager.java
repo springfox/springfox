@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Optional.*;
-
 @Component
 public class SchemaPluginsManager {
   private final PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers;
@@ -80,27 +78,21 @@ public class SchemaPluginsManager {
   }
 
   public ViewProviderPlugin viewProvider(DocumentationType documentationType) {
-    return viewProviders.getPluginFor(documentationType);
+    return viewProviders.getPluginFor(documentationType)
+        .orElseThrow(() -> new IllegalStateException("No ViewProviderPlugin for " + documentationType.getName()));
   }
 
   public Optional<Model> syntheticModel(ModelContext context) {
-    if (syntheticModelProviders.hasPluginFor(context)) {
-      return of(syntheticModelProviders.getPluginFor(context).create(context));
-    }
-    return empty();
+      return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.create(context));
   }
 
   public List<ModelProperty> syntheticProperties(ModelContext context) {
-    if (syntheticModelProviders.hasPluginFor(context)) {
-      return syntheticModelProviders.getPluginFor(context).properties(context);
-    }
-    return new ArrayList<ModelProperty>();
+      return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.properties(context))
+          .orElseGet(ArrayList::new);
   }
 
   public Set<ResolvedType> dependencies(ModelContext context) {
-    if (syntheticModelProviders.hasPluginFor(context)) {
-      return syntheticModelProviders.getPluginFor(context).dependencies(context);
-    }
-    return new HashSet<ResolvedType>();
+    return syntheticModelProviders.getPluginFor(context).map(plugin -> plugin.dependencies(context))
+        .orElseGet(HashSet::new);
   }
 }
