@@ -21,7 +21,7 @@ ext {
   spring = "5.2.0.RELEASE"
   springIntegration = "5.2.0.RELEASE"
   springHateoas = "1.0.0.RELEASE"
-  springDataRest = "3.1.5.RELEASE"
+  springDataRest = "3.2.0.RELEASE"
   springPluginVersion = "2.0.0.RELEASE"
   swagger2Core = "1.5.20"
   springBoot = "2.2.0.RELEASE"
