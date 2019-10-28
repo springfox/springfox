@@ -18,7 +18,7 @@
  */
 package springfox.documentation.schema;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
-public class SubclassOfResourceSupport extends ResourceSupport {
+public class SubclassOfResourceSupport extends RepresentationModel {
 }

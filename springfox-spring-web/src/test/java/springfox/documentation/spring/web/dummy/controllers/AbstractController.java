@@ -21,14 +21,14 @@ package springfox.documentation.spring.web.dummy.controllers;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-public abstract class AbstractController<T extends ResourceSupport, ID> {
+public abstract class AbstractController<T extends RepresentationModel, ID> {
 
   @RequestMapping(value = "/create-t", method = RequestMethod.PUT)
   public void create(@RequestBody T toCreate) {

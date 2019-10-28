@@ -23,6 +23,7 @@ dependencies {
   testCompile project(':springfox-core')
   testCompile libs.test
   testCompile libs.swagger2Core
+  testCompile libs.springProvidedWithMvc
   testCompile project(':springfox-core').sourceSets.test.output
   testCompile project(':springfox-schema').sourceSets.test.output
 }

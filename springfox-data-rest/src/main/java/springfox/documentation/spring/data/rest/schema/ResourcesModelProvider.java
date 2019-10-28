@@ -20,8 +20,8 @@ package springfox.documentation.spring.data.rest.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
@@ -139,7 +139,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
 
   @Override
   public boolean supports(ModelContext delimiter) {
-    return Resources.class.equals(resourceType(delimiter.getType()).getErasedType())
+    return CollectionModel.class.equals(resourceType(delimiter.getType()).getErasedType())
         && delimiter.getDocumentationType() == DocumentationType.SWAGGER_2;
   }
 

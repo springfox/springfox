@@ -20,8 +20,8 @@ package springfox.documentation.spring.data.rest.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import org.springframework.hateoas.RelProvider;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.LinkRelationProvider;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
@@ -43,13 +43,13 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
 
   private final TypeResolver resolver;
-  private final RelProvider relProvider;
+  private final LinkRelationProvider relProvider;
   private final TypeNameExtractor typeNameExtractor;
   private final EnumTypeDeterminer enumTypeDeterminer;
 
   EmbeddedCollectionModelProvider(
       TypeResolver resolver,
-      RelProvider relProvider,
+      LinkRelationProvider relProvider,
       TypeNameExtractor typeNameExtractor,
       EnumTypeDeterminer enumTypeDeterminer) {
     this.resolver = resolver;
@@ -86,9 +86,9 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     return singletonList(
         new ModelPropertyBuilder()
-            .name(relProvider.getCollectionResourceRelFor(type))
+            .name(relProvider.getCollectionResourceRelFor(type).value())
             .type(resolver.resolve(List.class, type))
-            .qualifiedType(Resources.class.getName())
+            .qualifiedType(CollectionModel.class.getName())
             .position(0)
             .required(true)
             .isHidden(false)

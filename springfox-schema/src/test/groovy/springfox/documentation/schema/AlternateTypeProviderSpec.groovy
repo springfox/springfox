@@ -19,7 +19,6 @@
 
 package springfox.documentation.schema
 import com.fasterxml.classmate.TypeResolver
-import org.springframework.hateoas.Resources
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import spock.lang.Unroll

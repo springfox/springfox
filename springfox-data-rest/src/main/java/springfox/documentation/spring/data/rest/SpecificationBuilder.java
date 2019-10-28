@@ -25,8 +25,8 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -324,17 +324,17 @@ abstract class SpecificationBuilder {
           methodResolver.methodReturnType(handler);
 
       if (isContainerType(methodReturnType)) {
-        return resolver.resolve(Resources.class,
+        return resolver.resolve(CollectionModel.class,
             collectionElementType(methodReturnType));
       } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
-        return resolver.resolve(Resources.class, domainReturnType);
+        return resolver.resolve(CollectionModel.class, domainReturnType);
       } else if (Types.isBaseType(domainReturnType)) {
         return domainReturnType;
       } else if (Types.isVoid(domainReturnType)) {
         return resolver.resolve(Void.TYPE);
       }
 
-      return resolver.resolve(Resource.class, domainReturnType);
+      return resolver.resolve(EntityModel.class, domainReturnType);
     }
 
     private List<ResolvedMethodParameter> transferResolvedMethodParameterList(

@@ -19,9 +19,9 @@
 package springfox.documentation.schema;
 
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 
-public class SimpleTypeResource extends Resource<SimpleType> {
+public class SimpleTypeResource extends EntityModel<SimpleType> {
   public SimpleTypeResource(SimpleType content, Link... links) {
     super(content, links);
   }
