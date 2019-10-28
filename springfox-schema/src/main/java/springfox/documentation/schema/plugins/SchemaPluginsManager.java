@@ -45,7 +45,7 @@ public class SchemaPluginsManager {
   private final PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propertyEnrichers;
   private final PluginRegistry<ModelBuilderPlugin, DocumentationType> modelEnrichers;
   private final PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviders;
-    private final PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders;
+  private final PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelProviders;
 
   @Autowired
   public SchemaPluginsManager(
