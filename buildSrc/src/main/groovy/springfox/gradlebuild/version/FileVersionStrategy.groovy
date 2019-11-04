@@ -56,7 +56,7 @@ class FileVersionStrategy implements VersioningStrategy, GitTaggingSupport, GitV
       project.logger.warn("[RELEASE] [DRYRUN] Will execute command: $commitChanges")
       return
     }
-    def proc = commitChanges.execute()
+    def proc = commitChanges.execute(null, versionFile.getParentFile())
     def err = new StringBuilder()
     def out = new StringBuilder()
     proc.consumeProcessOutput(out, err)

@@ -15,12 +15,12 @@ trait GitVersionParser {
     def matcher = versionPart =~ pattern
     if (!matcher.matches()) {
       throw new IllegalArgumentException("Not a valid version. Expecting a version of form <MAJOR.MINOR.PATCH> where " +
-          "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: $versionPart")
+          "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: got '$versionPart'")
     }
     def patchComponents = matcher.collect { it }[0]
     if (patchComponents.size() < 4) {
       throw new IllegalArgumentException("Not a valid version. Expecting a version of form <MAJOR.MINOR.PATCH> where " +
-          "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: $versionPart")
+          "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: got '$versionPart'")
     }
     Integer patch = patchComponents[1].toInteger()
     Integer count = ofNullable(patchComponents[3]).orElse("0").toInteger()
@@ -33,7 +33,7 @@ trait GitVersionParser {
     def components = Stream.of(version.split("\\.")).collect(toList())
     if (StreamSupport.stream(components.spliterator(), false).count() < 3) {
       throw new IllegalArgumentException("Not a valid version. Expecting a version of form <MAJOR.MINOR.PATCH> where " +
-          "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: ${version}")
+          "e.g. 1.0.0-SNAPSHOT, 1.0.0-1-g10a2eg: got '${version}'")
     }
     def versions = components.iterator()
     Integer major = versions.next().toInteger()

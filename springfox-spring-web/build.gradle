@@ -14,7 +14,7 @@ dependencies {
   compile libs.core
   compile libs.spring
   compile project(':springfox-spi')
-  compile project(':springfox-schema').sourceSets.main.output
+  compile project(':springfox-schema')
 
   provided libs.springProvided
   provided libs.clientProvided

@@ -6,12 +6,12 @@ import springfox.gradlebuild.BuildInfo
 trait GitTaggingSupport {
 
   String lastAnnotatedTag(Project project) {
-    def proc = "git -C ${project.getRootDir().toString()} describe --exact-match".execute();
+    def proc = "git describe --exact-match".execute(null, versionFile.getParentFile())
     proc.waitFor();
     if (proc.exitValue() == 0) {
       return proc.text.trim()
     }
-    proc = "git -C ${project.getRootDir().toString()} describe".execute()
+    proc = "git describe".execute(null, versionFile.getParentFile())
     proc.waitFor()
     if (proc.exitValue() == 0) {
       return proc.text.trim()
@@ -27,7 +27,7 @@ trait GitTaggingSupport {
           "[RELEASE] [DRYRUN] Would have executed -> $tagCommand")
       return
     }
-    def proc = tagCommand.execute()
+    def proc = tagCommand.execute(null, versionFile.getParentFile())
     proc.waitFor()
     def err = new StringBuilder()
     def out = new StringBuilder()
