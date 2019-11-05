@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 class TokenEndpointSpec extends InternalJsonSerializationSpec {
 
-  final TokenEndpoint tokenEndpoint = new TokenEndpoint("u", "tok")
+  TokenEndpoint tokenEndpoint = new TokenEndpoint("u", "tok")
 
   def "should serialize"() {
     expect:

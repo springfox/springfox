@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 class OperationSpec extends InternalJsonSerializationSpec {
 
-  final Operation operation = new Operation('PUT'
+  Operation operation = new Operation('PUT'
           ,'updatePet'
           ,'updatePet'
           ,'void'

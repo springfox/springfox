@@ -20,21 +20,21 @@
 package springfox.documentation.swagger1.dto
 
 class ModelPropertySpec extends InternalJsonSerializationSpec {
-  final ModelPropertyDto modelProperty = new ModelPropertyDto("aName",'List[mtype]'
+  ModelPropertyDto modelProperty = new ModelPropertyDto("aName",'List[mtype]'
           , 'com.qual'
           , 1
           , true
           , 'decs'
           , new AllowableListValues())
 
-  final ModelPropertyDto setProperty = new ModelPropertyDto("aName",'Set[mtype]'
+  ModelPropertyDto setProperty = new ModelPropertyDto("aName",'Set[mtype]'
           , 'com.qual'
           , 1
           , true
           , 'decs'
           , new AllowableListValues())
 
-  final ModelPropertyDto regularProperty = new ModelPropertyDto("aName",'mtype'
+  ModelPropertyDto regularProperty = new ModelPropertyDto("aName",'mtype'
           , 'com.qual'
           , 1
           , true

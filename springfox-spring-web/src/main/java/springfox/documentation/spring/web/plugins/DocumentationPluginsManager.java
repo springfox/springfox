@@ -62,6 +62,7 @@ import static java.util.stream.Collectors.*;
 import static springfox.documentation.spring.web.plugins.DuplicateGroupsDetector.*;
 
 @Component
+@SuppressWarnings("deprecation")
 public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("documentationPluginRegistry")

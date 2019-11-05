@@ -10,6 +10,7 @@ ext {
 }
 
 dependencies {
+  compile "org.springframework:spring-webmvc:${spring}"
   compile "net.bytebuddy:byte-buddy:${byteBuddyVersion}"
   compile libs.core
   compile libs.spring

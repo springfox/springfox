@@ -33,17 +33,13 @@ trait FileAccess {
   def maybeWriteToFile(fileName, String contents) {
     def root = System.properties.get("contract.tests.root")
     def updateContracts = System.properties.get("contract.tests.update", false)
-    System.out.println("Update contracts? $updateContracts, root -> $root")
     if (updateContracts) {
-      System.out.println("Writing file ${root}${File.separator}${fileName}...")
       def file
       def writer
       try {
         file = new FileOutputStream("${root}${File.separator}${fileName}")
         writer = new OutputStreamWriter(file, "UTF-8")
         writer.write(StringEscapeUtils.unescapeJava(prettyPrint(contents)))
-      } catch (Exception e) {
-        System.err.println("**** ERROR WRITING FILE: " + e.getMessage())
       } finally {
         writer.flush()
         writer.close()

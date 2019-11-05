@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 class ApiInfoSpec extends InternalJsonSerializationSpec {
 
-  final ApiInfo apiInfo = new ApiInfo('Title'
+  ApiInfo apiInfo = new ApiInfo('Title'
           , 'Api Description'
           , 'Api terms of service'
           , 'Contact Email'

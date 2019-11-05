@@ -19,6 +19,13 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
+import static java.util.Optional.ofNullable;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -29,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ValueConstants;
-import springfox.documentation.common.SpringVersion;
+
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -37,27 +44,14 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import static java.util.Optional.*;
-
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
-  private final SpringVersion springVersion;
   private final DescriptionResolver descriptions;
 
   @Autowired
-  public ParameterRequiredReader(DescriptionResolver descriptions) {
-    this(descriptions, new SpringVersion());
-  }
-
-  ParameterRequiredReader(DescriptionResolver descriptions, SpringVersion springVersion) {
+  ParameterRequiredReader(DescriptionResolver descriptions) {
     this.descriptions = descriptions;
-    this.springVersion = springVersion;
   }
 
   @Override
@@ -118,7 +112,7 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
 
   @SuppressWarnings("squid:S1872")
   boolean isOptional(ResolvedMethodParameter methodParameter) {
-    return "com.google.common.base.Optional".equals(methodParameter.getParameterType().getErasedType().getName());
+    return Optional.class == methodParameter.getParameterType().getErasedType();
   }
 
   private boolean isRequired(RequestParam annotation) {

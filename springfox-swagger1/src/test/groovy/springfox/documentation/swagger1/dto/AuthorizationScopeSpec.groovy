@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 class AuthorizationScopeSpec extends InternalJsonSerializationSpec {
 
-  final AuthorizationScope authorizationScope = new AuthorizationScope('s', 'd')
+  AuthorizationScope authorizationScope = new AuthorizationScope('s', 'd')
 
   def "should serialize"() {
     expect:

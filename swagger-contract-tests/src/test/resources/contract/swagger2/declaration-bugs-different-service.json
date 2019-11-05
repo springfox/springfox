@@ -1716,6 +1716,7 @@
                             "example":{
                                 "value":"exampleMessage",
                                 "mediaType":{
+                                    "empty": true,
                                     "present":false
                                 }
                             }
@@ -1976,7 +1977,7 @@
                         "name": "year",
                         "in": "query",
                         "description": "year",
-                        "required": true,
+                        "required": false,
                         "type": "integer",
                         "format": "int32"
                     }

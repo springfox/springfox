@@ -90,6 +90,7 @@ public class ApiDescriptionReader {
     return apiDescriptionList;
   }
 
+  @SuppressWarnings("unchecked")
   private List<String> matchingPaths(ApiSelector selector, PatternsRequestCondition patternsCondition) {
     return ((Set<String>) patternsCondition.getPatterns()).stream()
         .filter(selector.getPathSelector())

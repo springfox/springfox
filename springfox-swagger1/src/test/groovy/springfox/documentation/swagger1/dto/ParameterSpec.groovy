@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 class ParameterSpec extends InternalJsonSerializationSpec {
 
-  final Parameter testParameter = new Parameter('aname'
+  Parameter testParameter = new Parameter('aname'
           , 'adesc'
           , 'defaultVal'
           , true

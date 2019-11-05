@@ -23,7 +23,7 @@ import spock.lang.Unroll
 
 class ModelSpec extends InternalJsonSerializationSpec {
 
-  final ModelDto model = new ModelDto("id", "name", 'qtype',
+  ModelDto model = new ModelDto("id", "name", 'qtype',
           ['propK': 'propV'] as Map<String, ModelPropertyDto>,
           'desc', 'bModel', 'discrim',
           ['subtype1'])

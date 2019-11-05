@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 class PrimitiveFormatDataTypeSpec extends InternalJsonSerializationSpec {
 
-  final PrimitiveFormatDataType primitiveFormatParameterType = new PrimitiveFormatDataType('type', 'format')
+  PrimitiveFormatDataType primitiveFormatParameterType = new PrimitiveFormatDataType('type', 'format')
 
   def "should serialize"() {
     expect:

@@ -40,6 +40,7 @@ import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 
+@SuppressWarnings("deprecation")
 public class CombinedRequestHandler implements RequestHandler {
   private final RequestHandler first;
   private final RequestHandler second;

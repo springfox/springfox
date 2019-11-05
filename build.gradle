@@ -32,7 +32,7 @@ apply plugin: 'springfox-multi-release'
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  jdkVersion = 1.8
+  jdkVersion = 11
 }
 
 allprojects {
@@ -110,7 +110,7 @@ subprojects {
 apply from: "$rootDir/gradle/documentation.gradle"
 
 wrapper {
-  gradleVersion = '4.10.1'
+  gradleVersion = '5.6.3'
 }
 
 task codeCoverageReport(type: JacocoReport) {

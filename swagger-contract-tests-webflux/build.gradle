@@ -31,7 +31,7 @@ configurations {
   all*.exclude group: 'io.springfox', module: 'springfox-spring-webmvc'
 }
 
-ext['groovy.version'] = '2.5.0'
+ext['groovy.version'] = '${groovy}'
 ext {
   limits = [
       'instruction': 89.5,

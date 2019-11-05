@@ -66,7 +66,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     when:
     def response = http.exchange(request, String)
     then:
-    String raw = response.body
+    String raw = response.body.replaceAll("\\\\r", "")
     response.statusCode == HttpStatus.OK
 
     def withPortReplaced = contract.replaceAll("__PORT__", "$port")
@@ -142,7 +142,8 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     response.statusCode == HttpStatus.OK
 
-    JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
+    String body = response.body.replaceAll("\\\\r", "")
+    JSONAssert.assertEquals(contract, body, NON_EXTENSIBLE)
   }
 
   @Unroll

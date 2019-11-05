@@ -37,6 +37,7 @@ import static springfox.documentation.spring.web.paths.Paths.*;
  * - Paths beginning with path variables
  * - Controllers without top level request mappings
  */
+@SuppressWarnings("deprecation")
 public class SpringGroupingStrategy implements ResourceGroupingStrategy {
   @Override
   public Set<ResourceGroup> getResourceGroups(RequestMappingInfo requestMappingInfo, HandlerMethod handlerMethod) {

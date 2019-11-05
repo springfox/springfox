@@ -21,8 +21,8 @@ package springfox.documentation.swagger1.dto
 
 class ApiKeySpec extends InternalJsonSerializationSpec {
 
-  final ApiKey headerKey = new ApiKey('myKey')
-  final ApiKey customKey = new ApiKey('myKey', 'cookie')
+  ApiKey headerKey = new ApiKey('myKey')
+  ApiKey customKey = new ApiKey('myKey', 'cookie')
 
   def "should produce a header key"() {
     expect:

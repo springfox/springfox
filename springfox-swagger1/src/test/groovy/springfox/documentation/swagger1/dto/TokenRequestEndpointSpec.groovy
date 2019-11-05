@@ -22,7 +22,7 @@ package springfox.documentation.swagger1.dto
 class TokenRequestEndpointSpec extends InternalJsonSerializationSpec {
 
   public static final String URL = "http://petstore.swagger.io/oauth/requestToken"
-  final TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint(
+  TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint(
           URL,
           "client_id",
           "client_secret"

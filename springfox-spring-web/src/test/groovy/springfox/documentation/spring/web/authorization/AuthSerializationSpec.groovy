@@ -30,7 +30,7 @@ import springfox.documentation.spring.web.mixins.AuthSupport
 
 @Mixin(AuthSupport)
 class AuthSerializationSpec extends Specification {
-   final ObjectMapper mapper = new ObjectMapper();
+   ObjectMapper mapper = new ObjectMapper();
 
    def setup() {
 //      mapper.registerModule(new DefaultScalaModule())

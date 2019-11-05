@@ -24,6 +24,7 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 
+@SuppressWarnings("deprecation")
 @Configuration
 public class BasePathConfigurer {
   @Bean

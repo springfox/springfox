@@ -246,6 +246,7 @@ public class HandlerMethodResolver {
   }
 
 
+  @SuppressWarnings("deprecation")
   private ParameterNameDiscoverer parameterNameDiscoverer() {
     ParameterNameDiscoverer discoverer;
     try {

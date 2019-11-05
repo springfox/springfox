@@ -20,7 +20,7 @@
 package springfox.documentation.swagger1.dto
 
 class ApiDescriptionSpec extends InternalJsonSerializationSpec {
-  final ApiDescription description = new ApiDescription('p', 'd', [], true)
+  ApiDescription description = new ApiDescription('p', 'd', [], true)
 
   def "should serialize"() {
     expect:

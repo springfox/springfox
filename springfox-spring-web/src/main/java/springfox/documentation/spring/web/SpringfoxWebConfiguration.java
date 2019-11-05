@@ -38,6 +38,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @Import({ ModelsConfiguration.class })
 @ComponentScan(basePackages = {

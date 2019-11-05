@@ -31,7 +31,7 @@ configurations {
   all*.exclude group: 'io.springfox', module: 'springfox-spring-webflux'
 }
 
-ext['groovy.version'] = '2.5.0'
+ext['groovy.version'] = '${groovy}'
 ext {
   limits = [
       'instruction': 89.5,
@@ -51,7 +51,7 @@ dependencies {
 
   testCompile libs.test
   testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
-  testCompile("org.springframework.boot:spring-boot-starter-test")
+  testCompile "org.springframework.boot:spring-boot-starter-test"
 
   compile project(':springfox-swagger1')
   compile project(':springfox-swagger2')

@@ -43,11 +43,10 @@ public class WebMvcObjectMapperConfigurerIntegrationTest {
   @Test
   public void event_is_fired_when_default_rmh_is_loaded() {
 
-    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestDefaultConfig.class);
-
-    context.getBean("defaultRmh", RequestMappingHandlerAdapter.class);
-
-    assertEquals(TestObjectMapperListener.firedCount, 1L);
+    try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(TestDefaultConfig.class)) {
+      context.getBean("defaultRmh", RequestMappingHandlerAdapter.class);
+      assertEquals(TestObjectMapperListener.firedCount, 1L);
+    }
   }
 
   @Test

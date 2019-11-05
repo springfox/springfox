@@ -105,7 +105,9 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     }
     return parameters.stream().filter(((Predicate<Parameter>) Parameter::isHidden).negate()).collect(toList());
   }
-
+  
+  
+  @SuppressWarnings("unchecked")
   private boolean shouldIgnore(
       final ResolvedMethodParameter parameter,
       ResolvedType resolvedParameterType,

@@ -21,7 +21,7 @@ package springfox.documentation.swagger1.dto
 
 class ApiListingReferenceSpec extends InternalJsonSerializationSpec {
 
-  final ApiListingReference apiListingReference = new ApiListingReference('/path', 'desc', 2)
+  ApiListingReference apiListingReference = new ApiListingReference('/path', 'desc', 2)
 
   def "should serialize"() {
     expect:

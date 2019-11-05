@@ -40,6 +40,7 @@ public class ApiListingReferenceScanner {
 
   private static final Logger LOG = LoggerFactory.getLogger(ApiListingReferenceScanner.class);
 
+  @SuppressWarnings("deprecation")
   public ApiListingReferenceScanResult scan(DocumentationContext context) {
     LOG.info("Scanning for api listing references");
 

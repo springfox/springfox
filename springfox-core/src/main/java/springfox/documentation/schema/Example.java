@@ -27,8 +27,7 @@ public class Example {
   private final String mediaType;
 
   public Example(Object value) {
-    this.value = value;
-    this.mediaType = null;
+    this(null, value);
   }
 
   public Example(
