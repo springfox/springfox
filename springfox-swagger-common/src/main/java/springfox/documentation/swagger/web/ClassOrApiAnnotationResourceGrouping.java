@@ -53,8 +53,8 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     String className = splitCamelCase(controllerClass.getSimpleName(), " ");
 
     return stripSlashes(extractAnnotation(controllerClass, descriptionOrValueExtractor())
-              .filter(((Predicate<String>)String::isEmpty).negate())
-              .orElse(className));
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse(className));
   }
 
   @Override
@@ -77,7 +77,9 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
     String group = splitCamelCase(controllerClass.getSimpleName(), " ");
     String apiValue = ofNullable(findAnnotation(controllerClass, Api.class))
         .map(toApiValue()).orElse("");
-    return singleton(normalize(ofNullable(apiValue).filter(((Predicate<String>)String::isEmpty).negate()).orElse(group)));
+    return singleton(normalize(ofNullable(apiValue)
+        .filter(((Predicate<String>) String::isEmpty).negate())
+        .orElse(group)));
   }
 
   private String normalize(String tag) {
@@ -123,7 +125,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
   private Function<Api, Optional<String>> descriptionExtractor() {
     return input -> {
       if (null != input) {
-        return of(input.description()).filter(((Predicate<String>)String::isEmpty).negate());
+        return of(input.description()).filter(((Predicate<String>) String::isEmpty).negate());
       }
       return empty();
     };
@@ -132,7 +134,7 @@ public class ClassOrApiAnnotationResourceGrouping implements ResourceGroupingStr
   private Function<Api, Optional<String>> valueExtractor() {
     return input -> {
       if (null != input) {
-        return of(input.value()).filter(((Predicate<String>)String::isEmpty).negate());
+        return of(input.value()).filter(((Predicate<String>) String::isEmpty).negate());
       }
       return empty();
     };

@@ -27,6 +27,6 @@ import org.springframework.stereotype.Controller;
 public class DummyController {
 
   public void dummyMethod() {
-
+    //just a dummy method for testing
   }
 }

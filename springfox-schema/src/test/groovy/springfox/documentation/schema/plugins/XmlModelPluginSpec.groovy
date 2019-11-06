@@ -27,10 +27,14 @@ class XmlModelPluginSpec extends Specification {
   @Unroll
   def "Xml model plugin parses #type.name annotation as expected"() {
     given:
-    XmlModelPlugin sut = new XmlModelPlugin(new TypeResolver())
+    def resolver = new TypeResolver()
+    XmlModelPlugin sut = new XmlModelPlugin(resolver)
     ModelContext context = ModelContext.inputParam(
+        "0_0",
         "group",
-        type,
+        resolver.resolve(type),
+        Optional.empty(),
+        new HashSet<>(),
         DocumentationType.SWAGGER_12,
         new AlternateTypeProvider([]),
         new DefaultGenericTypeNamingStrategy(),

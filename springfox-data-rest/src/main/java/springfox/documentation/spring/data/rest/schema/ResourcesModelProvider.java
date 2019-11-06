@@ -28,6 +28,7 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -45,12 +46,15 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
 
   private final TypeResolver resolver;
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   ResourcesModelProvider(
       TypeResolver resolver,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.resolver = resolver;
     this.typeNameExtractor = typeNameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -64,15 +68,16 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
             "Resources of %s",
             type.getSimpleName()))
         .name(name)
-        .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
+        .properties(properties(context).stream().collect(toMap(
+            ModelProperty::getName,
+            identity())))
         .xml(new Xml()
-            .name("entities")
-            .wrapped(false)
-            .attribute(false)
-        )
+                 .name("entities")
+                 .wrapped(false)
+                 .attribute(false)
+            )
         .build();
   }
 
@@ -81,8 +86,13 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     ResolvedType resourceType = resourceType(context.getType());
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
-    ResolvedType embedded = resolver.resolve(EmbeddedCollection.class, type);
-    ResolvedType mapOfLinks = resolver.resolve(Map.class, String.class, Link.class);
+    ResolvedType embedded = resolver.resolve(
+        EmbeddedCollection.class,
+        type);
+    ResolvedType mapOfLinks = resolver.resolve(
+        Map.class,
+        String.class,
+        Link.class);
     return Stream.of(
         new ModelPropertyBuilder()
             .name("_embedded")
@@ -92,7 +102,10 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
             .required(true)
             .isHidden(false)
             .build()
-            .updateModelRef(modelRefFactory(context, typeNameExtractor)),
+            .updateModelRef(modelRefFactory(
+                context,
+                enumTypeDeterminer,
+                typeNameExtractor)),
         new ModelPropertyBuilder()
             .name("_links")
             .type(mapOfLinks)
@@ -102,8 +115,12 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
             .isHidden(false)
             .description("Link collection")
             .build()
-            .updateModelRef(modelRefFactory(context, typeNameExtractor))
-    ).collect(toList());
+            .updateModelRef(modelRefFactory(
+                context,
+                enumTypeDeterminer,
+                typeNameExtractor))
+                    )
+        .collect(toList());
   }
 
   @Override
@@ -113,9 +130,11 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
 
     return Stream.of(
-        resolver.resolve(EmbeddedCollection.class, type),
+        resolver.resolve(
+            EmbeddedCollection.class,
+            type),
         resolver.resolve(Link.class)
-    ).collect(toSet());
+                    ).collect(toSet());
   }
 
   @Override

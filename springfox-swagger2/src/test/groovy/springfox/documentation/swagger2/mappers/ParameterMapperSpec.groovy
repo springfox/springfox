@@ -105,6 +105,26 @@ class ParameterMapperSpec extends Specification {
       mapped.schema.type == "string"
   }
 
+  def "Maps example for body parameter" () {
+    given:
+      def parameter = parameter("body")
+              .modelRef(new ModelRef("sometype"))
+              .scalarExample("example")
+              .build()
+    when:
+      def sut = new ParameterMapper()
+    then:
+      def mapped = sut.mapParameter(parameter)
+    and:
+      mapped.access == "access"
+      mapped.name == "test"
+      mapped.description == "test description"
+      mapped.required
+      mapped instanceof BodyParameter
+      mapped.schema instanceof Model
+      mapped.schema.example == "example"
+  }
+
   def "Serializes byte array to string model in query" () {
     given:
       def byteArray = new ModelRef("", new ModelRef("byte"))

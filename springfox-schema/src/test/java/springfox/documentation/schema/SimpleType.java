@@ -24,27 +24,27 @@ import java.util.Date;
 import java.util.UUID;
 
 public class SimpleType {
-  byte aByte;
-  boolean aBoolean;
-  short aShort;
-  int anInt;
-  long aLong;
-  float aFloat;
-  double aDouble;
-  String aString;
-  Date date;
-  Object anObject;
-  Byte anObjectByte;
-  Boolean anObjectBoolean;
-  Short anObjectShort;
-  Integer anObjectInt;
-  Long anObjectLong;
-  Float anObjectFloat;
-  Double anObjectDouble;
-  Currency currency;
-  UUID uuid;
-  Date aDate;
-  java.sql.Date aSqlDate;
+  private byte aByte;
+  private boolean aBoolean;
+  private short aShort;
+  private int anInt;
+  private long aLong;
+  private float aFloat;
+  private double aDouble;
+  private String aString;
+  private Date date;
+  private Object anObject;
+  private Byte anObjectByte;
+  private Boolean anObjectBoolean;
+  private Short anObjectShort;
+  private Integer anObjectInt;
+  private Long anObjectLong;
+  private Float anObjectFloat;
+  private Double anObjectDouble;
+  private Currency currency;
+  private UUID uuid;
+  private Date aDate;
+  private java.sql.Date aSqlDate;
 
   public Date getaDate() {
     return aDate;

@@ -139,8 +139,8 @@ public class HandlerMethodResolver {
   }
 
   private List<ResolvedMethod> getMemberMethods(
-          Class hostClass) {
-    if(!methodsResolvedForHostClasses.containsKey(hostClass)) {
+      Class hostClass) {
+    if (!methodsResolvedForHostClasses.containsKey(hostClass)) {
       ResolvedType beanType = typeResolver.resolve(hostClass);
       MemberResolver resolver = new MemberResolver(typeResolver);
       resolver.setIncludeLangObject(false);
@@ -210,7 +210,7 @@ public class HandlerMethodResolver {
       final Method methodToResolve) {
 
     return StreamSupport.stream(methodsWithSameNumberOfParams(filtered, methodToResolve).spliterator(), false)
-            .filter(onlyCovariantMethods(methodToResolve))
+        .filter(onlyCovariantMethods(methodToResolve))
         .collect(toList());
   }
 
@@ -241,7 +241,7 @@ public class HandlerMethodResolver {
     int discoveredNameCount = ofNullable(discoveredNames).orElse(new String[0]).length;
     return methodParameter.getParameterIndex() < discoveredNameCount
            ? ofNullable(discoveredNames[methodParameter.getParameterIndex()])
-               .filter(((Predicate<String>)String::isEmpty).negate())
+               .filter(((Predicate<String>) String::isEmpty).negate())
            : ofNullable(methodParameter.getParameterName());
   }
 

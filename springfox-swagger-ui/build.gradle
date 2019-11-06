@@ -29,7 +29,7 @@ plugins {
 }
 
 ext {
-  swaggerUiVersion = '3.17.1'
+  swaggerUiVersion = '3.23.4'
   swaggerUiDist = "build/libs/swagger-ui-dist.zip"
   swaggerUiExplodedDir = "swagger-ui-${swaggerUiVersion}/dist/"
   downloadUrl = "https://github.com/swagger-api/swagger-ui/archive/v${swaggerUiVersion}.zip"
@@ -44,8 +44,8 @@ dependencies {
 }
 
 node {
-  version = '8.11.1' // LTS
-  npmVersion = '5.8.0'
+  version = '8.12.0' // LTS
+  npmVersion = '6.4.1'
   distBaseUrl = 'https://nodejs.org/dist'
   download = true
   workDir = file("${project.buildDir}/nodejs")
@@ -78,10 +78,32 @@ task npmBuild(type: NpmTask) {
   args = ['run', 'build']
 }
 
+task npmAuditFixForce(type: NpmTask) {
+  args = ['audit', 'fix', '--force']
+}
+
+task npmAuditFix(type: NpmTask) {
+  args = ['audit', 'fix']
+}
+
+task npmAudit(type: NpmTask) {
+  args = ['audit']
+}
+
+task npmCi(type: NpmTask) {
+  dependsOn npmSetup
+  args = ["ci"]
+  outputs.dir("node_modules")
+}
+
 task customizeSwaggerUi {
   doLast {
     copy {
       from("${projectDir}/src/web/dist/springfox.js")
+      into("${buildDir}/${swaggerUiExplodedDir}")
+    }
+    copy {
+      from("${projectDir}/src/web/dist/springfox.js.map")
       into("${buildDir}/${swaggerUiExplodedDir}")
     }
     copy {
@@ -129,7 +151,13 @@ task cleanup(type: Delete) {
 }
 
 clean.dependsOn(cleanup)
-npmTest.dependsOn(npm_install)
-npmBuild.dependsOn(npm_install, npmTest)
+if (project.hasProperty("local")) {
+  npmTest.dependsOn(npm_install)
+  npmBuild.dependsOn(npm_install, npmTest)
+} else {
+  npmTest.dependsOn(npmCi)
+  npmBuild.dependsOn(npmCi, npmTest)
+}
+
 customizeSwaggerUi.dependsOn(unzip, npmBuild)
 jar.dependsOn(customizeSwaggerUi)

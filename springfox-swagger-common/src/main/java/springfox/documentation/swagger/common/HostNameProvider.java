@@ -31,7 +31,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 public class HostNameProvider {
 
-  public HostNameProvider() {
+  private HostNameProvider() {
     throw new UnsupportedOperationException();
   }
 
@@ -52,7 +52,7 @@ public class HostNameProvider {
 
     builder.host(host);
     builder.port(components.getPort());
-
+    builder.scheme(components.getScheme());
     return builder.build();
   }
 
@@ -63,7 +63,10 @@ public class HostNameProvider {
     ServletUriComponentsBuilder builder = fromContextPath(request);
 
     XForwardPrefixPathAdjuster adjuster = new XForwardPrefixPathAdjuster(request);
-    builder.replacePath(adjuster.adjustedPath(basePath));
+    String adjustedPath = adjuster.adjustedPath(basePath);
+    if (!adjustedPath.equals(basePath)) {
+      builder.replacePath(adjustedPath);
+    }
     if (hasText(new UrlPathHelper().getPathWithinServletMapping(request))) {
       builder.path(request.getServletPath());
     }

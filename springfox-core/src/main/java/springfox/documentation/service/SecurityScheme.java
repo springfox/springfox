@@ -27,8 +27,8 @@ import static java.util.stream.Collectors.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public abstract class SecurityScheme {
-  protected final String name;
-  protected final String type;
+  private final String name;
+  private final String type;
   private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   protected SecurityScheme(String name, String type) {

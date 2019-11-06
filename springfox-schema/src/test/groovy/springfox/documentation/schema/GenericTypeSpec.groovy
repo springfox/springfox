@@ -34,14 +34,20 @@ class GenericTypeSpec extends SchemaSpecification {
   def "Generic property on a generic types is inferred correctly for types"() {
     given:
     def inputContext = inputParam(
+        "0_0",
         "group",
         modelType,
+        Optional.empty(),
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
         emptySet())
-    def returnContext = returnValue("group",
+
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
+        Optional.empty(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
@@ -69,7 +75,7 @@ class GenericTypeSpec extends SchemaSpecification {
     genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<springfox.documentation.schema.SimpleType>"
     genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "springfox.documentation.schema.ResponseEntityAlternative<springfox.documentation.schema.SimpleType>"
     genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "springfox.documentation.schema.ResponseEntityAlternative<java.util.List<springfox.documentation.schema.SimpleType>>"
-    genericCollectionWithEnum()     | "List"                                        | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
+    genericCollectionWithEnum()     | "List"                                        | "List«string»"                                | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
     genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
     genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
     genericResource()               | "List"                                        | "SubclassOfResourceSupport"                   | null
@@ -79,14 +85,20 @@ class GenericTypeSpec extends SchemaSpecification {
   def "Void generic type bindings are rendered correctly"() {
     given:
     def inputContext = inputParam(
+        "0_0",
         "group",
         modelType,
+        Optional.empty(),
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
         emptySet())
-    def returnContext = returnValue("group",
+
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
+        Optional.empty(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
@@ -113,16 +125,21 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-    def inputContext = inputParam("group",
+    def inputContext = inputParam("0_0",
+        "group",
         modelType,
+        Optional.empty(),
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
         emptySet())
     Model asInput = modelProvider.modelFor(inputContext).get()
 
-    def returnContext = returnValue("group",
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
+        Optional.empty(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,

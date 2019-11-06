@@ -34,8 +34,11 @@ import java.util.Optional;
 public class OperationDeprecatedReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
-    Optional<Deprecated> annotation = context.findAnnotation(Deprecated.class);
-    context.operationBuilder().deprecated(String.valueOf(annotation.isPresent()));
+    Optional<Deprecated> annotationOnMethod = context.findAnnotation(Deprecated.class);
+    Optional<Deprecated> annotationOnController = context.findControllerAnnotation(Deprecated.class);
+
+    context.operationBuilder().deprecated(String.valueOf(annotationOnMethod.isPresent() ||
+                                                         annotationOnController.isPresent()));
   }
 
   @Override

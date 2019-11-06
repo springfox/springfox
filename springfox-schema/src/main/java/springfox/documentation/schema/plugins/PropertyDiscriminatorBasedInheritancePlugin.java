@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -45,19 +46,22 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   public PropertyDiscriminatorBasedInheritancePlugin(
       TypeResolver typeResolver,
+      EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor) {
     this.typeResolver = typeResolver;
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
   @Override
   public void apply(ModelContext context) {
 
-    List<ModelReference> modelRefs =  modelRefs(context);
+    List<ModelReference> modelRefs = modelRefs(context);
 
     if (!modelRefs.isEmpty()) {
       context.getBuilder()
@@ -71,7 +75,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     List<ModelReference> modelRefs = new ArrayList<>();
     if (subTypes != null) {
       for (JsonSubTypes.Type each : subTypes.value()) {
-        modelRefs.add(modelRefFactory(context, typeNameExtractor)
+        modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)
             .apply(typeResolver.resolve(each.value())));
       }
     }
@@ -82,7 +86,7 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     JsonTypeInfo typeInfo = AnnotationUtils.getAnnotation(forClass(context), JsonTypeInfo.class);
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
-        return ofNullable(typeInfo.property()).filter(((Predicate<String>)String::isEmpty).negate())
+        return ofNullable(typeInfo.property()).filter(((Predicate<String>) String::isEmpty).negate())
             .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }

@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
@@ -43,13 +44,16 @@ import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
 public class ApiModelBuilder implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   public ApiModelBuilder(
       TypeResolver typeResolver,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.typeResolver = typeResolver;
     this.typeNameExtractor = typeNameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -58,7 +62,7 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
     if (annotation != null) {
       List<ModelReference> modelRefs = new ArrayList<ModelReference>();
       for (Class<?> each : annotation.subTypes()) {
-        modelRefs.add(modelRefFactory(context, typeNameExtractor)
+        modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)
             .apply(typeResolver.resolve(each)));
       }
       context.getBuilder()

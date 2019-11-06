@@ -26,17 +26,17 @@ import springfox.documentation.schema.ModelProperty
 class ModelBuilderSpec extends Specification {
   def "Setting properties on the builder with non-null values"() {
     given:
-      def sut = new ModelBuilder()
+      def sut = new ModelBuilder('model1')
     when:
       sut."$builderMethod"(value)
     and:
       def built = sut.build()
     then:
+      built.id == 'model1'
       built."$property" == value
 
     where:
       builderMethod   | value                                 | property
-      'id'            | 'model1'                              | 'id'
       'name'          | 'model1'                              | 'name'
       'qualifiedType' | 'com.Model1'                          | 'qualifiedType'
       'description'   | 'model1 desc'                         | 'description'
@@ -50,18 +50,18 @@ class ModelBuilderSpec extends Specification {
 
   def "Setting builder properties to null values preserves existing values"() {
     given:
-      def sut = new ModelBuilder()
+      def sut = new ModelBuilder('model1')
     when:
       sut."$builderMethod"(value)
       sut."$builderMethod"(null)
     and:
       def built = sut.build()
     then:
+      built.id == 'model1'
       built."$property" == value
 
     where:
       builderMethod   | value                                 | property
-      'id'            | 'model1'                              | 'id'
       'name'          | 'model1'                              | 'name'
       'qualifiedType' | 'com.Model1'                          | 'qualifiedType'
       'description'   | 'model1 desc'                         | 'description'

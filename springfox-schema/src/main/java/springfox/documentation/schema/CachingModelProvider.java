@@ -18,6 +18,7 @@
  */
 package springfox.documentation.schema;
 
+import com.fasterxml.classmate.ResolvedType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +51,20 @@ public class CachingModelProvider implements ModelProvider {
   @Override
   public Optional<Model> modelFor(ModelContext modelContext) {
     try {
-      return cache.computeIfAbsent(modelContext, lookup);
+      return cache.computeIfAbsent(
+          modelContext,
+          lookup);
     } catch (Exception e) {
-      LOGGER.warn("Failed to get the model for -> {}. {}", modelContext.description(), e.getMessage());
+      LOGGER.warn(
+          "Failed to get the model for -> {}. {}",
+          modelContext.description(),
+          e.getMessage());
       return empty();
     }
   }
 
   @Override
-  public Map<String, Model> dependencies(ModelContext modelContext) {
+  public Map<ResolvedType, Model> dependencies(ModelContext modelContext) {
     return delegate.dependencies(modelContext);
   }
 }

@@ -46,4 +46,24 @@ class ListVendorExtensionSpec extends Specification {
       sut.getName().equals("Name")
       sut.value.size() == 0
   }
+
+  def "Class .equals() and .hashCode() test" () {
+    given:
+      def sut = new ListVendorExtension<Integer>("Name", null)
+      def sutTest = new ListVendorExtension<Integer>(name, values)
+    expect:
+      sut.equals(sutTest) == expectedEquality
+      sut.equals(sut)
+      !sut.equals(null)
+      !sut.equals(new Object())
+    and:
+      (sut.hashCode() == sutTest.hashCode()) == expectedEquality
+      sut.hashCode() == sut.hashCode()
+    where:
+      name    | values                                      | expectedEquality
+      "Name"  | null                                        | true
+      "Name1" | null                                        | false
+      "Name"  | new ArrayList<Integer>()                    | true
+      "Name"  | new ArrayList<Integer>(Arrays.asList(1, 3)) | false
+    }
 }

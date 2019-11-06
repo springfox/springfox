@@ -25,14 +25,14 @@ public class SpringVersionCapability {
   private static final Version FOUR_THREE_THREE = Version.parse("4.3.3.RELEASE");
   private static final Version FOUR_THREE_FIFTEEN = Version.parse("4.3.15.RELEASE");
 
-  public SpringVersionCapability() {
+  private SpringVersionCapability() {
     throw new UnsupportedOperationException();
   }
 
   public static boolean supportsXForwardPrefixHeader(Version version) {
     return (version.isGreaterThanOrEqualTo(FOUR_THREE_FIFTEEN)
                 && version.isLessThan(FIVE_ZERO_ZERO)) ||
-            version.isGreaterThanOrEqualTo(FIVE_ZERO_FIVE);
+        version.isGreaterThanOrEqualTo(FIVE_ZERO_FIVE);
   }
 
   public static boolean supportsExtendedPathVariableAnnotation(Version version) {

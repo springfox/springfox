@@ -21,11 +21,13 @@ package springfox.bean.validators.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.bean.validators.plugins.parameter.ExpandedParameterMinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.parameter.ExpandedParameterNotBlankAnnotationPlugin;
 import springfox.bean.validators.plugins.parameter.ExpandedParameterNotNullAnnotationPlugin;
 import springfox.bean.validators.plugins.parameter.ExpandedParameterPatternAnnotationPlugin;
 import springfox.bean.validators.plugins.parameter.ExpandedParameterSizeAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.DecimalMinMaxAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.MinMaxAnnotationPlugin;
+import springfox.bean.validators.plugins.schema.NotBlankAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.NotNullAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.PatternAnnotationPlugin;
 import springfox.bean.validators.plugins.schema.SizeAnnotationPlugin;
@@ -41,6 +43,11 @@ public class BeanValidatorPluginsConfiguration {
   @Bean
   public ExpandedParameterNotNullAnnotationPlugin expanderNotNull() {
     return new ExpandedParameterNotNullAnnotationPlugin();
+  }
+
+  @Bean
+  public ExpandedParameterNotBlankAnnotationPlugin expanderNotBlank() {
+    return new ExpandedParameterNotBlankAnnotationPlugin();
   }
 
   @Bean
@@ -61,6 +68,11 @@ public class BeanValidatorPluginsConfiguration {
   @Bean
   public springfox.bean.validators.plugins.parameter.NotNullAnnotationPlugin parameterNotNull() {
     return new springfox.bean.validators.plugins.parameter.NotNullAnnotationPlugin();
+  }
+
+  @Bean
+  public springfox.bean.validators.plugins.parameter.NotBlankAnnotationPlugin parameterNotBlank() {
+    return new springfox.bean.validators.plugins.parameter.NotBlankAnnotationPlugin();
   }
 
   @Bean
@@ -91,6 +103,11 @@ public class BeanValidatorPluginsConfiguration {
   @Bean
   public NotNullAnnotationPlugin notNullPlugin() {
     return new NotNullAnnotationPlugin();
+  }
+
+  @Bean
+  public NotBlankAnnotationPlugin notBlankPlugin() {
+    return new NotBlankAnnotationPlugin();
   }
 
   @Bean

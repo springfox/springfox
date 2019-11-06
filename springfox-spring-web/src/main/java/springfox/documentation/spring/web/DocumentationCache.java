@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DocumentationCache {
-  private Map<String, Documentation> documentationLookup = new LinkedHashMap();
+  private Map<String, Documentation> documentationLookup = new LinkedHashMap<>();
 
   public void addDocumentation(Documentation documentation) {
     documentationLookup.put(documentation.getGroupName(), documentation);

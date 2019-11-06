@@ -28,6 +28,7 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -44,14 +45,17 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
   private final TypeResolver resolver;
   private final RelProvider relProvider;
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   EmbeddedCollectionModelProvider(
       TypeResolver resolver,
       RelProvider relProvider,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.resolver = resolver;
     this.relProvider = relProvider;
     this.typeNameExtractor = typeNameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -65,7 +69,6 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
             "Embedded collection of %s",
             type.getSimpleName()))
         .name(name)
-        .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
         .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
@@ -91,7 +94,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
             .isHidden(false)
             .description("Resource collection")
             .build()
-            .updateModelRef(modelRefFactory(context, typeNameExtractor)));
+            .updateModelRef(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)));
   }
 
   @Override

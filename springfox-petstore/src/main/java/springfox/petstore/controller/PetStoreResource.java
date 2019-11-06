@@ -43,9 +43,9 @@ import static springfox.petstore.Responses.*;
 @RequestMapping(value = "/api/store", produces = APPLICATION_JSON_VALUE)
 @Api(value = "/store", description = "Operations about store")
 public class PetStoreResource {
-  static StoreData storeData = new StoreData();
+  private static StoreData storeData = new StoreData();
 
-  static class StoreData extends MapBackedRepository<Long, Order> {
+  private static class StoreData extends MapBackedRepository<Long, Order> {
   }
 
   @RequestMapping(value = "/order/{orderId}", method = GET)
@@ -92,13 +92,13 @@ public class PetStoreResource {
     return ok("");
   }
 
-  @RequestMapping(value="search", method = RequestMethod.GET, produces = "application/json", params = "x=TX")
+  @RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json", params = "x=TX")
   @ResponseStatus(value = HttpStatus.OK)
   public ResponseEntity<Pet> getPetInTx() {
     throw new UnsupportedOperationException();
   }
 
-  @RequestMapping(value="search", method = RequestMethod.GET, produces = "application/json", params = "x=CA")
+  @RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json", params = "x=CA")
   @ResponseStatus(value = HttpStatus.OK)
   public ResponseEntity<Pet> getPetInCA() {
     throw new UnsupportedOperationException();

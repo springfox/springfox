@@ -496,6 +496,12 @@ public class BugsController {
   public void bug2423(Bug2423 input) {
   }
 
+  @PostMapping("/2822")
+  public void bug2822(@ApiParam(example = "exampleMessage") @RequestBody String message) {
+    // Empty body is sufficient for testing
+  }
+
+  @SuppressWarnings("VisibilityModifier")
   public class Bug2423 {
     public String from;
     public String to;
@@ -503,7 +509,7 @@ public class BugsController {
 
   public class Bug2415 {
     private String test;
-    
+
     @Pattern(regexp = "^[A-Za-z0-9]{8,16}$")
     @Size(min = 8, max = 16)
     public String getTest() {
@@ -588,7 +594,7 @@ public class BugsController {
   }
 
   public class User {
-    Office office;
+    private Office office;
 
     public Office getOffice() {
       return office;
@@ -604,7 +610,7 @@ public class BugsController {
 
   public class TreeEntity<T> {
     //    private T  parent ;
-    User user;
+    private User user;
 
     public User getUser() {
       return user;
@@ -698,7 +704,7 @@ public class BugsController {
   }
 
   public static class Bug2081Filter {
-    String importantField;
+    private String importantField;
 
     public String getImportantField() {
       return importantField;
@@ -710,8 +716,8 @@ public class BugsController {
   }
 
   public static class Bug2081 {
-    Bug2081Filter a;
-    Bug2081Filter b;
+    private Bug2081Filter a;
+    private Bug2081Filter b;
 
     public Bug2081Filter getA() {
       return a;
@@ -975,9 +981,9 @@ public class BugsController {
 
   class Bug1376 {
 
-    URL url;
+    private URL url;
 
-    public Bug1376(URL url) {
+    Bug1376(URL url) {
       this.url = url;
     }
 
@@ -1028,14 +1034,17 @@ public class BugsController {
 
   private class UpperCasedField {
     @ApiModelProperty(name = "AGE", value = "the age of person")
+    @SuppressWarnings("MemberName")
     private Integer AGE;
 
+    @SuppressWarnings({ "MemberName", "VisibilityModifier" })
     public Integer YEAR;
 
     public Integer getAGE() {
       return AGE;
     }
 
+    @SuppressWarnings("ParameterName")
     public void setAGE(Integer AGE) {
       this.AGE = AGE;
     }

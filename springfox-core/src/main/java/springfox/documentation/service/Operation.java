@@ -49,7 +49,8 @@ public class Operation {
   private final Set<ResponseMessage> responseMessages;
   private final String deprecated;
   private final List<VendorExtension> vendorExtensions;
-
+  
+  @SuppressWarnings("ParameterNumber")
   public Operation(
       HttpMethod method,
       String summary,
@@ -81,7 +82,7 @@ public class Operation {
     this.isHidden = isHidden;
     this.securityReferences = toAuthorizationsMap(securityReferences);
     this.parameters = parameters.stream()
-        .sorted(byParameterName()).collect(toList());
+        .sorted(byOrder().thenComparing(byParameterName())).collect(toList());
     this.responseMessages = responseMessages;
     this.deprecated = deprecated;
     this.vendorExtensions = new ArrayList<>(vendorExtensions);
@@ -154,6 +155,10 @@ public class Operation {
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  private Comparator<Parameter> byOrder() {
+    return Comparator.comparingInt(Parameter::getOrder);
   }
 
   private Comparator<Parameter> byParameterName() {

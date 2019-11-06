@@ -24,12 +24,14 @@ import org.springframework.core.MethodParameter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.Optional.*;
 
 public class ParameterAnnotationReader {
+  private ParameterAnnotationReader() {
+    throw new UnsupportedOperationException();
+  }
 
   public static <A extends Annotation> Optional<A> fromHierarchy(
       MethodParameter methodParameter,
@@ -38,15 +40,6 @@ public class ParameterAnnotationReader {
         methodParameter.getParameterIndex(),
         annotationType,
         getParentInterfaces(methodParameter)));
-  }
-
-  private static <A extends Annotation> Predicate<? super Annotation> annotationOfType(final Class<A> annotationType) {
-    return new Predicate<Annotation>() {
-      @Override
-      public boolean test(Annotation input) {
-        return input.annotationType().equals(annotationType);
-      }
-    };
   }
 
   private static Optional<Method> interfaceMethod(Class<?> iface, Method method) {
@@ -70,7 +63,8 @@ public class ParameterAnnotationReader {
       if (interfaceMethod.isPresent()) {
         Method superMethod = interfaceMethod.get();
         Optional<Annotation> found = Stream.of(
-                superMethod.getParameterAnnotations()[parameterIndex]).filter(annotationOfType(annotationType)).findFirst();
+                superMethod.getParameterAnnotations()[parameterIndex])
+            .filter(input -> input.annotationType().equals(annotationType)).findFirst();
         if (found.isPresent()) {
           annotation = (A) found.get();
           break;

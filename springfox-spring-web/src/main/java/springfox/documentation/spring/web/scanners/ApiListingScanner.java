@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -97,13 +98,13 @@ public class ApiListingScanner {
         commons.add(word);
       }
     }
-    return of("/" + String.join("/", commons.stream()
+    return of("/" + commons.stream()
         .filter(Objects::nonNull)
-        .collect(toList())));
+        .collect(joining("/")));
   }
 
-  static List<String> urlParts(ApiDescription apiDescription) {
-    return Stream.of(apiDescription.getPath().split("\\/"))
+  private static List<String> urlParts(ApiDescription apiDescription) {
+    return Stream.of(apiDescription.getPath().split("/"))
         .filter(((Predicate<String>) String::isEmpty).negate())
         .map(String::trim)
         .collect(toList());
@@ -113,8 +114,8 @@ public class ApiListingScanner {
     final Map<String, List<ApiListing>> apiListingMap = new HashMap<>();
     int position = 0;
 
-    Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup
-        = context.getRequestMappingsByResourceGroup();
+    Map<ResourceGroup, List<RequestMappingContext>> requestMappingsByResourceGroup = context
+        .getRequestMappingsByResourceGroup();
     Collection<ApiDescription> additionalListings = pluginsManager.additionalListings(context);
     Set<ResourceGroup> allResourceGroups =
         concat(
@@ -125,22 +126,31 @@ public class ApiListingScanner {
             .collect(toSet());
 
     List<SecurityReference> securityReferences = new ArrayList<>();
+
+    Map<String, Set<Model>> globalModelMap = new TreeMap<>();
     for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
-      Set<String> produces = new LinkedHashSet<String>(documentationContext.getProduces());
-      Set<String> consumes = new LinkedHashSet<String>(documentationContext.getConsumes());
+      Set<String> produces = new LinkedHashSet<>(documentationContext.getProduces());
+      Set<String> consumes = new LinkedHashSet<>(documentationContext.getConsumes());
       String host = documentationContext.getHost();
-      Set<String> protocols = new LinkedHashSet<String>(documentationContext.getProtocols());
+      Set<String> protocols = new LinkedHashSet<>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = new HashSet<>();
 
-      Map<String, Model> models = new LinkedHashMap<String, Model>();
-      List<RequestMappingContext> requestMappings =
-          nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
 
+      final Map<String, Model> models = new LinkedHashMap<>();
+      List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
       for (RequestMappingContext each : sortedByMethods(requestMappings)) {
-        models.putAll(apiModelReader.read(each.withKnownModels(models)));
-        apiDescriptions.addAll(apiDescriptionReader.read(each));
+        Map<String, Set<Model>> currentModelMap = apiModelReader.read(each.withKnownModels(globalModelMap));
+        currentModelMap.values().forEach(list -> {
+          for (Model model : list) {
+            models.put(
+                model.getName(),
+                model);
+          }
+        });
+        globalModelMap.putAll(currentModelMap);
+        apiDescriptions.addAll(apiDescriptionReader.read(each.withKnownModels(globalModelMap)));
       }
 
       List<ApiDescription> additional = additionalListings.stream()
@@ -148,6 +158,7 @@ public class ApiListingScanner {
               belongsTo(resourceGroup.getGroupName())
                   .and(onlySelectedApis(documentationContext)))
           .collect(toList());
+
       apiDescriptions.addAll(additional);
 
       List<ApiDescription> sortedApis = apiDescriptions.stream()
@@ -158,6 +169,7 @@ public class ApiListingScanner {
           .orElse(
               longestCommonPath(sortedApis)
                   .orElse(null));
+
 
       PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
@@ -178,7 +190,9 @@ public class ApiListingScanner {
           context.getDocumentationType(),
           resourceGroup,
           apiListingBuilder);
-      apiListingMap.putIfAbsent(resourceGroup.getGroupName(), new LinkedList<>());
+      apiListingMap.putIfAbsent(
+          resourceGroup.getGroupName(),
+          new LinkedList<>());
       apiListingMap.get(resourceGroup.getGroupName()).add(pluginsManager.apiListing(apiListingContext));
     }
     return apiListingMap;

@@ -41,7 +41,7 @@ import static springfox.documentation.schema.Annotations.*;
 @Component
 @Conditional(JaxbPresentInClassPathCondition.class)
 public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
-  
+
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<XmlElement> elementAnnotation = empty();
@@ -95,9 +95,9 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   private String wrapperName(Optional<XmlElementWrapper> wrapper, Optional<XmlElement> element) {
     if (wrapper.isPresent()) {
       return ofNullable(defaultToNull(ofNullable(wrapper.get().name())
-              .filter(((Predicate<String>)String::isEmpty).negate()).orElse(null)))
+          .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null)))
           .orElse(ofNullable(elementName(element))
-          .orElse(null));
+              .orElse(null));
     }
     return elementName(element);
   }
@@ -105,7 +105,7 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   private String elementName(Optional<XmlElement> element) {
     if (element.isPresent()) {
       return defaultToNull(ofNullable(element.get().name())
-          .filter(((Predicate<String>)String::isEmpty).negate())
+          .filter(((Predicate<String>) String::isEmpty).negate())
           .orElse(null));
     }
     return null;
@@ -114,7 +114,7 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
   private String attributeName(Optional<XmlAttribute> attribute) {
     if (attribute.isPresent()) {
       return defaultToNull(ofNullable(attribute.get().name())
-          .filter(((Predicate<String>)String::isEmpty).negate())
+          .filter(((Predicate<String>) String::isEmpty).negate())
           .orElse(null));
     }
     return null;

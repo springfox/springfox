@@ -17,8 +17,8 @@ class GitDescribeVersioningStrategy implements VersioningStrategy, GitVersionPar
   }
 
   @Override
-  SemanticVersion current() {
-    parseTransform(lastAnnotatedTag(), buildNumberFormat)
+  SemanticVersion current(Project project) {
+    parseTransform(lastAnnotatedTag(project), buildNumberFormat)
   }
 
   @Override

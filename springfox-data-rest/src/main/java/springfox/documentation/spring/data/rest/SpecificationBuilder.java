@@ -51,11 +51,11 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
 
 abstract class SpecificationBuilder {
 
-  protected final Set<RequestMethod> supportedMethods = new HashSet<>();
-  protected final Set<MediaType> produces = new HashSet<>();
-  protected final Set<MediaType> consumes = new HashSet<>();
-  protected final List<ResolvedMethodParameter> parameters = new ArrayList<>();
-  protected String path;
+  private final Set<RequestMethod> supportedMethods = new HashSet<>();
+  private final Set<MediaType> produces = new HashSet<>();
+  private final Set<MediaType> consumes = new HashSet<>();
+  private final List<ResolvedMethodParameter> parameters = new ArrayList<>();
+  private String path;
 
   static ResolvedType resolveType(EntityContext context, Function<RepositoryMetadata, Type> getType) {
 
@@ -100,6 +100,30 @@ abstract class SpecificationBuilder {
     return this;
   }
 
+  public Set<RequestMethod> getSupportedMethods() {
+    return supportedMethods;
+  }
+
+  public Set<MediaType> getProduces() {
+    return produces;
+  }
+
+  public Set<MediaType> getConsumes() {
+    return consumes;
+  }
+
+  public List<ResolvedMethodParameter> getParameters() {
+    return parameters;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
+
   abstract SpecificationBuilder withParameterType(ParameterType parameterType);
 
   abstract Optional<ActionSpecification> build();
@@ -117,15 +141,15 @@ abstract class SpecificationBuilder {
     private final PersistentProperty<?> property;
 
     AssociationActionSpecificationBuilder(EntityAssociationContext context, String path) {
+      setPath(path);
       this.context = context;
-      this.path = path;
       this.property = context.getAssociation().getInverse();
     }
 
     @Override
     SpecificationBuilder withParameterType(ParameterType parameterType) {
 
-      int index = this.parameters.size();
+      int index = this.getParameters().size();
 
       switch (parameterType) {
         case ID:
@@ -167,12 +191,12 @@ abstract class SpecificationBuilder {
           .map(entity -> actionName(entity, property))
           .map(actionName -> new ActionSpecification(
               actionName,
-              path,
-              supportedMethods,
-              produces,
-              consumes,
+              getPath(),
+              getSupportedMethods(),
+              getProduces(),
+              getConsumes(),
               null,
-              parameters,
+              getParameters(),
               returnType(resolver))
           );
     }
@@ -187,9 +211,9 @@ abstract class SpecificationBuilder {
     }
 
     private ResolvedType returnType(TypeResolver resolver) {
-      return supportedMethods.contains(DELETE)
+      return getSupportedMethods().contains(DELETE)
              ? resolver.resolve(Void.TYPE)
-             : parameters.stream()
+             : getParameters().stream()
                    .anyMatch(param -> param.getParameterIndex() > 0)
                ? propertyItemResponse(property, resolver)
                : propertyResponse(property, resolver);
@@ -243,13 +267,13 @@ abstract class SpecificationBuilder {
               0,
               configuration.getPageParamName(),
               Collections.EMPTY_LIST,
-              typeResolver.resolve(String.class)));
+              typeResolver.resolve(Integer.class)));
           //noinspection unchecked
           withParameter(new ResolvedMethodParameter(
               1,
               configuration.getLimitParamName(),
               Collections.EMPTY_LIST,
-              typeResolver.resolve(String.class)));
+              typeResolver.resolve(Integer.class)));
           //noinspection unchecked
           withParameter(new ResolvedMethodParameter(
               2,
@@ -266,20 +290,20 @@ abstract class SpecificationBuilder {
     @Override
     Optional<ActionSpecification> build() {
 
-      if (!StringUtils.hasText(path)) {
-        path = String.format("%s%s",
+      if (!StringUtils.hasText(getPath())) {
+        setPath(String.format("%s%s",
             context.basePath(),
-            context.resourcePath());
+            context.resourcePath()));
       }
 
       return context.entity()
           .map(entity -> actionName(entity, handlerMethod.getMethod()))
           .map(actionName -> new ActionSpecification(
               actionName,
-              path,
-              supportedMethods,
-              produces,
-              consumes,
+              getPath(),
+              getSupportedMethods(),
+              getProduces(),
+              getConsumes(),
               handlerMethod,
               inputParameters(),
               inferReturnType(context, handlerMethod))
@@ -326,8 +350,8 @@ abstract class SpecificationBuilder {
     }
 
     private List<ResolvedMethodParameter> inputParameters() {
-      return !parameters.isEmpty()
-             ? parameters
+      return !getParameters().isEmpty()
+             ? getParameters()
              : transferResolvedMethodParameterList(context, handlerMethod);
     }
   }

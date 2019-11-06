@@ -44,13 +44,15 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
   public ApiModelPropertyPropertyBuilder(DescriptionResolver descriptions) {
     this.descriptions = descriptions;
   }
-  
+
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<ApiModelProperty> annotation = empty();
 
     if (context.getAnnotatedElement().isPresent()) {
-      annotation = annotation.map(Optional::of).orElse(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
+      annotation =
+          annotation.map(Optional::of)
+              .orElse(findApiModePropertyAnnotation(context.getAnnotatedElement().get()));
     }
     if (context.getBeanPropertyDefinition().isPresent()) {
       annotation = annotation.map(Optional::of).orElse(findPropertyAnnotation(

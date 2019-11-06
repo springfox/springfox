@@ -59,6 +59,7 @@ public class Accessors {
             s.substring(1);
   }
 
+  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
   public static String propertyName(Method method) {
     Optional<JsonGetter> jsonGetterAnnotation = getterAnnotation(method);
     if (jsonGetterAnnotation.isPresent() && !isEmpty(jsonGetterAnnotation.get().value())) {

@@ -61,6 +61,7 @@ public class WebMvcObjectMapperConfigurerIntegrationTest {
   }
 
   static class TestObjectMapperListener implements ApplicationListener<ObjectMapperConfigured> {
+    @SuppressWarnings("VisibilityModifier")
     static long firedCount = 0;
 
     @Override

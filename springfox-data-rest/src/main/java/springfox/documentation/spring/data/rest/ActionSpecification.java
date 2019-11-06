@@ -42,7 +42,8 @@ class ActionSpecification {
   private final String name;
   private final String path;
 
-  public ActionSpecification(
+  @SuppressWarnings("ParameterNumber")
+  ActionSpecification(
       String name,
       String path,
       Collection<RequestMethod> supportedMethods,

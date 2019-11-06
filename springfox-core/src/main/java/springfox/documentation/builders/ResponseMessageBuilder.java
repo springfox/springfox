@@ -93,12 +93,14 @@ public class ResponseMessageBuilder {
    *
    * @param headers header responses
    * @return this
-   * @deprecated Use the {@link ResponseMessageBuilder#headersWithDescription} instead
    * @since 2.5.0
+   * @deprecated Use the {@link ResponseMessageBuilder#headersWithDescription} instead
    */
   @Deprecated
   public ResponseMessageBuilder headers(Map<String, ModelReference> headers) {
-    this.headers.putAll(nullToEmptyMap(headers).entrySet().stream().map(toHeaderEntry()).collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
+    this.headers.putAll(nullToEmptyMap(headers).entrySet().stream()
+        .map(toHeaderEntry())
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
     return this;
   }
 
@@ -136,6 +138,12 @@ public class ResponseMessageBuilder {
   }
 
   public ResponseMessage build() {
-    return new ResponseMessage(code, message, responseModel, examples, headers, vendorExtensions);
+    return new ResponseMessage(
+        code,
+        message,
+        responseModel,
+        examples,
+        headers,
+        vendorExtensions);
   }
 }

@@ -21,7 +21,9 @@ package springfox.documentation.builders;
 
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.service.DocumentationReference;
 import springfox.documentation.service.ResourceListing;
+import springfox.documentation.service.Server;
 import springfox.documentation.service.Tag;
 import springfox.documentation.service.VendorExtension;
 
@@ -46,6 +48,8 @@ public class DocumentationBuilder {
   private String host;
   private Set<String> schemes = new LinkedHashSet<>();
   private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private List<Server> servers = new ArrayList<>();
+  private DocumentationReference documentationReference;
 
 
   /**
@@ -55,7 +59,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder name(String groupName) {
-    this.groupName = defaultIfAbsent(groupName, this.groupName);
+    this.groupName = defaultIfAbsent(
+        groupName,
+        this.groupName);
     return this;
   }
 
@@ -66,14 +72,16 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder apiListingsByResourceGroupName(Map<String, List<ApiListing>> apiListings) {
-    nullToEmptyMultimap(apiListings).entrySet().stream().forEachOrdered(entry -> {
+    nullToEmptyMultimap(apiListings).forEach((key, value) -> {
       List<ApiListing> list;
-      if (this.apiListings.containsKey(entry.getKey())) {
-        list = this.apiListings.get(entry.getKey());
-        list.addAll(entry.getValue());
+      if (this.apiListings.containsKey(key)) {
+        list = this.apiListings.get(key);
+        list.addAll(value);
       } else {
-        list = new ArrayList<>(entry.getValue());
-        this.apiListings.put(entry.getKey(), list);
+        list = new ArrayList<>(value);
+        this.apiListings.put(
+            key,
+            list);
       }
       list.sort(byListingPosition());
     });
@@ -87,7 +95,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder resourceListing(ResourceListing resourceListing) {
-    this.resourceListing = defaultIfAbsent(resourceListing, this.resourceListing);
+    this.resourceListing = defaultIfAbsent(
+        resourceListing,
+        this.resourceListing);
     return this;
   }
 
@@ -131,7 +141,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder host(String host) {
-    this.host = defaultIfAbsent(host, this.host);
+    this.host = defaultIfAbsent(
+        host,
+        this.host);
     return this;
   }
 
@@ -153,7 +165,9 @@ public class DocumentationBuilder {
    * @return this
    */
   public DocumentationBuilder basePath(String basePath) {
-    this.basePath = defaultIfAbsent(basePath, this.basePath);
+    this.basePath = defaultIfAbsent(
+        basePath,
+        this.basePath);
     return this;
   }
 
@@ -168,6 +182,29 @@ public class DocumentationBuilder {
     return this;
   }
 
+  /**
+   * Adds servers information for this API
+   *
+   * @param servers - servers
+   * @return this
+   */
+  public DocumentationBuilder servers(List<Server> servers) {
+    this.servers.addAll(nullToEmptyList(servers));
+    return this;
+  }
+
+  /**
+   * Adds external documentation information for this API
+   *
+   * @param documentationReference - external documentation reference
+   * @return this
+   */
+  public DocumentationBuilder documentationReference(DocumentationReference documentationReference) {
+    this.documentationReference = defaultIfAbsent(
+        documentationReference,
+        this.documentationReference);
+    return this;
+  }
 
   public static Comparator<ApiListing> byListingPosition() {
     return Comparator.comparingInt(ApiListing::getPosition);
@@ -184,6 +221,8 @@ public class DocumentationBuilder {
         consumes,
         host,
         schemes,
+        servers,
+        documentationReference,
         vendorExtensions);
   }
 }

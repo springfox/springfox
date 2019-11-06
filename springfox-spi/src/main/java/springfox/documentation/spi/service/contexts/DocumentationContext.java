@@ -74,6 +74,7 @@ public class DocumentationContext {
   private boolean isUriTemplatesEnabled;
   private List<VendorExtension> vendorExtensions;
 
+  @SuppressWarnings("ParameterNumber")
   public DocumentationContext(
       DocumentationType documentationType,
       List<RequestHandler> handlerMappings,
@@ -156,14 +157,14 @@ public class DocumentationContext {
   public Map<RequestMethod, List<ResponseMessage>> getGlobalResponseMessages() {
     return globalResponseMessages;
   }
-  
+
   public List<Parameter> getGlobalRequestParameters() {
     return globalOperationParameters;
   }
 
   /**
-   * @deprecated  @since 2.2.0 - only here for backward compatibility
    * @return resource grouping strategy
+   * @deprecated @since 2.2.0 - only here for backward compatibility
    */
   @Deprecated
   public ResourceGroupingStrategy getResourceGroupingStrategy() {

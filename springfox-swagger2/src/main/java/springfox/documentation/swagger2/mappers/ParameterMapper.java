@@ -30,6 +30,8 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
+import org.springframework.util.StringUtils;
+
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
@@ -58,7 +60,7 @@ public class ParameterMapper {
           "array",
           "file").collect(toSet());
 
-  private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
+  private static final VendorExtensionsMapper VENDOR_EXTENSIONS_MAPPER = new VendorExtensionsMapper();
 
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
     Parameter parameter;
@@ -91,7 +93,7 @@ public class ParameterMapper {
     parameter.setAccess(source.getParamAccess());
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
-    parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
+    parameter.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getVendorExtentions()));
     for (Entry<String, List<Example>> each : source.getExamples().entrySet()) {
       Optional<Example> example = each.getValue().stream().findFirst();
       if (example.isPresent() && example.get().getValue() != null) {
@@ -108,12 +110,12 @@ public class ParameterMapper {
     BodyParameter parameter = new BodyParameter()
         .description(source.getDescription())
         .name(source.getName())
-        .schema(fromModelRef(source.getModelRef()));
+        .schema(toSchema(source));
     parameter.setIn(source.getParamType());
     parameter.setAccess(source.getParamAccess());
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
-    parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
+    parameter.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getVendorExtentions()));
     for (Entry<String, List<Example>> each : source.getExamples().entrySet()) {
       Optional<Example> example = each.getValue().stream().findFirst();
       if (example.isPresent() && example.get().getValue() != null) {
@@ -123,6 +125,20 @@ public class ParameterMapper {
 
     //TODO: swagger-core Body parameter does not have an enum property
     return parameter;
+  }
+
+  private Model toSchema(springfox.documentation.service.Parameter source) {
+    Model schema = fromModelRef(source.getModelRef());
+
+    if (!StringUtils.isEmpty(source.getScalarExample()) && !isEmptyExample(source.getScalarExample())) {
+      schema.setExample(source.getScalarExample());
+    }
+
+    return schema;
+  }
+
+  private boolean isEmptyExample(Object object) {
+    return object instanceof Example && StringUtils.isEmpty(((Example) object).getValue());
   }
 
   Model fromModelRef(ModelReference modelRef) {

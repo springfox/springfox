@@ -28,7 +28,6 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Collections.*;
 
-
 public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
   private final List<VendorExtension> properties = new ArrayList<>();
   private final String name;
@@ -52,7 +51,9 @@ public class ObjectVendorExtension implements VendorExtension<List<VendorExtensi
   }
 
   public void replaceProperty(VendorExtension property) {
-    Optional<VendorExtension> vendorProperty = StreamSupport.stream(properties.spliterator(), false).filter(withName(property.getName())).findFirst();
+    Optional<VendorExtension> vendorProperty =
+        StreamSupport.stream(properties.spliterator(), false)
+            .filter(withName(property.getName())).findFirst();
 
     vendorProperty.ifPresent(properties::remove);
     properties.add(property);

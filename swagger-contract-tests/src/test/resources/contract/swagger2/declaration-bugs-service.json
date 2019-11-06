@@ -1682,6 +1682,41 @@
                 "deprecated": false
             }
         },
+        "/bugs/2822":{
+            "post":{
+                "tags":[
+                    "Bugs"
+                ],
+                "summary":"bug2822",
+                "operationId":"bug2822UsingPOST_1",
+                "consumes":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"message",
+                        "description":"message",
+                        "required":false,
+                        "schema":{
+                            "type":"string",
+                            "example":{
+                                "value":"exampleMessage",
+                                "mediaType":{
+                                    "present":false
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description":"OK"
+                    }
+                },
+                "deprecated":false
+            }
+        },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
@@ -2065,6 +2100,7 @@
             "required": [
                 "longitude"
             ],
+            "discriminator": "Test 1777",
             "properties": {
                 "longitude": {
                     "type": "number",

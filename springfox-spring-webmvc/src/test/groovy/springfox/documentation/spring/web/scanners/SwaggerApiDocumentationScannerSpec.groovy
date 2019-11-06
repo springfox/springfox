@@ -33,7 +33,6 @@ import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.paths.Paths
-
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
@@ -136,12 +135,12 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
         .pathProvider(pathProvider)
         .configure(contextBuilder)
 
-    RequestMappingContext requestMappingContext = new RequestMappingContext(documentationContext(),
+    RequestMappingContext requestMappingContext = new RequestMappingContext("0_0",
+        documentationContext(),
         new WebMvcRequestHandler(
             Paths.ROOT,
             new HandlerMethodResolver(new TypeResolver()),
-            requestMappingInfo("somePath/"),
-            dummyHandlerMethod()))
+            requestMappingInfo("somePath/"), dummyHandlerMethod()))
 
     and:
     def mockListingRef = Mock(ApiListingReference)
@@ -149,7 +148,7 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
     when:
     listingReferenceScanner.scan(_) >>
-    new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
+        new ApiListingReferenceScanResult([resourceGroup: [requestMappingContext]])
     listingScanner.scan(_) >> new HashMap<>()
 
     and:
@@ -194,9 +193,10 @@ class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
 
     def resourceLinkApi = scanned.resourceListing.apis.get(0)
     resourceLinkApi.path == "/groupName/test"
-    resourceLinkApi.description.normalize() == """Operation with path /a and position 2
-                                                           |Operation with path /b and position 1
-                                                           |Operation with path /c and position 2""".stripMargin()
+    resourceLinkApi.description.normalize() ==
+        """Operation with path /a and position 2
+        |Operation with path /b and position 1
+        |Operation with path /c and position 2""".stripMargin()
 
     where:
     index | path | position

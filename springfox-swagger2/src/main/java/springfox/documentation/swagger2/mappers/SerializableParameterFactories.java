@@ -44,7 +44,7 @@ import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
 public class SerializableParameterFactories {
-  public static final Map<String, SerializableParameterFactory> factory = unmodifiableMap(Stream.of(
+  private static final Map<String, SerializableParameterFactory> FACTORY_MAP = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>("header", new HeaderSerializableParameterFactory()),
       new AbstractMap.SimpleEntry<>("form", new FormSerializableParameterFactory()),
       new AbstractMap.SimpleEntry<>("path", new PathSerializableParameterFactory()),
@@ -52,7 +52,7 @@ public class SerializableParameterFactories {
       new AbstractMap.SimpleEntry<>("cookie", new CookieSerializableParameterFactory()))
       .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
-  private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
+  private static final VendorExtensionsMapper VENDOR_EXTENSIONS_MAPPER = new VendorExtensionsMapper();
 
 
   private SerializableParameterFactories() {
@@ -61,7 +61,7 @@ public class SerializableParameterFactories {
 
   static Optional<io.swagger.models.parameters.Parameter> create(Parameter source) {
     String safeSourceParamType = ofNullable(source.getParamType()).map(String::toLowerCase).orElse("");
-    SerializableParameterFactory factory = SerializableParameterFactories.factory.getOrDefault(safeSourceParamType,
+    SerializableParameterFactory factory = SerializableParameterFactories.FACTORY_MAP.getOrDefault(safeSourceParamType,
         new NullSerializableParameterFactory());
 
     SerializableParameter toReturn = factory.create(source);
@@ -76,7 +76,7 @@ public class SerializableParameterFactories {
     toReturn.setRequired(source.isRequired());
     toReturn.setAllowEmptyValue(source.isAllowEmptyValue());
     toReturn.getVendorExtensions()
-        .putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
+        .putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getVendorExtentions()));
     Property property = property(paramModel.getType());
     maybeAddAllowableValuesToParameter(toReturn, property, source.getAllowableValues());
     if (paramModel.isCollection()) {
@@ -89,8 +89,8 @@ public class SerializableParameterFactories {
         ModelReference paramItemModelRef = paramModel.itemModel().get();
         Property itemProperty
             = maybeAddAllowableValues(
-                itemTypeProperty(paramItemModelRef),
-                paramItemModelRef.getAllowableValues());
+            itemTypeProperty(paramItemModelRef),
+            paramItemModelRef.getAllowableValues());
         toReturn.setItems(itemProperty);
         maybeAddAllowableValuesToParameter(toReturn, itemProperty, paramItemModelRef.getAllowableValues());
       }

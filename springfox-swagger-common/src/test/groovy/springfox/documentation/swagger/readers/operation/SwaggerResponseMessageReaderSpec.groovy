@@ -26,6 +26,7 @@ import spock.lang.Unroll
 import springfox.documentation.schema.*
 import springfox.documentation.service.Header
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.dummy.ResponseExampleTestController
@@ -52,7 +53,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -83,7 +88,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -115,7 +124,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -179,7 +191,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    def sut = new SwaggerResponseMessageReader(typeNameExtractor, resolver)
+    def sut = new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
 
     then:
     !sut.supports(DocumentationType.SPRING_WEB)
@@ -203,7 +218,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(
+        Mock(EnumTypeDeterminer),
+        typeNameExtractor,
+        resolver)
+        .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()

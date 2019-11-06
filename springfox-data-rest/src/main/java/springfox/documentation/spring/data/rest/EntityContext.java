@@ -49,7 +49,8 @@ public class EntityContext {
   private final Associations associations;
   private final RequestHandlerExtractorConfiguration extractorConfiguration;
   private final String contextPath;
-
+  
+  @SuppressWarnings("ParameterNumber")
   public EntityContext(
       TypeResolver typeResolver,
       String contextPath,

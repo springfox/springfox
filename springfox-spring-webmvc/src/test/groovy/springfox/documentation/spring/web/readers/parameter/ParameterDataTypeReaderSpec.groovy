@@ -30,19 +30,25 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.Model
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.AlternateTypeProvider
+import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Business
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+
+import static java.util.Collections.*
 
 @Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
@@ -52,120 +58,146 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
       new TypeResolver(),
       modelNameRegistry,
       new JacksonEnumTypeDeterminer())
+  def operationModelContextsBuilder = new OperationModelContextsBuilder(
+      "group",
+      DocumentationType.SWAGGER_12,
+      "0",
+      Mock(AlternateTypeProvider),
+      Mock(GenericTypeNamingStrategy),
+      emptySet())
+
+  def knownModels = new HashMap<String, Set<Model>>()
 
   ParameterDataTypeReader sut = new ParameterDataTypeReader(
+      defaultSchemaPlugins(),
       typeNameExtractor,
       new TypeResolver(),
       new JacksonEnumTypeDeterminer())
 
   def "Should support all documentation types"() {
     expect:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
   }
 
   @Unroll
   def "Parameter types #paramType"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
-                  Mock(OperationContext))
+    ResolvedMethodParameter resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "", annotations, new TypeResolver().resolve(paramType))
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    knownModels.put("0_0", new HashSet<Model>());
+
+    ParameterContext parameterContext =
+        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+            Stub(OperationContext) {
+              operationModelsBuilder() >> operationModelContextsBuilder
+              getKnownModels() >> knownModels
+            })
 
     when:
-      sut.apply(parameterContext)
+    sut.apply(parameterContext)
 
     then:
-      def modelRef = parameterContext.parameterBuilder().build().modelRef
-      modelRef.type == expected
-      if ("object".equals(expected)) {
-        assert modelRef.itemType == "string"
-        def allowable = modelRef.allowableValues as AllowableListValues
-        assert allowable.values.size() == 2
-      }
+    def modelRef = parameterContext.parameterBuilder().build().modelRef
+    modelRef.type == expected
+    if ("object" == expected) {
+      assert modelRef.itemType == "string"
+      def allowable = modelRef.allowableValues as AllowableListValues
+      assert allowable.values.size() == 2
+    }
     where:
-      paramType                   | annotations          | expected
-      char                        | []                   | "string"
-      String                      | []                   | "string"
-      Integer                     | []                   | "int"
-      int                         | []                   | "int"
-      Long                        | []                   | "long"
-      Long                        | [Mock(PathVariable)] | "long"
-      Long                        | [Mock(RequestParam)] | "long"
-      Long[]                      | [Mock(PathVariable)] | "string"
-      Long[]                      | [Mock(RequestParam)] | "Array"
-      BigInteger                  | []                   | "biginteger"
-      long                        | []                   | "long"
-      Float                       | []                   | "float"
-      float                       | []                   | "float"
-      Double                      | []                   | "double"
-      double                      | []                   | "double"
-      Byte                        | []                   | "byte"
-      BigDecimal                  | []                   | "bigdecimal"
-      byte                        | []                   | "byte"
-      Boolean                     | []                   | "boolean"
-      boolean                     | []                   | "boolean"
-      Date                        | []                   | "date-time"
-      DummyModels.FunkyBusiness   | []                   | "FunkyBusiness"
-      DummyModels.FunkyBusiness   | [Mock(PathVariable)] | "string"
-      DummyModels.FunkyBusiness   | [Mock(RequestParam)] | "string"
-      DummyModels.FunkyBusiness[] | [Mock(PathVariable)] | "string"
-      DummyModels.FunkyBusiness[] | [Mock(RequestParam)] | "string"
-      Void                        | []                   | "void"
-      MultipartFile               | []                   | "__file"
-      Business.BusinessType       | []                   | "string"
-      Business.BusinessType       | [Mock(PathVariable)] | "string"
-      Business.BusinessType       | [Mock(RequestParam)] | "string"
-      Business.BusinessType[]     | [Mock(PathVariable)] | "string"
-      Business.BusinessType[]     | [Mock(RequestParam)] | "Array"
+    paramType                   | annotations          | expected
+    char                        | []                   | "string"
+    String                      | []                   | "string"
+    Integer                     | []                   | "int"
+    int                         | []                   | "int"
+    Long                        | []                   | "long"
+    Long                        | [Mock(PathVariable)] | "long"
+    Long                        | [Mock(RequestParam)] | "long"
+    Long[]                      | [Mock(PathVariable)] | "string"
+    Long[]                      | [Mock(RequestParam)] | "Array"
+    BigInteger                  | []                   | "biginteger"
+    long                        | []                   | "long"
+    Float                       | []                   | "float"
+    float                       | []                   | "float"
+    Double                      | []                   | "double"
+    double                      | []                   | "double"
+    Byte                        | []                   | "byte"
+    BigDecimal                  | []                   | "bigdecimal"
+    byte                        | []                   | "byte"
+    Boolean                     | []                   | "boolean"
+    boolean                     | []                   | "boolean"
+    Date                        | []                   | "date-time"
+    DummyModels.FunkyBusiness   | []                   | "FunkyBusiness"
+    DummyModels.FunkyBusiness   | [Mock(PathVariable)] | "string"
+    DummyModels.FunkyBusiness   | [Mock(RequestParam)] | "string"
+    DummyModels.FunkyBusiness[] | [Mock(PathVariable)] | "string"
+    DummyModels.FunkyBusiness[] | [Mock(RequestParam)] | "string"
+    Void                        | []                   | "void"
+    MultipartFile               | []                   | "__file"
+    Business.BusinessType       | []                   | "string"
+    Business.BusinessType       | [Mock(PathVariable)] | "string"
+    Business.BusinessType       | [Mock(RequestParam)] | "string"
+    Business.BusinessType[]     | [Mock(PathVariable)] | "string"
+    Business.BusinessType[]     | [Mock(RequestParam)] | "Array"
   }
 
   def "RequestParam Map types"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext =
-          new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
-              Mock(OperationContext))
+    ResolvedMethodParameter resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "", [Mock(RequestParam)], new TypeResolver().resolve(Map, String, String))
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    knownModels.put("0_0", new HashSet<Model>())
+
+    ParameterContext parameterContext =
+        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+            Stub(OperationContext) {
+              operationModelsBuilder() >> operationModelContextsBuilder
+              getKnownModels() >> knownModels
+            })
 
     when:
-      sut.apply(parameterContext)
+    sut.apply(parameterContext)
 
     then:
-      def modelRef = parameterContext.parameterBuilder().build().modelRef
-      modelRef.type == ""
-      modelRef.isMap()
-      modelRef.itemType == "string"
+    def modelRef = parameterContext.parameterBuilder().build().modelRef
+    modelRef.type == ""
+    modelRef.isMap()
+    modelRef.itemType == "string"
   }
 
   def "Container Parameter types"() {
     given:
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
-      ParameterContext parameterContext =
-              new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
-                  Mock(OperationContext))
+    ResolvedMethodParameter resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "", [], new TypeResolver().resolve(List, String))
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    knownModels.put("0_0", new HashSet<Model>())
+
+    ParameterContext parameterContext =
+        new ParameterContext(resolvedMethodParameter, new ParameterBuilder(), documentationContext(), namingStrategy,
+            Stub(OperationContext) {
+              operationModelsBuilder() >> operationModelContextsBuilder
+              getKnownModels() >> knownModels
+            })
 
     when:
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
-      def typeNameExtractor = new TypeNameExtractor(
-          new TypeResolver(),
-          modelNameRegistry,
-          new JacksonEnumTypeDeterminer())
-      def sut = new ParameterDataTypeReader(
-          typeNameExtractor,
-          new TypeResolver(),
-          new JacksonEnumTypeDeterminer())
-      sut.apply(parameterContext)
+    def typeNameExtractor = new TypeNameExtractor(
+        new TypeResolver(),
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
+    def sut = new ParameterDataTypeReader(
+        defaultSchemaPlugins(),
+        typeNameExtractor,
+        new TypeResolver(),
+        new JacksonEnumTypeDeterminer())
+    sut.apply(parameterContext)
     then:
-      parameterContext.parameterBuilder().build().modelRef.type == "List"
-      parameterContext.parameterBuilder().build().modelRef.itemType == "string"
+    parameterContext.parameterBuilder().build().modelRef.type == "List"
+    parameterContext.parameterBuilder().build().modelRef.itemType == "string"
 
   }
 

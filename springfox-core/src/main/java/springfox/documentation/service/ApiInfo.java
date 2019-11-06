@@ -24,12 +24,23 @@ import java.util.Collection;
 import java.util.List;
 
 
-
 public class ApiInfo {
 
-  public static final Contact DEFAULT_CONTACT = new Contact("", "", "");
-  public static final ApiInfo DEFAULT = new ApiInfo("Api Documentation", "Api Documentation", "1.0", "urn:tos",
-          DEFAULT_CONTACT, "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0", new ArrayList<VendorExtension>());
+  public static final Contact DEFAULT_CONTACT
+      = new Contact(
+      "",
+      "",
+      "");
+  public static final ApiInfo DEFAULT
+      = new ApiInfo(
+      "Api Documentation",
+      "Api Documentation",
+      "1.0",
+      "urn:tos",
+      DEFAULT_CONTACT,
+      "Apache 2.0",
+      "http://www.apache.org/licenses/LICENSE-2.0",
+      new ArrayList<>());
 
   private final String version;
   private final String title;
@@ -42,17 +53,18 @@ public class ApiInfo {
 
   /**
    * Deprecated in favor of richer contact object
-   * @deprecated @since 2.4.0
    *
-   * @param title title
-   * @param description description
-   * @param version version
+   * @param title             title
+   * @param description       description
+   * @param version           version
    * @param termsOfServiceUrl terms of service
-   * @param contactName contact name
-   * @param license licence text
-   * @param licenseUrl license url
+   * @param contactName       contact name
+   * @param license           licence text
+   * @param licenseUrl        license url
+   * @deprecated @since 2.4.0
    */
   @Deprecated
+  @SuppressWarnings("ParameterNumber")
   public ApiInfo(
       String title,
       String description,
@@ -61,20 +73,30 @@ public class ApiInfo {
       String contactName,
       String license,
       String licenseUrl) {
-    this(title, description, version, termsOfServiceUrl, new Contact(contactName, "", ""), license, licenseUrl, new ArrayList<VendorExtension>());
+    this(
+        title,
+        description,
+        version,
+        termsOfServiceUrl,
+        new Contact(contactName, "", ""),
+        license,
+        licenseUrl,
+        new ArrayList<>());
   }
 
   /**
    * Default contstructor
-   * @param title title
-   * @param description description
-   * @param version version
+   *
+   * @param title             title
+   * @param description       description
+   * @param version           version
    * @param termsOfServiceUrl termsOfServiceUrl
-   * @param contact contact
-   * @param license license
-   * @param licenseUrl license url
-   * @param vendorExtensions vendor extensions
+   * @param contact           contact
+   * @param license           license
+   * @param licenseUrl        license url
+   * @param vendorExtensions  vendor extensions
    */
+  @SuppressWarnings("ParameterNumber")
   public ApiInfo(
       String title,
       String description,
@@ -91,7 +113,7 @@ public class ApiInfo {
     this.contact = contact;
     this.license = license;
     this.licenseUrl = licenseUrl;
-    this.vendorExtensions = new ArrayList(vendorExtensions);
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public String getTitle() {

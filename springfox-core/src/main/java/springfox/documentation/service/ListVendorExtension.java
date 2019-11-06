@@ -20,6 +20,7 @@ package springfox.documentation.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Collections.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
@@ -28,7 +29,9 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
   private final List<T> values = new ArrayList<>();
   private final String name;
 
-  public ListVendorExtension(String name, List<T> values) {
+  public ListVendorExtension(
+      String name,
+      List<T> values) {
     this.name = name;
     this.values.addAll(nullToEmptyList(values));
   }
@@ -41,5 +44,32 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
   @Override
   public List<T> getValue() {
     return unmodifiableList(values);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        values,
+        name);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ListVendorExtension<?> that = (ListVendorExtension<?>) o;
+
+    return Objects.equals(
+        values,
+        that.values) &&
+        Objects.equals(
+            name,
+            that.name);
   }
 }

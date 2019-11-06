@@ -36,46 +36,49 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 @Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
 class ConstructorModelPropertySpec extends SchemaSpecification {
 
-  def "Extracting information from resolved constructor params" () {
+  def "Extracting information from resolved constructor params"() {
     given:
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
-      def typeToTest = typeWithConstructorProperty()
-      def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
-      def modelContext = inputParam("group",
-          typeToTest,
-          documentationType,
-          alternateTypeProvider(),
-          genericNamingStrategy,
-          emptySet())
-      def field = field(typeToTest, fieldName)
-      ObjectMapper mapper = new ObjectMapper()
-      def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
-      namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
-      String propName = name(beanPropertyDefinition, true,  namingStrategy, "")
-      def sut = new FieldModelProperty(
-          propName,
-          field,
-          resolver,
-          alternateTypeProvider(),
-          beanPropertyDefinition)
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    def typeToTest = typeWithConstructorProperty()
+    def beanPropertyDefinition = beanPropertyDefinitionByField(typeToTest, fieldName)
+    def modelContext = inputParam("0_0",
+        "group",
+        resolver.resolve(typeToTest),
+        Optional.empty(),
+        new HashSet<>(),
+        documentationType,
+        alternateTypeProvider(),
+        genericNamingStrategy,
+        emptySet())
+    def field = field(typeToTest, fieldName)
+    ObjectMapper mapper = new ObjectMapper()
+    def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+    namingStrategy.onApplicationEvent(new ObjectMapperConfigured(this, mapper))
+    String propName = name(beanPropertyDefinition, true, namingStrategy, "")
+    def sut = new FieldModelProperty(
+        propName,
+        field,
+        resolver,
+        alternateTypeProvider(),
+        beanPropertyDefinition)
 
     expect:
-      sut.propertyDescription() == description
-      sut.required == isRequired
-      typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
-      sut.qualifiedTypeName() == qualifiedTypeName
-      if (allowableValues != null) {
-        sut.allowableValues() == new AllowableListValues(new ArrayList(allowableValues), "string")
-      } else {
-        sut.allowableValues() == null
-      }
-      sut.getName() == fieldName
-      sut.getType() == field.getType()
+    sut.propertyDescription() == description
+    sut.required == isRequired
+    typeNameExtractor.typeName(fromParent(modelContext, sut.getType())) == typeName
+    sut.qualifiedTypeName() == qualifiedTypeName
+    if (allowableValues != null) {
+      sut.allowableValues() == new AllowableListValues(new ArrayList(allowableValues), "string")
+    } else {
+      sut.allowableValues() == null
+    }
+    sut.getName() == fieldName
+    sut.getType() == field.getType()
 
 
     where:
-    fieldName             || description  | isRequired | typeName             | qualifiedTypeName                                                     | allowableValues
-    "foobar"              || null         | false      | "string"             | "springfox.documentation.schema.TypeWithConstructorProperty\$Foobar" | ["Foo", "Bar"]
-    "visibleForSerialize" || null         | false      | "long"               | "java.lang.Long"                                                      | null
+    fieldName             || description | isRequired | typeName | qualifiedTypeName                                                    | allowableValues
+    "foobar"              || null        | false      | "string" | "springfox.documentation.schema.TypeWithConstructorProperty\$Foobar" | ["Foo", "Bar"]
+    "visibleForSerialize" || null        | false      | "long"   | "java.lang.Long"                                                     | null
   }
 }

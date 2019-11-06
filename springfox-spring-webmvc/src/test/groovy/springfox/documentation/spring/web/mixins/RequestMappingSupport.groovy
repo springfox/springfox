@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.builders.OperationBuilder
+import springfox.documentation.schema.Model
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
@@ -38,6 +39,7 @@ import springfox.documentation.spring.web.dummy.DummyController
 import springfox.documentation.spring.web.dummy.DummyControllerWithApiDescription
 import springfox.documentation.spring.web.dummy.DummyControllerWithResourcePath
 import springfox.documentation.spring.web.dummy.DummyControllerWithTags
+import springfox.documentation.spring.web.dummy.DummyDeprecatedController
 import springfox.documentation.spring.web.dummy.controllers.FancyPetService
 import springfox.documentation.spring.web.dummy.controllers.PetGroomingService
 import springfox.documentation.spring.web.dummy.controllers.PetService
@@ -78,8 +80,18 @@ class RequestMappingSupport {
   HandlerMethod dummyHandlerMethod(
       String methodName = "dummyMethod",
       Class<?>... parameterTypes = null) {
-    
+
     def clazz = new DummyClass()
+    Class c = clazz.getClass()
+    new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+  }
+
+  HandlerMethod dummyHandlerMethodIn(
+      Class<?> aClass,
+      String methodName = "dummyMethod",
+      Class<?>... parameterTypes = null) {
+
+    def clazz = aClass.newInstance()
     Class c = clazz.getClass()
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
@@ -153,12 +165,25 @@ class RequestMappingSupport {
     new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
   }
 
+  HandlerMethod dummyDeprecatedController(
+      String methodName = "dummyMethod",
+      Class<?>... parameterTypes = null) {
+
+    def clazz = new DummyDeprecatedController()
+    Class c = clazz.getClass()
+    new HandlerMethod(clazz, c.getMethod(methodName, parameterTypes))
+  }
+
   Class ignorableClass() {
     DummyClass.ApiIgnorableClass
   }
 
   def apiImplicitParamsClass() {
     DummyClass.ApiImplicitParamsClass.class;
+  }
+
+  def apiImplicitParamsAllowMultipleClass() {
+    DummyClass.ApiImplicitParamsAllowMultipleClass.class;
   }
 
   HandlerMethod ignorableHandlerMethod() {
@@ -200,17 +225,19 @@ class RequestMappingSupport {
       handlerMethod,
       operationIndex = 0,
       requestMapping = requestMappingInfo("/somePath"),
-      httpMethod = RequestMethod.GET) {
+      httpMethod = RequestMethod.GET,
+      knownModels = new HashMap<String, List<Model>>()) {
     new OperationContext(
         new OperationBuilder(new CachingOperationNameGenerator()),
         httpMethod,
         new RequestMappingContext(
+            "0",
             context,
             new WebMvcRequestHandler(
                 Paths.ROOT,
                 new HandlerMethodResolver(new TypeResolver()),
                 requestMapping,
-                handlerMethod)),
+                handlerMethod)).withKnownModels(knownModels),
         operationIndex)
   }
 }

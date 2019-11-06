@@ -47,6 +47,7 @@ class ModelPropertyBuilderSpec extends Specification {
       'required'          | true                                  | 'required'
       'readOnly'          | true                                  | 'readOnly'
       'isHidden'          | true                                  | 'hidden'
+      'pattern'           | "pattern"                             | 'pattern'
       'allowableValues'   | new AllowableListValues(['a'], "LIST")| 'allowableValues'
       'example'           | 'example1'                            | 'example'
       'extensions'        | extensions()                          | 'vendorExtensions'

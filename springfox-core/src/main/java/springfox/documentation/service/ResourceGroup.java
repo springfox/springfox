@@ -82,6 +82,6 @@ public class ResourceGroup {
         "ResourceGroup{groupName='%s', position=%d, controller=%s}",
         groupName,
         position,
-        getControllerClass().map((Function<Class<?>,String>) Class::getName).orElse(""));
+        getControllerClass().map((Function<Class<?>, String>) Class::getName).orElse(""));
   }
 }

@@ -32,7 +32,9 @@ public class Category {
   }
 
   @JsonCreator
-  public static Category create(@JsonProperty(value = "id", required=true) long id, @JsonProperty("name") String name) {
+  public static Category create(
+      @JsonProperty(value = "id", required = true) long id,
+      @JsonProperty("name") String name) {
     return new Category(id, name);
   }
 

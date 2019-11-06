@@ -56,6 +56,8 @@ public class NotNullAnnotationPlugin implements ModelPropertyBuilderPlugin {
   }
 
   private Optional<NotNull> extractAnnotation(ModelPropertyContext context) {
-    return annotationFromBean(context, NotNull.class).map(Optional::of).orElse(annotationFromField(context, NotNull.class));
+    return annotationFromBean(context, NotNull.class)
+        .map(Optional::of)
+        .orElse(annotationFromField(context, NotNull.class));
   }
 }
