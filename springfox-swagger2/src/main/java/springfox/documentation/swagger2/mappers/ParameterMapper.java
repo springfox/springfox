@@ -52,7 +52,7 @@ import static springfox.documentation.swagger2.mappers.Properties.property;
 public class ParameterMapper {
 
   // This list is directly copied from the OpenAPI 2.0 spec
-  private static final Set<String> supportedFormDataTypes = Stream.of(
+  private static final Set<String> SUPPORTED_FORM_DATA_TYPES = Stream.of(
           "string",
           "number",
           "integer",
@@ -82,8 +82,9 @@ public class ParameterMapper {
     ModelReference modelRef = source.getModelRef();
     parameter.setProperty(itemTypeProperty(modelRef));
 
-    if (!supportedFormDataTypes.contains(parameter.getType())
-            || "array".equals(parameter.getType()) && !supportedFormDataTypes.contains(parameter.getItems().getType())) {
+    if (!SUPPORTED_FORM_DATA_TYPES.contains(parameter.getType())
+            || "array".equals(parameter.getType()) 
+            && !SUPPORTED_FORM_DATA_TYPES.contains(parameter.getItems().getType())) {
       // Falling back to BodyParameter is non-compliant with the Swagger 2.0 spec,
       // but matches previous behavior.
       return bodyParameter(source);
