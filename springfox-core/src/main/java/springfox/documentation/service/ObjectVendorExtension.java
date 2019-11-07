@@ -28,7 +28,7 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Collections.*;
 
-public class ObjectVendorExtension implements VendorExtension<List<VendorExtension>> {
+public class ObjectVendorExtension implements VendorExtension {
   private final List<VendorExtension> properties = new ArrayList<>();
   private final String name;
 

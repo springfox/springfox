@@ -24,7 +24,7 @@ import spock.lang.Specification
 class ListVendorExtensionSpec extends Specification {
   def "List vendor extension adds and retrieves properties" () {
     given:
-      ListVendorExtension sut = new ListVendorExtension<Integer>("Name", [1, 2])
+      ListVendorExtension sut = new ListVendorExtension("Name", [1, 2])
     expect:
       sut.getName().equals("Name")
       sut.value.size() == 2
@@ -33,7 +33,7 @@ class ListVendorExtensionSpec extends Specification {
 
   def "List vendor extension works with empty lists" () {
     given:
-      ListVendorExtension sut = new ListVendorExtension<Integer>("Name", [])
+      ListVendorExtension sut = new ListVendorExtension("Name", [])
     expect:
       sut.getName().equals("Name")
       sut.value.size() == 0
@@ -41,7 +41,7 @@ class ListVendorExtensionSpec extends Specification {
 
   def "List vendor extension works with null" () {
     given:
-      ListVendorExtension sut = new ListVendorExtension<Integer>("Name", null)
+      ListVendorExtension sut = new ListVendorExtension("Name", null)
     expect:
       sut.getName().equals("Name")
       sut.value.size() == 0
@@ -49,8 +49,8 @@ class ListVendorExtensionSpec extends Specification {
 
   def "Class .equals() and .hashCode() test" () {
     given:
-      def sut = new ListVendorExtension<Integer>("Name", null)
-      def sutTest = new ListVendorExtension<Integer>(name, values)
+      def sut = new ListVendorExtension("Name", null)
+      def sutTest = new ListVendorExtension(name, values)
     expect:
       sut.equals(sutTest) == expectedEquality
       sut.equals(sut)

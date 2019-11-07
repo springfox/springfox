@@ -48,7 +48,7 @@ public class ModelContext {
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
-  private final Set<Class> ignorableTypes;
+  private final Set<Class<?>> ignorableTypes;
   private final Map<ResolvedType, String> registeredTypes;
 
   @SuppressWarnings("ParameterNumber")
@@ -62,7 +62,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      Set<Class> ignorableTypes) {
+      Set<Class<?>> ignorableTypes) {
     this.parameterId = parameterId;
     this.groupName = groupName;
     this.documentationType = documentationType;
@@ -201,7 +201,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      Set<Class> ignorableTypes) {
+      Set<Class<?>> ignorableTypes) {
 
     return new ModelContext(
         parameterId,
@@ -236,7 +236,7 @@ public class ModelContext {
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      Set<Class> ignorableTypes) {
+      Set<Class<?>> ignorableTypes) {
 
     return new ModelContext(
         parameterId,

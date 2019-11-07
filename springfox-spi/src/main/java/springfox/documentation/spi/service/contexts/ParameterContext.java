@@ -91,7 +91,7 @@ public class ParameterContext {
     return operationContext;
   }
 
-  public Set<Class> getIgnorableParameterTypes() {
+  public Set<Class<?>> getIgnorableParameterTypes() {
     return documentationContext.getIgnorableParameterTypes();
   }
 

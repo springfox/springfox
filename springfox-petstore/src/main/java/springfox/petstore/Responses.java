@@ -19,23 +19,22 @@
 
 package springfox.petstore;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class Responses {
-  private Responses() {
-    throw new UnsupportedOperationException();
-  }
+    private Responses() {
+      throw new UnsupportedOperationException();
+    }
 
-  public static ResponseEntity ok() {
-    return new ResponseEntity(HttpStatus.OK);
-  }
+    public static <T> ResponseEntity<T> ok() {
+      return ResponseEntity.ok().build();
+    }
 
-  public static ResponseEntity notFound() {
-    return new ResponseEntity(HttpStatus.NOT_FOUND);
-  }
+    public static <T> ResponseEntity<T> notFound() {
+      return ResponseEntity.notFound().build();
+    }
 
-  public static <T> ResponseEntity<T> ok(T model) {
-    return new ResponseEntity<T>(model, HttpStatus.OK);
+    public static <T> ResponseEntity<T> ok(T model) {
+      return ResponseEntity.ok(model);
+    }
   }
-}

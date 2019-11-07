@@ -58,40 +58,41 @@ public class JacksonSerializerConvention implements AlternateTypeRuleConvention 
 
   @Override
   public List<AlternateTypeRule> rules() {
-    ScanResult scanResults = new ClassGraph()
+    try (ScanResult scanResults = new ClassGraph()
         .whitelistPackages(packagePrefix)
         .enableAnnotationInfo()
-        .scan();
+        .scan()) {
 
-    List<Class<?>> serialized =
-        scanResults.getClassesWithAnnotation(JsonSerialize.class.getCanonicalName())
-            .loadClasses();
-
-    List<Class<?>> deserialized =
-        scanResults.getClassesWithAnnotation(JsonDeserialize.class.getCanonicalName())
-            .loadClasses();
-
-    List<AlternateTypeRule> rules = new ArrayList<>();
-    Stream.concat(serialized.stream(), deserialized.stream())
-        .forEachOrdered(type -> {
-          findAlternate(type).ifPresent(alternative -> {
-            rules.add(newRule(
-                resolver.resolve(type),
-                resolver.resolve(alternative), getOrder()));
-            rules.add(newRule(
-                resolver.resolve(ResponseEntity.class, type),
-                resolver.resolve(alternative), getOrder()));
+      List<Class<?>> serialized =
+          scanResults.getClassesWithAnnotation(JsonSerialize.class.getCanonicalName())
+              .loadClasses();
+  
+      List<Class<?>> deserialized =
+          scanResults.getClassesWithAnnotation(JsonDeserialize.class.getCanonicalName())
+              .loadClasses();
+  
+      List<AlternateTypeRule> rules = new ArrayList<>();
+      Stream.concat(serialized.stream(), deserialized.stream())
+          .forEachOrdered(type -> {
+            findAlternate(type).ifPresent(alternative -> {
+              rules.add(newRule(
+                  resolver.resolve(type),
+                  resolver.resolve(alternative), getOrder()));
+              rules.add(newRule(
+                  resolver.resolve(ResponseEntity.class, type),
+                  resolver.resolve(alternative), getOrder()));
+            });
           });
-        });
-    return rules;
+      return rules;
+    }
   }
 
   private Optional<Type> findAlternate(Class<?> type) {
-    Class serializer = ofNullable(type.getAnnotation(JsonSerialize.class))
-        .map((Function<JsonSerialize, Class>) JsonSerialize::as)
+    Class<?> serializer = ofNullable(type.getAnnotation(JsonSerialize.class))
+        .map((Function<JsonSerialize, Class<?>>) JsonSerialize::as)
         .orElse(Void.class);
-    Class deserializer = ofNullable(type.getAnnotation(JsonDeserialize.class))
-        .map((Function<JsonDeserialize, Class>) JsonDeserialize::as)
+    Class<?> deserializer = ofNullable(type.getAnnotation(JsonDeserialize.class))
+        .map((Function<JsonDeserialize, Class<?>>) JsonDeserialize::as)
         .orElse(Void.class);
     Type toUse;
     if (serializer != deserializer) {

@@ -84,7 +84,7 @@ public class ApiModelReader {
     Map<String, Set<Model>> mergedModelMap = new TreeMap<>();
     final UniqueTypeNameAdapter adapter = new TypeNameIndexingAdapter();
 
-    Set<Class> ignorableTypes = new HashSet<>(context.getIgnorableParameterTypes());
+    Set<Class<?>> ignorableTypes = new HashSet<>(context.getIgnorableParameterTypes());
     Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
     Map<String, Set<Model>> modelMap = new TreeMap<>(context.getModelMap());
     for (Set<Model> modelList : modelMap.values()) {
@@ -673,7 +673,7 @@ public class ApiModelReader {
   @SuppressWarnings("rawtypes")
   private void markIgnorablesAsHasSeen(
       TypeResolver typeResolver,
-      Set<Class> ignorableParameterTypes,
+      Set<Class<?>> ignorableParameterTypes,
       ModelContext modelContext) {
 
     for (Class ignorableParameterType : ignorableParameterTypes) {

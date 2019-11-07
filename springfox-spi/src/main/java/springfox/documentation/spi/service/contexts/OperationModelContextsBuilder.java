@@ -41,7 +41,7 @@ public class OperationModelContextsBuilder {
   private final String requestMappingId;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericsNamingStrategy;
-  private final Set<Class> ignorableTypes;
+  private final Set<Class<?>> ignorableTypes;
   private final Set<ModelContext> contexts = new HashSet<>();
 
   private int parameterIndex = 0;
@@ -52,7 +52,7 @@ public class OperationModelContextsBuilder {
       String requestMappingId,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericsNamingStrategy,
-      Set<Class> ignorableParameterTypes) {
+      Set<Class<?>> ignorableParameterTypes) {
     this.group = group;
     this.documentationType = documentationType;
     this.requestMappingId = requestMappingId;

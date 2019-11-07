@@ -76,7 +76,7 @@ public class Docket implements DocumentationPlugin {
   private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
   private final List<Parameter> globalOperationParameters = new ArrayList<>();
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList<>();
-  private final Set<Class> ignorableParameterTypes = new HashSet<>();
+  private final Set<Class<?>> ignorableParameterTypes = new HashSet<>();
   private final Set<String> protocols = new HashSet<>();
   private final Set<String> produces = new LinkedHashSet<>();
   private final Set<String> consumes = new LinkedHashSet<>();
@@ -218,7 +218,7 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultIgnorableParameterTypes()
    */
-  public Docket ignoredParameterTypes(Class... classes) {
+  public Docket ignoredParameterTypes(Class<?>... classes) {
     this.ignorableParameterTypes.addAll(Arrays.asList(classes));
     return this;
   }
@@ -281,7 +281,7 @@ public class Docket implements DocumentationPlugin {
    * @param with  the class which substitutes 'clazz'
    * @return this Docket
    */
-  public Docket directModelSubstitute(final Class clazz, final Class with) {
+  public Docket directModelSubstitute(final Class<?> clazz, final Class<?> with) {
     this.ruleBuilders.add(newSubstitutionFunction(clazz, with));
     return this;
   }
@@ -295,8 +295,8 @@ public class Docket implements DocumentationPlugin {
    * @param genericClasses - generic classes on which to apply generic model substitution.
    * @return this Docket
    */
-  public Docket genericModelSubstitutes(Class... genericClasses) {
-    for (Class clz : genericClasses) {
+  public Docket genericModelSubstitutes(Class<?>... genericClasses) {
+    for (Class<?> clz : genericClasses) {
       this.ruleBuilders.add(newGenericSubstitutionFunction(clz));
     }
     return this;
@@ -504,14 +504,14 @@ public class Docket implements DocumentationPlugin {
     return this;
   }
 
-  private Function<TypeResolver, AlternateTypeRule> newSubstitutionFunction(final Class clazz, final Class with) {
+  private Function<TypeResolver, AlternateTypeRule> newSubstitutionFunction(final Class<?> clazz, final Class<?> with) {
     return typeResolver -> newRule(
         typeResolver.resolve(clazz),
         typeResolver.resolve(with),
         DIRECT_SUBSTITUTION_RULE_ORDER);
   }
 
-  private Function<TypeResolver, AlternateTypeRule> newGenericSubstitutionFunction(final Class clz) {
+  private Function<TypeResolver, AlternateTypeRule> newGenericSubstitutionFunction(final Class<?> clz) {
     return typeResolver -> newRule(
         typeResolver.resolve(clz, WildcardType.class),
         typeResolver.resolve(WildcardType.class),

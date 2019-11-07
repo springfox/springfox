@@ -25,13 +25,13 @@ import java.util.Objects;
 import static java.util.Collections.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
-public class ListVendorExtension<T> implements VendorExtension<List<T>> {
-  private final List<T> values = new ArrayList<>();
+public class ListVendorExtension implements VendorExtension {
+  private final List<Object> values = new ArrayList<>();
   private final String name;
 
   public ListVendorExtension(
       String name,
-      List<T> values) {
+      List<?> values) {
     this.name = name;
     this.values.addAll(nullToEmptyList(values));
   }
@@ -42,7 +42,7 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
   }
 
   @Override
-  public List<T> getValue() {
+  public List<?> getValue() {
     return unmodifiableList(values);
   }
 
@@ -63,7 +63,7 @@ public class ListVendorExtension<T> implements VendorExtension<List<T>> {
       return false;
     }
 
-    ListVendorExtension<?> that = (ListVendorExtension<?>) o;
+    ListVendorExtension that = (ListVendorExtension) o;
 
     return Objects.equals(
         values,

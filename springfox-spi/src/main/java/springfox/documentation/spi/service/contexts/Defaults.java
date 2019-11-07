@@ -58,7 +58,7 @@ import static springfox.documentation.schema.AlternateTypeRules.*;
 
 public class Defaults {
 
-  private HashSet<Class> ignored;
+  private HashSet<Class<?>> ignored;
   private LinkedHashMap<RequestMethod, List<ResponseMessage>> responses;
   private List<Class<? extends Annotation>> annotations;
   private Comparator<Operation> operationOrdering;
@@ -69,7 +69,7 @@ public class Defaults {
     init();
   }
 
-  public Set<Class> defaultIgnorableParameterTypes() {
+  public Set<Class<?>> defaultIgnorableParameterTypes() {
     return ignored;
   }
 
@@ -141,8 +141,8 @@ public class Defaults {
   }
 
   private void maybeAddRuleForClassName(TypeResolver typeResolver, List<AlternateTypeRule> rules, String className,
-                                        Class clazz) {
-    Optional<? extends Class> fromClazz = ClassSupport.classByName(className);
+                                        Class<?> clazz) {
+    Optional<? extends Class<?>> fromClazz = ClassSupport.classByName(className);
     fromClazz.ifPresent(aClass -> rules.add(newRule(
         typeResolver.resolve(aClass),
         typeResolver.resolve(clazz))));

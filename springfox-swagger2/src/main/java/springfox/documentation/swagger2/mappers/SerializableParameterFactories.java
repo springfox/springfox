@@ -100,9 +100,9 @@ public class SerializableParameterFactories {
       toReturn.setItems(itemProperty);
     } else {
       //TODO: swagger-core remove this downcast when swagger-core fixes its problem
-      ((AbstractSerializableParameter) toReturn).setDefaultValue(source.getDefaultValue());
+      ((AbstractSerializableParameter<?>) toReturn).setDefaultValue(source.getDefaultValue());
       if (source.getScalarExample() != null) {
-        ((AbstractSerializableParameter) toReturn).setExample(String.valueOf(source.getScalarExample()));
+        ((AbstractSerializableParameter<?>) toReturn).setExample(String.valueOf(source.getScalarExample()));
       }
       toReturn.setType(property.getType());
       toReturn.setFormat(property.getFormat());

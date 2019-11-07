@@ -22,7 +22,7 @@ package springfox.documentation.spring.web;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 
 public class WebMvcRequestMappingInfoWrapper
-    implements springfox.documentation.spring.wrapper.RequestMappingInfo<RequestMappingInfo> {
+    implements springfox.documentation.spring.wrapper.RequestMappingInfo {
 
     private final RequestMappingInfo originalInfo;
 

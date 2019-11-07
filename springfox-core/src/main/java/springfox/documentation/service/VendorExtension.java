@@ -18,8 +18,8 @@
  */
 package springfox.documentation.service;
 
-public interface VendorExtension<T> {
+public interface VendorExtension {
   String getName();
 
-  T getValue();
+  Object getValue();
 }

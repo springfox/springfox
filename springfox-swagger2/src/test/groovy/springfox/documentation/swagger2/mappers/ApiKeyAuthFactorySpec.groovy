@@ -44,7 +44,7 @@ class ApiKeyAuthFactorySpec extends Specification {
       String authTypeKey = 'x-amazon-apigateway-authtype') {
 
     def authorizer = new ObjectVendorExtension(authorizerKey)
-    def arns = new ListVendorExtension<String>(
+    def arns = new ListVendorExtension(
         "providerARNS",
         ["arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}"])
     authorizer.with {

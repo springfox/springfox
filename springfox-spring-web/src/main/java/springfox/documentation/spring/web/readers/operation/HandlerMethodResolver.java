@@ -55,7 +55,7 @@ public class HandlerMethodResolver {
   private static final String SPRING4_DISCOVERER = "org.springframework.core.DefaultParameterNameDiscoverer";
   private final ParameterNameDiscoverer parameterNameDiscover = parameterNameDiscoverer();
   private final TypeResolver typeResolver;
-  private Map<Class, List<ResolvedMethod>> methodsResolvedForHostClasses = new HashMap<>();
+  private Map<Class<?>, List<ResolvedMethod>> methodsResolvedForHostClasses = new HashMap<>();
 
   public HandlerMethodResolver(TypeResolver typeResolver) {
     this.typeResolver = typeResolver;
@@ -67,7 +67,7 @@ public class HandlerMethodResolver {
         .orElse(typeResolver.resolve(Void.TYPE));
   }
 
-  public static Optional<Class> useType(Class beanType) {
+  public static Optional<Class<?>> useType(Class<?> beanType) {
     if (Proxy.class.isAssignableFrom(beanType)) {
       return empty();
     }
@@ -131,7 +131,7 @@ public class HandlerMethodResolver {
     if (handlerMethod == null) {
       return empty();
     }
-    Class hostClass = useType(handlerMethod.getBeanType())
+    Class<?> hostClass = useType(handlerMethod.getBeanType())
         .orElse(handlerMethod.getMethod().getDeclaringClass());
     Iterable<ResolvedMethod> filtered = getMemberMethods(hostClass).stream()
         .filter(methodNamesAreSame(handlerMethod.getMethod())).collect(toList());
@@ -139,7 +139,7 @@ public class HandlerMethodResolver {
   }
 
   private List<ResolvedMethod> getMemberMethods(
-      Class hostClass) {
+      Class<?> hostClass) {
     if (!methodsResolvedForHostClasses.containsKey(hostClass)) {
       ResolvedType beanType = typeResolver.resolve(hostClass);
       MemberResolver resolver = new MemberResolver(typeResolver);

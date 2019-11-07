@@ -54,7 +54,7 @@ class ModelPropertyBuilderSpec extends Specification {
   }
 
   List<VendorExtension> extensions() {
-    return Arrays.asList(new ListVendorExtension<String>("test", Arrays.asList("Test")))
+    return Arrays.asList(new ListVendorExtension("test", Arrays.asList("Test")))
   }
 
   @Unroll

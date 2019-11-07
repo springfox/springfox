@@ -22,7 +22,7 @@ package springfox.documentation.spring.wrapper;
 import java.util.Set;
 
 public class PatternsRequestConditionWrapper
-    implements PatternsRequestCondition<org.springframework.web.servlet.mvc.condition.PatternsRequestCondition> {
+    implements PatternsRequestCondition {
 
   private org.springframework.web.servlet.mvc.condition.PatternsRequestCondition condition;
 
@@ -33,7 +33,7 @@ public class PatternsRequestConditionWrapper
 
   @Override
   public PatternsRequestCondition combine(
-      PatternsRequestCondition<org.springframework.web.servlet.mvc.condition.PatternsRequestCondition> other) {
+      PatternsRequestCondition other) {
     if (other instanceof PatternsRequestConditionWrapper) {
       return new PatternsRequestConditionWrapper(
           this.condition.combine(

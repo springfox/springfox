@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import static springfox.documentation.spring.web.paths.Paths.*;
 
 public class WebMvcPatternsRequestConditionWrapper
-    implements springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> {
+    implements springfox.documentation.spring.wrapper.PatternsRequestCondition {
 
   private final String contextPath;
   private final PatternsRequestCondition condition;
@@ -42,7 +42,7 @@ public class WebMvcPatternsRequestConditionWrapper
 
   @Override
   public springfox.documentation.spring.wrapper.PatternsRequestCondition combine(
-      springfox.documentation.spring.wrapper.PatternsRequestCondition<PatternsRequestCondition> other) {
+      springfox.documentation.spring.wrapper.PatternsRequestCondition other) {
     if (other instanceof WebMvcPatternsRequestConditionWrapper && !this.equals(other)) {
       return new WebMvcPatternsRequestConditionWrapper(
           contextPath,

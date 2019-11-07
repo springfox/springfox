@@ -59,7 +59,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class DocumentationContextBuilder {
 
   private final List<SecurityContext> securityContexts = new ArrayList<>();
-  private final Set<Class> ignorableParameterTypes = new HashSet<>();
+  private final Set<Class<?>> ignorableParameterTypes = new HashSet<>();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap<>();
   private final List<Parameter> globalOperationParameters = new ArrayList<>();
   private final List<AlternateTypeRule> rules = new ArrayList<>();
@@ -108,7 +108,7 @@ public class DocumentationContextBuilder {
     return this;
   }
 
-  public DocumentationContextBuilder additionalIgnorableTypes(Set<Class> ignorableParameterTypes) {
+  public DocumentationContextBuilder additionalIgnorableTypes(Set<Class<?>> ignorableParameterTypes) {
     this.ignorableParameterTypes.addAll(ignorableParameterTypes);
     return this;
   }

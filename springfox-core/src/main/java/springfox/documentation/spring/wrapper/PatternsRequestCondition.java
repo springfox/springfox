@@ -21,8 +21,8 @@ package springfox.documentation.spring.wrapper;
 
 import java.util.Set;
 
-public interface PatternsRequestCondition<T> {
-  PatternsRequestCondition combine(PatternsRequestCondition<T> other);
+public interface PatternsRequestCondition {
+  PatternsRequestCondition combine(PatternsRequestCondition other);
 
   Set<String> getPatterns();
 }

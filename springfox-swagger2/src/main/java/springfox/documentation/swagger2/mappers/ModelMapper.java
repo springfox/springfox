@@ -114,7 +114,7 @@ public abstract class ModelMapper {
     model.setType(ModelImpl.OBJECT);
     model.setTitle(source.getName());
     if (isMapType(source.getType())) {
-      Optional<Class> clazz = typeOfValue(source);
+      Optional<Class<?>> clazz = typeOfValue(source);
       if (clazz.isPresent()) {
         model.additionalProperties(property(clazz.get().getSimpleName()));
       } else {
@@ -147,13 +147,13 @@ public abstract class ModelMapper {
     return sortedMap;
   }
 
-  Optional<Class> typeOfValue(springfox.documentation.schema.Model source) {
+  Optional<Class<?>> typeOfValue(springfox.documentation.schema.Model source) {
     Optional<ResolvedType> mapInterface = findMapInterface(source.getType());
     if (mapInterface.isPresent()) {
       if (mapInterface.get().getTypeParameters().size() == 2) {
-        return of((Class) mapInterface.get().getTypeParameters().get(1).getErasedType());
+        return of(mapInterface.get().getTypeParameters().get(1).getErasedType());
       }
-      return of((Class) Object.class);
+      return of(Object.class);
     }
     return empty();
   }

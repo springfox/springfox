@@ -20,7 +20,7 @@ package springfox.documentation.service;
 
 import java.util.Objects;
 
-public class StringVendorExtension implements VendorExtension<String> {
+public class StringVendorExtension implements VendorExtension {
   private String name;
   private String value;
 

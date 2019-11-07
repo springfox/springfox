@@ -517,7 +517,7 @@ public class DummyClass {
   }
 
   public class MethodsWithSameName {
-    public ResponseEntity methodToTest(
+    public ResponseEntity<?> methodToTest(
         Integer integer,
         Parent child) {
       return null;

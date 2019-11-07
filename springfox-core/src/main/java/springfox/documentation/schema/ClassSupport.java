@@ -27,7 +27,7 @@ public class ClassSupport {
     throw new UnsupportedOperationException();
   }
 
-  public static Optional<? extends Class> classByName(String className) {
+  public static Optional<? extends Class<?>> classByName(String className) {
     try {
       return of(Class.forName(className));
     } catch (ClassNotFoundException e) {

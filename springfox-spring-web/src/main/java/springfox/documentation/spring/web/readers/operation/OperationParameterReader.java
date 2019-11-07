@@ -111,15 +111,15 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   private boolean shouldIgnore(
       final ResolvedMethodParameter parameter,
       ResolvedType resolvedParameterType,
-      final Set<Class> ignorableParamTypes) {
+      final Set<Class<?>> ignorableParamTypes) {
 
     if (ignorableParamTypes.contains(resolvedParameterType.getErasedType())) {
       return true;
     }
     return ignorableParamTypes.stream()
         .filter(Annotation.class::isAssignableFrom)
+        .map(a -> (Class<Annotation>) a)
         .anyMatch(parameter::hasParameterAnnotation);
-
   }
 
   private boolean shouldExpand(final ResolvedMethodParameter parameter, ResolvedType resolvedParamType) {

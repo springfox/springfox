@@ -134,7 +134,7 @@ public class OperationContext {
     return requestContext.consumes();
   }
 
-  public Set<Class> getIgnorableParameterTypes() {
+  public Set<Class<?>> getIgnorableParameterTypes() {
     return getDocumentationContext().getIgnorableParameterTypes().stream().collect(collectingAndThen(
         toSet(),
         Collections::unmodifiableSet));

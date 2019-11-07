@@ -53,7 +53,7 @@ public class DocumentationContext {
   private final String groupName;
   private final ApiSelector apiSelector;
   private final AlternateTypeProvider alternateTypeProvider;
-  private final Set<Class> ignorableParameterTypes;
+  private final Set<Class<?>> ignorableParameterTypes;
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
   private final List<Parameter> globalOperationParameters;
   private final ResourceGroupingStrategy resourceGroupingStrategy;
@@ -80,7 +80,7 @@ public class DocumentationContext {
       List<RequestHandler> handlerMappings,
       ApiInfo apiInfo, String groupName,
       ApiSelector apiSelector,
-      Set<Class> ignorableParameterTypes,
+      Set<Class<?>> ignorableParameterTypes,
       Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
       List<Parameter> globalOperationParameter,
       ResourceGroupingStrategy resourceGroupingStrategy,
@@ -150,7 +150,7 @@ public class DocumentationContext {
     return apiSelector;
   }
 
-  public Set<Class> getIgnorableParameterTypes() {
+  public Set<Class<?>> getIgnorableParameterTypes() {
     return new HashSet<>(ignorableParameterTypes);
   }
 

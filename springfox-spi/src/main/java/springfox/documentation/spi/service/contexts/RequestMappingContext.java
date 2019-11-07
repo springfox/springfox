@@ -141,7 +141,7 @@ public class RequestMappingContext {
                                      knownModels);
   }
 
-  public Set<Class> getIgnorableParameterTypes() {
+  public Set<Class<?>> getIgnorableParameterTypes() {
     return documentationContext.getIgnorableParameterTypes();
   }
 
