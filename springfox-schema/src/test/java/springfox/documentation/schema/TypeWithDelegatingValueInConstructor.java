@@ -21,20 +21,18 @@ package springfox.documentation.schema;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TypeWithDelegatedJsonCreatorConstructor {
-  private String foo;
-  private Integer bar;
+public class TypeWithDelegatingValueInConstructor {
+  private final String foo;
+  private final Integer bar;
 
-  private TypeWithDelegatedJsonCreatorConstructor(String foo, Integer bar) {
-    this.foo = foo;
-    this.bar = bar;
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+  static TypeWithDelegatingValueInConstructor fromBuilder(Builder builder) {
+    return new TypeWithDelegatingValueInConstructor(builder.foo, builder.bar);
   }
 
-  @JsonCreator
-  public static TypeWithDelegatedJsonCreatorConstructor create(
-      @JsonProperty(value = "foo", required = true) String foo,
-      @JsonProperty(value = "bar", required = true) Integer bar) {
-    return new TypeWithDelegatedJsonCreatorConstructor(foo, bar);
+  private TypeWithDelegatingValueInConstructor(String foo, Integer bar) {
+    this.foo = foo;
+    this.bar = bar;
   }
 
   public String getFoo() {
@@ -43,5 +41,26 @@ public class TypeWithDelegatedJsonCreatorConstructor {
 
   public Integer getBar() {
     return bar;
+  }
+
+  public static class Builder {
+    private String foo;
+    private Integer bar;
+
+    @JsonProperty("foo")
+    public Builder foo(String foo) {
+      this.foo = foo;
+      return this;
+    }
+
+    @JsonProperty("bar")
+    public Builder bar(Integer bar) {
+      this.bar = bar;
+      return this;
+    }
+
+    public TypeWithDelegatingValueInConstructor build() {
+      return TypeWithDelegatingValueInConstructor.fromBuilder(this);
+    }
   }
 }

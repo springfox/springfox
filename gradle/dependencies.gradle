@@ -43,7 +43,8 @@ ext {
           "org.spockframework:spock-core:${spock}",
           "org.codehaus.groovy:groovy-all:${groovy}",
           "org.springframework.hateoas:spring-hateoas:${springHateoas}",
-          "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}"
+          "nl.jqno.equalsverifier:equalsverifier:${equalsverifierVersion}",
+          "com.fasterxml.jackson.module:jackson-module-parameter-names:${jackson}"
       ],
       testNoHateoas                      : [
           "org.springframework:spring-test:${spring}",

@@ -49,6 +49,9 @@ class TypesForTestingSupport {
   static Class typeWithDelegatedConstructor() {
     TypeWithDelegatedJsonCreatorConstructor
   }
+  static Class typeWithDelegatingValueInConstructor() {
+    TypeWithDelegatingValueInConstructor
+  }
 
   static Class typeWithJsonCreatorConstructor() {
     TypeWithJsonCreatorConstructor

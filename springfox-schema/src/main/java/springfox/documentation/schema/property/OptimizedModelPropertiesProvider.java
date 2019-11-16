@@ -23,17 +23,13 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.members.ResolvedField;
 import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
-import com.fasterxml.jackson.databind.introspect.AnnotatedField;
-import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
-import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
-import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
-import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.introspect.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -490,19 +486,47 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final ModelContext givenContext,
       final String namePrefix) {
 
-    Optional<ModelProperty> property = factoryMethods.in(
+    Optional<List<ModelProperty>> property = factoryMethods.in(
         resolvedType,
         factoryMethodOf(member))
-        .map((Function<ResolvedParameterizedMember, ModelProperty>) input ->
-            paramModelProperty(
-                input,
-                beanProperty,
-                member,
-                givenContext,
-                namePrefix));
-    return property
-        .map(Collections::singletonList)
-        .orElseGet(ArrayList::new);
+        .map((Function<ResolvedParameterizedMember, List<ModelProperty>>) input -> {
+          if (beanProperty.hasConstructorParameter() &&
+            !(beanProperty.hasField() || beanProperty.hasGetter() || beanProperty.hasSetter()) &&
+            isDelegatingCreator(beanProperty.getConstructorParameter().getOwner())) {
+
+            ResolvedType newType = typeResolver.resolve(beanProperty.getRawPrimaryType());
+
+            return propertiesFor(newType, ModelContext.fromParent(givenContext, newType));
+          } else {
+            return Collections.singletonList(paramModelProperty(
+              input,
+              beanProperty,
+              member,
+              givenContext,
+              namePrefix));
+          }
+        });
+
+    return property.orElseGet(ArrayList::new);
+  }
+
+  private boolean isDelegatingCreator(AnnotatedWithParams creator) {
+    JsonCreator ann = creator.getAnnotation(JsonCreator.class);
+
+    if (ann == null || creator.getParameterCount() != 1) {
+      return false;
+    }
+
+    if (ann.mode() != JsonCreator.Mode.DELEGATING && ann.mode() != JsonCreator.Mode.DEFAULT) {
+      return false;
+    }
+
+    Class<?> type = creator.getParameter(0).getRawType();
+
+    return !(type == String.class || type == CharSequence.class || type == int.class ||
+      type == Integer.class || type == long.class || type == Long.class ||
+      type == double.class || type == Double.class || type == boolean.class ||
+      type == Boolean.class);
   }
 
   private BeanDescription beanDescription(

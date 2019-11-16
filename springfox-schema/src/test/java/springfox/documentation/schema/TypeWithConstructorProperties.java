@@ -24,7 +24,7 @@ public class TypeWithConstructorProperties {
   private String foo;
   private Integer bar;
 
-  public TypeWithConstructorProperties(@JsonProperty("foo") String foo, @JsonProperty("bar") Integer bar) {
+  public TypeWithConstructorProperties(@JsonProperty(value = "foo", required = true) String foo, @JsonProperty(value = "bar", required = true) Integer bar) {
     this.foo = foo;
     this.bar = bar;
   }

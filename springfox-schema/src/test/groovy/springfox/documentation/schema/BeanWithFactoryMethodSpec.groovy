@@ -19,6 +19,8 @@
 
 package springfox.documentation.schema
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
@@ -57,13 +59,13 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
 
     then:
     models.each {
-      it.properties.size() == 2
-      it.properties.containsKey(fieldName)
-      it.properties."$fieldName".description == description
-      it.properties."$fieldName".required == isRequired
-      it.properties."$fieldName".type.erasedType == type
-      it.properties."$fieldName".qualifiedType == qualifiedTypeName
-      it.properties."$fieldName".allowableValues == allowableValues
+      assert it.properties.size() == 2
+      assert it.properties.containsKey(fieldName)
+      assert it.properties."$fieldName".description == description
+      assert it.properties."$fieldName".required == isRequired
+      assert it.properties."$fieldName".type.erasedType == type
+      assert it.properties."$fieldName".qualifiedType == qualifiedTypeName
+      assert it.properties."$fieldName".allowableValues == allowableValues
       true
     }
 
@@ -102,12 +104,12 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
 
     then:
     models.each {
-      it.properties.size() == 2
-      it.properties.containsKey(fieldName)
-      it.properties."$fieldName".description == description
-      it.properties."$fieldName".required == isRequired
-      it.properties."$fieldName".type.erasedType == type
-      it.properties."$fieldName".qualifiedType == qualifiedTypeName
+      assert it.properties.size() == 2
+      assert it.properties.containsKey(fieldName)
+      assert it.properties."$fieldName".description == description
+      assert it.properties."$fieldName".required == isRequired
+      assert it.properties."$fieldName".type.erasedType == type
+      assert it.properties."$fieldName".qualifiedType == qualifiedTypeName
       it.properties."$fieldName".allowableValues == allowableValues
       true
     }
@@ -147,13 +149,13 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
 
     then:
     models.each {
-      it.properties.size() == 2
-      it.properties.containsKey(fieldName)
-      it.properties."$fieldName".description == description
-      it.properties."$fieldName".required == isRequired
-      it.properties."$fieldName".type.erasedType == type
-      it.properties."$fieldName".qualifiedType == qualifiedTypeName
-      it.properties."$fieldName".allowableValues == allowableValues
+      assert it.properties.size() == 2
+      assert it.properties.containsKey(fieldName)
+      assert it.properties."$fieldName".description == description
+      assert it.properties."$fieldName".required == isRequired
+      assert it.properties."$fieldName".type.erasedType == type
+      assert it.properties."$fieldName".qualifiedType == qualifiedTypeName
+      assert it.properties."$fieldName".allowableValues == allowableValues
       true
     }
 
@@ -161,6 +163,53 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
     fieldName || description | isRequired | type    | qualifiedTypeName   | allowableValues
     "foo"     || null        | true       | String  | "java.lang.String"  | null
     "bar"     || null        | true       | Integer | "java.lang.Integer" | null
+  }
+
+  def "Type with @JsonCreator constructor that expects a delegate value"() {
+    given:
+    def om = new ObjectMapper()
+    om.registerModule(new ParameterNamesModule())
+    def sut = defaultModelProvider(om)
+    def typeToTest = resolver.resolve(typeWithDelegatingValueInConstructor())
+    def reqContext = inputParam(
+        "0_0",
+        "group",
+        typeToTest,
+        Optional.empty(),
+        new HashSet<>(),
+        documentationType,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        emptySet())
+    def resContext = returnValue(
+        "0_0",
+        "group",
+        typeToTest,
+        Optional.empty(),
+        documentationType,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        emptySet())
+
+    when:
+    def models = [sut.modelFor(reqContext).get(), sut.modelFor(resContext).get()]
+
+    then:
+    models.each {
+      assert it.properties.size() == 2
+      assert it.properties.containsKey(fieldName)
+      assert it.properties."$fieldName".description == description
+      assert it.properties."$fieldName".required == isRequired
+      assert it.properties."$fieldName".type.erasedType == type
+      assert it.properties."$fieldName".qualifiedType == qualifiedTypeName
+      assert it.properties."$fieldName".allowableValues == allowableValues
+      true
+    }
+
+    where:
+    fieldName || description | isRequired | type    | qualifiedTypeName   | allowableValues
+    "foo"     || null        | false      | String  | "java.lang.String"  | null
+    "bar"     || null        | false      | Integer | "java.lang.Integer" | null
   }
 }
 
