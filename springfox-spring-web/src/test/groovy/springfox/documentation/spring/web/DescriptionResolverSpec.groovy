@@ -20,6 +20,8 @@ class DescriptionResolverSpec extends Specification {
       value         | key
       "key1value"   | '${key1}'
       "key2value"   | '${key2}'
+      "key2value"   | '${key2:}'
+      "key2value"   | '${key2:key2default}'
       '${unknown}'  | '${unknown}'
       "key1"        | 'key1'
       "key2"        | 'key2'
