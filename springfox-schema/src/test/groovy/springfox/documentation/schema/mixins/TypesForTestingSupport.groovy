@@ -22,6 +22,7 @@ package springfox.documentation.schema.mixins
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.hateoas.CollectionModel
+import org.springframework.hateoas.EntityModel
 import org.springframework.http.ResponseEntity
 import org.springframework.ui.ModelMap
 import springfox.documentation.schema.*
@@ -208,8 +209,9 @@ class TypesForTestingSupport {
   def ResolvedType typeWithVoidLists() {
     resolver.resolve(GenericTypeBoundToMultiple, Void.class, Void.class)
   }
-  def ResolvedType genericResource() {
-    resolver.resolve(Resource, SubclassOfResourceSupport.class)
+
+  def ResolvedType genericEntityModel() {
+    resolver.resolve(EntityModel, SubclassOfResourceSupport.class)
   }
 
   static def nestedMaps() {
