@@ -18,22 +18,17 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.schema.Types;
-import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.actionName;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.bodyAnnotations;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.lowerCamelCaseName;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.pathAnnotations;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.propertyIdentifierName;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.propertyItemResponse;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.propertyResponse;
+import static springfox.documentation.spring.data.rest.RequestExtractionUtils.upperCamelCaseName;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,9 +40,24 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.repository.core.RepositoryMetadata;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
+import springfox.documentation.schema.Types;
+import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
 abstract class SpecificationBuilder {
 
@@ -324,17 +334,17 @@ abstract class SpecificationBuilder {
           methodResolver.methodReturnType(handler);
 
       if (isContainerType(methodReturnType)) {
-        return resolver.resolve(Resources.class,
+        return resolver.resolve(CollectionModel.class,
             collectionElementType(methodReturnType));
       } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
-        return resolver.resolve(Resources.class, domainReturnType);
+        return resolver.resolve(CollectionModel.class, domainReturnType);
       } else if (Types.isBaseType(domainReturnType)) {
         return domainReturnType;
       } else if (Types.isVoid(domainReturnType)) {
         return resolver.resolve(Void.TYPE);
       }
 
-      return resolver.resolve(Resource.class, domainReturnType);
+      return resolver.resolve(EntityModel.class, domainReturnType);
     }
 
     private List<ResolvedMethodParameter> transferResolvedMethodParameterList(

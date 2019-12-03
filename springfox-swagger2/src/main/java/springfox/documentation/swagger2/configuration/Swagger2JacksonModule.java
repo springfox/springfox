@@ -96,7 +96,7 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
   @JsonAutoDetect
   @JsonInclude(value = Include.NON_EMPTY)
-  private interface PropertyExampleSerializerMixin {
+  interface PropertyExampleSerializerMixin {
 
     @JsonSerialize(using = PropertyExampleSerializer.class)
     Object getExample();

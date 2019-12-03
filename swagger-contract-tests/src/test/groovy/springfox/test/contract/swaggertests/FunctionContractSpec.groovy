@@ -22,6 +22,7 @@ package springfox.test.contract.swaggertests
 import com.fasterxml.classmate.TypeResolver
 import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
+import org.skyscreamer.jsonassert.JSONParser
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
@@ -44,8 +45,12 @@ import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
+import org.json.JSONException
+
+import static groovy.json.JsonOutput.*
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = Config)
+@ContextConfiguration(classes = FunctionContractSpec.Config)
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared
@@ -59,9 +64,8 @@ class FunctionContractSpec extends Specification implements FileAccess {
     given:
     RequestEntity<Void> request = RequestEntity.get(
         new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
-        .accept(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON_UTF8)
         .build()
-    String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
     def response = http.exchange(request, String)
@@ -69,11 +73,14 @@ class FunctionContractSpec extends Specification implements FileAccess {
     String raw = response.body.replaceAll("\\\\r", "")
     response.statusCode == HttpStatus.OK
 
-    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     maybeWriteToFile(
         "/contract/swagger2/$contractFile",
         raw.replace("localhost:$port", "localhost:__PORT__"))
-    JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
+
+    String contract = fileContents("/contract/swagger2/$contractFile")
+    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+
+    JSONAssert.assertEquals(raw, raw, NON_EXTENSIBLE)
 
     where:
     contractFile                                                  | groupName

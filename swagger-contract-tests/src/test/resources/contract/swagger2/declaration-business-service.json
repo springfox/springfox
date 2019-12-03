@@ -34,8 +34,8 @@
                 "summary": "Find a business by its id",
                 "operationId": "findBusinessById_2",
                 "produces": [
-                    "*/*",
-                    "application/json"
+                    "application/json",
+                    "*/*"
                 ],
                 "parameters": [
                     {
@@ -134,8 +134,8 @@
                 "summary": "Find a business by its id",
                 "operationId": "findBusinessById_3",
                 "produces": [
-                    "*/*",
-                    "application/json"
+                    "application/json",
+                    "*/*"
                 ],
                 "parameters": [
                     {
@@ -172,8 +172,8 @@
                 "summary": "getResponseEntity",
                 "operationId": "getResponseEntityUsingGET_1",
                 "produces": [
-                    "*/*",
-                    "application/json"
+                    "application/json",
+                    "*/*"
                 ],
                 "parameters": [
                     {
@@ -246,8 +246,8 @@
                 "summary": "getVanillaPathVariable",
                 "operationId": "getVanillaPathVariableUsingGET_1",
                 "produces": [
-                    "*/*",
-                    "application/json"
+                    "application/json",
+                    "*/*"
                 ],
                 "parameters": [
                     {

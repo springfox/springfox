@@ -18,22 +18,37 @@
  */
 package springfox.documentation.spring.web.dummy.controllers;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Authorization;
-import io.swagger.annotations.AuthorizationScope;
-import org.springframework.hateoas.Resource;
+import static org.springframework.http.MediaType.APPLICATION_ATOM_XML_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
+import java.beans.ConstructorProperties;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.sql.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +62,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Authorization;
+import io.swagger.annotations.AuthorizationScope;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.spring.web.dummy.models.Bug1749;
 import springfox.documentation.spring.web.dummy.models.EHDTOApplicatorUnits;
@@ -54,29 +86,6 @@ import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.LanguageResponse;
 import springfox.documentation.spring.web.dummy.models.Response;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
-import java.beans.ConstructorProperties;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.sql.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
-import static org.springframework.http.MediaType.*;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Api(tags = "Bugs")
 @RestController
@@ -125,8 +134,8 @@ public class BugsController {
   }
 
   @RequestMapping(value = "1440", method = GET)
-  public Resource<String> issue1440() {
-    return new Resource<String>("1420");
+  public EntityModel<String> issue1440() {
+    return new EntityModel<>("1420");
   }
 
   @RequestMapping(value = "1475", method = GET)

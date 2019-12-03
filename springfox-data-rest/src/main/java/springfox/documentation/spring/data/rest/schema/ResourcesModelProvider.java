@@ -21,7 +21,7 @@ package springfox.documentation.spring.data.rest.schema;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.CollectionModel;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
@@ -65,7 +65,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
     String name = typeNameExtractor.typeName(context);
     return context.getBuilder()
         .description(String.format(
-            "Resources of %s",
+            "CollectionModel of %s",
             type.getSimpleName()))
         .name(name)
         .qualifiedType(type.getName())
@@ -139,7 +139,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
 
   @Override
   public boolean supports(ModelContext delimiter) {
-    return Resources.class.equals(resourceType(delimiter.getType()).getErasedType())
+    return CollectionModel.class.equals(resourceType(delimiter.getType()).getErasedType())
         && delimiter.getDocumentationType() == DocumentationType.SWAGGER_2;
   }
 

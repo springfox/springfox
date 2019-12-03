@@ -30,7 +30,7 @@ import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import static springfox.documentation.spi.service.contexts.Orderings.*
 
-class DocumentationContextSpec extends Specification {
+public class DocumentationContextSpec extends Specification {
   DocumentationContextBuilder contextBuilder
   Docket plugin
   ApiOperationReader operationReader

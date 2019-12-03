@@ -28,6 +28,8 @@ import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProvider
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
+import springfox.documentation.spi.schema.contexts.ModelContext
+import java.util.Optional;
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
@@ -41,7 +43,8 @@ class AlternatePropertiesSpec extends Specification {
     given:
     def provider = alternateTypeProvider()
     ModelProvider modelProvider = defaultModelProvider()
-    Model model = modelProvider.modelFor(inputParam("0_0",
+    ModelContext context = inputParam(
+        "0_0",
         "group",
         typeWithAlternateProperty(),
         Optional.empty(),
@@ -49,7 +52,11 @@ class AlternatePropertiesSpec extends Specification {
         SWAGGER_12,
         provider,
         namingStrategy,
-        emptySet())).get()
+        emptySet())
+    
+    Model model = 
+        modelProvider.modelFor(context)
+        .get()
     expect:
     model.getName() == "TypeWithAlternateProperty"
     model.getProperties().containsKey("localDate")

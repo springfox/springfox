@@ -173,6 +173,16 @@
         
     ],
     "models": {
+        "Category_1": {
+            "description": "",
+            "id": "Category_1",
+            "properties": {
+                "name": {
+                    "required": false,
+                    "type": "string"
+                }
+            }
+        },
         "FancyPet": {
             "description": "",
             "id": "FancyPet",
@@ -193,16 +203,6 @@
                     "required": false,
                     "type": "string"
                 },
-                "name": {
-                    "required": false,
-                    "type": "string"
-                }
-            }
-        },
-        "Category_1": {
-            "description": "",
-            "id": "Category_1",
-            "properties": {
                 "name": {
                     "required": false,
                     "type": "string"

@@ -19,7 +19,12 @@
 
 package springfox.documentation.spring.web.readers.operation;
 
-import com.fasterxml.classmate.ResolvedType;
+import static springfox.documentation.schema.ResolvedTypes.resolvedTypeSignature;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +33,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
+
+import com.fasterxml.classmate.ResolvedType;
+
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-
-import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -116,21 +117,18 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
   private Optional<ResolvedType> viewForReturn(
       RequestMappingContext context,
       ResolvedType regularModel) {
-    ViewProviderPlugin viewProvider =
-        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
-    return viewProvider.viewFor(
-        regularModel,
-        context);
+      return pluginsManager
+              .viewProvider(context.getDocumentationContext().getDocumentationType())
+              .flatMap(viewProvider -> viewProvider.viewFor(regularModel, context));
   }
 
   private Optional<ResolvedType> viewForParameter(
       RequestMappingContext context,
       ResolvedType modelType,
       ResolvedMethodParameter parameter) {
-    ViewProviderPlugin viewProvider =
-        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
-    return viewProvider.viewFor(
-        modelType,
-        parameter);
+    return pluginsManager
+            .viewProvider(context.getDocumentationContext().getDocumentationType())
+            .flatMap(viewProvider -> viewProvider.viewFor(modelType, parameter));
+
   }
 }

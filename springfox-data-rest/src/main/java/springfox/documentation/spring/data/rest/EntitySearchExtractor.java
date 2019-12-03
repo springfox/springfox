@@ -18,22 +18,22 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.RequestHandler;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.entityAction;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
+import org.springframework.web.method.HandlerMethod;
+
+import springfox.documentation.RequestHandler;
 
 class EntitySearchExtractor implements EntityOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityContext context) {
 
-    return StreamSupport.stream(context.searchMappings().getExportedMappings().spliterator(), false)
+    return context.searchMappings().getExportedMappings()
         .map(mapping -> {
 
           final HandlerMethod handler = new HandlerMethod(context.getRepositoryInstance(), mapping.getMethod());

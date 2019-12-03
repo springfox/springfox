@@ -19,28 +19,28 @@
 
 package springfox.documentation.schema.plugins;
 
-import com.fasterxml.classmate.ResolvedType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.plugin.core.PluginRegistry;
-import org.springframework.stereotype.Component;
-import springfox.documentation.schema.Model;
-import springfox.documentation.schema.ModelProperty;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.ModelBuilderPlugin;
-import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
-import springfox.documentation.spi.schema.ViewProviderPlugin;
-import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
-import springfox.documentation.spi.schema.contexts.ModelContext;
-import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Optional.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.plugin.core.PluginRegistry;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelProperty;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ModelBuilderPlugin;
+import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 @Component
 public class SchemaPluginsManager {
@@ -79,28 +79,27 @@ public class SchemaPluginsManager {
     return context.getBuilder().build();
   }
 
-  public ViewProviderPlugin viewProvider(DocumentationType documentationType) {
+  public Optional<ViewProviderPlugin> viewProvider(DocumentationType documentationType) {
     return viewProviders.getPluginFor(documentationType);
   }
 
   public Optional<Model> syntheticModel(ModelContext context) {
-    if (syntheticModelProviders.hasPluginFor(context)) {
-      return of(syntheticModelProviders.getPluginFor(context).create(context));
-    }
-    return empty();
+    return syntheticModelProviders
+            .getPluginFor(context)
+            .map(plugin -> plugin.create(context));
   }
 
   public List<ModelProperty> syntheticProperties(ModelContext context) {
-    if (syntheticModelProviders.hasPluginFor(context)) {
-      return syntheticModelProviders.getPluginFor(context).properties(context);
-    }
-    return new ArrayList<ModelProperty>();
+    return syntheticModelProviders
+            .getPluginFor(context)
+            .map(plugin -> plugin.properties(context))
+            .orElseGet(ArrayList::new);
   }
 
   public Set<ResolvedType> dependencies(ModelContext context) {
-    if (syntheticModelProviders.hasPluginFor(context)) {
-      return syntheticModelProviders.getPluginFor(context).dependencies(context);
-    }
-    return new HashSet<ResolvedType>();
+    return syntheticModelProviders
+            .getPluginFor(context)
+            .map(plugin -> plugin.dependencies(context))
+            .orElseGet(HashSet::new);
   }
 }

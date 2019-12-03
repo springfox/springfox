@@ -19,7 +19,7 @@
 
 package springfox.documentation.schema
 import com.fasterxml.classmate.TypeResolver
-import org.springframework.hateoas.Resources
+import org.springframework.hateoas.CollectionModel
 import org.springframework.http.ResponseEntity
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -104,7 +104,7 @@ class AlternateTypeProviderSpec extends Specification {
   AlternateTypeRule hateoasResourcesRule() {
     def typeResolver = new TypeResolver()
     newRule(
-        typeResolver.resolve(Resources.class, SimpleTypeResource.class),
+        typeResolver.resolve(CollectionModel.class, SimpleTypeResource.class),
         typeResolver.resolve(List.class, SimpleType.class))
   }
 

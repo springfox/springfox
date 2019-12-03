@@ -220,8 +220,8 @@
         "/bugs/1420": {
             "get": {
                 "tags": [
-                    "foo",
-                    "Bugs"
+                    "Bugs",
+                    "foo"
                 ],
                 "summary": "issue1420",
                 "operationId": "issue1420UsingGET_2",
@@ -247,7 +247,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Resource«string»"
+                            "$ref": "#/definitions/EntityModel\u00abstring\u00bb"
                         }
                     }
                 },
@@ -493,8 +493,8 @@
                         "required": false,
                         "type": "integer",
                         "default": 0,
-                        "allowEmptyValue": false,
-                        "format": "int32"
+                        "format": "int32",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -538,27 +538,6 @@
                         "type": "boolean"
                     },
                     {
-                        "name": "companyName",
-                        "in": "query",
-                        "description": "companyName",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "email",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "like",
-                        "in": "query",
-                        "description": "like",
-                        "required": false,
-                        "type": "boolean"
-                    },
-                    {
                         "name": "pageNumber",
                         "in": "query",
                         "required": true,
@@ -597,6 +576,27 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "companyName",
+                        "in": "query",
+                        "description": "companyName",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "email",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "like",
+                        "in": "query",
+                        "description": "like",
+                        "required": false,
+                        "type": "boolean"
                     }
                 ],
                 "responses": {
@@ -803,8 +803,8 @@
                 "summary": "method1",
                 "operationId": "method1UsingGET_2",
                 "produces": [
-                    "application/atom+xml",
-                    "application/json;charset=UTF-8"
+                    "application/json;charset=UTF-8",
+                    "application/atom+xml"
                 ],
                 "responses": {
                     "200": {
@@ -1181,14 +1181,6 @@
                     },
                     {
                         "in": "formData",
-                        "name": "enumType",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "formData",
                         "name": "foo",
                         "description": "description of foo",
                         "required": true,
@@ -1204,6 +1196,23 @@
                         "schema": {
                             "type": "string",
                             "format": "date-time"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "readOnlyString",
+                        "description": "A read only string",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "formData",
+                        "name": "enumType",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     {
@@ -1229,15 +1238,6 @@
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    {
-                        "in": "formData",
-                        "name": "readOnlyString",
-                        "description": "A read only string",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 ],
                 "responses": {
@@ -1256,21 +1256,21 @@
                 "tags": [
                     "Bugs"
                 ],
-                "summary": "测试RequesetParam",
-                "description": "测试RequesetParam",
+                "summary": "\u6d4b\u8bd5RequesetParam",
+                "description": "\u6d4b\u8bd5RequesetParam",
                 "operationId": "bug2020UsingGET_2",
                 "parameters": [
                     {
                         "name": "date",
                         "in": "path",
-                        "description": "日期：2017-09-01",
+                        "description": "\u65e5\u671f\uff1a2017-09-01",
                         "required": true,
                         "type": "string"
                     },
                     {
                         "name": "name",
                         "in": "query",
-                        "description": "名称",
+                        "description": "\u540d\u79f0",
                         "required": false,
                         "type": "string"
                     }
@@ -1466,8 +1466,8 @@
         "/bugs/2268{?$filter}": {
             "get": {
                 "tags": [
-                    "example",
-                    "Bugs"
+                    "Bugs",
+                    "example"
                 ],
                 "summary": "Get all examples",
                 "description": "Get all examples ",
@@ -1695,40 +1695,40 @@
                 "deprecated": false
             }
         },
-        "/bugs/2822":{
-            "post":{
-                "tags":[
+        "/bugs/2822": {
+            "post": {
+                "tags": [
                     "Bugs"
                 ],
-                "summary":"bug2822",
-                "operationId":"bug2822UsingPOST_2",
-                "consumes":[
+                "summary": "bug2822",
+                "operationId": "bug2822UsingPOST_2",
+                "consumes": [
                     "application/json"
                 ],
-                "parameters":[
+                "parameters": [
                     {
-                        "in":"body",
-                        "name":"message",
-                        "description":"message",
-                        "required":false,
-                        "schema":{
-                            "type":"string",
-                            "example":{
-                                "value":"exampleMessage",
-                                "mediaType":{
+                        "in": "body",
+                        "name": "message",
+                        "description": "message",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": {
+                                "value": "exampleMessage",
+                                "mediaType": {
                                     "empty": true,
-                                    "present":false
+                                    "present": false
                                 }
                             }
                         }
                     }
                 ],
-                "responses":{
-                    "200":{
-                        "description":"OK"
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 },
-                "deprecated":false
+                "deprecated": false
             }
         },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
@@ -1739,17 +1739,6 @@
                 "summary": "addBook",
                 "operationId": "addBookUsingGET_2",
                 "parameters": [
-                    {
-                        "name": "authorIds",
-                        "in": "query",
-                        "description": "authorIds",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
                     {
                         "name": "authors[0].books[0].id",
                         "in": "query",
@@ -1788,6 +1777,17 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "authorIds",
+                        "in": "query",
+                        "description": "authorIds",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
                     }
                 ],
                 "responses": {
@@ -1851,7 +1851,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Response«LanguageResponse»"
+                            "$ref": "#/definitions/Response\u00abLanguageResponse\u00bb"
                         }
                     }
                 },
@@ -2110,7 +2110,7 @@
                 "longitude": {
                     "type": "number",
                     "format": "double",
-                    "description": "经度"
+                    "description": "\u7ecf\u5ea6"
                 }
             },
             "title": "Bug1777",
@@ -2253,6 +2253,15 @@
                 "wrapped": false
             }
         },
+        "EntityModel\u00abstring\u00bb": {
+            "type": "object",
+            "properties": {
+                "links": {
+                    "$ref": "#/definitions/Links"
+                }
+            },
+            "title": "EntityModel\u00abstring\u00bb"
+        },
         "Example": {
             "type": "object",
             "properties": {
@@ -2349,14 +2358,14 @@
             },
             "title": "LanguageText"
         },
-        "LinkAlternate": {
+        "Links": {
             "type": "object",
             "properties": {
-                "href": {
-                    "type": "string"
+                "empty": {
+                    "type": "boolean"
                 }
             },
-            "title": "LinkAlternate"
+            "title": "Links"
         },
         "Model1819": {
             "type": "object",
@@ -2430,30 +2439,7 @@
             },
             "title": "ProductVO"
         },
-        "Resource«string»": {
-            "type": "object",
-            "properties": {
-                "links": {
-                    "type": "object",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "additionalProperties": {
-                        "$ref": "#/definitions/LinkAlternate"
-                    }
-                }
-            },
-            "title": "Resource«string»",
-            "xml": {
-                "name": "Resource«string»",
-                "attribute": false,
-                "wrapped": false
-            }
-        },
-        "Response«LanguageResponse»": {
+        "Response\u00abLanguageResponse\u00bb": {
             "type": "object",
             "properties": {
                 "data": {
@@ -2478,7 +2464,7 @@
                     "type": "string"
                 }
             },
-            "title": "Response«LanguageResponse»"
+            "title": "Response\u00abLanguageResponse\u00bb"
         },
         "Status": {
             "type": "object",

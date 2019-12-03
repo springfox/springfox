@@ -19,31 +19,35 @@
 
 package springfox.documentation.schema;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-import com.fasterxml.classmate.types.ResolvedArrayType;
-import com.fasterxml.classmate.types.ResolvedObjectType;
-import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import static java.util.Optional.ofNullable;
+import static springfox.documentation.schema.Collections.containerType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.schema.Types.typeNameFor;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.classmate.types.ResolvedArrayType;
+import com.fasterxml.classmate.types.ResolvedObjectType;
+import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
-
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Optional.*;
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.schema.Types.*;
 
 @Component
 public class TypeNameExtractor {
@@ -191,14 +195,20 @@ public class TypeNameExtractor {
     if (!isMapType(asResolved(context.getType())) && knownNames.containsKey(context.getTypeId())) {
       return knownNames.get(context.getTypeId());
     }
-    TypeNameProviderPlugin selected = typeNameProviders.getPluginFor(
-        context.getDocumentationType(),
-        new DefaultTypeNameProvider());
-    String modelName = selected.nameFor(((ResolvedType) context.getType()).getErasedType());
-    LOG.debug(
-        "Generated unique model named: {}, with model id: {}",
-        modelName,
-        context.getTypeId());
-    return modelName;
+    try {
+      TypeNameProviderPlugin selected = typeNameProviders.getPluginOrDefaultFor(
+          context.getDocumentationType(),
+          DefaultTypeNameProvider::new);
+      String modelName = selected.nameFor(((ResolvedType) context.getType()).getErasedType());
+      LOG.debug(
+          "Generated unique model named: {}, with model id: {}",
+          modelName,
+          context.getTypeId());
+      return modelName;
+    } catch (NoSuchMethodError e) {
+        Stream.of(typeNameProviders.getClass().getDeclaredMethods()).forEach(System.out::println);
+//        new Throwable(e).printStackTrace(System.out);
+        return null;
+    }
   }
 }

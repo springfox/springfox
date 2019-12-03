@@ -64,7 +64,7 @@ class DocketSpec extends DocumentationContextSpec {
     pluginContext.apiInfo.getLicenseUrl() == "http://www.apache.org/licenses/LICENSE-2.0"
     pluginContext.apiInfo.version == "1.0"
 
-    pluginContext.pathProvider instanceof DummyPathProvider // this one is dummy as this is what we have in test ctx
+    pluginContext.pathProvider instanceof DocumentationContextSpec.DummyPathProvider // this one is dummy as this is what we have in test ctx
   }
 
   def "Swagger global response messages should override the default for a particular RequestMethod"() {

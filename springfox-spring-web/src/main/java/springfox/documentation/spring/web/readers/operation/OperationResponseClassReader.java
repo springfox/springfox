@@ -18,28 +18,29 @@
  */
 package springfox.documentation.spring.web.readers.operation;
 
-import com.fasterxml.classmate.ResolvedType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import springfox.documentation.schema.TypeNameExtractor;
-import springfox.documentation.schema.plugins.SchemaPluginsManager;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spi.schema.ViewProviderPlugin;
-import springfox.documentation.spi.schema.contexts.ModelContext;
-import springfox.documentation.spi.service.OperationBuilderPlugin;
-import springfox.documentation.spi.service.contexts.OperationContext;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 
-import static springfox.documentation.schema.ResolvedTypes.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.spi.service.OperationBuilderPlugin;
+import springfox.documentation.spi.service.contexts.OperationContext;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -60,15 +61,15 @@ public class OperationResponseClassReader implements OperationBuilderPlugin {
 
   @Override
   public void apply(OperationContext context) {
-    ResolvedType returnType = context.getReturnType();
-    returnType = context.alternateFor(returnType);
+    ResolvedType returnType = context.alternateFor(context.getReturnType());
     
-    ViewProviderPlugin viewProvider = 
-        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
+    Optional<ResolvedType> view = pluginsManager
+            .viewProvider(context.getDocumentationContext().getDocumentationType())
+            .flatMap(viewProvider -> viewProvider.viewFor(returnType, context));
 
     ModelContext modelContext = context.operationModelsBuilder().addReturn(
         returnType,
-        viewProvider.viewFor(returnType, context));
+        view);
 
     Map<String, String> knownNames;
     knownNames = new HashMap<>();

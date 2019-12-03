@@ -42,7 +42,9 @@ trait FileAccess {
         writer.write(StringEscapeUtils.unescapeJava(prettyPrint(contents)))
       } finally {
         writer.flush()
+        file.flush()
         writer.close()
+        file.close()
       }
     }
     true

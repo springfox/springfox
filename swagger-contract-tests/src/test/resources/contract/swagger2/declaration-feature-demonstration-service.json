@@ -6,7 +6,7 @@
         "title": "Api Documentation",
         "termsOfService": "urn:tos",
         "contact": {
-
+            
         },
         "license": {
             "name": "Apache 2.0",
@@ -205,11 +205,14 @@
         },
         "/features/1570": {
             "post": {
+                "tags": [
+                    "feature-demonstration-service"
+                ],
+                "summary": "Demo using examples",
+                "operationId": "saveUserUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
-                "deprecated": false,
-                "operationId": "saveUserUsingPOST_1",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -225,10 +228,7 @@
                         }
                     }
                 },
-                "summary": "Demo using examples",
-                "tags": [
-                    "feature-demonstration-service"
-                ]
+                "deprecated": false
             }
         },
         "/features/2031": {
@@ -507,16 +507,6 @@
                         "x-example": 10
                     },
                     {
-                        "name": "enumType",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "enum": [
-                            "ONE",
-                            "TWO"
-                        ]
-                    },
-                    {
                         "name": "foo",
                         "in": "query",
                         "description": "description of foo",
@@ -536,6 +526,23 @@
                         "format": "date-time"
                     },
                     {
+                        "name": "readOnlyString",
+                        "in": "query",
+                        "description": "A read only string",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "enumType",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    },
+                    {
                         "name": "nestedType.name",
                         "in": "query",
                         "required": false,
@@ -550,13 +557,6 @@
                     {
                         "name": "propertyWithNoSetterMethod",
                         "in": "query",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "readOnlyString",
-                        "in": "query",
-                        "description": "A read only string",
                         "required": false,
                         "type": "string"
                     }
@@ -814,7 +814,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Map«string,string»"
+                                "$ref": "#/definitions/Map\u00abstring,string\u00bb"
                             }
                         }
                     }
@@ -1256,16 +1256,16 @@
             },
             "title": "FancyPet"
         },
-        "Map«string,Example»": {
+        "Map\u00abstring,Example\u00bb": {
             "type": "object",
-            "title": "Map«string,Example»",
+            "title": "Map\u00abstring,Example\u00bb",
             "additionalProperties": {
                 "$ref": "#/definitions/Example"
             }
         },
-        "Map«string,string»": {
+        "Map\u00abstring,string\u00bb": {
             "type": "object",
-            "title": "Map«string,string»",
+            "title": "Map\u00abstring,string\u00bb",
             "additionalProperties": {
                 "type": "string"
             }

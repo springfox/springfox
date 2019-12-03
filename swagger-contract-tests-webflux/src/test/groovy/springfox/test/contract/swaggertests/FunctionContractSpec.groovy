@@ -43,7 +43,7 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = Config)
+@ContextConfiguration(classes = FunctionContractSpec.Config)
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared
@@ -59,7 +59,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
         new URI("http://localhost:$port/v2/api-docs?group=$groupName"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
-    String contract = fileContents("/contract/swagger2/$contractFile")
 
     when:
     def response = http.exchange(request, String)
@@ -67,10 +66,13 @@ class FunctionContractSpec extends Specification implements FileAccess {
     String raw = response.body
     response.statusCode == HttpStatus.OK
 
-    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
     maybeWriteToFile(
         "/contract/swagger2/$contractFile",
         raw.replace("localhost:$port", "localhost:__PORT__"))
+
+    String contract = fileContents("/contract/swagger2/$contractFile")
+    def withPortReplaced = contract.replaceAll("__PORT__", "$port")
+
     JSONAssert.assertEquals(withPortReplaced, raw, NON_EXTENSIBLE)
 
     where:

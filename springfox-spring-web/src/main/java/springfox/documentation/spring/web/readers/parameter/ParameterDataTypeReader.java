@@ -18,8 +18,18 @@
  */
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
+import static springfox.documentation.schema.Collections.collectionElementType;
+import static springfox.documentation.schema.Collections.isContainerType;
+import static springfox.documentation.schema.Maps.isMapType;
+import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
+import static springfox.documentation.schema.Types.isBaseType;
+import static springfox.documentation.schema.Types.typeNameFor;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +38,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
+
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -35,20 +49,9 @@ import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
-import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-
-import static springfox.documentation.schema.Collections.*;
-import static springfox.documentation.schema.Maps.*;
-import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.schema.Types.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -104,16 +107,16 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
             parameterType);
       }
     }
-    ViewProviderPlugin viewProvider = pluginsManager
-        .viewProvider(context.getDocumentationContext().getDocumentationType());
+    ResolvedType chosenParameterType = parameterType;
+    Optional<ResolvedType> view = pluginsManager
+        .viewProvider(context.getDocumentationContext().getDocumentationType())
+        .flatMap(viewProvider -> viewProvider.viewFor(chosenParameterType, methodParameter));
 
     ModelContext modelContext = context.getOperationContext()
         .operationModelsBuilder()
         .addInputParam(
             parameterType,
-            viewProvider.viewFor(
-                parameterType,
-                methodParameter),
+            view,
             new HashSet<>());
 
     final Map<String, String> knownNames = new HashMap<>();

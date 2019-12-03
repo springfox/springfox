@@ -34,8 +34,8 @@
         }
     ],
     "schemes": [
-        "https",
-        "http"
+        "http",
+        "https"
     ],
     "produces": [
         "application/xml",
@@ -273,16 +273,16 @@
                     "400": {
                         "description": "Invalid ID supplied",
                         "headers": {
-                            "header1": {
-                                "type": "string"
-                            },
-                            "header2": {
+                            "header4": {
                                 "type": "string"
                             },
                             "header3": {
                                 "type": "string"
                             },
-                            "header4": {
+                            "header2": {
+                                "type": "string"
+                            },
+                            "header1": {
                                 "type": "string"
                             }
                         }
@@ -290,10 +290,10 @@
                     "404": {
                         "description": "Pet not found",
                         "headers": {
-                            "header3": {
+                            "header4": {
                                 "type": "string"
                             },
-                            "header4": {
+                            "header3": {
                                 "type": "string"
                             }
                         }
@@ -301,14 +301,14 @@
                 },
                 "security": [
                     {
-                        "api_key": [
-
-                        ]
-                    },
-                    {
                         "petstore_auth": [
                             "write:pets",
                             "read:pets"
+                        ]
+                    },
+                    {
+                        "api_key": [
+                            
                         ]
                     }
                 ],
@@ -329,6 +329,18 @@
                     "application/json"
                 ],
                 "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Order Status",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "placed",
+                            "approved",
+                            "delivered"
+                        ]
+                    },
                     {
                         "name": "complete",
                         "in": "query",
@@ -369,18 +381,6 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
-                    },
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Order Status",
-                        "required": false,
-                        "type": "string",
-                        "enum": [
-                            "placed",
-                            "approved",
-                            "delivered"
-                        ]
                     }
                 ],
                 "responses": {
@@ -697,6 +697,26 @@
                 ],
                 "parameters": [
                     {
+                        "name": "userStatus",
+                        "in": "query",
+                        "description": "User Status",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "enum": [
+                            "1-registered",
+                            "2-active",
+                            "3-closed"
+                        ]
+                    },
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "name that need to be deleted",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "name": "email",
                         "in": "query",
                         "required": false,
@@ -737,26 +757,6 @@
                         "name": "phone",
                         "in": "query",
                         "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "userStatus",
-                        "in": "query",
-                        "description": "User Status",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32",
-                        "enum": [
-                            "1-registered",
-                            "2-active",
-                            "3-closed"
-                        ]
-                    },
-                    {
-                        "name": "username",
-                        "in": "path",
-                        "description": "name that need to be deleted",
-                        "required": true,
                         "type": "string"
                     },
                     {
