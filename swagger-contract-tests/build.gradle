@@ -60,7 +60,7 @@ dependencies {
   compile project(':springfox-bean-validators')
   compile project(':springfox-spring-web').sourceSets.test.output
   compile project(':springfox-spring-webmvc').sourceSets.test.output
-
+  compile project(':springfox-swagger2-autoconfigure')
 
   compile(project(path: ':springfox-swagger-ui')) {
     exclude group: 'org.springframework', module: 'spring-web'

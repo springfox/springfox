@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+springfox.documentation.swagger2.configuration.Swagger2DocumentationWebFluxAutoConfiguration,\
+springfox.documentation.swagger2.configuration.Swagger2DocumentationWebMvcAutoConfiguration

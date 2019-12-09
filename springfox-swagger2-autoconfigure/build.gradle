@@ -1,0 +1,17 @@
+ext {
+  limits = [
+      'instruction': 95,
+      'branch'     : 89,
+      'line'       : 95,
+      'complexity' : 90,
+      'method'     : 95,
+      'class'      : 100
+  ]
+}
+
+dependencies {
+  compile project(':springfox-swagger2')
+  compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: springBoot
+
+  testCompile libs.test
+}

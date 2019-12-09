@@ -20,28 +20,57 @@
 package springfox.documentation.swagger2.configuration;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebFluxConfiguration;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
+import springfox.documentation.swagger2.mappers.*;
 import springfox.documentation.swagger2.web.Swagger2ControllerWebFlux;
 
 @Configuration
 @ConditionalOnClass(name = "org.springframework.web.reactive.BindingContext")
 @Import({ SpringfoxWebConfiguration.class, SpringfoxWebFluxConfiguration.class, SwaggerCommonConfiguration.class,
         Swagger2ControllerWebFlux.class })
-@ComponentScan(basePackages = {
-    "springfox.documentation.swagger2.readers.parameter",
-    "springfox.documentation.swagger2.mappers"
-})
-public class Swagger2DocumentationWebFluxConfiguration {
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+public class Swagger2DocumentationWebFluxAutoConfiguration {
+
   @Bean
   public JacksonModuleRegistrar swagger2Module() {
     return new Swagger2JacksonModule();
   }
 
+
+  @Bean
+  public ModelMapper modelMapper() {
+    return new ModelMapperImpl();
+  }
+
+  @Bean
+  public ParameterMapper parameterMapper() {
+    return new ParameterMapperImpl();
+  }
+
+  @Bean
+  public SecurityMapper securityMapper() {
+    return new SecurityMapperImpl();
+  }
+
+  @Bean
+  public LicenseMapper licenseMapper() {
+    return new LicenseMapperImpl();
+  }
+
+  @Bean
+  public VendorExtensionsMapper vendorExtensionsMapper() {
+    return new VendorExtensionsMapperImpl();
+  }
+
+  @Bean
+  public ServiceModelToSwagger2Mapper serviceModelToSwagger2Mapper() {
+    return new ServiceModelToSwagger2MapperImpl();
+  }
 }

@@ -42,7 +42,7 @@ import springfox.documentation.spring.web.dummy.controllers.BugsController
 import springfox.documentation.spring.web.dummy.controllers.FeatureDemonstrationService
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc
+import springfox.documentation.swagger2.configuration.Swagger2DocumentationWebMvcAutoConfiguration
 import springfox.petstore.PetStoreConfiguration
 import springfox.test.contract.swagger.Bug1767ListingScanner
 
@@ -54,9 +54,8 @@ import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.schema.AlternateTypeRules.*
 
 @Configuration
-@EnableSwagger2WebMvc
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
-@Import([SpringDataRestConfiguration, PetStoreConfiguration])
+@Import([SpringDataRestConfiguration, PetStoreConfiguration, Swagger2DocumentationWebMvcAutoConfiguration])
 class Swagger2TestConfig {
 
   @Autowired
