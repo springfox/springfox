@@ -57,20 +57,20 @@ class AlternateTypeProviderSpec extends Specification {
       sut.alternateFor(resolvedSource) == resolver.resolve(expectedAlternate)
 
     where:
-      rule                                                    | source                          | expectedAlternate
-      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(SimpleType)  | SimpleType
-      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(ComplexType) | genericClassOfType(ComplexType)
-      newRule(genericClassOfType(WildcardType), SimpleType)   | genericClassOfType(SimpleType)  | SimpleType
-      newRule(genericClassOfType(WildcardType), ComplexType)  | genericClassOfType(SimpleType)  | ComplexType
-      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)  | SimpleType
-      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType) | ComplexType
-      newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                     | ComplexType
-      newRule(genericClassOfType(WildcardType), WildcardType) | Void                            | Void
-      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(String)     | String
-      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(SimpleType) | SimpleType
-      mismatchedNestedGenericRule()                           | nestedGenericType(SimpleType) | nestedGenericType(nestedGenericType(SimpleType))
-      newRule(genericClassOfType(WildcardType), WildcardType) | nestedGenericType(SimpleType) | resolver.resolve(ResponseEntity, SimpleType)
-      hateoasCollectionModelRule()                            | resources(SimpleTypeResource) | resolver.resolve(List, SimpleType)
+      rule                                                    | source                           | expectedAlternate
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(SimpleType)   | SimpleType
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(ComplexType)  | genericClassOfType(ComplexType)
+      newRule(genericClassOfType(WildcardType), SimpleType)   | genericClassOfType(SimpleType)   | SimpleType
+      newRule(genericClassOfType(WildcardType), ComplexType)  | genericClassOfType(SimpleType)   | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)   | SimpleType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType)  | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                      | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | Void                             | Void
+      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(String)        | String
+      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(SimpleType)    | SimpleType
+      mismatchedNestedGenericRule()                           | nestedGenericType(SimpleType)    | nestedGenericType(nestedGenericType(SimpleType))
+      newRule(genericClassOfType(WildcardType), WildcardType) | nestedGenericType(SimpleType)    | resolver.resolve(ResponseEntity, SimpleType)
+      hateoasCollectionModelRule()                            | resources(SimpleTypeEntityModel) | resolver.resolve(List, SimpleType)
   }
 
   @Unroll
@@ -84,27 +84,26 @@ class AlternateTypeProviderSpec extends Specification {
       sut.alternateFor(resolvedSource) == resolver.resolve(expectedAlternate)
 
     where:
-      rule                                                    | source                          | expectedAlternate
-
-      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(SimpleType)  | SimpleType
-      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(ComplexType) | genericClassOfType(ComplexType)
-      newRule(genericClassOfType(WildcardType), SimpleType)   | genericClassOfType(SimpleType)  | SimpleType
-      newRule(genericClassOfType(WildcardType), ComplexType)  | genericClassOfType(SimpleType)  | ComplexType
-      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)  | SimpleType
-      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType) | ComplexType
-      newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                     | ComplexType
-      newRule(genericClassOfType(WildcardType), WildcardType) | Void                            | Void
-      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(String)     | String
-      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(SimpleType) | SimpleType
-      mismatchedNestedGenericRule()                           | nestedGenericType(SimpleType) | nestedGenericType(nestedGenericType(SimpleType))
-      newRule(genericClassOfType(WildcardType), WildcardType) | nestedGenericType(SimpleType) | resolver.resolve(ResponseEntity, SimpleType)
-      hateoasCollectionModelRule()                            | resources(SimpleTypeResource) | resolver.resolve(List, SimpleType)
+      rule                                                    | source                           | expectedAlternate
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(SimpleType)   | SimpleType
+      newRule(genericClassOfType(SimpleType), SimpleType)     | genericClassOfType(ComplexType)  | genericClassOfType(ComplexType)
+      newRule(genericClassOfType(WildcardType), SimpleType)   | genericClassOfType(SimpleType)   | SimpleType
+      newRule(genericClassOfType(WildcardType), ComplexType)  | genericClassOfType(SimpleType)   | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(SimpleType)   | SimpleType
+      newRule(genericClassOfType(WildcardType), WildcardType) | genericClassOfType(ComplexType)  | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | ComplexType                      | ComplexType
+      newRule(genericClassOfType(WildcardType), WildcardType) | Void                             | Void
+      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(String)        | String
+      newRule(nestedGenericType(WildcardType), WildcardType)  | nestedGenericType(SimpleType)    | SimpleType
+      mismatchedNestedGenericRule()                           | nestedGenericType(SimpleType)    | nestedGenericType(nestedGenericType(SimpleType))
+      newRule(genericClassOfType(WildcardType), WildcardType) | nestedGenericType(SimpleType)    | resolver.resolve(ResponseEntity, SimpleType)
+      hateoasCollectionModelRule()                            | resources(SimpleTypeEntityModel) | resolver.resolve(List, SimpleType)
   }
 
   AlternateTypeRule hateoasCollectionModelRule() {
     def typeResolver = new TypeResolver()
     newRule(
-        typeResolver.resolve(CollectionModel.class, SimpleTypeResource.class),
+        typeResolver.resolve(CollectionModel.class, SimpleTypeEntityModel.class),
         typeResolver.resolve(List.class, SimpleType.class))
   }
 

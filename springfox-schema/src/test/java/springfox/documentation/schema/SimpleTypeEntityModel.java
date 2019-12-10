@@ -18,7 +18,11 @@
  */
 package springfox.documentation.schema;
 
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.EntityModel;
 
-public class SubclassOfResourceSupport extends RepresentationModel {
+public class SimpleTypeEntityModel extends EntityModel<SimpleType> {
+  public SimpleTypeEntityModel(SimpleType content, Link... links) {
+    super(content, links);
+  }
 }

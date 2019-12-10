@@ -247,7 +247,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Resource«string»"
+                            "$ref": "#/definitions/EntityModel«string»"
                         }
                     }
                 },
@@ -2348,14 +2348,14 @@
             },
             "title": "LanguageText"
         },
-        "LinkAlternate": {
+        "Links": {
             "type": "object",
             "properties": {
-                "href": {
-                    "type": "string"
+                "empty": {
+                    "type": "boolean"
                 }
             },
-            "title": "LinkAlternate"
+            "title": "Links"
         },
         "Model1819": {
             "type": "object",
@@ -2429,28 +2429,14 @@
             },
             "title": "ProductVO"
         },
-        "Resource«string»": {
+        "EntityModel«string»": {
             "type": "object",
             "properties": {
                 "links": {
-                    "type": "object",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "additionalProperties": {
-                        "$ref": "#/definitions/LinkAlternate"
-                    }
+                    "$ref": "#/definitions/Links"
                 }
             },
-            "title": "Resource«string»",
-            "xml": {
-                "name": "Resource«string»",
-                "attribute": false,
-                "wrapped": false
-            }
+            "title": "EntityModel«string»"
         },
         "Response«LanguageResponse»": {
             "type": "object",

@@ -211,7 +211,7 @@ class TypesForTestingSupport {
   }
 
   def ResolvedType genericEntityModel() {
-    resolver.resolve(EntityModel, SubclassOfResourceSupport.class)
+    resolver.resolve(EntityModel, SubclassOfRepresentationModel.class)
   }
 
   static def nestedMaps() {

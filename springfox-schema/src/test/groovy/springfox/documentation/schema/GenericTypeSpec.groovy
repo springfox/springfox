@@ -78,7 +78,7 @@ class GenericTypeSpec extends SchemaSpecification {
     genericCollectionWithEnum()     | "List"                                        | "List«string»"                                | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
     genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
     genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
-    genericEntityModel()            | "List"                                        | "SubclassOfResourceSupport"                   | null
+    genericEntityModel()            | "List"                                        | "SubclassOfRepresentationModel"               | null
   }
 
   @Unroll
