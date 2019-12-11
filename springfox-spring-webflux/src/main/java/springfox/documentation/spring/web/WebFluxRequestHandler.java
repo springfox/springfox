@@ -65,7 +65,7 @@ public class WebFluxRequestHandler implements RequestHandler {
 
   @Override
   public Class<?> declaringClass() {
-    return handlerMethod.getBeanType();
+      return handlerMethod.getMethod().getDeclaringClass();
   }
 
   @Override

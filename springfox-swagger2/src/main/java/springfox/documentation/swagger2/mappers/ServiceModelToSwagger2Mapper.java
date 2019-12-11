@@ -20,26 +20,11 @@
 package springfox.documentation.swagger2.mappers;
 
 
-import io.swagger.models.Contact;
-import io.swagger.models.Info;
-import io.swagger.models.Operation;
-import io.swagger.models.Path;
-import io.swagger.models.Response;
-import io.swagger.models.Scheme;
-import io.swagger.models.Swagger;
-import io.swagger.models.Tag;
-import io.swagger.models.properties.Property;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import springfox.documentation.schema.ModelReference;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListing;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Documentation;
-import springfox.documentation.service.Header;
-import springfox.documentation.service.ResponseMessage;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.swagger2.mappers.ModelMapper.modelRefToProperty;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -52,10 +37,27 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
 
-import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
-import static springfox.documentation.builders.BuilderDefaults.*;
-import static springfox.documentation.swagger2.mappers.ModelMapper.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+
+import io.swagger.models.Contact;
+import io.swagger.models.Info;
+import io.swagger.models.Operation;
+import io.swagger.models.Path;
+import io.swagger.models.Response;
+import io.swagger.models.Scheme;
+import io.swagger.models.Swagger;
+import io.swagger.models.Tag;
+import io.swagger.models.properties.Property;
+import springfox.documentation.schema.ModelReference;
+import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiListing;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.Documentation;
+import springfox.documentation.service.Header;
+import springfox.documentation.service.ResponseMessage;
 
 @Mapper(uses = {
     ModelMapper.class,

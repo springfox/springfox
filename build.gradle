@@ -110,7 +110,7 @@ subprojects {
 apply from: "$rootDir/gradle/documentation.gradle"
 
 wrapper {
-  gradleVersion = '5.6.3'
+  gradleVersion = '5.5.1'
 }
 
 task codeCoverageReport(type: JacocoReport) {

@@ -18,19 +18,10 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.ResolvedType;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.RequestHandlerKey;
-import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper;
-import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
-import springfox.documentation.spring.wrapper.NameValueExpression;
-import springfox.documentation.spring.wrapper.PatternsRequestCondition;
-import springfox.documentation.spring.wrapper.RequestMappingInfo;
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -41,8 +32,21 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.RequestHandler;
+import springfox.documentation.RequestHandlerKey;
+import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper;
+import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 
 class SpringDataRestRequestHandler implements RequestHandler {
   private final EntityContext entityContext;
@@ -60,7 +64,7 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public Class<?> declaringClass() {
-    return actionSpecification.getDeclaringClass().orElse(null);
+    return entityContext.getRepositoryMetadata().getRepositoryInterface();
   }
 
   @Override
@@ -78,7 +82,9 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public String groupName() {
-    return String.format("%s Entity", entityContext.getName());
+    return String.format("%s%s",
+        this.entityContext.basePath(),
+        this.entityContext.resourcePath());
   }
 
   @Override
@@ -120,7 +126,6 @@ class SpringDataRestRequestHandler implements RequestHandler {
     return empty();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(

@@ -2,18 +2,18 @@
     "apiVersion": "1.0",
     "apis": [
         {
-            "description": "Address Entity\nSimple Jpa Repository",
-            "path": "/default/Address Entity",
+            "description": "Address Repository",
+            "path": "/default/rest/addresses",
             "position": 0
         },
         {
-            "description": "Person Entity\nSimple Jpa Repository",
-            "path": "/default/Person Entity",
+            "description": "Person Repository",
+            "path": "/default/rest/people",
             "position": 0
         },
         {
-            "description": "Simple Jpa Repository\nTag Entity",
-            "path": "/default/Tag Entity",
+            "description": "Tag Repository",
+            "path": "/default/rest/tags",
             "position": 0
         },
         {

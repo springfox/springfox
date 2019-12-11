@@ -18,19 +18,20 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.ResolvedType;
-import org.springframework.aop.support.AopUtils;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.service.ResolvedMethodParameter;
+import static java.util.Optional.ofNullable;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Optional.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.service.ResolvedMethodParameter;
 
 class ActionSpecification {
   private final Collection<RequestMethod> supportedMethods;
@@ -92,15 +93,5 @@ class ActionSpecification {
 
   public Optional<HandlerMethod> getHandlerMethod() {
     return ofNullable(handlerMethod);
-  }
-
-  public Optional<Class<?>> getDeclaringClass() {
-    return getHandlerMethod().map(input -> {
-      Object bean = new OptionalDeferencer<>().convert(handlerMethod.getBean());
-      if (AopUtils.isAopProxy(bean)) {
-        return AopUtils.getTargetClass(bean);
-      }
-      return (Class<?>) bean;
-    });
   }
 }

@@ -19,21 +19,21 @@
 
 package springfox.documentation.spring.web.scanners;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.stream.Collectors.*;
 
 @Component
 public class ApiListingReferenceScanner {
@@ -50,26 +50,27 @@ public class ApiListingReferenceScanner {
     int requestMappingContextId = 0;
 
     ApiSelector selector = context.getApiSelector();
-    Iterable<RequestHandler> matchingHandlers = context.getRequestHandlers().stream()
-        .filter(selector.getRequestHandlerSelector()).collect(toList());
-    for (RequestHandler handler : matchingHandlers) {
-      ResourceGroup resourceGroup = new ResourceGroup(
-          handler.groupName(),
-          handler.declaringClass(),
-          0);
-
-      RequestMappingContext requestMappingContext
-          = new RequestMappingContext(
-          String.valueOf(requestMappingContextId),
-          context,
-          handler);
-
-      resourceGroupRequestMappings.putIfAbsent(
-          resourceGroup,
-          new ArrayList<>());
-      resourceGroupRequestMappings.get(resourceGroup).add(requestMappingContext);
-
-      ++requestMappingContextId;
+    Predicate<RequestHandler> requestHandlerSelector = selector.getRequestHandlerSelector();
+    for (RequestHandler handler : context.getRequestHandlers()) {
+      if (requestHandlerSelector.test(handler)) {
+        ResourceGroup resourceGroup = new ResourceGroup(
+            handler.groupName(),
+            handler.declaringClass(),
+            0);
+  
+        RequestMappingContext requestMappingContext
+            = new RequestMappingContext(
+            String.valueOf(requestMappingContextId),
+            context,
+            handler);
+  
+        resourceGroupRequestMappings.putIfAbsent(
+            resourceGroup,
+            new ArrayList<>());
+        resourceGroupRequestMappings.get(resourceGroup).add(requestMappingContext);
+  
+        ++requestMappingContextId;
+      }
     }
     return new ApiListingReferenceScanResult(resourceGroupRequestMappings);
   }

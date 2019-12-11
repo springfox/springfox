@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import static java.util.Collections.emptyList;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static springfox.documentation.schema.Collections.collectionElementType;
 import static springfox.documentation.schema.Collections.isContainerType;
@@ -30,16 +31,16 @@ import static springfox.documentation.spring.data.rest.RequestExtractionUtils.pr
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.propertyResponse;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.upperCamelCaseName;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.TypeResolver;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -51,10 +52,6 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-
-import com.fasterxml.classmate.ResolvedType;
-import com.fasterxml.classmate.TypeResolver;
-
 import springfox.documentation.schema.Types;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
@@ -276,19 +273,19 @@ abstract class SpecificationBuilder {
           withParameter(new ResolvedMethodParameter(
               0,
               configuration.getPageParamName(),
-              Collections.EMPTY_LIST,
+              emptyList(),
               typeResolver.resolve(Integer.class)));
           //noinspection unchecked
           withParameter(new ResolvedMethodParameter(
               1,
               configuration.getLimitParamName(),
-              Collections.EMPTY_LIST,
+              emptyList(),
               typeResolver.resolve(Integer.class)));
           //noinspection unchecked
           withParameter(new ResolvedMethodParameter(
               2,
               configuration.getSortParamName(),
-              Collections.EMPTY_LIST,
+              emptyList(),
               typeResolver.resolve(String.class)));
 
         default:
@@ -334,8 +331,12 @@ abstract class SpecificationBuilder {
           methodResolver.methodReturnType(handler);
 
       if (isContainerType(methodReturnType)) {
-        return resolver.resolve(CollectionModel.class,
-            collectionElementType(methodReturnType));
+        ResolvedType collectionElementType = collectionElementType(methodReturnType);
+        if (collectionElementType.isAbstract() 
+            && collectionElementType.getErasedType().isAssignableFrom(domainReturnType.getErasedType())) {
+          collectionElementType = domainReturnType;
+        }
+        return resolver.resolve(CollectionModel.class, collectionElementType);
       } else if (Iterable.class.isAssignableFrom(methodReturnType.getErasedType())) {
         return resolver.resolve(CollectionModel.class, domainReturnType);
       } else if (Types.isBaseType(domainReturnType)) {

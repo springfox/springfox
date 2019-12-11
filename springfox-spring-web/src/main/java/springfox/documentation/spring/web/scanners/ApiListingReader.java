@@ -40,7 +40,7 @@ public class ApiListingReader implements ApiListingBuilderPlugin {
     String description = group.getControllerClass()
         .map(description())
         .orElse(group.getGroupName());
-
+    
     apiListingContext.apiListingBuilder()
         .description(description);
   }

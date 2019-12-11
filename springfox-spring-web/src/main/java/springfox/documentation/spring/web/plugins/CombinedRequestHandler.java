@@ -18,16 +18,9 @@
  */
 package springfox.documentation.spring.web.plugins;
 
-import com.fasterxml.classmate.ResolvedType;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.RequestHandlerKey;
-import springfox.documentation.service.ResolvedMethodParameter;
-import springfox.documentation.spring.wrapper.NameValueExpression;
-import springfox.documentation.spring.wrapper.PatternsRequestCondition;
-import springfox.documentation.spring.wrapper.RequestMappingInfo;
+import static java.util.Collections.emptySet;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toSet;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -36,9 +29,18 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
-import static java.util.Collections.*;
-import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.method.HandlerMethod;
+
+import com.fasterxml.classmate.ResolvedType;
+
+import springfox.documentation.RequestHandler;
+import springfox.documentation.RequestHandlerKey;
+import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 
 @SuppressWarnings("deprecation")
 public class CombinedRequestHandler implements RequestHandler {
@@ -60,7 +62,6 @@ public class CombinedRequestHandler implements RequestHandler {
     return first.isAnnotatedWith(annotation) || second.isAnnotatedWith(annotation);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public PatternsRequestCondition getPatternsCondition() {
     return first.getPatternsCondition().combine(second.getPatternsCondition());
@@ -120,7 +121,6 @@ public class CombinedRequestHandler implements RequestHandler {
         .orElse(second.findAnnotation(annotation));
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public RequestHandlerKey key() {
     return new RequestHandlerKey(
