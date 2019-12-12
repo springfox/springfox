@@ -20,7 +20,6 @@
 package springfox.documentation.spi.service.contexts;
 
 
-import static java.util.function.Predicate.not;
 import static springfox.documentation.builders.RequestHandlerSelectors.withClassAnnotation;
 import static springfox.documentation.builders.RequestHandlerSelectors.withMethodAnnotation;
 
@@ -33,8 +32,8 @@ import springfox.documentation.builders.PathSelectors;
 public class ApiSelector {
   public static final ApiSelector DEFAULT
       = new ApiSelector(
-          (not(withClassAnnotation(ApiIgnore.class))).and(
-          (not(withMethodAnnotation(ApiIgnore.class)))), PathSelectors.any());
+          (withClassAnnotation(ApiIgnore.class).negate()).and(
+          (withMethodAnnotation(ApiIgnore.class).negate())), PathSelectors.any());
   private final Predicate<RequestHandler> requestHandlerSelector;
   private final Predicate<String> pathSelector;
 
