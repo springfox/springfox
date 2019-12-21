@@ -70,6 +70,25 @@ class ParameterMergerSpec extends Specification {
 
   }
 
+  @Unroll
+  def "Merge hidden parameters"() {
+    given:
+    def merger = new ParameterMerger(destination, source)
+
+    when:
+    def merged = merger.merged()
+    def expected = newHashSet()
+    expected.addAll(destination.collect { it.name })
+    expected.addAll(source.collect { it.name })
+
+    then:
+    merged.get(0).hidden
+
+    where:
+    destination                                      | source
+    [new ParameterBuilder().name("a").hidden(false)] | [new ParameterBuilder().name("a").hidden(true)]
+  }
+
   def param(String name, String desc, order = LOWEST_PRECEDENCE) {
     new ParameterBuilder()
         .name(name)
