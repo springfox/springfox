@@ -26,7 +26,8 @@ class ApiInfoSpec extends InternalJsonSerializationSpec {
           , 'Api terms of service'
           , 'Contact Email'
           , 'Licence Type'
-          , 'License URL')
+          , 'License URL'
+          , new ArrayList<VendorExtension>())
 
   def "should serialize"() {
     expect:

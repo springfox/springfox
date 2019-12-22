@@ -19,6 +19,8 @@
 
 package springfox.documentation.swagger1.dto;
 
+import java.util.List;
+
 public class ApiInfo {
 
   private String title;
@@ -27,18 +29,20 @@ public class ApiInfo {
   private String contact;
   private String license;
   private String licenseUrl;
+  private List<VendorExtension> vendorExtensions;
 
   public ApiInfo() {
   }
 
   public ApiInfo(String title, String description, String termsOfServiceUrl, String contact, String license, String
-          licenseUrl) {
+          licenseUrl, List<VendorExtension> vendorExtensions) {
     this.title = title;
     this.description = description;
     this.termsOfServiceUrl = termsOfServiceUrl;
     this.contact = contact;
     this.license = license;
     this.licenseUrl = licenseUrl;
+    this.vendorExtensions = vendorExtensions;
   }
 
   public String getTitle() {
@@ -88,4 +92,13 @@ public class ApiInfo {
   public void setLicenseUrl(String licenseUrl) {
     this.licenseUrl = licenseUrl;
   }
+
+  public List<VendorExtension> getVendorExtensions() {
+    return vendorExtensions;
+  }
+
+  public void setVendorExtensions(List<VendorExtension> vendorExtensions) {
+    this.vendorExtensions = vendorExtensions;
+  }
+
 }
