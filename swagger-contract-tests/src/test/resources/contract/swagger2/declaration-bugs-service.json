@@ -1123,10 +1123,8 @@
                         "name": "sfId",
                         "description": "sfId",
                         "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
-                        }
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "responses": {
@@ -1156,92 +1154,72 @@
                         "name": "allCapsSet",
                         "description": "description of allCapsSet",
                         "required": false,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
                     },
                     {
                         "in": "formData",
                         "name": "annotatedEnumType",
                         "description": "description of annotatedEnumType",
                         "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     },
                     {
                         "in": "formData",
                         "name": "bar",
                         "description": "description of bar",
                         "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32",
-                            "example": "10"
-                        }
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "in": "formData",
                         "name": "enumType",
                         "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     },
                     {
                         "in": "formData",
                         "name": "foo",
                         "description": "description of foo",
                         "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     },
                     {
                         "in": "formData",
                         "name": "localDateTime",
                         "description": "local date time desc dd-MM-yyyy hh:mm:ss",
                         "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "date-time"
-                        }
+                        "type": "string",
+                        "format": "date-time"
                     },
                     {
                         "in": "formData",
                         "name": "nestedType.name",
                         "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     },
                     {
                         "in": "formData",
                         "name": "parentBeanProperty",
                         "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     },
                     {
                         "in": "formData",
                         "name": "propertyWithNoSetterMethod",
                         "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     },
                     {
                         "in": "formData",
                         "name": "readOnlyString",
                         "description": "A read only string",
                         "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "type": "string"
                     }
                 ],
                 "responses": {

@@ -3,8 +3,10 @@ package springfox.documentation.swagger2.mappers
 import com.fasterxml.classmate.ResolvedType
 import io.swagger.models.Model
 import io.swagger.models.parameters.BodyParameter
+import io.swagger.models.parameters.FormParameter
 import io.swagger.models.parameters.QueryParameter
 import io.swagger.models.parameters.SerializableParameter
+import io.swagger.models.properties.FileProperty
 import spock.lang.Specification
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.schema.ModelRef
@@ -35,6 +37,66 @@ class ParameterMapperSpec extends Specification {
       "body"         | new ModelRef("sometype", new ModelRef("itemType"))       | BodyParameter
       "header"       | new ModelRef("sometype", new ModelRef("itemType"), true) | SerializableParameter
       "body"         | new ModelRef("sometype", new ModelRef("itemType"), true) | BodyParameter
+  }
+
+  def "form parameters are mapped correctly" () {
+    given:
+      def parameter = parameter("formData").modelRef(modelRef).build()
+    when:
+      def sut = new ParameterMapper()
+    then:
+      def mapped = (FormParameter) sut.mapParameter(parameter)
+    and:
+      mapped.access == "access"
+      mapped.name == "test"
+      mapped.description == "test description"
+      mapped.required
+      mapped.type == type
+      mapped.format == format
+      mapped.items?.format == itemFormat
+      mapped.items?.type == itemType
+
+    where:
+      modelRef                                      | type      | format  | itemType       | itemFormat
+      new ModelRef("string")                        | "string"  | null    | null           | null
+      new ModelRef("array", new ModelRef("string")) | "array"   | null    | "string"       | null
+      new ModelRef("array", new ModelRef("int"))    | "array"   | null    | "integer"      | "int32"
+      new ModelRef("int")                           | "integer" | "int32" | null           | null
+      new ModelRef("long")                          | "integer" | "int64" | null           | null
+      new ModelRef("boolean")                       | "boolean" | null    | null           | null
+  }
+
+  def "form parameters fall back to body parameters for non-primitive top level types" () {
+    given:
+      def parameter = parameter("formData")
+              .modelRef(new ModelRef("some-non-primitive-type"))
+              .build()
+    when:
+      def sut = new ParameterMapper()
+    then:
+      sut.mapParameter(parameter) instanceof BodyParameter
+  }
+
+  def "file parameter handling" () {
+    given:
+      def parameter = parameter("formData")
+              .modelRef(new ModelRef("file"))
+              .build()
+    when:
+      def sut = new ParameterMapper()
+    then:
+      sut.mapParameter(parameter) instanceof BodyParameter
+  }
+
+  def "form parameters fall back to body parameters for arrays of non-primitive types" () {
+    given:
+    def parameter = parameter("formData")
+            .modelRef(new ModelRef("array", new ModelRef("object")))
+            .build()
+    when:
+    def sut = new ParameterMapper()
+    then:
+    sut.mapParameter(parameter) instanceof BodyParameter
   }
 
   def "Serializes byte array to string model in body" () {
