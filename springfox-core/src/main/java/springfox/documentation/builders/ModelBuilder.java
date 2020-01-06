@@ -59,7 +59,7 @@ public class ModelBuilder {
     this.qualifiedType = model.getQualifiedType();
     this.description = model.getDescription();
     this.baseModel = model.getBaseModel();
-    this.discriminator = model.getDescription();
+    this.discriminator = model.getDiscriminator();
     this.modelType = model.getType();
     this.example = model.getExample();
     this.xml = model.getXml();

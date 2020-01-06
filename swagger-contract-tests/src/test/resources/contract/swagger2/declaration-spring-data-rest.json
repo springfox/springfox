@@ -1709,7 +1709,6 @@
             "required": [
                 "addresses"
             ],
-            "discriminator": "Embedded collection of Address",
             "properties": {
                 "addresses": {
                     "type": "array",
@@ -1731,7 +1730,6 @@
             "required": [
                 "people"
             ],
-            "discriminator": "Embedded collection of Person",
             "properties": {
                 "people": {
                     "type": "array",
@@ -1753,7 +1751,6 @@
             "required": [
                 "tags"
             ],
-            "discriminator": "Embedded collection of Tag",
             "properties": {
                 "tags": {
                     "type": "array",
@@ -2001,7 +1998,6 @@
                 "_embedded",
                 "_links"
             ],
-            "discriminator": "Resources of Address",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfAddress"
@@ -2028,7 +2024,6 @@
                 "_embedded",
                 "_links"
             ],
-            "discriminator": "Resources of Person",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfPerson"
@@ -2055,7 +2050,6 @@
                 "_embedded",
                 "_links"
             ],
-            "discriminator": "Resources of Tag",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfTag"
