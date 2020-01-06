@@ -27,6 +27,7 @@ import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.spi.service.DocumentationPlugin;
 
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import static java.util.Optional.*;
 import static springfox.documentation.RequestHandler.*;
@@ -57,19 +58,35 @@ public class Orderings {
   }
 
   public static Comparator<ResourceGroup> resourceGroupComparator() {
-    return Comparator.comparing(ResourceGroup::getGroupName);
+    return Comparator.comparing(Orderings::qualifiedResourceGroupName);
+  }
+
+  public static String qualifiedResourceGroupName(ResourceGroup resourceGroup) {
+    return String.format("%s.%s.%s", resourceGroup.getGroupName(),
+        resourceGroup.getControllerClass().map(cls -> cls.getName()).orElse("-"),
+        resourceGroup.getPosition());
   }
 
   public static Comparator<RequestMappingContext> methodComparator() {
     return Comparator.comparing(Orderings::qualifiedMethodName);
   }
 
-  private static String qualifiedMethodName(RequestMappingContext context) {
-    return String.format("%s.%s", context.getGroupName(), context.getName());
+  public static String qualifiedMethodName(RequestMappingContext context) {
+    return String.format("%s.%s.%s.%s", context.getGroupName(),
+        context.getReturnType().getBriefDescription(), context.getName(),
+        methodParametersSignature(context));
+  }
+
+  private static String methodParametersSignature(RequestMappingContext context) {
+    return context
+        .getParameters().stream().map(p -> String.format("%s-%s",
+            p.getParameterType().getBriefDescription(), p.getParameterIndex()))
+        .collect(Collectors.joining(",", "[", "]"));
   }
 
   public static Comparator<RequestHandler> byPatternsCondition() {
-    return Comparator.comparing(requestHandler -> sortedPaths(requestHandler.getPatternsCondition()));
+    return Comparator
+        .comparing(requestHandler -> sortedPaths(requestHandler.getPatternsCondition()));
   }
 
   public static Comparator<RequestHandler> byOperationName() {
@@ -81,7 +98,8 @@ public class Orderings {
   }
 
   public static Comparator<DocumentationPlugin> byPluginType() {
-    return Comparator.comparingInt(documentationPlugin -> documentationPlugin.getDocumentationType().hashCode());
+    return Comparator
+        .comparingInt(documentationPlugin -> documentationPlugin.getDocumentationType().hashCode());
   }
 
   public static Comparator<DocumentationPlugin> byPluginName() {

@@ -39,6 +39,7 @@ class ActionSpecification {
   private final List<ResolvedMethodParameter> parameters;
   private final ResolvedType returnType;
   private final HandlerMethod handlerMethod;
+  private final Class<?> entityType;
   private final String name;
   private final String path;
 
@@ -50,6 +51,7 @@ class ActionSpecification {
       Set<MediaType> produces,
       Set<MediaType> consumes,
       HandlerMethod handlerMethod,
+      Class<?> entityType,
       List<ResolvedMethodParameter> parameters,
       ResolvedType returnType) {
     this.name = name;
@@ -60,6 +62,7 @@ class ActionSpecification {
     this.parameters = parameters;
     this.returnType = returnType;
     this.handlerMethod = handlerMethod;
+    this.entityType = entityType;
   }
 
   public String getName() {
@@ -95,12 +98,12 @@ class ActionSpecification {
   }
 
   public Optional<Class<?>> getDeclaringClass() {
-    return getHandlerMethod().map(input -> {
+    return Optional.ofNullable(getHandlerMethod().map(input -> {
       Object bean = new OptionalDeferencer<>().convert(handlerMethod.getBean());
       if (AopUtils.isAopProxy(bean)) {
         return AopUtils.getTargetClass(bean);
       }
       return (Class<?>) bean;
-    });
+    }).orElse(entityType));
   }
 }
