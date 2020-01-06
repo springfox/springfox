@@ -83,6 +83,7 @@ class DocumentationPluginsManagerSpec extends Specification {
       def operationContext = Mock(OperationContext)
     and:
       operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
+      operationContext.documentationType >> DocumentationType.SWAGGER_2
     when:
       def sut = customWebPlugins()
       def operation = sut.operation(operationContext)
@@ -96,6 +97,7 @@ class DocumentationPluginsManagerSpec extends Specification {
       def operationContext = Mock(OperationContext)
     and:
       operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
+      operationContext.documentationType >> DocumentationType.SPRING_WEB
       operationPlugin.supports(_) >> true
     when:
       def sut = customWebPlugins([], [], [operationPlugin])
@@ -110,6 +112,7 @@ class DocumentationPluginsManagerSpec extends Specification {
       def paramContext = Mock(ParameterContext)
     and:
       paramContext.parameterBuilder() >> new ParameterBuilder()
+      paramContext.documentationType >> DocumentationType.SWAGGER_2
     when:
       def sut = customWebPlugins()
       def parameter = sut.parameter(paramContext)
@@ -123,6 +126,7 @@ class DocumentationPluginsManagerSpec extends Specification {
       def paramContext = Mock(ParameterContext)
     and:
       paramContext.parameterBuilder() >> new ParameterBuilder()
+      paramContext.documentationType >> DocumentationType.SPRING_WEB
       paramPlugin.supports(_) >> true
     when:
       def sut = customWebPlugins([], [], [], [paramPlugin])

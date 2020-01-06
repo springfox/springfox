@@ -25,6 +25,7 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -32,8 +33,8 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
+import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.test.context.ContextConfiguration
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -41,6 +42,7 @@ import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration
 import springfox.documentation.schema.AlternateTypeRuleConvention
 import springfox.documentation.spring.web.plugins.JacksonSerializerConvention
 
+import static java.nio.charset.StandardCharsets.UTF_8
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
@@ -49,7 +51,7 @@ import static org.springframework.boot.test.context.SpringBootTest.*
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared
-  def http = new TestRestTemplate()
+  def http = new TestRestTemplate(new RestTemplateBuilder().additionalMessageConverters(new StringHttpMessageConverter(UTF_8)))
 
   @Value('${local.server.port}')
   int port
@@ -100,7 +102,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
   def "should list swagger resources for swagger 2.0"() {
     given:
-    def http = new TestRestTemplate()
     RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
@@ -130,7 +131,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
   def 'should honor swagger resource listing'() {
     given:
-    def http = new TestRestTemplate()
     RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
@@ -149,7 +149,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
   @Unroll
   def 'should honor api v1.2 contract [#contractFile] at endpoint [#declarationPath]'() {
     given:
-    def http = new TestRestTemplate()
     RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs${declarationPath}"))
         .accept(MediaType.APPLICATION_JSON)
         .build()
@@ -183,7 +182,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
 
   def "should list swagger resources for swagger 1.2"() {
     given:
-    def http = new TestRestTemplate()
     RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/swagger-resources"))
         .accept(MediaType.APPLICATION_JSON)
         .build()

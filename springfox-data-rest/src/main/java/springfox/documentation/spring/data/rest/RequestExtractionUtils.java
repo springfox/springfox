@@ -23,8 +23,8 @@ import com.fasterxml.classmate.TypeResolver;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.web.method.HandlerMethod;
 
 import java.lang.annotation.Annotation;
@@ -95,26 +95,26 @@ class RequestExtractionUtils {
 
   static ResolvedType propertyResponse(PersistentProperty<?> property, TypeResolver resolver) {
     if (property.isCollectionLike()) {
-      return resolver.resolve(Resources.class, property.getComponentType());
+      return resolver.resolve(CollectionModel.class, property.getComponentType());
     } else if (property.isMap()) {
       return resolver.resolve(
-          Resource.class,
+          EntityModel.class,
           resolver.resolve(
               Map.class,
               String.class,
               property.getMapValueType()));
     }
-    return resolver.resolve(Resource.class, property.getType());
+    return resolver.resolve(EntityModel.class, property.getType());
   }
 
   static ResolvedType propertyItemResponse(PersistentProperty<?> property, TypeResolver resolver) {
     if (property.isCollectionLike()) {
-      return resolver.resolve(Resource.class, property.getComponentType());
+      return resolver.resolve(EntityModel.class, property.getComponentType());
     } else if (property.isMap()) {
       return resolver.resolve(
-          Resource.class,
+          EntityModel.class,
           property.getMapValueType());
     }
-    return resolver.resolve(Resource.class, property.getType());
+    return resolver.resolve(EntityModel.class, property.getType());
   }
 }

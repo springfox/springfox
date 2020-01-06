@@ -191,7 +191,7 @@ public class TypeNameExtractor {
     if (!isMapType(asResolved(context.getType())) && knownNames.containsKey(context.getTypeId())) {
       return knownNames.get(context.getTypeId());
     }
-    TypeNameProviderPlugin selected = typeNameProviders.getPluginFor(
+    TypeNameProviderPlugin selected = typeNameProviders.getPluginOrDefaultFor(
         context.getDocumentationType(),
         new DefaultTypeNameProvider());
     String modelName = selected.nameFor(((ResolvedType) context.getType()).getErasedType());

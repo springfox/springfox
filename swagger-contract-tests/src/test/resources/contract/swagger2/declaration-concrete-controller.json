@@ -43,7 +43,7 @@
                         "description": "toCreate",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Resource«Pet»_1"
+                            "$ref": "#/definitions/EntityModel«Pet»_1"
                         }
                     }
                 ],
@@ -75,7 +75,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/HttpEntity«Resource«Pet»»"
+                            "$ref": "#/definitions/HttpEntity«EntityModel«Pet»»"
                         }
                     },
                     "405": {
@@ -105,7 +105,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Resource«Pet»"
+                            "$ref": "#/definitions/EntityModel«Pet»"
                         }
                     },
                     "405": {
@@ -133,153 +133,101 @@
         }
     },
     "definitions": {
-        "HttpEntity«Resource«Pet»»": {
+        "EntityModel«Pet»": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "links": {
+                    "$ref": "#/definitions/Links"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "EntityModel«Pet»"
+        },
+        "EntityModel«Pet»_1": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Link"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "EntityModel«Pet»_1"
+        },
+        "HttpEntity«EntityModel«Pet»»": {
             "type": "object",
             "properties": {
                 "body": {
-                    "$ref": "#/definitions/Resource«Pet»"
+                    "$ref": "#/definitions/EntityModel«Pet»"
                 }
             },
-            "title": "HttpEntity«Resource«Pet»»"
+            "title": "HttpEntity«EntityModel«Pet»»"
         },
         "Link": {
             "type": "object",
             "properties": {
                 "deprecation": {
-                    "type": "string",
-                    "xml": {
-                        "name": "deprecation",
-                        "attribute": true,
-                        "wrapped": false
-                    }
+                    "type": "string"
                 },
                 "href": {
-                    "type": "string",
-                    "xml": {
-                        "name": "href",
-                        "attribute": true,
-                        "wrapped": false
-                    }
+                    "type": "string"
                 },
                 "hreflang": {
-                    "type": "string",
-                    "xml": {
-                        "name": "hreflang",
-                        "attribute": true,
-                        "wrapped": false
-                    }
+                    "type": "string"
                 },
                 "media": {
-                    "type": "string",
-                    "xml": {
-                        "name": "media",
-                        "attribute": true,
-                        "wrapped": false
-                    }
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "profile": {
+                    "type": "string"
                 },
                 "rel": {
-                    "type": "string",
-                    "xml": {
-                        "name": "rel",
-                        "attribute": true,
-                        "wrapped": false
-                    }
-                },
-                "templated": {
-                    "type": "boolean"
+                    "$ref": "#/definitions/LinkRelation"
                 },
                 "title": {
-                    "type": "string",
-                    "xml": {
-                        "name": "title",
-                        "attribute": true,
-                        "wrapped": false
-                    }
+                    "type": "string"
                 },
                 "type": {
-                    "type": "string",
-                    "xml": {
-                        "name": "type",
-                        "attribute": true,
-                        "wrapped": false
-                    }
+                    "type": "string"
                 }
             },
-            "title": "Link",
-            "xml": {
-                "name": "link",
-                "namespace": "http://www.w3.org/2005/Atom",
-                "attribute": false,
-                "wrapped": false
-            }
+            "title": "Link"
         },
-        "Link_1": {
+        "LinkRelation": {
+            "type": "object",
+            "title": "LinkRelation"
+        },
+        "Links": {
             "type": "object",
             "properties": {
-                "deprecation": {
-                    "type": "string",
-                    "xml": {
-                        "name": "deprecation",
-                        "attribute": true,
-                        "wrapped": false
-                    }
-                },
-                "href": {
-                    "type": "string",
-                    "xml": {
-                        "name": "href",
-                        "attribute": true,
-                        "wrapped": false
-                    }
-                },
-                "hreflang": {
-                    "type": "string",
-                    "xml": {
-                        "name": "hreflang",
-                        "attribute": true,
-                        "wrapped": false
-                    }
-                },
-                "media": {
-                    "type": "string",
-                    "xml": {
-                        "name": "media",
-                        "attribute": true,
-                        "wrapped": false
-                    }
-                },
-                "rel": {
-                    "type": "string",
-                    "xml": {
-                        "name": "rel",
-                        "attribute": true,
-                        "wrapped": false
-                    }
-                },
-                "title": {
-                    "type": "string",
-                    "xml": {
-                        "name": "title",
-                        "attribute": true,
-                        "wrapped": false
-                    }
-                },
-                "type": {
-                    "type": "string",
-                    "xml": {
-                        "name": "type",
-                        "attribute": true,
-                        "wrapped": false
-                    }
+                "empty": {
+                    "type": "boolean"
                 }
             },
-            "title": "Link_1",
-            "xml": {
-                "name": "link",
-                "namespace": "http://www.w3.org/2005/Atom",
-                "attribute": false,
-                "wrapped": false
-            }
+            "title": "Links"
         },
         "Pet": {
             "type": "object",
@@ -296,66 +244,6 @@
                 }
             },
             "title": "Pet"
-        },
-        "Resource«Pet»": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "links": {
-                    "type": "array",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "items": {
-                        "$ref": "#/definitions/Link"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "Resource«Pet»",
-            "xml": {
-                "name": "Resource«Pet»",
-                "attribute": false,
-                "wrapped": false
-            }
-        },
-        "Resource«Pet»_1": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "links": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Link_1"
-                    }
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "Resource«Pet»_1",
-            "xml": {
-                "name": "Resource«Pet»",
-                "attribute": false,
-                "wrapped": false
-            }
         }
     }
 }

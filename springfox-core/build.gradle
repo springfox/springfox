@@ -19,4 +19,5 @@ dependencies {
 
   testCompile libs.test
   testCompile libs.clientProvidedServlet
+  testCompile libs.springProvidedWithMvc
 }
