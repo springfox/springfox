@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.google.common.annotations.VisibleForTesting;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.Info;
@@ -104,11 +103,11 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
 
     class PropertyExampleSerializer extends StdSerializer<Object> {
 
-      private final static Pattern JSON_NUMBER_PATTERN =
+      private static final Pattern JSON_NUMBER_PATTERN =
           Pattern.compile("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
 
       @SuppressWarnings("unused")
-      public PropertyExampleSerializer() {
+      PropertyExampleSerializer() {
         this(Object.class);
       }
 
@@ -137,28 +136,23 @@ public class Swagger2JacksonModule extends SimpleModule implements JacksonModule
       }
 
       private boolean canConvertToString(Object value) {
-        if (value instanceof java.lang.Boolean
-            || value instanceof java.lang.Character
-            || value instanceof java.lang.String
-            || value instanceof java.lang.Byte
-            || value instanceof java.lang.Short
-            || value instanceof java.lang.Integer
-            || value instanceof java.lang.Long
-            || value instanceof java.lang.Float
-            || value instanceof java.lang.Double
-            || value instanceof java.lang.Void) {
-          return true;
-        }
-        return false;
+        return value instanceof Boolean
+            || value instanceof Character
+            || value instanceof String
+            || value instanceof Byte
+            || value instanceof Short
+            || value instanceof Integer
+            || value instanceof Long
+            || value instanceof Float
+            || value instanceof Double
+            || value instanceof Void;
       }
 
-      @VisibleForTesting
       boolean isStringLiteral(String value) {
         return (value.startsWith("\"") && value.endsWith("\""))
             || (value.startsWith("'") && value.endsWith("'"));
       }
 
-      @VisibleForTesting
       boolean isNotJsonString(final String value) {
         // strictly speaking, should also test for equals("null") since {"example": null} would be valid JSON
         // but swagger2 does not support null values

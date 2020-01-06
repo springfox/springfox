@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,25 +20,28 @@ package springfox.documentation.schema.property
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
 
+import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin(TypesForTestingSupport)
 class CachingModelPropertiesProviderSpec extends Specification {
   def "Implementation caches the invocations"() {
     given:
-    def context = inputParam("group",
-        complexType(),
+    def context = inputParam("0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        new HashSet<>(),
         DocumentationType.SWAGGER_2,
         new AlternateTypeProvider([]),
         new CodeGenGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     def property = aProperty()
     def mock = Mock(ModelPropertiesProvider) {
       propertiesFor(_, context) >> [property]
@@ -53,12 +56,15 @@ class CachingModelPropertiesProviderSpec extends Specification {
 
   def "When cache miss occurs"() {
     given:
-    def context = inputParam("group",
-        complexType(),
+    def context = inputParam("0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        new HashSet<>(),
         DocumentationType.SWAGGER_2,
         new AlternateTypeProvider([]),
         new CodeGenGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     def mock = Mock(ModelPropertiesProvider) {
       propertiesFor(_, context) >> { throw new NullPointerException("") }
     }

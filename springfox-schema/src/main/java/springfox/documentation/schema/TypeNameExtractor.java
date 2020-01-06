@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.classmate.types.ResolvedArrayType;
 import com.fasterxml.classmate.types.ResolvedObjectType;
 import com.fasterxml.classmate.types.ResolvedPrimitiveType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.plugin.core.PluginRegistry;
@@ -35,13 +37,18 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.google.common.base.Optional.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.Collections.*;
+import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.Types.*;
 
 @Component
 public class TypeNameExtractor {
+  private static final Logger LOG = LoggerFactory.getLogger(TypeNameExtractor.class);
+
   private final TypeResolver typeResolver;
   private final PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders;
   private final EnumTypeDeterminer enumTypeDeterminer;
@@ -50,7 +57,7 @@ public class TypeNameExtractor {
   public TypeNameExtractor(
       TypeResolver typeResolver,
       @Qualifier("typeNameProviderPluginRegistry")
-      PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
+          PluginRegistry<TypeNameProviderPlugin, DocumentationType> typeNameProviders,
       EnumTypeDeterminer enumTypeDeterminer) {
 
     this.typeResolver = typeResolver;
@@ -59,46 +66,97 @@ public class TypeNameExtractor {
   }
 
   public String typeName(ModelContext context) {
+    return typeName(
+        context,
+        new HashMap<>());
+  }
+
+  public String typeName(
+      ModelContext context,
+      Map<String, String> knownNames) {
     ResolvedType type = asResolved(context.getType());
     if (isContainerType(type)) {
       return containerType(type);
     }
-    return innerTypeName(type, context);
+    if (knownNames.containsKey(context.getTypeId())) {
+      return knownNames.get(context.getTypeId());
+    }
+    return innerTypeName(
+        type,
+        context,
+        knownNames);
   }
 
   private ResolvedType asResolved(Type type) {
     return typeResolver.resolve(type);
   }
 
-  private String genericTypeName(ResolvedType resolvedType, ModelContext context) {
+  private String genericTypeName(
+      ResolvedType resolvedType,
+      ModelContext context,
+      Map<String, String> knownNames) {
     Class<?> erasedType = resolvedType.getErasedType();
     GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
-    ModelNameContext nameContext = new ModelNameContext(resolvedType.getErasedType(), context.getDocumentationType());
-    String simpleName = fromNullable(typeNameFor(erasedType)).or(typeName(nameContext));
-    StringBuilder sb = new StringBuilder(String.format("%s%s", simpleName, namingStrategy.getOpenGeneric()));
+    String typeId = ModelContext.fromParent(
+        context,
+        resolvedType).getTypeId();
+    if (knownNames.containsKey(typeId)) {
+      return knownNames.get(typeId);
+    }
+    String simpleName = ofNullable(
+        isContainerType(resolvedType) ? containerType(resolvedType) : typeNameFor(erasedType))
+        .orElse(modelName(
+            ModelContext.fromParent(
+                context,
+                resolvedType),
+            knownNames));
+    StringBuilder sb = new StringBuilder(String.format(
+        "%s%s",
+        simpleName,
+        namingStrategy.getOpenGeneric()));
     boolean first = true;
     for (int index = 0; index < erasedType.getTypeParameters().length; index++) {
       ResolvedType typeParam = resolvedType.getTypeParameters().get(index);
       if (first) {
-        sb.append(innerTypeName(typeParam, context));
+        sb.append(innerTypeName(
+            typeParam,
+            context,
+            knownNames));
         first = false;
       } else {
-        sb.append(String.format("%s%s", namingStrategy.getTypeListDelimiter(),
-            innerTypeName(typeParam, context)));
+        sb.append(String.format(
+            "%s%s",
+            namingStrategy.getTypeListDelimiter(),
+            innerTypeName(
+                typeParam,
+                context,
+                knownNames)));
       }
     }
     sb.append(namingStrategy.getCloseGeneric());
     return sb.toString();
   }
 
-  private String innerTypeName(ResolvedType type, ModelContext context) {
+  private String innerTypeName(
+      ResolvedType type,
+      ModelContext context,
+      Map<String, String> knownNames) {
     if (type.getTypeParameters().size() > 0 && type.getErasedType().getTypeParameters().length > 0) {
-      return genericTypeName(type, context);
+      return genericTypeName(
+          type,
+          context,
+          knownNames);
     }
-    return simpleTypeName(type, context);
+    return simpleTypeName(
+        type,
+        context,
+        knownNames);
   }
 
-  private String simpleTypeName(ResolvedType type, ModelContext context) {
+  private String simpleTypeName(
+      ResolvedType type,
+      ModelContext context,
+      Map<String, String> knownNames) {
     Class<?> erasedType = type.getErasedType();
     if (type instanceof ResolvedPrimitiveType) {
       return typeNameFor(erasedType);
@@ -106,20 +164,41 @@ public class TypeNameExtractor {
       return "string";
     } else if (type instanceof ResolvedArrayType) {
       GenericTypeNamingStrategy namingStrategy = context.getGenericNamingStrategy();
-      return String.format("Array%s%s%s", namingStrategy.getOpenGeneric(),
-          simpleTypeName(type.getArrayElementType(), context), namingStrategy.getCloseGeneric());
+      return String.format(
+          "Array%s%s%s",
+          namingStrategy.getOpenGeneric(),
+          simpleTypeName(
+              type.getArrayElementType(),
+              context,
+              knownNames),
+          namingStrategy.getCloseGeneric());
     } else if (type instanceof ResolvedObjectType) {
       String typeName = typeNameFor(erasedType);
       if (typeName != null) {
         return typeName;
       }
     }
-    return typeName(new ModelNameContext(type.getErasedType(), context.getDocumentationType()));
+    return modelName(
+        ModelContext.fromParent(
+            context,
+            type),
+        knownNames);
   }
 
-  private String typeName(ModelNameContext context) {
-    TypeNameProviderPlugin selected =
-        typeNameProviders.getPluginFor(context.getDocumentationType(), new DefaultTypeNameProvider());
-    return selected.nameFor(context.getType());
+  private String modelName(
+      ModelContext context,
+      Map<String, String> knownNames) {
+    if (!isMapType(asResolved(context.getType())) && knownNames.containsKey(context.getTypeId())) {
+      return knownNames.get(context.getTypeId());
+    }
+    TypeNameProviderPlugin selected = typeNameProviders.getPluginFor(
+        context.getDocumentationType(),
+        new DefaultTypeNameProvider());
+    String modelName = selected.nameFor(((ResolvedType) context.getType()).getErasedType());
+    LOG.debug(
+        "Generated unique model named: {}, with model id: {}",
+        modelName,
+        context.getTypeId());
+    return modelName;
   }
 }

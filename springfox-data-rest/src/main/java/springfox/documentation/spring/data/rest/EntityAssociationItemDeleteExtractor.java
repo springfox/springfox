@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,66 +18,52 @@
  */
 package springfox.documentation.spring.data.rest;
 
-import com.fasterxml.classmate.TypeResolver;
-import org.springframework.data.mapping.Association;
-import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.data.repository.core.RepositoryMetadata;
+import org.springframework.data.rest.core.Path;
 import org.springframework.data.rest.core.mapping.ResourceMapping;
-import org.springframework.data.rest.core.mapping.ResourceMetadata;
-import org.springframework.data.rest.webmvc.RestMediaTypes;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.service.ResolvedMethodParameter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static org.springframework.data.rest.webmvc.RestMediaTypes.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static springfox.documentation.spring.data.rest.RequestExtractionUtils.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.ParameterType.*;
+import static springfox.documentation.spring.data.rest.SpecificationBuilder.*;
 
 public class EntityAssociationItemDeleteExtractor implements EntityAssociationOperationsExtractor {
   @Override
   public List<RequestHandler> extract(EntityAssociationContext context) {
-    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
-    ResourceMetadata metadata = context.associationMetadata();
-    Association<? extends PersistentProperty<?>> association = context.getAssociation();
-    PersistentProperty<?> property = association.getInverse();
-    ResourceMapping mapping = metadata.getMappingFor(property);
-    EntityContext entityContext = context.getEntityContext();
-    PersistentEntity entity = entityContext.entity();
-    TypeResolver resolver = entityContext.getTypeResolver();
-    RepositoryMetadata repository = entityContext.getRepositoryMetadata();
+
+    List<RequestHandler> handlers = new ArrayList<>();
+    PersistentProperty<?> property = context.getAssociation().getInverse();
+    String propertyIdentifier = propertyIdentifierName(property);
+
+    String mappingPath = context.associationMetadata()
+        .map(metadata -> metadata.getMappingFor(property))
+        .map(ResourceMapping::getPath)
+        .map(Path::toString)
+        .orElse("");
+
+    String path = String.format("%s%s/{id}/%s/{%s}",
+        context.getEntityContext().basePath(),
+        context.getEntityContext().resourcePath(),
+        mappingPath,
+        propertyIdentifier);
+
     if (property.isMap() || property.isCollectionLike()) {
-      String propertyIdentifier = propertyIdentifierName(property);
-      ActionSpecification deleteItem = new ActionSpecification(
-          String.format("%s%s",
-              lowerCamelCaseName(entity.getType().getSimpleName()),
-              upperCamelCaseName(property.getName())),
-          String.format("%s%s/{id}/%s/{%s}",
-              entityContext.basePath(),
-              entityContext.resourcePath(),
-              mapping.getPath(),
-              propertyIdentifier),
-          newHashSet(RequestMethod.DELETE),
-          new HashSet<MediaType>(),
-          newHashSet(RestMediaTypes.TEXT_URI_LIST, RestMediaTypes.SPRING_DATA_COMPACT_JSON),
-          null,
-          newArrayList(new ResolvedMethodParameter(
-                  0,
-                  "id",
-                  pathAnnotations("id"),
-                  resolver.resolve(repository.getIdType())),
-              new ResolvedMethodParameter(
-                  1,
-                  propertyIdentifier,
-                  pathAnnotations(propertyIdentifier),
-                  resolver.resolve(String.class))),
-          resolver.resolve(Void.TYPE));
-      handlers.add(new SpringDataRestRequestHandler(entityContext, deleteItem));
+
+      associationAction(context, path)
+          .supportsMethod(DELETE)
+          .consumes(TEXT_URI_LIST)
+          .consumes(SPRING_DATA_COMPACT_JSON)
+          .withParameterType(ID)
+          .withParameterType(ASSOCIATION)
+          .build()
+          .map(deleteItem -> new SpringDataRestRequestHandler(context.getEntityContext(), deleteItem))
+          .ifPresent(handlers::add);
+
     }
     return handlers;
   }

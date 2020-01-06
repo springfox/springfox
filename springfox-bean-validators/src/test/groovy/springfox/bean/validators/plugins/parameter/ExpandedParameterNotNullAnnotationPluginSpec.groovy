@@ -28,7 +28,7 @@ class ExpandedParameterNotNullAnnotationPluginSpec
   }
 
   @Unroll
-  def "@Min/@Max annotations are reflected in the model for #fieldName"() {
+  def "@NotNull annotations are reflected in the model for #fieldName"() {
     given:
     def sut = new ExpandedParameterNotNullAnnotationPlugin()
     ParameterExpansionContext context = new ParameterExpansionContext(

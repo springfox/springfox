@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,36 +19,40 @@
 
 package springfox.documentation.service;
 
-import com.google.common.collect.Multimap;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
 
 public class Documentation {
   private final String groupName;
   private final String basePath;
-  private final Multimap<String, ApiListing> apiListings;
+  private final Map<String, List<ApiListing>> apiListings;
   private final Set<Tag> tags;
   private final ResourceListing resourceListing;
   private final Set<String> produces;
   private final Set<String> consumes;
   private final String host;
   private final Set<String> schemes;
+  private final List<Server> servers;
+  private final DocumentationReference documentationReference;
   private final List<VendorExtension> vendorExtensions;
 
+  @SuppressWarnings("ParameterNumber")
   public Documentation(
       String groupName,
       String basePath,
       Set<Tag> tags,
-      Multimap<String, ApiListing> apiListings,
+      Map<String, List<ApiListing>> apiListings,
       ResourceListing resourceListing,
       Set<String> produces,
       Set<String> consumes,
       String host,
       Set<String> schemes,
+      List<Server> servers,
+      DocumentationReference documentationReference,
       Collection<VendorExtension> vendorExtensions) {
 
     this.groupName = groupName;
@@ -60,14 +64,16 @@ public class Documentation {
     this.consumes = consumes;
     this.host = host;
     this.schemes = schemes;
-    this.vendorExtensions = newArrayList(vendorExtensions);
+    this.servers = servers;
+    this.documentationReference = documentationReference;
+    this.vendorExtensions = new ArrayList<>(vendorExtensions);
   }
 
   public String getGroupName() {
     return groupName;
   }
 
-  public Multimap<String, ApiListing> getApiListings() {
+  public Map<String, List<ApiListing>> getApiListings() {
     return apiListings;
   }
 
@@ -84,7 +90,7 @@ public class Documentation {
   }
 
   public List<String> getProduces() {
-    return newArrayList(produces);
+    return new ArrayList<>(produces);
   }
 
   public String getHost() {
@@ -92,14 +98,22 @@ public class Documentation {
   }
 
   public List<String> getSchemes() {
-    return newArrayList(schemes);
+    return new ArrayList<>(schemes);
   }
 
   public List<String> getConsumes() {
-    return newArrayList(consumes);
+    return new ArrayList<>(consumes);
   }
 
   public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
+  }
+
+  public List<Server> getServers() {
+    return servers;
+  }
+
+  public DocumentationReference getDocumentationReference() {
+    return documentationReference;
   }
 }

@@ -18,11 +18,11 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
-import static com.google.common.base.Strings.*
+import static java.util.Collections.*
+import static org.springframework.util.StringUtils.*
 import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -34,18 +34,24 @@ class GenericTypeSpec extends SchemaSpecification {
   def "Generic property on a generic types is inferred correctly for types"() {
     given:
     def inputContext = inputParam(
+        "0_0",
         "group",
         modelType,
+        Optional.empty(),
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
-    def returnContext = returnValue("group",
+        emptySet())
+
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
+        Optional.empty(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        emptySet())
     def propertyLookup = ["GenericType": "genericField", "Resource": "links"]
 
     when:
@@ -69,7 +75,7 @@ class GenericTypeSpec extends SchemaSpecification {
     genericClassWithListField()     | "List"                                        | "List«SimpleType»"                            | "java.util.List<springfox.documentation.schema.SimpleType>"
     genericClassWithGenericField()  | "ResponseEntityAlternative«SimpleType»"       | "ResponseEntityAlternative«SimpleType»"       | "springfox.documentation.schema.ResponseEntityAlternative<springfox.documentation.schema.SimpleType>"
     genericClassWithDeepGenerics()  | "ResponseEntityAlternative«List«SimpleType»»" | "ResponseEntityAlternative«List«SimpleType»»" | "springfox.documentation.schema.ResponseEntityAlternative<java.util.List<springfox.documentation.schema.SimpleType>>"
-    genericCollectionWithEnum()     | "List"                                        | "Collection«string»"                          | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
+    genericCollectionWithEnum()     | "List"                                        | "List«string»"                                | "java.util.Collection<springfox.documentation.schema.ExampleEnum>"
     genericTypeWithPrimitiveArray() | "Array"                                       | "Array«byte»"                                 | "byte"
     genericTypeWithComplexArray()   | "Array"                                       | "Array«SimpleType»"                           | null
     genericResource()               | "List"                                        | "SubclassOfResourceSupport"                   | null
@@ -79,18 +85,24 @@ class GenericTypeSpec extends SchemaSpecification {
   def "Void generic type bindings are rendered correctly"() {
     given:
     def inputContext = inputParam(
+        "0_0",
         "group",
         modelType,
+        Optional.empty(),
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
-    def returnContext = returnValue("group",
+        emptySet())
+
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
+        Optional.empty(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        emptySet())
 
     when:
     Model asInput = modelProvider.modelFor(inputContext).get()
@@ -113,20 +125,25 @@ class GenericTypeSpec extends SchemaSpecification {
   @Unroll
   def "Generic properties are inferred correctly even when they are not participating in the type bindings"() {
     given:
-    def inputContext = inputParam("group",
+    def inputContext = inputParam("0_0",
+        "group",
         modelType,
+        Optional.empty(),
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        emptySet())
     Model asInput = modelProvider.modelFor(inputContext).get()
 
-    def returnContext = returnValue("group",
+    def returnContext = returnValue("0_0",
+        "group",
         modelType,
+        Optional.empty(),
         documentationType,
         alternateTypeProvider(),
         namingStrategy,
-        ImmutableSet.builder().build())
+        emptySet())
     Model asReturn = modelProvider.modelFor(returnContext).get()
 
     expect:
@@ -151,7 +168,7 @@ class GenericTypeSpec extends SchemaSpecification {
   }
 
   def expectedModelName(String modelName, String hostType = "GenericType") {
-    if (!isNullOrEmpty(modelName)) {
+    if (!isEmpty(modelName)) {
       "$hostType«$modelName»"
     } else {
       hostType

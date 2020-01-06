@@ -5,19 +5,31 @@ import spock.lang.Specification
 
 import javax.servlet.http.HttpServletRequest
 
+import static java.util.Collections.*
 import static springfox.documentation.swagger.common.HostNameProvider.*
 import static springfox.documentation.swagger.common.XForwardPrefixPathAdjuster.*
 
 class HostNameProviderSpec extends Specification {
   def "should prefix path with x-forwarded-prefix"() {
     given:
-    def request = mockRequest()
+    def request = mockRequest(true)
 
     when:
     def result = componentsFrom(request, "/basePath")
 
     then:
     result.toUriString() == "http://localhost/prefix"
+  }
+
+  def "should preserve contextPath from request if no x-forwarded-prefix"() {
+    given:
+    def request = mockRequest(false)
+
+    when:
+    def result = componentsFrom(request, "/basePath")
+
+    then:
+    result.toUriString() == "http://localhost/contextPath"
   }
 
   def "should not be allowed to create object from utility class"() {
@@ -28,10 +40,14 @@ class HostNameProviderSpec extends Specification {
     thrown UnsupportedOperationException
   }
 
-  def mockRequest() {
+  def mockRequest(boolean addXForwardedHeaders) {
     def request = Mock(HttpServletRequest.class)
-    request.getHeader(X_FORWARDED_PREFIX) >> "/prefix"
-    request.getHeaders(X_FORWARDED_PREFIX) >> headerValues()
+    if (addXForwardedHeaders) {
+      request.getHeader(X_FORWARDED_PREFIX) >> "/prefix"
+      request.getHeaders(X_FORWARDED_PREFIX) >> headerValues()
+    } else {
+      request.getHeaders(X_FORWARDED_PREFIX) >> emptyEnumeration()
+    }
     request.headerNames >> headerNames()
     request.requestURL >> new StringBuffer("http://localhost/contextPath")
     request.requestURI >> new URI("http://localhost/contextPath")

@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -32,6 +31,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
+
+import java.util.Optional;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

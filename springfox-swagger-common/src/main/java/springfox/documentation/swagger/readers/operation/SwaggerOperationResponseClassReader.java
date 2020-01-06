@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,13 +28,18 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+
 import static springfox.documentation.schema.ResolvedTypes.*;
-import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 import static springfox.documentation.swagger.annotations.Annotations.*;
 
 @Component
@@ -42,12 +47,15 @@ import static springfox.documentation.swagger.annotations.Annotations.*;
 public class SwaggerOperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(SwaggerOperationResponseClassReader.class);
   private final TypeResolver typeResolver;
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor nameExtractor;
 
   @Autowired
   public SwaggerOperationResponseClassReader(
       TypeResolver typeResolver,
+      EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor nameExtractor) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeResolver = typeResolver;
     this.nameExtractor = nameExtractor;
   }
@@ -57,24 +65,27 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
 
     ResolvedType returnType = context.alternateFor(context.getReturnType());
     returnType = context.findAnnotation(ApiOperation.class)
-        .transform(resolvedTypeFromOperation(typeResolver, returnType))
-        .or(returnType);
+        .map(resolvedTypeFromOperation(typeResolver, returnType))
+        .orElse(returnType);
     if (canSkip(context, returnType)) {
       return;
     }
-    ModelContext modelContext = returnValue(
-        context.getGroupName(),
-        returnType,
-        context.getDocumentationType(),
-        context.getAlternateTypeProvider(),
-        context.getGenericsNamingStrategy(),
-        context.getIgnorableParameterTypes());
 
-    String responseTypeName = nameExtractor.typeName(modelContext);
+    ModelContext modelContext = context.operationModelsBuilder().addReturn(
+        returnType,
+        Optional.empty());
+
+    final Map<String, String> knownNames = new HashMap<>();
+    Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
+        .orElse(new HashSet<>())
+        .forEach(model -> knownNames.put(model.getId(), model.getName()));
+
+    String responseTypeName = nameExtractor.typeName(modelContext, knownNames);
     log.debug("Setting response class to:" + responseTypeName);
 
     context.operationBuilder()
-            .responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
+            .responseModel(
+                modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor, knownNames).apply(returnType));
   }
 
   private boolean canSkip(OperationContext context, ResolvedType returnType) {

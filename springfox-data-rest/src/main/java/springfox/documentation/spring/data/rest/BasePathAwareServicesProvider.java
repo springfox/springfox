@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  */
 package springfox.documentation.spring.data.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.BasePathAwareHandlerMapping;
@@ -30,36 +31,31 @@ import springfox.documentation.spi.service.RequestHandlerProvider;
 import springfox.documentation.spring.web.WebMvcRequestHandler;
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver;
 
+import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.*;
+import static springfox.documentation.spring.web.paths.Paths.*;
+
 
 @Component
 public class BasePathAwareServicesProvider implements RequestHandlerProvider {
   private final BasePathAwareHandlerMapping basePathAwareMappings;
   private final HandlerMethodResolver methodResolver;
+  private final String contextPath;
 
+  @Autowired
   public BasePathAwareServicesProvider(
       RepositoryRestConfiguration repositoryConfiguration,
       ApplicationContext applicationContext,
-      HandlerMethodResolver methodResolver) {
+      HandlerMethodResolver methodResolver,
+      ServletContext servletContext) {
     basePathAwareMappings = new BasePathAwareHandlerMapping(repositoryConfiguration);
     this.methodResolver = methodResolver;
     basePathAwareMappings.setApplicationContext(applicationContext);
     basePathAwareMappings.afterPropertiesSet();
-  }
-
-  @Override
-  public List<RequestHandler> requestHandlers() {
-    List<RequestHandler> requestHandlers = newArrayList();
-    for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
-      if (!isEntitySchemaService(each.getValue())
-          && !isAlpsProfileServices(each.getValue())) {
-        requestHandlers.add(new WebMvcRequestHandler(methodResolver, each.getKey(), each.getValue()));
-      }
-    }
-    return requestHandlers;
+    contextPath = contextPath(servletContext);
   }
 
   private static boolean isEntitySchemaService(HandlerMethod input) {
@@ -68,5 +64,22 @@ public class BasePathAwareServicesProvider implements RequestHandlerProvider {
 
   private static boolean isAlpsProfileServices(HandlerMethod input) {
     return AlpsController.class.equals(input.getBeanType());
+  }
+
+  @Override
+  public List<RequestHandler> requestHandlers() {
+    List<RequestHandler> requestHandlers = new ArrayList<>();
+    for (Map.Entry<RequestMappingInfo, HandlerMethod> each : basePathAwareMappings.getHandlerMethods().entrySet()) {
+      if (!isEntitySchemaService(each.getValue())
+          && !isAlpsProfileServices(each.getValue())) {
+        requestHandlers.add(
+            new WebMvcRequestHandler(
+                contextPath,
+                methodResolver,
+                each.getKey(),
+                each.getValue()));
+      }
+    }
+    return requestHandlers;
   }
 }

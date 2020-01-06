@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,10 +25,10 @@ import springfox.documentation.schema.Xml;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Strings.*;
-import static com.google.common.collect.Lists.*;
+import static org.springframework.util.StringUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class ModelPropertyBuilder {
@@ -46,7 +46,29 @@ public class ModelPropertyBuilder {
   private String defaultValue;
   private Xml xml;
   private Boolean allowEmptyValue;
-  private List<VendorExtension> vendorExtensions = newArrayList();
+  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+
+  public ModelPropertyBuilder() {
+    
+  }
+
+  public ModelPropertyBuilder(ModelProperty modelProperty) {
+    this.type = modelProperty.getType();
+    this.qualifiedType = modelProperty.getQualifiedType();
+    this.position = modelProperty.getPosition();
+    this.required = modelProperty.isRequired();
+    this.readOnly = modelProperty.isReadOnly();
+    this.description = modelProperty.getDescription();
+    this.allowableValues = modelProperty.getAllowableValues();
+    this.name = modelProperty.getName();
+    this.isHidden = modelProperty.isHidden();
+    this.example = modelProperty.getExample();
+    this.pattern = modelProperty.getPattern();
+    this.defaultValue = modelProperty.getDefaultValue();
+    this.xml = modelProperty.getXml();
+    this.allowEmptyValue = modelProperty.isAllowEmptyValue();
+    this.vendorExtensions.addAll(modelProperty.getVendorExtensions());
+  }
 
   public ModelPropertyBuilder name(String name) {
     this.name = defaultIfAbsent(name, this.name);
@@ -148,7 +170,7 @@ public class ModelPropertyBuilder {
   }
 
   public ModelProperty build() {
-    if (xml != null && isNullOrEmpty(xml.getName())) {
+    if (xml != null && isEmpty(xml.getName())) {
       xml.setName(name);
     }
     return new ModelProperty(

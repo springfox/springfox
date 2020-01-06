@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,41 +19,48 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableSet;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.NameValueExpression;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.RequestHandlerKey;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.spring.web.WebMvcPatternsRequestConditionWrapper;
 import springfox.documentation.spring.web.plugins.CombinedRequestHandler;
+import springfox.documentation.spring.wrapper.NameValueExpression;
+import springfox.documentation.spring.wrapper.PatternsRequestCondition;
+import springfox.documentation.spring.wrapper.RequestMappingInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 class SpringDataRestRequestHandler implements RequestHandler {
   private final EntityContext entityContext;
   private final ActionSpecification actionSpecification;
+  private final String contextPath;
 
   SpringDataRestRequestHandler(
       EntityContext entityContext,
       ActionSpecification actionSpecification) {
+
+    this.contextPath = entityContext.contextPath();
     this.entityContext = entityContext;
     this.actionSpecification = actionSpecification;
   }
 
   @Override
   public Class<?> declaringClass() {
-    return actionSpecification.getDeclaringClass().orNull();
+    return actionSpecification.getDeclaringClass().orElse(null);
   }
 
   @Override
@@ -63,7 +70,10 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public PatternsRequestCondition getPatternsCondition() {
-    return new PatternsRequestCondition(actionSpecification.getPath());
+    return new WebMvcPatternsRequestConditionWrapper(
+        contextPath,
+        new org.springframework.web.servlet.mvc.condition.PatternsRequestCondition(actionSpecification.getPath())
+    );
   }
 
   @Override
@@ -78,7 +88,8 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public Set<RequestMethod> supportedMethods() {
-    return ImmutableSet.copyOf(actionSpecification.getSupportedMethods());
+    return actionSpecification.getSupportedMethods().stream()
+        .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
   }
 
   @Override
@@ -93,30 +104,35 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public Set<NameValueExpression<String>> headers() {
-    return newHashSet();
+    return new HashSet<>();
   }
 
   @Override
   public Set<NameValueExpression<String>> params() {
-    return newHashSet();
+    return new HashSet<>();
   }
 
   @Override
   public <T extends Annotation> Optional<T> findAnnotation(Class<T> annotation) {
     if (getHandlerMethod() != null) {
-      return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
+      return ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getMethod(), annotation));
     }
-    return Optional.absent();
+    return empty();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public RequestHandlerKey key() {
-    return new RequestHandlerKey(getPatternsCondition().getPatterns(), supportedMethods(), consumes(), produces());
+    return new RequestHandlerKey(
+        getPatternsCondition().getPatterns(),
+        supportedMethods(),
+        consumes(),
+        produces());
   }
 
   @Override
   public List<ResolvedMethodParameter> getParameters() {
-    return new ArrayList<ResolvedMethodParameter>(actionSpecification.getParameters());
+    return new ArrayList<>(actionSpecification.getParameters());
   }
 
   @Override
@@ -124,18 +140,17 @@ class SpringDataRestRequestHandler implements RequestHandler {
     return actionSpecification.getReturnType();
   }
 
-  @SuppressWarnings("Guava")
   @Override
   public <T extends Annotation> Optional<T> findControllerAnnotation(Class<T> annotation) {
     if (getHandlerMethod() != null) {
-      return Optional.fromNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
+      return ofNullable(AnnotationUtils.findAnnotation(getHandlerMethod().getBeanType(), annotation));
     }
-    return Optional.absent();
+    return empty();
   }
 
   @Override
   public HandlerMethod getHandlerMethod() {
-    return actionSpecification.getHandlerMethod().orNull();
+    return actionSpecification.getHandlerMethod().orElse(null);
   }
 
   @Override
@@ -150,9 +165,10 @@ class SpringDataRestRequestHandler implements RequestHandler {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("SpringDataRestRequestHandler{");
-    sb.append("key=").append(key());
-    sb.append('}');
-    return sb.toString();
+    return new StringJoiner(", ", SpringDataRestRequestHandler.class.getSimpleName() + "{", "}")
+        .add("entityContext=" + entityContext)
+        .add("actionSpecification=" + actionSpecification)
+        .add("key=" + key())
+        .toString();
   }
 }

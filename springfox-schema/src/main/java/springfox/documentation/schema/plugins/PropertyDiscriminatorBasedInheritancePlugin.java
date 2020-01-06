@@ -16,12 +16,12 @@
  *
  *
  */
+
 package springfox.documentation.schema.plugins;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -30,13 +30,15 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+import static java.util.Optional.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 @Component
@@ -44,19 +46,22 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   @Autowired
   public PropertyDiscriminatorBasedInheritancePlugin(
       TypeResolver typeResolver,
+      EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor) {
     this.typeResolver = typeResolver;
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
   @Override
   public void apply(ModelContext context) {
 
-    List<ModelReference> modelRefs =  modelRefs(context);
+    List<ModelReference> modelRefs = modelRefs(context);
 
     if (!modelRefs.isEmpty()) {
       context.getBuilder()
@@ -67,10 +72,10 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
 
   private List<ModelReference> modelRefs(ModelContext context) {
     JsonSubTypes subTypes = AnnotationUtils.getAnnotation(forClass(context), JsonSubTypes.class);
-    List<ModelReference> modelRefs = new ArrayList<ModelReference>();
+    List<ModelReference> modelRefs = new ArrayList<>();
     if (subTypes != null) {
       for (JsonSubTypes.Type each : subTypes.value()) {
-        modelRefs.add(modelRefFactory(context, typeNameExtractor)
+        modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)
             .apply(typeResolver.resolve(each.value())));
       }
     }
@@ -81,8 +86,8 @@ public class PropertyDiscriminatorBasedInheritancePlugin implements ModelBuilder
     JsonTypeInfo typeInfo = AnnotationUtils.getAnnotation(forClass(context), JsonTypeInfo.class);
     if (typeInfo != null && typeInfo.use() == JsonTypeInfo.Id.NAME) {
       if (typeInfo.include() == JsonTypeInfo.As.PROPERTY) {
-        return Optional.fromNullable(emptyToNull(typeInfo.property()))
-            .or(typeInfo.use().getDefaultPropertyName());
+        return ofNullable(typeInfo.property()).filter(((Predicate<String>) String::isEmpty).negate())
+            .orElse(typeInfo.use().getDefaultPropertyName());
       }
     }
     return "";

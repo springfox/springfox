@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2016 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.fasterxml.classmate.members.ResolvedMethod;
 import com.fasterxml.classmate.members.ResolvedParameterizedMember;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
@@ -32,10 +33,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,19 +49,27 @@ import springfox.documentation.schema.property.bean.BeanModelProperty;
 import springfox.documentation.schema.property.bean.ParameterModelProperty;
 import springfox.documentation.schema.property.field.FieldModelProperty;
 import springfox.documentation.schema.property.field.FieldProvider;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Iterables.*;
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Maps.*;
+import static java.util.Collections.*;
+import static java.util.Optional.*;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
@@ -81,9 +87,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private final TypeResolver typeResolver;
   private final BeanPropertyNamingStrategy namingStrategy;
   private final SchemaPluginsManager schemaPluginsManager;
+  private final JacksonAnnotationIntrospector annotationIntrospector;
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
   private ObjectMapper objectMapper;
 
+  @SuppressWarnings("ParameterNumber")
   @Autowired
   public OptimizedModelPropertiesProvider(
       AccessorsProvider accessors,
@@ -92,6 +101,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       TypeResolver typeResolver,
       BeanPropertyNamingStrategy namingStrategy,
       SchemaPluginsManager schemaPluginsManager,
+      EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor) {
 
     this.accessors = accessors;
@@ -100,6 +110,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     this.typeResolver = typeResolver;
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
+    this.annotationIntrospector = new JacksonAnnotationIntrospector();
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
@@ -110,45 +122,71 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
 
   @Override
-  public List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext) {
+  public List<ModelProperty> propertiesFor(
+      ResolvedType type,
+      ModelContext givenContext) {
     List<ModelProperty> syntheticProperties = schemaPluginsManager.syntheticProperties(givenContext);
     if (!syntheticProperties.isEmpty()) {
       return syntheticProperties;
     }
-    return propertiesFor(type, givenContext, "");
+    return propertiesFor(
+        type,
+        givenContext,
+        "");
   }
 
-  private List<ModelProperty> propertiesFor(ResolvedType type, ModelContext givenContext, String namePrefix) {
-    List<ModelProperty> properties = newArrayList();
-    BeanDescription beanDescription = beanDescription(type, givenContext);
-    Map<String, BeanPropertyDefinition> propertyLookup = uniqueIndex(beanDescription.findProperties(),
-        BeanPropertyDefinitions.beanPropertyByInternalName());
+  // List cannot contain duplicated byPropertyName()
+  private List<ModelProperty> propertiesFor(
+      ResolvedType type,
+      ModelContext givenContext,
+      String namePrefix) {
+    Set<ModelProperty> properties = new TreeSet<>(byPropertyName());
+    BeanDescription beanDescription = beanDescription(
+        type,
+        givenContext);
+    Map<String, BeanPropertyDefinition> propertyLookup = beanDescription.findProperties().stream().collect(toMap(
+        beanPropertyByInternalName(),
+        identity()));
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
-      LOG.debug("Reading property {}", each.getKey());
+      LOG.debug(
+          "Reading property {}",
+          each.getKey());
       BeanPropertyDefinition jacksonProperty = each.getValue();
       Optional<AnnotatedMember> annotatedMember
-          = Optional.fromNullable(safeGetPrimaryMember(jacksonProperty));
-      if (annotatedMember.isPresent()) {
-        properties.addAll(candidateProperties(type, annotatedMember.get(), jacksonProperty, givenContext, namePrefix));
-      }
+          = ofNullable(safeGetPrimaryMember(
+          jacksonProperty,
+          givenContext));
+      annotatedMember.ifPresent(
+          member -> properties.addAll(
+              candidateProperties(
+                  type,
+                  member,
+                  jacksonProperty,
+                  givenContext,
+                  namePrefix)));
     }
-    return FluentIterable.from(properties).toSortedSet(byPropertyName()).asList();
+    return new ArrayList<>(properties);
   }
 
   private Comparator<ModelProperty> byPropertyName() {
-    return new Comparator<ModelProperty>() {
-      @Override
-      public int compare(ModelProperty first, ModelProperty second) {
-        return first.getName().compareTo(second.getName());
-      }
-    };
+    return Comparator.comparing(ModelProperty::getName);
   }
 
-  private AnnotatedMember safeGetPrimaryMember(BeanPropertyDefinition jacksonProperty) {
+  private AnnotatedMember safeGetPrimaryMember(
+      BeanPropertyDefinition jacksonProperty,
+      ModelContext givenContext) {
     try {
-      return jacksonProperty.getPrimaryMember();
+        /* was jacksonProperty.getPrimaryMember() but as of jackson-binding:2.9+
+        includes setter-less properties returning false positives so returning
+        back to original getPrimaryMember() implementation */
+      if (givenContext.isReturnType()) {
+        return jacksonProperty.getAccessor();
+      }
+      return jacksonProperty.getMutator();
     } catch (IllegalArgumentException e) {
-      LOG.warn(String.format("Unable to get unique property. %s", e.getMessage()));
+      LOG.warn(String.format(
+          "Unable to get unique property. %s",
+          e.getMessage()));
       return null;
     }
   }
@@ -158,50 +196,57 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final BeanPropertyDefinition jacksonProperty,
       final String namePrefix) {
 
-    return new Function<ResolvedMethod, List<ModelProperty>>() {
-      @Override
-      public List<ModelProperty> apply(ResolvedMethod input) {
-        ResolvedType type = paramOrReturnType(typeResolver, input);
-        if (!givenContext.canIgnore(type)) {
-          if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
-            return propertiesFor(
-                type,
-                fromParent(givenContext, type),
-                String.format(
-                    "%s%s",
-                    namePrefix,
-                    unwrappedPrefix(jacksonProperty.getPrimaryMember())));
-          }
-          return newArrayList(beanModelProperty(input, jacksonProperty, givenContext, namePrefix));
+    return input -> {
+      ResolvedType type = paramOrReturnType(
+          typeResolver,
+          input);
+      if (!givenContext.canIgnore(type)) {
+        if (memberIsUnwrapped(jacksonProperty.getPrimaryMember())) {
+          return propertiesFor(
+              type,
+              fromParent(
+                  givenContext,
+                  type),
+              String.format(
+                  "%s%s",
+                  namePrefix,
+                  unwrappedPrefix(jacksonProperty.getPrimaryMember())));
         }
-        return newArrayList();
+        return singletonList(beanModelProperty(
+            input,
+            jacksonProperty,
+            givenContext,
+            namePrefix));
       }
+      return new ArrayList<>();
     };
   }
-
 
   private Function<ResolvedField, List<ModelProperty>> propertyFromField(
       final ModelContext givenContext,
       final BeanPropertyDefinition jacksonProperty,
       final String namePrefix) {
 
-    return new Function<ResolvedField, List<ModelProperty>>() {
-      @Override
-      public List<ModelProperty> apply(ResolvedField input) {
-        if (!givenContext.canIgnore(input.getType())) {
-          if (memberIsUnwrapped(jacksonProperty.getField())) {
-            return propertiesFor(
-                input.getType(),
-                ModelContext.fromParent(givenContext, input.getType()),
-                String.format(
-                    "%s%s",
-                    namePrefix,
-                    unwrappedPrefix(jacksonProperty.getPrimaryMember())));
-          }
-          return newArrayList(fieldModelProperty(input, jacksonProperty, givenContext, namePrefix));
+    return input -> {
+      if (!givenContext.canIgnore(input.getType())) {
+        if (memberIsUnwrapped(jacksonProperty.getField())) {
+          return propertiesFor(
+              input.getType(),
+              ModelContext.fromParent(
+                  givenContext,
+                  input.getType()),
+              String.format(
+                  "%s%s",
+                  namePrefix,
+                  unwrappedPrefix(jacksonProperty.getPrimaryMember())));
         }
-        return newArrayList();
+        return singletonList(fieldModelProperty(
+            input,
+            jacksonProperty,
+            givenContext,
+            namePrefix));
       }
+      return new ArrayList<>();
     };
   }
 
@@ -212,17 +257,36 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ModelContext givenContext,
       String namePrefix) {
 
-    List<ModelProperty> properties = newArrayList();
+    List<ModelProperty> properties = new ArrayList<>();
+    if (!isInActiveView(
+        member,
+        givenContext)) {
+      return properties;
+    }
+
     if (member instanceof AnnotatedMethod) {
-      properties.addAll(findAccessorMethod(type, member)
-          .transform(propertyFromBean(givenContext, jacksonProperty, namePrefix))
-          .or(new ArrayList<ModelProperty>()));
+      properties.addAll(
+          findAccessorMethod(
+              type,
+              member)
+              .map(propertyFromBean(
+                  givenContext,
+                  jacksonProperty,
+                  namePrefix))
+              .orElse(new ArrayList<>()));
     } else if (member instanceof AnnotatedField) {
-      properties.addAll(findField(type, jacksonProperty.getInternalName())
-          .transform(propertyFromField(givenContext, jacksonProperty, namePrefix))
-          .or(new ArrayList<ModelProperty>()));
+      properties.addAll(findField(
+          type,
+          jacksonProperty.getInternalName())
+                            .map(propertyFromField(
+                                givenContext,
+                                jacksonProperty,
+                                namePrefix))
+                            .orElse(new ArrayList<>()));
     } else if (member instanceof AnnotatedParameter) {
-      ModelContext modelContext = ModelContext.fromParent(givenContext, type);
+      ModelContext modelContext = ModelContext.fromParent(
+          givenContext,
+          type);
       properties.addAll(
           fromFactoryMethod(
               type,
@@ -231,28 +295,47 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
               modelContext,
               namePrefix));
     }
-    return from(properties).filter(hiddenProperties()).toList();
+    return properties.stream()
+        .filter(hiddenProperties())
+        .collect(toList());
+  }
 
+  private boolean isInActiveView(
+      AnnotatedMember member,
+      ModelContext givenContext) {
+    if (givenContext.getView().isPresent()) {
+      Class<?>[] typeViews = annotationIntrospector.findViews(member);
+      if (typeViews == null) {
+        typeViews = new Class<?>[0];
+      }
+      if (typeViews.length == 0 && objectMapper.isEnabled(MapperFeature.DEFAULT_VIEW_INCLUSION)) {
+        return true;
+      }
+      Class<?> activeView = givenContext.getView().get().getErasedType();
+      int i = 0;
+      int len = typeViews.length;
+      for (; i < len; ++i) {
+        if (typeViews[i].isAssignableFrom(activeView)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
   }
 
   private Predicate<? super ModelProperty> hiddenProperties() {
-    return new Predicate<ModelProperty>() {
-      @Override
-      public boolean apply(ModelProperty input) {
-        return !input.isHidden();
-      }
-    };
+    return (Predicate<ModelProperty>) input -> !input.isHidden();
   }
 
   private Optional<ResolvedField> findField(
       ResolvedType resolvedType,
       final String fieldName) {
 
-    return tryFind(fields.in(resolvedType), new Predicate<ResolvedField>() {
-      public boolean apply(ResolvedField input) {
-        return fieldName.equals(input.getName());
-      }
-    });
+    return StreamSupport.stream(
+        fields.in(resolvedType).spliterator(),
+        false)
+        .filter(input -> fieldName.equals(input.getName())).findFirst();
   }
 
   private ModelProperty fieldModelProperty(
@@ -285,11 +368,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .allowableValues(fieldModelProperty.allowableValues())
         .example(fieldModelProperty.example());
     return schemaPluginsManager.property(
-        new ModelPropertyContext(propertyBuilder,
+        new ModelPropertyContext(
+            propertyBuilder,
             childField.getRawMember(),
             typeResolver,
             modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+        .updateModelRef(modelRefFactory(
+            modelContext,
+            enumTypeDeterminer,
+            typeNameExtractor));
   }
 
   private ModelProperty beanModelProperty(
@@ -312,7 +399,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         modelContext.getAlternateTypeProvider(),
         jacksonProperty);
 
-    LOG.debug("Adding property {} to model", propertyName);
+    LOG.debug(
+        "Adding property {} to model",
+        propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(beanModelProperty.getName())
         .type(beanModelProperty.getType())
@@ -324,11 +413,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .allowableValues(beanModelProperty.allowableValues())
         .example(beanModelProperty.example());
     return schemaPluginsManager.property(
-        new ModelPropertyContext(propertyBuilder,
+        new ModelPropertyContext(
+            propertyBuilder,
             jacksonProperty,
             typeResolver,
             modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+        .updateModelRef(modelRefFactory(
+            modelContext,
+            enumTypeDeterminer,
+            typeNameExtractor));
   }
 
   private ModelProperty paramModelProperty(
@@ -353,7 +446,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         modelContext.getAlternateTypeProvider(),
         jacksonProperty);
 
-    LOG.debug("Adding property {} to model", propertyName);
+    LOG.debug(
+        "Adding property {} to model",
+        propertyName);
     ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
         .name(parameterModelProperty.getName())
         .type(parameterModelProperty.getType())
@@ -365,20 +460,27 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .allowableValues(parameterModelProperty.allowableValues())
         .example(parameterModelProperty.example());
     return schemaPluginsManager.property(
-        new ModelPropertyContext(propertyBuilder,
+        new ModelPropertyContext(
+            propertyBuilder,
             jacksonProperty,
             typeResolver,
             modelContext.getDocumentationType()))
-        .updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+        .updateModelRef(modelRefFactory(
+            modelContext,
+            enumTypeDeterminer,
+            typeNameExtractor));
   }
 
-  private Optional<ResolvedMethod> findAccessorMethod(ResolvedType resolvedType, final AnnotatedMember member) {
-    return tryFind(accessors.in(resolvedType), new Predicate<ResolvedMethod>() {
-      public boolean apply(ResolvedMethod accessorMethod) {
-        SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
-        return methodComparer.equivalent(accessorMethod.getRawMember(), (Method) member.getMember());
-      }
-    });
+  private Optional<ResolvedMethod> findAccessorMethod(
+      ResolvedType resolvedType,
+      final AnnotatedMember member) {
+    return accessors.in(resolvedType).stream()
+        .filter(accessorMethod -> {
+          SimpleMethodSignatureEquality methodComparer = new SimpleMethodSignatureEquality();
+          return methodComparer.test(
+              accessorMethod.getRawMember(),
+              (Method) member.getMember());
+        }).findFirst();
   }
 
   private List<ModelProperty> fromFactoryMethod(
@@ -388,20 +490,24 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       final ModelContext givenContext,
       final String namePrefix) {
 
-    Optional<ModelProperty> property = factoryMethods.in(resolvedType, factoryMethodOf(member))
-        .transform(new Function<ResolvedParameterizedMember, ModelProperty>() {
-          @Override
-          public ModelProperty apply(ResolvedParameterizedMember input) {
-            return paramModelProperty(input, beanProperty, member, givenContext, namePrefix);
-          }
-        });
-    if (property.isPresent()) {
-      return newArrayList(property.get());
-    }
-    return newArrayList();
+    Optional<ModelProperty> property = factoryMethods.in(
+        resolvedType,
+        factoryMethodOf(member))
+        .map((Function<ResolvedParameterizedMember, ModelProperty>) input ->
+            paramModelProperty(
+                input,
+                beanProperty,
+                member,
+                givenContext,
+                namePrefix));
+    return property
+        .map(Collections::singletonList)
+        .orElseGet(ArrayList::new);
   }
 
-  private BeanDescription beanDescription(ResolvedType type, ModelContext context) {
+  private BeanDescription beanDescription(
+      ResolvedType type,
+      ModelContext context) {
     if (context.isReturnType()) {
       SerializationConfig serializationConfig = objectMapper.getSerializationConfig();
       return serializationConfig.introspect(serializationConfig.constructType(type.getErasedType()));

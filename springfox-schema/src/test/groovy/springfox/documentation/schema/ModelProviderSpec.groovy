@@ -19,13 +19,16 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import org.springframework.http.HttpHeaders
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import java.util.function.Function
+import java.util.stream.Collectors
+
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
@@ -33,56 +36,76 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.*
 class ModelProviderSpec extends Specification {
 
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  def getNames =
+      new Function<Model, String>() {
+        String apply(Model model) {
+          return model.getName();
+        }
+      }
+
   def "dependencies provider respects ignorables"() {
     given:
-      ModelProvider sut = defaultModelProvider()
-      def context = inputParam(
-          "group",
-          modelType,
-          SWAGGER_12,
-          alternateTypeProvider(),
-          namingStrategy,
-          ImmutableSet.builder().build())
-      context.seen(new TypeResolver().resolve(HttpHeaders))
-      def dependentTypeNames = sut.dependencies(context).keySet().sort()
+    ModelProvider sut = defaultModelProvider()
+    def context = inputParam(
+        "0_0",
+        "group",
+        modelType,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
+    context.seen(new TypeResolver().resolve(HttpHeaders))
+    def dependentTypeNames = sut.dependencies(context).values().stream()
+        .collect(Collectors.toMap(getNames,
+            Function.identity()))
+        .keySet()
+        .sort()
 
     expect:
-      dependencies == dependentTypeNames
+    dependencies == dependentTypeNames
 
     where:
-      modelType                      | dependencies
-      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+    modelType                      | dependencies
+    genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
   }
 
   @Unroll
   def "dependencies are inferred correctly by the model provider"() {
     given:
-      ModelProvider provider = defaultModelProvider()
-      def dependentTypeNames = provider.dependencies(
+    ModelProvider provider = defaultModelProvider()
+    def dependentTypeNames = provider.dependencies(
         inputParam(
+            "0_0",
             "group",
-            modelType,
+            resolver.resolve(modelType),
+            Optional.empty(),
+            new HashSet<>(),
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build())).keySet().sort()
+            emptySet())).values().stream()
+        .collect(Collectors.toMap(getNames,
+            Function.identity()))
+        .keySet().sort()
 
     expect:
-      dependencies == dependentTypeNames
+    dependencies == dependentTypeNames
 
     where:
-      modelType                      | dependencies
-      simpleType()                   | []
-      complexType()                  | ["Category"]
-      inheritedComplexType()         | ["Category"]
-      typeWithLists()                | ["Category", "ComplexType", "Substituted"].sort()
-      typeWithSets()                 | ["Category", "ComplexType"].sort()
-      typeWithArrays()               | ["Category", "ComplexType", "Substituted"]
-      genericClass()                 | ["SimpleType"]
-      genericClassWithListField()    | ["SimpleType"]
-      genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
-      genericClassWithDeepGenerics() | ["ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort()
-      genericCollectionWithEnum()    | []
-      recursiveType()                | ["SimpleType"]
+    modelType                      | dependencies
+    simpleType()                   | []
+    complexType()                  | ["Category"]
+    inheritedComplexType()         | ["Category"]
+    typeWithLists()                | ["Category", "ComplexType", "Substituted"].sort()
+    typeWithSets()                 | ["Category", "ComplexType"].sort()
+    typeWithArrays()               | ["Category", "ComplexType", "Substituted"]
+    genericClass()                 | ["SimpleType"]
+    genericClassWithListField()    | ["SimpleType"]
+    genericClassWithGenericField() | ["ResponseEntityAlternative«SimpleType»", "SimpleType"].sort()
+    genericClassWithDeepGenerics() | ["ResponseEntityAlternative«List«SimpleType»»", "SimpleType"].sort()
+    genericCollectionWithEnum()    | []
+    recursiveType()                | ["SimpleType"]
   }
 }

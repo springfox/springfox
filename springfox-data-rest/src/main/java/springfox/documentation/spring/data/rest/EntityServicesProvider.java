@@ -19,11 +19,8 @@
 package springfox.documentation.spring.data.rest;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.context.PersistentEntities;
-import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ResourceMappings;
@@ -33,11 +30,15 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.RequestHandlerProvider;
 
-import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
-import static com.google.common.collect.Lists.*;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.spring.web.paths.Paths.contextPath;
 
 @Component
 class EntityServicesProvider implements RequestHandlerProvider {
@@ -47,73 +48,65 @@ class EntityServicesProvider implements RequestHandlerProvider {
   private final TypeResolver typeResolver;
   private final PersistentEntities entities;
   private final Associations associations;
-
-  @Autowired(required = false)
-  private RequestHandlerExtractorConfiguration extractorConfiguration;
+  private final RequestHandlerExtractorConfiguration extractorConfiguration;
+  private final String contextPath;
 
   @Autowired
-  public EntityServicesProvider(
+  @SuppressWarnings("ParameterNumber")
+  EntityServicesProvider(
+      ServletContext servletContext,
       RepositoryRestConfiguration configuration,
       ResourceMappings mappings,
       Repositories repositories,
       TypeResolver typeResolver,
       PersistentEntities entities,
-      Associations associations) {
+      Associations associations,
+      Optional<RequestHandlerExtractorConfiguration> extractorConfiguration) {
     this.mappings = mappings;
     this.configuration = configuration;
     this.repositories = repositories;
     this.typeResolver = typeResolver;
     this.entities = entities;
     this.associations = associations;
+    this.extractorConfiguration = extractorConfiguration.orElse(new DefaultExtractorConfiguration());
+    this.contextPath = contextPath(servletContext);
   }
 
-  @PostConstruct
-  public void init() {
-    if (extractorConfiguration == null) {
-      extractorConfiguration = new DefaultExtractorConfiguration();
-    }
-  }
-
-  @Override
   public List<RequestHandler> requestHandlers() {
-    List<EntityContext> contexts = newArrayList();
+    List<EntityContext> contexts = new ArrayList<>();
     for (Class each : repositories) {
-      Object repositoryInformation = repositories.getRepositoryInformationFor(each);
-      Object repositoryInstance = repositories.getRepositoryFor(each);
-      ResourceMetadata resource = mappings.getMetadataFor(each);
-      if (resource.isExported()) {
-        Java8OptionalToGuavaOptionalConverter converter = new Java8OptionalToGuavaOptionalConverter();
-        RepositoryInformation repositoryInfo =
-            (RepositoryInformation) converter.convert(repositoryInformation).orNull();
-        contexts.add(new EntityContext(
-            typeResolver,
-            configuration,
-            repositoryInfo,
-            repositoryInstance,
-            resource,
-            mappings,
-            entities,
-            associations, extractorConfiguration));
-      }
-
+      repositories.getRepositoryInformationFor(each).ifPresent(repositoryInfo -> {
+        repositories.getRepositoryFor(each).ifPresent(repositoryInstance -> {
+          ResourceMetadata resource = mappings.getMetadataFor(each);
+          if (resource.isExported()) {
+            contexts.add(new EntityContext(
+                typeResolver,
+                contextPath, configuration,
+                repositoryInfo,
+                repositoryInstance,
+                resource,
+                mappings,
+                entities,
+                associations,
+                extractorConfiguration
+            ));
+          }
+        });
+      });
     }
 
-    List<RequestHandler> handlers = new ArrayList<RequestHandler>();
+    List<RequestHandler> handlers = new ArrayList<>();
     for (EntityContext each : contexts) {
-      handlers.addAll(FluentIterable.from(extractorConfiguration.getEntityExtractors())
-          .transformAndConcat(extractFromContext(each))
-          .toList());
+      handlers.addAll(extractorConfiguration.getEntityExtractors().stream()
+          .map(extractFromContext(each))
+          .flatMap(Collection::stream)
+          .collect(toList()));
     }
     return handlers;
   }
 
   private Function<EntityOperationsExtractor, List<RequestHandler>> extractFromContext(final EntityContext context) {
-    return new Function<EntityOperationsExtractor, List<RequestHandler>>() {
-      @Override
-      public List<RequestHandler> apply(EntityOperationsExtractor input) {
-        return input.extract(context);
-      }
-    };
+    return input -> input.extract(context);
   }
 
 }

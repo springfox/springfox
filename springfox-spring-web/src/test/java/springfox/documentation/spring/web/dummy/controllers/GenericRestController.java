@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,7 +26,11 @@ public abstract class GenericRestController<T extends Pet, S extends IRepository
     extends CommonRestController {
 
   @Autowired
-  protected S genericService;
+  private S genericService;
 
   public abstract ResponseEntity<T> test();
+
+  public S getGenericService() {
+    return genericService;
+  }
 }

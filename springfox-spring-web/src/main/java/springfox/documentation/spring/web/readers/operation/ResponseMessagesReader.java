@@ -19,7 +19,6 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -31,13 +30,18 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
@@ -45,17 +49,21 @@ import static springfox.documentation.schema.Types.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ResponseMessagesReader implements OperationBuilderPlugin {
 
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
 
   @Autowired
-  public ResponseMessagesReader(TypeNameExtractor typeNameExtractor) {
+  public ResponseMessagesReader(
+      EnumTypeDeterminer enumTypeDeterminer,
+      TypeNameExtractor typeNameExtractor) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
   }
 
   @Override
   public void apply(OperationContext context) {
     List<ResponseMessage> responseMessages = context.getGlobalResponseMessages(context.httpMethod().toString());
-    context.operationBuilder().responseMessages(newHashSet(responseMessages));
+    context.operationBuilder().responseMessages(new HashSet<>(responseMessages));
     applyReturnTypeOverride(context);
   }
 
@@ -71,23 +79,27 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     String message = message(context);
     ModelReference modelRef = null;
     if (!isVoid(returnType)) {
-      ModelContext modelContext = ModelContext.returnValue(
-          context.getGroupName(),
+      ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
-          context.getDocumentationType(),
-          context.getAlternateTypeProvider(),
-          context.getGenericsNamingStrategy(),
-          context.getIgnorableParameterTypes());
-      modelRef = modelRefFactory(modelContext, typeNameExtractor).apply(returnType);
-    }
-    ResponseMessage built = new ResponseMessageBuilder()
-        .code(httpStatusCode)
-        .message(message)
-        .responseModel(modelRef)
-        .build();
-    context.operationBuilder().responseMessages(newHashSet(built));
-  }
+          Optional.empty());
 
+      Map<String, String> knownNames = new HashMap<>();
+      Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
+          .orElse(new HashSet<>())
+          .forEach(model -> knownNames.put(
+              model.getId(),
+              model.getName()));
+
+      modelRef = modelRefFactory(
+          modelContext,
+          enumTypeDeterminer,
+          typeNameExtractor,
+          knownNames).apply(returnType);
+    }
+    ResponseMessage built = new ResponseMessageBuilder().code(httpStatusCode).message(message).responseModel(modelRef)
+        .build();
+    context.operationBuilder().responseMessages(singleton(built));
+  }
 
   public static int httpStatusCode(OperationContext context) {
     Optional<ResponseStatus> responseStatus = context.findAnnotation(ResponseStatus.class);

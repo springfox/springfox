@@ -1,7 +1,6 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.TypeResolver
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -11,6 +10,8 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlType
+
+import static java.util.Collections.*
 
 class XmlModelPluginSpec extends Specification {
   def "Should support all swagger documentation types"() {
@@ -26,14 +27,18 @@ class XmlModelPluginSpec extends Specification {
   @Unroll
   def "Xml model plugin parses #type.name annotation as expected"() {
     given:
-    XmlModelPlugin sut = new XmlModelPlugin(new TypeResolver())
+    def resolver = new TypeResolver()
+    XmlModelPlugin sut = new XmlModelPlugin(resolver)
     ModelContext context = ModelContext.inputParam(
+        "0_0",
         "group",
-        type,
+        resolver.resolve(type),
+        Optional.empty(),
+        new HashSet<>(),
         DocumentationType.SWAGGER_12,
         new AlternateTypeProvider([]),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     when:
     sut.apply(context)
 

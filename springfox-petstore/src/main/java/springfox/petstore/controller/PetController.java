@@ -44,38 +44,38 @@ import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
-@RequestMapping(value = "/api/pet", produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+@RequestMapping(value = "/api/pet", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
 @Api(value = "/pet", description = "Operations about pets")
 public class PetController {
 
-  PetRepository petData = new PetRepository();
+  private PetRepository petData = new PetRepository();
 
   @RequestMapping(value = "/{petId}", method = GET)
   @ApiOperation(
-          value = "Find pet by ID", notes = "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API " +
-          "error conditions",
-          response = Pet.class,
-          responseHeaders = {
-            @ResponseHeader(name = "header4", response = String.class),
-            @ResponseHeader(name = "header3", response = String.class)
-          },
-          authorizations = {
-                  @Authorization(value = "api_key"),
-                  @Authorization(value = "petstore_auth", scopes = {
-                          @AuthorizationScope(scope = "write:pets", description = ""),
-                          @AuthorizationScope(scope = "read:pets", description = "")
-                  })})
+      value = "Find pet by ID", notes = "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API " +
+      "error conditions",
+      response = Pet.class,
+      responseHeaders = {
+          @ResponseHeader(name = "header4", response = String.class),
+          @ResponseHeader(name = "header3", response = String.class)
+      },
+      authorizations = {
+          @Authorization(value = "api_key"),
+          @Authorization(value = "petstore_auth", scopes = {
+              @AuthorizationScope(scope = "write:pets", description = ""),
+              @AuthorizationScope(scope = "read:pets", description = "")
+          }) })
   @ApiResponses(value = {
-          @ApiResponse(code = 400, message = "Invalid ID supplied", responseHeaders = {
-                  @ResponseHeader(name = "header2", response = String.class),
-                  @ResponseHeader(name = "header1", response = String.class)
-          }),
-          @ApiResponse(code = 404, message = "Pet not found")}
+      @ApiResponse(code = 400, message = "Invalid ID supplied", responseHeaders = {
+          @ResponseHeader(name = "header2", response = String.class),
+          @ResponseHeader(name = "header1", response = String.class)
+      }),
+      @ApiResponse(code = 404, message = "Pet not found") }
   )
   public ResponseEntity<Pet> getPetById(
-          @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]", required = true)
-          @PathVariable("petId") String petId)
-          throws NotFoundException {
+      @ApiParam(value = "ID of pet that needs to be fetched", allowableValues = "range[1,5]", required = true)
+      @PathVariable("petId") String petId)
+      throws NotFoundException {
     Pet pet = petData.get(Long.valueOf(petId));
     if (null != pet) {
       return Responses.ok(pet);
@@ -86,43 +86,43 @@ public class PetController {
 
   @RequestMapping(method = POST)
   @ApiOperation(value = "Add a new pet to the store",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
-          }))
-  @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+      authorizations = @Authorization(value = "petstore_auth", scopes = {
+          @AuthorizationScope(scope = "write:pets", description = ""),
+          @AuthorizationScope(scope = "read:pets", description = "")
+      }))
+  @ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input") })
   public ResponseEntity<String> addPet(
-          @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
+      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
     petData.add(pet);
     return Responses.ok("SUCCESS");
   }
 
   @RequestMapping(method = PUT)
   @ApiOperation(value = "Update an existing pet",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
-          }))
-  @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid ID supplied"),
-          @ApiResponse(code = 404, message = "Pet not found"),
-          @ApiResponse(code = 405, message = "Validation exception")})
+      authorizations = @Authorization(value = "petstore_auth", scopes = {
+          @AuthorizationScope(scope = "write:pets", description = ""),
+          @AuthorizationScope(scope = "read:pets", description = "")
+      }))
+  @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid ID supplied"),
+      @ApiResponse(code = 404, message = "Pet not found"),
+      @ApiResponse(code = 405, message = "Validation exception") })
   public ResponseEntity<String> updatePet(
-          @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
+      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
     petData.add(pet);
     return Responses.ok("SUCCESS");
   }
 
   @RequestMapping(value = "/findByStatus", method = GET)
   @ApiOperation(
-          value = "Finds Pets by status",
-          notes = "Multiple status values can be provided with comma-separated strings",
-          response = Pet.class,
-          responseContainer = "List",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
-          }))
-  @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid status value")})
+      value = "Finds Pets by status",
+      notes = "Multiple status values can be provided with comma-separated strings",
+      response = Pet.class,
+      responseContainer = "List",
+      authorizations = @Authorization(value = "petstore_auth", scopes = {
+          @AuthorizationScope(scope = "write:pets", description = ""),
+          @AuthorizationScope(scope = "read:pets", description = "")
+      }))
+  @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid status value") })
   /** TODO: This renders parameter as
    *
    "name": "status",
@@ -135,41 +135,41 @@ public class PetController {
    "default": "available"
    */
   public ResponseEntity<List<Pet>> findPetsByStatus(
-          @ApiParam(value = "Status values that need to be considered for filter",
-                  required = true,
-                  defaultValue = "available",
-                  allowableValues = "available,pending,sold",
-                  allowMultiple = true)
-          @RequestParam("status") String status) {
+      @ApiParam(value = "Status values that need to be considered for filter",
+          required = true,
+          defaultValue = "available",
+          allowableValues = "available,pending,sold",
+          allowMultiple = true)
+      @RequestParam("status") String status) {
     return Responses.ok(petData.findPetByStatus(status));
   }
 
   @RequestMapping(value = "/findByTags", method = GET)
   @ApiOperation(
-          value = "Finds Pets by tags",
-          notes = "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
-          response = Pet.class,
-          responseContainer = "List",
-          authorizations = @Authorization(value = "petstore_auth", scopes = {
-                  @AuthorizationScope(scope = "write:pets", description = ""),
-                  @AuthorizationScope(scope = "read:pets", description = "")
-          }))
-  @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid tag value")})
+      value = "Finds Pets by tags",
+      notes = "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
+      response = Pet.class,
+      responseContainer = "List",
+      authorizations = @Authorization(value = "petstore_auth", scopes = {
+          @AuthorizationScope(scope = "write:pets", description = ""),
+          @AuthorizationScope(scope = "read:pets", description = "")
+      }))
+  @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid tag value") })
   @Deprecated
   /** TODO: This renders the parameter as 
-  "name": "tags",
-          "in": "query",
-          "description": "Tags to filter by",
-          "required": false,
-          "type": "array",
-          "items": {"type": "string"},
-          "collectionFormat": "multi" */
+   "name": "tags",
+   "in": "query",
+   "description": "Tags to filter by",
+   "required": false,
+   "type": "array",
+   "items": {"type": "string"},
+   "collectionFormat": "multi" */
   public ResponseEntity<List<Pet>> findPetsByTags(
-          @ApiParam(
-                  value = "Tags to filter by",
-                  required = true,
-                  allowMultiple = true)
-          @RequestParam("tags") String tags) {
+      @ApiParam(
+          value = "Tags to filter by",
+          required = true,
+          allowMultiple = true)
+      @RequestParam("tags") String tags) {
     return Responses.ok(petData.findPetByTags(tags));
   }
 
@@ -184,7 +184,7 @@ public class PetController {
           @AuthorizationScope(scope = "write:pets", description = ""),
           @AuthorizationScope(scope = "read:pets", description = "")
       }))
-  @ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid tag value")})
+  @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid tag value") })
   public ResponseEntity<List<Pet>> findPetsHidden(
       @ApiParam(
           value = "Tags to filter by",

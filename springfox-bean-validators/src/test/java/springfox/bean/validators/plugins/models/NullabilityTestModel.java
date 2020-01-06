@@ -18,6 +18,7 @@
  */
 package springfox.bean.validators.plugins.models;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class NullabilityTestModel {
@@ -25,6 +26,9 @@ public class NullabilityTestModel {
   private String notNullString;
   private String string;
   private String notNullGetter;
+  @NotBlank
+  private String notBlankString;
+  private String notBlankGetter;
 
   public String getNotNullString() {
     return notNullString;
@@ -50,4 +54,22 @@ public class NullabilityTestModel {
   public void setNotNullGetter(String notNullGetter) {
     this.notNullGetter = notNullGetter;
   }
+
+  @NotBlank
+  public String getNotBlankGetter() {
+    return notBlankGetter;
+  }
+
+  public String getNotBlankString() {
+    return notBlankString;
+  }
+
+  public void setNotBlankString(String notBlankString) {
+    this.notBlankString = notBlankString;
+  }
+
+  public void setNotBlankGetter(String notBlankGetter) {
+    this.notBlankGetter = notBlankGetter;
+  }
+
 }

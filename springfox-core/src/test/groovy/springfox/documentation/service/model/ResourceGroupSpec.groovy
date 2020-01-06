@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@
 
 package springfox.documentation.service.model
 
-import com.google.common.base.Optional
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.service.ResourceGroup
+
+import static java.util.Optional.*
 
 class ResourceGroupSpec extends Specification {
   @Shared
@@ -58,7 +59,7 @@ class ResourceGroupSpec extends Specification {
     when:
       def group = new ResourceGroup("group", String)
     then:
-      group.controllerClass == Optional.fromNullable(String)
+      group.controllerClass == ofNullable(String)
       group.groupName == "group"
       group.position == 0
   }
@@ -67,7 +68,7 @@ class ResourceGroupSpec extends Specification {
     when:
       def group = new ResourceGroup("group", String, 1)
     then:
-      group.controllerClass == Optional.fromNullable(String)
+      group.controllerClass == ofNullable(String)
       group.groupName == "group"
       group.position == 1
   }

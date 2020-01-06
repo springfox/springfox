@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.RelProvider;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 
 @Configuration
 public class SpringDataRestSchemaExtensions {
@@ -31,8 +32,9 @@ public class SpringDataRestSchemaExtensions {
   @Bean
   public ResourcesModelProvider resourcesModelProvider(
       TypeResolver resolver,
-      TypeNameExtractor typeNameExtractor) {
-    return new ResourcesModelProvider(resolver, typeNameExtractor);
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
+    return new ResourcesModelProvider(resolver, typeNameExtractor, enumTypeDeterminer);
   }
 
   @Bean
@@ -40,7 +42,8 @@ public class SpringDataRestSchemaExtensions {
       TypeResolver resolver,
       @Qualifier("_relProvider")
           RelProvider relProvider,
-      TypeNameExtractor typeNameExtractor) {
-    return new EmbeddedCollectionModelProvider(resolver, relProvider, typeNameExtractor);
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
+    return new EmbeddedCollectionModelProvider(resolver, relProvider, typeNameExtractor, enumTypeDeterminer);
   }
 }

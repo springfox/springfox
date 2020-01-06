@@ -40,6 +40,7 @@ public class Parameter {
   public Parameter() {
   }
 
+  @SuppressWarnings("ParameterNumber")
   public Parameter(String name, String description, String defaultValue, Boolean required, Boolean allowMultiple,
                    String dataType, AllowableValues allowableValues, String paramType, String paramAccess) {
     this.description = description;

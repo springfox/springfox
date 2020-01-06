@@ -28,32 +28,33 @@ import java.util.Date;
 
 
 @ApiModel(value = "Biz")
+@SuppressWarnings("VisibilityModifier")
 public class Business {
-   @ApiModelProperty(hidden = true)
-   @JsonProperty(value = "_meta")
-   public String meta = "Hello";
+  @ApiModelProperty(hidden = true)
+  @JsonProperty(value = "_meta")
+  public String meta = "Hello";
 
-   //not private - just for testing
-   public int id;
-   public String name;
-   public String owner;
-   public LocalDate inception;
-   public BusinessType businessType = BusinessType.PRODUCT;
-   public Date taxDate = new Date();
+  //not private - just for testing
+  public int id;
+  public String name;
+  public String owner;
+  public LocalDate inception;
+  public BusinessType businessType = BusinessType.PRODUCT;
+  public Date taxDate = new Date();
 
-   public enum BusinessType {
-      PRODUCT(1),
-      SERVICE(2);
-      private int value;
+  public enum BusinessType {
+    PRODUCT(1),
+    SERVICE(2);
+    private int value;
 
-      private BusinessType(int value) {
-         this.value = value;
-      }
+    BusinessType(int value) {
+      this.value = value;
+    }
 
-      public int getValue() {
-         return value;
-      }
-   }
+    public int getValue() {
+      return value;
+    }
+  }
 }
 
 

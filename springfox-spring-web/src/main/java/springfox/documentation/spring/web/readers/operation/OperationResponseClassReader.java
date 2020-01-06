@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,10 +26,18 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 
@@ -37,28 +45,42 @@ import static springfox.documentation.schema.ResolvedTypes.*;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationResponseClassReader implements OperationBuilderPlugin {
   private static Logger log = LoggerFactory.getLogger(OperationResponseClassReader.class);
+  private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor nameExtractor;
+  private final SchemaPluginsManager pluginsManager;
 
   @Autowired
-  public OperationResponseClassReader(TypeNameExtractor nameExtractor) {
+  public OperationResponseClassReader(SchemaPluginsManager pluginsManager,
+          EnumTypeDeterminer enumTypeDeterminer,
+          TypeNameExtractor nameExtractor) {
+    this.enumTypeDeterminer = enumTypeDeterminer;
     this.nameExtractor = nameExtractor;
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
   public void apply(OperationContext context) {
     ResolvedType returnType = context.getReturnType();
     returnType = context.alternateFor(returnType);
-    ModelContext modelContext = ModelContext.returnValue(
-        context.getGroupName(),
+    
+    ViewProviderPlugin viewProvider = 
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
+
+    ModelContext modelContext = context.operationModelsBuilder().addReturn(
         returnType,
-        context.getDocumentationType(),
-        context.getAlternateTypeProvider(),
-        context.getGenericsNamingStrategy(),
-        context.getIgnorableParameterTypes());
+        viewProvider.viewFor(returnType, context));
+
+    Map<String, String> knownNames;
+    knownNames = new HashMap<>();
+    Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
+            .orElse(new HashSet<>())
+        .forEach(model -> knownNames.put(model.getId(), model.getName()));
+
     String responseTypeName = nameExtractor.typeName(modelContext);
     log.debug("Setting spring response class to: {}", responseTypeName);
 
-    context.operationBuilder().responseModel(modelRefFactory(modelContext, nameExtractor).apply(returnType));
+    context.operationBuilder().responseModel(
+        modelRefFactory(modelContext, enumTypeDeterminer, nameExtractor, knownNames).apply(returnType));
   }
 
   @Override

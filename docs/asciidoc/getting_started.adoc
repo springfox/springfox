@@ -170,7 +170,8 @@ NOTE: This is still in ***incubation***.
 
 In order to use it
 
-1. add the `springfox-data-rest` dependency.
+1. add the `springfox-data-rest` dependency (via Gradle or Maven).
+2. Import the configuration from the `springfox-data-rest` module (via Java or xml config) as shown below
 
 ==== Gradle
 [source,groovy]
@@ -192,7 +193,7 @@ dependencies {
 </dependency>
 ----
 
-1. Import the configuration from the `springfox-data-rest` module as shown below
+
 
 ==== java config
 [source,java]
@@ -332,6 +333,26 @@ For maven:
 NOTE: The newer version has changed the group id from `_io.springfox_` to `_io.springfox.ui_`!
 
 - Enable url templating; (http://springfox.github.io/springfox/docs/current/#springfox-swagger2-with-spring-mvc-and-spring-boot[see #21])
+
+=== Springfox Spring-Integration Support *incubating*
+NOTE: _Keep in mind this is experimental_!
+
+As of Springfox 3.0 we offer experimental support for Spring Integration http inbound endpoints.
+
+The current implementation produces documentation for your endpoints, as far as possible automatically, based on static code analysis.
+Since the ultimate http responses in spring-integration cannot be determined statically from an http inbound endpoint,
+we use spring-restdocs to provide response body examples.
+
+We consider the
+support experimental because it has not been tested with a wide range of spring-integration applications and because we
+have only started to evaluate the possibilities we have with spring-restdocs.
+
+Depending on which web technology you choose, you need to include the appropriate `springfox-spring-integration-webflux`
+or `springfox-spring-integration-webmvc` dependency and use its respective tooling to produce documentation for your http
+responses, based on https://spring.io/projects/spring-restdocs[spring-restdocs].
+
+See the readme for https://github.com/springfox/springfox/tree/master/springfox-spring-integration-webmvc[springfox-spring-integration-webmvc] and
+https://github.com/springfox/springfox/tree/master/springfox-spring-integration-webflux[springfox-spring-integration-webflux] for details.
 
 === Securing swagger-ui
 https://github.com/springfox/springfox/issues/2191#issuecomment-359159833[The user contributed example] uses OAuth2 and

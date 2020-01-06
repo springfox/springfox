@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  */
 package springfox.documentation.spring.web.plugins
 
-import com.google.common.collect.ImmutableSet
+import com.fasterxml.classmate.TypeResolver
 import spock.lang.Specification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -26,25 +26,32 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy
 import springfox.documentation.spi.service.contexts.OperationModelContextsBuilder
 import springfox.documentation.spring.web.dummy.models.Example
 
+import static java.util.Collections.*
+
 class OperationModelsBuilderSpec extends Specification {
   OperationModelContextsBuilder sut =
       new OperationModelContextsBuilder("group",
           DocumentationType.SWAGGER_12,
+          "0",
           Mock(AlternateTypeProvider),
           Mock(GenericTypeNamingStrategy),
-          ImmutableSet.builder().build())
+          emptySet())
 
-  def "Manages a unique set of model contexts" () {
+  def "Manages a unique set of model contexts"() {
     given:
-      sut.addInputParam(Example)
+    sut.addInputParam(new TypeResolver().resolve(Example))
+
     when:
-      def models = sut.build()
+    def models = sut.build()
+
     then:
-      models.size() == 1
+    models.size() == 1
 
     and:
-      sut.addInputParam(Example).build().size() == 1
-      sut.addReturn(Example).build().size() == 2
+    sut.addInputParam(new TypeResolver().resolve(Example))
+    sut.build().size() == 1
+    sut.addReturn(new TypeResolver().resolve(Example))
+    sut.build().size() == 2
   }
 
 }

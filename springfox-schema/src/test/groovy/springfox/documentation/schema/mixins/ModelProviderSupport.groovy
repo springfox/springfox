@@ -68,6 +68,7 @@ class ModelProviderSupport {
         typeResolver,
         namingStrategy,
         pluginsManager,
+        new JacksonEnumTypeDeterminer(),
         typeNameExtractor)
 
     modelPropertiesProvider.onApplicationEvent(event)
@@ -121,6 +122,7 @@ class ModelProviderSupport {
         typeResolver,
         namingStrategy,
         pluginsManager,
+        new JacksonEnumTypeDeterminer(),
         typeNameExtractor)
     modelPropertiesProvider.onApplicationEvent(event)
     modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)

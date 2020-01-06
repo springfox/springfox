@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,10 @@
 package springfox.documentation.spring.web.mixins
 
 import com.fasterxml.classmate.TypeResolver
+
+import groovy.lang.Mixin
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.PathDecorator
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spi.service.DefaultsProviderPlugin
@@ -39,23 +42,26 @@ import springfox.documentation.spring.web.readers.parameter.ParameterNameReader
 import springfox.documentation.spring.web.scanners.ApiListingReader
 import springfox.documentation.spring.web.scanners.MediaTypeReader
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.stream.Collectors.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
+@Mixin([SchemaPluginsSupport])
 class ServicePluginsSupport {
 
   DocumentationPluginsManager defaultWebPlugins() {
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new ApiListingReader()))
+    plugins.apiListingPlugins = create(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
     plugins.documentationPlugins = create([])
     plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
     plugins.parameterPlugins = create([new ParameterNameReader()])
     plugins.operationBuilderPlugins = create([])
     plugins.resourceGroupingStrategies = create([])
-    plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
+    plugins.operationModelsProviders = create([new OperationModelsProvider(defaultSchemaPlugins())])
     plugins.defaultsProviders = create([])
     plugins.apiListingScanners = create([])
     plugins.pathDecorators = create([
@@ -81,13 +87,13 @@ class ServicePluginsSupport {
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(newArrayList(new MediaTypeReader(), new ApiListingReader()))
+    plugins.apiListingPlugins = create(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
     plugins.documentationPlugins = create(documentationPlugins)
     plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
     plugins.parameterPlugins = create(paramPlugins)
     plugins.operationBuilderPlugins = create(operationPlugins)
     plugins.resourceGroupingStrategies = create(groupingStrategyPlugins)
-    plugins.operationModelsProviders = create([new OperationModelsProvider(resolver)])
+    plugins.operationModelsProviders = create([new OperationModelsProvider(defaultSchemaPlugins())])
     plugins.defaultsProviders = create(defaultProviderPlugins)
     plugins.pathDecorators = create(pathDecorators)
     plugins.apiListingScanners = create(listingScanners)

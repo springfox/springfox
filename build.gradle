@@ -9,14 +9,18 @@ buildscript {
   dependencies {
     classpath "com.github.adrianbk:gradle-jvmsrc-plugin:0.6.1"
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2"
-    classpath "com.github.adrianbk:gradle-travisci-trigger-plugin:1.0.0"
     classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.2"
-    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.4"
-    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
-    classpath "org.ajoberstar:gradle-git:1.7.2"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.3"
+    classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.6.0"
+    classpath 'org.ajoberstar.grgit:grgit-core:3.0.0'
+    classpath 'org.ajoberstar:gradle-git-publish:2.0.0'
   }
+}
+
+plugins {
+  id "net.ltgt.apt-idea" version "0.21"
 }
 
 apply from: "$rootDir/gradle/dependencies.gradle"
@@ -28,7 +32,7 @@ apply plugin: 'springfox-multi-release'
 
 ext {
   apiKey = System.getenv('GIT_HUB_API_KEY')
-  jdkVersion = 1.6
+  jdkVersion = 1.8
 }
 
 allprojects {
@@ -44,6 +48,13 @@ subprojects {
   javadoc {
     options.encoding = 'UTF-8'
   }
+
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.deprecation = true
+    options.compilerArgs += ["-Xlint:unchecked", "-Xlint:deprecation", "-parameters"]
+  }
+
   //Commented PMD and Findbugs as its taking too much time for very little value
   //Perhaps run every 20 CI builds (mod of ci build number)
 //  apply from: "$rootDir/gradle/code-quality.gradle"
@@ -73,8 +84,6 @@ subprojects {
     packageName "springfox"
   }
 
-  compileJava.options.encoding = 'UTF-8'
-
   sourceCompatibility = jdkVersion
   targetCompatibility = jdkVersion
   group = 'io.springfox'
@@ -85,7 +94,7 @@ subprojects {
   jacoco {
     toolVersion = "$jacocoVersion"
   }
-  
+
   jacocoTestReport {
     reports {
       xml.enabled true
@@ -100,8 +109,8 @@ subprojects {
 
 apply from: "$rootDir/gradle/documentation.gradle"
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '4.4.1'
+wrapper {
+  gradleVersion = '4.10.1'
 }
 
 task codeCoverageReport(type: JacocoReport) {
@@ -115,7 +124,7 @@ task codeCoverageReport(type: JacocoReport) {
 
   reports {
     xml.enabled true
-    xml.destination "${buildDir}/reports/jacoco/report.xml"
+    xml.destination file("${buildDir}/reports/jacoco/report.xml")
     html.enabled false
     csv.enabled false
   }

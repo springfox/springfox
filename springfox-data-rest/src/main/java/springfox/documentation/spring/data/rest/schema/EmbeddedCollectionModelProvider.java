@@ -20,8 +20,6 @@ package springfox.documentation.spring.data.rest.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import org.springframework.hateoas.RelProvider;
 import org.springframework.hateoas.Resources;
 import springfox.documentation.builders.ModelPropertyBuilder;
@@ -30,14 +28,16 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
+import static java.util.function.Function.*;
+import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 
 class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
@@ -45,14 +45,17 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
   private final TypeResolver resolver;
   private final RelProvider relProvider;
   private final TypeNameExtractor typeNameExtractor;
+  private final EnumTypeDeterminer enumTypeDeterminer;
 
   EmbeddedCollectionModelProvider(
       TypeResolver resolver,
       RelProvider relProvider,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      EnumTypeDeterminer enumTypeDeterminer) {
     this.resolver = resolver;
     this.relProvider = relProvider;
     this.typeNameExtractor = typeNameExtractor;
+    this.enumTypeDeterminer = enumTypeDeterminer;
   }
 
   @Override
@@ -66,10 +69,9 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
             "Embedded collection of %s",
             type.getSimpleName()))
         .name(name)
-        .id(name)
         .qualifiedType(type.getName())
         .type(typeParameters.get(0))
-        .properties(Maps.uniqueIndex(properties(context), byName()))
+        .properties(properties(context).stream().collect(toMap(ModelProperty::getName, identity())))
         .xml(new Xml()
             .wrapped(true)
             .name("content")
@@ -82,7 +84,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     ResolvedType resourceType = resolver.resolve(context.getType());
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
-    return newArrayList(
+    return singletonList(
         new ModelPropertyBuilder()
             .name(relProvider.getCollectionResourceRelFor(type))
             .type(resolver.resolve(List.class, type))
@@ -92,7 +94,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
             .isHidden(false)
             .description("Resource collection")
             .build()
-            .updateModelRef(modelRefFactory(context, typeNameExtractor)));
+            .updateModelRef(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)));
   }
 
   @Override
@@ -101,22 +103,13 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
 
-    return newHashSet(resolver.resolve(type));
+    return singleton(resolver.resolve(type));
   }
 
   @Override
   public boolean supports(ModelContext delimiter) {
     return EmbeddedCollection.class.equals(resolver.resolve(delimiter.getType()).getErasedType())
         && delimiter.getDocumentationType() == DocumentationType.SWAGGER_2;
-  }
-
-  private Function<ModelProperty, String> byName() {
-    return new Function<ModelProperty, String>() {
-      @Override
-      public String apply(ModelProperty input) {
-        return input.getName();
-      }
-    };
   }
 
 }

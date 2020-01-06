@@ -19,11 +19,15 @@
 
 package springfox.documentation.schema;
 
-import com.google.common.base.Optional;
 import springfox.documentation.service.AllowableValues;
 
+import java.util.Optional;
+
 public interface ModelReference {
+
   String getType();
+
+  Optional<String> getTypeSignature();
 
   boolean isCollection();
 
@@ -34,4 +38,6 @@ public interface ModelReference {
   AllowableValues getAllowableValues();
 
   Optional<ModelReference> itemModel();
+
+  Optional<String> getModelId();
 }

@@ -19,9 +19,6 @@
 
 package springfox.documentation.spring.web.readers.parameter;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -32,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ValueConstants;
+import springfox.documentation.common.SpringVersion;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -40,18 +38,26 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.DescriptionResolver;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Strings.*;
+import static java.util.Optional.*;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ParameterRequiredReader implements ParameterBuilderPlugin {
+  private final SpringVersion springVersion;
   private final DescriptionResolver descriptions;
 
   @Autowired
   public ParameterRequiredReader(DescriptionResolver descriptions) {
+    this(descriptions, new SpringVersion());
+  }
+
+  ParameterRequiredReader(DescriptionResolver descriptions, SpringVersion springVersion) {
     this.descriptions = descriptions;
+    this.springVersion = springVersion;
   }
 
   @Override
@@ -77,20 +83,15 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     boolean optional = isOptional(methodParameter);
 
     Optional<RequestParam> requestParam = methodParameter.findAnnotation(RequestParam.class);
-    if (requestParam.isPresent()) {
-      requiredSet.add(!optional && isRequired(requestParam.get()));
-    }
+    requestParam.ifPresent(param -> requiredSet.add(!optional && isRequired(param)));
 
     Optional<RequestHeader> requestHeader = methodParameter.findAnnotation(RequestHeader.class);
-    if (requestHeader.isPresent()) {
-      requiredSet.add(!optional && requestHeader.get().required());
-    }
+    requestHeader.ifPresent(header -> requiredSet.add(!optional && header.required()));
 
     Optional<PathVariable> pathVariable = methodParameter.findAnnotation(PathVariable.class);
     if (pathVariable.isPresent()) {
-      String paramName = MoreObjects.firstNonNull(
-          emptyToNull(pathVariable.get().name()),
-          methodParameter.defaultName().orNull());
+      String paramName = ofNullable(pathVariable.get().name()).filter(((Predicate<String>) String::isEmpty).negate())
+          .orElse(methodParameter.defaultName().orElse(null));
 
       if (pathVariable.get().required() ||
           optionalButPresentInThePath(operationContext, pathVariable.get(), paramName)) {
@@ -99,14 +100,10 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     }
 
     Optional<RequestBody> requestBody = methodParameter.findAnnotation(RequestBody.class);
-    if (requestBody.isPresent()) {
-      requiredSet.add(!optional && requestBody.get().required());
-    }
+    requestBody.ifPresent(body -> requiredSet.add(!optional && body.required()));
 
     Optional<RequestPart> requestPart = methodParameter.findAnnotation(RequestPart.class);
-    if (requestPart.isPresent()) {
-      requiredSet.add(!optional && requestPart.get().required());
-    }
+    requestPart.ifPresent(part -> requiredSet.add(!optional && part.required()));
     return requiredSet.contains(true);
   }
 
@@ -116,13 +113,12 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
       String paramName) {
 
     return !pathVariable.required()
-         && operationContext.requestMappingPattern().contains("{" + paramName + "}");
+        && operationContext.requestMappingPattern().contains("{" + paramName + "}");
   }
 
-  @VisibleForTesting
   @SuppressWarnings("squid:S1872")
   boolean isOptional(ResolvedMethodParameter methodParameter) {
-    return "java.util.Optional".equals(methodParameter.getParameterType().getErasedType().getName());
+    return "com.google.common.base.Optional".equals(methodParameter.getParameterType().getErasedType().getName());
   }
 
   private boolean isRequired(RequestParam annotation) {

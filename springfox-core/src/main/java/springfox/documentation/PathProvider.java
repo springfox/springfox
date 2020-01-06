@@ -22,12 +22,6 @@ package springfox.documentation;
 public interface PathProvider {
 
   /**
-   * Gets the application base path
-   * @return application base path
-   */
-  String getApplicationBasePath();
-
-  /**
    * Gets the sanitized and prepended with a "/" operation path
    * @param operationPath - raw operation path
    * @return sanitized and prepended with a "/" operation path

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,14 +23,18 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.BeanDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
-import com.google.common.collect.ImmutableSet
 import org.joda.time.LocalDate
 import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.*
+import springfox.documentation.schema.AlternateTypesSupport
+import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
+import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
@@ -39,6 +43,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 import springfox.documentation.spring.web.DescriptionResolver
 
+import static java.util.Collections.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
@@ -162,12 +167,15 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     def resolver = new TypeResolver()
     ModelContext modelContext = inputParam(
+        "0_0",
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        Optional.empty(),
+        new HashSet<>(),
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(
@@ -183,7 +191,11 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     and:
     def enriched = context.getBuilder().build()
-    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    enriched.updateModelRef(
+        modelRefFactory(
+            modelContext,
+            new JacksonEnumTypeDeterminer(),
+            typeNameExtractor))
 
     then:
     enriched.allowableValues?.values == null
@@ -206,12 +218,15 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     def resolver = new TypeResolver()
     ModelContext modelContext = inputParam(
+        "0_0",
         "group",
         resolver.resolve(TypeWithAnnotatedGettersAndSetters),
+        Optional.empty(),
+        new HashSet<>(),
         SWAGGER_12,
         alternateTypeProvider(),
         new DefaultGenericTypeNamingStrategy(),
-        ImmutableSet.builder().build())
+        emptySet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(
@@ -230,7 +245,11 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
 
     and:
     def enriched = context.getBuilder().build()
-    enriched.updateModelRef(modelRefFactory(modelContext, typeNameExtractor))
+    enriched.updateModelRef(
+        modelRefFactory(
+            modelContext,
+            new JacksonEnumTypeDeterminer(),
+            typeNameExtractor))
 
     then:
     enriched.allowableValues?.values == null

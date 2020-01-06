@@ -26,8 +26,10 @@ import spock.lang.Unroll
 import springfox.documentation.schema.*
 import springfox.documentation.service.Header
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.dummy.ResponseExampleTestController
 import springfox.documentation.spring.web.dummy.ResponseHeaderTestController
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.mixins.ServicePluginsSupport
@@ -51,7 +53,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -82,7 +88,11 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -114,7 +124,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    new SwaggerResponseMessageReader(typeNameExtractor, resolver).apply(operationContext)
+    new SwaggerResponseMessageReader(new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
+      .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -178,11 +191,64 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         new JacksonEnumTypeDeterminer())
 
     when:
-    def sut = new SwaggerResponseMessageReader(typeNameExtractor, resolver)
+    def sut = new SwaggerResponseMessageReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        resolver)
 
     then:
     !sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
+  }
+
+  @Unroll
+  def "Supports examples"() {
+    given:
+    OperationContext operationContext =
+        operationContext(documentationContext(), handlerMethodIn(ResponseExampleTestController, methodName))
+
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+
+    def resolver = new TypeResolver()
+    def typeNameExtractor = new TypeNameExtractor(
+        resolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
+
+    when:
+    new SwaggerResponseMessageReader(
+        Mock(EnumTypeDeterminer),
+        typeNameExtractor,
+        resolver)
+        .apply(operationContext)
+
+    and:
+    def operation = operationContext.operationBuilder().build()
+    def responseMessages = operation.responseMessages
+
+    then:
+    examplesMatch(responseMessages[0].examples, examples)
+
+    where:
+    methodName                  | examples
+    "operationWithNoExamples"   | []
+    "operationWithOneExample"   | [new Example("mediaType", "value")]
+    "operationWithTwoExamples"  | [new Example("mediaType1", "value1"), new Example("mediaType2", "value2")]
+    "operationWithEmptyExample" | [new Example("mediaType1", "value1")]
+  }
+
+  boolean examplesMatch(List<Example> examples, List<Example> expectedExamples) {
+    if (examples.size() != expectedExamples.size()) {
+      return false
+    }
+    for (def i = 0; i < examples.size(); i++) {
+      if (examples[i].mediaType != expectedExamples[i].mediaType
+          || examples[i].value != expectedExamples[i].value) {
+        return false
+      }
+    }
+    return true
   }
 }

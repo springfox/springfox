@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2017 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
  *
  *
  */
+
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.models.properties.AbstractNumericProperty;
@@ -35,12 +34,17 @@ import springfox.documentation.service.AllowableValues;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
-import static com.google.common.base.Optional.*;
-import static com.google.common.collect.FluentIterable.*;
-import static com.google.common.collect.Lists.*;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 public class EnumMapper {
+  private EnumMapper() {
+    throw new UnsupportedOperationException();
+  }
+
   static ModelImpl maybeAddAllowableValuesToParameter(ModelImpl toReturn, AllowableValues allowableValues) {
     if (allowableValues instanceof AllowableListValues) {
       toReturn.setEnum(((AllowableListValues) allowableValues).getValues());
@@ -72,7 +76,7 @@ public class EnumMapper {
   }
 
   static BigDecimal safeBigDecimal(String doubleString) {
-    if (doubleString == null){
+    if (doubleString == null) {
       return null;
     }
     try {
@@ -83,7 +87,7 @@ public class EnumMapper {
   }
 
   static Integer safeInteger(String doubleString) {
-    if (doubleString == null){
+    if (doubleString == null) {
       return null;
     }
     try {
@@ -131,28 +135,27 @@ public class EnumMapper {
   }
 
   private static <T extends Number> List<T> convert(List<String> values, Class<T> toType) {
-    return newArrayList(presentInstances(from(values).transform(converterOfType(toType))));
+    return values.stream().map(converterOfType(toType))
+        .filter(Optional::isPresent).map(Optional::get)
+        .collect(toList());
   }
 
+  @SuppressWarnings("unchecked")
   private static <T extends Number> Function<? super String, Optional<T>> converterOfType(final Class<T> toType) {
-    return new Function<String, Optional<T>>() {
-      @SuppressWarnings("unchecked")
-      @Override
-      public Optional<T> apply(String input) {
-        try {
-          if (Integer.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Integer.valueOf(input));
-          } else if (Long.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Long.valueOf(input));
-          } else if (Double.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Double.valueOf(input));
-          } else if (Float.class.equals(toType)) {
-            return (Optional<T>) Optional.of(Float.valueOf(input));
-          }
-        } catch (NumberFormatException ignored) {
+    return (Function<String, Optional<T>>) input -> {
+      try {
+        if (Integer.class.equals(toType)) {
+          return (Optional<T>) of(Integer.valueOf(input));
+        } else if (Long.class.equals(toType)) {
+          return (Optional<T>) of(Long.valueOf(input));
+        } else if (Double.class.equals(toType)) {
+          return (Optional<T>) of(Double.valueOf(input));
+        } else if (Float.class.equals(toType)) {
+          return (Optional<T>) of(Float.valueOf(input));
         }
-        return Optional.absent();
+      } catch (NumberFormatException ignored) {
       }
+      return empty();
     };
   }
 }

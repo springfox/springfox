@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,20 +18,20 @@
  */
 package springfox.documentation.schema
 
-import com.google.common.collect.ImmutableSet
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.ModelProviderSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 
+import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 @Mixin([TypesForTestingSupport, ModelProviderSupport, ConfiguredObjectMapperSupport, AlternateTypesSupport])
 class UnwrappedTypeSpec extends Specification {
 
-  def "Unwrapped field with regular getter" () {
+  def "Unwrapped field with regular getter"() {
     given:
     def mapper = objectMapperThatUsesFields()
 
@@ -52,49 +52,55 @@ class UnwrappedTypeSpec extends Specification {
   @Unroll
   def "Unwrapped types are rendered correctly for fields"() {
     given:
-      def provider = defaultModelProvider(objectMapperThatUsesFields())
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    def provider = defaultModelProvider(objectMapperThatUsesFields())
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+
     when:
-      Model asInput = provider.modelFor(
-          inputParam("group",
-              UnwrappedTypeForField,
-              SWAGGER_12,
-              alternateTypeProvider(),
-              namingStrategy,
-              ImmutableSet.builder().build()))
-          .get()
-      Model asReturn = provider.modelFor(
-          returnValue("group",
-              UnwrappedTypeForField,
-              SWAGGER_12,
-              alternateTypeProvider(),
-              namingStrategy,
-              ImmutableSet.builder().build()))
-          .get()
+    Model asInput = provider.modelFor(
+        inputParam("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForField),
+            Optional.empty(),
+            new HashSet<>(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet()))
+        .get()
+    Model asReturn = provider.modelFor(
+        returnValue("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForField),
+            Optional.empty(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet()))
+        .get()
 
     then:
-      asInput.getName() == UnwrappedTypeForField.simpleName
-      asInput.getProperties().size() == 1
-      asInput.getProperties().containsKey("name")
-      def modelProperty = asInput.getProperties().get("name")
-      modelProperty.type.erasedType == String
-      modelProperty.getQualifiedType() == "java.lang.String"
-      def item = modelProperty.getModelRef()
-      item.type == "string"
-      !item.collection
-      item.itemType == null
+    asInput.getName() == UnwrappedTypeForField.simpleName
+    asInput.getProperties().size() == 1
+    asInput.getProperties().containsKey("name")
+    def modelProperty = asInput.getProperties().get("name")
+    modelProperty.type.erasedType == String
+    modelProperty.getQualifiedType() == "java.lang.String"
+    def item = modelProperty.getModelRef()
+    item.type == "string"
+    !item.collection
+    item.itemType == null
 
     and:
-      asReturn.getName() == UnwrappedTypeForField.simpleName
-      asReturn.getProperties().size() == 1
-      asReturn.getProperties().containsKey("name")
-      def returnProperty = asReturn.getProperties().get("name")
-      returnProperty.type.erasedType == String
-      returnProperty.getQualifiedType() == "java.lang.String"
-      def returnItem = modelProperty.getModelRef()
-      returnItem.type == "string"
-      !returnItem.collection
-      returnItem.itemType == null
+    asReturn.getName() == UnwrappedTypeForField.simpleName
+    asReturn.getProperties().size() == 1
+    asReturn.getProperties().containsKey("name")
+    def returnProperty = asReturn.getProperties().get("name")
+    returnProperty.type.erasedType == String
+    returnProperty.getQualifiedType() == "java.lang.String"
+    def returnItem = modelProperty.getModelRef()
+    returnItem.type == "string"
+    !returnItem.collection
+    returnItem.itemType == null
   }
 
   @Unroll
@@ -105,20 +111,25 @@ class UnwrappedTypeSpec extends Specification {
 
     when:
     Model asInput = provider.modelFor(
-        inputParam("group",
-            UnwrappedTypeForFieldWithGetter,
+        inputParam("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForFieldWithGetter),
+            Optional.empty(),
+            new HashSet<>(),
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
         .get()
     Model asReturn = provider.modelFor(
-        returnValue("group",
-            UnwrappedTypeForFieldWithGetter,
+        returnValue("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForFieldWithGetter),
+            Optional.empty(),
             SWAGGER_12,
             alternateTypeProvider(),
             namingStrategy,
-            ImmutableSet.builder().build()))
+            emptySet()))
         .get()
 
     then:
@@ -149,95 +160,102 @@ class UnwrappedTypeSpec extends Specification {
   @Unroll
   def "Unwrapped types are rendered correctly for getters"() {
     given:
-      def provider = defaultModelProvider(
+    def provider = defaultModelProvider(
         objectMapperThatUsesGetters())
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(
-          inputParam("group",
-              UnwrappedTypeForGetter,
-              SWAGGER_12,
-              alternateTypeProvider(),
-              namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(
-          returnValue("group",
-              UnwrappedTypeForGetter,
-              SWAGGER_12,
-              alternateTypeProvider(),
-              namingStrategy,
-              ImmutableSet.builder().build())).get()
+    Model asInput = provider.modelFor(
+        inputParam("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForGetter),
+            Optional.empty(),
+            new HashSet<>(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+    Model asReturn = provider.modelFor(
+        returnValue("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForGetter),
+            Optional.empty(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
 
     then:
-      asInput.getName() == UnwrappedTypeForGetter.simpleName
-      asInput.getProperties().size() == 1
-      asInput.getProperties().containsKey("name")
-      def modelProperty = asInput.getProperties().get("name")
-      modelProperty.type.erasedType == String
-      modelProperty.getQualifiedType() == "java.lang.String"
-      def item = modelProperty.getModelRef()
-      item.type == "string"
-      !item.collection
-      item.itemType == null
+    asInput.getName() == UnwrappedTypeForGetter.simpleName
+    asInput.getProperties().size() == 1
+    asInput.getProperties().containsKey("name")
+    def modelProperty = asInput.getProperties().get("name")
+    modelProperty.type.erasedType == String
+    modelProperty.getQualifiedType() == "java.lang.String"
+    def item = modelProperty.getModelRef()
+    item.type == "string"
+    !item.collection
+    item.itemType == null
 
-      asReturn.getName() == UnwrappedTypeForGetter.simpleName
-      asReturn.getProperties().size() == 1
-      asReturn.getProperties().containsKey("name")
-      def retModelProperty = asReturn.getProperties().get("name")
-      retModelProperty.type.erasedType == String
-      retModelProperty.getQualifiedType() == "java.lang.String"
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == "string"
-      !retItem.collection
-      retItem.itemType == null
-
+    asReturn.getName() == UnwrappedTypeForGetter.simpleName
+    asReturn.getProperties().size() == 1
+    asReturn.getProperties().containsKey("name")
+    def retModelProperty = asReturn.getProperties().get("name")
+    retModelProperty.type.erasedType == String
+    retModelProperty.getQualifiedType() == "java.lang.String"
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == "string"
+    !retItem.collection
+    retItem.itemType == null
   }
 
   @Unroll
   def "Unwrapped types are rendered correctly for setters"() {
     given:
-      def provider = defaultModelProvider(
+    def provider = defaultModelProvider(
         objectMapperThatUsesSetters())
-      def namingStrategy = new DefaultGenericTypeNamingStrategy()
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
     when:
-      Model asInput = provider.modelFor(
-          inputParam("group",
-              UnwrappedTypeForSetter,
-              SWAGGER_12,
-              alternateTypeProvider(),
-              namingStrategy,
-              ImmutableSet.builder().build())).get()
-      Model asReturn = provider.modelFor(
-          returnValue("group",
-              UnwrappedTypeForSetter,
-              SWAGGER_12,
-              alternateTypeProvider(),
-              namingStrategy,
-              ImmutableSet.builder().build())).get()
+    Model asInput = provider.modelFor(
+        inputParam("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForSetter),
+            Optional.empty(),
+            new HashSet<>(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+    Model asReturn = provider.modelFor(
+        returnValue("0_0",
+            "group",
+            resolver.resolve(UnwrappedTypeForSetter),
+            Optional.empty(),
+            SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
 
     then:
-      asInput.getName() == UnwrappedTypeForSetter.simpleName
-      asInput.getProperties().size() == 1
-      asInput.getProperties().containsKey("name")
-      def modelProperty = asInput.getProperties().get("name")
-      modelProperty.type.erasedType == String
-      modelProperty.getQualifiedType() == "java.lang.String"
-      def item = modelProperty.getModelRef()
-      item.type == "string"
-      !item.collection
-      item.itemType == null
+    asInput.getName() == UnwrappedTypeForSetter.simpleName
+    asInput.getProperties().size() == 1
+    asInput.getProperties().containsKey("name")
+    def modelProperty = asInput.getProperties().get("name")
+    modelProperty.type.erasedType == String
+    modelProperty.getQualifiedType() == "java.lang.String"
+    def item = modelProperty.getModelRef()
+    item.type == "string"
+    !item.collection
+    item.itemType == null
 
-      asReturn.getName() == UnwrappedTypeForSetter.simpleName
-      asReturn.getProperties().size() == 1
-      asReturn.getProperties().containsKey("name")
-      def retModelProperty = asReturn.getProperties().get("name")
-      retModelProperty.type.erasedType == String
-      retModelProperty.getQualifiedType() == "java.lang.String"
-      def retItem = retModelProperty.getModelRef()
-      retItem.type == "string"
-      !retItem.collection
-      retItem.itemType == null
-
+    asReturn.getName() == UnwrappedTypeForSetter.simpleName
+    asReturn.getProperties().size() == 1
+    asReturn.getProperties().containsKey("name")
+    def retModelProperty = asReturn.getProperties().get("name")
+    retModelProperty.type.erasedType == String
+    retModelProperty.getQualifiedType() == "java.lang.String"
+    def retItem = retModelProperty.getModelRef()
+    retItem.type == "string"
+    !retItem.collection
+    retItem.itemType == null
   }
-
 }

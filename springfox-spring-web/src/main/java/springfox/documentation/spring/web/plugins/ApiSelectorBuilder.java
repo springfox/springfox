@@ -19,12 +19,11 @@
 
 package springfox.documentation.spring.web.plugins;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+
 import springfox.documentation.RequestHandler;
 import springfox.documentation.spi.service.contexts.ApiSelector;
 
-import static com.google.common.base.Predicates.*;
+import java.util.function.Predicate;
 
 public class ApiSelectorBuilder {
   private final Docket parent;
@@ -36,12 +35,12 @@ public class ApiSelectorBuilder {
   }
 
   public ApiSelectorBuilder apis(Predicate<RequestHandler> selector) {
-    requestHandlerSelector = and(requestHandlerSelector, selector);
+    requestHandlerSelector = requestHandlerSelector.and(selector);
     return this;
   }
 
   public ApiSelectorBuilder paths(Predicate<String> selector) {
-    pathSelector = and(pathSelector, selector);
+    pathSelector = pathSelector.and(selector);
     return this;
   }
 
@@ -51,14 +50,14 @@ public class ApiSelectorBuilder {
 
   private Predicate<RequestHandler> combine(Predicate<RequestHandler> requestHandlerSelector,
       Predicate<String> pathSelector) {
-    return and(requestHandlerSelector, transform(pathSelector));
+    return requestHandlerSelector.and(transform(pathSelector));
   }
 
   private Predicate<RequestHandler> transform(final Predicate<String> pathSelector) {
     return new Predicate<RequestHandler>() {
       @Override
-      public boolean apply(RequestHandler input) {
-        return Iterables.any(input.getPatternsCondition().getPatterns(), pathSelector);
+      public boolean test(RequestHandler input) {
+        return input.getPatternsCondition().getPatterns().stream().anyMatch(pathSelector);
       }
     };
   }

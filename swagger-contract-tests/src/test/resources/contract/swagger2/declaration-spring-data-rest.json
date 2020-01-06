@@ -75,8 +75,8 @@
                 "tags": [
                     "Address Entity"
                 ],
-                "summary": "findOneAddress",
-                "operationId": "findOneAddressUsingGET_2",
+                "summary": "findByIdAddress",
+                "operationId": "findByIdAddressUsingGET_2",
                 "parameters": [
                     {
                         "name": "id",
@@ -391,14 +391,16 @@
                         "in": "query",
                         "description": "page",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "size",
                         "in": "query",
                         "description": "size",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "sort",
@@ -558,8 +560,8 @@
                 "tags": [
                     "Person Entity"
                 ],
-                "summary": "findOnePerson",
-                "operationId": "findOnePersonUsingGET_2",
+                "summary": "findByIdPerson",
+                "operationId": "findByIdPersonUsingGET_2",
                 "parameters": [
                     {
                         "name": "id",
@@ -861,7 +863,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_5",
+                "operationId": "personTagsUsingGET_4",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -974,7 +976,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_5",
+                "operationId": "personTagsUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1045,7 +1047,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingGET_4",
+                "operationId": "personTagsUsingGET_5",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1081,7 +1083,7 @@
                     "Person Entity"
                 ],
                 "summary": "personTags",
-                "operationId": "personTagsUsingDELETE_4",
+                "operationId": "personTagsUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1159,14 +1161,16 @@
                         "in": "query",
                         "description": "page",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "size",
                         "in": "query",
                         "description": "size",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "sort",
@@ -1224,8 +1228,8 @@
                 "tags": [
                     "Tag Entity"
                 ],
-                "summary": "findOneTag",
-                "operationId": "findOneTagUsingGET_2",
+                "summary": "findByIdTag",
+                "operationId": "findByIdTagUsingGET_2",
                 "parameters": [
                     {
                         "name": "id",
@@ -1352,7 +1356,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_5",
+                "operationId": "tagPeopleUsingGET_4",
                 "produces": [
                     "application/hal+json"
                 ],
@@ -1465,7 +1469,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_5",
+                "operationId": "tagPeopleUsingDELETE_4",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1536,7 +1540,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingGET_4",
+                "operationId": "tagPeopleUsingGET_5",
                 "consumes": [
                     "application/hal+json"
                 ],
@@ -1572,7 +1576,7 @@
                     "Tag Entity"
                 ],
                 "summary": "tagPeople",
-                "operationId": "tagPeopleUsingDELETE_4",
+                "operationId": "tagPeopleUsingDELETE_5",
                 "consumes": [
                     "text/uri-list",
                     "application/x-spring-data-compact+json"
@@ -1621,14 +1625,16 @@
                         "in": "query",
                         "description": "page",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "size",
                         "in": "query",
                         "description": "size",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     {
                         "name": "sort",
@@ -1703,6 +1709,7 @@
             "required": [
                 "addresses"
             ],
+            "discriminator": "Embedded collection of Address",
             "properties": {
                 "addresses": {
                     "type": "array",
@@ -1713,17 +1720,18 @@
                 }
             },
             "title": "EmbeddedCollectionOfAddress",
-            "description": "Embedded collection of Address",
             "xml": {
                 "name": "content",
                 "wrapped": true
-            }
+            },
+            "description": "Embedded collection of Address"
         },
         "EmbeddedCollectionOfPerson": {
             "type": "object",
             "required": [
                 "people"
             ],
+            "discriminator": "Embedded collection of Person",
             "properties": {
                 "people": {
                     "type": "array",
@@ -1734,6 +1742,10 @@
                 }
             },
             "title": "EmbeddedCollectionOfPerson",
+            "xml": {
+                "name": "content",
+                "wrapped": true
+            },
             "description": "Embedded collection of Person"
         },
         "EmbeddedCollectionOfTag": {
@@ -1741,6 +1753,7 @@
             "required": [
                 "tags"
             ],
+            "discriminator": "Embedded collection of Tag",
             "properties": {
                 "tags": {
                     "type": "array",
@@ -1751,11 +1764,11 @@
                 }
             },
             "title": "EmbeddedCollectionOfTag",
-            "description": "Embedded collection of Tag",
             "xml": {
                 "name": "content",
                 "wrapped": true
-            }
+            },
+            "description": "Embedded collection of Tag"
         },
         "Link": {
             "type": "object",
@@ -1820,7 +1833,13 @@
                     }
                 }
             },
-            "title": "Link"
+            "title": "Link",
+            "xml": {
+                "name": "link",
+                "namespace": "http://www.w3.org/2005/Atom",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "Person": {
             "type": "object",
@@ -1888,7 +1907,12 @@
                     "type": "string"
                 }
             },
-            "title": "ResourceOfAddress"
+            "title": "ResourceOfAddress",
+            "xml": {
+                "name": "ResourceOfAddress",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "ResourceOfPerson": {
             "type": "object",
@@ -1964,7 +1988,12 @@
                     }
                 }
             },
-            "title": "ResourceOfTag"
+            "title": "ResourceOfTag",
+            "xml": {
+                "name": "ResourceOfTag",
+                "attribute": false,
+                "wrapped": false
+            }
         },
         "ResourcesOfAddress": {
             "type": "object",
@@ -1972,6 +2001,7 @@
                 "_embedded",
                 "_links"
             ],
+            "discriminator": "Resources of Address",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfAddress"
@@ -1985,12 +2015,12 @@
                 }
             },
             "title": "ResourcesOfAddress",
-            "description": "Resources of Address",
             "xml": {
                 "name": "entities",
                 "attribute": false,
                 "wrapped": false
-            }
+            },
+            "description": "Resources of Address"
         },
         "ResourcesOfPerson": {
             "type": "object",
@@ -1998,6 +2028,7 @@
                 "_embedded",
                 "_links"
             ],
+            "discriminator": "Resources of Person",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfPerson"
@@ -2011,6 +2042,11 @@
                 }
             },
             "title": "ResourcesOfPerson",
+            "xml": {
+                "name": "entities",
+                "attribute": false,
+                "wrapped": false
+            },
             "description": "Resources of Person"
         },
         "ResourcesOfTag": {
@@ -2019,6 +2055,7 @@
                 "_embedded",
                 "_links"
             ],
+            "discriminator": "Resources of Tag",
             "properties": {
                 "_embedded": {
                     "$ref": "#/definitions/EmbeddedCollectionOfTag"
@@ -2032,12 +2069,12 @@
                 }
             },
             "title": "ResourcesOfTag",
-            "description": "Resources of Tag",
             "xml": {
                 "name": "entities",
                 "attribute": false,
                 "wrapped": false
-            }
+            },
+            "description": "Resources of Tag"
         },
         "Tag": {
             "type": "object",

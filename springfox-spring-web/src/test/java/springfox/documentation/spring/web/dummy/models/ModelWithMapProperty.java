@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,14 +22,15 @@ package springfox.documentation.spring.web.dummy.models;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.*;
+
 
 @ApiModel(description = "Describes model with map property")
 public class ModelWithMapProperty {
   @ApiModelProperty(value = "Map of params to be sent")
-  private final Map<String, String> params = newHashMap();
+  private final Map<String, String> params = new HashMap<>();
 
   public Map<String, String> getParams() {
     return params;

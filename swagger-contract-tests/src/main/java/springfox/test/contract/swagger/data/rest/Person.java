@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -39,14 +39,14 @@ public class Person {
 
   private String firstName;
   private String lastName;
-  
+
   @OneToOne
   @JoinColumn(name = "address_id")
-  @RestResource(path = "personAddress", rel="address")
+  @RestResource(path = "personAddress", rel = "address")
   private Address address;
 
   @ManyToOne
-  @JoinColumn(name="category_id")
+  @JoinColumn(name = "category_id")
   private Category category;
 
   @ManyToMany(mappedBy = "people")

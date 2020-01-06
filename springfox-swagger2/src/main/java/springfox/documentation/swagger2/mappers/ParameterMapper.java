@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@
 
 package springfox.documentation.swagger2.mappers;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.FluentIterable;
+
 import io.swagger.models.ArrayModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
@@ -30,11 +29,14 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
+import org.springframework.util.StringUtils;
+
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
@@ -43,25 +45,25 @@ import static springfox.documentation.swagger2.mappers.Properties.*;
 @Mapper
 public class ParameterMapper {
 
-  private static final VendorExtensionsMapper vendorMapper = new VendorExtensionsMapper();
+  private static final VendorExtensionsMapper VENDOR_EXTENSIONS_MAPPER = new VendorExtensionsMapper();
 
   public Parameter mapParameter(springfox.documentation.service.Parameter source) {
     Parameter bodyParameter = bodyParameter(source);
-    return SerializableParameterFactories.create(source).or(bodyParameter);
+    return SerializableParameterFactories.create(source).orElse(bodyParameter);
   }
 
   private Parameter bodyParameter(springfox.documentation.service.Parameter source) {
     BodyParameter parameter = new BodyParameter()
         .description(source.getDescription())
         .name(source.getName())
-        .schema(fromModelRef(source.getModelRef()));
+        .schema(toSchema(source));
     parameter.setIn(source.getParamType());
     parameter.setAccess(source.getParamAccess());
     parameter.setPattern(source.getPattern());
     parameter.setRequired(source.isRequired());
-    parameter.getVendorExtensions().putAll(vendorMapper.mapExtensions(source.getVendorExtentions()));
-    for (Entry<String, Collection<Example>> each : source.getExamples().asMap().entrySet()) {
-      Optional<Example> example = FluentIterable.from(each.getValue()).first();
+    parameter.getVendorExtensions().putAll(VENDOR_EXTENSIONS_MAPPER.mapExtensions(source.getVendorExtentions()));
+    for (Entry<String, List<Example>> each : source.getExamples().entrySet()) {
+      Optional<Example> example = each.getValue().stream().findFirst();
       if (example.isPresent() && example.get().getValue() != null) {
         parameter.addExample(each.getKey(), String.valueOf(example.get().getValue()));
       }
@@ -69,6 +71,20 @@ public class ParameterMapper {
 
     //TODO: swagger-core Body parameter does not have an enum property
     return parameter;
+  }
+
+  private Model toSchema(springfox.documentation.service.Parameter source) {
+    Model schema = fromModelRef(source.getModelRef());
+
+    if (!StringUtils.isEmpty(source.getScalarExample()) && !isEmptyExample(source.getScalarExample())) {
+      schema.setExample(source.getScalarExample());
+    }
+
+    return schema;
+  }
+
+  private boolean isEmptyExample(Object object) {
+    return object instanceof Example && StringUtils.isEmpty(((Example) object).getValue());
   }
 
   Model fromModelRef(ModelReference modelRef) {

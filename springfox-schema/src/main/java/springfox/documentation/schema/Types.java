@@ -20,26 +20,24 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.AbstractMap;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
-import static com.google.common.collect.Sets.*;
+import static java.util.Collections.*;
+import static java.util.stream.Collectors.*;
 
 public class Types {
-  private Types() {
-    throw new UnsupportedOperationException();
-  }
-
-  private static final Set<String> baseTypes = newHashSet(
+  private static final Set<String> BASE_TYPES = Stream.of(
       "int",
       "date",
       "string",
@@ -53,45 +51,99 @@ public class Types {
       "__file",
       "biginteger",
       "bigdecimal",
-      "uuid");
-  private static final Map<Type, String> typeNameLookup = ImmutableMap.<Type, String>builder()
-      .put(Long.TYPE, "long")
-      .put(Short.TYPE, "int")
-      .put(Integer.TYPE, "int")
-      .put(Double.TYPE, "double")
-      .put(Float.TYPE, "float")
-      .put(Byte.TYPE, "byte")
-      .put(Boolean.TYPE, "boolean")
-      .put(Character.TYPE, "string")
+      "uuid").collect(toSet());
 
-      .put(Date.class, "date-time")
-      .put(java.sql.Date.class, "date")
-      .put(String.class, "string")
-      .put(Object.class, "object")
-      .put(Long.class, "long")
-      .put(Integer.class, "int")
-      .put(Short.class, "int")
-      .put(Double.class, "double")
-      .put(Float.class, "float")
-      .put(Boolean.class, "boolean")
-      .put(Byte.class, "byte")
-      .put(BigDecimal.class, "bigdecimal")
-      .put(BigInteger.class, "biginteger")
-      .put(Currency.class, "string")
-      .put(UUID.class, "uuid")
-      .put(MultipartFile.class, "__file")
-      .build();
+  private static final Map<Type, String> TYPE_NAME_LOOKUP = unmodifiableMap(Stream.of(
+      new AbstractMap.SimpleEntry<>(
+          Long.TYPE,
+          "long"),
+      new AbstractMap.SimpleEntry<>(
+          Short.TYPE,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Integer.TYPE,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Double.TYPE,
+          "double"),
+      new AbstractMap.SimpleEntry<>(
+          Float.TYPE,
+          "float"),
+      new AbstractMap.SimpleEntry<>(
+          Byte.TYPE,
+          "byte"),
+      new AbstractMap.SimpleEntry<>(
+          Boolean.TYPE,
+          "boolean"),
+      new AbstractMap.SimpleEntry<>(
+          Character.TYPE,
+          "string"),
+      new AbstractMap.SimpleEntry<>(
+          Date.class,
+          "date-time"),
+      new AbstractMap.SimpleEntry<>(
+          java.sql.Date.class,
+          "date"),
+      new AbstractMap.SimpleEntry<>(
+          String.class,
+          "string"),
+      new AbstractMap.SimpleEntry<>(
+          Object.class,
+          "object"),
+      new AbstractMap.SimpleEntry<>(
+          Long.class,
+          "long"),
+      new AbstractMap.SimpleEntry<>(
+          Integer.class,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Short.class,
+          "int"),
+      new AbstractMap.SimpleEntry<>(
+          Double.class,
+          "double"),
+      new AbstractMap.SimpleEntry<>(
+          Float.class,
+          "float"),
+      new AbstractMap.SimpleEntry<>(
+          Boolean.class,
+          "boolean"),
+      new AbstractMap.SimpleEntry<>(
+          Byte.class,
+          "byte"),
+      new AbstractMap.SimpleEntry<>(
+          BigDecimal.class,
+          "bigdecimal"),
+      new AbstractMap.SimpleEntry<>(
+          BigInteger.class,
+          "biginteger"),
+      new AbstractMap.SimpleEntry<>(
+          Currency.class,
+          "string"),
+      new AbstractMap.SimpleEntry<>(
+          UUID.class,
+          "uuid"),
+      new AbstractMap.SimpleEntry<>(
+          MultipartFile.class,
+          "__file"))
+                                                                                .collect(toMap(
+                                                                                    Map.Entry::getKey,
+                                                                                    Map.Entry::getValue)));
+
+  private Types() {
+    throw new UnsupportedOperationException();
+  }
 
   public static String typeNameFor(Type type) {
-    return typeNameLookup.get(type);
+    return TYPE_NAME_LOOKUP.get(type);
   }
 
   public static boolean isBaseType(String typeName) {
-    return baseTypes.contains(typeName);
+    return BASE_TYPES.contains(typeName);
   }
 
   public static boolean isBaseType(ResolvedType type) {
-    return baseTypes.contains(typeNameFor(type.getErasedType()));
+    return BASE_TYPES.contains(typeNameFor(type.getErasedType()));
   }
 
   public static boolean isVoid(ResolvedType returnType) {

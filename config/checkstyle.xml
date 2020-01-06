@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN"
-        "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "http://checkstyle.sourceforge.net/dtds/configuration_1_3.dtd">
 
 <!-- A set of Checkstyle rules that should be applied to non-legacy modules that should adhere to relatively strict
      code style rules. -->
 <module name="Checker">
 
     <property name="severity" value="error"/>
+
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value=".*generated-test-sources.*\.java$"/>
+    </module>
 
     <!-- Whitespace checks http://checkstyle.sourceforge.net/config_whitespace.html -->
     <module name="FileTabCharacter"/>
@@ -25,53 +30,92 @@
                   value="Calls to Throwable.printStackTrace() are not allowed. Log the exception instead."/>
     </module>
 
-    <!--
-        Along with the FileContentsHolder module, allows for adding comments to source code to suppress checks.
-        http://checkstyle.sourceforge.net/config.html#Filters
-    -->
-    <module name="SuppressionCommentFilter"/>
+
+    <!-- Along with the SuppressWarningsHolder module, enables support for @SuppressWarnigns annotation -->
+    <module name="SuppressWarningsFilter"/>
+
+    <!-- Checks whether files end with a new line.                        -->
+    <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
+    <!--<module name="NewlineAtEndOfFile"/>-->
 
     <module name="TreeWalker">
 
-        <!--
-            Along with the SuppressionCommentFilter module, allows for adding comments to source code to suppress checks.
-            http://checkstyle.sourceforge.net/config.html#Filters
-        -->
-        <module name="FileContentsHolder"/>
+        <module name="SuppressionCommentFilter"/>
+        <module name="SuppressWarningsHolder"/>
 
-        <!-- Import checks - http://checkstyle.sourceforge.net/config_imports.html -->
-        <module name="UnusedImports"/>
+        <!-- Checks for Naming Conventions.                  -->
+        <!-- See http://checkstyle.sf.net/config_naming.html -->
+        <module name="ConstantName"/>
+        <module name="LocalFinalVariableName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <!--<module name="MethodName"/>-->
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName"/>
 
-        <!-- Block checks - http://checkstyle.sourceforge.net/config_blocks.html -->
-        <module name="LeftCurly">
-            <property name="option" value="eol"/>
+        <!-- Checks for imports                              -->
+        <!-- See http://checkstyle.sf.net/config_import.html -->
+        <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
+        <module name="RedundantImport"/>
+        <module name="UnusedImports">
+            <property name="processJavadoc" value="false"/>
         </module>
-        <module name="RightCurly">
-            <property name="option" value="same"/>
-        </module>
-        <module name="NeedBraces"/>
 
+        <!-- Checks for Size Violations.                    -->
+        <!-- See http://checkstyle.sf.net/config_sizes.html -->
         <!-- Size checks - http://checkstyle.sourceforge.net/config_sizes.html -->
-        <module name="LineLengthCheck">
-            <property name="max" value="150"/>
+        <module name="LineLength">
+            <property name="max" value="120"/>
             <property name="tabWidth" value="4"/>
             <property name="ignorePattern" value="^import"/>
         </module>
-
-        <!-- Metrics checks - http://checkstyle.sourceforge.net/config_metrics.html -->
-        <module name="JavaNCSS">
-            <property name="methodMaximum" value="70"/>
-            <property name="classMaximum" value="500"/>
+        <module name="MethodLength"/>
+        <module name="ParameterNumber">
+            <property name="ignoreOverriddenMethods" value="true"/>
         </module>
-        <module name="CyclomaticComplexity">
-            <property name="max" value="15"/>
-        </module>
+        <!--        <module name="CyclomaticComplexity">-->
+        <!--            <property name="max" value="16"/>-->
+        <!--        </module>-->
         <!--<module name="NPathComplexity">-->
         <!--<property name="max" value="50"/>-->
         <!--</module>-->
 
-        <!-- Coding checks http://checkstyle.sourceforge.net/config_coding.html -->
+        <!-- Checks for whitespace                               -->
+        <!-- See http://checkstyle.sf.net/config_whitespace.html -->
+        <module name="EmptyForIteratorPad"/>
+        <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+        <!--<module name="OperatorWrap"/>-->
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
+
+        <!-- Modifier Checks                                    -->
+        <!-- See http://checkstyle.sf.net/config_modifiers.html -->
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+
+        <!-- Checks for blocks. You know, those {}'s         -->
+        <!-- See http://checkstyle.sf.net/config_blocks.html -->
+        <module name="AvoidNestedBlocks"/>
+        <module name="EmptyBlock"/>
+        <module name="LeftCurly"/>
+        <module name="NeedBraces"/>
+        <module name="RightCurly"/>
+
+        <!-- Checks for common coding problems               -->
+        <!-- See http://checkstyle.sf.net/config_coding.html -->
+        <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
+        <!--<module name="HiddenField"/>-->
+        <module name="IllegalInstantiation"/>
+        <module name="InnerAssignment"/>
+        <module name="MissingSwitchDefault"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
@@ -83,10 +127,32 @@
         </module>
         <module name="NoFinalizer"/>
 
+        <!-- Checks for class design                         -->
+        <!-- See http://checkstyle.sf.net/config_design.html -->
+        <!--<module name="DesignForExtension"/>-->
+        <!--<module name="FinalClass"/>-->
+        <module name="HideUtilityClassConstructor"/>
+        <module name="InterfaceIsType"/>
+        <module name="VisibilityModifier"/>
+
+        <!-- Miscellaneous other checks.                   -->
+        <!-- See http://checkstyle.sf.net/config_misc.html -->
+        <module name="ArrayTypeStyle"/>
+        <!--<module name="TodoComment"/>-->
+        <module name="UpperEll"/>
+
+        <!-- Metrics checks - http://checkstyle.sourceforge.net/config_metrics.html -->
+        <module name="JavaNCSS">
+            <property name="methodMaximum" value="60"/>
+            <property name="classMaximum" value="500"/>
+        </module>
+        <module name="CyclomaticComplexity">
+            <property name="max" value="10"/>
+        </module>
+        <module name="NPathComplexity">
+            <property name="max" value="50"/>
+        </module>
+
     </module>
 
-    <module name="RegexpHeader">
-        <property name="headerFile" value="config/apache-copyright.header" />
-        <property name="fileExtensions" value="java, groovy" />
-    </module>
 </module>

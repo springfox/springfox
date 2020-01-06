@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015-2018 the original author or authors.
+ *  Copyright 2015-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,68 +20,113 @@ package springfox.documentation.spi.schema.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableSet;
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
-import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.*;
 
 public class ModelContext {
-  private final Type type;
+  private final String parameterId;
+  private final ResolvedType type;
   private final boolean returnType;
   private final String groupName;
   private final DocumentationType documentationType;
 
+  private final Optional<ResolvedType> view;
+  private final Set<ResolvedType> validationGroups;
+
   private final ModelContext parentContext;
-  private final Set<ResolvedType> seenTypes = newHashSet();
+  private final Set<ResolvedType> seenTypes = new HashSet<>();
   private final ModelBuilder modelBuilder;
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
-  private final ImmutableSet<Class> ignorableTypes;
+  private final Set<Class> ignorableTypes;
+  private final Map<ResolvedType, String> registeredTypes;
 
+  @SuppressWarnings("ParameterNumber")
   private ModelContext(
+      String parameterId,
       String groupName,
-      Type type,
+      ResolvedType type,
       boolean returnType,
+      Optional<ResolvedType> view,
+      Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
+    this.parameterId = parameterId;
     this.groupName = groupName;
     this.documentationType = documentationType;
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericNamingStrategy = genericNamingStrategy;
     this.ignorableTypes = ignorableTypes;
+    this.registeredTypes = new HashMap<>();
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
-    this.modelBuilder = new ModelBuilder();
+    this.view = view;
+    this.validationGroups = new HashSet<>(validationGroups);
+    this.modelBuilder =
+        new ModelBuilder(String.format(
+            "%s_%s",
+            parameterId,
+            type.getBriefDescription()));
   }
 
-  private ModelContext(ModelContext parentContext, ResolvedType input) {
+  @SuppressWarnings("ParameterNumber")
+  private ModelContext(
+      ModelContext parentContext,
+      ResolvedType input) {
+    this.parameterId = parentContext.parameterId;
     this.parentContext = parentContext;
     this.type = input;
     this.groupName = parentContext.groupName;
     this.returnType = parentContext.isReturnType();
+    this.view = parentContext.getView();
+    this.validationGroups = parentContext.getValidationGroups();
     this.documentationType = parentContext.getDocumentationType();
-    this.modelBuilder = new ModelBuilder();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
+    this.registeredTypes = parentContext.registeredTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
+    this.modelBuilder =
+        new ModelBuilder(String.format(
+            "%s_%s",
+            parameterId,
+            input.getBriefDescription()));
   }
 
   /**
    * @return type behind this context
    */
-  public Type getType() {
+  public ResolvedType getType() {
     return type;
+  }
+
+  /**
+   * @return parameter id behind this context
+   */
+  public String getParameterId() {
+    return parameterId;
+  }
+
+  /**
+   * @return type id behind this context
+   */
+  public String getTypeId() {
+    return String.format(
+        "%s_%s",
+        parameterId,
+        type.getBriefDescription());
   }
 
   /**
@@ -97,6 +142,20 @@ public class ModelContext {
    */
   public boolean isReturnType() {
     return returnType;
+  }
+
+  /**
+   * @return view
+   */
+  public Optional<ResolvedType> getView() {
+    return view;
+  }
+
+  /**
+   * @return a set of jsr-303 validation groups
+   */
+  public Set<ResolvedType> getValidationGroups() {
+    return validationGroups;
   }
 
   /**
@@ -132,18 +191,25 @@ public class ModelContext {
    * @param ignorableTypes        - types that can be ignored
    * @return new context
    */
+  @SuppressWarnings("ParameterNumber")
   public static ModelContext inputParam(
+      String parameterId,
       String group,
-      Type type,
+      ResolvedType type,
+      Optional<ResolvedType> view,
+      Set<ResolvedType> validationGroups,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
 
     return new ModelContext(
+        parameterId,
         group,
         type,
         false,
+        view,
+        validationGroups,
         documentationType,
         alternateTypeProvider,
         genericNamingStrategy,
@@ -153,7 +219,6 @@ public class ModelContext {
   /**
    * Convenience method to provide an new context for an return parameter
    *
-   *
    * @param groupName             - group name of the docket
    * @param type                  - type
    * @param documentationType     - for documentation type
@@ -162,18 +227,24 @@ public class ModelContext {
    * @param ignorableTypes        - types that can be ignored
    * @return new context
    */
+  @SuppressWarnings("ParameterNumber")
   public static ModelContext returnValue(
+      String parameterId,
       String groupName,
-      Type type,
+      ResolvedType type,
+      Optional<ResolvedType> view,
       DocumentationType documentationType,
       AlternateTypeProvider alternateTypeProvider,
       GenericTypeNamingStrategy genericNamingStrategy,
-      ImmutableSet<Class> ignorableTypes) {
+      Set<Class> ignorableTypes) {
 
     return new ModelContext(
+        parameterId,
         groupName,
         type,
         true,
+        view,
+        new HashSet<>(),
         documentationType,
         alternateTypeProvider,
         genericNamingStrategy,
@@ -184,11 +255,15 @@ public class ModelContext {
    * Convenience method to provide an new context for an input parameter
    *
    * @param context - parent context
-   * @param input - context for given input
+   * @param input   - context for given input
    * @return new context based on parent context for a given input
    */
-  public static ModelContext fromParent(ModelContext context, ResolvedType input) {
-    return new ModelContext(context, input);
+  public static ModelContext fromParent(
+      ModelContext context,
+      ResolvedType input) {
+    return new ModelContext(
+        context,
+        input);
   }
 
   /**
@@ -236,6 +311,7 @@ public class ModelContext {
   }
 
   @Override
+  @SuppressWarnings("CyclomaticComplexity")
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -248,12 +324,14 @@ public class ModelContext {
     ModelContext that = (ModelContext) o;
 
     return
-        Objects.equal(groupName, that.groupName) &&
-        Objects.equal(type, that.type) &&
-        Objects.equal(documentationType, that.documentationType) &&
-        Objects.equal(returnType, that.returnType) &&
-        Objects.equal(namingStrategy(), that.namingStrategy());
-
+        Objects.equals(parameterId, that.parameterId)
+            && Objects.equals(groupName, that.groupName)
+            && Objects.equals(type, that.type)
+            && Objects.equals(view, that.view)
+            && Objects.equals(validationGroups, that.validationGroups)
+            && Objects.equals(documentationType, that.documentationType)
+            && Objects.equals(returnType, that.returnType)
+            && Objects.equals(namingStrategy(), that.namingStrategy());
   }
 
   private String namingStrategy() {
@@ -265,20 +343,25 @@ public class ModelContext {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(
+    return Objects.hash(
+        parameterId,
         groupName,
         type,
+        view,
+        validationGroups,
         documentationType,
         returnType,
         namingStrategy());
   }
 
   public String description() {
-    return MoreObjects.toStringHelper(ModelContext.class)
-        .add("groupName", this.getGroupName())
-        .add("type", this.getType())
-        .add("isReturnType", this.isReturnType())
-        .toString();
+    return new StringBuilder(this.getClass().getSimpleName())
+        .append("{")
+        .append("groupName=").append(this.getGroupName()).append(", ")
+        .append("type=").append(this.getType()).append(", ")
+        .append("isReturnType=").append(this.isReturnType())
+        .append("view=").append(this.getView())
+        .append("}").toString();
   }
 
   public boolean canIgnore(ResolvedType type) {

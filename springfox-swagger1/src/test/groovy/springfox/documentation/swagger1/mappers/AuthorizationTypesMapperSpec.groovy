@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2017-2018 the original author or authors.
+ *  Copyright 2017-2019 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -42,7 +42,9 @@ import springfox.documentation.swagger1.dto.TokenEndpoint
 import springfox.documentation.swagger1.dto.TokenRequestEndpoint
 import springfox.documentation.swagger1.mixins.MapperSupport
 
-import static com.google.common.collect.Lists.*
+import java.util.stream.Stream
+
+import static java.util.stream.Collectors.*
 
 class AuthorizationTypesMapperSpec extends Specification implements MapperSupport {
   AuthorizationTypesMapper sut = authMapper()
@@ -153,7 +155,7 @@ class AuthorizationTypesMapperSpec extends Specification implements MapperSuppor
   def "Polymorphic authorization types are handled"() {
     given:
       List<SecurityScheme> listAuthType =
-              newArrayList(createOAuth(), new BasicAuth("basic"), new ApiKey("api-key", "test", "header",))
+              Stream.of(createOAuth(), new BasicAuth("basic"), new ApiKey("api-key", "test", "header",)).collect(toList())
 
     when:
       List<springfox.documentation.swagger1.dto.AuthorizationType> mapped = sut.toSwaggerAuthorizationTypes(listAuthType)

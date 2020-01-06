@@ -1,7 +1,7 @@
-
 # Springfox
 
 [![Join the chat at https://gitter.im/springfox/springfox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/springfox/springfox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox?ref=badge_shield)
 [ ![Download](https://api.bintray.com/packages/springfox/maven-repo/springfox/images/download.svg) ](https://bintray.com/springfox/maven-repo/springfox/_latestVersion) 
 [![Project Stats](https://www.openhub.net/p/springfox/widgets/project_thin_badge.gif)](https://www.openhub.net/p/springfox)
 [![Stories in Ready](https://badge.waffle.io/springfox/springfox.png?label=in%20progress&title=In%20Progress)](https://waffle.io/springfox/springfox)
@@ -42,3 +42,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fspringfox%2Fspringfox?ref=badge_large)
