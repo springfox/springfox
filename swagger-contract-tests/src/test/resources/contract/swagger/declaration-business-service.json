@@ -9,8 +9,8 @@
                     "summary": "Find a business by its id",
                     "nickname": "findBusinessById",
                     "produces": [
-                        "*/*",
-                        "application/json"
+                        "application/json",
+                        "*/*"
                     ],
                     "consumes": [
                         
@@ -161,8 +161,8 @@
                     "summary": "Find a business by its id",
                     "nickname": "findBusinessById_1",
                     "produces": [
-                        "*/*",
-                        "application/json"
+                        "application/json",
+                        "*/*"
                     ],
                     "consumes": [
                         
@@ -218,8 +218,8 @@
                     "summary": "getResponseEntity",
                     "nickname": "getResponseEntityUsingGET",
                     "produces": [
-                        "*/*",
-                        "application/json"
+                        "application/json",
+                        "*/*"
                     ],
                     "consumes": [
                         
@@ -323,8 +323,8 @@
                     "summary": "getVanillaPathVariable",
                     "nickname": "getVanillaPathVariableUsingGET",
                     "produces": [
-                        "*/*",
-                        "application/json"
+                        "application/json",
+                        "*/*"
                     ],
                     "consumes": [
                         
@@ -409,8 +409,8 @@
         }
     },
     "produces": [
-        "*/*",
-        "application/json"
+        "application/json",
+        "*/*"
     ],
     "resourcePath": "/businesses",
     "swaggerVersion": "1.2"

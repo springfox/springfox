@@ -220,8 +220,8 @@
         "/bugs/1420": {
             "get": {
                 "tags": [
-                    "foo",
-                    "Bugs"
+                    "Bugs",
+                    "foo"
                 ],
                 "summary": "issue1420",
                 "operationId": "issue1420UsingGET_2",
@@ -247,7 +247,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Resource«string»"
+                            "$ref": "#/definitions/EntityModel«string»"
                         }
                     }
                 },
@@ -493,8 +493,8 @@
                         "required": false,
                         "type": "integer",
                         "default": 0,
-                        "allowEmptyValue": false,
-                        "format": "int32"
+                        "format": "int32",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -538,27 +538,6 @@
                         "type": "boolean"
                     },
                     {
-                        "name": "companyName",
-                        "in": "query",
-                        "description": "companyName",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "email",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "like",
-                        "in": "query",
-                        "description": "like",
-                        "required": false,
-                        "type": "boolean"
-                    },
-                    {
                         "name": "pageNumber",
                         "in": "query",
                         "required": true,
@@ -597,6 +576,27 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "companyName",
+                        "in": "query",
+                        "description": "companyName",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "email",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "like",
+                        "in": "query",
+                        "description": "like",
+                        "required": false,
+                        "type": "boolean"
                     }
                 ],
                 "responses": {
@@ -803,8 +803,8 @@
                 "summary": "method1",
                 "operationId": "method1UsingGET_2",
                 "produces": [
-                    "application/atom+xml",
-                    "application/json;charset=UTF-8"
+                    "application/json;charset=UTF-8",
+                    "application/atom+xml"
                 ],
                 "responses": {
                     "200": {
@@ -1115,8 +1115,8 @@
                         }
                     },
                     {
-                        "in": "formData",
                         "name": "sfId",
+                        "in": "formData",
                         "description": "sfId",
                         "required": true,
                         "type": "integer",
@@ -1146,8 +1146,8 @@
                 ],
                 "parameters": [
                     {
-                        "in": "formData",
                         "name": "allCapsSet",
+                        "in": "formData",
                         "description": "description of allCapsSet",
                         "required": false,
                         "type": "array",
@@ -1157,63 +1157,63 @@
                         "collectionFormat": "multi"
                     },
                     {
-                        "in": "formData",
                         "name": "annotatedEnumType",
+                        "in": "formData",
                         "description": "description of annotatedEnumType",
                         "required": false,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "bar",
+                        "in": "formData",
                         "description": "description of bar",
                         "required": false,
                         "type": "integer",
                         "format": "int32"
                     },
                     {
-                        "in": "formData",
-                        "name": "enumType",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
                         "name": "foo",
+                        "in": "formData",
                         "description": "description of foo",
                         "required": true,
                         "type": "string"
                     },
                     {
-                        "in": "formData",
                         "name": "localDateTime",
+                        "in": "formData",
                         "description": "local date time desc dd-MM-yyyy hh:mm:ss",
                         "required": true,
                         "type": "string",
                         "format": "date-time"
                     },
                     {
-                        "in": "formData",
-                        "name": "nestedType.name",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "parentBeanProperty",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "propertyWithNoSetterMethod",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "in": "formData",
                         "name": "readOnlyString",
+                        "in": "formData",
                         "description": "A read only string",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "enumType",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "nestedType.name",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "parentBeanProperty",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "propertyWithNoSetterMethod",
+                        "in": "formData",
                         "required": false,
                         "type": "string"
                     }
@@ -1673,39 +1673,39 @@
                 "deprecated": false
             }
         },
-        "/bugs/2822":{
-            "post":{
-                "tags":[
+        "/bugs/2822": {
+            "post": {
+                "tags": [
                     "Bugs"
                 ],
-                "summary":"bug2822",
-                "operationId":"bug2822UsingPOST_2",
-                "consumes":[
+                "summary": "bug2822",
+                "operationId": "bug2822UsingPOST_2",
+                "consumes": [
                     "application/json"
                 ],
-                "parameters":[
+                "parameters": [
                     {
-                        "in":"body",
-                        "name":"message",
-                        "description":"message",
-                        "required":false,
-                        "schema":{
-                            "type":"string",
-                            "example":{
-                                "value":"exampleMessage",
-                                "mediaType":{
-                                    "present":false
+                        "in": "body",
+                        "name": "message",
+                        "description": "message",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": {
+                                "value": "exampleMessage",
+                                "mediaType": {
+                                    "present": false
                                 }
                             }
                         }
                     }
                 ],
-                "responses":{
-                    "200":{
-                        "description":"OK"
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     }
                 },
-                "deprecated":false
+                "deprecated": false
             }
         },
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
@@ -1716,17 +1716,6 @@
                 "summary": "addBook",
                 "operationId": "addBookUsingGET_2",
                 "parameters": [
-                    {
-                        "name": "authorIds",
-                        "in": "query",
-                        "description": "authorIds",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
                     {
                         "name": "authors[0].books[0].id",
                         "in": "query",
@@ -1765,6 +1754,17 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "name": "authorIds",
+                        "in": "query",
+                        "description": "authorIds",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
                     }
                 ],
                 "responses": {
@@ -2229,6 +2229,15 @@
                 "wrapped": false
             }
         },
+        "EntityModel«string»": {
+            "type": "object",
+            "properties": {
+                "links": {
+                    "$ref": "#/definitions/Links"
+                }
+            },
+            "title": "EntityModel«string»"
+        },
         "Example": {
             "type": "object",
             "properties": {
@@ -2325,14 +2334,14 @@
             },
             "title": "LanguageText"
         },
-        "LinkAlternate": {
+        "Links": {
             "type": "object",
             "properties": {
-                "href": {
-                    "type": "string"
+                "empty": {
+                    "type": "boolean"
                 }
             },
-            "title": "LinkAlternate"
+            "title": "Links"
         },
         "Model1819": {
             "type": "object",
@@ -2405,29 +2414,6 @@
                 }
             },
             "title": "ProductVO"
-        },
-        "Resource«string»": {
-            "type": "object",
-            "properties": {
-                "links": {
-                    "type": "object",
-                    "xml": {
-                        "name": "link",
-                        "namespace": "http://www.w3.org/2005/Atom",
-                        "attribute": false,
-                        "wrapped": false
-                    },
-                    "additionalProperties": {
-                        "$ref": "#/definitions/LinkAlternate"
-                    }
-                }
-            },
-            "title": "Resource«string»",
-            "xml": {
-                "name": "Resource«string»",
-                "attribute": false,
-                "wrapped": false
-            }
         },
         "Response«LanguageResponse»": {
             "type": "object",

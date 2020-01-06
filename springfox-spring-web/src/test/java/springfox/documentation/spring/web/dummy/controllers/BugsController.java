@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
 import io.swagger.annotations.AuthorizationScope;
-import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -125,8 +125,8 @@ public class BugsController {
   }
 
   @RequestMapping(value = "1440", method = GET)
-  public Resource<String> issue1440() {
-    return new Resource<String>("1420");
+  public EntityModel<String> issue1440() {
+    return new EntityModel<String>("1420");
   }
 
   @RequestMapping(value = "1475", method = GET)
