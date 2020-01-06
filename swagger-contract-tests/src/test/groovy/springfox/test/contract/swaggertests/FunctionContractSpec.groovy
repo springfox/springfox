@@ -142,7 +142,8 @@ class FunctionContractSpec extends Specification implements FileAccess {
     then:
     response.statusCode == HttpStatus.OK
 
-    JSONAssert.assertEquals(contract, response.body, NON_EXTENSIBLE)
+    def bodyWithLFOnly = response.body.replaceAll("\\\\r\\\\n", "\\\\n") //Make sure if we're running on windows the line endings which are double-escaped match up with the resource file above.
+    JSONAssert.assertEquals(contract, bodyWithLFOnly, NON_EXTENSIBLE)
   }
 
   @Unroll
