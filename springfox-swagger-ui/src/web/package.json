@@ -23,7 +23,7 @@
     "fetch-mock": "^6.4.2",
     "jest": "^24.1.0",
     "node-fetch": "^2.1.2",
-    "webpack": "^4.6.0",
+    "webpack": "^4.41.5",
     "webpack-cli": "^3.2.3"
   }
 }
