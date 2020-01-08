@@ -19,9 +19,12 @@
 package springfox.bean.validators.plugins.schema;
 
 
-import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
-import static springfox.bean.validators.plugins.Validators.annotationFromBean;
-import static springfox.bean.validators.plugins.Validators.annotationFromField;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
 import java.util.Optional;
 import javax.validation.constraints.Max;
@@ -30,12 +33,10 @@ import javax.validation.constraints.Negative;
 import javax.validation.constraints.NegativeOrZero;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import springfox.bean.validators.plugins.Validators;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
-import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
+
+import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
+import static springfox.bean.validators.plugins.Validators.annotationFromBean;
+import static springfox.bean.validators.plugins.Validators.annotationFromField;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)

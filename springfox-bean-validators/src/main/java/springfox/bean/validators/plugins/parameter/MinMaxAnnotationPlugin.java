@@ -19,15 +19,6 @@
 package springfox.bean.validators.plugins.parameter;
 
 
-import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
-import static springfox.bean.validators.plugins.Validators.annotationFromParameter;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Negative;
-import javax.validation.constraints.NegativeOrZero;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -36,6 +27,16 @@ import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Negative;
+import javax.validation.constraints.NegativeOrZero;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+
+import static springfox.bean.validators.plugins.RangeAnnotations.allowableRange;
+import static springfox.bean.validators.plugins.Validators.annotationFromParameter;
 
 @Component
 @Order(Validators.BEAN_VALIDATOR_PLUGIN_ORDER)
