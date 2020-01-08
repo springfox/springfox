@@ -46,7 +46,6 @@ class NotBlankAnnotationPluginSpec extends Specification implements AnnotationsS
         new ResolvedMethodParameter(0, "", [annotation], Mock(ResolvedType))
       ParameterContext context = new ParameterContext(
           resolvedMethodParameter,
-          new ParameterBuilder(),
           Mock(DocumentationContext),
           Mock(GenericTypeNamingStrategy),
           Mock(OperationContext))

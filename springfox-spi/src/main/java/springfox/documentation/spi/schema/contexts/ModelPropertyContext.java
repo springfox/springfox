@@ -119,4 +119,8 @@ public class ModelPropertyContext {
   public TypeResolver getResolver() {
     return resolver;
   }
+
+  public PropertySpecificationBuilder getSpecificationBuilder() {
+    return specificationBuilder;
+  }
 }

@@ -113,7 +113,7 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     Class<?> type = typeParameters.get(0).getErasedType();
     return singletonList(
         new PropertySpecificationBuilder()
-            .withName(relProvider.getCollectionResourceRelFor(type))
+            .withName(relProvider.getCollectionResourceRelFor(type).value())
             .withType(new ModelSpecificationBuilder(String.format(
                 "%s_%s",
                 context.getParameterId(),

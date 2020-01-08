@@ -278,7 +278,7 @@
                     "type": "string"
                 }
             },
-            "title": "SameCategory"
+            "title": "SameCategory_1"
         },
         "SameCategory_1": {
             "type": "object",

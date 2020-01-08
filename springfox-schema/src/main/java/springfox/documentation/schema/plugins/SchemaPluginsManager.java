@@ -31,8 +31,8 @@ import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
-import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.ViewProviderPlugin;
+import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
@@ -115,5 +115,13 @@ public class SchemaPluginsManager {
     return syntheticModelProviders.getPluginFor(context)
                                   .map(p -> p.propertySpecifications(context))
                                   .orElse(new ArrayList<>());
+  }
+
+  public PropertySpecification propertySpecification(ModelPropertyContext modelPropertyContext) {
+    for (ModelPropertyBuilderPlugin enricher :
+        propertyEnrichers.getPluginsFor(modelPropertyContext.getDocumentationType())) {
+      enricher.apply(modelPropertyContext);
+    }
+    return modelPropertyContext.getSpecificationBuilder().build();
   }
 }
