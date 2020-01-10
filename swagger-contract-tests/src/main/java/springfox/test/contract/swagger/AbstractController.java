@@ -36,14 +36,14 @@ public abstract class AbstractController<T extends RepresentationModel, ID> {
   }
 
   @RequestMapping(value = "/get-t/{id}", method = RequestMethod.GET)
-  @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
-  public T get(@PathVariable("id")  ID id) {
+  @ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input") })
+  public T get(@PathVariable("id") ID id) {
     throw new UnsupportedOperationException();
   }
 
   @RequestMapping(value = "/delete-t/{id}", method = RequestMethod.DELETE)
-  @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
-  public HttpEntity delete(@PathVariable("id")  ID id) {
+  @ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input") })
+  public HttpEntity delete(@PathVariable("id") ID id) {
     throw new UnsupportedOperationException();
   }
 }

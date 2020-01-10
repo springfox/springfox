@@ -35,8 +35,8 @@ public class InheritedServiceImpl implements InheritedService {
 
   @Override
   public Pet demonstrateInheritanceWithAnnotations(
-          @ApiParam(value = "", required = true)
-          @PathVariable("param1") String param1) {
+      @ApiParam(value = "", required = true)
+      @PathVariable("param1") String param1) {
     return null;
   }
 }

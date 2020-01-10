@@ -57,7 +57,11 @@ public class Example extends Parent implements Serializable {
 
   private Void voidParam;
 
-  public Example(String foo, int bar, EnumType enumType, NestedType nestedType) {
+  public Example(
+      String foo,
+      int bar,
+      EnumType enumType,
+      NestedType nestedType) {
     this.foo = foo;
     this.bar = bar;
     this.enumType = enumType;

@@ -31,14 +31,14 @@ import springfox.test.contract.swagger.models.ModelWithSameNameClasses;
 @Controller
 @RequestMapping("/same")
 public class SameController {
-    
+
   @RequestMapping(value = "/create-same", method = RequestMethod.PUT)
   public void create(@RequestBody ModelWithSameNameClasses toCreate) {
     throw new UnsupportedOperationException();
   }
 
   @RequestMapping(value = "/get-same/{id}", method = RequestMethod.GET)
-  @ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+  @ApiResponses(value = { @ApiResponse(code = 405, message = "Invalid input") })
   public ModelWithSameNameClasses get(@PathVariable("id") String id) {
     throw new UnsupportedOperationException();
   }

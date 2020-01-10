@@ -36,30 +36,52 @@ public class Bug1749 {
   private SortDirection sortDirection;
   private String sortField;
 
-  public Bug1749(int pageNumber, int pageSize) {
+  public Bug1749(
+      int pageNumber,
+      int pageSize) {
     this.pageNumber = pageNumber;
     this.pageSize = pageSize;
   }
 
-  public Bug1749(int pageNumber, int pageSize, String sortField) {
-    this(pageNumber, pageSize);
+  public Bug1749(
+      int pageNumber,
+      int pageSize,
+      String sortField) {
+    this(
+        pageNumber,
+        pageSize);
     this.sortField = sortField;
   }
 
-  public Bug1749(int pageNumber, int pageSize, String sortField, SortDirection sortDirection) {
-    this(pageNumber, pageSize, sortField);
+  public Bug1749(
+      int pageNumber,
+      int pageSize,
+      String sortField,
+      SortDirection sortDirection) {
+    this(
+        pageNumber,
+        pageSize,
+        sortField);
     this.sortDirection = sortDirection;
   }
 
   public Map<String, String> toMap() {
     Map<String, String> map = new HashMap<String, String>();
-    map.put("pageNumber", Integer.toString(pageNumber));
-    map.put("pageSize", Integer.toString(pageSize));
+    map.put(
+        "pageNumber",
+        Integer.toString(pageNumber));
+    map.put(
+        "pageSize",
+        Integer.toString(pageSize));
     if (sortDirection != null) {
-      map.put("sortDirection", sortDirection.toString());
+      map.put(
+          "sortDirection",
+          sortDirection.toString());
     }
     if (sortField != null) {
-      map.put("sortField", sortField);
+      map.put(
+          "sortField",
+          sortField);
     }
     return map;
   }
@@ -78,7 +100,9 @@ public class Bug1749 {
     return pageNumber != null && pageSize != null;
   }
 
-  public Bug1749 setSort(String field, SortDirection direction) {
+  public Bug1749 setSort(
+      String field,
+      SortDirection direction) {
     this.sortField = field;
     this.sortDirection = direction;
     return this;

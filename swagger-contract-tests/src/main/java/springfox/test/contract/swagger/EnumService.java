@@ -41,24 +41,30 @@ import static java.util.stream.Collectors.*;
 @Api(value = "", description = "Service that return enums")
 public class EnumService {
 
-    @RequestMapping(value = "/wrapped", method = RequestMethod.GET)
-    @ApiOperation(value = "Example with wrapped enum collection")
-    public EnumCollection getCollectionValue() {
-        EnumCollection result = new EnumCollection();
-        result.setTypes(Stream.of(EnumType.ONE, EnumType.TWO).collect(toSet()));
-        return result;
-    }
+  @RequestMapping(value = "/wrapped", method = RequestMethod.GET)
+  @ApiOperation(value = "Example with wrapped enum collection")
+  public EnumCollection getCollectionValue() {
+    EnumCollection result = new EnumCollection();
+    result.setTypes(Stream.of(
+        EnumType.ONE,
+        EnumType.TWO).collect(toSet()));
+    return result;
+  }
 
-    @RequestMapping(value = "/entity", method = RequestMethod.GET)
-    @ApiOperation(value = "Example with response entity single value")
-    public ResponseEntity<EnumType> getResponseEntityValue() {
-        return new ResponseEntity<>(EnumType.ONE, HttpStatus.OK);
-    }
+  @RequestMapping(value = "/entity", method = RequestMethod.GET)
+  @ApiOperation(value = "Example with response entity single value")
+  public ResponseEntity<EnumType> getResponseEntityValue() {
+    return new ResponseEntity<>(
+        EnumType.ONE,
+        HttpStatus.OK);
+  }
 
-    @RequestMapping(value = "/collection", method = RequestMethod.GET)
-    @ApiOperation(value = "Example with response entity collection")
-    public ResponseEntity<Set<EnumType>> getResponseEntityCollection() {
-        return new ResponseEntity<>(singleton(EnumType.ONE), HttpStatus.OK);
-    }
+  @RequestMapping(value = "/collection", method = RequestMethod.GET)
+  @ApiOperation(value = "Example with response entity collection")
+  public ResponseEntity<Set<EnumType>> getResponseEntityCollection() {
+    return new ResponseEntity<>(
+        singleton(EnumType.ONE),
+        HttpStatus.OK);
+  }
 
 }

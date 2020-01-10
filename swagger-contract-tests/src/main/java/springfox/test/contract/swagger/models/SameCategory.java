@@ -31,7 +31,10 @@ public class SameCategory extends Category {
   @ApiModelProperty(value = "Type field", readOnly = true)
   private String type;
 
-  public SameCategory(String name, Integer id, String type) {
+  public SameCategory(
+      String name,
+      Integer id,
+      String type) {
     super(name);
     this.id = id;
     this.type = type;

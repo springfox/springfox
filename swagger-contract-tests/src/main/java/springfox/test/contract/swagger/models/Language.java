@@ -23,6 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Language extends HashMap<String, LanguageText>
-        implements Map<String, LanguageText>, Serializable {
+    implements Map<String, LanguageText>, Serializable {
 
 }

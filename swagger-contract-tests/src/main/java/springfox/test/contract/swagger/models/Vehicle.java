@@ -26,9 +26,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     include = JsonTypeInfo.As.PROPERTY,
     property = "type")
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = Car.class, name = "car"),
-    @JsonSubTypes.Type(value = Truck.class, name = "truck")
-})
+                  @JsonSubTypes.Type(value = Car.class, name = "car"),
+                  @JsonSubTypes.Type(value = Truck.class, name = "truck")
+              })
 public abstract class Vehicle {
   private String make;
   private String model;
@@ -36,7 +36,9 @@ public abstract class Vehicle {
   public Vehicle() {
   }
 
-  protected Vehicle(String make, String model) {
+  protected Vehicle(
+      String make,
+      String model) {
     this.make = make;
     this.model = model;
   }

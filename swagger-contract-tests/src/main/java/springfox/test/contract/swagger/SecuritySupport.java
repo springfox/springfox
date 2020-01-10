@@ -12,7 +12,6 @@ import springfox.documentation.service.SecurityScheme;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,7 +42,11 @@ public class SecuritySupport {
   }
 
   public List<GrantType> grantTypes() {
-    return Collections.singletonList(new ImplicitGrantBuilder().loginEndpoint(new LoginEndpoint("http://petstore.swagger.io/api/oauth/dialog")).build());
+    return Collections.singletonList(
+        new ImplicitGrantBuilder()
+            .loginEndpoint(new LoginEndpoint(
+                "http://petstore.swagger.io/api/oauth/dialog"))
+            .build());
   }
 
 }

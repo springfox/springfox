@@ -48,24 +48,25 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @Api(value = "/", description = "Services to demonstrate path variable resolution")
-@RequestMapping(produces = {MediaType.ALL_VALUE, MediaType.APPLICATION_JSON_VALUE},
-        consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(produces = { MediaType.ALL_VALUE, MediaType.APPLICATION_JSON_VALUE },
+                consumes = MediaType.APPLICATION_JSON_VALUE)
 public class BusinessService {
 
   @RequestMapping(value = "/businesses/aliased/{otherId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find a business by its id", nickname = "findBusinessById")
   public String getAliasedPathVariable(
-          @ApiParam(value = "ID of business", required = true) @PathVariable("otherId") String businessId) {
+      @ApiParam(value = "ID of business", required = true) @PathVariable("otherId") String businessId) {
     return "This is only a test";
   }
 
   @RequestMapping(value = "/businesses/non-aliased/{businessId}", method = RequestMethod.GET)
   @ApiOperation(value = "Find a business by its id", nickname = "findBusinessById",
-          authorizations = @Authorization(value = "oauth2",
-                  scopes = {@AuthorizationScope(scope = "scope", description = "scope description")
-                  }))
+                authorizations = @Authorization(value = "oauth2",
+                                                scopes = { @AuthorizationScope(scope = "scope",
+                                                                               description = "scope description")
+                                                }))
   public String getNonAliasedPathVariable(
-          @ApiParam(value = "ID of business", required = true) @PathVariable("businessId") String businessId) {
+      @ApiParam(value = "ID of business", required = true) @PathVariable("businessId") String businessId) {
     return "This is only a test";
   }
 
@@ -76,11 +77,13 @@ public class BusinessService {
 
   @RequestMapping(value = "/businesses/responseEntity/{businessId}", method = RequestMethod.GET)
   public ResponseEntity<String> getResponseEntity(@PathVariable String businessId) {
-    return new ResponseEntity<String>("This is only a test", HttpStatus.OK);
+    return new ResponseEntity<String>(
+        "This is only a test",
+        HttpStatus.OK);
   }
 
   @RequestMapping(value = { "/businesses/typeEcho" }, method = POST, consumes = APPLICATION_JSON_VALUE,
-          produces = APPLICATION_JSON_VALUE)
+                  produces = APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Business.BusinessType> businessTypeEcho(@RequestBody Business.BusinessType business) {
     return new ResponseEntity<>(
@@ -89,14 +92,14 @@ public class BusinessService {
   }
 
   @RequestMapping(value = { "/businesses/demonstratesApiModelName" }, method = POST, consumes = APPLICATION_JSON_VALUE,
-      produces = APPLICATION_JSON_VALUE)
+                  produces = APPLICATION_JSON_VALUE)
   @ResponseBody
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "Business", response = Business.class)})
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "Business", response = Business.class) })
   public String businessAsString() {
     return "";
   }
 
-  @RequestMapping(value = {"/businesses/byTypes"}, method = GET, produces = APPLICATION_JSON_VALUE)
+  @RequestMapping(value = { "/businesses/byTypes" }, method = GET, produces = APPLICATION_JSON_VALUE)
   @ResponseBody
   public List<Business> businessesByCategories(@RequestParam Business.BusinessType[] types) {
     return new ArrayList<>();

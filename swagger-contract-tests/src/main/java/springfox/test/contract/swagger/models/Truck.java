@@ -24,8 +24,13 @@ public class Truck extends Vehicle {
   public Truck() {
   }
 
-  public Truck(String make, String model, double payloadCapacity) {
-    super(make, model);
+  public Truck(
+      String make,
+      String model,
+      double payloadCapacity) {
+    super(
+        make,
+        model);
     this.payloadCapacity = payloadCapacity;
   }
 

@@ -24,15 +24,15 @@ import java.io.Serializable;
 
 public class LanguageText implements Serializable {
 
-    @JsonProperty("TEXT")
-    private String text;
+  @JsonProperty("TEXT")
+  private String text;
 
-    public String getText() {
-        return text;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public void setText(String text) {
+    this.text = text;
+  }
 
 }

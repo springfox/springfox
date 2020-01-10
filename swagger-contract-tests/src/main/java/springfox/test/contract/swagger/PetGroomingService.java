@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 //Demonstrates multiple request mappings at the controller level
-@RequestMapping({"/petgrooming", "/pets/grooming", "/pets"})
+@RequestMapping({ "/petgrooming", "/pets/grooming", "/pets" })
 @Api(value = "", description = "Grooming operations for pets")
 public class PetGroomingService {
 
@@ -42,7 +42,7 @@ public class PetGroomingService {
 
   //void returns
   @RequestMapping(value = "voidMethod/{input}", method = RequestMethod.DELETE,
-          headers = {"Accept=application/xml,application/json"})
+                  headers = { "Accept=application/xml,application/json" })
   @ResponseStatus(value = HttpStatus.OK, reason = "Just testing")
   public void groomingFunctionThatReturnsVoid(@PathVariable("input") String input) throws Exception {
   }

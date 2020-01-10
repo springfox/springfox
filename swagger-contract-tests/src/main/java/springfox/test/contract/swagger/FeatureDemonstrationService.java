@@ -114,10 +114,11 @@ public class FeatureDemonstrationService {
   @RequestMapping(value = "/effectives", method = RequestMethod.GET)
   private ResponseEntity<List<Example>> getEffectives() {
     return new ResponseEntity<List<Example>>(
-        singletonList(new Example("Hello",
-                                  1,
-                                  EnumType.ONE,
-                                  new NestedType("test"))),
+        singletonList(new Example(
+            "Hello",
+            1,
+            EnumType.ONE,
+            new NestedType("test"))),
         HttpStatus.OK);
   }
 

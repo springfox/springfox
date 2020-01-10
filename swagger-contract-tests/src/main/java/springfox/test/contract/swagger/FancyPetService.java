@@ -54,7 +54,9 @@ public class FancyPetService extends AbstractPetService<FancyPet> {
   // overload one of superclass
   @ResponseBody
   @RequestMapping(method = RequestMethod.POST, value = "?{someId}")
-  public int createObject(@RequestBody FancyPet object, @PathVariable int someId) {
+  public int createObject(
+      @RequestBody FancyPet object,
+      @PathVariable int someId) {
     int id = super.createObject(object);
     // do some logic with sub class
     return id;

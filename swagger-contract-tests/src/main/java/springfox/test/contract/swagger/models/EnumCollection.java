@@ -22,13 +22,13 @@ import java.util.Set;
 
 public class EnumCollection {
 
-    private Set<EnumType> types;
+  private Set<EnumType> types;
 
-    public Set<EnumType> getTypes() {
-        return types;
-    }
+  public Set<EnumType> getTypes() {
+    return types;
+  }
 
-    public void setTypes(Set<EnumType> types) {
-        this.types = types;
-    }
+  public void setTypes(Set<EnumType> types) {
+    this.types = types;
+  }
 }

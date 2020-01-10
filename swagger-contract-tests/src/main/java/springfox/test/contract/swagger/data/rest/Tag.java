@@ -38,9 +38,9 @@ public class Tag {
 
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "person_tag",
-      joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "tag_id",
-          referencedColumnName = "id"))
+             joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"),
+             inverseJoinColumns = @JoinColumn(name = "tag_id",
+                                              referencedColumnName = "id"))
   private List<Person> people;
 
   public long getId() {

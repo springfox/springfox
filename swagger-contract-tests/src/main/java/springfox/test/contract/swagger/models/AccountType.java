@@ -19,13 +19,19 @@
 package springfox.test.contract.swagger.models;
 
 public enum AccountType {
-  CASH("现金账户", 2),
-  BANK("银行账户", 3);
+  CASH(
+      "现金账户",
+      2),
+  BANK(
+      "银行账户",
+      3);
 
   private String name;
   private int code;
 
-  AccountType(String name, int code) {
+  AccountType(
+      String name,
+      int code) {
     this.name = name;
     this.code = code;
   }

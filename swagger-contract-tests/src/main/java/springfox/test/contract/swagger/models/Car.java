@@ -25,8 +25,14 @@ public class Car extends Vehicle {
   public Car() {
   }
 
-  public Car(String make, String model, int seatingCapacity, double topSpeed) {
-    super(make, model);
+  public Car(
+      String make,
+      String model,
+      int seatingCapacity,
+      double topSpeed) {
+    super(
+        make,
+        model);
     this.seatingCapacity = seatingCapacity;
     this.topSpeed = topSpeed;
   }

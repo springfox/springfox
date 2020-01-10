@@ -35,16 +35,16 @@ import springfox.test.contract.swagger.models.Pet;
 @Api(value = "inheritedService", description = "Interface API")
 public interface InheritedService {
 
-    @RequestMapping(value = "child-method", method = RequestMethod.GET)
-    String getSomething(String parameter);
+  @RequestMapping(value = "child-method", method = RequestMethod.GET)
+  String getSomething(String parameter);
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "kkj", response = Pet.class) })
-    @RequestMapping(value = "/1575",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
-    Pet demonstrateInheritanceWithAnnotations(
-        @ApiParam(value = "Parameter 1", required = true) @PathVariable("param1") String param1
-                                             );
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "kkj", response = Pet.class) })
+  @RequestMapping(value = "/1575",
+                  produces = { "application/json" },
+                  method = RequestMethod.GET)
+  Pet demonstrateInheritanceWithAnnotations(
+      @ApiParam(value = "Parameter 1", required = true) @PathVariable("param1") String param1
+                                           );
 
 }

@@ -39,7 +39,7 @@ import java.util.Set;
 
 import static java.util.Collections.*;
 
-@SuppressWarnings({"WhitespaceAround", "ParenPad"})
+@SuppressWarnings({ "WhitespaceAround", "ParenPad" })
 public class Bug1767ListingScanner implements ApiListingScannerPlugin {
 
   // tag::api-listing-plugin[]
@@ -61,54 +61,55 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                 "test",
                 "/bugs/1767",
                 "This is a bug",
-                Collections.singletonList( //<2>
-                    new OperationBuilder(
-                        operationNames)
-                        .authorizations(new ArrayList<>())
-                        .codegenMethodNameStem("bug1767GET") //<3>
-                        .method(HttpMethod.GET)
-                        .notes("This is a test method")
-                        .parameters(
-                            Collections.singletonList( //<4>
-                                new ParameterBuilder()
-                                    .description("search by description")
-                                    .type(new TypeResolver().resolve(String.class))
-                                    .name("description")
-                                    .parameterType("query")
-                                    .parameterAccess("access")
-                                    .required(true)
-                                    .modelRef(new ModelRef("string")) //<5>
-                                    .build()))
-                        .responseMessages(responseMessages()) //<6>
-                        .responseModel(new ModelRef("string")) //<7>
-                        .build()),
-                false),
-            new ApiDescription(
-                "different-group", //<8>
-                "/different/2219",
-                "This is a bug",
-                Collections.singletonList(
-                    new OperationBuilder(
-                        operationNames)
-                        .authorizations(new ArrayList<>())
-                        .codegenMethodNameStem("bug2219GET")
-                        .method(HttpMethod.GET)
-                        .notes("This is a test method")
-                        .parameters(
-                            Collections.singletonList(
-                                new ParameterBuilder()
-                                    .description("description of bug 2219")
-                                    .type(new TypeResolver().resolve(String.class))
-                                    .name("description")
-                                    .parameterType("query")
-                                    .parameterAccess("access")
-                                    .required(true)
-                                    .modelRef(new ModelRef("string"))
-                                    .build()))
-                        .responseMessages(responseMessages())
-                        .responseModel(new ModelRef("string"))
-                        .build()),
-                false)));
+               Collections.singletonList( //<2>
+                  new OperationBuilder(operationNames)
+                    .authorizations(new ArrayList<>())
+                    .codegenMethodNameStem("bug1767GET") //<3>
+                    .method(HttpMethod.GET)
+                    .notes("This is a test method")
+                    .parameters(
+                        Collections.singletonList( //<4>
+                            new ParameterBuilder()
+                            .description("search by description")
+                            .type(new TypeResolver().resolve(String.class))
+                            .name("description")
+                            .parameterType("query")
+                            .parameterAccess("access")
+                            .required(true)
+                            .modelRef(new ModelRef(
+                                "string")) //<5>
+                                     .build()))
+                             .responseMessages(responseMessages()) //<6>
+                             .responseModel(new ModelRef("string")) //<7>
+                             .build()),
+                             false),
+                       new ApiDescription(
+                           "different-group",
+                           //<8>
+                           "/different/2219",
+                           "This is a bug",
+                           Collections.singletonList(
+                               new OperationBuilder(
+                                   operationNames)
+                                   .authorizations(new ArrayList<>())
+                                   .codegenMethodNameStem("bug2219GET")
+                                   .method(HttpMethod.GET)
+                                   .notes("This is a test method")
+                                   .parameters(
+                                       Collections.singletonList(
+                                           new ParameterBuilder()
+                                               .description("description of bug 2219")
+                                               .type(new TypeResolver().resolve(String.class))
+                                               .name("description")
+                                               .parameterType("query")
+                                               .parameterAccess("access")
+                                               .required(true)
+                                               .modelRef(new ModelRef("string"))
+                                               .build()))
+                                   .responseMessages(responseMessages())
+                                   .responseModel(new ModelRef("string"))
+                                   .build()),
+                           false)));
   }
 
   /**
@@ -116,10 +117,10 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
    */
   private Set<ResponseMessage> responseMessages() { //<8>
     return singleton(new ResponseMessageBuilder()
-        .code(200)
-        .message("Successfully received bug 1767 or 2219 response")
-        .responseModel(new ModelRef("string"))
-        .build());
+                         .code(200)
+                         .message("Successfully received bug 1767 or 2219 response")
+                         .responseModel(new ModelRef("string"))
+                         .build());
   }
   // tag::api-listing-plugin[]
 
