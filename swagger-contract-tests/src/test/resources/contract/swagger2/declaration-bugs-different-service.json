@@ -36,7 +36,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1162",
-                "operationId": "bug1162UsingPOST_2",
+                "operationId": "bug1162UsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -58,7 +58,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1209",
-                "operationId": "bug1209UsingPOST_2",
+                "operationId": "bug1209UsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -90,7 +90,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1306",
-                "operationId": "bug1306UsingPOST_2",
+                "operationId": "bug1306UsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -128,7 +128,7 @@
                     "Bugs"
                 ],
                 "summary": "issue1376Bare",
-                "operationId": "issue1376BareUsingPOST_2",
+                "operationId": "issue1376BareUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -149,7 +149,7 @@
                     "Bugs"
                 ],
                 "summary": "issue1376Input",
-                "operationId": "issue1376InputUsingPOST_4",
+                "operationId": "issue1376InputUsingPOST_2",
                 "consumes": [
                     "application/json"
                 ],
@@ -176,7 +176,7 @@
                     "Bugs"
                 ],
                 "summary": "issue1376Input",
-                "operationId": "issue1376InputUsingPOST_5",
+                "operationId": "issue1376InputUsingPOST_3",
                 "consumes": [
                     "application/json"
                 ],
@@ -202,7 +202,7 @@
                     "Bugs"
                 ],
                 "summary": "issue1376Property",
-                "operationId": "issue1376PropertyUsingPOST_2",
+                "operationId": "issue1376PropertyUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -224,7 +224,7 @@
                     "foo"
                 ],
                 "summary": "issue1420",
-                "operationId": "issue1420UsingGET_2",
+                "operationId": "issue1420UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -242,7 +242,7 @@
                     "Bugs"
                 ],
                 "summary": "issue1440",
-                "operationId": "issue1440UsingGET_2",
+                "operationId": "issue1440UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -260,7 +260,7 @@
                     "Bugs"
                 ],
                 "summary": "mapOfLists",
-                "operationId": "mapOfListsUsingGET_2",
+                "operationId": "mapOfListsUsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -284,7 +284,7 @@
                     "Bugs"
                 ],
                 "summary": "mapOfListOfExample",
-                "operationId": "mapOfListOfExampleUsingGET_2",
+                "operationId": "mapOfListOfExampleUsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -308,7 +308,7 @@
                     "Bugs"
                 ],
                 "summary": "byteArrayResponse",
-                "operationId": "byteArrayResponseUsingGET_2",
+                "operationId": "byteArrayResponseUsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -327,7 +327,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1627",
-                "operationId": "bug1627UsingGET_2",
+                "operationId": "bug1627UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -342,7 +342,7 @@
                     "Bugs"
                 ],
                 "summary": "fileCustomType",
-                "operationId": "fileCustomTypeUsingGET_2",
+                "operationId": "fileCustomTypeUsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -368,7 +368,7 @@
                     "Bugs"
                 ],
                 "summary": "filesCustomType",
-                "operationId": "filesCustomTypeUsingGET_2",
+                "operationId": "filesCustomTypeUsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -397,7 +397,7 @@
                     "Bugs"
                 ],
                 "summary": "apiModelProperty",
-                "operationId": "apiModelPropertyUsingGET_2",
+                "operationId": "apiModelPropertyUsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -423,7 +423,7 @@
                     "Bugs"
                 ],
                 "summary": "payloadWithByteBuffer",
-                "operationId": "payloadWithByteBufferUsingGET_2",
+                "operationId": "payloadWithByteBufferUsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -450,7 +450,7 @@
                 ],
                 "summary": "Remove an apple from a user",
                 "description": "Remove an apple from a user. You must specify the user name and the apple name.",
-                "operationId": "bug1722UsingPOST_2",
+                "operationId": "bug1722UsingPOST_1",
                 "consumes": [
                     "application/xml",
                     "application/json"
@@ -484,7 +484,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1734",
-                "operationId": "bug1734UsingGET_2",
+                "operationId": "bug1734UsingGET_1",
                 "parameters": [
                     {
                         "name": "offset",
@@ -511,7 +511,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1740",
-                "operationId": "bug1740UsingGET_2",
+                "operationId": "bug1740UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -529,7 +529,7 @@
                     "Bugs"
                 ],
                 "summary": "Retrieve all the companies",
-                "operationId": "getAllPagedUsingGET_2",
+                "operationId": "getAllPagedUsingGET_1",
                 "parameters": [
                     {
                         "name": "ascending",
@@ -619,7 +619,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1750a",
-                "operationId": "bug1750aUsingGET_2",
+                "operationId": "bug1750aUsingGET_1",
                 "responses": {
                     "200": {
                         "description": "list of ids",
@@ -640,7 +640,7 @@
                     "Bugs"
                 ],
                 "summary": "1750b",
-                "operationId": "bug1750bUsingGET_2",
+                "operationId": "bug1750bUsingGET_1",
                 "responses": {
                     "200": {
                         "description": "list of ids",
@@ -687,7 +687,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1777",
-                "operationId": "bug1777UsingGET_2",
+                "operationId": "bug1777UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -705,7 +705,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1778",
-                "operationId": "bug1778UsingGET_2",
+                "operationId": "bug1778UsingGET_1",
                 "parameters": [
                     {
                         "name": "e",
@@ -734,7 +734,7 @@
                     "Bugs"
                 ],
                 "summary": "modelWithListOfEnumsAsJson",
-                "operationId": "modelWithListOfEnumsAsJsonUsingPUT_2",
+                "operationId": "modelWithListOfEnumsAsJsonUsingPUT_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -763,7 +763,7 @@
                     "Bugs"
                 ],
                 "summary": "modelWithListOfEnumsAsModelAttribute",
-                "operationId": "modelWithListOfEnumsAsModelAttributeUsingPOST_2",
+                "operationId": "modelWithListOfEnumsAsModelAttributeUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -801,10 +801,10 @@
                     "Bugs"
                 ],
                 "summary": "method1",
-                "operationId": "method1UsingGET_2",
+                "operationId": "method1UsingGET_1",
                 "produces": [
-                    "application/json;charset=UTF-8",
-                    "application/atom+xml"
+                    "application/atom+xml",
+                    "application/json;charset=UTF-8"
                 ],
                 "responses": {
                     "200": {
@@ -820,7 +820,7 @@
                     "Bugs"
                 ],
                 "summary": "test",
-                "operationId": "testUsingGET_2",
+                "operationId": "testUsingGET_1",
                 "parameters": [
                     {
                         "name": "somename",
@@ -843,7 +843,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1881",
-                "operationId": "bug1881UsingGET_2",
+                "operationId": "bug1881UsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -872,7 +872,7 @@
                     "Bugs"
                 ],
                 "summary": "1887 example",
-                "operationId": "addEmailsToListUsingPOST_2",
+                "operationId": "addEmailsToListUsingPOST_1",
                 "consumes": [
                     "application/json;charset=UTF-8"
                 ],
@@ -924,7 +924,7 @@
                     "Bugs"
                 ],
                 "summary": "cacheEvict1",
-                "operationId": "cacheEvict1UsingPOST_2",
+                "operationId": "cacheEvict1UsingPOST_1",
                 "consumes": [
                     "application/x-www-form-urlencoded"
                 ],
@@ -942,7 +942,7 @@
                     "Bugs"
                 ],
                 "summary": "xmlPayload",
-                "operationId": "xmlPayloadUsingGET_2",
+                "operationId": "xmlPayloadUsingGET_1",
                 "produces": [
                     "application/xml"
                 ],
@@ -971,7 +971,7 @@
                     "Bugs"
                 ],
                 "summary": "filtered",
-                "operationId": "filteredUsingGET_2",
+                "operationId": "filteredUsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -1004,7 +1004,7 @@
                     "Bugs"
                 ],
                 "summary": "notFiltered",
-                "operationId": "notFilteredUsingGET_2",
+                "operationId": "notFilteredUsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -1037,7 +1037,7 @@
                     "Bugs"
                 ],
                 "summary": "authenticate a user using a given set of credentials, producing a JWT token that may be used for future API operations if successful",
-                "operationId": "authenticateUsingGET_2",
+                "operationId": "authenticateUsingGET_1",
                 "produces": [
                     "application/jwt"
                 ],
@@ -1081,7 +1081,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1965",
-                "operationId": "bug1965UsingPOST_2",
+                "operationId": "bug1965UsingPOST_1",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1140,7 +1140,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1965FormData",
-                "operationId": "bug1965FormDataUsingPOST_2",
+                "operationId": "bug1965FormDataUsingPOST_1",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -1236,7 +1236,7 @@
                 ],
                 "summary": "测试RequesetParam",
                 "description": "测试RequesetParam",
-                "operationId": "bug2020UsingGET_2",
+                "operationId": "bug2020UsingGET_1",
                 "parameters": [
                     {
                         "name": "date",
@@ -1270,7 +1270,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2081",
-                "operationId": "bug2081UsingGET_2",
+                "operationId": "bug2081UsingGET_1",
                 "parameters": [
                     {
                         "name": "a.importantField",
@@ -1299,7 +1299,7 @@
                     "Bugs"
                 ],
                 "summary": "2107",
-                "operationId": "getSomeByIdUsingGET_2",
+                "operationId": "getSomeByIdUsingGET_1",
                 "produces": [
                     "application/json"
                 ],
@@ -1330,7 +1330,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2114",
-                "operationId": "bug2114UsingPUT_2",
+                "operationId": "bug2114UsingPUT_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -1389,7 +1389,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2118",
-                "operationId": "bug2118UsingGET_2",
+                "operationId": "bug2118UsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -1418,7 +1418,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2161And2249and2469",
-                "operationId": "bug2161And2249and2469UsingGET_2",
+                "operationId": "bug2161And2249and2469UsingGET_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -1449,7 +1449,7 @@
                 ],
                 "summary": "Get all examples",
                 "description": "Get all examples ",
-                "operationId": "bug2268_2",
+                "operationId": "bug2268_1",
                 "produces": [
                     "application/json"
                 ],
@@ -1491,7 +1491,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2368",
-                "operationId": "bug2368UsingGET_2",
+                "operationId": "bug2368UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -1506,7 +1506,7 @@
                     "Bugs"
                 ],
                 "summary": "upperCaseField",
-                "operationId": "upperCaseFieldUsingPOST_2",
+                "operationId": "upperCaseFieldUsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -1535,7 +1535,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2391",
-                "operationId": "bug2391UsingPOST_2",
+                "operationId": "bug2391UsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -1562,7 +1562,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2415",
-                "operationId": "bug2415UsingPOST_2",
+                "operationId": "bug2415UsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -1591,7 +1591,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2415",
-                "operationId": "bug2415UsingGET_2",
+                "operationId": "bug2415UsingGET_1",
                 "parameters": [
                     {
                         "name": "input",
@@ -1621,7 +1621,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2423",
-                "operationId": "bug2423UsingGET_2",
+                "operationId": "bug2423UsingGET_1",
                 "parameters": [
                     {
                         "name": "from",
@@ -1650,7 +1650,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2479",
-                "operationId": "bug2479UsingPOST_2",
+                "operationId": "bug2479UsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -1679,7 +1679,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2822",
-                "operationId": "bug2822UsingPOST_2",
+                "operationId": "bug2822UsingPOST_1",
                 "consumes": [
                     "application/json"
                 ],
@@ -1714,7 +1714,7 @@
                     "Bugs"
                 ],
                 "summary": "addBook",
-                "operationId": "addBookUsingGET_2",
+                "operationId": "addBookUsingGET_1",
                 "parameters": [
                     {
                         "name": "authors[0].books[0].id",
@@ -1784,7 +1784,7 @@
                     "Bugs"
                 ],
                 "summary": "bug1944",
-                "operationId": "bug1944UsingGET_2",
+                "operationId": "bug1944UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "The object was deleted successfully."
@@ -1802,7 +1802,7 @@
                     "Bugs"
                 ],
                 "summary": "/bug2182",
-                "operationId": "bug2182UsingGET_2",
+                "operationId": "bug2182UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1820,7 +1820,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2203",
-                "operationId": "bug2203UsingGET_2",
+                "operationId": "bug2203UsingGET_1",
                 "produces": [
                     "application/json;charset=UTF-8"
                 ],
@@ -1841,7 +1841,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2220",
-                "operationId": "bug2220UsingGET_4",
+                "operationId": "bug2220UsingGET_2",
                 "parameters": [
                     {
                         "name": "bar",
@@ -1865,7 +1865,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2220",
-                "operationId": "bug2220UsingGET_5",
+                "operationId": "bug2220UsingGET_3",
                 "parameters": [
                     {
                         "name": "bar",
@@ -1889,7 +1889,7 @@
                     "Bugs"
                 ],
                 "summary": "/bug2230",
-                "operationId": "bug2230UsingPOST_2",
+                "operationId": "bug2230UsingPOST_1",
                 "consumes": [
                     "application/atom+xml"
                 ],
@@ -1921,7 +1921,7 @@
                     "Bugs"
                 ],
                 "summary": "/bug2282",
-                "operationId": "bug2282UsingGET_2",
+                "operationId": "bug2282UsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1939,7 +1939,7 @@
                     "Bugs"
                 ],
                 "summary": "bug2148",
-                "operationId": "bug2148UsingGET_2",
+                "operationId": "bug2148UsingGET_1",
                 "parameters": [
                     {
                         "name": "bar",
@@ -1976,7 +1976,7 @@
                     "Bugs"
                 ],
                 "summary": "getProperty",
-                "operationId": "getPropertyUsingGET_2",
+                "operationId": "getPropertyUsingGET_1",
                 "parameters": [
                     {
                         "name": "environmentKey",
@@ -2418,26 +2418,14 @@
         "Response«LanguageResponse»": {
             "type": "object",
             "properties": {
-                "data": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "$ref": "#/definitions/LanguageText"
-                            }
-                        }
-                    }
+                "cancelled": {
+                    "type": "boolean"
                 },
-                "errors": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "context": {
+                    "type": "object"
                 },
-                "uuid": {
-                    "type": "string"
+                "done": {
+                    "type": "boolean"
                 }
             },
             "title": "Response«LanguageResponse»"

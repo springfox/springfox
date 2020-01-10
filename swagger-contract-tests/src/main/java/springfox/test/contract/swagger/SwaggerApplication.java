@@ -21,11 +21,31 @@ package springfox.test.contract.swagger;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
+import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+import springfox.petstore.PetStoreConfiguration;
 
 @SpringBootApplication
 @SuppressWarnings("HideUtilityClassConstructor")
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
+@ComponentScan(basePackages = {
+    "springfox.test.contract.swagger",
+    "springfox.petstore.controller"
+})
+@Import(value = {
+    SpringDataRestConfiguration.class,
+    PetStoreConfiguration.class,
+    SecuritySupport.class,
+    Swagger2TestConfig.class,
+    BeanValidatorPluginsConfiguration.class })
 public class SwaggerApplication {
   public static void main(String[] args) {
-    SpringApplication.run(SwaggerApplication.class, args);
+    SpringApplication.run(
+        SwaggerApplication.class,
+        args);
   }
 }

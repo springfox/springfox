@@ -32,7 +32,7 @@
                     "fancy-pet-service"
                 ],
                 "summary": "createObject",
-                "operationId": "createObjectUsingPOST_2",
+                "operationId": "createObjectUsingPOST",
                 "consumes": [
                     "application/json"
                 ],

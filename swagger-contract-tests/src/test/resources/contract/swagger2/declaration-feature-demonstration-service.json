@@ -32,7 +32,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "findById",
-                "operationId": "findByIdUsingGET_1",
+                "operationId": "findByIdUsingGET",
                 "produces": [
                     "application/vnd.com.fancy-pet+json",
                     "application/vnd.com.pet+json"
@@ -63,7 +63,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "base64EncodedBody",
-                "operationId": "base64EncodedBodyUsingPOST_1",
+                "operationId": "base64EncodedBodyUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -93,7 +93,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "proper",
-                "operationId": "properUsingPOST_1",
+                "operationId": "properUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -121,7 +121,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "serializablePetEntity",
-                "operationId": "serializablePetEntityUsingGET_1",
+                "operationId": "serializablePetEntityUsingGET",
                 "parameters": [
                     {
                         "name": "itemId",
@@ -135,7 +135,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
                 },
@@ -148,7 +148,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "serializablePet",
-                "operationId": "serializablePetUsingGET_1",
+                "operationId": "serializablePetUsingGET",
                 "parameters": [
                     {
                         "name": "itemId",
@@ -162,7 +162,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
                 },
@@ -173,7 +173,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateSerializablePet",
-                "operationId": "updateSerializablePetUsingPUT_1",
+                "operationId": "updateSerializablePetUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -191,7 +191,7 @@
                         "description": "pet",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetWithSerializer"
                         }
                     }
                 ],
@@ -209,7 +209,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "Demo using examples",
-                "operationId": "saveUserUsingPOST_1",
+                "operationId": "saveUserUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -282,7 +282,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "Add a new contact with file attachment",
-                "operationId": "addFilesUsingPOST_1",
+                "operationId": "addFilesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -313,7 +313,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingGET_1",
+                "operationId": "allMethodAllowedUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -326,7 +326,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingHEAD_1",
+                "operationId": "allMethodAllowedUsingHEAD",
                 "consumes": [
                     "application/json"
                 ],
@@ -342,7 +342,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPOST_1",
+                "operationId": "allMethodAllowedUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -358,7 +358,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPUT_1",
+                "operationId": "allMethodAllowedUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -374,7 +374,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingDELETE_1",
+                "operationId": "allMethodAllowedUsingDELETE",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -387,7 +387,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingOPTIONS_1",
+                "operationId": "allMethodAllowedUsingOPTIONS",
                 "consumes": [
                     "application/json"
                 ],
@@ -403,7 +403,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "allMethodAllowed",
-                "operationId": "allMethodAllowedUsingPATCH_1",
+                "operationId": "allMethodAllowedUsingPATCH",
                 "consumes": [
                     "application/json"
                 ],
@@ -470,7 +470,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getBare",
-                "operationId": "getBareUsingPOST_1",
+                "operationId": "getBareUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -575,7 +575,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBigDecimal",
-                "operationId": "updateBigDecimalUsingPOST_1",
+                "operationId": "updateBigDecimalUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -602,7 +602,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBoolean",
-                "operationId": "updateBooleanUsingPOST_1",
+                "operationId": "updateBooleanUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -629,7 +629,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateDate",
-                "operationId": "updateDateUsingPOST_1",
+                "operationId": "updateDateUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -657,7 +657,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffective",
-                "operationId": "getEffectiveUsingGET_1",
+                "operationId": "getEffectiveUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -675,7 +675,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEffectives",
-                "operationId": "getEffectivesUsingGET_1",
+                "operationId": "getEffectivesUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -696,7 +696,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getEnumAsObject",
-                "operationId": "getEnumAsObjectUsingGET_1",
+                "operationId": "getEnumAsObjectUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -714,7 +714,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateListOfExamples",
-                "operationId": "updateListOfExamplesUsingPUT_1",
+                "operationId": "updateListOfExamplesUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -745,7 +745,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "findVehicles",
-                "operationId": "findVehiclesUsingGET_1",
+                "operationId": "findVehiclesUsingGET",
                 "parameters": [
                     {
                         "name": "type",
@@ -775,7 +775,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateListOfIntegers",
-                "operationId": "updateListOfIntegersUsingPUT_1",
+                "operationId": "updateListOfIntegersUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -807,7 +807,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "listOfMaps",
-                "operationId": "listOfMapsUsingGET_1",
+                "operationId": "listOfMapsUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -828,7 +828,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "mapOfMapOfExample",
-                "operationId": "mapOfMapOfExampleUsingGET_1",
+                "operationId": "mapOfMapOfExampleUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -852,7 +852,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "modelWithMapProperty",
-                "operationId": "modelWithMapPropertyUsingGET_1",
+                "operationId": "modelWithMapPropertyUsingGET",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -870,7 +870,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "getModelAttribute",
-                "operationId": "getModelAttributeUsingGET_1",
+                "operationId": "getModelAttributeUsingGET",
                 "parameters": [
                     {
                         "name": "accountTypes",
@@ -974,7 +974,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "propertyWithObjectNode",
-                "operationId": "propertyWithObjectNodeUsingPOST_1",
+                "operationId": "propertyWithObjectNodeUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -1003,7 +1003,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBaz",
-                "operationId": "updateBazUsingPOST_1",
+                "operationId": "updateBazUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -1034,7 +1034,7 @@
                     "feature-demonstration-service"
                 ],
                 "summary": "updateBazes",
-                "operationId": "updateBazesUsingPOST_1",
+                "operationId": "updateBazesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -1074,7 +1074,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET_2",
+                "operationId": "getPetByIdUsingGET",
                 "parameters": [
                     {
                         "name": "petId",
@@ -1337,6 +1337,10 @@
                 }
             },
             "title": "Pet"
+        },
+        "PetWithSerializer": {
+            "type": "object",
+            "title": "PetWithSerializer"
         },
         "Truck": {
             "title": "Truck",

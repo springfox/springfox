@@ -32,7 +32,7 @@
                     "inherited-service-impl"
                 ],
                 "summary": "demonstrateInheritanceWithAnnotations",
-                "operationId": "demonstrateInheritanceWithAnnotationsUsingGET_1",
+                "operationId": "demonstrateInheritanceWithAnnotationsUsingGET",
                 "produces": [
                     "application/json"
                 ],
@@ -62,7 +62,7 @@
                     "inherited-service-impl"
                 ],
                 "summary": "getSomething",
-                "operationId": "getSomethingUsingGET_1",
+                "operationId": "getSomethingUsingGET",
                 "parameters": [
                     {
                         "name": "parameter",

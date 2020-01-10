@@ -32,7 +32,7 @@
                     "pet-grooming-service"
                 ],
                 "summary": "groomingFunctionThatReturnsVoid",
-                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE_3",
+                "operationId": "groomingFunctionThatReturnsVoidUsingDELETE",
                 "produces": [
                     "application/json",
                     "application/xml"

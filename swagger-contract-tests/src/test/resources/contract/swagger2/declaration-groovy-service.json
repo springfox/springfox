@@ -15,63 +15,10 @@
     },
     "host": "localhost:__PORT__",
     "basePath": "/",
-    "tags": [
-        {
-            "name": "groovy-service",
-            "description": "Groovy Service"
-        }
-    ],
     "produces": [
         "application/json",
         "application/xml"
     ],
-    "paths": {
-        "/groovy/groovyModel": {
-            "get": {
-                "tags": [
-                    "groovy-service"
-                ],
-                "summary": "groovyModel",
-                "operationId": "groovyModelUsingGET_1",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/GroovyModel"
-                        }
-                    }
-                },
-                "deprecated": false
-            },
-            "put": {
-                "tags": [
-                    "groovy-service"
-                ],
-                "summary": "updateGroovyModel",
-                "operationId": "updateGroovyModelUsingPUT_1",
-                "consumes": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "model",
-                        "description": "model",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/GroovyModel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                },
-                "deprecated": false
-            }
-        }
-    },
     "securityDefinitions": {
         "api_key": {
             "type": "apiKey",
@@ -86,17 +33,6 @@
                 "write:pets": "modify pets in your account",
                 "read:pets": "read your pets"
             }
-        }
-    },
-    "definitions": {
-        "GroovyModel": {
-            "type": "object",
-            "properties": {
-                "stringProp": {
-                    "type": "string"
-                }
-            },
-            "title": "GroovyModel"
         }
     }
 }

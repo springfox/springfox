@@ -32,10 +32,10 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessById_2",
+                "operationId": "findBusinessById",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -63,7 +63,7 @@
                     "business-service"
                 ],
                 "summary": "businessesByCategories",
-                "operationId": "businessesByCategoriesUsingGET_1",
+                "operationId": "businessesByCategoriesUsingGET",
                 "produces": [
                     "application/json"
                 ],
@@ -108,7 +108,7 @@
                     "business-service"
                 ],
                 "summary": "businessAsString",
-                "operationId": "businessAsStringUsingPOST_1",
+                "operationId": "businessAsStringUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -132,10 +132,10 @@
                     "business-service"
                 ],
                 "summary": "Find a business by its id",
-                "operationId": "findBusinessById_3",
+                "operationId": "findBusinessById_1",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -170,10 +170,10 @@
                     "business-service"
                 ],
                 "summary": "getResponseEntity",
-                "operationId": "getResponseEntityUsingGET_1",
+                "operationId": "getResponseEntityUsingGET",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {
@@ -201,7 +201,7 @@
                     "business-service"
                 ],
                 "summary": "businessTypeEcho",
-                "operationId": "businessTypeEchoUsingPOST_1",
+                "operationId": "businessTypeEchoUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -244,10 +244,10 @@
                     "business-service"
                 ],
                 "summary": "getVanillaPathVariable",
-                "operationId": "getVanillaPathVariableUsingGET_1",
+                "operationId": "getVanillaPathVariableUsingGET",
                 "produces": [
-                    "application/json",
-                    "*/*"
+                    "*/*",
+                    "application/json"
                 ],
                 "parameters": [
                     {

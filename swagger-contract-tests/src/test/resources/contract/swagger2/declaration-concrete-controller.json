@@ -32,7 +32,7 @@
                     "concrete-controller"
                 ],
                 "summary": "create",
-                "operationId": "createUsingPUT_2",
+                "operationId": "createUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -43,7 +43,7 @@
                         "description": "toCreate",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/EntityModel«Pet»_1"
+                            "$ref": "#/definitions/EntityModel«Pet»"
                         }
                     }
                 ],
@@ -61,7 +61,7 @@
                     "concrete-controller"
                 ],
                 "summary": "delete",
-                "operationId": "deleteUsingDELETE_1",
+                "operationId": "deleteUsingDELETE",
                 "parameters": [
                     {
                         "name": "id",
@@ -91,7 +91,7 @@
                     "concrete-controller"
                 ],
                 "summary": "get",
-                "operationId": "getUsingGET_2",
+                "operationId": "getUsingGET",
                 "parameters": [
                     {
                         "name": "id",

@@ -17,10 +17,6 @@
     "basePath": "/",
     "tags": [
         {
-            "name": "generic-pet-controller",
-            "description": "Generic Pet Controller"
-        },
-        {
             "name": "pet-controller",
             "description": "Operations about pets"
         },
@@ -48,7 +44,7 @@
                     "pet-controller"
                 ],
                 "summary": "Add a new pet to the store",
-                "operationId": "addPetUsingPOST_1",
+                "operationId": "addPetUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -93,7 +89,7 @@
                     "pet-controller"
                 ],
                 "summary": "Update an existing pet",
-                "operationId": "updatePetUsingPUT_2",
+                "operationId": "updatePetUsingPUT",
                 "consumes": [
                     "application/json"
                 ],
@@ -147,7 +143,7 @@
                 ],
                 "summary": "Finds Pets by status",
                 "description": "Multiple status values can be provided with comma-separated strings",
-                "operationId": "findPetsByStatusUsingGET_2",
+                "operationId": "findPetsByStatusUsingGET_1",
                 "produces": [
                     "application/json",
                     "application/xml"
@@ -174,7 +170,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet_2"
+                                "$ref": "#/definitions/Pet_1"
                             }
                         }
                     },
@@ -200,7 +196,7 @@
                 ],
                 "summary": "Finds Pets by tags",
                 "description": "Multiple tags can be provided with comma-separated strings. Use tag1, tag2, tag3 for testing.",
-                "operationId": "findPetsByTagsUsingGET_2",
+                "operationId": "findPetsByTagsUsingGET_1",
                 "produces": [
                     "application/json",
                     "application/xml"
@@ -221,7 +217,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet_2"
+                                "$ref": "#/definitions/Pet_1"
                             }
                         }
                     },
@@ -247,7 +243,7 @@
                 ],
                 "summary": "Find pet by ID",
                 "description": "Returns a pet when ID < 10. ID > 10 or non-integers will simulate API error conditions",
-                "operationId": "getPetByIdUsingGET_5",
+                "operationId": "getPetByIdUsingGET_3",
                 "produces": [
                     "application/json",
                     "application/xml"
@@ -267,7 +263,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet_2"
+                            "$ref": "#/definitions/Pet_1"
                         }
                     },
                     "400": {
@@ -817,27 +813,6 @@
                 },
                 "deprecated": false
             }
-        },
-        "/generic/pets/test": {
-            "post": {
-                "tags": [
-                    "generic-pet-controller"
-                ],
-                "summary": "test",
-                "operationId": "testUsingPOST_1",
-                "consumes": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Pet"
-                        }
-                    }
-                },
-                "deprecated": false
-            }
         }
     },
     "securityDefinitions": {
@@ -927,22 +902,6 @@
         "Pet": {
             "type": "object",
             "properties": {
-                "age": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "Pet"
-        },
-        "Pet_1": {
-            "type": "object",
-            "properties": {
                 "category": {
                     "$ref": "#/definitions/Category"
                 },
@@ -975,9 +934,9 @@
                     }
                 }
             },
-            "title": "Pet_1"
+            "title": "Pet"
         },
-        "Pet_2": {
+        "Pet_1": {
             "type": "object",
             "properties": {
                 "category": {
@@ -1016,7 +975,7 @@
                     }
                 }
             },
-            "title": "Pet_2"
+            "title": "Pet_1"
         },
         "Tag": {
             "type": "object",

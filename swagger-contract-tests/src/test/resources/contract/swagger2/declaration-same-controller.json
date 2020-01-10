@@ -32,7 +32,7 @@
                     "same-controller"
                 ],
                 "summary": "create",
-                "operationId": "createUsingPUT_5",
+                "operationId": "createUsingPUT_3",
                 "consumes": [
                     "application/json"
                 ],
@@ -43,7 +43,7 @@
                         "description": "toCreate",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ModelWithSameNameClasses_1"
+                            "$ref": "#/definitions/ModelWithSameNameClasses"
                         }
                     }
                 ],
@@ -61,7 +61,7 @@
                     "same-controller"
                 ],
                 "summary": "get",
-                "operationId": "getUsingGET_5",
+                "operationId": "getUsingGET_3",
                 "parameters": [
                     {
                         "name": "id",
@@ -278,7 +278,7 @@
                     "type": "string"
                 }
             },
-            "title": "SameCategory_1"
+            "title": "SameCategory"
         },
         "SameCategory_1": {
             "type": "object",

@@ -28,7 +28,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation consumes defined",
-                "operationId": "withOperationConsumesUsingPOST_1",
+                "operationId": "withOperationConsumesUsingPOST",
                 "consumes": [
                     "application/xml"
                 ],
@@ -60,7 +60,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation consumes and produces defined",
-                "operationId": "withOperationConsumesAndProducesUsingPOST_1",
+                "operationId": "withOperationConsumesAndProducesUsingPOST",
                 "consumes": [
                     "application/xml"
                 ],
@@ -92,7 +92,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation produces defined",
-                "operationId": "withOperationProducesUsingGET_1",
+                "operationId": "withOperationProducesUsingGET",
                 "produces": [
                     "application/xml"
                 ],
@@ -113,7 +113,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does not have operation consumes defined",
-                "operationId": "withoutOperationConsumesUsingPOST_1",
+                "operationId": "withoutOperationConsumesUsingPOST",
                 "consumes": [
                     "application/json"
                 ],
@@ -145,7 +145,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does not have operation produces defined",
-                "operationId": "withoutOperationProducesUsingGET_1",
+                "operationId": "withoutOperationProducesUsingGET",
                 "produces": [
                     "*/*"
                 ],

@@ -34,7 +34,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation consumes defined",
-                "operationId": "withOperationConsumesUsingPOST_2",
+                "operationId": "withOperationConsumesUsingPOST_1",
                 "consumes": [
                     "application/xml"
                 ],
@@ -63,7 +63,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation consumes and produces defined",
-                "operationId": "withOperationConsumesAndProducesUsingPOST_2",
+                "operationId": "withOperationConsumesAndProducesUsingPOST_1",
                 "consumes": [
                     "application/xml"
                 ],
@@ -95,7 +95,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does have operation produces defined",
-                "operationId": "withOperationProducesUsingGET_2",
+                "operationId": "withOperationProducesUsingGET_1",
                 "produces": [
                     "application/xml"
                 ],
@@ -116,7 +116,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does not have operation consumes defined",
-                "operationId": "withoutOperationConsumesUsingPOST_2",
+                "operationId": "withoutOperationConsumesUsingPOST_1",
                 "parameters": [
                     {
                         "in": "body",
@@ -142,7 +142,7 @@
                     "consumes-produces-service"
                 ],
                 "summary": "Does not have operation produces defined",
-                "operationId": "withoutOperationProducesUsingGET_2",
+                "operationId": "withoutOperationProducesUsingGET_1",
                 "responses": {
                     "200": {
                         "description": "OK",
