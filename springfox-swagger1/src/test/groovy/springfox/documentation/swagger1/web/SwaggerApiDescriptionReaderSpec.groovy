@@ -21,23 +21,23 @@ package springfox.documentation.swagger1.web
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import spock.lang.Shared
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
+import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.scanners.ApiDescriptionLookup
 import springfox.documentation.spring.web.scanners.ApiDescriptionReader
-import springfox.documentation.swagger1.mixins.SwaggerPathProviderSupport
 
 import static springfox.documentation.spring.web.paths.Paths.*
 
-@Mixin([RequestMappingSupport, SwaggerPathProviderSupport, ServicePluginsSupport])
-class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
+class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
+  @Shared def relativeSwaggerPathProvider = new DefaultPathProvider()
 
   def "should generate an api description for each request mapping pattern"() {
     given:
@@ -77,7 +77,7 @@ class SwaggerApiDescriptionReaderSpec extends DocumentationContextSpec {
 
     where:
     pathProvider                  | prefix
-    relativeSwaggerPathProvider() | ""
+    relativeSwaggerPathProvider | ""
   }
 
   def "should sanitize request mapping endpoints"() {

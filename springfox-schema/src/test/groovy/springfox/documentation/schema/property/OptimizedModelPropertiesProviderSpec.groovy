@@ -47,8 +47,7 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(SchemaPluginsSupport)
-class OptimizedModelPropertiesProviderSpec extends Specification {
+class OptimizedModelPropertiesProviderSpec extends Specification implements SchemaPluginsSupport {
   def "model properties are detected correctly"() {
     given:
     TypeResolver typeResolver = new TypeResolver()

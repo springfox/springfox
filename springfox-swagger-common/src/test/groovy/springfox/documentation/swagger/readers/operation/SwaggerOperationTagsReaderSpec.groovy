@@ -20,12 +20,10 @@ package springfox.documentation.swagger.readers.operation
 
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.DefaultTagsProvider
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport, ServicePluginsSupport])
-class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec {
+class SwaggerOperationTagsReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   def "should have correct tags"() {
     given:
       OperationContext operationContext =

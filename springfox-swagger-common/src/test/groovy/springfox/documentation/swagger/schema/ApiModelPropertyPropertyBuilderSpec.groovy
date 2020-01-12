@@ -42,14 +42,18 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 import springfox.documentation.spring.web.DescriptionResolver
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([ConfiguredObjectMapperSupport, AlternateTypesSupport, SchemaPluginsSupport])
-class ApiModelPropertyPropertyBuilderSpec extends Specification {
+class ApiModelPropertyPropertyBuilderSpec
+    extends Specification
+    implements ServicePluginsSupport,
+        AlternateTypesSupport,
+        ConfiguredObjectMapperSupport {
   BeanDescription beanDescription
   def descriptions = new DescriptionResolver(new MockEnvironment())
 

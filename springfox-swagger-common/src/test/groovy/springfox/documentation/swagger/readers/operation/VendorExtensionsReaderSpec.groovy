@@ -25,8 +25,7 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport])
-class VendorExtensionsReaderSpec extends DocumentationContextSpec {
+class VendorExtensionsReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   def "should read from annotations"() {
     given:
     OperationContext operationContext =

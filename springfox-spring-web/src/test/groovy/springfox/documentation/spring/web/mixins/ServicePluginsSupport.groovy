@@ -48,8 +48,7 @@ import static java.util.stream.Collectors.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
-@Mixin([SchemaPluginsSupport])
-class ServicePluginsSupport {
+trait ServicePluginsSupport implements SchemaPluginsSupport {
 
   DocumentationPluginsManager defaultWebPlugins() {
     def resolver = new TypeResolver()

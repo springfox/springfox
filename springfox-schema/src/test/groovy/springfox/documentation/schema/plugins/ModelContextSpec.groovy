@@ -19,6 +19,7 @@
 package springfox.documentation.schema.plugins
 
 import com.fasterxml.classmate.ResolvedType
+import com.fasterxml.classmate.TypeResolver
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
@@ -32,12 +33,12 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(TypesForTestingSupport)
-class ModelContextSpec extends Specification {
+class ModelContextSpec extends Specification implements TypesForTestingSupport {
   @Shared
   AlternateTypeProvider provider = Mock(AlternateTypeProvider)
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared def resolver = new TypeResolver()
 
   def "ModelContext equals works as expected"() {
     given:

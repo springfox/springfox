@@ -33,8 +33,7 @@ import java.util.stream.Stream
 import static java.util.Collections.*
 import static java.util.stream.Collectors.*
 
-@Mixin([RequestMappingSupport])
-class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec {
+class SwaggerMediaTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   def "handler method should override spring media types"() {
     RequestMappingInfo requestMappingInfo =
         requestMappingInfo('/somePath',

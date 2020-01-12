@@ -25,8 +25,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.wrapper.RequestMappingInfo
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
-@Mixin(RequestMappingSupport)
-class ClassOrApiAnnotationResourceGroupingSpec extends Specification {
+class ClassOrApiAnnotationResourceGroupingSpec extends Specification implements RequestMappingSupport {
 
   @Unroll
   def "group paths and descriptions"() {

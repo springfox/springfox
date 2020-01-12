@@ -25,12 +25,13 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.Defaults
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 
 import static springfox.documentation.spi.service.contexts.Orderings.*
 
-class DocumentationContextSpec extends Specification {
+class DocumentationContextSpec extends Specification implements ServicePluginsSupport {
   DocumentationContextBuilder contextBuilder
   Docket plugin
   ApiOperationReader operationReader

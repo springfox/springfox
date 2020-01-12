@@ -37,8 +37,10 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 
-@Mixin([AccessorAssertions, RequestMappingSupport])
-class ApiListingReferenceScannerSpec extends DocumentationContextSpec {
+class ApiListingReferenceScannerSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        AccessorAssertions {
 
   ApiListingReferenceScanner sut = new ApiListingReferenceScanner()
   List<RequestHandler> requestHandlers

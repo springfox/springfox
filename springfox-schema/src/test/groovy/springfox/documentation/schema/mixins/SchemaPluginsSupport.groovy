@@ -35,7 +35,7 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.ViewProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
 
-class SchemaPluginsSupport {
+trait SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =

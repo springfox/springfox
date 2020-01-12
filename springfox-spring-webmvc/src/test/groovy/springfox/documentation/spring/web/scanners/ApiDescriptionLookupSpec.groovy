@@ -24,8 +24,7 @@ import springfox.documentation.RequestHandlerKey
 import springfox.documentation.service.ApiDescription
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
-@Mixin(RequestMappingSupport)
-class ApiDescriptionLookupSpec extends Specification {
+class ApiDescriptionLookupSpec extends Specification implements RequestMappingSupport {
   def "Given a controller method be able to lookup the api description" () {
     given:
       ApiDescriptionLookup sut = new ApiDescriptionLookup()

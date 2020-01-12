@@ -31,8 +31,9 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.readers.operation.OperationReader
 
-@Mixin([TypesForTestingSupport, RequestMappingSupport])
-class CachingOperationReaderSpec extends DocumentationContextSpec {
+class CachingOperationReaderSpec
+    extends DocumentationContextSpec
+    implements TypesForTestingSupport, RequestMappingSupport {
   def "Implementation caches the invocations"() {
     given:
     RequestMappingInfo requestMappingInfo = requestMappingInfo('/anyPath')

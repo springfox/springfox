@@ -27,9 +27,11 @@ import javax.servlet.http.HttpServletRequest
 import static java.util.Collections.*
 import static springfox.documentation.spi.service.contexts.Orderings.*
 
-@Mixin([ApiListingSupport, AuthSupport])
 class Swagger2ControllerSpec extends DocumentationContextSpec
-    implements MapperSupport, JsonSupport {
+    implements MapperSupport,
+        JsonSupport,
+        AuthSupport,
+        ApiListingSupport {
 
   Swagger2ControllerWebMvc controller = new Swagger2ControllerWebMvc(
       mockEnvironment(),

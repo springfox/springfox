@@ -30,8 +30,10 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterNameReaderSpec extends DocumentationContextSpec {
+class ParameterNameReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ModelProviderForServiceSupport {
 
   def "Should support only swagger 1 documentation types"() {
     given:

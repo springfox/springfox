@@ -24,7 +24,7 @@ import springfox.documentation.service.OAuth
 import springfox.documentation.service.ApiListingReference
 import springfox.documentation.service.ResourceListing
 
-class ApiListingSupport {
+trait ApiListingSupport {
 
    def apiListing(authorizations = [], models = null) {
       new ApiListing(

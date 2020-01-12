@@ -29,7 +29,6 @@ import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.ModelAttributeComplexTypeExample
 import springfox.documentation.spring.web.dummy.models.ModelAttributeExample
 import springfox.documentation.spring.web.dummy.models.SomeType
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import java.beans.BeanInfo
@@ -37,7 +36,6 @@ import java.beans.IntrospectionException
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-@Mixin([ServicePluginsSupport])
 class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
   TypeResolver typeResolver
   EnumTypeDeterminer enumTypeDeterminer

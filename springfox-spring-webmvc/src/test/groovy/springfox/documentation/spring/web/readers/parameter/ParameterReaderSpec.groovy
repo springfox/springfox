@@ -41,8 +41,10 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterReaderSpec extends DocumentationContextSpec {
+class ParameterReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ModelProviderForServiceSupport  {
   @Shared
   description = new DescriptionResolver(new MockEnvironment())
   

@@ -38,7 +38,6 @@ import springfox.documentation.spring.web.dummy.models.Example
 import springfox.documentation.spring.web.dummy.models.Treeish
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 
@@ -50,8 +49,10 @@ import javax.servlet.http.HttpServletResponse
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport])
-class OperationParameterReaderSpec extends DocumentationContextSpec {
+class OperationParameterReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ModelProviderForServiceSupport  {
   OperationParameterReader sut
   def pluginsManager = defaultWebPlugins()
 

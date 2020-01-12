@@ -33,8 +33,11 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ParameterReaderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ParameterReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        ApiParamAnnotationSupport,
+        ModelProviderForServiceSupport {
   def descriptions = new DescriptionResolver(new MockEnvironment())
   def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
 

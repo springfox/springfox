@@ -28,8 +28,10 @@ import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 
-@Mixin([ModelPropertyLookupSupport, TypesForTestingSupport])
-class ObjectMapperNamingStrategySpec extends Specification {
+class ObjectMapperNamingStrategySpec
+    extends Specification
+    implements TypesForTestingSupport,
+        ModelPropertyLookupSupport {
 
   def "rename without setting an strategy"() {
     given:

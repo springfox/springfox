@@ -28,17 +28,14 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
-class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
+class DefaultResponseMessageReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   ResponseMessagesReader sut
 
   def setup() {

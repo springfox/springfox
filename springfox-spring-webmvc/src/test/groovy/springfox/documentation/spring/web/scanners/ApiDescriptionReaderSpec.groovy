@@ -28,15 +28,13 @@ import springfox.documentation.service.Operation
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport])
-class ApiDescriptionReaderSpec extends DocumentationContextSpec {
+class ApiDescriptionReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   def "should generate an api description for each request mapping pattern"() {
     given:

@@ -23,8 +23,7 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport])
-class OperationNicknameIntoUniqueIdReaderSpec extends DocumentationContextSpec {
+class OperationNicknameIntoUniqueIdReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   def "should set various unique operation id based on swagger annotation"() {
     given:
       OperationContext operationContext =

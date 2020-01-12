@@ -50,7 +50,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import javax.servlet.ServletContext
 
-class RequestMappingSupport {
+trait RequestMappingSupport {
 
   RequestMappingInfo requestMappingInfo(String path, Map overrides = [:]) {
     PatternsRequestCondition singlePatternRequestCondition = patternsRequestCondition([path] as String[])

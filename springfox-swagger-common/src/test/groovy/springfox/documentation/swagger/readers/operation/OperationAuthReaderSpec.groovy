@@ -30,8 +30,9 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import static java.util.Collections.*
 
-@Mixin([RequestMappingSupport, AuthSupport])
-class OperationAuthReaderSpec extends DocumentationContextSpec {
+class OperationAuthReaderSpec
+    extends DocumentationContextSpec
+    implements AuthSupport, RequestMappingSupport {
 
   OperationAuthReader sut = new OperationAuthReader()
 

@@ -33,10 +33,8 @@ import java.util.stream.Stream
 
 import static java.util.stream.Collectors.*
 
-@Mixin([RequestMappingSupport])
-class MediaTypeReaderSpec extends DocumentationContextSpec {
+class MediaTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   MediaTypeReader sut
-
 
   def setup() {
     sut = new MediaTypeReader()

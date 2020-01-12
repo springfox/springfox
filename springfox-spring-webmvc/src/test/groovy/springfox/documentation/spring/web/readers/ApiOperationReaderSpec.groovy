@@ -30,7 +30,6 @@ import springfox.documentation.spi.service.contexts.SecurityContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.ApiOperationReader
@@ -41,8 +40,11 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 import static java.util.Collections.*
 import static org.springframework.web.bind.annotation.RequestMethod.*
 
-@Mixin([RequestMappingSupport, AuthSupport, ServicePluginsSupport])
-class ApiOperationReaderSpec extends DocumentationContextSpec {
+class ApiOperationReaderSpec
+    extends DocumentationContextSpec
+    implements AuthSupport,
+        RequestMappingSupport {
+
   ApiOperationReader sut
   def methodResolver = new HandlerMethodResolver(new TypeResolver())
 

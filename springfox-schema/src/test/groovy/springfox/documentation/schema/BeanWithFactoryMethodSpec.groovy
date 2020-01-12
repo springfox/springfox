@@ -19,15 +19,15 @@
 
 package springfox.documentation.schema
 
-import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
 class BeanWithFactoryMethodSpec extends SchemaSpecification {
+  @Shared def resolver = new TypeResolver()
   def "Type with bean properties in the constructor"() {
     given:
     def sut = defaultModelProvider()

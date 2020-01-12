@@ -40,8 +40,10 @@ import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.builders.RequestHandlerSelectors.*
 import static springfox.documentation.spring.web.paths.Paths.*
 
-@Mixin([AccessorAssertions, RequestMappingSupport])
-class SwaggerApiListingReferenceScannerSpec extends DocumentationContextSpec {
+class SwaggerApiListingReferenceScannerSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        AccessorAssertions {
 
   ApiListingReferenceScanner sut = new ApiListingReferenceScanner()
   List<RequestHandler> requestHandlers

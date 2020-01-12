@@ -19,16 +19,17 @@
 package springfox.documentation.swagger2.mappers
 
 import com.fasterxml.classmate.ResolvedType
+import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.classmate.types.ResolvedObjectType
 import io.swagger.models.properties.AbstractNumericProperty
 import io.swagger.models.properties.ObjectProperty
 import io.swagger.models.properties.RefProperty
 import io.swagger.models.properties.StringProperty
 import org.mapstruct.factory.Mappers
+import spock.lang.Shared
 import spock.lang.Unroll
 import springfox.documentation.builders.ModelBuilder
 import springfox.documentation.builders.ModelPropertyBuilder
-import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProperty
@@ -36,7 +37,6 @@ import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.SimpleType
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 
@@ -48,10 +48,10 @@ import static springfox.documentation.schema.ResolvedTypes.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 import static springfox.documentation.swagger2.mappers.ModelMapper.*
 
-@Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ModelMapperSpec extends SchemaSpecification {
 
-  def namingStrategy = new CodeGenGenericTypeNamingStrategy()
+  @Shared def namingStrategy = new CodeGenGenericTypeNamingStrategy()
+  @Shared def resolver = new TypeResolver()
 
   def getIds = new Function<Model, String>() {
     String apply(Model model) {

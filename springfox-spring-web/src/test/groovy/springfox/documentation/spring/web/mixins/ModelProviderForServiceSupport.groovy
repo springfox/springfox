@@ -45,9 +45,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
-@SuppressWarnings("GrMethodMayBeStatic")
-@Mixin([ServicePluginsSupport, SchemaPluginsSupport])
-class ModelProviderForServiceSupport {
+trait ModelProviderForServiceSupport implements ServicePluginsSupport {
   def typeNameExtractor() {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
@@ -123,5 +121,4 @@ class ModelProviderForServiceSupport {
         typeNameExtractor,
         enumTypeDeterminer)
   }
-
 }

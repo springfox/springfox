@@ -18,9 +18,10 @@
  */
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.spi.DocumentationType
 
 import java.util.stream.Stream
@@ -29,8 +30,9 @@ import static java.util.Collections.*
 import static java.util.stream.Collectors.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
-class EnumTypeSpec extends Specification {
+class EnumTypeSpec extends Specification implements ModelProviderSupport {
+  @Shared def resolver = new TypeResolver()
+  
   def "enum type are inferred as type string with allowable values"() {
     given:
     def list = Stream.of("ONE", "TWO").collect(toList())

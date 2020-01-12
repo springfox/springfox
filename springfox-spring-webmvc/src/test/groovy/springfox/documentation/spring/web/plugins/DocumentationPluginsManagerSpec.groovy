@@ -38,8 +38,7 @@ import springfox.documentation.spring.web.readers.operation.CachingOperationName
 
 import static java.util.Optional.*
 
-@Mixin(ServicePluginsSupport)
-class DocumentationPluginsManagerSpec extends Specification {
+class DocumentationPluginsManagerSpec extends Specification implements ServicePluginsSupport {
   def "default documentation plugin always exists" () {
     given:
       def sut = defaultWebPlugins()

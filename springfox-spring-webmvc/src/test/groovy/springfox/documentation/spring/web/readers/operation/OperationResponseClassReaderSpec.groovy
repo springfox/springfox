@@ -25,18 +25,13 @@ import org.springframework.plugin.core.PluginRegistry
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-
-
-@Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
-class OperationResponseClassReaderSpec extends DocumentationContextSpec {
+class OperationResponseClassReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   OperationResponseClassReader sut
   
   def setup() {

@@ -19,21 +19,21 @@
 
 package springfox.documentation.schema.property.field
 
-import springfox.documentation.schema.AlternateTypesSupport
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.TypeWithGettersAndSetters
 import springfox.documentation.schema.mixins.ModelPropertyLookupSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableListValues
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelPropertyLookupSupport, AlternateTypesSupport])
-class FieldModelPropertySpec extends SchemaSpecification {
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
+class FieldModelPropertySpec extends SchemaSpecification implements ModelPropertyLookupSupport {
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared def resolver = new TypeResolver()
 
   def "Extracting information from resolved fields"() {
     given:

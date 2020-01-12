@@ -21,6 +21,7 @@ package springfox.documentation.schema
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.hateoas.CollectionModel
 import org.springframework.http.ResponseEntity
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -29,8 +30,8 @@ import springfox.documentation.spi.service.contexts.Defaults
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-@Mixin(TypesForTestingSupport)
-class AlternateTypeProviderSpec extends Specification {
+class AlternateTypeProviderSpec extends Specification implements TypesForTestingSupport {
+  @Shared def resolver = new TypeResolver()
   def "Alternate types are provided for specified map types"() {
     given:
       AlternateTypeProvider sut = new AlternateTypeProvider([])
@@ -49,7 +50,6 @@ class AlternateTypeProviderSpec extends Specification {
   @Unroll
   def "Alternate types are provided for specified types"() {
     given:
-      def resolver = new TypeResolver()
       def resolvedSource = resolver.resolve(source)
       AlternateTypeProvider sut = new AlternateTypeProvider([])
       sut.addRule(rule)

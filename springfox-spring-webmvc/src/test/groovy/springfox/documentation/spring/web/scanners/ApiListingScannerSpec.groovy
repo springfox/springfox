@@ -38,7 +38,6 @@ import springfox.documentation.spring.web.mixins.ApiDescriptionSupport
 import springfox.documentation.spring.web.mixins.AuthSupport
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -48,14 +47,13 @@ import static org.springframework.http.MediaType.*
 import static springfox.documentation.builders.PathSelectors.*
 import static springfox.documentation.spring.web.scanners.ApiListingScanner.*
 
-@Mixin([
-    RequestMappingSupport,
-    AuthSupport,
-    ModelProviderForServiceSupport,
-    ServicePluginsSupport,
-    ApiDescriptionSupport,
-    SchemaPluginsSupport])
-class ApiListingScannerSpec extends DocumentationContextSpec {
+class ApiListingScannerSpec
+    extends DocumentationContextSpec
+    implements AuthSupport,
+        RequestMappingSupport,
+        ModelProviderForServiceSupport,
+        ApiDescriptionSupport {
+  
   ApiDescriptionReader apiDescriptionReader
   ApiModelReader apiModelReader
   ApiListingScanningContext listingContext

@@ -32,11 +32,9 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.dummy.ResponseExampleTestController
 import springfox.documentation.spring.web.dummy.ResponseHeaderTestController
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport])
-class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
+class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   def "ApiResponse annotation should override when using swagger reader"() {
     given:

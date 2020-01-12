@@ -18,17 +18,18 @@
  */
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Unroll
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, AlternateTypesSupport])
 class ContainerTypesSpec extends SchemaSpecification {
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared def resolver = new TypeResolver()
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
   def "Model properties of type List, are inferred correctly"() {
     given:

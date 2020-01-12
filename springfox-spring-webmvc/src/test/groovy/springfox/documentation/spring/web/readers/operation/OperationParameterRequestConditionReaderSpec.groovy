@@ -29,8 +29,7 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport])
-class OperationParameterRequestConditionReaderSpec extends DocumentationContextSpec {
+class OperationParameterRequestConditionReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   OperationParameterRequestConditionReader sut = new OperationParameterRequestConditionReader(new TypeResolver())
   def "Should read a parameter given a parameter request condition"() {

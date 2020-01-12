@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.type.SimpleType
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spring.web.dummy.DummyModels
@@ -36,8 +35,11 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport, AlternateTypesSupport])
-class ReturnTypesSpec extends Specification {
+class ReturnTypesSpec extends Specification
+    implements ServicePluginsSupport,
+        AlternateTypesSupport,
+        RequestMappingSupport {
+  
   TypeNameExtractor sut
 
   def setup() {

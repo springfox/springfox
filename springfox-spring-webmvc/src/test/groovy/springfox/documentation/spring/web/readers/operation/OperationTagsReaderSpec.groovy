@@ -21,11 +21,9 @@ package springfox.documentation.spring.web.readers.operation
 
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport, ServicePluginsSupport])
-class OperationTagsReaderSpec extends DocumentationContextSpec {
+class OperationTagsReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   def "should have correct tags"() {
     given:
       OperationContext operationContext =

@@ -38,8 +38,11 @@ import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport])
-class ApiParamParameterBuilderSpec extends DocumentationContextSpec implements ApiParamAnnotationSupport {
+class ApiParamParameterBuilderSpec
+    extends DocumentationContextSpec
+    implements ApiParamAnnotationSupport,
+        RequestMappingSupport,
+        ModelProviderForServiceSupport  {
 
   def descriptions = new DescriptionResolver(new MockEnvironment())
 

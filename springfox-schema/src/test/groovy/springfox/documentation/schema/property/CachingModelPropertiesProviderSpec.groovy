@@ -20,6 +20,7 @@ package springfox.documentation.schema.property
 
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
+import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.mixins.TypesForTestingSupport
@@ -29,8 +30,9 @@ import springfox.documentation.spi.schema.AlternateTypeProvider
 import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin(TypesForTestingSupport)
-class CachingModelPropertiesProviderSpec extends Specification {
+class CachingModelPropertiesProviderSpec extends Specification implements TypesForTestingSupport {
+  @Shared def resolver = new TypeResolver()
+  
   def "Implementation caches the invocations"() {
     given:
     def context = inputParam("0_0",

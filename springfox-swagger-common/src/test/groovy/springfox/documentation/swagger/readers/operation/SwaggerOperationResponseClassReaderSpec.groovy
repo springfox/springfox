@@ -33,8 +33,11 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
-@Mixin([RequestMappingSupport, SwaggerPluginsSupport])
-class SwaggerOperationResponseClassReaderSpec extends DocumentationContextSpec {
+class SwaggerOperationResponseClassReaderSpec
+    extends DocumentationContextSpec
+    implements SwaggerPluginsSupport,
+        RequestMappingSupport {
+
   @Unroll
   def "should have correct response class"() {
     given:

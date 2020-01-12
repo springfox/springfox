@@ -38,8 +38,7 @@ import springfox.documentation.spring.web.readers.operation.HandlerMethodResolve
 
 import static springfox.documentation.builders.PathSelectors.*
 
-@Mixin([RequestMappingSupport])
-class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec {
+class SwaggerApiDocumentationScannerSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   ApiListingReferenceScanner listingReferenceScanner = Mock(ApiListingReferenceScanner)
   ApiListingScanner listingScanner = Mock(ApiListingScanner)

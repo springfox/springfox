@@ -28,13 +28,11 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport])
-class OperationImplicitParamsReaderSpec extends DocumentationContextSpec {
+class OperationImplicitParamsReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   def "Should add implicit parameters"() {
     given:

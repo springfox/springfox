@@ -61,7 +61,6 @@ import springfox.documentation.spring.web.dummy.models.SameFancyPet
 import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
@@ -73,8 +72,10 @@ import java.util.stream.Collectors
 
 import static springfox.documentation.spring.web.paths.Paths.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, ServicePluginsSupport, SchemaPluginsSupport])
-class ApiModelReaderSpec extends DocumentationContextSpec {
+class ApiModelReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+      ModelProviderForServiceSupport {
 
   ApiModelReader sut
   ApiModelReader sutSpecial

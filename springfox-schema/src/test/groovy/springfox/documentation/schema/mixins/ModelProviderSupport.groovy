@@ -23,11 +23,14 @@ import com.fasterxml.classmate.TypeResolver
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
+import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultModelDependencyProvider
 import springfox.documentation.schema.DefaultModelProvider
+import springfox.documentation.schema.DefaultModelSpecificationProvider
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.ModelProvider
+import springfox.documentation.schema.ModelSpecificationProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.property.FactoryMethodProvider
@@ -41,8 +44,7 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
 @SuppressWarnings("GrMethodMayBeStatic")
-@Mixin([SchemaPluginsSupport])
-class ModelProviderSupport {
+trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTestingSupport, AlternateTypesSupport {
 
   ModelProvider defaultModelProvider(
       ObjectMapper objectMapper = new ObjectMapper(),
@@ -78,6 +80,49 @@ class ModelProviderSupport {
         typeNameExtractor)
 
     new DefaultModelProvider(
+        typeResolver,
+        modelPropertiesProvider,
+        modelDependenciesProvider,
+        pluginsManager,
+        typeNameExtractor,
+        enumTypeDeterminer
+    )
+  }
+
+  ModelSpecificationProvider defaultModelSpecificationProvider(
+      ObjectMapper objectMapper = new ObjectMapper(),
+      TypeResolver typeResolver = new TypeResolver(),
+      EnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer()) {
+
+    def pluginsManager = defaultSchemaPlugins()
+    PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
+        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
+        typeResolver,
+        modelNameRegistry,
+        new JacksonEnumTypeDeterminer())
+    def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
+
+    def event = new ObjectMapperConfigured(this, objectMapper)
+    namingStrategy.onApplicationEvent(event)
+
+    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(
+        new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver),
+        new FactoryMethodProvider(typeResolver),
+        typeResolver,
+        namingStrategy,
+        pluginsManager,
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor)
+
+    modelPropertiesProvider.onApplicationEvent(event)
+    def modelDependenciesProvider = modelDependencyProvider(
+        typeResolver,
+        modelPropertiesProvider,
+        typeNameExtractor)
+
+    new DefaultModelSpecificationProvider(
         typeResolver,
         modelPropertiesProvider,
         modelDependenciesProvider,

@@ -41,8 +41,7 @@ import springfox.documentation.swagger.mixins.SwaggerPluginsSupport
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-@Mixin([SwaggerPluginsSupport])
-class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec {
+class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec implements SwaggerPluginsSupport {
   TypeResolver typeResolver
   ModelAttributeParameterExpander sut
 

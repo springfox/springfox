@@ -55,27 +55,27 @@ import static java.util.stream.Collectors.*
 import static org.springframework.plugin.core.OrderAwarePluginRegistry.*
 
 @SuppressWarnings("GrMethodMayBeStatic")
-class SwaggerPluginsSupport {
+trait SwaggerPluginsSupport {
   SchemaPluginsManager swaggerSchemaPlugins() {
     def resolver = new TypeResolver()
     def descriptions = new DescriptionResolver(new MockEnvironment())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        create(singletonList(new DefaultTypeNameProvider()))
+        of(singletonList(new DefaultTypeNameProvider()))
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        create(singletonList(new ApiModelPropertyPropertyBuilder(descriptions)))
+        of(singletonList(new ApiModelPropertyPropertyBuilder(descriptions)))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        create([new ApiModelBuilder(resolver, typeNameExtractor, new JacksonEnumTypeDeterminer())])
+        of([new ApiModelBuilder(resolver, typeNameExtractor, new JacksonEnumTypeDeterminer())])
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
-        create([new JacksonJsonViewProvider(new TypeResolver())])
+        of([new JacksonJsonViewProvider(new TypeResolver())])
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        create(new ArrayList<>())
+        of(new ArrayList<>())
 
     new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry, syntheticModelRegistry)
   }
@@ -83,23 +83,23 @@ class SwaggerPluginsSupport {
   DocumentationPluginsManager swaggerServicePlugins(List<DefaultsProviderPlugin> swaggerDefaultsPlugins) {
     def resolver = new TypeResolver()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(Stream.of(new MediaTypeReader(), new SwaggerApiListingReader()).collect(toList()))
-    plugins.documentationPlugins = create([])
+    plugins.apiListingPlugins = of(Stream.of(new MediaTypeReader(), new SwaggerApiListingReader()).collect(toList()))
+    plugins.documentationPlugins = of([])
     def descriptions = new DescriptionResolver(new MockEnvironment())
     plugins.parameterExpanderPlugins =
         create([
             new ExpandedParameterBuilder(resolver, new JacksonEnumTypeDeterminer()),
             new SwaggerExpandedParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())])
-    plugins.parameterPlugins = create([new ParameterNameReader(),
+    plugins.parameterPlugins = of([new ParameterNameReader(),
                                        new ParameterNameReader()])
-    plugins.operationBuilderPlugins = create([])
-    plugins.resourceGroupingStrategies = create([new ClassOrApiAnnotationResourceGrouping()])
-    plugins.apiListingScanners = create([])
-    plugins.operationModelsProviders = create([
+    plugins.operationBuilderPlugins = of([])
+    plugins.resourceGroupingStrategies = of([new ClassOrApiAnnotationResourceGrouping()])
+    plugins.apiListingScanners = of([])
+    plugins.operationModelsProviders = of([
         new OperationModelsProvider(swaggerSchemaPlugins()),
         new SwaggerOperationModelsProvider(resolver)])
-    plugins.defaultsProviders = create(swaggerDefaultsPlugins)
-    plugins.apiListingScanners = create([])
+    plugins.defaultsProviders = of(swaggerDefaultsPlugins)
+    plugins.apiListingScanners = of([])
     return plugins
   }
 }

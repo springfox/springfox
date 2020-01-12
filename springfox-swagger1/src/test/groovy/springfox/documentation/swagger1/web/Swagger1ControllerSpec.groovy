@@ -45,9 +45,11 @@ import springfox.documentation.swagger1.mixins.MapperSupport
 import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletRequest
 
-@Mixin([ApiListingSupport, AuthSupport])
 class Swagger1ControllerSpec extends DocumentationContextSpec
-    implements MapperSupport, JsonSupport {
+    implements MapperSupport,
+        JsonSupport,
+        AuthSupport,
+        ApiListingSupport {
 
   Swagger1Controller sut =  new Swagger1Controller(
           new DocumentationCache(),

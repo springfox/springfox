@@ -19,23 +19,23 @@
 
 package springfox.documentation.schema.alternates
 
+import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.ResponseEntity
+import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.AlternateTypeRule
-import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.ModelProvider
 import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([ModelProviderSupport, TypesForTestingSupport, AlternateTypesSupport])
-class AlternatePropertiesSpec extends Specification {
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
+class AlternatePropertiesSpec extends Specification implements ModelProviderSupport {
+  @Shared def resolver = new TypeResolver()
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
   def "Nested properties that have alternate types defined are rendered correctly"() {
     given:

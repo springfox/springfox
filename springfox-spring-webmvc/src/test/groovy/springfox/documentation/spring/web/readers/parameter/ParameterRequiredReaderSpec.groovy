@@ -40,8 +40,9 @@ import java.lang.annotation.Annotation
 
 import static org.springframework.web.bind.annotation.ValueConstants.*
 
-@Mixin([RequestMappingSupport])
-class ParameterRequiredReaderSpec extends DocumentationContextSpec implements ParameterAnnotationSupport {
+class ParameterRequiredReaderSpec
+    extends DocumentationContextSpec
+    implements ParameterAnnotationSupport, RequestMappingSupport {
   @Shared
   def description = new DescriptionResolver(new MockEnvironment())
 

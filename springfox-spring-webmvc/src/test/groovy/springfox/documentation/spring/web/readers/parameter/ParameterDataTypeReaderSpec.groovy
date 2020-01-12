@@ -31,7 +31,6 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.TypeNameExtractor
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -44,13 +43,11 @@ import springfox.documentation.spi.service.contexts.ParameterContext
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.models.Business
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
-import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import static java.util.Collections.*
 
-@Mixin([RequestMappingSupport, ServicePluginsSupport, SchemaPluginsSupport])
-class ParameterDataTypeReaderSpec extends DocumentationContextSpec {
+class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
       OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
   def typeNameExtractor = new TypeNameExtractor(

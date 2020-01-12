@@ -21,8 +21,7 @@ package springfox.documentation.spring.web.mixins
 
 import springfox.documentation.service.ApiDescription
 
-
-class ApiDescriptionSupport {
+trait ApiDescriptionSupport {
 
   def apiDescriptions(List<String> paths) {
     def result = []
@@ -31,5 +30,4 @@ class ApiDescriptionSupport {
     }
     result
   }
-
 }

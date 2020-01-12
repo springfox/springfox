@@ -56,8 +56,11 @@ import javax.servlet.http.HttpServletResponse
 
 import static springfox.documentation.schema.AlternateTypeRules.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport])
-class OperationParameterReaderSpec extends DocumentationContextSpec {
+class OperationParameterReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        SwaggerPluginsSupport,
+        ModelProviderForServiceSupport {
   OperationParameterReader sut
   def pluginsManager
 

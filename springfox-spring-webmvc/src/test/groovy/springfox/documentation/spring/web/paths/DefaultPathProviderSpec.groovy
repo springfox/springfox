@@ -24,8 +24,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
 import javax.servlet.ServletContext
 
-@Mixin(RequestMappingSupport)
-class DefaultPathProviderSpec extends Specification {
+class DefaultPathProviderSpec extends Specification implements RequestMappingSupport {
 
   def "relative paths"() {
     given:

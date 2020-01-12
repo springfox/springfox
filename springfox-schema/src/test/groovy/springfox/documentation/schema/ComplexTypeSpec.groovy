@@ -19,17 +19,17 @@
 
 package springfox.documentation.schema
 
+import com.fasterxml.classmate.TypeResolver
 import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.schema.mixins.ModelProviderSupport
-import springfox.documentation.schema.mixins.TypesForTestingSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, ModelProviderSupport, AlternateTypesSupport])
-class ComplexTypeSpec extends Specification {
+class ComplexTypeSpec extends Specification implements ModelProviderSupport {
+  @Shared def resolver = new TypeResolver()
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
 

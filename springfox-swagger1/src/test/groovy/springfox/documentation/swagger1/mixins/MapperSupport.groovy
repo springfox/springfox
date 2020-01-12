@@ -28,8 +28,7 @@ import springfox.documentation.swagger1.mappers.DataTypeMapper
 import springfox.documentation.swagger1.mappers.ServiceModelToSwaggerMapper
 
 @SuppressWarnings("GrMethodMayBeStatic")
-@Mixin([ModelProviderSupport, SwaggerPluginsSupport])
-trait MapperSupport {
+trait MapperSupport implements ModelProviderSupport, SwaggerPluginsSupport {
   DataTypeMapper dataTypeMapper() {
     new DataTypeMapper()
   }

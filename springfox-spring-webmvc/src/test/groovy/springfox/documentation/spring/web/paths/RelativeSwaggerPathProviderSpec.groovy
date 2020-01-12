@@ -24,8 +24,7 @@ import springfox.documentation.spring.web.mixins.RequestMappingSupport
 
 import javax.servlet.ServletContext
 
-@Mixin(RequestMappingSupport)
-class RelativeSwaggerPathProviderSpec extends Specification {
+class RelativeSwaggerPathProviderSpec extends Specification implements RequestMappingSupport {
 
    def "assert urls"(){
       given:

@@ -28,8 +28,7 @@ import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 
-@Mixin([RequestMappingSupport])
-class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec {
+class SwaggerOperationModelsProviderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   def "should read from annotations"() {
     given:
     def methodResolver = new HandlerMethodResolver(new TypeResolver())

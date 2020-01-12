@@ -55,8 +55,11 @@ import java.util.stream.Collectors
 
 import static springfox.documentation.spring.web.paths.Paths.*
 
-@Mixin([RequestMappingSupport, ModelProviderForServiceSupport, SwaggerPluginsSupport, SchemaPluginsSupport])
-class SwaggerApiModelReaderSpec extends DocumentationContextSpec {
+class SwaggerApiModelReaderSpec
+    extends DocumentationContextSpec
+    implements RequestMappingSupport,
+        SwaggerPluginsSupport,
+        ModelProviderForServiceSupport {
 
   ApiModelReader sut
   ResourceGroup resourceGroup

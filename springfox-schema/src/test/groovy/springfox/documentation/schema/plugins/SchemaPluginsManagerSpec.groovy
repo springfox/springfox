@@ -21,8 +21,10 @@ package springfox.documentation.schema.plugins
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
+import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ExampleWithEnums
@@ -46,8 +48,7 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-@Mixin([TypesForTestingSupport, AlternateTypesSupport])
-class SchemaPluginsManagerSpec extends Specification {
+class SchemaPluginsManagerSpec extends Specification implements TypesForTestingSupport, AlternateTypesSupport {
   SchemaPluginsManager sut
   TypeNameExtractor typeNames
   def propertyPlugin = Mock(ModelPropertyBuilderPlugin)
@@ -55,6 +56,7 @@ class SchemaPluginsManagerSpec extends Specification {
   def namePlugin = Mock(TypeNameProviderPlugin)
   def resourcesModelPlugin = Mock(SyntheticModelProviderPlugin)
   def viewProviderPlugin = Mock(ViewProviderPlugin)
+  def resolver = new TypeResolver()
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
@@ -86,7 +88,7 @@ class SchemaPluginsManagerSpec extends Specification {
 
   def "enriches model property when plugins are found"() {
     given:
-    def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), new springfox.documentation.builders.PropertySpecificationBuilder(), Mock(AnnotatedElement),
+    def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), new PropertySpecificationBuilder(), Mock(AnnotatedElement),
         new TypeResolver(), SPRING_WEB)
     when:
     sut.property(context)

@@ -41,8 +41,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import static org.springframework.http.MediaType.*
 
-@Mixin([RequestMappingSupport])
-class ParameterTypeReaderSpec extends DocumentationContextSpec {
+class ParameterTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   @Unroll
   def "param #type"() {
