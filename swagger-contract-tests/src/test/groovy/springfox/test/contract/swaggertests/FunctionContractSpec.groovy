@@ -24,15 +24,14 @@ import groovy.json.JsonSlurper
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.RequestEntity
 import org.springframework.http.converter.StringHttpMessageConverter
-import org.springframework.test.context.ContextConfiguration
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
@@ -45,8 +44,7 @@ import static java.nio.charset.StandardCharsets.*
 import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [Config, SwaggerApplication])
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = SwaggerApplication)
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared
@@ -202,7 +200,7 @@ class FunctionContractSpec extends Specification implements FileAccess {
     }
   }
 
-  @Configuration
+  @TestConfiguration
   static class Config {
 
     // tag::alternate-type-rule-convention[]

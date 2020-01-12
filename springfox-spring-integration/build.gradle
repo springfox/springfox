@@ -18,9 +18,9 @@ dependencies {
   compile project(':springfox-spring-web')
   compile project(':springfox-schema')
 
-  compile "com.athaydes.rawhttp:rawhttp-core:2.0"
+  compile "com.athaydes.rawhttp:rawhttp-core:2.2.1"
   compileOnly libs.springProvidedWithSpringIntegration
-  compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE"
+  compileOnly "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.4.RELEASE"
 
   provided libs.clientProvidedServlet
 

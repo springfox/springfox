@@ -23,7 +23,7 @@ repositories {
 dependencies {
   compile gradleApi()
   compile localGroovy() //Gradle 2.3 -> Groovy 2.3.9
-  testCompile 'org.spockframework:spock-core:1.1-groovy-2.4-rc-4@jar'
+  testCompile 'org.spockframework:spock-core:1.3-groovy-2.5@jar'
   testCompile 'junit:junit:4.12'
 }
 

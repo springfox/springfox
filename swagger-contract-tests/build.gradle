@@ -38,7 +38,7 @@ dependencies {
   compile("org.springframework.boot:spring-boot-starter-data-rest")
   compile("org.springframework.boot:spring-boot-starter-data-jpa")
   compile("com.h2database:h2")
-  compile 'org.codehaus.groovy:groovy-all:2.5.4'
+  compile "org.codehaus.groovy:groovy-all:$groovy"
 
   testCompile libs.test
   testCompile "org.skyscreamer:jsonassert:${jsonAssert}"
@@ -49,9 +49,6 @@ dependencies {
   compile project(':springfox-data-rest')
   compile project(':springfox-petstore')
   compile project(':springfox-bean-validators')
-//  compile project(':springfox-spring-web').sourceSets.test.output
-//  compile project(':springfox-spring-webmvc').sourceSets.test.output
-
 
   compile(project(path: ':springfox-swagger-ui')) {
     exclude group: 'org.springframework', module: 'spring-web'

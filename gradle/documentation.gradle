@@ -1,7 +1,6 @@
 import springfox.gradlebuild.BuildInfo
 import springfox.gradlebuild.utils.ProjectDefinitions
 
-apply plugin: "org.asciidoctor.convert"
 apply plugin: 'org.ajoberstar.git-publish'
 
 gitPublish {
@@ -23,10 +22,15 @@ gitPublish {
 }
 
 asciidoctor {
+  asciidoctorj {
+    version = '2.1.0'
+  }
   sourceDir = file('docs/asciidoc')
   logDocuments = true
-  separateOutputDirs = false
-  backends = ['html5']
+  outputOptions {
+    separateOutputDirs = false
+    backends = ['html5']
+  }
   outputDir = file("${buildDir}/all-docs/docs/snapshot")
   attributes 'source-highlighter': 'coderay',
           'springfox-current-version': project.version.toString(),
