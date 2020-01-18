@@ -105,9 +105,10 @@ public class DefaultModelProvider implements ModelProvider {
     Map<String, ModelProperty> propertiesIndex
         = properties(
         modelContext,
-        propertiesHost).stream().collect(toMap(
-        ModelProperty::getName,
-        identity()));
+        propertiesHost).stream()
+                       .collect(toMap(
+                           ModelProperty::getName,
+                           identity()));
     LOG.debug("Inferred {} properties. Properties found {}",
               propertiesIndex.size(),
               String.join(

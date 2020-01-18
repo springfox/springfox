@@ -25,6 +25,7 @@ public class ModelSpecification {
       MapSpecification map,
       ReferenceModelSpecification reference) {
     this.sourceIdentifier = sourceIdentifier;
+    this.name = name;
     ensureValidSpecification(scalar, compound, reference, collection, map);
     this.collection = collection;
     this.facets = facets;

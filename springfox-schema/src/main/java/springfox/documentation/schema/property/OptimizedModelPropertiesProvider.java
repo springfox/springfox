@@ -69,6 +69,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static java.util.Collections.*;
@@ -490,7 +491,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     }
     return properties.stream()
         .filter(input -> !input.getHidden())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private boolean isInActiveView(
@@ -599,7 +600,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             String.format("%s_%s", modelContext.getParameterId(), "String"))
                       .withReference(new ReferenceModelSpecification(
                           new ModelKey(
-                              fieldModelProperty.getType().getErasedType().getPackage().getName(),
+                              safeGetPackageName(fieldModelProperty.getType()),
                               typeNameExtractor.typeName(modelContext))))
                       .build())
         .withPosition(fieldModelProperty.position())
@@ -691,7 +692,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             String.format("%s_%s", modelContext.getParameterId(), "String"))
                       .withReference(new ReferenceModelSpecification(
                           new ModelKey(
-                              beanModelProperty.getType().getErasedType().getPackage().getName(),
+                              safeGetPackageName(beanModelProperty.getType()),
                               typeNameExtractor.typeName(modelContext))))
                       .build())
         .withPosition(beanModelProperty.position())
@@ -710,6 +711,18 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             typeResolver,
             modelContext.getDocumentationType(),
             propertyBuilder));
+  }
+
+  private String safeGetPackageName(ResolvedType type) {
+    if (type != null
+        && type.getErasedType() != null
+        && type.getErasedType().getPackage() != null) {
+      return type.getErasedType()
+                 .getPackage()
+                 .getName();
+    } else {
+      return "";
+    }
   }
 
   private ModelProperty paramModelProperty(
@@ -761,7 +774,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
 
-  private PropertySpecification paramModelPropertySpecfication(
+  private PropertySpecification paramModelPropertySpecification(
       ResolvedParameterizedMember constructor,
       BeanPropertyDefinition jacksonProperty,
       AnnotatedParameter parameter,
@@ -792,7 +805,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             String.format("%s_%s", modelContext.getParameterId(), "String"))
                       .withReference(new ReferenceModelSpecification(
                           new ModelKey(
-                              parameterModelProperty.getType().getErasedType().getPackage().getName(),
+                              safeGetPackageName(parameterModelProperty.getType()),
                               typeNameExtractor.typeName(modelContext))))
                       .build())
         .withPosition(parameterModelProperty.position())
@@ -855,7 +868,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         resolvedType,
         factoryMethodOf(member))
         .map((Function<ResolvedParameterizedMember, PropertySpecification>) input ->
-            paramModelPropertySpecfication(
+            paramModelPropertySpecification(
                 input,
                 beanProperty,
                 member,

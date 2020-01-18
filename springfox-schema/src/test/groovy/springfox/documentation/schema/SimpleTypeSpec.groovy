@@ -19,7 +19,6 @@
 package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -34,7 +33,7 @@ class SimpleTypeSpec extends SchemaSpecification {
   @Unroll
   def "simple type [#qualifiedType] is rendered as [#type]"() {
     given:
-    Model asInput = modelProvider.modelFor(
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(
         inputParam(
             "0_0",
             "group",
@@ -45,7 +44,7 @@ class SimpleTypeSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()
-    Model asReturn = modelProvider.modelFor(
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(
         returnValue("0_0",
             "group",
             resolver.resolve(simpleType()),
@@ -57,24 +56,12 @@ class SimpleTypeSpec extends SchemaSpecification {
 
     expect:
     asInput.getName() == "SimpleType"
-    asInput.getProperties().containsKey(property)
-    def modelProperty = asInput.getProperties().get(property)
-    modelProperty.type.erasedType == type
-    modelProperty.getQualifiedType() == qualifiedType
-    def item = modelProperty.modelRef
-    item.type == Types.typeNameFor(type)
-    !item.collection
-    item.itemType == null
+    asInput.getCompound().isPresent()
+    assertSpec(asInput.getCompound().get(), property, 21)
 
     asReturn.getName() == "SimpleType"
-    asReturn.getProperties().containsKey(property)
-    def retModelProperty = asReturn.getProperties().get(property)
-    retModelProperty.type.erasedType == type
-    retModelProperty.getQualifiedType() == qualifiedType
-    def retItem = retModelProperty.modelRef
-    retItem.type == Types.typeNameFor(type)
-    !retItem.collection
-    retItem.itemType == null
+    asReturn.getCompound().isPresent()
+    assertSpec(asReturn.getCompound().get(), property, 21)
 
     where:
     property          | type          | qualifiedType
@@ -99,53 +86,22 @@ class SimpleTypeSpec extends SchemaSpecification {
     "aSqlDate"        | java.sql.Date | "java.sql.Date"
   }
 
-  @Ignore
-  def "type with constructor all properties are inferred"() {
-    given:
-    Model asInput = modelProvider.modelFor(
-        inputParam(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithConstructor()),
-            Optional.empty(),
-            new HashSet<>(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-    Model asReturn = modelProvider.modelFor(
-        returnValue(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithConstructor()),
-            Optional.empty(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-
-    expect:
-    asInput.getName() == "TypeWithConstructor"
-    asInput.getProperties().containsKey(property)
-    def modelProperty = asInput.getProperties().get(property)
-    modelProperty.getType().erasedType == type
-    modelProperty.getQualifiedType() == qualifiedType
-    def item = modelProperty.getModelRef()
-    item.type == Types.typeNameFor(type)
-    !item.collection
-    item.itemType == null
-
-    asReturn.getName() == "TypeWithConstructor"
-    !asReturn.getProperties().containsKey(property)
-
-    where:
-    property      | type   | qualifiedType
-    "stringValue" | String | "java.lang.String"
+  private assertSpec(CompoundModelSpecification compoundSpec, property, numberOfProperties) {
+    with(compoundSpec) {
+      assert properties.size() == numberOfProperties
+      def modelProperty = properties.find { it.name.equals(property) }
+      with(modelProperty) {
+        assert modelProperty != null
+        assert modelProperty.type.reference.isPresent()
+        assert !modelProperty.facetOfType(CollectionElementFacet).isPresent()
+      }
+    }
+    true
   }
 
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
-    Model asInput = modelProvider.modelFor(
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(
         inputParam(
             "0_0",
             "group",
@@ -156,7 +112,7 @@ class SimpleTypeSpec extends SchemaSpecification {
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()
-    Model asReturn = modelProvider.modelFor(
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(
         returnValue(
             "0_0",
             "group",
@@ -169,24 +125,12 @@ class SimpleTypeSpec extends SchemaSpecification {
 
     expect:
     asInput.getName() == "TypeWithJsonProperty"
-    asInput.getProperties().containsKey(property)
-    def modelProperty = asInput.getProperties().get(property)
-    modelProperty.type.erasedType == type
-    modelProperty.getQualifiedType() == qualifiedType
-    def item = modelProperty.getModelRef()
-    item.type == Types.typeNameFor(type)
-    !item.collection
-    item.itemType == null
+    asInput.getCompound().isPresent()
+    assertSpec(asInput.getCompound().get(), property, 1)
 
     asReturn.getName() == "TypeWithJsonProperty"
-    asReturn.getProperties().containsKey(property)
-    def retModelProperty = asReturn.getProperties().get(property)
-    retModelProperty.type.erasedType == type
-    retModelProperty.getQualifiedType() == qualifiedType
-    def retItem = retModelProperty.getModelRef()
-    retItem.type == Types.typeNameFor(type)
-    !retItem.collection
-    retItem.itemType == null
+    asReturn.getCompound().isPresent()
+    assertSpec(asReturn.getCompound().get(), property, 1)
 
     where:
     property                    | type   | qualifiedType
@@ -259,50 +203,6 @@ class SimpleTypeSpec extends SchemaSpecification {
     "uuid"            | UUID          | "java.util.UUID"
     "aDate"           | Date          | "java.util.Date"
     "aSqlDate"        | java.sql.Date | "java.sql.Date"
-  }
-
-  @Ignore
-  def "(Deprecated) type with constructor all properties are inferred"() {
-    given:
-    Model asInput = modelProvider.modelFor(
-        inputParam(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithConstructor()),
-            Optional.empty(),
-            new HashSet<>(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-    Model asReturn = modelProvider.modelFor(
-        returnValue(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithConstructor()),
-            Optional.empty(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-
-    expect:
-    asInput.getName() == "TypeWithConstructor"
-    asInput.getProperties().containsKey(property)
-    def modelProperty = asInput.getProperties().get(property)
-    modelProperty.getType().erasedType == type
-    modelProperty.getQualifiedType() == qualifiedType
-    def item = modelProperty.getModelRef()
-    item.type == Types.typeNameFor(type)
-    !item.collection
-    item.itemType == null
-
-    asReturn.getName() == "TypeWithConstructor"
-    !asReturn.getProperties().containsKey(property)
-
-    where:
-    property      | type   | qualifiedType
-    "stringValue" | String | "java.lang.String"
   }
 
   def "(Deprecated) Types with properties aliased using JsonProperty annotation"() {

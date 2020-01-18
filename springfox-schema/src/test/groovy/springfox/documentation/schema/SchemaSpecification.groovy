@@ -40,7 +40,7 @@ class SchemaSpecification
   DocumentationType documentationType = DocumentationType.SWAGGER_12
   def setup() {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
     typeNameExtractor =
             new TypeNameExtractor(
                 new TypeResolver(),

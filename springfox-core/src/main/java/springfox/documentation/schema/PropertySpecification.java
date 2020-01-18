@@ -2,14 +2,18 @@ package springfox.documentation.schema;
 
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static springfox.documentation.builders.BuilderDefaults.*;
 
 public class PropertySpecification {
   private final String name;
   private final String description;
   private final ModelSpecification type;
 
-  private final List<ElementFacet> facets;
+  private final List<ElementFacet> facets = new ArrayList<>();
 
   private final Boolean nullable;
   private final Boolean required;
@@ -21,9 +25,9 @@ public class PropertySpecification {
   private final int position;
   private final Object example;
   private final Object defaultValue;
-  
+
   private final Xml xml;
-  private final List<VendorExtension> vendorExtensions;
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   @SuppressWarnings("ParameterNumber")
   public PropertySpecification(
@@ -46,7 +50,7 @@ public class PropertySpecification {
     this.name = name;
     this.description = description;
     this.type = type;
-    this.facets = facets;
+    this.facets.addAll(nullToEmptyList(facets));
     this.nullable = nullable;
     this.required = required;
     this.readOnly = readOnly;
@@ -58,7 +62,7 @@ public class PropertySpecification {
     this.example = example;
     this.defaultValue = defaultValue;
     this.xml = xml;
-    this.vendorExtensions = vendorExtensions;
+    this.vendorExtensions.addAll(nullToEmptyList(vendorExtensions));
   }
 
   public String getName() {
@@ -75,6 +79,13 @@ public class PropertySpecification {
 
   public List<ElementFacet> getFacets() {
     return facets;
+  }
+
+  public <T extends ElementFacet> Optional<T> facetOfType(Class<T> type) {
+    return facets.stream()
+                 .filter(f -> f.getClass().isAssignableFrom(type))
+                 .findFirst()
+                 .map(type::cast);
   }
 
   public Boolean getNullable() {

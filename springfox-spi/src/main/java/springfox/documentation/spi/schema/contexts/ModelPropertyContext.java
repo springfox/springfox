@@ -91,6 +91,14 @@ public class ModelPropertyContext {
   }
 
   /**
+   * Model property specification. Use this to override model property attributes
+   * @return the builder
+   */
+  public PropertySpecificationBuilder getSpecificationBuilder() {
+    return specificationBuilder;
+  }
+
+  /**
    * Documentation type this context supports, swagger 1.2, 2.0 or vanilla spring mvc
    * @return documentation type
    */
@@ -118,9 +126,5 @@ public class ModelPropertyContext {
    */
   public TypeResolver getResolver() {
     return resolver;
-  }
-
-  public PropertySpecificationBuilder getSpecificationBuilder() {
-    return specificationBuilder;
   }
 }
