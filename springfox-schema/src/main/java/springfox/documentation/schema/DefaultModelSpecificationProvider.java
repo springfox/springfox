@@ -173,7 +173,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                                    "%s_%s",
                                    mapContext.getParameterId(),
                                    "String"))
-                               .withScalar(ScalarType.STRING)
+                               .withScalar(new ScalarModelSpecification(ScalarType.STRING))
                               .build(),
                        new ModelSpecificationBuilder(
                            String.format(
@@ -181,12 +181,14 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                                mapContext.getParameterId(),
                                "String"))
                            .withReference(new ReferenceModelSpecification(
-                               new ModelKey("", simpleQualifiedTypeName(valueType))))
+                               new ModelKey("", simpleQualifiedTypeName(valueType),
+                                            mapContext.isReturnType())))
                            .build()))
           .withFacets(new ModelFacetsBuilder()
                           .withModelKey(new ModelKey(
                               simpleQualifiedTypeName(resolvedType),
-                              typeName))
+                              typeName,
+                              mapContext.isReturnType()))
                           .withTitle(typeName)
                           .withDescription("Key of type " + typeName)
                           .withNullable(false)

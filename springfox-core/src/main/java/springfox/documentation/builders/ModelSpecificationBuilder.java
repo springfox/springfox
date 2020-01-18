@@ -7,7 +7,9 @@ import springfox.documentation.schema.ModelFacets;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
-import springfox.documentation.schema.ScalarType;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 public class ModelSpecificationBuilder {
   private final String sourceIdentifier;
@@ -35,59 +37,36 @@ public class ModelSpecificationBuilder {
 
   public ModelSpecificationBuilder withScalar(ScalarModelSpecification scalar) {
     this.scalar = scalar;
-    this.compound = null;
-    this.collection = null;
-    this.map = null;
-    this.reference = null;
-    return this;
-  }
-
-  public ModelSpecificationBuilder withScalar(ScalarType scalar) {
-    this.scalar = new ScalarModelSpecification(scalar);
-    this.compound = null;
-    this.collection = null;
-    this.map = null;
-    this.reference = null;
     return this;
   }
 
   public ModelSpecificationBuilder withCompound(CompoundModelSpecification compound) {
     this.compound = compound;
-    this.scalar = null;
-    this.collection = null;
-    this.map = null;
-    this.reference = null;
     return this;
   }
 
   public ModelSpecificationBuilder withCollection(CollectionSpecification collection) {
     this.collection = collection;
-    this.scalar = null;
-    this.compound = null;
-    this.map = null;
-    this.reference = null;
     return this;
   }
 
   public ModelSpecificationBuilder withMap(MapSpecification map) {
     this.map = map;
-    this.scalar = null;
-    this.compound = null;
-    this.collection = null;
-    this.reference = null;
     return this;
   }
 
   public ModelSpecificationBuilder withReference(ReferenceModelSpecification reference) {
     this.reference = reference;
-    this.scalar = null;
-    this.compound = null;
-    this.collection = null;
-    this.map = null;
     return this;
   }
 
   public ModelSpecification build() {
+    ensureValidSpecification(
+        scalar,
+        compound,
+        reference,
+        collection,
+        map);
     return new ModelSpecification(
         sourceIdentifier,
         name,
@@ -97,5 +76,15 @@ public class ModelSpecificationBuilder {
         collection,
         map,
         reference);
+  }
+
+  private void ensureValidSpecification(
+      Object... specs) {
+    long specCount = Arrays.stream(specs)
+                           .filter(Objects::nonNull)
+                           .count();
+    if (specCount != 1) {
+      throw new IllegalArgumentException("Only one of the specifications should be non null");
+    }
   }
 }

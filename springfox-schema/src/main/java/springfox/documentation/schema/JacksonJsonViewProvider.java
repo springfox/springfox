@@ -87,7 +87,7 @@ public class JacksonJsonViewProvider implements ViewProviderPlugin {
       Optional<JsonView> annotation) {
     Optional<ResolvedType> view = Optional.empty();
     if (annotation.isPresent()) {
-      Class<?>[] views = ((JsonView) (annotation.get())).value();
+      Class<?>[] views = annotation.get().value();
       view = Optional.of(typeResolver.resolve(views[0]));
       LOG.debug(
           "Found view {} for type {}",

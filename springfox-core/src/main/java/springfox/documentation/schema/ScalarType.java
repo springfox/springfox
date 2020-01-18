@@ -1,5 +1,8 @@
 package springfox.documentation.schema;
 
+import java.util.Objects;
+import java.util.StringJoiner;
+
 public class ScalarType {
   public static final ScalarType INTEGER = new ScalarType("integer", "int32");
   public static final ScalarType LONG = new ScalarType("integer", "int64");
@@ -16,6 +19,7 @@ public class ScalarType {
   public static final ScalarType BIGDECIMAL = new ScalarType("number", "bigdecimal");
   public static final ScalarType UUID = new ScalarType("string", "uuid");
   public static final ScalarType EMAIL = new ScalarType("string", "email");
+  public static final ScalarType CURRENCY = new ScalarType("number", "bigdecimal");
 
   private String type;
   private String format;
@@ -37,5 +41,40 @@ public class ScalarType {
 
   public String getFormat() {
     return format;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ScalarType that = (ScalarType) o;
+    return Objects.equals(
+        type,
+        that.type) &&
+        Objects.equals(
+            format,
+            that.format);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        type,
+        format);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(
+        ", ",
+        ScalarType.class.getSimpleName() + "[",
+        "]")
+        .add("type='" + type + "'")
+        .add("format='" + format + "'")
+        .toString();
   }
 }

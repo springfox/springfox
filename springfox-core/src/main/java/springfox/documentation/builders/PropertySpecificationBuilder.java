@@ -24,7 +24,7 @@ public class PropertySpecificationBuilder {
   private Object example;
   private Object defaultValue;
   private Xml xml;
-  private List<VendorExtension> vendorExtensions;
+  private List<VendorExtension<?>> vendorExtensions;
 
   public PropertySpecificationBuilder withName(String name) {
     this.name = name;
@@ -101,7 +101,7 @@ public class PropertySpecificationBuilder {
     return this;
   }
 
-  public PropertySpecificationBuilder withVendorExtensions(List<VendorExtension> vendorExtensions) {
+  public PropertySpecificationBuilder withVendorExtensions(List<VendorExtension<?>> vendorExtensions) {
     this.vendorExtensions = vendorExtensions;
     return this;
   }

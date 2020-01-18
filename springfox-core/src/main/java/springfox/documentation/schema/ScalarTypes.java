@@ -1,5 +1,6 @@
 package springfox.documentation.schema;
 
+import com.fasterxml.classmate.ResolvedType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Type;
@@ -50,8 +51,18 @@ public class ScalarTypes {
   }
 
   public static Optional<ScalarType> builtInScalarType(Type forType) {
+    if (forType instanceof ResolvedType) {
+      return builtInScalarTypeForResolvedType((ResolvedType) forType);
+    } else {
+      return Optional.ofNullable(SCALAR_TYPE_LOOKUP.getOrDefault(
+          forType,
+          null));
+    }
+  }
+
+  private static Optional<ScalarType> builtInScalarTypeForResolvedType(ResolvedType forType) {
     return Optional.ofNullable(SCALAR_TYPE_LOOKUP.getOrDefault(
-        forType,
+        forType.getErasedType(),
         null));
   }
 }

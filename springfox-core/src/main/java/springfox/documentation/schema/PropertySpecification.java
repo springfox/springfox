@@ -27,7 +27,7 @@ public class PropertySpecification {
   private final Object defaultValue;
 
   private final Xml xml;
-  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension<?>> vendorExtensions = new ArrayList<>();
 
   @SuppressWarnings("ParameterNumber")
   public PropertySpecification(
@@ -46,7 +46,7 @@ public class PropertySpecification {
       Object example,
       Object defaultValue,
       Xml xml,
-      List<VendorExtension> vendorExtensions) {
+      List<VendorExtension<?>> vendorExtensions) {
     this.name = name;
     this.description = description;
     this.type = type;
@@ -132,7 +132,7 @@ public class PropertySpecification {
     return xml;
   }
 
-  public List<VendorExtension> getVendorExtensions() {
+  public List<VendorExtension<?>> getVendorExtensions() {
     return vendorExtensions;
   }
 }

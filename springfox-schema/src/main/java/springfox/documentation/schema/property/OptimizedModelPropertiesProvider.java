@@ -46,6 +46,9 @@ import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
+import springfox.documentation.schema.ScalarModelSpecification;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
@@ -594,14 +597,25 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
 
+    ReferenceModelSpecification reference = null;
+    Optional<ScalarType> scalar = ScalarTypes.builtInScalarType(fieldModelProperty.getType());
+    if (!scalar.isPresent()) {
+      reference = new ReferenceModelSpecification(
+          new ModelKey(
+              safeGetPackageName(fieldModelProperty.getType()),
+              typeNameExtractor.typeName(
+                  ModelContext.fromParent(
+                      modelContext,
+                      fieldModelProperty.getType())),
+              modelContext.isReturnType()));
+    }
+
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(fieldModelProperty.getName())
         .withType(new ModelSpecificationBuilder(
             String.format("%s_%s", modelContext.getParameterId(), "String"))
-                      .withReference(new ReferenceModelSpecification(
-                          new ModelKey(
-                              safeGetPackageName(fieldModelProperty.getType()),
-                              typeNameExtractor.typeName(modelContext))))
+                      .withScalar(scalar.map(ScalarModelSpecification::new).orElse(null))
+                      .withReference(reference)
                       .build())
         .withPosition(fieldModelProperty.position())
         .withRequired(fieldModelProperty.isRequired())
@@ -686,14 +700,25 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     LOG.debug(
         "Adding property {} to model",
         propertyName);
+    ReferenceModelSpecification reference = null;
+    Optional<ScalarType> scalar = ScalarTypes.builtInScalarType(beanModelProperty.getType());
+    if (!scalar.isPresent()) {
+      reference = new ReferenceModelSpecification(
+          new ModelKey(
+              safeGetPackageName(beanModelProperty.getType()),
+              typeNameExtractor.typeName(
+                  ModelContext.fromParent(
+                      modelContext,
+                      beanModelProperty.getType())),
+              modelContext.isReturnType()));
+    }
+
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(beanModelProperty.getName())
         .withType(new ModelSpecificationBuilder(
             String.format("%s_%s", modelContext.getParameterId(), "String"))
-                      .withReference(new ReferenceModelSpecification(
-                          new ModelKey(
-                              safeGetPackageName(beanModelProperty.getType()),
-                              typeNameExtractor.typeName(modelContext))))
+                      .withScalar(scalar.map(ScalarModelSpecification::new).orElse(null))
+                      .withReference(reference)
                       .build())
         .withPosition(beanModelProperty.position())
         .withRequired(beanModelProperty.isRequired())
@@ -726,7 +751,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   }
 
   private ModelProperty paramModelProperty(
-      ResolvedParameterizedMember constructor,
+      ResolvedParameterizedMember<?> constructor,
       BeanPropertyDefinition jacksonProperty,
       AnnotatedParameter parameter,
       ModelContext modelContext,
@@ -775,7 +800,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
 
   private PropertySpecification paramModelPropertySpecification(
-      ResolvedParameterizedMember constructor,
+      ResolvedParameterizedMember<?> constructor,
       BeanPropertyDefinition jacksonProperty,
       AnnotatedParameter parameter,
       ModelContext modelContext,
@@ -799,14 +824,26 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     LOG.debug(
         "Adding property {} to model",
         propertyName);
+
+    ReferenceModelSpecification reference = null;
+    Optional<ScalarType> scalar = ScalarTypes.builtInScalarType(parameterModelProperty.getType());
+    if (!scalar.isPresent()) {
+      reference = new ReferenceModelSpecification(
+          new ModelKey(
+              safeGetPackageName(parameterModelProperty.getType()),
+              typeNameExtractor.typeName(
+                  ModelContext.fromParent(
+                      modelContext,
+                      parameterModelProperty.getType())),
+              modelContext.isReturnType()));
+    }
+
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(parameterModelProperty.getName())
         .withType(new ModelSpecificationBuilder(
             String.format("%s_%s", modelContext.getParameterId(), "String"))
-                      .withReference(new ReferenceModelSpecification(
-                          new ModelKey(
-                              safeGetPackageName(parameterModelProperty.getType()),
-                              typeNameExtractor.typeName(modelContext))))
+                      .withScalar(scalar.map(ScalarModelSpecification::new).orElse(null))
+                      .withReference(reference)
                       .build())
         .withPosition(parameterModelProperty.position())
         .withRequired(parameterModelProperty.isRequired())
@@ -845,7 +882,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     Optional<ModelProperty> property = factoryMethods.in(
         resolvedType,
         factoryMethodOf(member))
-        .map((Function<ResolvedParameterizedMember, ModelProperty>) input ->
+        .map(input ->
             paramModelProperty(
                 input,
                 beanProperty,
@@ -867,7 +904,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     Optional<PropertySpecification> property = factoryMethods.in(
         resolvedType,
         factoryMethodOf(member))
-        .map((Function<ResolvedParameterizedMember, PropertySpecification>) input ->
+        .map(input ->
             paramModelPropertySpecification(
                 input,
                 beanProperty,

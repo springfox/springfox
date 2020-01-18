@@ -1,7 +1,5 @@
 package springfox.documentation.schema;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 
 public class ModelSpecification {
@@ -26,7 +24,6 @@ public class ModelSpecification {
       ReferenceModelSpecification reference) {
     this.sourceIdentifier = sourceIdentifier;
     this.name = name;
-    ensureValidSpecification(scalar, compound, reference, collection, map);
     this.collection = collection;
     this.facets = facets;
     this.map = map;
@@ -61,16 +58,6 @@ public class ModelSpecification {
 
   public ModelFacets getFacets() {
     return facets;
-  }
-
-  private void ensureValidSpecification(
-      Object... specs) {
-    long specCount = Arrays.stream(specs)
-        .filter(Objects::nonNull)
-        .count();
-    if (specCount != 1) {
-      throw new IllegalArgumentException("Only one of the specifications should be non null");
-    }
   }
 
   public String getName() {

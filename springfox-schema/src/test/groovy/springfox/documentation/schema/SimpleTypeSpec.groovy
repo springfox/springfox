@@ -26,12 +26,12 @@ import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-class SimpleTypeSpec extends SchemaSpecification {
+class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport {
   @Shared def resolver = new TypeResolver()
   @Shared def namingStrategy = new CodeGenGenericTypeNamingStrategy()
   
   @Unroll
-  def "simple type [#qualifiedType] is rendered as [#type]"() {
+  def "simple type is rendered as [#type]"() {
     given:
     ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(
         inputParam(
@@ -57,47 +57,35 @@ class SimpleTypeSpec extends SchemaSpecification {
     expect:
     asInput.getName() == "SimpleType"
     asInput.getCompound().isPresent()
-    assertSpec(asInput.getCompound().get(), property, 21)
+    assertScalarPropertySpecification(asInput.getCompound().get(), property, type)
 
     asReturn.getName() == "SimpleType"
     asReturn.getCompound().isPresent()
-    assertSpec(asReturn.getCompound().get(), property, 21)
+    assertScalarPropertySpecification(asReturn.getCompound().get(), property, type)
 
     where:
-    property          | type          | qualifiedType
-    "aString"         | String        | "java.lang.String"
-    "aByte"           | byte          | "byte"
-    "aBoolean"        | boolean       | "boolean"
-    "aShort"          | short         | "int"
-    "anInt"           | int           | "int"
-    "aLong"           | long          | "long"
-    "aFloat"          | float         | "float"
-    "aDouble"         | double        | "double"
-    "anObjectByte"    | Byte          | "java.lang.Byte"
-    "anObjectBoolean" | Boolean       | "java.lang.Boolean"
-    "anObjectShort"   | Short         | "java.lang.Short"
-    "anObjectInt"     | Integer       | "java.lang.Integer"
-    "anObjectLong"    | Long          | "java.lang.Long"
-    "anObjectFloat"   | Float         | "java.lang.Float"
-    "anObjectDouble"  | Double        | "java.lang.Double"
-    "currency"        | Currency      | "java.util.Currency"
-    "uuid"            | UUID          | "java.util.UUID"
-    "aDate"           | Date          | "java.util.Date"
-    "aSqlDate"        | java.sql.Date | "java.sql.Date"
+    property          | type
+    "aString"         | ScalarType.STRING
+    "aByte"           | ScalarType.BYTE
+    "aBoolean"        | ScalarType.BOOLEAN
+    "aShort"          | ScalarType.INTEGER
+    "anInt"           | ScalarType.INTEGER
+    "aLong"           | ScalarType.LONG
+    "aFloat"          | ScalarType.FLOAT
+    "aDouble"         | ScalarType.DOUBLE
+    "anObjectByte"    | ScalarType.BYTE
+    "anObjectBoolean" | ScalarType.BOOLEAN
+    "anObjectShort"   | ScalarType.INTEGER
+    "anObjectInt"     | ScalarType.INTEGER
+    "anObjectLong"    | ScalarType.LONG
+    "anObjectFloat"   | ScalarType.FLOAT
+    "anObjectDouble"  | ScalarType.DOUBLE
+    "uuid"            | ScalarType.UUID
+    "currency"        | ScalarType.CURRENCY
+    "aDate"           | ScalarType.DATE
+    "aSqlDate"        | ScalarType.DATE_TIME
   }
 
-  private assertSpec(CompoundModelSpecification compoundSpec, property, numberOfProperties) {
-    with(compoundSpec) {
-      assert properties.size() == numberOfProperties
-      def modelProperty = properties.find { it.name.equals(property) }
-      with(modelProperty) {
-        assert modelProperty != null
-        assert modelProperty.type.reference.isPresent()
-        assert !modelProperty.facetOfType(CollectionElementFacet).isPresent()
-      }
-    }
-    true
-  }
 
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
@@ -126,15 +114,15 @@ class SimpleTypeSpec extends SchemaSpecification {
     expect:
     asInput.getName() == "TypeWithJsonProperty"
     asInput.getCompound().isPresent()
-    assertSpec(asInput.getCompound().get(), property, 1)
+    assertScalarPropertySpecification(asInput.getCompound().get(), property, type)
 
     asReturn.getName() == "TypeWithJsonProperty"
     asReturn.getCompound().isPresent()
-    assertSpec(asReturn.getCompound().get(), property, 1)
+    assertScalarPropertySpecification(asReturn.getCompound().get(), property, type)
 
     where:
-    property                    | type   | qualifiedType
-    "some_custom_odd_ball_name" | String | "java.lang.String"
+    property                    | type
+    "some_custom_odd_ball_name" | ScalarType.STRING
   }
 
   @Unroll

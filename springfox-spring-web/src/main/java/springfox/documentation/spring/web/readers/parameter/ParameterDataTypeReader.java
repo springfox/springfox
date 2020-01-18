@@ -99,20 +99,20 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       model.withMap(
           new MapSpecification(
               new ModelSpecificationBuilder("TODO")
-                  .withScalar(ScalarType.STRING)
+                  .withScalar(new ScalarModelSpecification(ScalarType.STRING))
                   .build(),
               new ModelSpecificationBuilder("TODO")
-                  .withScalar(ScalarType.STRING)
+                  .withScalar(new ScalarModelSpecification(ScalarType.STRING))
                   .build()));
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");
-      model.withScalar(ScalarType.STRING);
+      model.withScalar(new ScalarModelSpecification(ScalarType.STRING));
     }
     if (!methodParameter.hasParameterAnnotations()) {
       String typeName = typeNameFor(parameterType.getErasedType());
       ScalarTypes.builtInScalarType(parameterType.getErasedType())
-          .ifPresent(model::withScalar);
+          .ifPresent(s -> model.withScalar(new ScalarModelSpecification(s)));
       if (isBaseType(typeName)) {
         modelRef = new ModelRef(typeName);
       } else {

@@ -22,18 +22,19 @@ package springfox.documentation.schema
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 import springfox.documentation.schema.mixins.ModelProviderSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-class ComplexTypeSpec extends Specification implements ModelProviderSupport {
+class ComplexTypeSpec extends Specification implements ModelProviderSupport, ModelTestingSupport {
   @Shared def resolver = new TypeResolver()
-  @Shared
-  def namingStrategy = new DefaultGenericTypeNamingStrategy()
+  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
-  def "complex type properties are inferred correctly"() {
+  @Unroll
+  def "(Deprecated) Property #property on ComplexType is inferred correctly"() {
     given:
     def provider = defaultModelProvider()
     Model asInput = provider.modelFor(inputParam("0_0",
@@ -82,7 +83,80 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport {
     "customType" | BigDecimal   | "bigdecimal" | "java.math.BigDecimal"
   }
 
+  @Unroll
+  def "Property #property on ComplexType is inferred correctly"() {
+    given:
+    def provider = defaultModelSpecificationProvider()
+    ModelSpecification asInput = provider.modelSpecificationsFor(inputParam("0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    ModelSpecification asReturn = provider.modelSpecificationsFor(returnValue("0_0",
+        "group",
+        resolver.resolve(complexType()),
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    expect:
+    asInput.getName() == "ComplexType"
+    asInput.getCompound().isPresent()
+    assertComplexPropertySpecification(asInput.getCompound().get(), property, requestModelKey(type))
+
+    asReturn.getName() == "ComplexType"
+    asReturn.getCompound().isPresent()
+    assertComplexPropertySpecification(asReturn.getCompound().get(), property, responseModelKey(type))
+
+    where:
+    property     | type
+    "category"   | Category
+  }
+
   def "recursive type properties are inferred correctly"() {
+    given:
+    def complexType = resolver.resolve(recursiveType())
+    def provider = defaultModelSpecificationProvider()
+    ModelSpecification asInput = provider.modelSpecificationsFor(inputParam("0_0",
+        "group",
+        complexType,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+    ModelSpecification asReturn = provider.modelSpecificationsFor(returnValue("0_0",
+        "group",
+        complexType,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    expect:
+    asInput.getName() == "RecursiveType"
+    asInput.getCompound().isPresent()
+    assertComplexPropertySpecification(asInput.getCompound().get(), property, requestModelKey(type))
+
+    asReturn.getName() == "RecursiveType"
+    asReturn.getCompound().isPresent()
+    assertComplexPropertySpecification(asReturn.getCompound().get(), property, responseModelKey(type))
+
+    where:
+    property | type
+    "parent" | RecursiveType
+  }
+
+  def "(Deprecated) recursive type properties are inferred correctly"() {
     given:
     def complexType = resolver.resolve(recursiveType())
     def provider = defaultModelProvider()
