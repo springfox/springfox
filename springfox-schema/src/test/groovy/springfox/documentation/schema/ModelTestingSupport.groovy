@@ -1,6 +1,21 @@
 package springfox.documentation.schema
 
 trait ModelTestingSupport {
+  def assertPropertySpecification(
+      CompoundModelSpecification compoundSpec,
+      String propertyName,
+      type,
+      isRequest = false) {
+    if (type instanceof ScalarType) {
+      assertScalarPropertySpecification(compoundSpec, propertyName, type)
+    } else {
+      assertComplexPropertySpecification(
+          compoundSpec,
+          propertyName,
+          isRequest ? requestModelKey(type) : responseModelKey(type))
+    }
+  }
+
   def assertScalarPropertySpecification(
       CompoundModelSpecification compoundSpec,
       String propertyName,
