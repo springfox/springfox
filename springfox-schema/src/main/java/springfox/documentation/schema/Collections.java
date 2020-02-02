@@ -66,6 +66,20 @@ public class Collections {
     }
   }
 
+  public static CollectionType collectionType(ResolvedType type) {
+    if (List.class.isAssignableFrom(type.getErasedType())) {
+      return CollectionType.LIST;
+    } else if (Set.class.isAssignableFrom(type.getErasedType())) {
+      return CollectionType.SET;
+    } else if (type.isArray()) {
+      return CollectionType.ARRAY;
+    } else if (Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type)) {
+      return CollectionType.LIST;
+    } else {
+      throw new UnsupportedOperationException(String.format("Type is not collection type %s", type));
+    }
+  }
+
   private static <T extends Collection> ResolvedType elementType(ResolvedType container, Class<T> collectionType) {
     List<ResolvedType> resolvedTypes = container.typeParametersFor(collectionType);
     if (resolvedTypes.size() == 1) {

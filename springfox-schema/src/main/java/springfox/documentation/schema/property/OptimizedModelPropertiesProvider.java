@@ -42,6 +42,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
+import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.PropertySpecification;
@@ -232,9 +233,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     BeanDescription beanDescription = beanDescription(
         type,
         givenContext);
-    Map<String, BeanPropertyDefinition> propertyLookup = beanDescription.findProperties().stream().collect(toMap(
-        beanPropertyByInternalName(),
-        identity()));
+    Map<String, BeanPropertyDefinition> propertyLookup =
+        beanDescription.findProperties().stream()
+                       .collect(toMap(beanPropertyByInternalName(), identity()));
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug(
           "Reading property {}",
@@ -701,16 +702,27 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         "Adding property {} to model",
         propertyName);
     ReferenceModelSpecification reference = null;
+    CollectionSpecification collectionSpecification =
+        new CollectionSpecificationProvider(
+            typeNameExtractor,
+            enumTypeDeterminer)
+            .create(
+                modelContext,
+                beanModelProperty.getType())
+            .orElse(null);
     Optional<ScalarType> scalar = ScalarTypes.builtInScalarType(beanModelProperty.getType());
     if (!scalar.isPresent()) {
-      reference = new ReferenceModelSpecification(
-          new ModelKey(
-              safeGetPackageName(beanModelProperty.getType()),
-              typeNameExtractor.typeName(
-                  ModelContext.fromParent(
-                      modelContext,
-                      beanModelProperty.getType())),
-              modelContext.isReturnType()));
+      if (collectionSpecification == null) {
+        reference = new ReferenceModelSpecification(
+            new ModelKey(
+                safeGetPackageName(beanModelProperty.getType()),
+                typeNameExtractor.typeName(
+                    ModelContext.fromParent(
+                        modelContext,
+                        beanModelProperty.getType())),
+                modelContext.isReturnType()));
+
+      }
     }
 
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
@@ -719,6 +731,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             String.format("%s_%s", modelContext.getParameterId(), "String"))
                       .withScalar(scalar.map(ScalarModelSpecification::new).orElse(null))
                       .withReference(reference)
+                      .withCollection(collectionSpecification)
                       .build())
         .withPosition(beanModelProperty.position())
         .withRequired(beanModelProperty.isRequired())

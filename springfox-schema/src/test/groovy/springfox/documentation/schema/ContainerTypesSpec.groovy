@@ -27,11 +27,14 @@ import static springfox.documentation.schema.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-class ContainerTypesSpec extends SchemaSpecification {
-  @Shared def resolver = new TypeResolver()
-  @Shared def namingStrategy = new DefaultGenericTypeNamingStrategy()
+class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupport {
+  @Shared
+  def resolver = new TypeResolver()
+  @Shared
+  def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
-  def "Model properties of type List, are inferred correctly"() {
+  @Unroll
+  def "(Deprecated) Model property #property of type List, is inferred correctly"() {
     given:
     def sut = resolver.resolve(typeWithLists())
     Model asInput = modelProvider.modelFor(inputParam("0_0",
@@ -83,7 +86,60 @@ class ContainerTypesSpec extends SchemaSpecification {
     "substituted"     | List      | "Substituted" | "springfox.documentation.schema.Substituted"
   }
 
-  def "Model properties are inferred correctly"() {
+
+  @Unroll
+  def "Model property #property of type List, is inferred correctly"() {
+    given:
+    def sut = resolver.resolve(typeWithLists())
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    expect:
+    asInput.getName() == "ListsContainer"
+    asInput.getCompound().isPresent()
+    assertCollectionPropertySpecification(
+        asInput.compound.get(),
+        property,
+        CollectionType.LIST,
+        itemType,
+        true)
+
+    asReturn.getName() == "ListsContainer"
+    asReturn.getCompound().isPresent()
+    assertCollectionPropertySpecification(
+        asReturn.compound.get(),
+        property,
+        CollectionType.LIST,
+        itemType,
+        false)
+
+    where:
+    property          | itemType
+    "complexTypes"    | ComplexType
+    "enums"           | ScalarType.STRING
+    "aliasOfIntegers" | ScalarType.INTEGER
+    "strings"         | ScalarType.STRING
+    "objects"         | Object
+    "substituted"     | Substituted
+  }
+
+  @Unroll
+  def "(Deprecated) Model property #property of type SET, is inferred correctly"() {
     given:
     def sut = resolver.resolve(typeWithSets())
     Model asInput = modelProvider.modelFor(inputParam("0_0",
@@ -136,7 +192,156 @@ class ContainerTypesSpec extends SchemaSpecification {
   }
 
   @Unroll
+  def "Model property #property of type SET, is inferred correctly"() {
+    given:
+    def sut = resolver.resolve(typeWithSets())
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    expect:
+    asInput.getName() == "SetsContainer"
+    asInput.getCompound().isPresent()
+    assertCollectionPropertySpecification(
+        asInput.compound.get(),
+        property,
+        CollectionType.SET,
+        itemType,
+        true)
+
+    asReturn.getName() == "SetsContainer"
+    asReturn.getCompound().isPresent()
+    assertCollectionPropertySpecification(
+        asReturn.compound.get(),
+        property,
+        CollectionType.SET,
+        itemType,
+        false)
+
+    where:
+    property          | itemType
+    "complexTypes"    | ComplexType
+    "enums"           | ScalarType.STRING
+    "aliasOfIntegers" | ScalarType.INTEGER
+    "strings"         | ScalarType.STRING
+    "objects"         | Object
+  }
+
+  @Unroll
   def "Model properties of type Arrays are inferred correctly for #property"() {
+    given:
+    def sut = resolver.resolve(typeWithArrays())
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    expect:
+    asInput.getName() == "ArraysContainer"
+    asInput.getCompound().isPresent()
+    assertCollectionPropertySpecification(
+        asInput.compound.get(),
+        property,
+        CollectionType.ARRAY,
+        itemType,
+        true)
+
+    asReturn.getName() == "ArraysContainer"
+    asReturn.getCompound().isPresent()
+    assertCollectionPropertySpecification(
+        asReturn.compound.get(),
+        property,
+        CollectionType.ARRAY,
+        itemType,
+        false)
+
+    where:
+    property          | itemType
+    "complexTypes"    | ComplexType
+    "enums"           | ScalarType.STRING
+    "aliasOfIntegers" | ScalarType.INTEGER
+    "strings"         | ScalarType.STRING
+    "objects"         | Object
+    "bytes"           | ScalarType.BYTE
+    "substituted"     | Substituted
+  }
+
+  @Unroll
+  def "Model properties of type Arrays or Arrays are inferred correctly for #property"() {
+    given:
+    def sut = resolver.resolve(typeWithArrays())
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    expect:
+    asInput.getName() == "ArraysContainer"
+    asInput.getCompound().isPresent()
+    def collectionProperty = asInput.compound.get().properties.find { (it.name == property) }
+    def innerCollection = collectionProperty.type.collection.get()
+    def innerInnerCollection = innerCollection.model.collection.get()
+    innerInnerCollection.collectionType == innerCollectionType
+    innerInnerCollection.model.scalar.isPresent()
+    innerInnerCollection.model.scalar.get().type == innerItemType
+
+    asReturn.getName() == "ArraysContainer"
+    asReturn.getCompound().isPresent()
+    def returnCollectionProperty = asReturn.compound.get().properties.find { (it.name == property) }
+    def returnInnerCollection = returnCollectionProperty.type.collection.get()
+    def returnInnerInnerCollection = returnInnerCollection.model.collection.get()
+    returnInnerInnerCollection.collectionType == innerCollectionType
+    returnInnerInnerCollection.model.scalar.isPresent()
+    returnInnerInnerCollection.model.scalar.get().type == innerItemType
+
+    where:
+    property               | innerCollectionType  | innerItemType
+    "arrayOfArrayOfInts"   | CollectionType.ARRAY | ScalarType.INTEGER
+    "arrayOfListOfStrings" | CollectionType.LIST  | ScalarType.STRING
+  }
+
+  @Unroll
+  def "(Deprecated) Model properties of type Arrays are inferred correctly for #property"() {
     given:
     def sut = resolver.resolve(typeWithArrays())
     Model asInput = modelProvider.modelFor(inputParam("0_0",
@@ -179,6 +384,7 @@ class ContainerTypesSpec extends SchemaSpecification {
     retItem.itemType == itemType
     retItem.collection
 
+    //TODO List<String[]>
     where:
     property               | type          | itemType      | itemQualifiedType
     "complexTypes"         | ComplexType[] | 'ComplexType' | "springfox.documentation.schema.ComplexType"

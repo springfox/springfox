@@ -40,6 +40,55 @@ trait ModelTestingSupport {
     true
   }
 
+  def assertCollectionPropertySpecification(
+      CompoundModelSpecification specification,
+      String propertyName,
+      CollectionType collectionType,
+      itemType,
+      isRequest = false) {
+    def collectionProperty = specification.properties.find { it.name.equals(propertyName) }
+    assert !collectionProperty.facetOfType(CollectionElementFacet).isPresent()
+    if (itemType instanceof ScalarType) {
+      assertScalarCollectionPropertySpecification(
+          collectionProperty.type.collection.orElse(null),
+          propertyName,
+          collectionType,
+          itemType)
+    } else {
+      assertComplexCollectionPropertySpecification(
+          collectionProperty.type.collection.orElse(null),
+          propertyName,
+          collectionType,
+          isRequest ? requestModelKey(itemType) : responseModelKey(itemType))
+    }
+  }
+
+  def assertScalarCollectionPropertySpecification(
+      CollectionSpecification collectionSpecification,
+      String propertyName,
+      CollectionType collectionType,
+      ScalarType itemType) {
+    assert collectionSpecification != null
+    assert collectionSpecification.collectionType == collectionType
+    assert collectionSpecification.model.scalar.isPresent()
+    def item = collectionSpecification.model.scalar.get()
+    assert item.type == itemType
+    true
+  }
+
+  def assertComplexCollectionPropertySpecification(
+      CollectionSpecification collectionSpecification,
+      String propertyName,
+      CollectionType collectionType,
+      itemReference) {
+    assert collectionSpecification != null
+    assert collectionSpecification.collectionType == collectionType
+    assert collectionSpecification.model.reference.isPresent()
+    def reference = collectionSpecification.model.reference.get()
+    assert reference.key == itemReference
+    true
+  }
+
   def responseModelKey(Class<?> type) {
     def alias = Types.typeNameFor(type)
     new ModelKey(type.getPackage()?.name ?: "", alias ?: type.simpleName, true)

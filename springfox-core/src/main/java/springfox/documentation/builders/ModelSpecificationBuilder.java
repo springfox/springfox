@@ -83,7 +83,10 @@ public class ModelSpecificationBuilder {
     long specCount = Arrays.stream(specs)
                            .filter(Objects::nonNull)
                            .count();
-    if (specCount != 1) {
+    if (specCount == 0) {
+      throw new IllegalArgumentException("At least one type of specification is required");
+    }
+    if (specCount > 1) {
       throw new IllegalArgumentException("Only one of the specifications should be non null");
     }
   }
