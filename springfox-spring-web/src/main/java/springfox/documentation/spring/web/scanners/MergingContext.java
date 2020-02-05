@@ -18,13 +18,14 @@
  */
 package springfox.documentation.spring.web.scanners;
 
-import springfox.documentation.schema.Model;
-import springfox.documentation.spi.schema.contexts.ModelContext;
-
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import springfox.documentation.schema.Model;
+import springfox.documentation.spi.schema.contexts.ModelContext;
 
 public class MergingContext {
 
@@ -38,45 +39,35 @@ public class MergingContext {
   private final Map<String, Model> currentBranch;
   private final Set<String> seenModels;
 
-  public MergingContext(
-      String rootId,
-      Map<String, Set<Model>> typedModelMap,
-      Map<String, String> modelIdToParameterId,
-      Map<String, Model> currentBranch,
-      Map<String, ModelContext> contextMap) {
+  public MergingContext(String rootId, Map<String, Set<Model>> typedModelMap, Map<String, String> modelIdToParameterId,
+      Map<String, Model> currentBranch, Map<String, ModelContext> contextMap) {
     this.rootId = rootId;
-    this.parametersMatching = new HashMap<>();
-    this.dependencies = new HashSet<>();
-    this.comparisonConditions = new HashSet<>();
-    this.contextMap = new HashMap<>(contextMap);
-    this.currentBranch = new HashMap<>(currentBranch);
-    this.typedModelMap = new HashMap<>(typedModelMap);
-    this.modelIdToParameterId = new HashMap<>(modelIdToParameterId);
-    this.seenModels = new HashSet<>();
+    this.parametersMatching = new HashMap<String, Set<String>>();
+    this.dependencies = new HashSet<String>();
+    this.comparisonConditions = new HashSet<ComparisonCondition>();
+    this.contextMap = Collections.unmodifiableMap(new HashMap<String, ModelContext>(contextMap));
+    this.currentBranch = Collections.unmodifiableMap(new HashMap<String, Model>(currentBranch));
+    this.typedModelMap = Collections.unmodifiableMap(new HashMap<String, Set<Model>>(typedModelMap));
+    this.modelIdToParameterId = Collections.unmodifiableMap(new HashMap<String, String>(modelIdToParameterId));
+    this.seenModels = new HashSet<String>();
   }
 
-
-  @SuppressWarnings("ParameterNumber")
-  private MergingContext(
-      String rootId,
-      Map<String, Set<String>> parametersMatching,
-      Set<String> dependencies,
-      Set<ComparisonCondition> comparisonConditions,
-      Map<String, Set<Model>> typedModelMap,
-      Map<String, String> modelIdToParameterId,
-      Map<String, Model> currentBranch,
-      Map<String, ModelContext> contextMap,
+  //CHECKSTYLE:OFF
+  private MergingContext(String rootId, Map<String, Set<String>> parametersMatching, Set<String> dependencies,
+      Set<ComparisonCondition> comparisonConditions, Map<String, Set<Model>> typedModelMap,
+      Map<String, String> modelIdToParameterId, Map<String, Model> currentBranch, Map<String, ModelContext> contextMap,
       Set<String> seenModels) {
     this.rootId = rootId;
-    this.parametersMatching = new HashMap<>(parametersMatching);
-    this.dependencies = new HashSet<>(dependencies);
-    this.comparisonConditions = new HashSet<>(comparisonConditions);
-    this.typedModelMap = new HashMap<>(typedModelMap);
-    this.modelIdToParameterId = new HashMap<>(modelIdToParameterId);
-    this.contextMap = new HashMap<>(contextMap);
-    this.currentBranch = new HashMap<>(currentBranch);
-    this.seenModels = new HashSet<>(seenModels);
+    this.parametersMatching = Collections.unmodifiableMap(new HashMap<String, Set<String>>(parametersMatching));
+    this.dependencies = Collections.unmodifiableSet(new HashSet<String>(dependencies));
+    this.comparisonConditions = Collections.unmodifiableSet(new HashSet<ComparisonCondition>(comparisonConditions));
+    this.typedModelMap = Collections.unmodifiableMap(new HashMap<String, Set<Model>>(typedModelMap));
+    this.modelIdToParameterId = Collections.unmodifiableMap(new HashMap<String, String>(modelIdToParameterId));
+    this.contextMap = Collections.unmodifiableMap(new HashMap<String, ModelContext>(contextMap));
+    this.currentBranch = Collections.unmodifiableMap(new HashMap<String, Model>(currentBranch));
+    this.seenModels = Collections.unmodifiableSet(new HashSet<String>(seenModels));
   }
+  //CHECKSTYLE:ON
 
   public String getRootId() {
     return rootId;
@@ -126,53 +117,31 @@ public class MergingContext {
     if (this.typedModelMap.containsKey(type)) {
       return this.typedModelMap.get(type);
     }
-    return new HashSet<>();
+    return Collections.unmodifiableSet(new HashSet<Model>());
   }
 
   public boolean hasSeenBefore(String modelId) {
     return this.seenModels.contains(modelId);
   }
 
-  public MergingContext populateDependencies(
-      Map<String, Set<String>> parametersMatching,
-      Set<String> dependencies,
+  public MergingContext populateDependencies(Map<String, Set<String>> parametersMatching, Set<String> dependencies,
       Set<ComparisonCondition> comparisonConditions) {
     dependencies.remove(rootId);
-    return new MergingContext(this.rootId,
-                              parametersMatching,
-                              dependencies,
-                              comparisonConditions,
-                              this.typedModelMap,
-                              this.modelIdToParameterId,
-                              this.currentBranch,
-                              this.contextMap,
-                              this.seenModels);
+    return new MergingContext(this.rootId, parametersMatching, dependencies, comparisonConditions, this.typedModelMap,
+        this.modelIdToParameterId, this.currentBranch, this.contextMap, this.seenModels);
   }
 
   public MergingContext toRootId(String rootId) {
-    Set<String> localSeenModels = new HashSet<>();
+    Set<String> localSeenModels = new HashSet<String>();
     localSeenModels.addAll(this.seenModels);
     localSeenModels.add(rootId);
-    return new MergingContext(rootId,
-                              new HashMap<>(),
-                              new HashSet<>(),
-                              new HashSet<>(),
-                              this.typedModelMap,
-                              this.modelIdToParameterId,
-                              this.currentBranch,
-                              this.contextMap,
-                              localSeenModels);
+    return new MergingContext(rootId, new HashMap<String, Set<String>>(), new HashSet<String>(),
+        new HashSet<ComparisonCondition>(), this.typedModelMap, this.modelIdToParameterId, this.currentBranch,
+        this.contextMap, localSeenModels);
   }
 
-  public MergingContext withNewBranch(
-      Map<String, Model> currentBranch,
-      Map<String, ModelContext> contextMap) {
-    return new MergingContext(
-        "",
-        this.typedModelMap,
-        this.modelIdToParameterId,
-        currentBranch,
-        contextMap);
+  public MergingContext withNewBranch(Map<String, Model> currentBranch, Map<String, ModelContext> contextMap) {
+    return new MergingContext("", this.typedModelMap, this.modelIdToParameterId, currentBranch, contextMap);
   }
 
 }
