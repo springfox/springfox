@@ -178,6 +178,14 @@ public class ApiModelReader {
     Set<String> sameModels = new HashSet<String>();
     Set<Model> modelsToCompare = new HashSet<Model>();
 
+    Iterator<String> nodesIt = nodes.iterator();
+
+    while (nodesIt.hasNext()) {
+      if (adapter.getTypeName(nodesIt.next()).isPresent()) {
+        nodesIt.remove();
+      }
+    }
+
     if (!nodes.isEmpty()) {
       mergingContext = mergeNodes(nodes, adapter, mergingContext);
       modelsToCompare.addAll(buildModels(adapter, mergingContext));
@@ -213,9 +221,6 @@ public class ApiModelReader {
     final Set<String> currentDependencies = new HashSet<String>();
 
     for (final String modelId : nodes) {
-      if (adapter.getTypeName(modelId).isPresent()) {
-        continue;
-      }
 
       if (!mergingContext.hasSeenBefore(modelId)) {
         Set<ComparisonCondition> newDependencies = mergeModelBranch(adapter,
