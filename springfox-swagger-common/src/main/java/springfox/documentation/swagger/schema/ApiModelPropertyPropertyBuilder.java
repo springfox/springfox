@@ -19,6 +19,7 @@
 
 package springfox.documentation.swagger.schema;
 
+import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -62,7 +63,7 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
     if (annotation.isPresent()) {
       context.getBuilder()
           .allowableValues(annotation.map(toAllowableValues()).orElse(null))
-          .required(annotation.map(ApiModelProperty::required).orElse(false))
+          .required(isRequired(annotation, context))
           .readOnly(annotation.map(ApiModelProperty::readOnly).orElse(false))
           .description(annotation.map(toDescription(descriptions)).orElse(null))
           .isHidden(annotation.map(ApiModelProperty::hidden).orElse(false))
@@ -70,6 +71,16 @@ public class ApiModelPropertyPropertyBuilder implements ModelPropertyBuilderPlug
           .position(annotation.map(ApiModelProperty::position).orElse(0))
           .example(annotation.map(toExample()).orElse(null));
     }
+  }
+
+  private boolean isRequired(Optional<ApiModelProperty> annotation, ModelPropertyContext context) {
+    return annotation
+            .filter(ApiModelProperty::required)
+            .map(ApiModelProperty::required)
+            .orElse(context.getBeanPropertyDefinition()
+                    .map(BeanPropertyDefinition::isRequired)
+                    .orElse(false)
+            );
   }
 
   @Override
