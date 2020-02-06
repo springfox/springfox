@@ -35,6 +35,7 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
+import springfox.documentation.schema.TypeWithFieldsAndGettersAnnotatedWithJsonPropertyAndApiPropertyModel
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
@@ -65,6 +66,35 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     !sut.supports(SPRING_WEB)
     sut.supports(SWAGGER_12)
     sut.supports(SWAGGER_2)
+  }
+
+  def "Required property from JsonProperty annotation should be honoured when required from ApiModelProperty is false"() {
+    given:
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def beanDescription = beanDescription(TypeWithFieldsAndGettersAnnotatedWithJsonPropertyAndApiPropertyModel)
+    def properties = beanDescription.findProperties()
+    def context = new ModelPropertyContext(
+            new ModelPropertyBuilder(),
+            properties.find { it.name == property },
+            new TypeResolver(),
+            SWAGGER_12)
+    when:
+    sut.apply(context)
+
+    and:
+    def enriched = context.getBuilder().build()
+
+    then:
+    enriched.isRequired() == required
+
+    where:
+    property                                             | required
+    "apiModelPropertyAnnotatedField"                     | true
+    "jsonPropertyAnnotatedField"                         | true
+    "apiModelPropertyAnnotatedGetter"                    | true
+    "jsonPropertyAnnotatedGetter"                        | true
+    "jsonPropertyAndApiModelPropertyAnnotatedField"      | false
+    "jsonPropertyAndApiModelPropertyAnnotatedGetter"     | false
   }
 
   def "ApiModelProperty annotated models get enriched with additional info given a bean property"() {
@@ -265,7 +295,7 @@ class ApiModelPropertyPropertyBuilderSpec extends Specification {
     "invalidOverride" | LocalDate | "LocalDate"
   }
 
-  BeanDescription beanDescription(Class<TypeWithAnnotatedGettersAndSetters> clazz) {
+  BeanDescription beanDescription(Class<?> clazz) {
     def objectMapper = new ObjectMapper()
     objectMapper.getDeserializationConfig()
         .introspect(TypeFactory.defaultInstance().constructType(clazz))
