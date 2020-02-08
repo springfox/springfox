@@ -28,9 +28,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
+import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
@@ -51,13 +53,16 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
 
   private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
+  private final SchemaPluginsManager pluginsManager;
 
   @Autowired
   public ResponseMessagesReader(
       EnumTypeDeterminer enumTypeDeterminer,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      SchemaPluginsManager pluginsManager) {
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
+    this.pluginsManager = pluginsManager;
   }
 
   @Override
@@ -78,10 +83,14 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     int httpStatusCode = httpStatusCode(context);
     String message = message(context);
     ModelReference modelRef = null;
+
+    ViewProviderPlugin viewProvider = 
+        pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
+
     if (!isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
-          Optional.empty());
+          viewProvider.viewFor(returnType, context));
 
       Map<String, String> knownNames = new HashMap<>();
       Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
