@@ -539,7 +539,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
 
   }
 
-  def "Test to verify that recursive type holder doesn't generate spare models"() {
+  def "Test to verify that type holder doesn't generate spare models"() {
     given:
       HandlerMethod handlerMethod =
           dummyHandlerMethod('methodToTestSpareModelsWithKnownTypes', Foo, Holder)

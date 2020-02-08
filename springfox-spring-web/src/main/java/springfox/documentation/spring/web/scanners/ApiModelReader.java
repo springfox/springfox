@@ -221,6 +221,9 @@ public class ApiModelReader {
     final Set<String> currentDependencies = new HashSet<String>();
 
     for (final String modelId : nodes) {
+      if (adapter.getTypeName(modelId).isPresent()) {
+        continue;
+      }
 
       if (!mergingContext.hasSeenBefore(modelId)) {
         Set<ComparisonCondition> newDependencies = mergeModelBranch(adapter,
