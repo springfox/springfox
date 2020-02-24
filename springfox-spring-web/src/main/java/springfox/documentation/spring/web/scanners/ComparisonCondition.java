@@ -34,8 +34,8 @@ public class ComparisonCondition {
 
   public ComparisonCondition(String modelFor, Set<String> modelsTo, Set<String> conditions) {
     this.modelFor = modelFor;
-    this.modelsTo = Collections.unmodifiableSet(new HashSet<String>(modelsTo));
-    this.conditions = Collections.unmodifiableSet(new HashSet<String>(conditions));
+    this.modelsTo = Collections.unmodifiableSet(new HashSet<>(modelsTo));
+    this.conditions = Collections.unmodifiableSet(new HashSet<>(conditions));
   }
 
   public String getModelFor() {
