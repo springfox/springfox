@@ -45,9 +45,12 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.schema.Views;
 import springfox.documentation.spring.web.dummy.DummyModels.Ignorable;
+import springfox.documentation.spring.web.dummy.models.Bar;
+import springfox.documentation.spring.web.dummy.models.Holder;
 import springfox.documentation.spring.web.dummy.models.EnumType;
 import springfox.documentation.spring.web.dummy.models.Example;
 import springfox.documentation.spring.web.dummy.models.FancyPet;
+import springfox.documentation.spring.web.dummy.models.Foo;
 import springfox.documentation.spring.web.dummy.models.FoobarDto;
 import springfox.documentation.spring.web.dummy.models.MapFancyPet;
 import springfox.documentation.spring.web.dummy.models.Pet;
@@ -474,6 +477,12 @@ public class DummyClass {
   @ResponseBody
   public RecursiveTypeWithNonEqualsConditionsOuterWithSubTypes methodToTestBidirectionalRecursiveTypesWithKnownTypes(
       @RequestBody RecursiveTypeWithConditions model) {
+    throw new UnsupportedOperationException();
+  }
+
+  @ResponseBody
+  public Holder<Bar> methodToTestSpareModelsWithKnownTypes(
+      @RequestBody Foo model1, @RequestBody Holder<Bar> model2) {
     throw new UnsupportedOperationException();
   }
 

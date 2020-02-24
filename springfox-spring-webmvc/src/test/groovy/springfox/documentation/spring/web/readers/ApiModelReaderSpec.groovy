@@ -44,7 +44,9 @@ import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.dummy.controllers.PetService
+import springfox.documentation.spring.web.dummy.models.Foo
 import springfox.documentation.spring.web.dummy.models.FoobarDto
+import springfox.documentation.spring.web.dummy.models.Holder
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.PetWithJsonView
 import springfox.documentation.spring.web.dummy.models.Pirate
@@ -122,8 +124,10 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
   def "Method return type model"() {
     given:
     RequestMappingContext context = requestMappingContext(dummyHandlerMethod('methodWithConcreteResponseBody'), '/somePath')
+
     when:
     def modelsMap = sut.read(context)
+
     then:
     modelsMap.containsKey("0_0")
     Map<String, Model> models = modelsMap.get("0_0").stream()
@@ -192,6 +196,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
         DummyModels.AnnotatedBusinessModel.class
     )
     RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+
     when:
     def modelsMap = sut.read(context)
 
@@ -215,6 +220,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
         DummyModels.AnnotatedBusinessModel.class
     )
     RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+
     when:
     def modelsMap = sut.read(context)
 
@@ -312,6 +318,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
         DummyModels.ModelWithSerializeOnlyProperty
     )
     RequestMappingContext context = requestMappingContext(handlerMethod, '/somePath')
+
     and:
     def snakeCaseReader = new ApiModelReader(modelProviderWithSnakeCaseNamingStrategy(),
         new TypeResolver(), defaultWebPlugins(), new JacksonEnumTypeDeterminer(), typeNameExtractor)
@@ -364,7 +371,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     then:
     modelsMap.containsKey("0_0")
     modelsMap.containsKey("0_1")
-    Map<String, Model> models_1 =     modelsMap.get("0_0").stream()
+    Map<String, Model> models_1 = modelsMap.get("0_0").stream()
         .collect(Collectors.toMap(toModelMap,
             Function.identity()))
     Map<String, Model> models_2 = modelsMap.get("0_1").stream()
@@ -534,6 +541,75 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     ModelReference modelRef_6 = pirate_2.getProperties().get('monkey').getModelRef()
     modelRef_6.getModelId().get() == "0_1_springfox.documentation.spring.web.dummy.models.Monkey"
     modelRef_6.getType() == 'Monkey'
+
+  }
+
+  def "Test to verify that type holder doesn't generate spare models"() {
+    given:
+    HandlerMethod handlerMethod =
+        dummyHandlerMethod('methodToTestSpareModelsWithKnownTypes', Foo, Holder)
+    RequestMappingContext contextFirst = requestMappingContext(handlerMethod, '/somePath')
+
+    when:
+    def modelsMap = new HashMap<>(sut.read(contextFirst))
+
+    then:
+    modelsMap.containsKey("0_2")
+    modelsMap.containsKey("0_1")
+    modelsMap.containsKey("0_0")
+    Map<String, Model> models_1 = modelsMap.get("0_0").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+    Map<String, Model> models_2 = modelsMap.get("0_1").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+    Map<String, Model> models_3 = modelsMap.get("0_2").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    and:
+    modelsMap.keySet().size() == 3
+
+    and:
+    models_1.size() == 4
+    Model foo1 = models_1['Foo']
+    Model bar1 = models_1['Bar']
+    Model barHolder1 = models_1['Holder«Bar»']
+    Model barWrapper1 = models_1['Wrapper«Bar»']
+
+    models_2.size() == 1
+    Model foo2 = models_2['Foo']
+
+    models_3.size() == 4
+    Model foo3 = models_3['Foo']
+    Model bar2 = models_3['Bar']
+    Model barHolder2 = models_3['Holder«Bar»']
+    Model barWrapper2 = models_3['Wrapper«Bar»']
+
+    and:
+    foo1.equalsIgnoringName(foo2)
+    foo1.equalsIgnoringName(foo3)
+
+    bar1.equalsIgnoringName(bar2)
+
+    barHolder1.equalsIgnoringName(barHolder2)
+
+    barWrapper1.equalsIgnoringName(barWrapper2)
+
+    and:
+    foo1.getName().equals("Foo")
+    foo1.getName().equals(foo2.getName())
+    foo1.getName().equals(foo3.getName())
+
+    bar1.getName().equals("Bar")
+    bar1.getName().equals(bar2.getName())
+
+    barHolder1.getName().equals("Holder«Bar»")
+    barHolder1.getName().equals(barHolder2.getName())
+
+    barWrapper1.getName().equals("Wrapper«Bar»")
+    barWrapper1.getName().equals(barWrapper2.getName())
+
   }
 
   def "Test to verify that recursive type different for serialization and deserialization"() {
@@ -622,6 +698,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
         .get('recursiveTypeWithNonEqualsConditionsOuter').getModelRef()
     modelRef_6.getModelId().get() == "0_1_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter"
     modelRef_6.getType() == 'RecursiveTypeWithNonEqualsConditionsOuter_1'
+
   }
 
   def "Test to verify that recursive type same with known types"() {
@@ -750,6 +827,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     pirate_4.equalsIgnoringName(pirate_1) && pirate_4.equalsIgnoringName(pirate_2)
     monkey_3.equalsIgnoringName(monkey_1) && monkey_3.equalsIgnoringName(monkey_2)
     monkey_4.equalsIgnoringName(monkey_1) && monkey_4.equalsIgnoringName(monkey_2)
+
   }
 
   def "Test to verify that duplicate class names in different packages will be produced as different models (#182)"() {
@@ -791,6 +869,7 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
     pet_2.getProperties().containsKey('id')
     pet_2.getProperties().containsKey('name')
     pet_2.getProperties().containsKey('age')
+
   }
 
   def "Test to verify that same class for serialization and deserialization will be produced as one model"() {

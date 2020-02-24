@@ -19,10 +19,10 @@
 
 package springfox.documentation.spring.web.scanners;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
 
 public class ComparisonCondition {
 
@@ -34,8 +34,8 @@ public class ComparisonCondition {
 
   public ComparisonCondition(String modelFor, Set<String> modelsTo, Set<String> conditions) {
     this.modelFor = modelFor;
-    this.modelsTo = new HashSet<>(modelsTo);
-    this.conditions = new HashSet<>(conditions);
+    this.modelsTo = Collections.unmodifiableSet(new HashSet<>(modelsTo));
+    this.conditions = Collections.unmodifiableSet(new HashSet<>(conditions));
   }
 
   public String getModelFor() {
@@ -67,8 +67,7 @@ public class ComparisonCondition {
 
     ComparisonCondition that = (ComparisonCondition) o;
 
-    return Objects.equals(modelFor, that.modelFor)
-        && Objects.equals(modelsTo, that.modelsTo)
+    return Objects.equals(modelFor, that.modelFor) && Objects.equals(modelsTo, that.modelsTo)
         && Objects.equals(conditions, that.conditions);
   }
 }

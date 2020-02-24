@@ -48,7 +48,10 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec {
         new TypeResolver(),
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
-    sut = new ResponseMessagesReader(new JacksonEnumTypeDeterminer(), typeNameExtractor)
+    sut = new ResponseMessagesReader(
+        new JacksonEnumTypeDeterminer(),
+        typeNameExtractor,
+        defaultSchemaPlugins())
   }
 
   def "Should add default response messages"() {
