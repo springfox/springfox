@@ -19,6 +19,7 @@
 package springfox.documentation.swagger2.mappers
 
 import io.swagger.models.parameters.QueryParameter
+import io.swagger.models.properties.ArrayProperty
 import io.swagger.models.properties.DoubleProperty
 import io.swagger.models.properties.FloatProperty
 import io.swagger.models.properties.IntegerProperty
@@ -82,6 +83,20 @@ class EnumMapperSpec extends Specification {
     new LongProperty()    | 2      | 8      | false     | false     | new AllowableRangeValues("2", false, "8", false)
     new DoubleProperty()  | 3      | 9      | false     | true      | new AllowableRangeValues("3", false, "9", true)
     new FloatProperty()   | 4      | 10     | true      | false     | new AllowableRangeValues("4", true, "10", false)
+  }
+
+  @Unroll("Exclusive #property.class.simpleName")
+  def "adds enum values with exclusive for array properties"() {
+    when:
+    maybeAddAllowableValues(property, allowableValues)
+    then:
+    property.minItems == expMinItems
+    property.maxItems == expMaxItems
+    where:
+    property              | expMinItems | expMaxItems | allowableValues
+    new ArrayProperty()   | 1           | 7           | new AllowableRangeValues("1", null, "7", null)
+    new ArrayProperty()   | 1           | 7           | new AllowableRangeValues("1", true, "7", false)
+    new ArrayProperty()   | 2           | 8           | new AllowableRangeValues("2", null, "8", null)
   }
 
   @Unroll("#allowableValues?.class.simpleName")
