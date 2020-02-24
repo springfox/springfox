@@ -380,10 +380,10 @@
                 "summary": "findAllAddress",
                 "operationId": "findAllAddressUsingGET_1",
                 "produces": [
-                  "applcation/hal+json",
-                  "application/json",
-                  "application/x-spring-data-compact+json",
-                  "text/uri-list"
+                    "application/hal+json",
+                    "application/json",
+                    "application/x-spring-data-compact+json",
+                    "text/uri-list"
                 ],
                 "parameters": [
                     {
@@ -1150,10 +1150,10 @@
                 "summary": "findAllPerson",
                 "operationId": "findAllPersonUsingGET_1",
                 "produces": [
-                  "applcation/hal+json",
-                  "application/json",
-                  "application/x-spring-data-compact+json",
-                  "text/uri-list"
+                    "application/hal+json",
+                    "application/json",
+                    "application/x-spring-data-compact+json",
+                    "text/uri-list"
                 ],
                 "parameters": [
                     {
@@ -1614,10 +1614,10 @@
                 "summary": "findAllTag",
                 "operationId": "findAllTagUsingGET_1",
                 "produces": [
-                  "applcation/hal+json",
-                  "application/json",
-                  "application/x-spring-data-compact+json",
-                  "text/uri-list"
+                    "application/hal+json",
+                    "application/json",
+                    "application/x-spring-data-compact+json",
+                    "text/uri-list"
                 ],
                 "parameters": [
                     {
