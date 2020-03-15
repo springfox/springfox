@@ -35,6 +35,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,14 +96,14 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   }
 
 
-  private List<ResolvedType> resolvedDependencies(ModelContext modelContext) {
+  private Set<ResolvedType> resolvedDependencies(ModelContext modelContext) {
     ResolvedType resolvedType = modelContext.alternateFor(modelContext.resolvedType(typeResolver));
     if (isBaseType(ModelContext.fromParent(modelContext, resolvedType))) {
       LOG.debug("Marking base type {} as seen", resolvedType.getSignature());
       modelContext.seen(resolvedType);
-      return new ArrayList<>();
+      return new HashSet<>();
     }
-    List<ResolvedType> dependencies = new ArrayList<>(resolvedTypeParameters(modelContext, resolvedType));
+    Set<ResolvedType> dependencies = new HashSet<>(resolvedTypeParameters(modelContext, resolvedType));
     dependencies.addAll(resolvedArrayElementType(modelContext, resolvedType));
     dependencies.addAll(resolvedMapType(modelContext, resolvedType));
     dependencies.addAll(resolvedSubclasses(modelContext, resolvedType));
@@ -146,8 +147,8 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return parameters;
   }
 
-  private List<? extends ResolvedType> resolvedTypeParameters(ModelContext modelContext, ResolvedType resolvedType) {
-    List<ResolvedType> parameters = new ArrayList<>();
+  private Set<? extends ResolvedType> resolvedTypeParameters(ModelContext modelContext, ResolvedType resolvedType) {
+    Set<ResolvedType> parameters = new HashSet<>();
     for (ResolvedType parameter : resolvedType.getTypeParameters()) {
       LOG.debug("Adding type for parameter {}", parameter.getSignature());
       parameters.add(modelContext.alternateFor(parameter));
@@ -157,12 +158,12 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
     return parameters;
   }
 
-  private List<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {
+  private Set<ResolvedType> resolvedPropertiesAndFields(ModelContext modelContext, ResolvedType resolvedType) {
     if (modelContext.hasSeenBefore(resolvedType) || enumTypeDeterminer.isEnum(resolvedType.getErasedType())) {
-      return new ArrayList<>();
+      return new HashSet<>();
     }
     modelContext.seen(resolvedType);
-    List<ResolvedType> properties = new ArrayList<>();
+    HashSet<ResolvedType> properties = new HashSet<>();
     for (ModelProperty property : nonTrivialProperties(modelContext, resolvedType)) {
       LOG.debug("Adding type {} for parameter {}", property.getType().getSignature(), property.getName());
       if (!isMapType(property.getType())) {
