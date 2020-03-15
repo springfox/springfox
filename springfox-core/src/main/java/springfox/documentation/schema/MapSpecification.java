@@ -4,7 +4,6 @@ public class MapSpecification {
   private final ModelSpecification key;
   private final ModelSpecification value;
 
-
   public MapSpecification(
       ModelSpecification key,
       ModelSpecification value) {

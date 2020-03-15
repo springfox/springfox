@@ -6,6 +6,7 @@ import springfox.documentation.schema.ModelKey;
 import springfox.documentation.service.DocumentationReference;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModelFacetsBuilder {
@@ -15,8 +16,8 @@ public class ModelFacetsBuilder {
   private Boolean nullable;
   private Boolean deprecated;
   private DocumentationReference externalDocumentation;
-  private List<Example> examples;
-  private List<VendorExtension> extensions;
+  private final List<Example> examples = new ArrayList<>();
+  private final List<VendorExtension> extensions = new ArrayList<>();
 
   public ModelFacetsBuilder withModelKey(ModelKey modelKey) {
     this.modelKey = modelKey;
@@ -49,12 +50,12 @@ public class ModelFacetsBuilder {
   }
 
   public ModelFacetsBuilder withExamples(List<Example> examples) {
-    this.examples = examples;
+    this.examples.addAll(examples);
     return this;
   }
 
   public ModelFacetsBuilder withExtensions(List<VendorExtension> extensions) {
-    this.extensions = extensions;
+    this.extensions.addAll(extensions);
     return this;
   }
 
