@@ -40,6 +40,27 @@ trait ModelTestingSupport {
     true
   }
 
+  def assertMapPropertySpecification(
+      CompoundModelSpecification compoundSpec,
+      String propertyName,
+      key,
+      value,
+      isRequest = true) {
+    def modelProperty = compoundSpec.properties.find { (it.name == propertyName) }
+    assert modelProperty != null
+    assert modelProperty.type.map.isPresent()
+    if (key instanceof ScalarType) {
+      assert modelProperty.type.map.get().key.scalar.isPresent()
+      assert key == modelProperty.type.map.get().key.scalar.get().type
+    } else {
+      def modelKey = isRequest ? requestModelKey(key) : responseModelKey(key)
+      assert modelProperty.type.map.get().key.reference.isPresent()
+      assert modelKey == modelProperty.type.map.get().key.reference.get().key
+    }
+    true
+  }
+
+
   def assertCollectionPropertySpecification(
       CompoundModelSpecification specification,
       String propertyName,

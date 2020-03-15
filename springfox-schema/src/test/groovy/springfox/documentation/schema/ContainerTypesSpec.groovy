@@ -448,7 +448,7 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
     "complexToSimpleType" | List | "Entry«Category,SimpleType»" | "springfox.documentation.schema.Entry"
   }
 
-  def "Model properties of type Map are inferred correctly on generic host"() {
+  def "Model properties of type Map are inferred correctly on generic host for swagger 1.2"() {
     given:
     def sut = genericTypeOfMapsContainer()
 
@@ -519,6 +519,64 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
     "stringToSimpleType"           | List | "Entry«string,SimpleType»"             | "springfox.documentation.schema.Entry"
     "complexToSimpleType"          | List | "Entry«Category,SimpleType»"           | "springfox.documentation.schema.Entry"
     "mapOfmapOfStringToSimpleType" | List | "Entry«string,Map«string,SimpleType»»" | "springfox.documentation.schema.Entry"
+  }
+
+  @Unroll
+  def "Map Model properties #property is inferred correctly for OpenAPI 3.0"() {
+    given:
+    def sut = genericTypeOfMapsContainer()
+
+    def modelContext = inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        OAS_30,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
+
+    List<ModelSpecification> asInputModels =
+        new ArrayList(modelSpecificationProvider.modelDependenciesSpecifications(modelContext).values())
+
+    def returnContext = returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        OAS_30,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())
+
+    List<ModelSpecification> asReturnModels =
+        new ArrayList(modelSpecificationProvider.modelDependenciesSpecifications(returnContext).values())
+
+    expect:
+    ModelSpecification asInput = asInputModels.find { it.name.equals("MapsContainer") }
+    asInput != null
+    asInput.compound.isPresent()
+    assertMapPropertySpecification(
+        asInput.compound.get(),
+        property,
+        keyRef,
+        valueRef)
+
+    ModelSpecification asReturn = asReturnModels.find { it.name.equals("MapsContainer") }
+    asReturn != null
+    asReturn.compound.isPresent()
+    assertMapPropertySpecification(
+        asReturn.compound.get(),
+        property,
+        keyRef,
+        valueRef,
+        false)
+
+    where:
+    property                       | keyRef            | valueRef
+    "enumToSimpleType"             | ScalarType.STRING | SimpleType
+    "stringToSimpleType"           | ScalarType.STRING | SimpleType
+    "complexToSimpleType"          | Category          | SimpleType
+    "mapOfmapOfStringToSimpleType" | ScalarType.STRING | Map
   }
 
   def "Model properties of type Map are inferred correctly on generic host with default rules"() {

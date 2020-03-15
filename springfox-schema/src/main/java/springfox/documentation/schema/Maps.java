@@ -32,16 +32,40 @@ public class Maps {
 
   public static ResolvedType mapValueType(ResolvedType type) {
     if (Map.class.isAssignableFrom(type.getErasedType())) {
-      return mapValueType(type, Map.class);
+      return mapValueType(
+          type,
+          Map.class);
     } else {
       return new TypeResolver().resolve(Object.class);
     }
   }
 
-  private static ResolvedType mapValueType(ResolvedType container, Class<Map> mapClass) {
+  private static ResolvedType mapValueType(
+      ResolvedType container,
+      Class<Map> mapClass) {
     List<ResolvedType> resolvedTypes = container.typeParametersFor(mapClass);
     if (resolvedTypes.size() == 2) {
       return resolvedTypes.get(1);
+    }
+    return new TypeResolver().resolve(Object.class);
+  }
+
+  public static ResolvedType mapKeyType(ResolvedType type) {
+    if (Map.class.isAssignableFrom(type.getErasedType())) {
+      return mapKeyType(
+          type,
+          Map.class);
+    } else {
+      return new TypeResolver().resolve(Object.class);
+    }
+  }
+
+  private static ResolvedType mapKeyType(
+      ResolvedType container,
+      Class<Map> mapClass) {
+    List<ResolvedType> resolvedTypes = container.typeParametersFor(mapClass);
+    if (resolvedTypes.size() == 2) {
+      return resolvedTypes.get(0);
     }
     return new TypeResolver().resolve(Object.class);
   }
