@@ -107,7 +107,6 @@ public class Defaults {
     rules.add(newRule(typeResolver.resolve(Map.class, Object.class, Object.class),
         typeResolver.resolve(Object.class)));
 
-
     rules.add(newRule(typeResolver.resolve(ResponseEntity.class, WildcardType.class),
         typeResolver.resolve(WildcardType.class)));
 

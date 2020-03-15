@@ -18,6 +18,8 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.Optional;
 
+import static springfox.documentation.schema.property.PackageNames.*;
+
 @Component
 public class CollectionSpecificationProvider {
   private final TypeNameExtractor typeNameExtractor;
@@ -79,15 +81,4 @@ public class CollectionSpecificationProvider {
     return Optional.of(new CollectionSpecification(itemModel, collectionType));
   }
 
-  private String safeGetPackageName(ResolvedType type) {
-    if (type != null
-        && type.getErasedType() != null
-        && type.getErasedType().getPackage() != null) {
-      return type.getErasedType()
-                 .getPackage()
-                 .getName();
-    } else {
-      return "";
-    }
-  }
 }

@@ -84,6 +84,7 @@ import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.schema.property.FactoryMethodProvider.*;
+import static springfox.documentation.schema.property.PackageNames.*;
 import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
@@ -717,18 +718,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             typeResolver,
             modelContext.getDocumentationType(),
             propertyBuilder));
-  }
-
-  private String safeGetPackageName(ResolvedType type) {
-    if (type != null
-        && type.getErasedType() != null
-        && type.getErasedType().getPackage() != null) {
-      return type.getErasedType()
-                 .getPackage()
-                 .getName();
-    } else {
-      return "";
-    }
   }
 
   private ModelProperty paramModelProperty(
