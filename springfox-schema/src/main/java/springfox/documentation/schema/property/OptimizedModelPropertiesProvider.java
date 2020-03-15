@@ -154,7 +154,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     if (!syntheticProperties.isEmpty()) {
       return syntheticProperties;
     }
-    return propertiesSpecificationsFor(
+    return propertySpecificationsFor(
         type,
         givenContext,
         "");
@@ -204,38 +204,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     Map<String, BeanPropertyDefinition> propertyLookup = beanDescription.findProperties().stream().collect(toMap(
         beanPropertyByInternalName(),
         identity()));
-    for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
-      LOG.debug(
-          "Reading property {}",
-          each.getKey());
-      BeanPropertyDefinition jacksonProperty = each.getValue();
-      Optional<AnnotatedMember> annotatedMember
-          = ofNullable(safeGetPrimaryMember(
-          jacksonProperty,
-          givenContext));
-      annotatedMember.ifPresent(
-          member -> properties.addAll(
-              candidatePropertySpecifications(
-                  type,
-                  member,
-                  jacksonProperty,
-                  givenContext,
-                  namePrefix)));
-    }
-    return new ArrayList<>(properties);
-  }
-
-  private List<PropertySpecification> propertiesSpecificationsFor(
-      ResolvedType type,
-      ModelContext givenContext,
-      String namePrefix) {
-    Set<PropertySpecification> properties = new TreeSet<>(Comparator.comparing(PropertySpecification::getName));
-    BeanDescription beanDescription = beanDescription(
-        type,
-        givenContext);
-    Map<String, BeanPropertyDefinition> propertyLookup =
-        beanDescription.findProperties().stream()
-                       .collect(toMap(beanPropertyByInternalName(), identity()));
     for (Map.Entry<String, BeanPropertyDefinition> each : propertyLookup.entrySet()) {
       LOG.debug(
           "Reading property {}",
