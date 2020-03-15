@@ -30,9 +30,7 @@ import springfox.documentation.spi.schema.TypeNameProviderPlugin
 
 class SchemaSpecification
     extends Specification
-    implements ModelProviderSupport,
-        TypesForTestingSupport,
-        AlternateTypesSupport {
+    implements ModelProviderSupport {
   TypeNameExtractor typeNameExtractor
   ModelProvider modelProvider
   ModelSpecificationProvider modelSpecificationProvider

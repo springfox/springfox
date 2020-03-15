@@ -39,25 +39,25 @@ trait SchemaPluginsSupport {
   @SuppressWarnings("GrMethodMayBeStatic")
   SchemaPluginsManager defaultSchemaPlugins() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        OrderAwarePluginRegistry.create(new ArrayList<>())
+        OrderAwarePluginRegistry.of(new ArrayList<>())
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        OrderAwarePluginRegistry.create(
+        OrderAwarePluginRegistry.of(
             [new PropertyDiscriminatorBasedInheritancePlugin(
                 new TypeResolver(), new JacksonEnumTypeDeterminer(), typeNameExtractor)])
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
-        OrderAwarePluginRegistry.create([new JacksonJsonViewProvider(new TypeResolver())])
+        OrderAwarePluginRegistry.of([new JacksonJsonViewProvider(new TypeResolver())])
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        OrderAwarePluginRegistry.create(new ArrayList<>())
+        OrderAwarePluginRegistry.of(new ArrayList<>())
 
     new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderRegistry, syntheticModelRegistry)
   }
