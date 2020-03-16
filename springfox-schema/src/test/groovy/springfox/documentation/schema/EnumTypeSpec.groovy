@@ -84,4 +84,50 @@ class EnumTypeSpec extends Specification implements ModelProviderSupport {
     retModelProperty.getModelRef().itemType == null
     retModelProperty.getAllowableValues().getValues() == list
   }
+
+  def "enum type are inferred as type string with allowable values for open api 3.x"() {
+    given:
+    def enumerationValues = ["ONE", "TWO"]
+    def provider = defaultModelSpecificationProvider()
+    def namingStrategy = new DefaultGenericTypeNamingStrategy()
+
+    ModelSpecification asInput = provider.modelSpecificationsFor(
+        inputParam("0_0",
+            "group",
+            resolver.resolve(enumType()),
+            Optional.empty(),
+            new HashSet<>(),
+            DocumentationType.SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+    ModelSpecification asReturn = provider.modelSpecificationsFor(
+        returnValue("0_0",
+            "group",
+            resolver.resolve(enumType()),
+            Optional.empty(),
+            DocumentationType.SWAGGER_12,
+            alternateTypeProvider(),
+            namingStrategy,
+            emptySet())).get()
+
+    expect:
+    asInput.getName() == "ExampleWithEnums"
+    asInput.compound.isPresent()
+    def modelProperty = asInput.compound.get().properties.find { it.name == "exampleEnum" }
+    modelProperty.name == "exampleEnum"
+    modelProperty.type.scalar.isPresent()
+    modelProperty.type.scalar.get().type == ScalarType.STRING
+    modelProperty.facetOfType(EnumerationFacet).isPresent()
+    modelProperty.facetOfType(EnumerationFacet).get().allowedValues == enumerationValues
+
+    asReturn.getName() == "ExampleWithEnums"
+    asReturn.compound.isPresent()
+    def retModelProperty = asInput.compound.get().properties.find { it.name == "exampleEnum" }
+    retModelProperty.name == "exampleEnum"
+    retModelProperty.type.scalar.isPresent()
+    retModelProperty.type.scalar.get().type == ScalarType.STRING
+    retModelProperty.facetOfType(EnumerationFacet).isPresent()
+    retModelProperty.facetOfType(EnumerationFacet).get().allowedValues == enumerationValues
+  }
 }

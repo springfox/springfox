@@ -43,6 +43,8 @@ import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
+import springfox.documentation.schema.ElementFacet;
+import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelProperty;
@@ -202,7 +204,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       ResolvedType type,
       ModelContext givenContext,
       String namePrefix) {
-    Set<PropertySpecification> properties = new TreeSet<>(Comparator.comparing(PropertySpecification::getName));
+    Set<PropertySpecification> properties =
+        new TreeSet<>(Comparator.comparing(PropertySpecification::getName));
     BeanDescription beanDescription = beanDescription(
         type,
         givenContext);
@@ -449,14 +452,15 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
                   namePrefix))
               .orElse(new ArrayList<>()));
     } else if (member instanceof AnnotatedField) {
-      properties.addAll(findField(
-          type,
-          jacksonProperty.getInternalName())
-                            .map(propertySpecificationFromField(
-                                givenContext,
-                                jacksonProperty,
-                                namePrefix))
-                            .orElse(new ArrayList<>()));
+      properties.addAll(
+          findField(
+              type,
+              jacksonProperty.getInternalName())
+              .map(propertySpecificationFromField(
+                  givenContext,
+                  jacksonProperty,
+                  namePrefix))
+              .orElse(new ArrayList<>()));
     } else if (member instanceof AnnotatedParameter) {
       ModelContext modelContext = ModelContext.fromParent(
           givenContext,
@@ -708,16 +712,26 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     if (!scalar.isPresent()
         && collectionSpecification == null
         && mapSpecification == null) {
-      reference = new ReferenceModelSpecification(
-          new ModelKey(
-              safeGetPackageName(beanModelProperty.getType()),
-              typeNameExtractor.typeName(
-                  ModelContext.fromParent(
-                      modelContext,
-                      beanModelProperty.getType())),
-              modelContext.isReturnType()));
-
+      if (beanModelProperty.getType() != null
+          && enumTypeDeterminer.isEnum(beanModelProperty.getType()
+                                                        .getErasedType())) {
+        scalar = Optional.of(ScalarType.STRING);
+        //TODO: Enum values in the facet
+      } else {
+        reference = new ReferenceModelSpecification(
+            new ModelKey(
+                safeGetPackageName(beanModelProperty.getType()),
+                typeNameExtractor.typeName(
+                    ModelContext.fromParent(
+                        modelContext,
+                        beanModelProperty.getType())),
+                modelContext.isReturnType()));
+      }
     }
+
+    ArrayList<ElementFacet> facets = new ArrayList<>();
+    EnumerationFacet.from(beanModelProperty.allowableValues())
+                    .ifPresent(facets::add);
 
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(beanModelProperty.getName())
@@ -736,10 +750,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .withRequired(beanModelProperty.isRequired())
         .withIsHidden(false)
         .withDescription(beanModelProperty.propertyDescription())
-        //TODO: facets
-//        .withFacets(new ArrayList<>(
-//            new EnumerationFacet<>(beanModelProperty.allowableValues())
-//        ))
+        .withFacets(facets)
         .withExample(beanModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(
