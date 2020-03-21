@@ -85,7 +85,7 @@ class EnumTypeSpec extends Specification implements ModelProviderSupport {
     retModelProperty.getAllowableValues().getValues() == list
   }
 
-  def "enum type are inferred as type string with allowable values for open api 3.x"() {
+  def "enum type are inferred as type string with allowable values for openapi 3.x"() {
     given:
     def enumerationValues = ["ONE", "TWO"]
     def provider = defaultModelSpecificationProvider()
@@ -97,7 +97,7 @@ class EnumTypeSpec extends Specification implements ModelProviderSupport {
             resolver.resolve(enumType()),
             Optional.empty(),
             new HashSet<>(),
-            DocumentationType.SWAGGER_12,
+            DocumentationType.OAS_30,
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()
@@ -106,7 +106,7 @@ class EnumTypeSpec extends Specification implements ModelProviderSupport {
             "group",
             resolver.resolve(enumType()),
             Optional.empty(),
-            DocumentationType.SWAGGER_12,
+            DocumentationType.OAS_30,
             alternateTypeProvider(),
             namingStrategy,
             emptySet())).get()

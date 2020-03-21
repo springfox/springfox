@@ -21,13 +21,17 @@ package springfox.documentation.schema
 
 import com.fasterxml.classmate.TypeResolver
 import spock.lang.Shared
+import spock.lang.Unroll
+import springfox.documentation.spi.DocumentationType
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 
 class BeanWithFactoryMethodSpec extends SchemaSpecification {
-  @Shared def resolver = new TypeResolver()
+  @Shared
+  def resolver = new TypeResolver()
+
   def "Type with bean properties in the constructor"() {
     given:
     def sut = defaultModelProvider()
@@ -71,6 +75,59 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
     fieldName || description | isRequired | type    | qualifiedTypeName   | allowableValues
     "foo"     || null        | true       | String  | "java.lang.String"  | null
     "bar"     || null        | true       | Integer | "java.lang.Integer" | null
+  }
+
+  @Unroll
+  def "Type #typeToTest.getSimpleName() for #fieldName in the constructor for openapi 3.x"() {
+    given:
+    def sut = defaultModelSpecificationProvider()
+    def subject = resolver.resolve(typeToTest)
+    def reqContext = inputParam(
+        "0_0",
+        "group",
+        subject,
+        Optional.empty(),
+        new HashSet<>(),
+        DocumentationType.OAS_30,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        emptySet())
+    def resContext = returnValue(
+        "0_0",
+        "group",
+        subject,
+        Optional.empty(),
+        DocumentationType.OAS_30,
+        alternateTypeProvider(),
+        new DefaultGenericTypeNamingStrategy(),
+        emptySet())
+
+    when:
+    def models = [sut.modelSpecificationsFor(reqContext).get(),
+                  sut.modelSpecificationsFor(resContext).get()]
+
+    then:
+    models.each {
+      it.compound.isPresent()
+      it.compound.get().properties.size() == 2
+      def property = it.compound.get().properties.find { f -> f.name == fieldName }
+      property != null
+      property.description == description
+      property.required == isRequired
+      property.type.scalar.isPresent()
+      property.type.scalar.get().getType() == type
+      !property.facetOfType(EnumerationFacet).isPresent()
+      true
+    }
+
+    where:
+    typeToTest                       | fieldName || description | isRequired | type
+    typeWithConstructorProperties()  | "foo"     || null        | true       | ScalarType.STRING
+    typeWithConstructorProperties()  | "bar"     || null        | true       | ScalarType.INTEGER
+    typeWithDelegatedConstructor()   | "foo"     || null        | true       | ScalarType.STRING
+    typeWithDelegatedConstructor()   | "bar"     || null        | true       | ScalarType.INTEGER
+    typeWithJsonCreatorConstructor() | "foo"     || null        | true       | ScalarType.STRING
+    typeWithJsonCreatorConstructor() | "bar"     || null        | true       | ScalarType.INTEGER
   }
 
   def "Type with delegated constructor (factory method)"() {
@@ -121,7 +178,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
   def "Type with @JsonCreator marked constructor"() {
     given:
     def sut = defaultModelProvider()
-    def typeToTest = resolver.resolve(typeWithDelegatedConstructor())
+    def typeToTest = resolver.resolve(typeWithJsonCreatorConstructor())
     def reqContext = inputParam(
         "0_0",
         "group",
