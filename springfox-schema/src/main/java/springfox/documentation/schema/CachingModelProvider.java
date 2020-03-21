@@ -35,17 +35,25 @@ import static java.util.Optional.*;
 
 @Component
 @Qualifier("cachedModels")
-public class CachingModelProvider implements ModelProvider {
+public class CachingModelProvider implements ModelProvider, ModelSpecificationProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(CachingModelProvider.class);
   private final Map<ModelContext, Optional<Model>> cache;
+  private final Map<ModelContext, Optional<ModelSpecification>> specificationCache;
   private final Function<ModelContext, Optional<Model>> lookup;
+  private final Function<ModelContext, Optional<ModelSpecification>> specificationLookup;
   private final ModelProvider delegate;
+  private final ModelSpecificationProvider specificationDelegate;
 
   @Autowired
-  public CachingModelProvider(@Qualifier("default") final ModelProvider delegate) {
+  public CachingModelProvider(
+      @Qualifier("default") ModelProvider delegate,
+      @Qualifier("default") ModelSpecificationProvider specificationDelegate) {
     this.delegate = delegate;
+    this.specificationDelegate = specificationDelegate;
     cache = new HashMap<>();
+    specificationCache = new HashMap<>();
     lookup = delegate::modelFor;
+    specificationLookup = specificationDelegate::modelSpecificationsFor;
   }
 
   @Override
@@ -66,5 +74,25 @@ public class CachingModelProvider implements ModelProvider {
   @Override
   public Map<ResolvedType, Model> dependencies(ModelContext modelContext) {
     return delegate.dependencies(modelContext);
+  }
+
+  @Override
+  public Optional<ModelSpecification> modelSpecificationsFor(ModelContext modelContext) {
+    try {
+      return specificationCache.computeIfAbsent(
+          modelContext,
+          specificationLookup);
+    } catch (Exception e) {
+      LOGGER.warn(
+          "Failed to get the model for -> {}. {}",
+          modelContext.description(),
+          e.getMessage());
+      return empty();
+    }
+  }
+
+  @Override
+  public Map<ResolvedType, ModelSpecification> modelDependenciesSpecifications(ModelContext modelContext) {
+    return specificationDelegate.modelDependenciesSpecifications(modelContext);
   }
 }
