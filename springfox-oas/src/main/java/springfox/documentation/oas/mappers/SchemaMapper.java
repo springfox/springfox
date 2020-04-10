@@ -5,7 +5,7 @@ import springfox.documentation.schema.ModelSpecification;
 
 import javax.xml.validation.Schema;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public class SchemaMapper {
   public Schema mapFrom(ModelSpecification modelSpecification) {
     return null;

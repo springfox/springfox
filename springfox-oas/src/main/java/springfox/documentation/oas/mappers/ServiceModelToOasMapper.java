@@ -36,7 +36,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.springframework.http.HttpMethod;
+import springfox.documentation.schema.ContentSpecification;
 import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.SimpleParameterSpecification;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
@@ -47,17 +49,19 @@ import springfox.documentation.service.RequestBody;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedSet;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
 
-@Mapper(uses = {
-    VendorExtensionsMapper.class,
-    LicenseMapper.class,
-    ExamplesMapper.class,
-    SecurityMapper.class,
-    SchemaMapper.class
-})
+@Mapper(componentModel = "spring",
+        uses = {
+            VendorExtensionsMapper.class,
+            LicenseMapper.class,
+            ExamplesMapper.class,
+            SecurityMapper.class,
+            SchemaMapper.class
+        })
 public abstract class ServiceModelToOasMapper {
   @Mappings({
                 @Mapping(target = "openapi", constant = "3.0.0"),
@@ -92,28 +96,28 @@ public abstract class ServiceModelToOasMapper {
             })
   abstract Parameter mapParameter(springfox.documentation.service.RequestParameter from);
 
-  Schema fromSimpleParameter(java.util.Optional<springfox.documentation.schema.SimpleParameterSpecification> value) {
+  static Schema fromSimpleParameter(Optional<SimpleParameterSpecification> value) {
     //TODO: Implement this mapping
     return null;
   }
 
-  Content fromContent(java.util.Optional<springfox.documentation.schema.ContentSpecification> value) {
-    //TODO: Implement this mapping
-    return null;
-  }
-  
-  Schema fromModelSpecification(ModelSpecification model) {
-    //TODO: Implement this mapping
-      return null;
-  }
-
-
-  ApiResponses map(java.util.Set<springfox.documentation.service.Response> value) {
+  static Content fromContent(Optional<ContentSpecification> value) {
     //TODO: Implement this mapping
     return null;
   }
 
-  io.swagger.oas.models.parameters.RequestBody map(RequestBody from) {
+  static Schema fromModelSpecification(ModelSpecification model) {
+    //TODO: Implement this mapping
+    return null;
+  }
+
+
+  static ApiResponses map(java.util.Set<springfox.documentation.service.Response> value) {
+    //TODO: Implement this mapping
+    return null;
+  }
+
+  static io.swagger.oas.models.parameters.RequestBody map(RequestBody from) {
     //TODO: Implement this mapping
     return null;
   }
@@ -146,7 +150,7 @@ public abstract class ServiceModelToOasMapper {
 
   abstract PathItem.HttpMethod mapHttpMethod(HttpMethod method);
 
-  Content map(SortedSet<MediaType> value)  {
+  static Content map(SortedSet<MediaType> value) {
     //TODO: Implement this mapping
     return new Content();
   }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-@Mapper(uses = VendorExtensionsMapper.class)
+@Mapper(componentModel = "spring", uses = VendorExtensionsMapper.class)
 public interface ExamplesMapper {
   default Map<String, io.swagger.oas.models.examples.Example> mapExamples(List<Example> from) {
     Map<String, io.swagger.oas.models.examples.Example> examples = new TreeMap<>();

@@ -8,18 +8,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public class SecurityMapper {
+
   public List<SecurityRequirement> mapFrom(Map<String, List<AuthorizationScope>> authorizationScopes) {
     return authorizationScopes.entrySet().stream()
-        .map(this::mapFrom)
+        .map(SecurityMapper::mapFrom)
         .collect(Collectors.toList());
   }
 
-  private SecurityRequirement mapFrom(Map.Entry<String, List<AuthorizationScope>> entry) {
+  private static SecurityRequirement mapFrom(Map.Entry<String, List<AuthorizationScope>> entry) {
     SecurityRequirement requirement = new SecurityRequirement();
-    return requirement.addList(entry.getKey(), entry.getValue().stream()
-        .map(AuthorizationScope::getScope)
-        .collect(Collectors.toList()));
+    return requirement.addList(
+        entry.getKey(),
+        entry.getValue().stream()
+            .map(AuthorizationScope::getScope)
+            .collect(Collectors.toList()));
   }
 }

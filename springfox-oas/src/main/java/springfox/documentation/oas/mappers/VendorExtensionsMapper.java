@@ -33,7 +33,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public class VendorExtensionsMapper {
 
   public Map<String, Object> mapExtensions(List<VendorExtension> from) {

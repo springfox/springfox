@@ -27,9 +27,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.HandlerMapping;
 import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.SpringfoxWebConfiguration;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
+import springfox.documentation.spring.web.WebMvcPropertySourcedRequestMappingHandlerMapping;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.swagger.configuration.SwaggerCommonConfiguration;
@@ -40,7 +40,6 @@ import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 @ConditionalOnClass(name = "springfox.documentation.spring.web.SpringfoxWebMvcConfiguration")
 @Import({ SpringfoxWebConfiguration.class, SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
 @ComponentScan(basePackages = {
-    "springfox.documentation.swagger2.readers.parameter",
     "springfox.documentation.swagger2.mappers"
 })
 public class Swagger2DocumentationWebMvcConfiguration {

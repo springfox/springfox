@@ -27,7 +27,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public class LicenseMapper {
 
   @License
@@ -42,7 +42,7 @@ public class LicenseMapper {
   @Qualifier
   @Target(ElementType.TYPE)
   @Retention(RetentionPolicy.SOURCE)
-  public @interface LicenseTranslator {
+  @interface LicenseTranslator {
   }
 
   @Qualifier
