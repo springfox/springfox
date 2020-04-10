@@ -17,7 +17,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
  */
 plugins {
   id "de.undercouch.download" version "4.0.2"
-  id "com.moowork.node" version "1.3.1"
+  id "com.github.node-gradle.node" version "2.2.3"
 }
 
 ext {
@@ -36,7 +36,7 @@ dependencies {
 }
 
 node {
-  version = '8.12.0' // LTS
+  version = '12.16.2' // LTS
   npmVersion = '6.4.1'
   distBaseUrl = 'https://nodejs.org/dist'
   download = true
