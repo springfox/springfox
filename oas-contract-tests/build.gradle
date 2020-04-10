@@ -1,0 +1,73 @@
+buildscript {
+  ext {
+    springBootVersion = '2.2.2.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+  }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+configurations {
+  //Logback causing spring boot errors
+  all*.exclude group: 'ch.qos.logback'
+  //Making sure we don't clash on the classpath as two controllers would be loaded
+  all*.exclude group: 'org.springframework',
+      module: 'spring-webflux'
+  all*.exclude group: 'io.springfox',
+      module: 'springfox-spring-webflux'
+}
+
+ext {
+  limits = [
+      'instruction': 89.5,
+      'line'       : 85,
+      'complexity' : 80,
+      'method'     : 80,
+      'branch'     : 85,
+      'class'      : 94
+  ]
+}
+
+dependencies {
+  compile("org.springframework.boot:spring-boot-starter-web")
+  compile("org.springframework.boot:spring-boot-starter-data-rest")
+  compile("org.springframework.boot:spring-boot-starter-data-jpa")
+  compile("com.h2database:h2")
+  compile "org.codehaus.groovy:groovy-all:$groovy"
+  compile 'org.slf4j:slf4j-simple:1.6.1'
+
+  testCompile libs.test
+  testCompile "org.skyscreamer:jsonassert:$jsonAssert"
+  testCompile("org.springframework.boot:spring-boot-starter-test")
+
+  compile project(':springfox-oas')
+  compile project(':springfox-data-rest')
+  compile project(':springfox-petstore')
+  compile project(':springfox-bean-validators')
+
+  compile(project(path: ':springfox-swagger-ui')) {
+    exclude group: 'org.springframework',
+        module: 'spring-web'
+  }
+}
+
+compileJava {
+  options.compilerArgs += [
+      "-Amapstruct.defaultComponentModel=spring",
+      "-Amapstruct.unmappedTargetPolicy=ERROR"
+  ]
+}
+
+// tag::update-contract-tests[]
+// NOTE: Uncomment to bulk update contracts
+//test {
+//  systemProperty("contract.tests.root", "$projectDir/src/test/resources")
+//  systemProperty("contract.tests.update", true)
+//}
+// tag::update-contract-tests[]

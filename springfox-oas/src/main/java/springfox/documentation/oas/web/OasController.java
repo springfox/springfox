@@ -40,7 +40,6 @@ import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.Optional;
 
 import static org.springframework.util.MimeTypeUtils.*;
@@ -49,7 +48,7 @@ import static org.springframework.util.MimeTypeUtils.*;
 @ApiIgnore
 public class OasController {
 
-  public static final String DEFAULT_URL = "/v2/api-docs";
+  private static final String DEFAULT_URL = "/v3/api-docs";
   private static final String HAL_MEDIA_TYPE = "application/hal+json";
 
   private final String hostNameOverride;
@@ -64,7 +63,9 @@ public class OasController {
       ServiceModelToOasMapper mapper,
       JsonSerializer jsonSerializer) {
 
-    this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
+    this.hostNameOverride = environment.getProperty(
+        "springfox.documentation.swagger.v3.host",
+        "DEFAULT");
     this.documentationCache = documentationCache;
     this.mapper = mapper;
     this.jsonSerializer = jsonSerializer;
@@ -85,7 +86,7 @@ public class OasController {
     String groupName = Optional.ofNullable(swaggerGroup).orElse(Docket.DEFAULT_GROUP_NAME);
     Documentation documentation = documentationCache.documentationByGroup(groupName);
     if (documentation == null) {
-      return new ResponseEntity<Json>(HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     OpenAPI oas = mapper.mapDocumentation(documentation);
 //    UriComponents uriComponents = componentsFrom(servletRequest, oas.getBasePath());
@@ -93,7 +94,9 @@ public class OasController {
 //    if (isNullOrEmpty(oas.getHost())) {
 //      oas.host(hostName(uriComponents));
 //    }
-    return new ResponseEntity<Json>(jsonSerializer.toJson(oas), HttpStatus.OK);
+    return new ResponseEntity<>(
+        jsonSerializer.toJson(oas),
+        HttpStatus.OK);
   }
 
   private String hostName(UriComponents uriComponents) {

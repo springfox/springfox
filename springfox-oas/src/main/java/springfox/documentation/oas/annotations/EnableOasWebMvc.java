@@ -21,6 +21,8 @@ package springfox.documentation.oas.annotations;
 
 import org.springframework.context.annotation.Import;
 import springfox.documentation.oas.configuration.OasDocumentationConfiguration;
+import springfox.documentation.spring.web.SpringfoxWebConfiguration;
+import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -38,6 +40,10 @@ import java.lang.annotation.Target;
 @Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 @Target(value = { java.lang.annotation.ElementType.TYPE })
 @Documented
-@Import({OasDocumentationConfiguration.class})
-public @interface EnableOas {
+@Import({
+            SpringfoxWebConfiguration.class,
+            SpringfoxWebMvcConfiguration.class,
+            OasDocumentationConfiguration.class })
+public @interface EnableOasWebMvc {
+
 }
