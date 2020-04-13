@@ -61,19 +61,19 @@ public class OperationBuilder {
   private String uniqueId;
   private String codeGenMethodNameStem;
   private int position;
-  private Set<String> produces = new TreeSet<>();
-  private Set<String> consumes = new TreeSet<>();
-  private Set<String> protocol = new TreeSet<>();
-  private List<SecurityReference> securityReferences = new ArrayList<>();
-  private List<Parameter> parameters = new ArrayList<>();
-  private Set<ResponseMessage> responseMessages = new HashSet<>();
-  private Set<String> tags = new TreeSet<>();
+  private final Set<String> produces = new TreeSet<>();
+  private final Set<String> consumes = new TreeSet<>();
+  private final Set<String> protocol = new TreeSet<>();
+  private final List<SecurityReference> securityReferences = new ArrayList<>();
+  private final List<Parameter> parameters = new ArrayList<>();
+  private final Set<ResponseMessage> responseMessages = new HashSet<>();
+  private final Set<String> tags = new TreeSet<>();
   private String deprecated;
   private boolean isHidden;
   private ModelReference responseModel;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
-  private Set<Response> responses = new HashSet<>();
-  private Set<RequestParameter> requestParameters =
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final Set<Response> responses = new HashSet<>();
+  private final Set<RequestParameter> requestParameters =
       new TreeSet<>(defaultRequestParameterComparator());
   private RequestBody body;
 
@@ -209,7 +209,8 @@ public class OperationBuilder {
     List<Parameter> source = nullToEmptyList(parameters);
     List<Parameter> destination = new ArrayList<>(this.parameters);
     ParameterMerger merger = new ParameterMerger(destination, source);
-    this.parameters = new ArrayList<>(merger.merged());
+    this.parameters.clear();
+    this.parameters.addAll(merger.merged());
     return this;
   }
 
@@ -224,7 +225,9 @@ public class OperationBuilder {
    */
   @Deprecated
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
-    this.responseMessages = new HashSet<>(mergeResponseMessages(responseMessages));
+    Set<ResponseMessage> merged = mergeResponseMessages(responseMessages);
+    this.responseMessages.clear();
+    this.responseMessages.addAll(merged);
     return this;
   }
 
@@ -282,7 +285,7 @@ public class OperationBuilder {
    * @return this
    */
   public OperationBuilder tags(Set<String> tags) {
-    this.tags = nullToEmptySet(tags);
+    this.tags.addAll(nullToEmptySet(tags));
     return this;
   }
 

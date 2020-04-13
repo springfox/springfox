@@ -32,67 +32,70 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 class OperationParameterRequestConditionReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   OperationParameterRequestConditionReader sut = new OperationParameterRequestConditionReader(new TypeResolver())
+
   def "Should read a parameter given a parameter request condition"() {
     given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue")
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
-              ["paramsCondition": paramCondition])
-      OperationContext operationContext =
-          operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
+    ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue")
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
+        ["paramsCondition": paramCondition])
+    OperationContext operationContext =
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
     then:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
     and:
-      Parameter parameter = operation.parameters[0]
-      assert parameter."$property" == expectedValue
+    Parameter parameter = operation.parameters[0]
+    assert parameter."$property" == expectedValue
 
     where:
-      property        | expectedValue
-      'name'          | 'test'
-      'defaultValue'  | 'testValue'
-      'description'   | null
-      'required'      | true
-      'allowMultiple' | false
-      'paramType'     | "query"
+    property        | expectedValue
+    'name'          | 'test'
+    'defaultValue'  | 'testValue'
+    'description'   | null
+    'required'      | true
+    'allowMultiple' | false
+    'paramType'     | "query"
 
   }
 
   def "Should ignore a negated parameter in a parameter request condition"() {
     given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      ParamsRequestCondition paramCondition = new ParamsRequestCondition("!test")
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
-              ["paramsCondition": paramCondition])
-      OperationContext operationContext =
-          operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
+    ParamsRequestCondition paramCondition = new ParamsRequestCondition("!test")
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
+        ["paramsCondition": paramCondition])
+    OperationContext operationContext =
+        operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
     then:
-      0 == operation.parameters.size()
+    0 == operation.parameters.size()
 
   }
 
   def "Should ignore a parameter request condition expression that is already present in the parameters"() {
     given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue", "test=3")
-      def requestMappingInfo = requestMappingInfo('/parameter-conditions', ["paramsCondition": paramCondition])
-      OperationContext operationContext =
+    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
+    ParamsRequestCondition paramCondition = new ParamsRequestCondition("test=testValue", "test=3")
+    def requestMappingInfo = requestMappingInfo('/parameter-conditions', ["paramsCondition": paramCondition])
+    OperationContext operationContext =
         operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+
     when:
-      sut.apply(operationContext)
+    sut.apply(operationContext)
 
     then:
-      1 == operationContext.operationBuilder().build().parameters.size()
+    1 == operationContext.operationBuilder().build().parameters.size()
 
   }
 }

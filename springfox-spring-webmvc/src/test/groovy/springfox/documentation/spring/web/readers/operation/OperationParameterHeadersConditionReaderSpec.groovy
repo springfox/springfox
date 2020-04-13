@@ -32,67 +32,68 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 class OperationParameterHeadersConditionReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
 
   OperationParameterHeadersConditionReader sut = new OperationParameterHeadersConditionReader(new TypeResolver())
+
   def "Should read a parameter given a parameter request condition"() {
     given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      HeadersRequestCondition headersCondition = new HeadersRequestCondition("test=testValue")
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
-              ["headersCondition": headersCondition])
-      OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
+    HeadersRequestCondition headersCondition = new HeadersRequestCondition("test=testValue")
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
+        ["headersCondition": headersCondition])
+    OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
     then:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
     and:
-      Parameter parameter = operation.parameters[0]
-      assert parameter."$property" == expectedValue
+    Parameter parameter = operation.parameters[0]
+    assert parameter."$property" == expectedValue
 
     where:
-      property        | expectedValue
-      'name'          | 'test'
-      'defaultValue'  | 'testValue'
-      'description'   | null
-      'required'      | true
-      'allowMultiple' | false
-      'paramType'     | "header"
+    property        | expectedValue
+    'name'          | 'test'
+    'defaultValue'  | 'testValue'
+    'description'   | null
+    'required'      | true
+    'allowMultiple' | false
+    'paramType'     | "header"
 
   }
 
   def "Should ignore a negated parameter in a parameter request condition"() {
     given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      HeadersRequestCondition headersCondition = new HeadersRequestCondition("!test")
-      RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
-              ["headersCondition": headersCondition])
-      OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
+    HeadersRequestCondition headersCondition = new HeadersRequestCondition("!test")
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
+        ["headersCondition": headersCondition])
+    OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
 
     when:
-      sut.apply(operationContext)
-      def operation = operationContext.operationBuilder().build()
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
 
     then:
-      0 == operation.parameters.size()
+    0 == operation.parameters.size()
 
   }
 
   def "Should ignore a parameter request condition expression that is already present in the parameters"() {
     given:
-      HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
-      HeadersRequestCondition paramCondition = new HeadersRequestCondition("test=testValue", "test=3")
-      OperationContext operationContext = operationContext(documentationContext(),
+    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
+    HeadersRequestCondition paramCondition = new HeadersRequestCondition("test=testValue", "test=3")
+    OperationContext operationContext = operationContext(documentationContext(),
         handlerMethod,
         0,
         requestMappingInfo('/parameter-conditions', ["headersCondition": paramCondition]))
 
     when:
-      sut.apply(operationContext)
+    sut.apply(operationContext)
 
     then:
-      1 == operationContext.operationBuilder().build().parameters.size()
-
+    1 == operationContext.operationBuilder().build().parameters.size()
   }
 }

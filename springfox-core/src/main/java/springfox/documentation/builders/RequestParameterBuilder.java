@@ -9,6 +9,7 @@ import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RequestParameterBuilder {
@@ -19,58 +20,60 @@ public class RequestParameterBuilder {
   private Boolean deprecated;
   private Boolean allowEmptyValue;
   private Either<SimpleParameterSpecification, ContentSpecification> parameterSpecification;
-  private List<VendorExtension> extensions;
+  private final List<VendorExtension> extensions = new ArrayList<>();
 
   private SimpleParameterSpecificationBuilder simpleParameterBuilder;
   private ContentSpecificationBuilder contentSpecificationBuilder;
 
-  public RequestParameterBuilder withName(String name) {
+  public RequestParameterBuilder name(String name) {
     this.name = name;
     return this;
   }
 
-  public RequestParameterBuilder withIn(ParameterType in) {
+  public RequestParameterBuilder in(ParameterType in) {
     this.in = in;
     return this;
   }
 
-  public RequestParameterBuilder withDescription(String description) {
+  public RequestParameterBuilder description(String description) {
     this.description = description;
     return this;
   }
 
-  public RequestParameterBuilder withRequired(Boolean required) {
+  public RequestParameterBuilder required(Boolean required) {
     this.required = required;
     return this;
   }
 
-  public RequestParameterBuilder withDeprecated(Boolean deprecated) {
+  public RequestParameterBuilder deprecated(Boolean deprecated) {
     this.deprecated = deprecated;
     return this;
   }
 
-  public RequestParameterBuilder withAllowEmptyValue(Boolean allowEmptyValue) {
+  public RequestParameterBuilder allowEmptyValue(Boolean allowEmptyValue) {
     this.allowEmptyValue = allowEmptyValue;
     return this;
   }
 
 
 
-  public RequestParameterBuilder withParameterSpecification(
+  public RequestParameterBuilder parameterSpecification(
       ContentSpecification spec) {
     this.parameterSpecification = new Either<>(null, spec);
     return this;
   }
 
-  public RequestParameterBuilder withParameterSpecification(
+  public RequestParameterBuilder parameterSpecification(
       SimpleParameterSpecification spec) {
     this.parameterSpecification = new Either<>(spec, null);
     return this;
   }
   
 
-  public RequestParameterBuilder withExtensions(List<VendorExtension> extensions) {
-    this.extensions = extensions;
+  public RequestParameterBuilder extensions(List<VendorExtension> extensions) {
+    this.extensions.addAll(extensions);
+    return this;
+  }
     return this;
   }
 
