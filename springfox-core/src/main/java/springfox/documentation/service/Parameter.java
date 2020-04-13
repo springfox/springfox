@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 /**
- * @deprecated @since 3.0.0 Use @see
+ * @deprecated @since 3.0.0 Use @see {@link RequestParameter}, {@link RequestBody}
  */
 @Deprecated
 public class Parameter implements Ordered {

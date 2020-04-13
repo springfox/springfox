@@ -24,8 +24,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @SuppressWarnings("HideUtilityClassConstructor")
-public class SwaggerApplication {
+public class SwaggerWebfluxApplication {
   public static void main(String[] args) {
-    SpringApplication.run(SwaggerApplication.class, args);
+    SpringApplication.run(SwaggerWebfluxApplication.class, args);
   }
 }
