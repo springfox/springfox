@@ -43,7 +43,9 @@ public class VendorExtensionsMapper {
         .map(each -> (ListVendorExtension) each)
         .collect(toList());
     for (ListVendorExtension each : listExtensions) {
-      extensions.put(each.getName(), each.getValue());
+      extensions.put(
+          each.getName(),
+          each.getValue());
     }
     Iterable<Map<String, Object>> objectExtensions = from.stream()
         .filter(ObjectVendorExtension.class::isInstance)
@@ -57,7 +59,9 @@ public class VendorExtensionsMapper {
         .map(each -> (StringVendorExtension) each)
         .collect(toList());
     for (StringVendorExtension each : propertyExtensions) {
-      extensions.put(each.getName(), each.getValue());
+      extensions.put(
+          each.getName(),
+          each.getValue());
     }
     return extensions;
   }
@@ -66,7 +70,9 @@ public class VendorExtensionsMapper {
     return input -> {
       if (!isEmpty(input.getName())) {
         Map<String, Object> map = new HashMap<>();
-        map.put(input.getName(), mapExtensions(input.getValue()));
+        map.put(
+            input.getName(),
+            mapExtensions(input.getValue()));
         return map;
       }
       return propertiesAsMap(input);
@@ -81,13 +87,17 @@ public class VendorExtensionsMapper {
             .map(each -> (StringVendorExtension) each)
             .collect(toList());
     for (StringVendorExtension property : stringExtensions) {
-      properties.put(property.getName(), property.getValue());
+      properties.put(
+          property.getName(),
+          property.getValue());
     }
     Iterable<ObjectVendorExtension> objectExtensions =
         input.getValue().stream().filter(ObjectVendorExtension.class::isInstance)
             .map(each -> (ObjectVendorExtension) each).collect(toList());
     for (ObjectVendorExtension property : objectExtensions) {
-      properties.put(property.getName(), mapExtensions(property.getValue()));
+      properties.put(
+          property.getName(),
+          mapExtensions(property.getValue()));
     }
     return properties;
   }
