@@ -18,20 +18,20 @@
  */
 package springfox.documentation.oas.mappers;
 
-import io.swagger.oas.models.ExternalDocumentation;
-import io.swagger.oas.models.OpenAPI;
-import io.swagger.oas.models.Operation;
-import io.swagger.oas.models.PathItem;
-import io.swagger.oas.models.Paths;
-import io.swagger.oas.models.info.Contact;
-import io.swagger.oas.models.info.Info;
-import io.swagger.oas.models.media.Content;
-import io.swagger.oas.models.media.Schema;
-import io.swagger.oas.models.parameters.Parameter;
-import io.swagger.oas.models.responses.ApiResponses;
-import io.swagger.oas.models.servers.Server;
-import io.swagger.oas.models.servers.ServerVariable;
-import io.swagger.oas.models.tags.Tag;
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.servers.ServerVariable;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -117,7 +117,7 @@ public abstract class ServiceModelToOasMapper {
     return null;
   }
 
-  static io.swagger.oas.models.parameters.RequestBody map(RequestBody from) {
+  static io.swagger.v3.oas.models.parameters.RequestBody map(RequestBody from) {
     //TODO: Implement this mapping
     return null;
   }

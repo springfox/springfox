@@ -1,9 +1,8 @@
 package springfox.documentation.oas.mappers;
 
+import io.swagger.v3.oas.models.media.Schema;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelSpecification;
-
-import javax.xml.validation.Schema;
 
 @Mapper(componentModel = "spring")
 public class SchemaMapper {

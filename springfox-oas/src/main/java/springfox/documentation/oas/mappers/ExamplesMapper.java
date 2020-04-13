@@ -11,10 +11,12 @@ import java.util.TreeMap;
 
 @Mapper(componentModel = "spring", uses = VendorExtensionsMapper.class)
 public interface ExamplesMapper {
-  default Map<String, io.swagger.oas.models.examples.Example> mapExamples(List<Example> from) {
-    Map<String, io.swagger.oas.models.examples.Example> examples = new TreeMap<>();
+  default Map<String, io.swagger.v3.oas.models.examples.Example> mapExamples(List<Example> from) {
+    Map<String, io.swagger.v3.oas.models.examples.Example> examples = new TreeMap<>();
     for (Example each : from) {
-      examples.put(each.getMediaType().orElse(""), toOasExample(each));
+      examples.put(
+          each.getMediaType().orElse(""),
+          toOasExample(each));
     }
     return examples;
   }
@@ -22,5 +24,5 @@ public interface ExamplesMapper {
   @Mappings({
                 @Mapping(target = "$ref", ignore = true)
             })
-  io.swagger.oas.models.examples.Example toOasExample(Example from);
+  io.swagger.v3.oas.models.examples.Example toOasExample(Example from);
 }

@@ -31,11 +31,11 @@ import java.lang.annotation.Target;
 public class LicenseMapper {
 
   @License
-  public io.swagger.oas.models.info.License apiInfoToLicense(ApiInfo from) {
+  public io.swagger.v3.oas.models.info.License apiInfoToLicense(ApiInfo from) {
     if (from.getLicense() == null && from.getLicenseUrl() == null) {
       return null;
     }
-    return new io.swagger.oas.models.info.License().name(from.getLicense()).url(from.getLicenseUrl());
+    return new io.swagger.v3.oas.models.info.License().name(from.getLicense()).url(from.getLicenseUrl());
   }
 
 

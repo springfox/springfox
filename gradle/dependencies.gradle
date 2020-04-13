@@ -4,7 +4,7 @@ ext {
   classmate = "1.5.1"
   classGraph = "4.8.60"
   equalsverifierVersion = '3.1.5'
-  groovy = "2.5.4"
+  groovy = "2.5.8"
   jacocoVersion = '0.8.5'
   jackson = '2.10.2'
   joda = "2.10.1"
@@ -13,7 +13,7 @@ ext {
   mapstruct = "1.3.1.Final"
   mockito = "2.24.5"
   objenesis = "3.0.1"
-  oasCore = "2.0.0-rc2"
+  oasCore = "2.1.2"
   servlet = "4.0.1"
   slf4j = "1.7.25"
   snakeyaml = '1.23'
@@ -62,8 +62,8 @@ ext {
           "io.swagger:swagger-models:${swagger2Core}"
       ],
       oasCore                            : [
-          "io.swagger:swagger-annotations:${oasCore}",
-          "io.swagger:swagger-models:${oasCore}"
+          "io.swagger.core.v3:swagger-annotations:${oasCore}",
+          "io.swagger.core.v3:swagger-models:${oasCore}"
       ],
       spring                             : [
           "org.springframework.plugin:spring-plugin-core:${springPluginVersion}",
