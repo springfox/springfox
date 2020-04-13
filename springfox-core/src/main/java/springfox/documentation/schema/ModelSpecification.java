@@ -3,14 +3,14 @@ package springfox.documentation.schema;
 import java.util.Optional;
 
 public class ModelSpecification {
-  private ScalarModelSpecification scalar;
-  private CompoundModelSpecification compound;
-  private CollectionSpecification collection;
-  private MapSpecification map;
-  private ReferenceModelSpecification reference;
-  private ModelFacets facets;
-  private String sourceIdentifier;
-  private String name;
+  private final ScalarModelSpecification scalar;
+  private final CompoundModelSpecification compound;
+  private final CollectionSpecification collection;
+  private final MapSpecification map;
+  private final ReferenceModelSpecification reference;
+  private final ModelFacets facets;
+  private final String sourceIdentifier;
+  private final String name;
 
   @SuppressWarnings("ParameterNumber")
   public ModelSpecification(
