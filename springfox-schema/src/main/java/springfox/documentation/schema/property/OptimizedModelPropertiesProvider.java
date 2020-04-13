@@ -602,7 +602,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             String.format(
                 "%s_%s",
                 modelContext.getParameterId(),
-                "String"))
+                typeNameExtractor.typeName(modelContext)))
                       .withScalar(scalar.map(ScalarModelSpecification::new)
                                         .orElse(null))
                       .withReference(reference)
@@ -739,7 +739,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             String.format(
                 "%s_%s",
                 modelContext.getParameterId(),
-                "String"))
+                typeNameExtractor.typeName(modelContext)))
                       .withScalar(scalar.map(ScalarModelSpecification::new)
                                         .orElse(null))
                       .withReference(reference)
@@ -855,7 +855,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             String.format(
                 "%s_%s",
                 modelContext.getParameterId(),
-                "String"))
+                typeNameExtractor.typeName(modelContext)))
                       .withScalar(scalar.map(ScalarModelSpecification::new)
                                         .orElse(null))
                       .withReference(reference)

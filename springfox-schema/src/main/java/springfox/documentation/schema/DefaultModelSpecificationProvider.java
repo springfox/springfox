@@ -172,14 +172,14 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                                String.format(
                                    "%s_%s",
                                    mapContext.getParameterId(),
-                                   "String"))
+                                  typeNameExtractor.typeName(mapContext)))
                                .withScalar(new ScalarModelSpecification(ScalarType.STRING))
                               .build(),
                        new ModelSpecificationBuilder(
                            String.format(
                                "%s_%s",
                                mapContext.getParameterId(),
-                               "String"))
+                               typeNameExtractor.typeName(mapContext)))
                            .withReference(new ReferenceModelSpecification(
                                new ModelKey("", simpleQualifiedTypeName(valueType),
                                             mapContext.isReturnType())))
