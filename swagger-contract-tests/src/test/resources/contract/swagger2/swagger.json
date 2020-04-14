@@ -396,7 +396,8 @@
         "/api/store/order/{orderId}": {
             "get": {
                 "tags": [
-                    "Pet Store"
+                    "Pet Store",
+                    "pet-store-resource"
                 ],
                 "summary": "Find purchase order by ID",
                 "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",

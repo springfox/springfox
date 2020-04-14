@@ -26,7 +26,8 @@
         "/bugs/1162": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1162",
                 "operationId": "bug1162UsingPOST",
@@ -48,7 +49,8 @@
         "/bugs/1209": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1209",
                 "operationId": "bug1209UsingPOST",
@@ -80,7 +82,8 @@
         "/bugs/1306{?paramMap}": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1306",
                 "operationId": "bug1306UsingPOST",
@@ -118,7 +121,8 @@
         "/bugs/1376-bare": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "issue1376Bare",
                 "operationId": "issue1376BareUsingPOST",
@@ -139,7 +143,8 @@
         "/bugs/1376-input-bare{?url}": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "issue1376Input",
                 "operationId": "issue1376InputUsingPOST",
@@ -166,7 +171,8 @@
         "/bugs/1376-input-property{?url}": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "issue1376Input",
                 "operationId": "issue1376InputUsingPOST_1",
@@ -192,7 +198,8 @@
         "/bugs/1376-property": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "issue1376Property",
                 "operationId": "issue1376PropertyUsingPOST",
@@ -214,6 +221,7 @@
             "get": {
                 "tags": [
                     "Bugs",
+                    "bugs-controller",
                     "foo"
                 ],
                 "summary": "issue1420",
@@ -232,7 +240,8 @@
         "/bugs/1440": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "issue1440",
                 "operationId": "issue1440UsingGET",
@@ -250,7 +259,8 @@
         "/bugs/1475": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "mapOfLists",
                 "operationId": "mapOfListsUsingGET",
@@ -274,7 +284,8 @@
         "/bugs/1475-example": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "mapOfListOfExample",
                 "operationId": "mapOfListOfExampleUsingGET",
@@ -298,7 +309,8 @@
         "/bugs/1605": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "byteArrayResponse",
                 "operationId": "byteArrayResponseUsingGET",
@@ -317,7 +329,8 @@
         "/bugs/1627": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1627",
                 "operationId": "bug1627UsingGET",
@@ -343,7 +356,8 @@
         "/bugs/1632": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "fileCustomType",
                 "operationId": "fileCustomTypeUsingGET",
@@ -369,7 +383,8 @@
         "/bugs/1632s": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "filesCustomType",
                 "operationId": "filesCustomTypeUsingGET",
@@ -398,7 +413,8 @@
         "/bugs/1676": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "apiModelProperty",
                 "operationId": "apiModelPropertyUsingGET",
@@ -424,7 +440,8 @@
         "/bugs/1697": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "payloadWithByteBuffer",
                 "operationId": "payloadWithByteBufferUsingGET",
@@ -450,7 +467,8 @@
         "/bugs/1722": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "Remove an apple from a user",
                 "description": "Remove an apple from a user. You must specify the user name and the apple name.",
@@ -485,7 +503,8 @@
         "/bugs/1734{?offset}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1734",
                 "operationId": "bug1734UsingGET",
@@ -512,7 +531,8 @@
         "/bugs/1740": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1740",
                 "operationId": "bug1740UsingGET",
@@ -530,7 +550,8 @@
         "/bugs/1749{?ascending,companyName,email,like,pageNumber,pageSize,set,sortDirection,sortField}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "Retrieve all the companies",
                 "operationId": "getAllPagedUsingGET",
@@ -620,7 +641,8 @@
         "/bugs/1750a": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1750a",
                 "operationId": "bug1750aUsingGET",
@@ -641,7 +663,8 @@
         "/bugs/1750b": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "1750b",
                 "operationId": "bug1750bUsingGET",
@@ -688,7 +711,8 @@
         "/bugs/1777": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1777",
                 "operationId": "bug1777UsingGET",
@@ -706,7 +730,8 @@
         "/bugs/1778{?e,s}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1778",
                 "operationId": "bug1778UsingGET",
@@ -735,7 +760,8 @@
         "/bugs/1819a": {
             "put": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "modelWithListOfEnumsAsJson",
                 "operationId": "modelWithListOfEnumsAsJsonUsingPUT",
@@ -764,7 +790,8 @@
         "/bugs/1819b{?enumTypes}": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "modelWithListOfEnumsAsModelAttribute",
                 "operationId": "modelWithListOfEnumsAsModelAttributeUsingPOST",
@@ -802,7 +829,8 @@
         "/bugs/1841": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "method1",
                 "operationId": "method1UsingGET",
@@ -821,7 +849,8 @@
         "/bugs/1864{?somename}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "test",
                 "operationId": "testUsingGET",
@@ -844,7 +873,8 @@
         "/bugs/1881": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1881",
                 "operationId": "bug1881UsingGET",
@@ -873,7 +903,8 @@
         "/bugs/1887/{env}/{list-id}/emails": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "1887 example",
                 "operationId": "addEmailsToListUsingPOST",
@@ -925,7 +956,8 @@
         "/bugs/1894": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "cacheEvict1",
                 "operationId": "cacheEvict1UsingPOST",
@@ -943,7 +975,8 @@
         "/bugs/1907": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "xmlPayload",
                 "operationId": "xmlPayloadUsingGET",
@@ -972,7 +1005,8 @@
         "/bugs/1926/filtered": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "filtered",
                 "operationId": "filteredUsingGET",
@@ -1005,7 +1039,8 @@
         "/bugs/1926/not-filtered": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "notFiltered",
                 "operationId": "notFilteredUsingGET",
@@ -1038,7 +1073,8 @@
         "/bugs/1939{?credential-source-id,password,username}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "authenticate a user using a given set of credentials, producing a JWT token that may be used for future API operations if successful",
                 "operationId": "authenticateUsingGET",
@@ -1082,7 +1118,8 @@
         "/bugs/1965": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1965",
                 "operationId": "bug1965UsingPOST",
@@ -1141,7 +1178,8 @@
         "/bugs/1965-form-data": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1965FormData",
                 "operationId": "bug1965FormDataUsingPOST",
@@ -1236,7 +1274,8 @@
         "/bugs/2029{?name}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "测试RequesetParam",
                 "description": "测试RequesetParam",
@@ -1271,7 +1310,8 @@
         "/bugs/2081{?a.importantField,b.importantField}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2081",
                 "operationId": "bug2081UsingGET",
@@ -1300,7 +1340,8 @@
         "/bugs/2107/{someId}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "2107",
                 "operationId": "getSomeByIdUsingGET",
@@ -1331,7 +1372,8 @@
         "/bugs/2114{?clearIndex,siteSecret,stripHtmlTags,xmlUrl}": {
             "put": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2114",
                 "operationId": "bug2114UsingPUT",
@@ -1390,7 +1432,8 @@
         "/bugs/2118": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2118",
                 "operationId": "bug2118UsingGET",
@@ -1419,7 +1462,8 @@
         "/bugs/2161": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2161And2249and2469",
                 "operationId": "bug2161And2249and2469UsingGET",
@@ -1449,6 +1493,7 @@
             "get": {
                 "tags": [
                     "Bugs",
+                    "bugs-controller",
                     "example"
                 ],
                 "summary": "Get all examples",
@@ -1497,7 +1542,8 @@
         "/bugs/2368": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2368",
                 "operationId": "bug2368UsingGET",
@@ -1512,7 +1558,8 @@
         "/bugs/2378": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "upperCaseField",
                 "operationId": "upperCaseFieldUsingPOST",
@@ -1541,7 +1588,8 @@
         "/bugs/2391{?from_country_id}": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2391",
                 "operationId": "bug2391UsingPOST",
@@ -1568,7 +1616,8 @@
         "/bugs/2415": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2415",
                 "operationId": "bug2415UsingPOST",
@@ -1597,7 +1646,8 @@
         "/bugs/2415{?input}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2415",
                 "operationId": "bug2415UsingGET",
@@ -1627,7 +1677,8 @@
         "/bugs/2423{?from,to}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2423",
                 "operationId": "bug2423UsingGET",
@@ -1656,7 +1707,8 @@
         "/bugs/2479": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2479",
                 "operationId": "bug2479UsingPOST",
@@ -1685,7 +1737,8 @@
         "/bugs/2822": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2822",
                 "operationId": "bug2822UsingPOST",
@@ -1720,7 +1773,8 @@
         "/bugs/bug1827{?authorIds,authors[0].books[0].id,authors[0].books[0].name,authors[0].id,authors[0].name,id,name}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "addBook",
                 "operationId": "addBookUsingGET",
@@ -1790,7 +1844,8 @@
         "/bugs/bug1944": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug1944",
                 "operationId": "bug1944UsingGET",
@@ -1808,7 +1863,8 @@
         "/bugs/bug2182": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "/bug2182",
                 "operationId": "bug2182UsingGET",
@@ -1826,7 +1882,8 @@
         "/bugs/bug2203": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2203",
                 "operationId": "bug2203UsingGET",
@@ -1847,7 +1904,8 @@
         "/bugs/bug2220": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2220",
                 "operationId": "bug2220UsingGET",
@@ -1871,7 +1929,8 @@
         "/bugs/bug2220/{bar}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2220",
                 "operationId": "bug2220UsingGET_1",
@@ -1895,7 +1954,8 @@
         "/bugs/bug2230": {
             "post": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "/bug2230",
                 "operationId": "bug2230UsingPOST",
@@ -1927,7 +1987,8 @@
         "/bugs/bug2282": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "/bug2282",
                 "operationId": "bug2282UsingGET",
@@ -1945,7 +2006,8 @@
         "/bugs/{bar}/2148{?year}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "bug2148",
                 "operationId": "bug2148UsingGET",
@@ -1982,7 +2044,8 @@
         "/bugs/{propertyKey}/{environmentKey}": {
             "get": {
                 "tags": [
-                    "Bugs"
+                    "Bugs",
+                    "bugs-controller"
                 ],
                 "summary": "getProperty",
                 "operationId": "getPropertyUsingGET",

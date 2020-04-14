@@ -20,16 +20,26 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
+import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ScalarModelSpecification;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.schema.SimpleParameterSpecification;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ParameterStyle;
+import springfox.documentation.service.ParameterType;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spring.wrapper.NameValueExpression;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static java.util.Collections.*;
@@ -75,8 +85,56 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
     return parameters;
   }
 
+  protected Set<RequestParameter> getRequestParameters(
+      Set<NameValueExpression<String>> expressions,
+      ParameterType parameterType) {
+    Set<RequestParameter> parameters = new HashSet<>();
+    int index = 0;
+    for (NameValueExpression<String> expression : expressions) {
+      if (skipRequestParameter(parameters, expression)) {
+        continue;
+      }
+
+      String paramValue = expression.getValue();
+      AllowableListValues allowableValues = null;
+      if (!isEmpty(paramValue)) {
+        allowableValues = new AllowableListValues(singletonList(paramValue), "string");
+      }
+      RequestParameter parameter = new RequestParameterBuilder()
+          .name(expression.getName())
+          .description(null)
+          .defaultValue(paramValue)
+          .required(true)
+          .allowMultiple(false)
+          .parameterSpecification(new SimpleParameterSpecification(
+              ParameterStyle.SIMPLE,
+              false,
+              false,
+              new ModelSpecificationBuilder(String.format(
+                  "nv%s_String",
+                  index++))
+                  .withName(expression.getName())
+                  .withScalar(new ScalarModelSpecification(ScalarType.STRING))
+                  .build(),
+              new ArrayList<>()))
+          .allowableValues(allowableValues)
+          .in(parameterType)
+          .order(DEFAULT_PRECEDENCE)
+          .build();
+      parameters.add(parameter);
+    }
+
+    return parameters;
+  }
+
   private boolean skipParameter(List<Parameter> parameters, NameValueExpression<String> expression) {
     return expression.isNegated() || parameterHandled(parameters, expression);
+  }
+
+  private boolean skipRequestParameter(Set<RequestParameter> parameters, NameValueExpression<String> expression) {
+    return expression.isNegated()
+        || parameters.stream()
+        .anyMatch(p -> Objects.equals(p.getName(), expression.getName()));
   }
 
   private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {

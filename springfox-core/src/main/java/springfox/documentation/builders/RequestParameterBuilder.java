@@ -5,6 +5,7 @@ import springfox.documentation.schema.ContentSpecification;
 import springfox.documentation.schema.ContentSpecificationBuilder;
 import springfox.documentation.schema.SimpleParameterSpecification;
 import springfox.documentation.schema.SimpleParameterSpecificationBuilder;
+import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.VendorExtension;
@@ -24,6 +25,10 @@ public class RequestParameterBuilder {
 
   private SimpleParameterSpecificationBuilder simpleParameterBuilder;
   private ContentSpecificationBuilder contentSpecificationBuilder;
+  private String defaultValue;
+  private boolean allowMultiple;
+  private AllowableListValues allowableValues;
+  private int order;
 
   public RequestParameterBuilder name(String name) {
     this.name = name;
@@ -74,6 +79,24 @@ public class RequestParameterBuilder {
     this.extensions.addAll(extensions);
     return this;
   }
+
+  public RequestParameterBuilder defaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
+    return this;
+  }
+
+  public RequestParameterBuilder allowMultiple(boolean allowMultiple) {
+    this.allowMultiple = allowMultiple;
+    return this;
+  }
+
+  public RequestParameterBuilder allowableValues(AllowableListValues allowableValues) {
+    this.allowableValues = allowableValues;
+    return this;
+  }
+
+  public RequestParameterBuilder order(int order) {
+    this.order = order;
     return this;
   }
 
@@ -84,8 +107,12 @@ public class RequestParameterBuilder {
         description,
         required,
         deprecated,
+        defaultValue,
+        allowMultiple,
         allowEmptyValue,
+        allowableValues,
         parameterSpecification,
+        order,
         extensions);
   }
 }

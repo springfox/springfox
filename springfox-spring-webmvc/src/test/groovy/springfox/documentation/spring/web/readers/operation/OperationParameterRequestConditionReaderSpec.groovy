@@ -23,7 +23,9 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import springfox.documentation.service.Operation
 import springfox.documentation.service.Parameter
+import springfox.documentation.service.RequestParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -50,9 +52,14 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
+
     and:
     Parameter parameter = operation.parameters[0]
     assert parameter."$property" == expectedValue
+
+    and:
+    RequestParameter requestParameter = operation.requestParameters[0]
+    assert requestParameter."$property" == expectedValue
 
     where:
     property        | expectedValue
@@ -80,6 +87,7 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
 
     then:
     0 == operation.parameters.size()
+    0 == operation.requestParameters.size()
 
   }
 
@@ -95,7 +103,9 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     sut.apply(operationContext)
 
     then:
-    1 == operationContext.operationBuilder().build().parameters.size()
+    def built = operationContext.operationBuilder().build()
+    1 == built.parameters.size()
+    1 == built.requestParameters.size()
 
   }
 }
