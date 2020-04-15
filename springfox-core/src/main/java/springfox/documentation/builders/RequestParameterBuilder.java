@@ -1,9 +1,8 @@
 package springfox.documentation.builders;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import springfox.documentation.common.Either;
-import springfox.documentation.schema.ContentSpecificationBuilder;
-import springfox.documentation.schema.SimpleParameterSpecificationBuilder;
-import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.ContentSpecification;
 import springfox.documentation.service.SimpleParameterSpecification;
 import springfox.documentation.service.ParameterType;
@@ -14,20 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestParameterBuilder {
+  private static final Logger LOGGER = LoggerFactory.getLogger(RequestParameterBuilder.class);
   private String name;
   private ParameterType in;
   private String description;
   private Boolean required;
   private Boolean deprecated;
-  private Boolean allowEmptyValue;
-  private Either<SimpleParameterSpecification, ContentSpecification> parameterSpecification;
+  private Boolean hidden;
   private final List<VendorExtension> extensions = new ArrayList<>();
-
   private SimpleParameterSpecificationBuilder simpleParameterBuilder;
   private ContentSpecificationBuilder contentSpecificationBuilder;
-  private String defaultValue;
-  private boolean allowMultiple;
-  private AllowableListValues allowableValues;
   private int order;
 
   public RequestParameterBuilder name(String name) {
@@ -37,6 +32,15 @@ public class RequestParameterBuilder {
 
   public RequestParameterBuilder in(ParameterType in) {
     this.in = in;
+    return this;
+  }
+
+  public RequestParameterBuilder in(String in) {
+    try {
+      this.in = ParameterType.valueOf(in);
+    } catch (IllegalArgumentException e) {
+      LOGGER.warn("Unrecognized parameter type {}", in);
+    }
     return this;
   }
 
@@ -55,43 +59,27 @@ public class RequestParameterBuilder {
     return this;
   }
 
-  public RequestParameterBuilder allowEmptyValue(Boolean allowEmptyValue) {
-    this.allowEmptyValue = allowEmptyValue;
-    return this;
+  public SimpleParameterSpecificationBuilder simpleParameterBuilder() {
+    if (simpleParameterBuilder == null) {
+      simpleParameterBuilder = new SimpleParameterSpecificationBuilder(this);
+    }
+    return simpleParameterBuilder;
   }
 
-
-
-  public RequestParameterBuilder parameterSpecification(
-      ContentSpecification spec) {
-    this.parameterSpecification = new Either<>(null, spec);
-    return this;
+  public ContentSpecificationBuilder contentSpecificationBuilder() {
+    if (contentSpecificationBuilder == null) {
+      contentSpecificationBuilder = new ContentSpecificationBuilder(this);
+    }
+    return contentSpecificationBuilder;
   }
-
-  public RequestParameterBuilder parameterSpecification(
-      SimpleParameterSpecification spec) {
-    this.parameterSpecification = new Either<>(spec, null);
-    return this;
-  }
-  
 
   public RequestParameterBuilder extensions(List<VendorExtension> extensions) {
     this.extensions.addAll(extensions);
     return this;
   }
 
-  public RequestParameterBuilder defaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
-    return this;
-  }
-
-  public RequestParameterBuilder allowMultiple(boolean allowMultiple) {
-    this.allowMultiple = allowMultiple;
-    return this;
-  }
-
-  public RequestParameterBuilder allowableValues(AllowableListValues allowableValues) {
-    this.allowableValues = allowableValues;
+  public RequestParameterBuilder hidden(boolean hidden) {
+    this.hidden = hidden;
     return this;
   }
 
@@ -101,18 +89,28 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameter build() {
+    if (simpleParameterBuilder != null && contentSpecificationBuilder != null) {
+      throw new IllegalStateException("Parameter can be either a simple parameter or content, but not both");
+    }
+    Either<SimpleParameterSpecification, ContentSpecification> parameterSpecification;
+    if (simpleParameterBuilder == null && contentSpecificationBuilder != null) {
+      parameterSpecification = new Either<>(null, contentSpecificationBuilder.create());
+    } else if (simpleParameterBuilder != null) {
+      parameterSpecification = new Either<>(simpleParameterBuilder.create(), null);
+    } else {
+      LOGGER.warn("Parameter has not been initialized");
+      return null;
+    }
     return new RequestParameter(
         name,
         in,
         description,
         required,
         deprecated,
-        defaultValue,
-        allowMultiple,
-        allowEmptyValue,
-        allowableValues,
+        hidden,
         parameterSpecification,
         order,
         extensions);
   }
+
 }
