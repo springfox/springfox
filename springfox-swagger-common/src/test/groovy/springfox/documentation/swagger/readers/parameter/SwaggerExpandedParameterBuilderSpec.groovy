@@ -27,6 +27,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.schema.ExampleEnum
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.property.field.FieldProvider
@@ -58,7 +59,8 @@ class SwaggerExpandedParameterBuilderSpec extends Specification {
             field.type,
             field.name),
         DocumentationType.SWAGGER_12,
-        builderWithDefaultName)
+        builderWithDefaultName,
+        new RequestParameterBuilder())
 
     when:
     sut.apply(context)

@@ -42,7 +42,7 @@ class ApiParamParameterBuilderSpec
     extends DocumentationContextSpec
     implements ApiParamAnnotationSupport,
         RequestMappingSupport,
-        ModelProviderForServiceSupport  {
+        ModelProviderForServiceSupport {
 
   def descriptions = new DescriptionResolver(new MockEnvironment())
 
@@ -53,8 +53,7 @@ class ApiParamParameterBuilderSpec
         new TypeResolver().resolve(handlerMethod.methodParameters[0].getParameterType()))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter
-        ,
+        resolvedMethodParameter,
         documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
@@ -86,8 +85,7 @@ class ApiParamParameterBuilderSpec
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext =
         new ParameterContext(
-            resolvedMethodParameter
-            ,
+            resolvedMethodParameter,
             documentationContext(),
             genericNamingStrategy,
             Mock(OperationContext))
@@ -115,8 +113,7 @@ class ApiParamParameterBuilderSpec
     def resolvedMethodParameter = new ResolvedMethodParameter(0, "", [apiParamAnnotation], stubbedResolvedType())
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter
-        ,
+        resolvedMethodParameter,
         documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))

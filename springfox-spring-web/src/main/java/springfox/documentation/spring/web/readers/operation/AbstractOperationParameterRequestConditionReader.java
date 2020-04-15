@@ -94,6 +94,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
       }
 
       String paramValue = expression.getValue();
+      //TODO: Convert to a facet
       AllowableListValues allowableValues = null;
       if (!isEmpty(paramValue)) {
         allowableValues = new AllowableListValues(singletonList(paramValue), "string");
@@ -101,21 +102,20 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
       RequestParameter parameter = new RequestParameterBuilder()
           .name(expression.getName())
           .description(null)
-          .defaultValue(paramValue)
           .required(true)
-          .allowMultiple(false)
-          .parameterSpecification(new SimpleParameterSpecification(
-              ParameterStyle.SIMPLE,
-              false,
-              false,
-              new ModelSpecificationBuilder(String.format(
-                  "nv%s_String",
-                  index++))
-                  .withName(expression.getName())
-                  .withScalar(new ScalarModelSpecification(ScalarType.STRING))
-                  .build(),
-              new ArrayList<>()))
-          .allowableValues(allowableValues)
+          .simpleParameterBuilder()
+          .style(ParameterStyle.SIMPLE)
+          .explode(false)
+          .allowReserved(false)
+          .allowEmptyValue(false)
+          .defaultValue(paramValue)
+          .model(new ModelSpecificationBuilder(String.format(
+              "nv%s_String",
+              index++))
+              .name(expression.getName())
+              .scalarModel(ScalarType.STRING)
+              .build())
+          .build()
           .in(parameterType)
           .order(DEFAULT_PRECEDENCE)
           .build();

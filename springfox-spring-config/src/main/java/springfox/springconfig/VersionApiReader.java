@@ -21,6 +21,10 @@ package springfox.springconfig;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.service.ParameterStyle;
+import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -48,6 +52,14 @@ public class VersionApiReader implements ParameterBuilderPlugin {
           .parameterType("header")
           .name("v")
           .type(resolver.resolve(String.class)); //<3>
+      parameterContext.requestParameterBuilder()
+          .in(ParameterType.HEADER)
+          .name("v")
+          .simpleParameterBuilder()
+          .style(ParameterStyle.SIMPLE)
+          .model(new ModelSpecificationBuilder("v") //TODO: what shuold this be
+              .scalarModel(ScalarType.STRING)
+              .build());
     }
   }
 

@@ -25,9 +25,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.service.CollectionFormat;
+import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -66,8 +70,8 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
     AllowableValues allowable = allowableValues(context.getFieldType().getErasedType());
 
     String name = isEmpty(context.getParentName())
-                  ? context.getFieldName()
-                  : String.format("%s.%s", context.getParentName(), context.getFieldName());
+        ? context.getFieldName()
+        : String.format("%s.%s", context.getParentName(), context.getFieldName());
 
     String typeName = context.getDataTypeName();
     ModelReference itemModel = null;
@@ -98,6 +102,19 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .parameterType(context.getParameterType())
         .order(DEFAULT_PRECEDENCE)
         .parameterAccess(null);
+    context.getRequestParameterBuilder()
+        .name(name)
+        .description(null)
+        .required(Boolean.FALSE)
+        .in(context.getParameterType())
+        .order(DEFAULT_PRECEDENCE)
+        .simpleParameterBuilder()
+        .collectionFormat(isContainerType(resolved) ? CollectionFormat.CSV : null)
+        .model(new ModelSpecificationBuilder(name)
+            .scalarModel(ScalarType.STRING)
+            .build())
+        .facet(EnumerationFacet.from(allowable).orElse(null));
+    //TODO: figure out model
   }
 
   private Optional<ResolvedType> fieldType(ParameterExpansionContext context) {

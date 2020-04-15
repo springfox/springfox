@@ -32,10 +32,8 @@ import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
-import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
-import springfox.documentation.schema.SimpleParameterSpecificationBuilder;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -92,27 +90,27 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     if (methodParameter.hasParameterAnnotation(PathVariable.class) && treatAsAString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");
-      model.withScalar(new ScalarModelSpecification(ScalarType.STRING));
-   } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
+      model.scalarModel(ScalarType.STRING);
+    } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
       modelRef = new ModelRef("", new ModelRef("string"), true);
       ModelSpecificationBuilder map = new ModelSpecificationBuilder("TODO");
-      model.withMap(
+      model.mapModel(
           new MapSpecification(
               new ModelSpecificationBuilder("TODO")
-                  .withScalar(new ScalarModelSpecification(ScalarType.STRING))
+                  .scalarModel(ScalarType.STRING)
                   .build(),
               new ModelSpecificationBuilder("TODO")
-                  .withScalar(new ScalarModelSpecification(ScalarType.STRING))
+                  .scalarModel(ScalarType.STRING)
                   .build()));
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");
-      model.withScalar(new ScalarModelSpecification(ScalarType.STRING));
+      model.scalarModel(ScalarType.STRING);
     }
     if (!methodParameter.hasParameterAnnotations()) {
       String typeName = typeNameFor(parameterType.getErasedType());
       ScalarTypes.builtInScalarType(parameterType.getErasedType())
-          .ifPresent(s -> model.withScalar(new ScalarModelSpecification(s)));
+          .ifPresent(model::scalarModel);
       if (isBaseType(typeName)) {
         modelRef = new ModelRef(typeName);
       } else {
@@ -148,9 +146,8 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                 enumTypeDeterminer,
                 nameExtractor).apply(parameterType)));
     context.requestParameterBuilder()
-        .parameterSpecification(
-            new SimpleParameterSpecificationBuilder()
-                .build());
+        .simpleParameterBuilder()
+        .build();
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {
@@ -160,6 +157,6 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
   private boolean treatAsAString(ResolvedType parameterType) {
     return !(isBaseType(typeNameFor(parameterType.getErasedType()))
-                 || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
+        || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
   }
 }

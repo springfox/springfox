@@ -23,6 +23,7 @@ import io.swagger.annotations.ExampleProperty;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +42,19 @@ public class Examples {
       if (!isEmpty(each.value())) {
         examples.putIfAbsent(each.mediaType(), new LinkedList<>());
         examples.get(each.mediaType()).add(new ExampleBuilder()
+            .withMediaType(each.mediaType())
+            .withValue(each.value())
+            .build());
+      }
+    }
+    return examples;
+  }
+
+  public static List<Example> allExamples(io.swagger.annotations.Example example) {
+    List<Example> examples = new ArrayList<>();
+    for (ExampleProperty each : example.value()) {
+      if (!isEmpty(each.value())) {
+        examples.add(new ExampleBuilder()
             .withMediaType(each.mediaType())
             .withValue(each.value())
             .build());

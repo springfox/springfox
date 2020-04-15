@@ -7,6 +7,7 @@ import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
 import springfox.bean.validators.plugins.ReflectionSupport
 import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
@@ -42,7 +43,8 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
             resolver.resolve(Subject),
             fieldName),
         DocumentationType.SWAGGER_12,
-        new ParameterBuilder())
+        new ParameterBuilder(),
+        new RequestParameterBuilder())
 
     when:
     sut.apply(context)

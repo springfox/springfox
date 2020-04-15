@@ -24,9 +24,10 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.ExampleBuilder;
+import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
-import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.DocumentationType;
@@ -91,6 +92,25 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .hidden(annotation.hidden())
           .collectionFormat(annotation.collectionFormat())
           .order(SWAGGER_PLUGIN_ORDER);
+      context.requestParameterBuilder()
+          .name(
+              annotation.name().isEmpty()
+                  ? null
+                  : annotation.defaultValue())
+          .description(ofNullable(descriptions.resolve(annotation.value()))
+              .filter(name -> !name.isEmpty()).orElse(null))
+          .required(annotation.required())
+          .hidden(annotation.hidden())
+          .order(SWAGGER_PLUGIN_ORDER)
+          .simpleParameterBuilder()
+          .collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
+          .defaultValue(
+              annotation.defaultValue().isEmpty()
+                  ? null
+                  : annotation.defaultValue())
+          .allowEmptyValue(annotation.allowEmptyValue())
+          .scalarExample(example)
+          .examples(allExamples(annotation.examples()));
     }
   }
 

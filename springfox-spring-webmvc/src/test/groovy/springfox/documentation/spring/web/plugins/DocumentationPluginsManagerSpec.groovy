@@ -22,6 +22,7 @@ package springfox.documentation.spring.web.plugins
 import spock.lang.Specification
 import springfox.documentation.builders.OperationBuilder
 import springfox.documentation.builders.ParameterBuilder
+import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.DocumentationPlugin
 import springfox.documentation.spi.service.OperationBuilderPlugin
@@ -111,7 +112,8 @@ class DocumentationPluginsManagerSpec extends Specification implements ServicePl
       def paramContext = Mock(ParameterContext)
     and:
       paramContext.parameterBuilder() >> new ParameterBuilder()
-      paramContext.documentationType >> DocumentationType.SWAGGER_2
+    paramContext.requestParameterBuilder() >> new RequestParameterBuilder()
+    paramContext.documentationType >> DocumentationType.SWAGGER_2
     when:
       def sut = customWebPlugins()
       def parameter = sut.parameter(paramContext)
@@ -125,6 +127,7 @@ class DocumentationPluginsManagerSpec extends Specification implements ServicePl
       def paramContext = Mock(ParameterContext)
     and:
       paramContext.parameterBuilder() >> new ParameterBuilder()
+    paramContext.requestParameterBuilder() >> new RequestParameterBuilder()
       paramContext.documentationType >> DocumentationType.SPRING_WEB
       paramPlugin.supports(_) >> true
     when:
