@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import springfox.documentation.common.Compatibility;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -42,8 +44,10 @@ import springfox.documentation.spring.web.readers.parameter.ModelAttributeParame
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.Collections.*;
@@ -70,7 +74,19 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder().parameters(context.getGlobalOperationParameters());
-    context.operationBuilder().parameters(readParameters(context));
+    List<Compatibility<Parameter, RequestParameter>> compatibilities = readParameters(context);
+    context.operationBuilder().parameters(
+        compatibilities.stream()
+            .map(Compatibility::getLegacy)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList()));
+    context.operationBuilder().requestParameters(
+        compatibilities.stream()
+            .map(Compatibility::getModern)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toSet()));
   }
 
   @Override
@@ -78,10 +94,10 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     return true;
   }
 
-  private List<Parameter> readParameters(final OperationContext context) {
+  private List<Compatibility<Parameter, RequestParameter>> readParameters(final OperationContext context) {
 
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
-    List<Parameter> parameters = new ArrayList<>();
+    List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
@@ -101,7 +117,15 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         }
       }
     }
-    return parameters.stream().filter(((Predicate<Parameter>) Parameter::isHidden).negate()).collect(toList());
+    return parameters.stream()
+        .filter(hiddenParameter().negate())
+        .collect(toList());
+  }
+
+  private Predicate<Compatibility<Parameter, RequestParameter>> hiddenParameter() {
+    return c -> c.getLegacy()
+        .map(p -> p.isHidden())
+        .orElse(false);
   }
 
   private boolean shouldIgnore(
@@ -127,7 +151,6 @@ public class OperationParameterReader implements OperationBuilderPlugin {
         && !enumTypeDeterminer.isEnum(resolvedParamType.getErasedType())
         && !isContainerType(resolvedParamType)
         && !isMapType(resolvedParamType);
-
   }
 
 }

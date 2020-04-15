@@ -71,6 +71,7 @@ class ModelAttributeParameterExpanderSpec extends DocumentationContextSpec imple
             "",
             typeResolver.resolve(ModelAttributeWithHiddenParametersExample),
             context()))
+        .collect { it -> it.legacy.get() }
 
     then:
     parameters.size() == 7
