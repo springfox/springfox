@@ -124,8 +124,8 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         modelContext,
         propertiesHost));
     modelContext.getModelSpecificationBuilder()
-        .withName(typeName)
-        .withCompound(new CompoundModelSpecification(
+        .name(typeName)
+        .compoundModel(new CompoundModelSpecification(
             properties.values(),
             properties.size(),
             properties.size()));
@@ -167,24 +167,24 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       String typeName = typeNameExtractor.typeName(valueContext);
       return of(
           mapContext.getModelSpecificationBuilder()
-              .withMap(new MapSpecification(
+              .mapModel(new MapSpecification(
                            new ModelSpecificationBuilder(
                                String.format(
                                    "%s_%s",
                                    mapContext.getParameterId(),
                                   typeNameExtractor.typeName(mapContext)))
-                               .withScalar(new ScalarModelSpecification(ScalarType.STRING))
+                               .scalarModel(ScalarType.STRING)
                               .build(),
                        new ModelSpecificationBuilder(
                            String.format(
                                "%s_%s",
                                mapContext.getParameterId(),
                                typeNameExtractor.typeName(mapContext)))
-                           .withReference(new ReferenceModelSpecification(
+                           .referenceModel(new ReferenceModelSpecification(
                                new ModelKey("", simpleQualifiedTypeName(valueType),
                                             mapContext.isReturnType())))
                            .build()))
-          .withFacets(new ModelFacetsBuilder()
+          .facets(new ModelFacetsBuilder()
                           .withModelKey(new ModelKey(
                               simpleQualifiedTypeName(resolvedType),
                               typeName,

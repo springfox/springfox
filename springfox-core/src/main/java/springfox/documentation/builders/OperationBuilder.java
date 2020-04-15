@@ -38,9 +38,11 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.*;
@@ -200,9 +202,8 @@ public class OperationBuilder {
    * Updates the input parameters this operation needs
    *
    * @param parameters - input parameter definitions
-   * @deprecated - Use @see {@link OperationBuilder#requestParameters(Set)}
-   *
    * @return this
+   * @deprecated - Use @see {@link OperationBuilder#requestParameters(Set)}
    */
   @Deprecated
   public OperationBuilder parameters(final List<Parameter> parameters) {
@@ -215,13 +216,12 @@ public class OperationBuilder {
   }
 
 
-
   /**
+   * @param responseMessages - new response messages to be merged with existing response messages
+   * @return this
    * @deprecated @since 3.0.0
    * Updates the response messages
    * Use @see {@link OperationBuilder#responses(Set)}
-   * @param responseMessages - new response messages to be merged with existing response messages
-   * @return this
    */
   @Deprecated
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
@@ -233,9 +233,10 @@ public class OperationBuilder {
 
   /**
    * Updates the response messages
+   *
    * @param responses - new response messages to be merged with existing response messages
-   * @since 3.0.0
    * @return this
+   * @since 3.0.0
    */
   public OperationBuilder responses(Set<Response> responses) {
     this.responses.addAll(responses);
@@ -266,11 +267,11 @@ public class OperationBuilder {
 
 
   /**
+   * @param responseType = response type model reference
+   * @return this
    * @deprecated @since 3.0.0
    * Updates the reference to the response model
    * Use @see {@link OperationBuilder#responses(Set)}
-   * @param responseType = response type model reference
-   * @return this
    */
   @Deprecated
   public OperationBuilder responseModel(ModelReference responseType) {
@@ -305,8 +306,8 @@ public class OperationBuilder {
    * Updates the operation request body
    *
    * @param requestBody - operation extensions
-   * @since 3.0.0
    * @return this
+   * @since 3.0.0
    */
   public OperationBuilder requestBody(RequestBody requestBody) {
     this.body = requestBody;
@@ -317,11 +318,13 @@ public class OperationBuilder {
    * Updates the operation response body
    *
    * @param parameters - operation extensions
-   * @since 3.0.0
    * @return this
+   * @since 3.0.0
    */
   public OperationBuilder requestParameters(Set<RequestParameter> parameters) {
-    this.requestParameters.addAll(parameters);
+    this.requestParameters.addAll(parameters.stream()
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList()));
     return this;
   }
 

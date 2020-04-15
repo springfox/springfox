@@ -7,7 +7,6 @@ import springfox.documentation.schema.Maps;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
-import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -51,15 +50,13 @@ class MapSpecificationProvider {
   private ModelSpecification modelSpecification(
       ModelContext modelContext,
       ResolvedType type) {
-    ScalarModelSpecification scalar
-        = ScalarTypes.builtInScalarType(type)
-                     .map(ScalarModelSpecification::new)
-                     .orElse(null);
+    Optional<ScalarType> scalar
+        = ScalarTypes.builtInScalarType(type);
 
     ReferenceModelSpecification reference = null;
-    if (scalar == null) {
+    if (!scalar.isPresent()) {
       if (type != null && enums.isEnum(type.getErasedType())) {
-        scalar = new ScalarModelSpecification(ScalarType.STRING);
+        scalar = Optional.of(ScalarType.STRING);
         //TODO: Enum values in the facet
       } else {
         reference = new ReferenceModelSpecification(
@@ -76,8 +73,8 @@ class MapSpecificationProvider {
         "%s_%s",
         modelContext.getParameterId(),
         "String"))
-        .withScalar(scalar)
-        .withReference(reference)
+        .scalarModel(scalar.orElse(null))
+        .referenceModel(reference)
         .build();
   }
 }

@@ -78,7 +78,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
     return url.contains("?");
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "rawtypes"})
   private Set<String> queryParamNames(PathContext context) {
     return context.getParameters().stream()
         .filter(queryStringParams().and(onlyOneAllowableValue().negate()))
@@ -86,7 +86,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
         .collect(toCollection(() -> new TreeSet(naturalOrder())));
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "rawtypes"})
   private String prefilledQueryParams(PathContext context) {
     return String.join("&", context.getParameters().stream()
         .filter(onlyOneAllowableValue())

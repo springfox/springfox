@@ -9,7 +9,6 @@ import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
-import springfox.documentation.schema.ScalarModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.schema.TypeNameExtractor;
@@ -41,16 +40,14 @@ public class CollectionSpecificationProvider {
     }
     ResolvedType itemType = Collections.collectionElementType(collection);
     CollectionType collectionType = Collections.collectionType(collection);
-    ScalarModelSpecification scalar
-        = ScalarTypes.builtInScalarType(itemType)
-                     .map(ScalarModelSpecification::new)
-                     .orElse(null);
+    Optional<ScalarType> scalar
+        = ScalarTypes.builtInScalarType(itemType);
 
     ReferenceModelSpecification reference = null;
     CollectionSpecification collectionSpecification = null;
-    if (scalar == null) {
+    if (!scalar.isPresent()) {
       if (itemType != null && enums.isEnum(itemType.getErasedType())) {
-        scalar = new ScalarModelSpecification(ScalarType.STRING);
+        scalar = Optional.of(ScalarType.STRING);
         //TODO: Enum values in the facet
       } else if (Collections.isContainerType(itemType)) {
         collectionSpecification = create(
@@ -74,9 +71,9 @@ public class CollectionSpecificationProvider {
             "%s_%s",
             modelContext.getParameterId(),
             "String"))
-        .withScalar(scalar)
-        .withReference(reference)
-        .withCollection(collectionSpecification)
+        .scalarModel(scalar.orElse(null))
+        .referenceModel(reference)
+        .collectionModel(collectionSpecification)
         .build();
     return Optional.of(new CollectionSpecification(itemModel, collectionType));
   }

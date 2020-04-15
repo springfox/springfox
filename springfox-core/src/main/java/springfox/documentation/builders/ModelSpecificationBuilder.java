@@ -7,6 +7,7 @@ import springfox.documentation.schema.ModelFacets;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
+import springfox.documentation.schema.ScalarType;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -25,37 +26,39 @@ public class ModelSpecificationBuilder {
     this.sourceIdentifier = sourceIdentifier;
   }
 
-  public ModelSpecificationBuilder withName(String name) {
+  public ModelSpecificationBuilder name(String name) {
     this.name = name;
     return this;
   }
 
-  public ModelSpecificationBuilder withFacets(ModelFacets facets) {
+  public ModelSpecificationBuilder facets(ModelFacets facets) {
     this.facets = facets;
     return this;
   }
 
-  public ModelSpecificationBuilder withScalar(ScalarModelSpecification scalar) {
-    this.scalar = scalar;
+  public ModelSpecificationBuilder scalarModel(ScalarType type) {
+    if (type != null) {
+      this.scalar = new ScalarModelSpecification(type);
+    }
     return this;
   }
 
-  public ModelSpecificationBuilder withCompound(CompoundModelSpecification compound) {
+  public ModelSpecificationBuilder compoundModel(CompoundModelSpecification compound) {
     this.compound = compound;
     return this;
   }
 
-  public ModelSpecificationBuilder withCollection(CollectionSpecification collection) {
+  public ModelSpecificationBuilder collectionModel(CollectionSpecification collection) {
     this.collection = collection;
     return this;
   }
 
-  public ModelSpecificationBuilder withMap(MapSpecification map) {
+  public ModelSpecificationBuilder mapModel(MapSpecification map) {
     this.map = map;
     return this;
   }
 
-  public ModelSpecificationBuilder withReference(ReferenceModelSpecification reference) {
+  public ModelSpecificationBuilder referenceModel(ReferenceModelSpecification reference) {
     this.reference = reference;
     return this;
   }
