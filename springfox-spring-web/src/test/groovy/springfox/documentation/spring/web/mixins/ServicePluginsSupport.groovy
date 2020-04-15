@@ -21,7 +21,6 @@ package springfox.documentation.spring.web.mixins
 
 import com.fasterxml.classmate.TypeResolver
 
-import groovy.lang.Mixin
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.PathDecorator
@@ -54,16 +53,16 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
-    plugins.documentationPlugins = create([])
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
-    plugins.parameterPlugins = create([new ParameterNameReader()])
-    plugins.operationBuilderPlugins = create([])
-    plugins.resourceGroupingStrategies = create([])
-    plugins.operationModelsProviders = create([new OperationModelsProvider(defaultSchemaPlugins())])
-    plugins.defaultsProviders = create([])
-    plugins.apiListingScanners = create([])
-    plugins.pathDecorators = create([
+    plugins.apiListingPlugins = of(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
+    plugins.documentationPlugins = of([])
+    plugins.parameterExpanderPlugins = of([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
+    plugins.parameterPlugins = of([new ParameterNameReader()])
+    plugins.operationBuilderPlugins = of([])
+    plugins.resourceGroupingStrategies = of([])
+    plugins.operationModelsProviders = of([new OperationModelsProvider(defaultSchemaPlugins())])
+    plugins.defaultsProviders = of([])
+    plugins.apiListingScanners = of([])
+    plugins.pathDecorators = of([
         new OperationPathDecorator(),
         new PathSanitizer(),
         new PathMappingDecorator(),
@@ -86,16 +85,16 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def plugins = new DocumentationPluginsManager()
-    plugins.apiListingPlugins = create(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
-    plugins.documentationPlugins = create(documentationPlugins)
-    plugins.parameterExpanderPlugins = create([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
-    plugins.parameterPlugins = create(paramPlugins)
-    plugins.operationBuilderPlugins = create(operationPlugins)
-    plugins.resourceGroupingStrategies = create(groupingStrategyPlugins)
-    plugins.operationModelsProviders = create([new OperationModelsProvider(defaultSchemaPlugins())])
-    plugins.defaultsProviders = create(defaultProviderPlugins)
-    plugins.pathDecorators = create(pathDecorators)
-    plugins.apiListingScanners = create(listingScanners)
+    plugins.apiListingPlugins = of(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
+    plugins.documentationPlugins = of(documentationPlugins)
+    plugins.parameterExpanderPlugins = of([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
+    plugins.parameterPlugins = of(paramPlugins)
+    plugins.operationBuilderPlugins = of(operationPlugins)
+    plugins.resourceGroupingStrategies = of(groupingStrategyPlugins)
+    plugins.operationModelsProviders = of([new OperationModelsProvider(defaultSchemaPlugins())])
+    plugins.defaultsProviders = of(defaultProviderPlugins)
+    plugins.pathDecorators = of(pathDecorators)
+    plugins.apiListingScanners = of(listingScanners)
     return plugins
   }
 

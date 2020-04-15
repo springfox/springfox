@@ -23,7 +23,14 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import springfox.documentation.service.Operation
+import springfox.documentation.builders.ModelSpecificationBuilder
+import springfox.documentation.common.Either
+import springfox.documentation.schema.ModelSpecification
+import springfox.documentation.schema.ScalarType
+import springfox.documentation.service.ContentSpecification
+import springfox.documentation.service.ParameterStyle
+import springfox.documentation.service.SimpleParameterSpecification
+import springfox.documentation.builders.SimpleParameterSpecificationBuilder
 import springfox.documentation.service.Parameter
 import springfox.documentation.service.RequestParameter
 import springfox.documentation.spi.DocumentationType
@@ -35,13 +42,17 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
 
   OperationParameterHeadersConditionReader sut = new OperationParameterHeadersConditionReader(new TypeResolver())
 
-  def "Should read a parameter given a parameter request condition"() {
+  def "(Deprecated) Should read a parameter given a parameter request condition"() {
     given:
     HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
     HeadersRequestCondition headersCondition = new HeadersRequestCondition("test=testValue")
     RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
         ["headersCondition": headersCondition])
-    OperationContext operationContext = operationContext(documentationContext(), handlerMethod, 0, requestMappingInfo)
+    OperationContext operationContext = operationContext(
+        documentationContext(),
+        handlerMethod,
+        0,
+        requestMappingInfo)
 
     when:
     sut.apply(operationContext)
@@ -51,14 +62,10 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
-    
+
     and:
     Parameter parameter = operation.parameters[0]
     parameter."$property" == expectedValue
-
-    and:
-    RequestParameter requestParameter = operation.requestParameters[0]
-    requestParameter."$property" == expectedValue
 
     where:
     property        | expectedValue
@@ -68,7 +75,56 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     'required'      | true
     'allowMultiple' | false
     'paramType'     | "header"
+  }
 
+  def "Should read a parameter given a parameter request condition"() {
+    given:
+    HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
+    HeadersRequestCondition headersCondition = new HeadersRequestCondition("test=testValue")
+    RequestMappingInfo requestMappingInfo = requestMappingInfo('/parameter-conditions',
+        ["headersCondition": headersCondition])
+    OperationContext operationContext = operationContext(
+        documentationContext(),
+        handlerMethod,
+        0,
+        requestMappingInfo)
+
+    when:
+    sut.apply(operationContext)
+    def operation = operationContext.operationBuilder().build()
+
+    then:
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
+
+    and:
+    RequestParameter requestParameter = operation.requestParameters[0]
+    requestParameter."$property" == expectedValue
+
+    where:
+    property                 | expectedValue
+    'name'                   | 'test'
+    'paramType'              | "header"
+    'required'               | true
+    'description'            | null
+    'parameterSpecification' | simpleParameter()
+  }
+
+  private Either<SimpleParameterSpecification, ContentSpecification> simpleParameter() {
+    new Either<SimpleParameterSpecification, ContentSpecification>(
+        new SimpleParameterSpecificationBuilder(null)
+            .style(ParameterStyle.SIMPLE)
+            .allowEmptyValue(false)
+            .allowReserved(false)
+            .defaultValue('testValue')
+            .explode(false)
+            .model(new ModelSpecificationBuilder("nv0_String")
+                .scalarModel(ScalarType.STRING)
+                .name("test")
+                .build())
+            .create(),
+        null)
   }
 
   def "Should ignore a negated parameter in a parameter request condition"() {
