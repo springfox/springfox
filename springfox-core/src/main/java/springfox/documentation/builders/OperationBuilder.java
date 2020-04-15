@@ -404,6 +404,6 @@ public class OperationBuilder {
   }
 
   private Comparator<RequestParameter> defaultRequestParameterComparator() {
-    return (p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName());
+    return (p1, p2) -> nullToEmpty(p1.getName()).compareToIgnoreCase(nullToEmpty(p2.getName()));
   }
 }

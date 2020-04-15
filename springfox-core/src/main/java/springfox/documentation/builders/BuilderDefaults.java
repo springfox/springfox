@@ -165,4 +165,11 @@ public class BuilderDefaults {
     }
     return test;
   }
+
+  public static String nullToEmpty(String test) {
+    if (test == null) {
+      return "";
+    }
+    return test;
+  }
 }
