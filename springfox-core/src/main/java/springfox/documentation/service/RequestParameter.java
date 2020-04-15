@@ -1,8 +1,6 @@
 package springfox.documentation.service;
 
 import springfox.documentation.common.Either;
-import springfox.documentation.schema.ContentSpecification;
-import springfox.documentation.schema.SimpleParameterSpecification;
 
 import java.util.ArrayList;
 import java.util.List;

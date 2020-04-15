@@ -1,11 +1,11 @@
 package springfox.documentation.builders;
 
 import springfox.documentation.common.Either;
-import springfox.documentation.schema.ContentSpecification;
 import springfox.documentation.schema.ContentSpecificationBuilder;
-import springfox.documentation.schema.SimpleParameterSpecification;
 import springfox.documentation.schema.SimpleParameterSpecificationBuilder;
 import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.ContentSpecification;
+import springfox.documentation.service.SimpleParameterSpecification;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.VendorExtension;
