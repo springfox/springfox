@@ -24,7 +24,6 @@ import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.service.Parameter
-import springfox.documentation.service.RequestParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport

@@ -6,13 +6,13 @@ import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.schema.Xml;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PropertySpecificationBuilder {
   private String name;
   private String description;
   private ModelSpecification type;
-  private List<ElementFacet> facets;
   private Boolean nullable;
   private Boolean required;
   private Boolean readOnly;
@@ -24,7 +24,9 @@ public class PropertySpecificationBuilder {
   private Object example;
   private Object defaultValue;
   private Xml xml;
-  private List<VendorExtension<?>> vendorExtensions;
+
+  private final List<ElementFacet> facets = new ArrayList<>();
+  private final List<VendorExtension<?>> vendorExtensions = new ArrayList<>();
 
   public PropertySpecificationBuilder withName(String name) {
     this.name = name;
@@ -42,7 +44,14 @@ public class PropertySpecificationBuilder {
   }
 
   public PropertySpecificationBuilder withFacets(List<ElementFacet> facets) {
-    this.facets = facets;
+    this.facets.addAll(facets);
+    return this;
+  }
+
+  public PropertySpecificationBuilder facet(ElementFacet facet) {
+    if (facet != null) {
+      this.facets.add(facet);
+    }
     return this;
   }
 
@@ -102,7 +111,7 @@ public class PropertySpecificationBuilder {
   }
 
   public PropertySpecificationBuilder withVendorExtensions(List<VendorExtension<?>> vendorExtensions) {
-    this.vendorExtensions = vendorExtensions;
+    this.vendorExtensions.addAll(vendorExtensions);
     return this;
   }
 

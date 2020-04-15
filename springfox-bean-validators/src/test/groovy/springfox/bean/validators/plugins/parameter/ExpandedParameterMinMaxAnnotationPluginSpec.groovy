@@ -8,6 +8,7 @@ import springfox.bean.validators.plugins.AnnotationsSupport
 import springfox.bean.validators.plugins.ReflectionSupport
 import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.RequestParameterBuilder
+import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
@@ -48,14 +49,27 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
 
     when:
     sut.apply(context)
-    def property = context.parameterBuilder.build()
+    def parameter = context.parameterBuilder.build()
+    def numericRange = context.requestParameterBuilder.build()
+        ?.parameterSpecification
+        ?.getLeft()
+        ?.map {p -> p.facetOfType(NumericElementFacet) }
+        ?.orElse(null)
+        ?.get()
+
 
     then:
-    def range = property.allowableValues as AllowableRangeValues
+    def range = parameter.allowableValues as AllowableRangeValues
     range?.max == expectedMax
     range?.exclusiveMax == exclusiveMax
     range?.min == expectedMin
     range?.exclusiveMin == exclusiveMin
+
+    and:
+    numericRange?.maximum == expectedMax ?: new BigDecimal(expectedMax)
+    numericRange?.exclusiveMaximum == exclusiveMax
+    numericRange?.minimum == expectedMin ?: new BigDecimal(expectedMin)
+    numericRange?.exclusiveMinimum  == exclusiveMin
 
     where:
     fieldName      | expectedMin | exclusiveMin | expectedMax | exclusiveMax

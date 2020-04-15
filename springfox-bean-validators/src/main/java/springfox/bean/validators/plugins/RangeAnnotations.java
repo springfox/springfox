@@ -21,12 +21,17 @@ package springfox.bean.validators.plugins;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import springfox.documentation.common.Compatibility;
+import springfox.documentation.schema.NumericElementFacet;
 import springfox.documentation.service.AllowableRangeValues;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.Optional;
+
+import static springfox.documentation.schema.NumericElementFacet.*;
 
 public class RangeAnnotations {
   private static final Logger LOG = LoggerFactory.getLogger(RangeAnnotations.class);
@@ -48,8 +53,11 @@ public class RangeAnnotations {
     return String.valueOf(Math.max(0, Math.min(size.max(), Integer.MAX_VALUE)));
   }
 
-  public static AllowableRangeValues allowableRange(Optional<Min> min, Optional<Max> max) {
+  public static Compatibility<AllowableRangeValues, NumericElementFacet> allowableRange(
+      Optional<Min> min,
+      Optional<Max> max) {
     AllowableRangeValues myvalues = null;
+    NumericElementFacet range = null;
 
     if (min.isPresent() && max.isPresent()) {
       LOG.debug("@Min+@Max detected: adding AllowableRangeValues to field ");
@@ -58,11 +66,23 @@ public class RangeAnnotations {
           false,
           Double.toString(max.get().value()),
           false);
+      range = new NumericElementFacet(
+          DEFAULT_MULTIPLE,
+          BigDecimal.valueOf(min.get().value()),
+          false,
+          BigDecimal.valueOf(max.get().value()),
+          false);
 
     } else if (min.isPresent()) {
       LOG.debug("@Min detected: adding AllowableRangeValues to field ");
       myvalues = new AllowableRangeValues(
           Double.toString(min.get().value()),
+          false,
+          null,
+          null);
+      range = new NumericElementFacet(
+          DEFAULT_MULTIPLE,
+          BigDecimal.valueOf(min.get().value()),
           false,
           null,
           null);
@@ -74,7 +94,13 @@ public class RangeAnnotations {
           null,
           Double.toString(max.get().value()),
           false);
+      range = new NumericElementFacet(
+          DEFAULT_MULTIPLE,
+          null,
+          null,
+          BigDecimal.valueOf(max.get().value()),
+          false);
     }
-    return myvalues;
+    return new Compatibility<>(myvalues, range);
   }
 }

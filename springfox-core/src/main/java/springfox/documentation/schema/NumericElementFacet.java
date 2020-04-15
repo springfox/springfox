@@ -1,8 +1,11 @@
 package springfox.documentation.schema;
 
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 public class NumericElementFacet implements ElementFacet {
+  public static final BigDecimal DEFAULT_MULTIPLE = BigDecimal.ONE;
   private final BigDecimal multipleOf;
   private final BigDecimal maximum;
   private final Boolean exclusiveMaximum;
@@ -11,10 +14,10 @@ public class NumericElementFacet implements ElementFacet {
 
   public NumericElementFacet(
       BigDecimal multipleOf,
-      BigDecimal maximum,
-      Boolean exclusiveMaximum,
       BigDecimal minimum,
-      Boolean exclusiveMinimum) {
+      Boolean exclusiveMinimum,
+      BigDecimal maximum,
+      Boolean exclusiveMaximum) {
     this.multipleOf = multipleOf;
     this.maximum = maximum;
     this.exclusiveMaximum = exclusiveMaximum;
@@ -40,5 +43,37 @@ public class NumericElementFacet implements ElementFacet {
 
   public Boolean getExclusiveMinimum() {
     return exclusiveMinimum;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    NumericElementFacet that = (NumericElementFacet) o;
+    return Objects.equals(multipleOf, that.multipleOf) &&
+        Objects.equals(maximum, that.maximum) &&
+        Objects.equals(exclusiveMaximum, that.exclusiveMaximum) &&
+        Objects.equals(minimum, that.minimum) &&
+        Objects.equals(exclusiveMinimum, that.exclusiveMinimum);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(multipleOf, maximum, exclusiveMaximum, minimum, exclusiveMinimum);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", NumericElementFacet.class.getSimpleName() + "[", "]")
+        .add("multipleOf=" + multipleOf)
+        .add("maximum=" + maximum)
+        .add("exclusiveMaximum=" + exclusiveMaximum)
+        .add("minimum=" + minimum)
+        .add("exclusiveMinimum=" + exclusiveMinimum)
+        .toString();
   }
 }

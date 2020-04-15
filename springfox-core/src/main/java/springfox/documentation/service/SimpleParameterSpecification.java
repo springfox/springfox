@@ -7,6 +7,7 @@ import springfox.documentation.schema.ModelSpecification;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 public class SimpleParameterSpecification {
@@ -75,6 +76,13 @@ public class SimpleParameterSpecification {
 
   public List<ElementFacet> getFacets() {
     return facets;
+  }
+
+  public <T extends ElementFacet> Optional<T> facetOfType(Class<T> clazz) {
+    return facets.stream()
+        .filter(f -> clazz.isAssignableFrom(f.getClass()))
+        .map(t -> (T) t)
+        .findFirst();
   }
 
   public String getDefaultValue() {

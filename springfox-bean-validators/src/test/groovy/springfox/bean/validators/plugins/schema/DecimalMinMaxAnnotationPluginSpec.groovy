@@ -23,45 +23,60 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.DecimalMinMaxTestModel
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
+import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 class DecimalMinMaxAnnotationPluginSpec extends Specification {
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
-      new DecimalMinMaxAnnotationPlugin().supports(types)
+    new DecimalMinMaxAnnotationPlugin().supports(types)
+
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@DecimalMin/@DecimalMax annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
+  def "@DecimalMin/@DecimalMax annotations are reflected in the model #propertyName that are AnnotatedElements"() {
     given:
-      def sut = new DecimalMinMaxAnnotationPlugin()
-      def element = DecimalMinMaxTestModel.getDeclaredField(propertyName)
-      def context = new ModelPropertyContext(
-          new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
-          element,
-          new TypeResolver(),
-          DocumentationType.SWAGGER_12)
+    def sut = new DecimalMinMaxAnnotationPlugin()
+    def element = DecimalMinMaxTestModel.getDeclaredField(propertyName)
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(), new PropertySpecificationBuilder(),
+        element,
+        new TypeResolver(),
+        DocumentationType.SWAGGER_12)
+
     when:
-      sut.apply(context)
-      def property = context.builder.build()
+    sut.apply(context)
+    def property = context.builder.build()
+    def numericRange = context.getSpecificationBuilder().build()
+        ?.facetOfType(NumericElementFacet)
+        ?.orElse(null)
+
     then:
-      def range = property.allowableValues as AllowableRangeValues
-      range?.max == expectedMax
-      range?.exclusiveMax == exclusiveMax
-      range?.min == expectedMin
-      range?.exclusiveMin == exclusiveMin
+    def range = property.allowableValues as AllowableRangeValues
+    range?.max == expectedMax
+    range?.exclusiveMax == exclusiveMax
+    range?.min == expectedMin
+    range?.exclusiveMin == exclusiveMin
+
+    and:
+    numericRange?.maximum == expectedMax ?: new BigDecimal(expectedMax)
+    numericRange?.exclusiveMaximum == exclusiveMax
+    numericRange?.minimum == expectedMin ?: new BigDecimal(expectedMin)
+    numericRange?.exclusiveMinimum  == exclusiveMin
+
     where:
-      propertyName      | expectedMin | exclusiveMin | expectedMax                 | exclusiveMax
-      "noAnnotation"    | null        | null         | null                        | null
-      "onlyMin"         | "10.5"      | false        | null                        | null
-      "onlyMax"         | null        | null         | "20.5"                      | false
-      "both"            | "10.5"      | false        | "20.5"                      | false
-      "minExclusive"    | "10.5"      | true         | null                        | null
-      "maxExclusive"    | null        | null         | "20.5"                      | true
-      "bothExclusive"   | "10.5"      | true         | "20.5"                      | true
+    propertyName    | expectedMin | exclusiveMin | expectedMax | exclusiveMax
+    "noAnnotation"  | null        | null         | null        | null
+    "onlyMin"       | "10.5"      | false        | null        | null
+    "onlyMax"       | null        | null         | "20.5"      | false
+    "both"          | "10.5"      | false        | "20.5"      | false
+    "minExclusive"  | "10.5"      | true         | null        | null
+    "maxExclusive"  | null        | null         | "20.5"      | true
+    "bothExclusive" | "10.5"      | true         | "20.5"      | true
   }
 }

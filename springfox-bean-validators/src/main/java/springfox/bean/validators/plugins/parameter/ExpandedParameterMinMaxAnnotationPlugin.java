@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.common.Compatibility;
+import springfox.documentation.schema.NumericElementFacet;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -49,13 +51,23 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
   public void apply(ParameterExpansionContext context) {
 
     Optional<Min> min = context.findAnnotation(Min.class);
-
     Optional<Max> max = context.findAnnotation(Max.class);
 
     if (min.isPresent() || max.isPresent()) {
-      AllowableRangeValues values = allowableRange(min, max);
-      LOG.debug("Adding allowable range: min({}) - max({}}", values.getMin(), values.getMax());
-      context.getParameterBuilder().allowableValues(values);
+      Compatibility<AllowableRangeValues, NumericElementFacet> values = allowableRange(min, max);
+      LOG.debug("Adding allowable range: min({}) - max({}}",
+          values.getLegacy().map(AllowableRangeValues::getMin)
+          .orElse("<empty>"),
+          values.getLegacy().map(AllowableRangeValues::getMax)
+              .orElse("<empty>"));
+      context.getParameterBuilder()
+          .allowableValues(values.getLegacy().orElse(null));
+
+      LOG.debug("Adding numeric element facet: {}",
+          values.getModern().map(NumericElementFacet::toString)
+              .orElse("<empty>"));
+      context.getRequestParameterBuilder()
+          .simpleParameterBuilder().facet(values.getModern().orElse(null));
     }
   }
 

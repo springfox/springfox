@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.common.Compatibility;
+import springfox.documentation.schema.NumericElementFacet;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -50,9 +52,14 @@ public class MinMaxAnnotationPlugin implements ParameterBuilderPlugin {
     Optional<Min> min = annotationFromParameter(context, Min.class);
     Optional<Max> max = annotationFromParameter(context, Max.class);
     if (min.isPresent() || max.isPresent()) {
-      AllowableRangeValues values = allowableRange(min, max);
-      LOG.debug("adding allowable Values: " + values.getMin() + " - " + values.getMax());
-      context.parameterBuilder().allowableValues(values);
+      Compatibility<AllowableRangeValues, NumericElementFacet> values = allowableRange(min, max);
+      LOG.debug(String.format("Adding allowable Values: %s",
+          values.getLegacy().map(AllowableRangeValues::toString).orElse("<none>")));
+      context.parameterBuilder().allowableValues(values.getLegacy().orElse(null));
+      LOG.debug(String.format("Adding numeric element facet : %s",
+          values.getModern().map(NumericElementFacet::toString).orElse("<none>")));
+      context.requestParameterBuilder().simpleParameterBuilder()
+          .facet(values.getModern().orElse(null));
     }
   }
 
