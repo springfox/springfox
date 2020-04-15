@@ -23,7 +23,6 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.ParamsRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
-import springfox.documentation.service.Operation
 import springfox.documentation.service.Parameter
 import springfox.documentation.service.RequestParameter
 import springfox.documentation.spi.DocumentationType
@@ -56,10 +55,6 @@ class OperationParameterRequestConditionReaderSpec extends DocumentationContextS
     and:
     Parameter parameter = operation.parameters[0]
     assert parameter."$property" == expectedValue
-
-    and:
-    RequestParameter requestParameter = operation.requestParameters[0]
-    assert requestParameter."$property" == expectedValue
 
     where:
     property        | expectedValue
