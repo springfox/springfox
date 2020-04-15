@@ -23,6 +23,7 @@ import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.*;
@@ -115,5 +116,35 @@ public class Example {
   @Override
   public String toString() {
     return String.valueOf(value);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Example example = (Example) o;
+    return id.equals(example.id) &&
+        Objects.equals(summary, example.summary) &&
+        Objects.equals(description, example.description) &&
+        value.equals(example.value) &&
+        externalValue.equals(example.externalValue) &&
+        mediaType.equals(example.mediaType) &&
+        extensions.equals(example.extensions);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        id,
+        summary,
+        description,
+        value,
+        externalValue,
+        mediaType,
+        extensions);
   }
 }

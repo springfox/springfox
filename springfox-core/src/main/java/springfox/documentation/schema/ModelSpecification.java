@@ -1,6 +1,8 @@
 package springfox.documentation.schema;
 
+import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class ModelSpecification {
   private final ScalarModelSpecification scalar;
@@ -62,5 +64,52 @@ public class ModelSpecification {
 
   public String getName() {
     return name;
+  }
+
+  @SuppressWarnings("CyclomaticComplexity")
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ModelSpecification that = (ModelSpecification) o;
+    return Objects.equals(scalar, that.scalar) &&
+        Objects.equals(compound, that.compound) &&
+        Objects.equals(collection, that.collection) &&
+        Objects.equals(map, that.map) &&
+        Objects.equals(reference, that.reference) &&
+        Objects.equals(facets, that.facets) &&
+        Objects.equals(sourceIdentifier, that.sourceIdentifier) &&
+        name.equals(that.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        scalar,
+        compound,
+        collection,
+        map,
+        reference,
+        facets,
+        sourceIdentifier,
+        name);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", ModelSpecification.class.getSimpleName() + "[", "]")
+        .add("scalar=" + scalar)
+        .add("compound=" + compound)
+        .add("collection=" + collection)
+        .add("map=" + map)
+        .add("reference=" + reference)
+        .add("facets=" + facets)
+        .add("sourceIdentifier='" + sourceIdentifier + "'")
+        .add("name='" + name + "'")
+        .toString();
   }
 }
