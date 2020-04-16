@@ -23,6 +23,7 @@ import com.fasterxml.classmate.ResolvedType;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
@@ -36,6 +37,9 @@ public class ParameterMultiplesReader implements ParameterBuilderPlugin {
   public void apply(ParameterContext context) {
     ResolvedType parameterType = context.resolvedMethodParameter().getParameterType();
     context.parameterBuilder().allowMultiple(isCollectionType(parameterType));
+    context.requestParameterBuilder()
+        .simpleParameterBuilder()
+        .collectionFormat(isCollectionType(parameterType) ? CollectionFormat.CSV : null);
   }
 
   private boolean isCollectionType(ResolvedType parameterType) {

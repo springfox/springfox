@@ -37,33 +37,38 @@ class ParameterNameReaderSpec
 
   def "Should support only swagger 1 documentation types"() {
     given:
-      def sut = new ParameterNameReader()
+    def sut = new ParameterNameReader()
+
     expect:
-      !sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      !sut.supports(DocumentationType.SWAGGER_2)
+    !sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    !sut.supports(DocumentationType.SWAGGER_2)
   }
 
   def "param required"() {
     given:
-      def operationContext = Mock(OperationContext)
-      def resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParam], new TypeResolver().resolve(Object.class))
-      def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+    def operationContext = Mock(OperationContext)
+    def resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "", [apiParam], new TypeResolver().resolve(Object.class))
+    def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
+
     and: "mocks are setup"
-      operationContext.consumes() >> []
+    operationContext.consumes() >> []
     and: "documentationContext is setup"
-      ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
-          documentationContext(), genericNamingStrategy, operationContext)
+    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
+        documentationContext(), genericNamingStrategy, operationContext)
+
     when:
-      def sut = nameReader(apiParam)
-      sut.apply(parameterContext)
+    def sut = nameReader(apiParam)
+    sut.apply(parameterContext)
+
     then:
-      parameterContext.parameterBuilder().build().name == expectedName
+    parameterContext.requestParameterBuilder().build().name == expectedName
+
     where:
-      apiParam                                                            | paramType | expectedName
-      [name: { -> "bodyParam" }, value: { -> "body Param"}] as ApiParam   | "body"    | "body"
-      null                                                                | "body"    | "body"
+    apiParam                                                           | paramType | expectedName
+    [name: { -> "bodyParam" }, value: { -> "body Param" }] as ApiParam | "body"    | "body"
+    null                                                               | "body"    | "body"
   }
 
   def nameReader(annotation) {

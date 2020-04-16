@@ -1,6 +1,7 @@
 package springfox.documentation.schema;
 
 import springfox.documentation.builders.ElementFacetBuilder;
+import springfox.documentation.service.AllowableRangeValues;
 
 import java.math.BigDecimal;
 
@@ -64,5 +65,15 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
         .maximum(other.getMaximum())
         .minimum(other.getMinimum())
         .multipleOf(other.getMultipleOf());
+  }
+
+  public NumericElementFacetBuilder from(AllowableRangeValues range) {
+    if (range == null) {
+      return this;
+    }
+    return this.exclusiveMaximum(range.getExclusiveMax())
+        .exclusiveMinimum(range.getExclusiveMin())
+        .maximum(range.getMax() != null ? new BigDecimal(range.getMax()) : null)
+        .minimum(range.getMin() != null ? new BigDecimal(range.getMin()) : null);
   }
 }

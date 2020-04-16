@@ -22,12 +22,7 @@ package springfox.documentation.spring.web.readers.parameter
 import com.fasterxml.classmate.ResolvedType
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.http.HttpMethod
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RequestPart
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Unroll
 import springfox.documentation.service.ResolvedMethodParameter
@@ -47,14 +42,22 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec implements Reques
   def "param #type"() {
     given:
     def paramAnnotations = annotations == null ? [] : annotations
-    def resolvedMethodParameter = new ResolvedMethodParameter(0, "", paramAnnotations, resolve(type))
+    def resolvedMethodParameter = new ResolvedMethodParameter(
+        0,
+        "",
+        paramAnnotations,
+        resolve(type))
     def operationContext = Mock(OperationContext)
 
     and:
     operationContext.consumes() >> consumes
     operationContext.httpMethod() >> httpMethod
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
-        documentationContext(), Mock(GenericTypeNamingStrategy), operationContext)
+    ParameterContext parameterContext =
+        new ParameterContext(
+            resolvedMethodParameter,
+            documentationContext(),
+            Mock(GenericTypeNamingStrategy),
+            operationContext)
 
     when:
     def operationCommand = new ParameterTypeReader()
@@ -62,6 +65,7 @@ class ParameterTypeReaderSpec extends DocumentationContextSpec implements Reques
 
     then:
     parameterContext.parameterBuilder().build().paramType == expected
+    parameterContext.requestParameterBuilder().build().in.in == expected
 
     where:
     annotations                               | type            | consumes                      | httpMethod      | expected

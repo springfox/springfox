@@ -37,121 +37,142 @@ import springfox.documentation.spring.web.mixins.ServicePluginsSupport
 import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
 
-import static java.util.Optional.*
+import static java.util.Optional.empty
 
 class DocumentationPluginsManagerSpec extends Specification implements ServicePluginsSupport {
-  def "default documentation plugin always exists" () {
+  def "default documentation plugin always exists"() {
     given:
-      def sut = defaultWebPlugins()
+    def sut = defaultWebPlugins()
+
     expect:
-      sut.documentationPlugins.size() == 0
-      sut.documentationPlugins().size() == 1
+    sut.documentationPlugins.size() == 0
+    sut.documentationPlugins().size() == 1
   }
 
-  def "Resource grouping strategy is defaulted to use SpringResourceGroupingStrategy" () {
+  def "Resource grouping strategy is defaulted to use SpringResourceGroupingStrategy"() {
     given:
-      def sut = defaultWebPlugins()
+    def sut = defaultWebPlugins()
+
     expect:
-      sut.resourceGroupingStrategy(DocumentationType.SPRING_WEB) instanceof SpringGroupingStrategy
-      sut.resourceGroupingStrategy(DocumentationType.SWAGGER_12) instanceof SpringGroupingStrategy
+    sut.resourceGroupingStrategy(DocumentationType.SPRING_WEB) instanceof SpringGroupingStrategy
+    sut.resourceGroupingStrategy(DocumentationType.SWAGGER_12) instanceof SpringGroupingStrategy
   }
 
-  def "When documentation plugins are explicitly defined" () {
+  def "When documentation plugins are explicitly defined"() {
     given:
-      def mockPlugin = Mock(DocumentationPlugin)
+    def mockPlugin = Mock(DocumentationPlugin)
+
     and:
-      mockPlugin.groupName >> "default"
-      def sut = customWebPlugins([mockPlugin])
+    mockPlugin.groupName >> "default"
+    def sut = customWebPlugins([mockPlugin])
+
     expect:
-      sut.documentationPlugins.size() == 1
-      sut.documentationPlugins().first() == mockPlugin
+    sut.documentationPlugins.size() == 1
+    sut.documentationPlugins().first() == mockPlugin
   }
 
-  def "When resource grouping strategy has been defined" () {
+  def "When resource grouping strategy has been defined"() {
     given:
-      def mockStrategy = Mock(ResourceGroupingStrategy)
+    def mockStrategy = Mock(ResourceGroupingStrategy)
+
     and:
-      def sut = customWebPlugins([], [mockStrategy])
-      mockStrategy.supports(_) >> true
+    def sut = customWebPlugins([], [mockStrategy])
+    mockStrategy.supports(_) >> true
+
     expect:
-      sut.resourceGroupingStrategy(DocumentationType.SPRING_WEB) == mockStrategy
-      sut.resourceGroupingStrategy(DocumentationType.SWAGGER_12) == mockStrategy
+    sut.resourceGroupingStrategy(DocumentationType.SPRING_WEB) == mockStrategy
+    sut.resourceGroupingStrategy(DocumentationType.SWAGGER_12) == mockStrategy
   }
 
-  def "Even when no operation plugins are applied an empty operation is returned" () {
+  def "Even when no operation plugins are applied an empty operation is returned"() {
     given:
-      def operationContext = Mock(OperationContext)
+    def operationContext = Mock(OperationContext)
+
     and:
-      operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
-      operationContext.documentationType >> DocumentationType.SWAGGER_2
+    operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
+    operationContext.documentationType >> DocumentationType.SWAGGER_2
+
     when:
-      def sut = customWebPlugins()
-      def operation = sut.operation(operationContext)
+    def sut = customWebPlugins()
+    def operation = sut.operation(operationContext)
+
     then:
-      operation != null
+    operation != null
   }
 
-  def "Operation plugins are applied" () {
+  def "Operation plugins are applied"() {
     given:
-      def operationPlugin = Mock(OperationBuilderPlugin)
-      def operationContext = Mock(OperationContext)
+    def operationPlugin = Mock(OperationBuilderPlugin)
+    def operationContext = Mock(OperationContext)
+
     and:
-      operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
-      operationContext.documentationType >> DocumentationType.SPRING_WEB
-      operationPlugin.supports(_) >> true
+    operationContext.operationBuilder() >> new OperationBuilder(new CachingOperationNameGenerator())
+    operationContext.documentationType >> DocumentationType.SPRING_WEB
+    operationPlugin.supports(_) >> true
+
     when:
-      def sut = customWebPlugins([], [], [operationPlugin])
-      def operation = sut.operation(operationContext)
+    def sut = customWebPlugins([], [], [operationPlugin])
+    def operation = sut.operation(operationContext)
+
     then:
-      operation != null
-      operationPlugin.apply(operationContext)
+    operation != null
+    operationPlugin.apply(operationContext)
   }
 
-  def "Even when no parameter plugins are applied an empty operation is returned" () {
+  def "Even when no parameter plugins are applied an empty operation is returned"() {
     given:
-      def paramContext = Mock(ParameterContext)
+    def paramContext = Mock(ParameterContext)
+
     and:
-      paramContext.parameterBuilder() >> new ParameterBuilder()
+    paramContext.parameterBuilder() >> new ParameterBuilder()
     paramContext.requestParameterBuilder() >> new RequestParameterBuilder()
     paramContext.documentationType >> DocumentationType.SWAGGER_2
+
     when:
-      def sut = customWebPlugins()
-      def parameter = sut.parameter(paramContext)
+    def sut = customWebPlugins()
+    def parameter = sut.parameter(paramContext)
+
     then:
-      parameter != null
+    parameter != null
   }
 
-  def "Parameter plugins are applied" () {
+  def "Parameter plugins are applied"() {
     given:
-      def paramPlugin = Mock(ParameterBuilderPlugin)
-      def paramContext = Mock(ParameterContext)
+    def paramPlugin = Mock(ParameterBuilderPlugin)
+    def paramContext = Mock(ParameterContext)
+
     and:
-      paramContext.parameterBuilder() >> new ParameterBuilder()
+    paramContext.parameterBuilder() >> new ParameterBuilder()
     paramContext.requestParameterBuilder() >> new RequestParameterBuilder()
-      paramContext.documentationType >> DocumentationType.SPRING_WEB
-      paramPlugin.supports(_) >> true
+    paramContext.documentationType >> DocumentationType.SPRING_WEB
+    paramPlugin.supports(_) >> true
+
     when:
-      def sut = customWebPlugins([], [], [], [paramPlugin])
-      def parameter = sut.parameter(paramContext)
+    def sut = customWebPlugins([], [], [], [paramPlugin])
+    def parameter = sut.parameter(paramContext)
+
     then:
-      parameter != null
-      paramPlugin.apply(paramContext)
+    parameter != null
+    paramPlugin.apply(paramContext)
   }
 
-  def "Path decorator plugins are applied" () {
+  def "Path decorator plugins are applied"() {
     given:
-      def pathContext = Mock(PathContext)
-      def context = Mock(DocumentationContext)
+    def pathContext = Mock(PathContext)
+    def context = Mock(DocumentationContext)
+
     and:
-      pathContext.pathProvider() >> new DefaultPathProvider()
-      pathContext.documentationContext() >> context
-      context.getPathMapping() >> empty()
-      pathContext.parameters >> []
+    pathContext.pathProvider() >> new DefaultPathProvider()
+    pathContext.documentationContext() >> context
+    context.getPathMapping() >> empty()
+    pathContext.parameters >> []
+
     when:
-      def sut = defaultWebPlugins()
-      def decorator = sut.decorator(pathContext)
+    def sut = defaultWebPlugins()
+    def decorator = sut.decorator(pathContext)
+
     then:
-      decorator != null
-      decorator.apply("") == "/"
+    decorator != null
+    decorator.apply("") == "/"
   }
 }

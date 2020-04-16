@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
+import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
@@ -47,6 +48,7 @@ class ParameterRequiredReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().isRequired() == expected
+    parameterContext.requestParameterBuilder().build().required == expected
 
     where:
     paramAnnotation             | expected
@@ -55,6 +57,7 @@ class ParameterRequiredReaderSpec
     null                        | false
   }
 
+  @Unroll
   def "parameters hidden using default reader"() {
     given:
     def parameterContext = setupParameterContext(paramAnnotation)
@@ -65,6 +68,7 @@ class ParameterRequiredReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().isHidden() == expected
+    parameterContext.requestParameterBuilder().build().hidden == expected
 
     where:
     paramAnnotation           | expected

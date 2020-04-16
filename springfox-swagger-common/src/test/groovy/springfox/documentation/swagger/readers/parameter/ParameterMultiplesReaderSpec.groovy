@@ -62,7 +62,11 @@ class ParameterMultiplesReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().isAllowMultiple() == expected
-
+    (parameterContext.requestParameterBuilder().build()
+        ?.parameterSpecification
+        ?.left
+        ?.orElse(null)
+        ?.collectionFormat != null) == expected
     where:
     apiParamAnnotation               | paramType                       | expected
     apiParamWithAllowMultiple(false) | String[].class                  | false

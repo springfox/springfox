@@ -57,6 +57,15 @@ class ParameterReaderSpec
 
     then:
     parameterContext.parameterBuilder().build()."$resultProperty" == expected
+    if (nestedSimpleProperty) {
+      parameterContext.requestParameterBuilder().build()
+          .parameterSpecification
+          .left
+          ?.orElse(null)
+          ?."$resultProperty" == expected
+    } else if (nestedSimpleProperty == false) {
+      parameterContext.requestParameterBuilder().build()."$resultProperty" == expected
+    }
 
     and:
     !sut.supports(DocumentationType.SPRING_WEB)
@@ -64,12 +73,12 @@ class ParameterReaderSpec
     sut.supports(DocumentationType.SWAGGER_2)
 
     where:
-    resultProperty | apiParamAnnotation                     | reqParamAnnot | expected
-    'description'  | null                                   | null          | null
-    'name'         | apiParamWithNameAndValue("AnDesc", "") | null          | 'AnDesc'
-    'description'  | apiParamWithNameAndValue("", "AnDesc") | null          | 'AnDesc'
-    'defaultValue' | apiParamWithDefault('defl')            | null          | 'defl'
-    'paramAccess'  | apiParamWithAccess('myAccess')         | null          | 'myAccess'
+    resultProperty | nestedSimpleProperty | apiParamAnnotation                     | reqParamAnnot | expected
+    'description'  | false                | null                                   | null          | null
+    'name'         | false                | apiParamWithNameAndValue("AnDesc", "") | null          | 'AnDesc'
+    'description'  | false                | apiParamWithNameAndValue("", "AnDesc") | null          | 'AnDesc'
+    'defaultValue' | true                 | apiParamWithDefault('defl')            | null          | 'defl'
+    'paramAccess'  | null                 | apiParamWithAccess('myAccess')         | null          | 'myAccess'
   }
 
   def stubbedParamBuilder() {

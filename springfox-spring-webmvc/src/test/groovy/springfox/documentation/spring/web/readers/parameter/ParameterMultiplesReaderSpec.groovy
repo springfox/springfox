@@ -36,48 +36,55 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 class ParameterMultiplesReaderSpec
     extends DocumentationContextSpec
     implements RequestMappingSupport,
-        ModelProviderForServiceSupport  {
+        ModelProviderForServiceSupport {
 
   def sut = new ParameterMultiplesReader();
-  
+
   def "Should support all documentation types"() {
     expect:
-      sut.supports(DocumentationType.SPRING_WEB)
-      sut.supports(DocumentationType.SWAGGER_12)
-      sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.SPRING_WEB)
+    sut.supports(DocumentationType.SWAGGER_12)
+    sut.supports(DocumentationType.SWAGGER_2)
   }
 
   @Unroll
   def "param multiples #apiParamAnnotation && #paramType for default reader"() {
     given:
-      ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
-      ResolvedMethodParameter resolvedMethodParameter =
-          new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
-      ParameterContext parameterContext = new ParameterContext(
-          resolvedMethodParameter
-          ,
-          documentationContext(),
-          Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+    ResolvedType resolvedType = paramType != null ? new TypeResolver().resolve(paramType) : null
+    ResolvedMethodParameter resolvedMethodParameter =
+        new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter
+        ,
+        documentationContext(),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext))
 
     when:
-      sut.apply(parameterContext)
+    sut.apply(parameterContext)
+    
     then:
-      parameterContext.parameterBuilder().build().isAllowMultiple() == expected
+    parameterContext.parameterBuilder().build().isAllowMultiple() == expected
+    (parameterContext.requestParameterBuilder().build()
+        .parameterSpecification
+        .left
+        .orElse(null)
+        ?.collectionFormat != null) == expected
+
     where:
-      apiParamAnnotation                        | paramType                       | expected
-      [allowMultiple: { -> true }] as ApiParam  | String.class                    | false
-      [allowMultiple: { -> true }] as ApiParam  | String[].class                  | true
-      [allowMultiple: { -> false }] as ApiParam | String[].class                  | true
-      [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | true
-      null                                      | String[].class                  | true
-      null                                      | List.class                      | true
-      null                                      | Collection.class                | true
-      null                                      | Set.class                       | true
-      null                                      | Vector.class                    | true
-      null                                      | Object[].class                  | true
-      null                                      | Integer.class                   | false
-      null                                      | Iterable.class                  | true
+    apiParamAnnotation                        | paramType                       | expected
+    [allowMultiple: { -> true }] as ApiParam  | String.class                    | false
+    [allowMultiple: { -> true }] as ApiParam  | String[].class                  | true
+    [allowMultiple: { -> false }] as ApiParam | String[].class                  | true
+    [allowMultiple: { -> false }] as ApiParam | DummyClass.BusinessType[].class | true
+    null                                      | String[].class                  | true
+    null                                      | List.class                      | true
+    null                                      | Collection.class                | true
+    null                                      | Set.class                       | true
+    null                                      | Vector.class                    | true
+    null                                      | Object[].class                  | true
+    null                                      | Integer.class                   | false
+    null                                      | Iterable.class                  | true
   }
 
 

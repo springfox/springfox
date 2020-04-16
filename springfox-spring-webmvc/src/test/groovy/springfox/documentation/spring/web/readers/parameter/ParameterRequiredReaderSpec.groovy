@@ -38,7 +38,7 @@ import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
 import java.lang.annotation.Annotation
 
-import static org.springframework.web.bind.annotation.ValueConstants.*
+import static org.springframework.web.bind.annotation.ValueConstants.DEFAULT_NONE
 
 class ParameterRequiredReaderSpec
     extends DocumentationContextSpec
@@ -82,6 +82,7 @@ class ParameterRequiredReaderSpec
 
     then:
     parameterContext.parameterBuilder().build().isRequired() == expected
+    parameterContext.requestParameterBuilder().build().required == expected
 
     where:
     paramAnnotations                                        | version         | requestPattern           | expected
@@ -148,6 +149,7 @@ class ParameterRequiredReaderSpec
 
     then:
     !parameterContext.parameterBuilder().build().isRequired()
+    !parameterContext.requestParameterBuilder().build().required
 
     where:
     paramAnnotations << [

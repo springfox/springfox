@@ -48,6 +48,7 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     context.parameterBuilder().parameterType(findParameterType(context));
+    context.requestParameterBuilder().in(findParameterType(context));
   }
 
   @Override

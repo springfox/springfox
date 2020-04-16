@@ -65,6 +65,8 @@ public class ParameterRequiredReader implements ParameterBuilderPlugin {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
     context.parameterBuilder()
         .required(isRequired(context.getOperationContext(), methodParameter));
+    context.requestParameterBuilder()
+        .required(isRequired(context.getOperationContext(), methodParameter));
   }
 
   @Override

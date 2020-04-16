@@ -146,7 +146,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                 enumTypeDeterminer,
                 nameExtractor).apply(parameterType)));
     context.requestParameterBuilder()
-        .simpleParameterBuilder()
+        .simpleParameterBuilder() //TODO: check this is correct
         .build();
   }
 

@@ -24,12 +24,16 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.EnumerationFacetBuilder;
 import springfox.documentation.builders.ExampleBuilder;
-import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
 import springfox.documentation.schema.Example;
+import springfox.documentation.schema.NumericElementFacetBuilder;
+import springfox.documentation.service.AllowableListValues;
+import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
+import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -40,10 +44,12 @@ import springfox.documentation.swagger.schema.ApiModelProperties;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static java.util.Optional.*;
-import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.swagger.common.SwaggerPluginSupport.*;
-import static springfox.documentation.swagger.readers.parameter.Examples.*;
+import static java.util.Optional.ofNullable;
+import static org.springframework.util.StringUtils.isEmpty;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER;
+import static springfox.documentation.swagger.common.SwaggerPluginSupport.pluginDoesApply;
+import static springfox.documentation.swagger.readers.parameter.Examples.allExamples;
+import static springfox.documentation.swagger.readers.parameter.Examples.examples;
 
 @Component("swaggerParameterDescriptionReader")
 @Order(SWAGGER_PLUGIN_ORDER)
@@ -62,10 +68,25 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
   @Override
   public void apply(ParameterContext context) {
     Optional<ApiParam> apiParam = context.resolvedMethodParameter().findAnnotation(ApiParam.class);
+    AllowableValues allowedValues = allowableValues(
+        context.alternateFor(context.resolvedMethodParameter().getParameterType()),
+        apiParam.map(ApiParam::allowableValues).orElse(""));
+
     context.parameterBuilder()
-        .allowableValues(allowableValues(
-            context.alternateFor(context.resolvedMethodParameter().getParameterType()),
-            apiParam.map(ApiParam::allowableValues).orElse("")));
+        .allowableValues(allowedValues);
+
+    if (allowedValues instanceof AllowableListValues) {
+      context.requestParameterBuilder()
+          .simpleParameterBuilder()
+          .facetBuilder(EnumerationFacetBuilder.class)
+          .allowedValues(allowedValues);
+    } else if (allowedValues instanceof AllowableRangeValues) {
+      context.requestParameterBuilder()
+          .simpleParameterBuilder()
+          .facetBuilder(NumericElementFacetBuilder.class)
+          .from((AllowableRangeValues) allowedValues);
+    }
+
     if (apiParam.isPresent()) {
       ApiParam annotation = apiParam.get();
       Example example = null;
@@ -74,8 +95,9 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
             .withValue(annotation.example())
             .build();
       }
-      context.parameterBuilder().name(ofNullable(annotation.name())
-          .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
+      context.parameterBuilder()
+          .name(ofNullable(annotation.name())
+              .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
           .description(ofNullable(descriptions.resolve(annotation.value()))
               .filter(((Predicate<String>) String::isEmpty).negate()).orElse(null))
           .parameterAccess(ofNullable(annotation.access())
@@ -96,9 +118,10 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
           .name(
               annotation.name().isEmpty()
                   ? null
-                  : annotation.defaultValue())
+                  : annotation.name())
           .description(ofNullable(descriptions.resolve(annotation.value()))
-              .filter(name -> !name.isEmpty()).orElse(null))
+              .filter(desc -> !desc.isEmpty())
+              .orElse(null))
           .required(annotation.required())
           .hidden(annotation.hidden())
           .order(SWAGGER_PLUGIN_ORDER)

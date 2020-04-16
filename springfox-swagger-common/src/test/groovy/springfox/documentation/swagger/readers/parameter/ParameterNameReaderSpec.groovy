@@ -21,6 +21,7 @@ package springfox.documentation.swagger.readers.parameter
 
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.mock.env.MockEnvironment
+import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.service.ResolvedMethodParameter
@@ -53,22 +54,26 @@ class ParameterNameReaderSpec
     sut.supports(DocumentationType.SWAGGER_2)
   }
 
+  @Unroll
   def "param required"() {
     given:
     def resolvedMethodParameter =
         new ResolvedMethodParameter(0, "someName", [apiParam], new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter
-        ,
+        resolvedMethodParameter,
         documentationContext(),
         genericNamingStrategy,
         Mock(OperationContext))
+
     when:
     def sut = nameReader()
     sut.apply(parameterContext)
+
     then:
     parameterContext.parameterBuilder().build().name == expectedName
+    parameterContext.requestParameterBuilder().build().name == expectedName
+
     where:
     apiParam                                            | paramType | expectedName
     apiParamWithNameAndValue("bodyParam", "body Param") | "body"    | "bodyParam"

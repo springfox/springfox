@@ -26,11 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Unroll
-import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.DefaultTypeNameProvider
-import springfox.documentation.schema.JacksonEnumTypeDeterminer
-import springfox.documentation.schema.Model
-import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.*
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -45,7 +41,7 @@ import springfox.documentation.spring.web.dummy.models.Business
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 
-import static java.util.Collections.*
+import static java.util.Collections.emptySet
 
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
@@ -77,6 +73,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
     sut.supports(DocumentationType.SWAGGER_2)
   }
 
+  //TODO: write a new test
   @Unroll
   def "Parameter types #paramType"() {
     given:
@@ -103,6 +100,7 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
       def allowable = modelRef.allowableValues as AllowableListValues
       assert allowable.values.size() == 2
     }
+
     where:
     paramType                   | annotations          | expected
     char                        | []                   | "string"

@@ -19,7 +19,7 @@ public class RequestParameterBuilder {
   private String description;
   private Boolean required = false;
   private Boolean deprecated;
-  private Boolean hidden;
+  private Boolean hidden = false;
   private final List<VendorExtension> extensions = new ArrayList<>();
   private SimpleParameterSpecificationBuilder simpleParameterBuilder;
   private ContentSpecificationBuilder contentSpecificationBuilder;
@@ -36,11 +36,7 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder in(String in) {
-    try {
-      this.in = ParameterType.valueOf(in);
-    } catch (IllegalArgumentException e) {
-      LOGGER.warn("Unrecognized parameter type {}", in);
-    }
+    this.in = ParameterType.from(in);
     return this;
   }
 
