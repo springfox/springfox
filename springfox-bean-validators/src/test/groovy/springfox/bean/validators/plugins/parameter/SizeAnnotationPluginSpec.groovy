@@ -22,6 +22,7 @@ import com.fasterxml.classmate.ResolvedType
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
+import springfox.documentation.schema.StringElementFacet
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -31,47 +32,59 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 
 class SizeAnnotationPluginSpec extends Specification implements AnnotationsSupport {
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
-      new SizeAnnotationPlugin().supports(types)
+    new SizeAnnotationPlugin().supports(types)
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@Size annotations are reflected for #description"()  {
+  def "@Size annotations are reflected for #description"() {
     given:
-      def sut = new SizeAnnotationPlugin()
-      def resolvedMethodParameter =
+    def sut = new SizeAnnotationPlugin()
+    def resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [annotation], Mock(ResolvedType))
-      ParameterContext context = new ParameterContext(
-          resolvedMethodParameter
-          ,
-          Mock(DocumentationContext),
-          Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+    ParameterContext context = new ParameterContext(
+        resolvedMethodParameter,
+        Mock(DocumentationContext),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext))
 
     when:
-      sut.apply(context)
-      def property = context.parameterBuilder().build()
+    sut.apply(context)
+    def property = context.parameterBuilder().build()
+    def sizeParameter = context.requestParameterBuilder().build()
+        .parameterSpecification?.left?.orElse(null)
+
     then:
-      def range = property.allowableValues as AllowableRangeValues
-      if (range != null) {
-        range.max == annotation == null ? null : annotation.min().toString()
-        range.min == annotation == null ? null : annotation.max().toString()
-      } else {
-        range == null
-      }
+    def range = property.allowableValues as AllowableRangeValues
+    if (range != null) {
+      range.max == annotation == null ? null : annotation.min().toString()
+      range.min == annotation == null ? null : annotation.max().toString()
+    } else {
+      range == null
+    }
+
+    and:
+    if (sizeParameter != null) {
+      def size = sizeParameter.facetOfType(StringElementFacet).orElse(null)
+      size?.minLength == (annotation == null ? null : Integer.valueOf(annotation.min().toString()))
+      size?.maxLength == (annotation == null ? null : Integer.valueOf(annotation.max().toString()))
+    } else {
+      sizeParameter == null
+    }
+
     where:
-      description                                   | annotation
-      "null"                                        | null
-      "size(0,Integer.MAX_VALUE)"                   | size(0,Integer.MAX_VALUE)
-      "size(0, 10)"                                 | size(0, 10)
-      "size(10, 0)"                                 | size(10, 0)
-      "size(Integer.MAX_VALUE, 0)"                  | size(Integer.MAX_VALUE, 0)
-      "size(0, 0)"                                  | size(0, 0)
-      "size(0, 0)"                                  | size(0, 0)
-      "size(-10, -5)"                               | size(-10, -5)
-      "size(Integer.MAX_VALUE, Integer.MAX_VALUE)"  | size(Integer.MAX_VALUE, Integer.MAX_VALUE)
+    description                                  | annotation
+    "null"                                       | null
+    "size(0,Integer.MAX_VALUE)"                  | size(0, Integer.MAX_VALUE)
+    "size(0, 10)"                                | size(0, 10)
+    "size(10, 0)"                                | size(10, 0)
+    "size(Integer.MAX_VALUE, 0)"                 | size(Integer.MAX_VALUE, 0)
+    "size(0, 0)"                                 | size(0, 0)
+    "size(0, 0)"                                 | size(0, 0)
+    "size(-10, -5)"                              | size(-10, -5)
+    "size(Integer.MAX_VALUE, Integer.MAX_VALUE)" | size(Integer.MAX_VALUE, Integer.MAX_VALUE)
   }
 }
