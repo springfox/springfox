@@ -17,7 +17,7 @@ public class RequestParameterBuilder {
   private String name;
   private ParameterType in;
   private String description;
-  private Boolean required;
+  private Boolean required = false;
   private Boolean deprecated;
   private Boolean hidden;
   private final List<VendorExtension> extensions = new ArrayList<>();
@@ -98,8 +98,8 @@ public class RequestParameterBuilder {
     } else if (simpleParameterBuilder != null) {
       parameterSpecification = new Either<>(simpleParameterBuilder.create(), null);
     } else {
-      LOGGER.warn("Parameter has not been initialized");
-      return null;
+      LOGGER.warn("Parameter has not been initialized to be either simple nor a content parameter");
+      parameterSpecification = null;
     }
     return new RequestParameter(
         name,

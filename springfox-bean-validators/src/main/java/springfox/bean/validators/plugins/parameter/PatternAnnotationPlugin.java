@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.builders.RequestParameterBuilder;
+import springfox.documentation.builders.StringElementFacetBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
@@ -52,6 +54,11 @@ public class PatternAnnotationPlugin implements ParameterBuilderPlugin {
     if (pattern.isPresent()) {
       LOG.debug("@Pattern present: {}", pattern.get().regexp());
       context.parameterBuilder().pattern(pattern.get().regexp());
+      context.requestParameterBuilder()
+          .simpleParameterBuilder()
+          .facetBuilder(StringElementFacetBuilder.class)
+          .pattern(pattern.get().regexp())
+          .yield(RequestParameterBuilder.class);
     }
   }
 }

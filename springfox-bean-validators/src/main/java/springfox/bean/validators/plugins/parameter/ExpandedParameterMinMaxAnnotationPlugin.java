@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.NumericElementFacet;
+import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
@@ -57,7 +58,7 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
       Compatibility<AllowableRangeValues, NumericElementFacet> values = allowableRange(min, max);
       LOG.debug("Adding allowable range: min({}) - max({}}",
           values.getLegacy().map(AllowableRangeValues::getMin)
-          .orElse("<empty>"),
+              .orElse("<empty>"),
           values.getLegacy().map(AllowableRangeValues::getMax)
               .orElse("<empty>"));
       context.getParameterBuilder()
@@ -67,7 +68,8 @@ public class ExpandedParameterMinMaxAnnotationPlugin implements ExpandedParamete
           values.getModern().map(NumericElementFacet::toString)
               .orElse("<empty>"));
       context.getRequestParameterBuilder()
-          .simpleParameterBuilder().facet(values.getModern().orElse(null));
+          .simpleParameterBuilder().facetBuilder(NumericElementFacetBuilder.class)
+          .copyOf(values.getModern().orElse(null));
     }
   }
 

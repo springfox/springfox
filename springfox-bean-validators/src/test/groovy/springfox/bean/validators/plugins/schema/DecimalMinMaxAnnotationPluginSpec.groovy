@@ -44,7 +44,8 @@ class DecimalMinMaxAnnotationPluginSpec extends Specification {
     def sut = new DecimalMinMaxAnnotationPlugin()
     def element = DecimalMinMaxTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(),
         element,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)

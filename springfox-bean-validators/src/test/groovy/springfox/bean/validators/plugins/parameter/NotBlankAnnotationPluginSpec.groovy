@@ -22,7 +22,6 @@ import com.fasterxml.classmate.ResolvedType
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
-import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -31,33 +30,37 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 
 class NotBlankAnnotationPluginSpec extends Specification implements AnnotationsSupport {
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
-      new NotBlankAnnotationPlugin().supports(types)
+    new NotBlankAnnotationPlugin().supports(types)
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@NotBlank annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
+  def "@NotBlank annotations are reflected in the model #propertyName that are AnnotatedElements"() {
     given:
-      def sut = new NotBlankAnnotationPlugin()
-      def resolvedMethodParameter =
+    def sut = new NotBlankAnnotationPlugin()
+    def resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [annotation], Mock(ResolvedType))
-      ParameterContext context = new ParameterContext(
-          resolvedMethodParameter,
-          Mock(DocumentationContext),
-          Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+    ParameterContext context = new ParameterContext(
+        resolvedMethodParameter,
+        Mock(DocumentationContext),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext))
 
     when:
-      sut.apply(context)
-      def property = context.parameterBuilder().build()
+    sut.apply(context)
+    def property = context.parameterBuilder().build()
+    def parameter = context.requestParameterBuilder().build()
+
     then:
-      property.required == required
+    property.required == required
+    parameter?.required == required
+
     where:
-      annotationDescription | required  | annotation
-      "none"                | false     | null
-      "@NotBlank"           | true      | notBlank()
+    annotationDescription | required | annotation
+    "none"                | false     | null
+    "@NotBlank"           | true     | notBlank()
   }
 }

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.NumericElementFacet;
+import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -65,10 +66,8 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
     LOGGER.debug(String.format("Adding numeric element facet : %s",
         values.getModern().map(NumericElementFacet::toString).orElse("<none>")));
     context.getSpecificationBuilder()
-        .facet(
-            values
-                .getModern()
-                .orElse(null));
+        .facetBuilder(NumericElementFacetBuilder.class)
+        .copyOf(values.getModern().orElse(null));
   }
 
   private Optional<Min> extractMin(ModelPropertyContext context) {

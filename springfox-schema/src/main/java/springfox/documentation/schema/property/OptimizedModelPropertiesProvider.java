@@ -39,12 +39,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import springfox.documentation.builders.EnumerationFacetBuilder;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.schema.CollectionSpecification;
-import springfox.documentation.schema.ElementFacet;
-import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelProperty;
@@ -727,10 +726,6 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       }
     }
 
-    ArrayList<ElementFacet> facets = new ArrayList<>();
-    EnumerationFacet.from(beanModelProperty.allowableValues())
-        .ifPresent(facets::add);
-
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(beanModelProperty.getName())
         .withType(new ModelSpecificationBuilder(
@@ -747,7 +742,9 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .withRequired(beanModelProperty.isRequired())
         .withIsHidden(false)
         .withDescription(beanModelProperty.propertyDescription())
-        .withFacets(facets)
+        .facetBuilder(EnumerationFacetBuilder.class)
+        .allowedValues(beanModelProperty.allowableValues())
+        .yield(PropertySpecificationBuilder.class)
         .withExample(beanModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(

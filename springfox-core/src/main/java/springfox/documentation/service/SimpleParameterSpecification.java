@@ -78,6 +78,7 @@ public class SimpleParameterSpecification {
     return facets;
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends ElementFacet> Optional<T> facetOfType(Class<T> clazz) {
     return facets.stream()
         .filter(f -> clazz.isAssignableFrom(f.getClass()))

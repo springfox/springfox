@@ -30,34 +30,37 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spi.service.contexts.ParameterContext
 
 class NotNullAnnotationPluginSpec extends Specification implements AnnotationsSupport {
-  def "Always supported" () {
+  def "Always supported"() {
     expect:
-      new NotNullAnnotationPlugin().supports(types)
+    new NotNullAnnotationPlugin().supports(types)
     where:
-      types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
+    types << [DocumentationType.SPRING_WEB, DocumentationType.SWAGGER_2, DocumentationType.SWAGGER_12]
   }
 
   @Unroll
-  def "@NotNull annotations are reflected in the model #propertyName that are AnnotatedElements"()  {
+  def "@NotNull annotations are reflected in the model #propertyName that are AnnotatedElements"() {
     given:
-      def sut = new NotNullAnnotationPlugin()
-      def resolvedMethodParameter =
+    def sut = new NotNullAnnotationPlugin()
+    def resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [annotation], Mock(ResolvedType))
-      ParameterContext context = new ParameterContext(
-          resolvedMethodParameter
-          ,
-          Mock(DocumentationContext),
-          Mock(GenericTypeNamingStrategy),
-          Mock(OperationContext))
+    ParameterContext context = new ParameterContext(
+        resolvedMethodParameter,
+        Mock(DocumentationContext),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext))
 
     when:
-      sut.apply(context)
-      def property = context.parameterBuilder().build()
+    sut.apply(context)
+    def property = context.parameterBuilder().build()
+    def parameter = context.requestParameterBuilder().build()
+
     then:
-      property.required == required
+    property.required == required
+    parameter?.required == required
+    
     where:
-      annotationDescription | required  | annotation
-      "none"                | false     | null
-      "@NotNull"            | true      | notNull()
+    annotationDescription | required | annotation
+    "none"                | false    | null
+    "@NotNull"            | true     | notNull()
   }
 }

@@ -83,7 +83,7 @@ public class PropertySpecification {
 
   public <T extends ElementFacet> Optional<T> facetOfType(Class<T> type) {
     return facets.stream()
-                 .filter(f -> f.getClass().isAssignableFrom(type))
+                 .filter(f -> f != null && type.isAssignableFrom(f.getClass()))
                  .findFirst()
                  .map(type::cast);
   }

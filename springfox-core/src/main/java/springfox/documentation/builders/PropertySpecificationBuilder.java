@@ -7,9 +7,16 @@ import springfox.documentation.schema.Xml;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static springfox.documentation.builders.ElementFacets.*;
 
 public class PropertySpecificationBuilder {
+
   private String name;
   private String description;
   private ModelSpecification type;
@@ -25,8 +32,9 @@ public class PropertySpecificationBuilder {
   private Object defaultValue;
   private Xml xml;
 
-  private final List<ElementFacet> facets = new ArrayList<>();
+  private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
   private final List<VendorExtension<?>> vendorExtensions = new ArrayList<>();
+
 
   public PropertySpecificationBuilder withName(String name) {
     this.name = name;
@@ -43,17 +51,12 @@ public class PropertySpecificationBuilder {
     return this;
   }
 
-  public PropertySpecificationBuilder withFacets(List<ElementFacet> facets) {
-    this.facets.addAll(facets);
-    return this;
+  @SuppressWarnings("unchecked")
+  public <T extends ElementFacetBuilder> T facetBuilder(Class<T> clazz) {
+    this.facetBuilders.computeIfAbsent(clazz, builderFactory(this, clazz));
+    return (T) this.facetBuilders.get(clazz);
   }
 
-  public PropertySpecificationBuilder facet(ElementFacet facet) {
-    if (facet != null) {
-      this.facets.add(facet);
-    }
-    return this;
-  }
 
   public PropertySpecificationBuilder withNullable(Boolean nullable) {
     this.nullable = nullable;
@@ -116,6 +119,11 @@ public class PropertySpecificationBuilder {
   }
 
   public PropertySpecification build() {
+    List<ElementFacet> facets = facetBuilders.values().stream()
+        .filter(Objects::nonNull)
+        .map(ElementFacetBuilder::build)
+        .collect(Collectors.toList());
+
     return new PropertySpecification(
         name,
         description,
