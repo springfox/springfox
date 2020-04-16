@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.common.Compatibility;
 import springfox.documentation.schema.NumericElementFacet;
+import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 
 import javax.validation.constraints.Max;
@@ -66,12 +67,13 @@ public class RangeAnnotations {
           false,
           Double.toString(max.get().value()),
           false);
-      range = new NumericElementFacet(
-          DEFAULT_MULTIPLE,
-          BigDecimal.valueOf(min.get().value()),
-          false,
-          BigDecimal.valueOf(max.get().value()),
-          false);
+      range = new NumericElementFacetBuilder()
+          .multipleOf(DEFAULT_MULTIPLE)
+          .minimum(BigDecimal.valueOf(min.get().value()))
+          .exclusiveMinimum(false)
+          .maximum(BigDecimal.valueOf(max.get().value()))
+          .exclusiveMaximum(false)
+          .build();
 
     } else if (min.isPresent()) {
       LOG.debug("@Min detected: adding AllowableRangeValues to field ");
@@ -80,12 +82,13 @@ public class RangeAnnotations {
           false,
           null,
           null);
-      range = new NumericElementFacet(
-          DEFAULT_MULTIPLE,
-          BigDecimal.valueOf(min.get().value()),
-          false,
-          null,
-          null);
+      range = new NumericElementFacetBuilder()
+          .multipleOf(DEFAULT_MULTIPLE)
+          .minimum(BigDecimal.valueOf(min.get().value()))
+          .exclusiveMinimum(false)
+          .maximum(null)
+          .exclusiveMaximum(null)
+          .build();
 
     } else if (max.isPresent()) {
       LOG.debug("@Max detected: adding AllowableRangeValues to field ");
@@ -94,12 +97,13 @@ public class RangeAnnotations {
           null,
           Double.toString(max.get().value()),
           false);
-      range = new NumericElementFacet(
-          DEFAULT_MULTIPLE,
-          null,
-          null,
-          BigDecimal.valueOf(max.get().value()),
-          false);
+      range = new NumericElementFacetBuilder()
+          .multipleOf(DEFAULT_MULTIPLE)
+          .minimum(null)
+          .exclusiveMinimum(null)
+          .maximum(BigDecimal.valueOf(max.get().value()))
+          .exclusiveMaximum(false)
+          .build();
     }
     return new Compatibility<>(myvalues, range);
   }
