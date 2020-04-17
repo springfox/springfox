@@ -8,7 +8,7 @@ public class StringElementFacetBuilder implements ElementFacetBuilder {
   private Integer maxLength;
   private Integer minLength;
   private String pattern;
-  
+
   public StringElementFacetBuilder(Object parent) {
     this.parent = parent;
   }
@@ -37,5 +37,16 @@ public class StringElementFacetBuilder implements ElementFacetBuilder {
   @Override
   public ElementFacet build() {
     return new StringElementFacet(maxLength, minLength, pattern);
+  }
+
+  @Override
+  public StringElementFacetBuilder copyOf(ElementFacet facet) {
+    if (!(facet instanceof StringElementFacet)) {
+      return this;
+    }
+    StringElementFacet other = (StringElementFacet) facet;
+    return this.minLength(other.getMinLength())
+        .maxLength(other.getMaxLength())
+        .pattern(other.getPattern());
   }
 }

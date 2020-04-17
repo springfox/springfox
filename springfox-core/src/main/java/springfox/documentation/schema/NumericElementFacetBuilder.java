@@ -56,10 +56,12 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
     return new NumericElementFacet(multipleOf, minimum, exclusiveMinimum, maximum, exclusiveMaximum);
   }
 
-  public NumericElementFacetBuilder copyOf(NumericElementFacet other) {
-    if (other == null) {
+  @Override
+  public NumericElementFacetBuilder copyOf(ElementFacet facet) {
+    if (!(facet instanceof NumericElementFacet)) {
       return this;
     }
+    NumericElementFacet other = (NumericElementFacet) facet;
     return this.exclusiveMaximum(other.getExclusiveMaximum())
         .exclusiveMinimum(other.getExclusiveMinimum())
         .maximum(other.getMaximum())

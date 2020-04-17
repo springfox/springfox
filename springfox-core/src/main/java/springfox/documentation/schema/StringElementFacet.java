@@ -1,5 +1,8 @@
 package springfox.documentation.schema;
 
+import springfox.documentation.builders.ElementFacetBuilder;
+import springfox.documentation.builders.StringElementFacetBuilder;
+
 public class StringElementFacet implements ElementFacet {
   private final Integer maxLength;
   private final Integer minLength;
@@ -24,5 +27,10 @@ public class StringElementFacet implements ElementFacet {
 
   public String getPattern() {
     return pattern;
+  }
+
+  @Override
+  public Class<? extends ElementFacetBuilder> facetBuilder() {
+    return StringElementFacetBuilder.class;
   }
 }

@@ -19,7 +19,7 @@
 
 package springfox.documentation.builders;
 
-import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,20 +28,21 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.*;
 
-class ParameterMerger {
+//TODO: write a test for this
+class RequestParameterMerger {
 
-  private final List<Parameter> destination;
-  private final List<Parameter> source;
+  private final List<RequestParameter> destination;
+  private final List<RequestParameter> source;
 
-  ParameterMerger(List<Parameter> destination, List<Parameter> source) {
+  RequestParameterMerger(List<RequestParameter> destination, List<RequestParameter> source) {
     this.destination = new ArrayList<>(destination);
     this.source = new ArrayList<>(source);
   }
 
-  public List<Parameter> merged() {
-    Set<String> existingParameterNames = destination.stream().map(Parameter::getName).collect(toSet());
-    Set<String> newParameterNames = source.stream().map(Parameter::getName).collect(toSet());
-    List<Parameter> merged = new ArrayList<>();
+  public List<RequestParameter> merged() {
+    Set<String> existingParameterNames = destination.stream().map(RequestParameter::getName).collect(toSet());
+    Set<String> newParameterNames = source.stream().map(RequestParameter::getName).collect(toSet());
+    List<RequestParameter> merged = new ArrayList<>();
 
     Set<String> asIsParams = existingParameterNames.stream()
         .filter(entry -> !newParameterNames.contains(entry)).collect(toSet());
@@ -56,9 +57,9 @@ class ParameterMerger {
     return merged;
   }
 
-  private List<Parameter> asIsParameters(Set<String> asIsParams, List<Parameter> source) {
-    List<Parameter> parameters = new ArrayList<>();
-    for (Parameter each : source) {
+  private List<RequestParameter> asIsParameters(Set<String> asIsParams, List<RequestParameter> source) {
+    List<RequestParameter> parameters = new ArrayList<>();
+    for (RequestParameter each : source) {
       if (asIsParams.contains(each.getName())) {
         parameters.add(each);
       }
@@ -66,14 +67,15 @@ class ParameterMerger {
     return parameters;
   }
 
-  private List<Parameter> mergedParameters(
+  private List<RequestParameter> mergedParameters(
       Set<String> paramsToMerge,
-      List<Parameter> existingParameters,
-      List<Parameter> newParams) {
-    List<Parameter> parameters = new ArrayList<>();
-    for (Parameter newParam : newParams) {
-      Optional<Parameter> original = existingParameters.stream()
-          .filter(input -> newParam.getName().equals(input.getName())).findFirst();
+      List<RequestParameter> existingParameters,
+      List<RequestParameter> newParams) {
+    List<RequestParameter> parameters = new ArrayList<>();
+    for (RequestParameter newParam : newParams) {
+      Optional<RequestParameter> original = existingParameters.stream()
+          .filter(input -> newParam.getName().equals(input.getName()))
+          .findFirst();
       if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
         if (newParam.getOrder() > original.get().getOrder()) {
           parameters.add(merged(newParam, original.get()));
@@ -85,29 +87,16 @@ class ParameterMerger {
     return parameters;
   }
 
-  private Parameter merged(Parameter destination, Parameter source) {
-    return new ParameterBuilder()
+  private RequestParameter merged(RequestParameter destination, RequestParameter source) {
+    return new RequestParameterBuilder()
         .from(destination)
-        .name(source.getName())
-        .allowableValues(source.getAllowableValues())
-        .allowMultiple(source.isAllowMultiple())
-        .defaultValue(source.getDefaultValue())
-        .description(source.getDescription())
-        .modelRef(source.getModelRef())
-        .parameterAccess(source.getParamAccess())
-        .parameterType(source.getParamType())
-        .required(source.isRequired())
-        .type(source.getType().orElse(null))
-        .order(source.getOrder())
-        .scalarExample(source.getScalarExample())
-        .complexExamples(source.getExamples())
-        .collectionFormat(source.getCollectionFormat())
+        .from(source)
         .build();
   }
 
-  private List<Parameter> newParameters(Set<String> missingParamNames, List<Parameter> newParams) {
-    List<Parameter> parameters = new ArrayList<>();
-    for (Parameter each : newParams) {
+  private List<RequestParameter> newParameters(Set<String> missingParamNames, List<RequestParameter> newParams) {
+    List<RequestParameter> parameters = new ArrayList<>();
+    for (RequestParameter each : newParams) {
       if (missingParamNames.contains(each.getName())) {
         parameters.add(each);
       }

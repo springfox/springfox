@@ -3,10 +3,11 @@ package springfox.documentation.builders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.common.Either;
+import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.service.ContentSpecification;
-import springfox.documentation.service.SimpleParameterSpecification;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
+import springfox.documentation.service.SimpleParameterSpecification;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
@@ -107,6 +108,42 @@ public class RequestParameterBuilder {
         parameterSpecification,
         order,
         extensions);
+  }
+
+  public RequestParameterBuilder from(RequestParameter source) {
+    source.getParameterSpecification()
+        .getLeft()
+        .map(simple -> {
+          for (ElementFacet each :
+              simple.getFacets()) {
+            this.simpleParameterBuilder()
+                .facetBuilder(each.facetBuilder())
+                .copyOf(each);
+          }
+          this.simpleParameterBuilder()
+              .collectionFormat(simple.getCollectionFormat())
+              .allowEmptyValue(simple.getAllowEmptyValue())
+              .allowReserved(simple.getAllowReserved())
+              .defaultValue(simple.getDefaultValue())
+              .examples(simple.getExamples())
+              .explode(simple.getExplode())
+              .scalarExample(simple.getScalarExample())
+              .model(simple.getModel())
+              .style(simple.getStyle());
+          return simple;
+        });
+    source.getParameterSpecification()
+        .getRight()
+        .map(content -> this.contentSpecificationBuilder()
+            .mediaTypes(content.getMediaTypes()));
+    return this.in(source.getIn())
+        .required(source.getRequired())
+        .hidden(source.getHidden())
+        .deprecated(source.getDeprecated())
+        .extensions(source.getExtensions())
+        .name(source.getName())
+        .description(source.getDescription())
+        .order(source.getOrder());
   }
 
 }

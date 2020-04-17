@@ -1,5 +1,7 @@
 package springfox.documentation.schema;
 
+import springfox.documentation.builders.ElementFacetBuilder;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -75,5 +77,10 @@ public class NumericElementFacet implements ElementFacet {
         .add("minimum=" + minimum)
         .add("exclusiveMinimum=" + exclusiveMinimum)
         .toString();
+  }
+
+  @Override
+  public Class<? extends ElementFacetBuilder> facetBuilder() {
+    return NumericElementFacetBuilder.class;
   }
 }

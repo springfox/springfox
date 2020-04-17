@@ -322,9 +322,13 @@ public class OperationBuilder {
    * @since 3.0.0
    */
   public OperationBuilder requestParameters(Set<RequestParameter> parameters) {
-    this.requestParameters.addAll(parameters.stream()
+    List<RequestParameter> source = nullToEmptyList(parameters).stream()
         .filter(Objects::nonNull)
-        .collect(Collectors.toList()));
+        .collect(Collectors.toList());
+    List<RequestParameter> destination = new ArrayList<>(this.requestParameters);
+    RequestParameterMerger merger = new RequestParameterMerger(destination, source);
+    this.requestParameters.clear();
+    this.requestParameters.addAll(merger.merged());
     return this;
   }
 

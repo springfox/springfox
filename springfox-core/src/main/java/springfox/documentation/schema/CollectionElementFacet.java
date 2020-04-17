@@ -1,5 +1,10 @@
 package springfox.documentation.schema;
 
+import springfox.documentation.builders.CollectionElementFacetBuilder;
+import springfox.documentation.builders.ElementFacetBuilder;
+
+
+//TODO: add tests to excercise this facet
 public class CollectionElementFacet implements ElementFacet {
   private final Integer maxItems;
   private final Integer minItems;
@@ -24,5 +29,10 @@ public class CollectionElementFacet implements ElementFacet {
 
   public Boolean getUniqueItems() {
     return uniqueItems;
+  }
+
+  @Override
+  public Class<? extends ElementFacetBuilder> facetBuilder() {
+    return CollectionElementFacetBuilder.class;
   }
 }

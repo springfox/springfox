@@ -1,5 +1,6 @@
 package springfox.documentation.builders;
 
+import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
@@ -37,6 +38,15 @@ public class EnumerationFacetBuilder implements ElementFacetBuilder {
   @Override
   public EnumerationFacet build() {
     return new EnumerationFacet(allowedValues);
+  }
+
+  @Override
+  public EnumerationFacetBuilder copyOf(ElementFacet facet) {
+    if (!(facet instanceof EnumerationFacet)) {
+      return this;
+    }
+    EnumerationFacet other = (EnumerationFacet) facet;
+    return this.allowedValues(other.getAllowedValues());
   }
 
   public static List<String> from(AllowableValues allowableValues) {

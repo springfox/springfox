@@ -42,7 +42,6 @@ import java.util.Set;
 
 import static java.util.Collections.*;
 import static org.springframework.util.StringUtils.*;
-import static springfox.documentation.builders.Parameters.*;
 import static springfox.documentation.service.Parameter.*;
 
 public abstract class AbstractOperationParameterRequestConditionReader implements OperationBuilderPlugin {
@@ -136,7 +135,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
   }
 
   private boolean parameterHandled(List<Parameter> parameters, NameValueExpression<String> expression) {
-    return parameters.stream().anyMatch(withName(expression.getName()));
+    return parameters.stream().anyMatch(input -> expression.getName().equals(input.getName()));
   }
 
   @Override
