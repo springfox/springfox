@@ -3,6 +3,9 @@ package springfox.documentation.schema;
 import springfox.documentation.builders.CollectionElementFacetBuilder;
 import springfox.documentation.builders.ElementFacetBuilder;
 
+import java.util.Objects;
+import java.util.StringJoiner;
+
 
 //TODO: add tests to excercise this facet
 public class CollectionElementFacet implements ElementFacet {
@@ -34,5 +37,33 @@ public class CollectionElementFacet implements ElementFacet {
   @Override
   public Class<? extends ElementFacetBuilder> facetBuilder() {
     return CollectionElementFacetBuilder.class;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    CollectionElementFacet that = (CollectionElementFacet) o;
+    return Objects.equals(maxItems, that.maxItems) &&
+        Objects.equals(minItems, that.minItems) &&
+        Objects.equals(uniqueItems, that.uniqueItems);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(maxItems, minItems, uniqueItems);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", CollectionElementFacet.class.getSimpleName() + "[", "]")
+        .add("maxItems=" + maxItems)
+        .add("minItems=" + minItems)
+        .add("uniqueItems=" + uniqueItems)
+        .toString();
   }
 }
