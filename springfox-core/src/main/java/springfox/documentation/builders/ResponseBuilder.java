@@ -16,37 +16,37 @@ public class ResponseBuilder {
   private Set<MediaType> mediaTypes;
   private List<VendorExtension> vendorExtensions;
 
-  public ResponseBuilder withCode(String code) {
+  public ResponseBuilder code(String code) {
     this.code = code;
     return this;
   }
 
-  public ResponseBuilder withDescription(String description) {
+  public ResponseBuilder description(String description) {
     this.description = description;
     return this;
   }
 
-  public ResponseBuilder withIsDefault(boolean isDefault) {
+  public ResponseBuilder isDefault(boolean isDefault) {
     this.isDefault = isDefault;
     return this;
   }
 
-  public ResponseBuilder withHeaders(List<Header> headers) {
+  public ResponseBuilder headers(List<Header> headers) {
     this.headers = headers;
     return this;
   }
 
-  public ResponseBuilder withMediaTypes(Set<MediaType> mediaTypes) {
+  public ResponseBuilder mediaTypes(Set<MediaType> mediaTypes) {
     this.mediaTypes = mediaTypes;
     return this;
   }
 
-  public ResponseBuilder withVendorExtensions(List<VendorExtension> vendorExtensions) {
+  public ResponseBuilder vendorExtensions(List<VendorExtension> vendorExtensions) {
     this.vendorExtensions = vendorExtensions;
     return this;
   }
 
-  public Response createResponse() {
+  public Response build() {
     return new Response(code, description, isDefault, headers, mediaTypes, vendorExtensions);
   }
 }
