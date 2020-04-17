@@ -25,26 +25,13 @@ import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.service.VendorExtension;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class DocumentationContext {
   private final DocumentationType documentationType;
@@ -56,6 +43,7 @@ public class DocumentationContext {
   private final Set<Class> ignorableParameterTypes;
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
   private final List<Parameter> globalOperationParameters;
+  private final List<RequestParameter> globalParameters = new ArrayList<>();
   private final ResourceGroupingStrategy resourceGroupingStrategy;
   private final PathProvider pathProvider;
   private final List<SecurityContext> securityContexts;
@@ -83,6 +71,7 @@ public class DocumentationContext {
       Set<Class> ignorableParameterTypes,
       Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
       List<Parameter> globalOperationParameter,
+      List<RequestParameter> globalRequestParameters,
       ResourceGroupingStrategy resourceGroupingStrategy,
       PathProvider pathProvider,
       List<SecurityContext> securityContexts,
@@ -110,6 +99,7 @@ public class DocumentationContext {
     this.ignorableParameterTypes = ignorableParameterTypes;
     this.globalResponseMessages = globalResponseMessages;
     this.globalOperationParameters = globalOperationParameter;
+    this.globalParameters.addAll(globalRequestParameters);
     this.resourceGroupingStrategy = resourceGroupingStrategy;
     this.pathProvider = pathProvider;
     this.securityContexts = securityContexts;
@@ -158,6 +148,11 @@ public class DocumentationContext {
     return globalResponseMessages;
   }
 
+  /**
+   * @deprecated use @see {@link DocumentationContext#getGlobalParameters()} instead
+   * @return list of parameters
+   */
+  @Deprecated
   public List<Parameter> getGlobalRequestParameters() {
     return globalOperationParameters;
   }
@@ -238,5 +233,9 @@ public class DocumentationContext {
 
   public List<VendorExtension> getVendorExtentions() {
     return vendorExtensions;
+  }
+
+  public Collection<RequestParameter> getGlobalParameters() {
+    return globalParameters;
   }
 }

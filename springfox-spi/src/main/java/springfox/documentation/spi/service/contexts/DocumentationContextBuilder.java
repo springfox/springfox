@@ -26,16 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.service.Tags;
-import springfox.documentation.service.VendorExtension;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
@@ -88,6 +79,7 @@ public class DocumentationContextBuilder {
   private GenericTypeNamingStrategy genericsNamingStrategy;
   private Optional<String> pathMapping;
   private boolean isUrlTemplatesEnabled;
+  private final List<RequestParameter> globalRequestParameters = new ArrayList<>();
 
   public DocumentationContextBuilder(DocumentationType documentationType) {
     this.documentationType = documentationType;
@@ -259,6 +251,13 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+
+  public DocumentationContextBuilder additionalRequestParameters(List<RequestParameter> globalRequestParameters) {
+    this.globalRequestParameters.addAll(globalRequestParameters);
+    return this;
+  }
+
+
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
     OrderComparator.sort(rules);
@@ -270,6 +269,7 @@ public class DocumentationContextBuilder {
         ignorableParameterTypes,
         responseMessages,
         globalOperationParameters,
+        globalRequestParameters,
         resourceGroupingStrategy,
         pathProvider,
         securityContexts,

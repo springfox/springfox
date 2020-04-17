@@ -42,10 +42,7 @@ import springfox.documentation.spring.web.readers.parameter.ExpansionContext;
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -81,6 +78,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .collect(Collectors.toList()));
+    context.operationBuilder().requestParameters(new HashSet<>(context.getRequestParameters()));
     context.operationBuilder().requestParameters(
         compatibilities.stream()
             .map(Compatibility::getModern)

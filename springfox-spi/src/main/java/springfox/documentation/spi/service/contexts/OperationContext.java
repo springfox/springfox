@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.OperationBuilder;
 import springfox.documentation.schema.Model;
 import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -84,8 +85,18 @@ public class OperationContext {
     return new ArrayList<>();
   }
 
+  /**
+   * Use @see {@link OperationContext#getRequestParameters()} instead
+   * @deprecated @since 3.0
+   * @return
+   */
+  @Deprecated
   public List<Parameter> getGlobalOperationParameters() {
     return nullToEmptyList(getDocumentationContext().getGlobalRequestParameters());
+  }
+
+  public List<RequestParameter> getRequestParameters() {
+    return nullToEmptyList(getDocumentationContext().getGlobalParameters());
   }
 
   public List<SecurityContext> securityContext() {

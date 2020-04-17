@@ -28,15 +28,7 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy;
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy;
 import springfox.documentation.schema.WildcardType;
-import springfox.documentation.service.ApiDescription;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiListingReference;
-import springfox.documentation.service.Operation;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResponseMessage;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.service.VendorExtension;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
@@ -98,7 +90,8 @@ public class Docket implements DocumentationPlugin {
   private Optional<String> pathMapping = empty();
   private ApiSelector apiSelector = ApiSelector.DEFAULT;
   private boolean enableUrlTemplating = false;
-  private List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<RequestParameter> globalRequestParameters = new ArrayList<>();
 
 
   public Docket(DocumentationType documentationType) {
@@ -202,10 +195,24 @@ public class Docket implements DocumentationPlugin {
    * Adds default parameters which will be applied to all operations.
    *
    * @param operationParameters parameters which will be globally applied to all operations
-   * @return this Docket
+   * @return this Docket use @see {@link Docket#globalRequestParameters} instead
+   * @deprecated
    */
+  @Deprecated
   public Docket globalOperationParameters(List<Parameter> operationParameters) {
     this.globalOperationParameters.addAll(nullToEmptyList(operationParameters));
+    return this;
+  }
+
+  /**
+   * Adds default parameters which will be applied to all operations.
+   *
+   * @param globalOperationRequestParameters parameters which will be globally applied to all operations
+   * @return this Docket
+   * @deprecated
+   */
+  public Docket globalOperationRequestParameters(List<RequestParameter> globalOperationRequestParameters) {
+    this.globalRequestParameters.addAll(nullToEmptyList(globalOperationRequestParameters));
     return this;
   }
 
@@ -450,6 +457,7 @@ public class Docket implements DocumentationPlugin {
         .applyDefaultResponseMessages(applyDefaultResponseMessages)
         .additionalResponseMessages(responseMessages)
         .additionalOperationParameters(globalOperationParameters)
+        .additionalRequestParameters(globalRequestParameters)
         .additionalIgnorableTypes(ignorableParameterTypes)
         .ruleBuilders(ruleBuilders)
         .groupName(groupName)
