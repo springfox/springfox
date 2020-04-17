@@ -51,6 +51,7 @@ public class DefaultConfiguration implements DefaultsProviderPlugin {
         .additionalIgnorableTypes(defaults.defaultIgnorableParameterTypes())
         .rules(defaults.defaultRules(typeResolver))
         .defaultResponseMessages(defaults.defaultResponseMessages())
+        .defaultResponses(defaults.defaultResponses())
         .pathProvider(pathProvider)
         .typeResolver(typeResolver)
         .enableUrlTemplating(false)

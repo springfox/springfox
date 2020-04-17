@@ -122,7 +122,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
 
   private Predicate<Compatibility<Parameter, RequestParameter>> hiddenParameter() {
     return c -> c.getLegacy()
-        .map(p -> p.isHidden())
+        .map(Parameter::isHidden)
         .orElse(false);
   }
 

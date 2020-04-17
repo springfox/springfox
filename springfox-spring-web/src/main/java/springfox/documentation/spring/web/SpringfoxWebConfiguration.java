@@ -51,6 +51,7 @@ import java.util.List;
     ApiListingBuilderPlugin.class,
     OperationBuilderPlugin.class,
     ParameterBuilderPlugin.class,
+    ResponseBuilderPlugin.class,
     ExpandedParameterBuilderPlugin.class,
     ResourceGroupingStrategy.class,
     OperationModelsProviderPlugin.class,

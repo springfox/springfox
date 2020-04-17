@@ -21,6 +21,7 @@ package springfox.documentation.spring.web.plugins;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.annotations.Incubating;
@@ -28,7 +29,17 @@ import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy;
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy;
 import springfox.documentation.schema.WildcardType;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiListingReference;
+import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
+import springfox.documentation.service.Response;
+import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Tag;
+import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.DocumentationPlugin;
@@ -66,6 +77,7 @@ public class Docket implements DocumentationPlugin {
   private final DocumentationType documentationType;
   private final List<SecurityContext> securityContexts = new ArrayList<>();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessages = new HashMap<>();
+  private final Map<HttpMethod, List<Response>> responses = new HashMap<>();
   private final List<Parameter> globalOperationParameters = new ArrayList<>();
   private final List<Function<TypeResolver, AlternateTypeRule>> ruleBuilders = new ArrayList<>();
   private final Set<Class> ignorableParameterTypes = new HashSet<>();
@@ -183,11 +195,33 @@ public class Docket implements DocumentationPlugin {
    * @return this Docket
    * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
    * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
+   * Use {@link Docket#responses} instead
+   * @deprecated @since 3.0.0
    */
-  public Docket globalResponseMessage(RequestMethod requestMethod,
-                                      List<ResponseMessage> responseMessages) {
-
+  @Deprecated
+  public Docket globalResponseMessage(
+      RequestMethod requestMethod,
+      List<ResponseMessage> responseMessages) {
     this.responseMessages.put(requestMethod, responseMessages);
+    return this;
+  }
+
+  /**
+   * Overrides the default http response messages at the http request method level.
+   * <p>
+   * To set specific response messages for specific api operations use the swagger core annotations on
+   * the appropriate controller methods.
+   *
+   * @param httpMethod - http request method for which to apply the message
+   * @param responses  - the message
+   * @return this Docket
+   * {@code See swagger annotations <code>@ApiResponse</code>, <code>@ApiResponses</code> }.
+   * @see springfox.documentation.spi.service.contexts.Defaults#defaultResponseMessages()
+   */
+  public Docket globalResponses(
+      HttpMethod httpMethod,
+      List<Response> responses) {
+    this.responses.put(httpMethod, responses);
     return this;
   }
 
@@ -456,6 +490,7 @@ public class Docket implements DocumentationPlugin {
         .selector(apiSelector)
         .applyDefaultResponseMessages(applyDefaultResponseMessages)
         .additionalResponseMessages(responseMessages)
+        .additionalResponses(responses)
         .additionalOperationParameters(globalOperationParameters)
         .additionalRequestParameters(globalRequestParameters)
         .additionalIgnorableTypes(ignorableParameterTypes)

@@ -31,6 +31,7 @@ import springfox.documentation.service.Operation;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.PathDecorator;
 import springfox.documentation.service.RequestParameter;
+import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ApiListingBuilderPlugin;
@@ -42,6 +43,7 @@ import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
+import springfox.documentation.spi.service.ResponseBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.DocumentationContextBuilder;
@@ -50,6 +52,7 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 import springfox.documentation.spi.service.contexts.PathContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
+import springfox.documentation.spi.service.contexts.ResponseContext;
 import springfox.documentation.spring.web.SpringGroupingStrategy;
 import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
 
@@ -95,6 +98,9 @@ public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("apiListingScannerPluginRegistry")
   private PluginRegistry<ApiListingScannerPlugin, DocumentationType> apiListingScanners;
+  @Autowired
+  @Qualifier("responseBuilderPluginRegistry")
+  private PluginRegistry<ResponseBuilderPlugin, DocumentationType> responsePlugins;
 
   public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
@@ -112,6 +118,13 @@ public class DocumentationPluginsManager {
     return new Compatibility<>(
         parameterContext.parameterBuilder().build(),
         parameterContext.requestParameterBuilder().build());
+  }
+
+  public Response response(ResponseContext responseContext) {
+    for (ResponseBuilderPlugin each : responsePlugins.getPluginsFor(responseContext.getDocumentationType())) {
+      each.apply(responseContext);
+    }
+    return responseContext.responseBuilder().build();
   }
 
   public Compatibility<Parameter, RequestParameter> expandParameter(ParameterExpansionContext context) {
