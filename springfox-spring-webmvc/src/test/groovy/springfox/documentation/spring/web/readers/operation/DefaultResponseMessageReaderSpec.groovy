@@ -28,6 +28,7 @@ import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.Model
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.service.ResponseMessage
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
@@ -40,15 +41,18 @@ class DefaultResponseMessageReaderSpec extends DocumentationContextSpec implemen
 
   def setup() {
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     sut = new ResponseMessagesReader(
-        new JacksonEnumTypeDeterminer(),
+        enumTypeDeterminer,
         typeNameExtractor,
-        defaultSchemaPlugins())
+        defaultSchemaPlugins(),
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer),
+        defaultWebPlugins())
   }
 
   def "Should add default response messages"() {

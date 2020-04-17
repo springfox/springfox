@@ -34,6 +34,7 @@ import springfox.documentation.spring.web.paths.OperationPathDecorator
 import springfox.documentation.spring.web.paths.PathMappingDecorator
 import springfox.documentation.spring.web.paths.PathSanitizer
 import springfox.documentation.spring.web.paths.QueryStringUriTemplateDecorator
+import springfox.documentation.spring.web.plugins.DefaultResponseTypeReader
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager
 import springfox.documentation.spring.web.readers.operation.OperationModelsProvider
 import springfox.documentation.spring.web.readers.parameter.ExpandedParameterBuilder
@@ -67,6 +68,7 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
         new PathSanitizer(),
         new PathMappingDecorator(),
         new QueryStringUriTemplateDecorator()])
+    plugins.responsePlugins = of([new DefaultResponseTypeReader()])
     return plugins
   }
 

@@ -11,7 +11,7 @@ public class ReferenceModelSpecificationToSchemaConverter implements Converter<R
         ObjectSchema objectSchema = new ObjectSchema();
         if (!source.getKey().getName().equals(Object.class.getSimpleName()) &&
                 !source.getKey().getNamespace().equals(Object.class.getPackage().getName())) {
-            objectSchema.$ref(source.getKey().getName());
+            return objectSchema.$ref(source.getKey().getName());
         }
         return objectSchema;
     }

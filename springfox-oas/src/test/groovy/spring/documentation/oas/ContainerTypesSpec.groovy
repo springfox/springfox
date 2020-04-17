@@ -229,7 +229,7 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
         "stringToSimpleType"           | new MapSchema().additionalProperties(new ObjectSchema().$ref("SimpleType"))
         "complexToSimpleType"          | new MapSchema().additionalProperties(new ObjectSchema().$ref("SimpleType"))
         "complexToString"              | new MapSchema().additionalProperties(new StringSchema())
-        "mapOfmapOfStringToSimpleType" | new MapSchema().additionalProperties(new ObjectSchema().$ref("Map«string,SimpleType»"))
+        "mapOfmapOfStringToSimpleType" | new MapSchema().additionalProperties(new MapSchema().additionalProperties(new ObjectSchema().$ref("SimpleType")))
     }
 }
                             

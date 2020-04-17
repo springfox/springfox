@@ -33,10 +33,10 @@ import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.ModelProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.schema.plugins.SchemaPluginsManager
 import springfox.documentation.schema.property.CachingModelPropertiesProvider
 import springfox.documentation.schema.property.FactoryMethodProvider
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.OptimizedModelPropertiesProvider
 import springfox.documentation.schema.property.bean.AccessorsProvider
@@ -67,9 +67,16 @@ trait ModelProviderForServiceSupport implements ServicePluginsSupport {
     def event = new ObjectMapperConfigured(this, objectMapper)
     namingStrategy.onApplicationEvent(event)
 
-    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
-        new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, enumTypeDeterminer, typeNameExtractor)
+    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(
+        new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver),
+        new FactoryMethodProvider(typeResolver),
+        typeResolver,
+        namingStrategy,
+        pluginsManager,
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
 
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider =
@@ -102,9 +109,17 @@ trait ModelProviderForServiceSupport implements ServicePluginsSupport {
     def event = new ObjectMapperConfigured(this, objectMapper)
     namingStrategy.onApplicationEvent(event)
 
-    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(new AccessorsProvider(typeResolver),
-        new FieldProvider(typeResolver), new FactoryMethodProvider(typeResolver), typeResolver, namingStrategy,
-        pluginsManager, new JacksonEnumTypeDeterminer(), typeNameExtractor)
+    def modelPropertiesProvider = new OptimizedModelPropertiesProvider(
+        new AccessorsProvider(typeResolver),
+        new FieldProvider(typeResolver),
+        new FactoryMethodProvider(typeResolver),
+        typeResolver,
+        namingStrategy,
+        pluginsManager,
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
+    
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider =
         new DefaultModelDependencyProvider(
