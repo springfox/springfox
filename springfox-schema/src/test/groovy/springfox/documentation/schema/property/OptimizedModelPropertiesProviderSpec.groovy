@@ -54,10 +54,11 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
     BeanPropertyNamingStrategy namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
         new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver),
@@ -65,8 +66,9 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
-        new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
     ResolvedType type = typeResolver.resolve(TypeWithSetterButNoGetter)
 
     and:
@@ -109,10 +111,11 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
     BeanPropertyNamingStrategy namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
         new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver),
@@ -120,8 +123,9 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
-        new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
     ResolvedType type = typeResolver.resolve(UnwrappedType)
 
     and:
@@ -165,10 +169,11 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create(
             [new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
         new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver),
@@ -176,8 +181,9 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
-        new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
     ResolvedType type = typeResolver.resolve(UnwrappedType)
 
     and:
@@ -226,10 +232,11 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
     BeanPropertyNamingStrategy namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
         new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver),
@@ -237,8 +244,8 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
-        new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        enumTypeDeterminer,
+        typeNameExtractor, new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
     ResolvedType type = typeResolver.resolve(TypeWithJsonFormat)
 
     and:
@@ -286,10 +293,11 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
     BeanPropertyNamingStrategy namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     OptimizedModelPropertiesProvider sut = new OptimizedModelPropertiesProvider(
         new AccessorsProvider(typeResolver),
         new FieldProvider(typeResolver),
@@ -297,8 +305,9 @@ class OptimizedModelPropertiesProviderSpec extends Specification implements Sche
         typeResolver,
         namingStrategy,
         defaultSchemaPlugins(),
-        new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
     ResolvedType type = typeResolver.resolve(TypeWithJsonView)
 
     and:

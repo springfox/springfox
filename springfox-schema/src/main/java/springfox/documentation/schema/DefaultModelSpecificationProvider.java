@@ -27,9 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.ModelFacetsBuilder;
-import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelPropertiesProvider;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
@@ -58,6 +58,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
   private final SchemaPluginsManager schemaPluginsManager;
   private final TypeNameExtractor typeNameExtractor;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  private final ModelSpecificationFactory modelSpecifications;
 
   @Autowired
   public DefaultModelSpecificationProvider(
@@ -66,13 +67,15 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       @Qualifier("cachedModelDependencies") ModelDependencyProvider dependencyProvider,
       SchemaPluginsManager schemaPluginsManager,
       TypeNameExtractor typeNameExtractor,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      ModelSpecificationFactory modelSpecifications) {
     this.resolver = resolver;
     this.propertiesProvider = propertiesProvider;
     this.dependencyProvider = dependencyProvider;
     this.schemaPluginsManager = schemaPluginsManager;
     this.typeNameExtractor = typeNameExtractor;
     this.enumTypeDeterminer = enumTypeDeterminer;
+    this.modelSpecifications = modelSpecifications;
   }
 
   @Override
@@ -107,13 +110,13 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         = properties(modelContext, propertiesHost).stream()
         .collect(Collectors.toMap(PropertySpecification::getName, identity()));
     LOG.debug("Inferred {} properties. Properties found {}",
-              propertiesIndex.size(),
-              String.join(
-                  ", ",
-                  propertiesIndex.keySet()));
+        propertiesIndex.size(),
+        String.join(
+            ", ",
+            propertiesIndex.keySet()));
     return of(modelBuilder(propertiesHost,
-                           new TreeMap<>(propertiesIndex),
-                           modelContext));
+        new TreeMap<>(propertiesIndex),
+        modelContext));
   }
 
   private ModelSpecification modelBuilder(
@@ -160,41 +163,36 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       ModelContext mapContext,
       ResolvedType resolvedType) {
     if (isMapType(resolvedType) && !mapContext.hasSeenBefore(resolvedType)) {
+      ResolvedType keyType = resolver.resolve(String.class);
+      ModelContext keyContext = ModelContext.fromParent(
+          mapContext,
+          keyType);
       ResolvedType valueType = mapValueType(resolvedType);
       ModelContext valueContext = ModelContext.fromParent(
           mapContext,
           valueType);
       String typeName = typeNameExtractor.typeName(valueContext);
+
       return of(
           mapContext.getModelSpecificationBuilder()
-              .mapModel(new MapSpecification(
-                           new ModelSpecificationBuilder(
-                               String.format(
-                                   "%s_%s",
-                                   mapContext.getParameterId(),
-                                  typeNameExtractor.typeName(mapContext)))
-                               .scalarModel(ScalarType.STRING)
-                              .build(),
-                       new ModelSpecificationBuilder(
-                           String.format(
-                               "%s_%s",
-                               mapContext.getParameterId(),
-                               typeNameExtractor.typeName(mapContext)))
-                           .referenceModel(new ReferenceModelSpecification(
-                               new ModelKey("", simpleQualifiedTypeName(valueType),
-                                            mapContext.isReturnType())))
-                           .build()))
-          .facets(new ModelFacetsBuilder()
-                          .withModelKey(new ModelKey(
-                              simpleQualifiedTypeName(resolvedType),
-                              typeName,
-                              mapContext.isReturnType()))
-                          .withTitle(typeName)
-                          .withDescription("Key of type " + typeName)
-                          .withNullable(false)
-                          .withDeprecated(false)
-                          .builder())
-          .build());
+              .mapModel(
+                  new MapSpecification(
+                      modelSpecifications.create(keyContext, keyType),
+                      modelSpecifications.create(valueContext, valueType)))
+              .facetsBuilder()
+              .copyOf(
+                  new ModelFacetsBuilder(null)
+                      .withModelKey(new ModelKey(
+                          simpleQualifiedTypeName(resolvedType),
+                          typeName,
+                          mapContext.isReturnType()))
+                      .withTitle(typeName)
+                      .withDescription("Key of type " + typeName)
+                      .withNullable(false)
+                      .withDeprecated(false)
+                      .build())
+              .yield()
+              .build());
     }
     return empty();
   }

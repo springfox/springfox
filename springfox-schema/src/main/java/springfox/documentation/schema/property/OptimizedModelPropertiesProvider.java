@@ -41,16 +41,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.builders.EnumerationFacetBuilder;
 import springfox.documentation.builders.ModelPropertyBuilder;
-import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
-import springfox.documentation.schema.CollectionSpecification;
-import springfox.documentation.schema.MapSpecification;
-import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.PropertySpecification;
-import springfox.documentation.schema.ReferenceModelSpecification;
-import springfox.documentation.schema.ScalarType;
-import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.configuration.ObjectMapperConfigured;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
@@ -85,7 +78,6 @@ import static springfox.documentation.schema.Annotations.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.property.BeanPropertyDefinitions.*;
 import static springfox.documentation.schema.property.FactoryMethodProvider.*;
-import static springfox.documentation.schema.property.PackageNames.*;
 import static springfox.documentation.schema.property.bean.BeanModelProperty.*;
 import static springfox.documentation.spi.schema.contexts.ModelContext.*;
 
@@ -99,6 +91,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
   private final TypeResolver typeResolver;
   private final BeanPropertyNamingStrategy namingStrategy;
   private final SchemaPluginsManager schemaPluginsManager;
+  private final ModelSpecificationFactory modelSpecifications;
   private final JacksonAnnotationIntrospector annotationIntrospector;
   private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
@@ -114,7 +107,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
       BeanPropertyNamingStrategy namingStrategy,
       SchemaPluginsManager schemaPluginsManager,
       EnumTypeDeterminer enumTypeDeterminer,
-      TypeNameExtractor typeNameExtractor) {
+      TypeNameExtractor typeNameExtractor,
+      ModelSpecificationFactory modelSpecifications) {
 
     this.accessors = accessors;
     this.fields = fields;
@@ -122,6 +116,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     this.typeResolver = typeResolver;
     this.namingStrategy = namingStrategy;
     this.schemaPluginsManager = schemaPluginsManager;
+    this.modelSpecifications = modelSpecifications;
     this.annotationIntrospector = new JacksonAnnotationIntrospector();
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
@@ -581,33 +576,12 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
 
-    ReferenceModelSpecification reference = null;
-    Optional<ScalarType> scalar = ScalarTypes.builtInScalarType(fieldModelProperty.getType());
-    if (!scalar.isPresent()) {
-      reference = new ReferenceModelSpecification(
-          new ModelKey(
-              safeGetPackageName(fieldModelProperty.getType()),
-              typeNameExtractor.typeName(
-                  ModelContext.fromParent(
-                      modelContext,
-                      fieldModelProperty.getType())),
-              modelContext.isReturnType()));
-    }
-
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(fieldModelProperty.getName())
-        .withType(new ModelSpecificationBuilder(
-            String.format(
-                "%s_%s",
-                modelContext.getParameterId(),
-                typeNameExtractor.typeName(modelContext)))
-            .scalarModel(scalar.orElse(null))
-            .referenceModel(reference)
-            .build())
+        .withType(modelSpecifications.create(modelContext, fieldModelProperty.getType()))
         .withPosition(fieldModelProperty.position())
         .withRequired(fieldModelProperty.isRequired())
         .withDescription(fieldModelProperty.propertyDescription())
-//        .withFacets(fieldModelProperty.allowableValues()) //TODO: Allowable values
         .withExample(fieldModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(
@@ -630,7 +604,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         namingStrategy,
         namePrefix);
 
-    BeanModelProperty beanModelProperty
+    BaseModelProperty beanModelProperty
         = new BeanModelProperty(
         propertyName,
         childProperty,
@@ -638,6 +612,14 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         modelContext.getAlternateTypeProvider(),
         jacksonProperty);
 
+    return modelProperty(jacksonProperty, modelContext, propertyName, beanModelProperty);
+  }
+
+  private ModelProperty modelProperty(
+      BeanPropertyDefinition jacksonProperty,
+      ModelContext modelContext,
+      String propertyName,
+      BaseModelProperty beanModelProperty) {
     LOG.debug(
         "Adding property {} to model",
         propertyName);
@@ -687,57 +669,10 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     LOG.debug(
         "Adding property {} to model",
         propertyName);
-    ReferenceModelSpecification reference = null;
-    CollectionSpecification collectionSpecification =
-        new CollectionSpecificationProvider(
-            typeNameExtractor,
-            enumTypeDeterminer)
-            .create(
-                modelContext,
-                beanModelProperty.getType())
-            .orElse(null);
-    MapSpecification mapSpecification =
-        new MapSpecificationProvider(
-            typeNameExtractor,
-            enumTypeDeterminer)
-            .create(
-                modelContext,
-                beanModelProperty.getType())
-            .orElse(null);
-
-    Optional<ScalarType> scalar = ScalarTypes.builtInScalarType(beanModelProperty.getType());
-    if (!scalar.isPresent()
-        && collectionSpecification == null
-        && mapSpecification == null) {
-      if (beanModelProperty.getType() != null
-          && enumTypeDeterminer.isEnum(beanModelProperty.getType()
-          .getErasedType())) {
-        scalar = Optional.of(ScalarType.STRING);
-        //TODO: Enum values in the facet
-      } else {
-        reference = new ReferenceModelSpecification(
-            new ModelKey(
-                safeGetPackageName(beanModelProperty.getType()),
-                typeNameExtractor.typeName(
-                    ModelContext.fromParent(
-                        modelContext,
-                        beanModelProperty.getType())),
-                modelContext.isReturnType()));
-      }
-    }
 
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(beanModelProperty.getName())
-        .withType(new ModelSpecificationBuilder(
-            String.format(
-                "%s_%s",
-                modelContext.getParameterId(),
-                typeNameExtractor.typeName(modelContext)))
-            .scalarModel(scalar.orElse(null))
-            .referenceModel(reference)
-            .collectionModel(collectionSpecification)
-            .mapModel(mapSpecification)
-            .build())
+        .withType(modelSpecifications.create(modelContext, beanModelProperty.getType()))
         .withPosition(beanModelProperty.position())
         .withRequired(beanModelProperty.isRequired())
         .withIsHidden(false)
@@ -768,7 +703,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         namingStrategy,
         namePrefix);
 
-    ParameterModelProperty parameterModelProperty
+    BaseModelProperty parameterModelProperty
         = new ParameterModelProperty(
         propertyName,
         parameter,
@@ -777,30 +712,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         modelContext.getAlternateTypeProvider(),
         jacksonProperty);
 
-    LOG.debug(
-        "Adding property {} to model",
-        propertyName);
-    ModelPropertyBuilder propertyBuilder = new ModelPropertyBuilder()
-        .name(parameterModelProperty.getName())
-        .type(parameterModelProperty.getType())
-        .qualifiedType(parameterModelProperty.qualifiedTypeName())
-        .position(parameterModelProperty.position())
-        .required(parameterModelProperty.isRequired())
-        .isHidden(false)
-        .description(parameterModelProperty.propertyDescription())
-        .allowableValues(parameterModelProperty.allowableValues())
-        .example(parameterModelProperty.example());
-    return schemaPluginsManager.property(
-        new ModelPropertyContext(
-            propertyBuilder,
-            jacksonProperty,
-            typeResolver,
-            modelContext.getDocumentationType(),
-            new PropertySpecificationBuilder()))
-        .updateModelRef(modelRefFactory(
-            modelContext,
-            enumTypeDeterminer,
-            typeNameExtractor));
+    return modelProperty(jacksonProperty, modelContext, propertyName, parameterModelProperty);
   }
 
 
@@ -830,34 +742,13 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         "Adding property {} to model",
         propertyName);
 
-    ReferenceModelSpecification reference = null;
-    Optional<ScalarType> scalar = ScalarTypes.builtInScalarType(parameterModelProperty.getType());
-    if (!scalar.isPresent()) {
-      reference = new ReferenceModelSpecification(
-          new ModelKey(
-              safeGetPackageName(parameterModelProperty.getType()),
-              typeNameExtractor.typeName(
-                  ModelContext.fromParent(
-                      modelContext,
-                      parameterModelProperty.getType())),
-              modelContext.isReturnType()));
-    }
-
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
         .withName(parameterModelProperty.getName())
-        .withType(new ModelSpecificationBuilder(
-            String.format(
-                "%s_%s",
-                modelContext.getParameterId(),
-                typeNameExtractor.typeName(modelContext)))
-            .scalarModel(scalar.orElse(null))
-            .referenceModel(reference)
-            .build())
+        .withType(modelSpecifications.create(modelContext, parameterModelProperty.getType()))
         .withPosition(parameterModelProperty.position())
         .withRequired(parameterModelProperty.isRequired())
         .withIsHidden(false)
         .withDescription(parameterModelProperty.propertyDescription())
-//        .withFacets(parameterModelProperty.allowableValues())
         .withExample(parameterModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(

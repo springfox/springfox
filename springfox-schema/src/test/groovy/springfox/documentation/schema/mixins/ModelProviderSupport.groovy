@@ -35,6 +35,7 @@ import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.configuration.ObjectMapperConfigured
 import springfox.documentation.schema.property.FactoryMethodProvider
 import springfox.documentation.schema.property.ModelPropertiesProvider
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.schema.property.ObjectMapperBeanPropertyNamingStrategy
 import springfox.documentation.schema.property.OptimizedModelPropertiesProvider
 import springfox.documentation.schema.property.bean.AccessorsProvider
@@ -57,7 +58,7 @@ trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTesti
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
 
     def event = new ObjectMapperConfigured(this, objectMapper)
@@ -70,8 +71,9 @@ trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTesti
         typeResolver,
         namingStrategy,
         pluginsManager,
-        new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
 
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = modelDependencyProvider(
@@ -100,7 +102,7 @@ trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTesti
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         typeResolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     def namingStrategy = new ObjectMapperBeanPropertyNamingStrategy()
 
     def event = new ObjectMapperConfigured(this, objectMapper)
@@ -113,8 +115,9 @@ trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTesti
         typeResolver,
         namingStrategy,
         pluginsManager,
-        new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        enumTypeDeterminer,
+        typeNameExtractor,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))
 
     modelPropertiesProvider.onApplicationEvent(event)
     def modelDependenciesProvider = modelDependencyProvider(
@@ -128,7 +131,8 @@ trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTesti
         modelDependenciesProvider,
         pluginsManager,
         typeNameExtractor,
-        enumTypeDeterminer
+        enumTypeDeterminer,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer)
     )
   }
 
@@ -168,7 +172,7 @@ trait ModelProviderSupport extends SchemaPluginsSupport implements TypesForTesti
         namingStrategy,
         pluginsManager,
         new JacksonEnumTypeDeterminer(),
-        typeNameExtractor)
+        typeNameExtractor, new springfox.documentation.schema.property.ModelSpecificationFactory(typeNameExtractor, new springfox.documentation.schema.JacksonEnumTypeDeterminer()))
     modelPropertiesProvider.onApplicationEvent(event)
     modelDependencyProvider(typeResolver, modelPropertiesProvider, typeNameExtractor)
   }
