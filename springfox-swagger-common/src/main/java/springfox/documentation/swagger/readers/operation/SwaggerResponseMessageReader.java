@@ -29,18 +29,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.Example;
 import springfox.documentation.builders.ExampleBuilder;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.common.Compatibility;
+import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.Header;
+import springfox.documentation.service.MediaType;
+import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spi.service.contexts.ResponseContext;
+import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
@@ -65,21 +71,28 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
   private final TypeResolver typeResolver;
+  private final ModelSpecificationFactory modelSpecifications;
+  private final DocumentationPluginsManager documentationPlugins;
 
   @Autowired
   public SwaggerResponseMessageReader(
       EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor,
-      TypeResolver typeResolver) {
+      TypeResolver typeResolver,
+      ModelSpecificationFactory modelSpecifications,
+      DocumentationPluginsManager documentationPlugins) {
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
     this.typeResolver = typeResolver;
+    this.modelSpecifications = modelSpecifications;
+    this.documentationPlugins = documentationPlugins;
   }
 
   @Override
   public void apply(OperationContext context) {
-    context.operationBuilder().responseMessages(read(context));
-
+    Compatibility<Set<ResponseMessage>, Set<Response>> read = read(context);
+    context.operationBuilder().responseMessages(read.getLegacy().orElse(new HashSet<>()));
+    context.operationBuilder().responses(read.getModern().orElse(new HashSet<>()));
   }
 
   @Override
@@ -88,8 +101,8 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   }
 
 
-  @SuppressWarnings({ "CyclomaticComplexity", "NPathComplexity" })
-  protected Set<ResponseMessage> read(OperationContext context) {
+  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
+  protected Compatibility<Set<ResponseMessage>, Set<Response>> read(OperationContext context) {
     ResolvedType defaultResponse = context.getReturnType();
     Optional<ApiOperation> operationAnnotation = context.findAnnotation(ApiOperation.class);
     Optional<ResolvedType> operationResponse =
@@ -103,6 +116,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
 
     List<ApiResponses> allApiResponses = context.findAllAnnotations(ApiResponses.class);
     Set<ResponseMessage> responseMessages = new HashSet<>();
+    Set<Response> responses = new HashSet<>();
 
     Map<Integer, ApiResponse> seenResponsesByCode = new HashMap<>();
     for (ApiResponses apiResponses : allApiResponses) {
@@ -122,7 +136,6 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
             type = type.map(Optional::of).orElse(operationResponse);
           }
           if (type.isPresent()) {
-
             final Map<String, String> knownNames = new HashMap<>();
             Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
                 .orElse(new HashSet<>())
@@ -149,13 +162,34 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           headers.putAll(headers(apiResponse.responseHeaders()));
 
           responseMessages.add(new ResponseMessageBuilder()
-                                   .code(apiResponse.code())
-                                   .message(apiResponse.message())
-                                   .responseModel(responseModel.orElse(null))
-                                   .examples(examples)
-                                   .headersWithDescription(headers)
-                                   .build());
-
+              .code(apiResponse.code())
+              .message(apiResponse.message())
+              .responseModel(responseModel.orElse(null))
+              .examples(examples)
+              .headersWithDescription(headers)
+              .build());
+          ResponseContext responseContext = new ResponseContext(
+              type.orElse(null),
+              context.getDocumentationContext(),
+              context.getGenericsNamingStrategy(),
+              context);
+          Set<MediaType> mediaTypes = new HashSet<>();
+          Optional<ResolvedType> finalType = type;
+          context.consumes()
+              .forEach(mediaType ->
+                  mediaTypes.add(
+                      new MediaType(
+                          mediaType,
+                          finalType.map(t -> modelSpecifications.create(modelContext, t))
+                              .orElse(null),
+                          new ArrayList<>(),
+                          new ArrayList<>())));
+          responseContext.responseBuilder()
+              .mediaTypes(mediaTypes)
+              .examples(examples)
+              .description(apiResponse.message())
+              .code(String.valueOf(apiResponse.code()));
+          responses.add(documentationPlugins.response(responseContext));
         }
       }
     }
@@ -179,13 +213,37 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           knownNames)
           .apply(resolvedType);
       context.operationBuilder().responseModel(responseModel);
-      ResponseMessage defaultMessage = new ResponseMessageBuilder().code(httpStatusCode(context))
-          .message(message(context)).responseModel(responseModel).build();
+      ResponseMessage defaultMessage = new ResponseMessageBuilder()
+          .code(httpStatusCode(context))
+          .message(message(context))
+          .responseModel(responseModel)
+          .build();
       if (!responseMessages.contains(defaultMessage) && !"void".equals(responseModel.getType())) {
         responseMessages.add(defaultMessage);
       }
+
+      ResponseContext responseContext = new ResponseContext(
+          resolvedType,
+          context.getDocumentationContext(),
+          context.getGenericsNamingStrategy(),
+          context);
+      Set<MediaType> mediaTypes = new HashSet<>();
+      context.consumes()
+          .forEach(mediaType ->
+              mediaTypes.add(
+                  new MediaType(
+                      mediaType,
+                      modelSpecifications.create(modelContext, resolvedType),
+                      new ArrayList<>(),
+                      new ArrayList<>())));
+
+      responseContext.responseBuilder()
+          .mediaTypes(mediaTypes)
+          .description(message(context))
+          .code(String.valueOf(httpStatusCode(context)));
+      responses.add(documentationPlugins.response(responseContext));
     }
-    return responseMessages;
+    return new Compatibility<>(responseMessages, responses);
   }
 
   static boolean isSuccessful(int code) {

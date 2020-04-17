@@ -24,6 +24,7 @@ import java.util.Objects;
 
 public class Header {
   private final String name;
+  //TODO: Introduce compatibility here
   private final ModelReference modelReference;
   private final String description;
 

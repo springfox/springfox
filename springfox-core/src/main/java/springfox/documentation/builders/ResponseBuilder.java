@@ -1,20 +1,25 @@
 package springfox.documentation.builders;
 
+import springfox.documentation.schema.Example;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.MediaType;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ResponseBuilder {
   private String code;
   private String description;
-  private boolean isDefault;
-  private List<Header> headers;
-  private Set<MediaType> mediaTypes;
-  private List<VendorExtension> vendorExtensions;
+  private Boolean isDefault = false;
+  private final List<Header> headers = new ArrayList<>();
+  private final Set<MediaType> mediaTypes = new HashSet<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<Example> examples = new ArrayList<>();
 
   public ResponseBuilder code(String code) {
     this.code = code;
@@ -31,22 +36,34 @@ public class ResponseBuilder {
     return this;
   }
 
-  public ResponseBuilder headers(List<Header> headers) {
-    this.headers = headers;
+  public ResponseBuilder headers(Collection<Header> headers) {
+    this.headers.addAll(headers);
     return this;
   }
 
   public ResponseBuilder mediaTypes(Set<MediaType> mediaTypes) {
-    this.mediaTypes = mediaTypes;
+    this.mediaTypes.addAll(mediaTypes);
     return this;
   }
 
-  public ResponseBuilder vendorExtensions(List<VendorExtension> vendorExtensions) {
-    this.vendorExtensions = vendorExtensions;
+  public ResponseBuilder vendorExtensions(Collection<VendorExtension> vendorExtensions) {
+    this.vendorExtensions.addAll(vendorExtensions);
+    return this;
+  }
+
+  public ResponseBuilder examples(Collection<Example> examples) {
+    this.examples.addAll(examples);
     return this;
   }
 
   public Response build() {
-    return new Response(code, description, isDefault, headers, mediaTypes, vendorExtensions);
+    return new Response(
+        code,
+        description,
+        isDefault,
+        headers,
+        mediaTypes,
+        examples,
+        vendorExtensions);
   }
 }

@@ -1,8 +1,11 @@
 package springfox.documentation.service;
 
+import springfox.documentation.schema.Example;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /**
  * @since 3.0.0
@@ -14,6 +17,7 @@ public class Response {
   private final Set<MediaType> mediaTypes;
   private final List<Header> headers;
   private final List<VendorExtension> vendorExtensions;
+  private final List<Example> examples;
 
   public Response(
       String code,
@@ -21,6 +25,7 @@ public class Response {
       boolean isDefault,
       List<Header> headers,
       Set<MediaType> mediaTypes,
+      List<Example> examples,
       List<VendorExtension> vendorExtensions) {
     this.code = code;
     this.description = description;
@@ -28,6 +33,7 @@ public class Response {
     this.mediaTypes = mediaTypes;
     this.headers = headers;
     this.vendorExtensions = vendorExtensions;
+    this.examples = examples;
   }
 
   public Set<MediaType> getMediaTypes() {
@@ -54,6 +60,10 @@ public class Response {
     return description;
   }
 
+  public List<Example> getExamples() {
+    return examples;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -69,5 +79,18 @@ public class Response {
   @Override
   public int hashCode() {
     return Objects.hash(code);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Response.class.getSimpleName() + "[", "]")
+        .add("code='" + code + "'")
+        .add("description='" + description + "'")
+        .add("isDefault=" + isDefault)
+        .add("mediaTypes=" + mediaTypes)
+        .add("headers=" + headers)
+        .add("vendorExtensions=" + vendorExtensions)
+        .add("examples=" + examples)
+        .toString();
   }
 }
