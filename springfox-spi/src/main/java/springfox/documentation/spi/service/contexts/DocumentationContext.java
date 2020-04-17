@@ -20,6 +20,7 @@
 package springfox.documentation.spi.service.contexts;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
@@ -42,6 +43,7 @@ public class DocumentationContext {
   private final AlternateTypeProvider alternateTypeProvider;
   private final Set<Class> ignorableParameterTypes;
   private final Map<RequestMethod, List<ResponseMessage>> globalResponseMessages;
+  private final Map<HttpMethod, List<Response>> globalResponses = new HashMap<>();
   private final List<Parameter> globalOperationParameters;
   private final List<RequestParameter> globalParameters = new ArrayList<>();
   private final ResourceGroupingStrategy resourceGroupingStrategy;
@@ -59,7 +61,7 @@ public class DocumentationContext {
   private Set<String> consumes;
   private String host;
   private Set<String> protocols;
-  private boolean isUriTemplatesEnabled;
+  private final boolean isUriTemplatesEnabled;
   private List<VendorExtension> vendorExtensions;
 
   @SuppressWarnings("ParameterNumber")
@@ -72,6 +74,7 @@ public class DocumentationContext {
       Map<RequestMethod, List<ResponseMessage>> globalResponseMessages,
       List<Parameter> globalOperationParameter,
       List<RequestParameter> globalRequestParameters,
+      Map<HttpMethod, List<Response>> globalResponses,
       ResourceGroupingStrategy resourceGroupingStrategy,
       PathProvider pathProvider,
       List<SecurityContext> securityContexts,
@@ -118,6 +121,7 @@ public class DocumentationContext {
     this.tags = tags;
     this.alternateTypeProvider = new AlternateTypeProvider(alternateTypeRules);
     this.vendorExtensions = vendorExtensions;
+    this.globalResponses.putAll(globalResponses);
   }
 
   public DocumentationType getDocumentationType() {
@@ -237,5 +241,9 @@ public class DocumentationContext {
 
   public Collection<RequestParameter> getGlobalParameters() {
     return globalParameters;
+  }
+
+  public Collection<Response> globalResponsesFor(HttpMethod method) {
+    return globalResponses.getOrDefault(method, new ArrayList<>());
   }
 }

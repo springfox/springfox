@@ -22,11 +22,23 @@ package springfox.documentation.spi.service.contexts;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.core.OrderComparator;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.PathProvider;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.schema.AlternateTypeRule;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiDescription;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiListingReference;
+import springfox.documentation.service.Operation;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.service.RequestParameter;
+import springfox.documentation.service.Response;
+import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityScheme;
+import springfox.documentation.service.Tag;
+import springfox.documentation.service.Tags;
+import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 import springfox.documentation.spi.service.ResourceGroupingStrategy;
@@ -52,9 +64,11 @@ public class DocumentationContextBuilder {
   private final List<SecurityContext> securityContexts = new ArrayList<>();
   private final Set<Class> ignorableParameterTypes = new HashSet<>();
   private final Map<RequestMethod, List<ResponseMessage>> responseMessageOverrides = new TreeMap<>();
+  private final Map<HttpMethod, List<Response>> responseOverrides = new TreeMap<>();
   private final List<Parameter> globalOperationParameters = new ArrayList<>();
   private final List<AlternateTypeRule> rules = new ArrayList<>();
   private final Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages = new HashMap<>();
+  private final Map<HttpMethod, List<Response>> defaultResponses = new HashMap<>();
   private final Set<String> protocols = new HashSet<>();
   private final Set<String> produces = new LinkedHashSet<>();
   private final Set<String> consumes = new LinkedHashSet<>();
@@ -110,16 +124,22 @@ public class DocumentationContextBuilder {
     this.responseMessageOverrides.putAll(additionalResponseMessages);
     return this;
   }
-  
+
+  public DocumentationContextBuilder additionalResponses(
+      Map<HttpMethod, List<Response>> additionalResponses) {
+    this.responseOverrides.putAll(additionalResponses);
+    return this;
+  }
+
   public DocumentationContextBuilder additionalOperationParameters(List<Parameter> globalRequestParameters) {
     this.globalOperationParameters.addAll(nullToEmptyList(globalRequestParameters));
     return this;
   }
 
   /**
-   * @deprecated  @since 2.2.0 - only here for backward compatibility
    * @param resourceGroupingStrategy - custom resource grouping strategy
    * @return this
+   * @deprecated @since 2.2.0 - only here for backward compatibility
    */
   @Deprecated
   public DocumentationContextBuilder withResourceGroupingStrategy(ResourceGroupingStrategy resourceGroupingStrategy) {
@@ -143,7 +163,7 @@ public class DocumentationContextBuilder {
   }
 
   public DocumentationContextBuilder apiListingReferenceOrdering(
-          Comparator<ApiListingReference> listingReferenceOrdering) {
+      Comparator<ApiListingReference> listingReferenceOrdering) {
 
     this.listingReferenceOrdering = defaultIfAbsent(listingReferenceOrdering, this.listingReferenceOrdering);
     return this;
@@ -160,6 +180,15 @@ public class DocumentationContextBuilder {
       responseMessages.putAll(defaultResponseMessages);
     }
     responseMessages.putAll(responseMessageOverrides);
+    return responseMessages;
+  }
+
+  private Map<HttpMethod, List<Response>> aggregateResponses() {
+    Map<HttpMethod, List<Response>> responseMessages = new HashMap<>();
+    if (applyDefaultResponseMessages) {
+      responseMessages.putAll(nullToEmptyMap(defaultResponses));
+    }
+    responseMessages.putAll(responseOverrides);
     return responseMessages;
   }
 
@@ -190,9 +219,24 @@ public class DocumentationContextBuilder {
     return this;
   }
 
+  /**
+   * Used to populate the defaults
+   *
+   * @param defaultResponseMessages
+   * @return
+   * @deprecated @since 3.1.0
+   * Use {@link DocumentationContextBuilder#defaultResponses} instead
+   */
+  @Deprecated
   public DocumentationContextBuilder defaultResponseMessages(
       Map<RequestMethod, List<ResponseMessage>> defaultResponseMessages) {
     this.defaultResponseMessages.putAll(defaultResponseMessages);
+    return this;
+  }
+
+  public DocumentationContextBuilder defaultResponses(
+      Map<HttpMethod, List<Response>> defaultResponses) {
+    this.defaultResponses.putAll(defaultResponses);
     return this;
   }
 
@@ -260,6 +304,7 @@ public class DocumentationContextBuilder {
 
   public DocumentationContext build() {
     Map<RequestMethod, List<ResponseMessage>> responseMessages = aggregateResponseMessages();
+    Map<HttpMethod, List<Response>> responses = aggregateResponses();
     OrderComparator.sort(rules);
     return new DocumentationContext(documentationType,
         handlerMappings,
@@ -270,6 +315,7 @@ public class DocumentationContextBuilder {
         responseMessages,
         globalOperationParameters,
         globalRequestParameters,
+        responses,
         resourceGroupingStrategy,
         pathProvider,
         securityContexts,
@@ -291,7 +337,7 @@ public class DocumentationContextBuilder {
   }
 
   private Function<Function<TypeResolver, AlternateTypeRule>, AlternateTypeRule>
-      evaluator(final TypeResolver typeResolver) {
+  evaluator(final TypeResolver typeResolver) {
 
     return input -> input.apply(typeResolver);
   }

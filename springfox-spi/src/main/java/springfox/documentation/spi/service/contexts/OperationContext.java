@@ -28,6 +28,7 @@ import springfox.documentation.schema.Model;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.service.RequestParameter;
 import springfox.documentation.service.ResolvedMethodParameter;
+import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
@@ -36,6 +37,7 @@ import springfox.documentation.spring.wrapper.NameValueExpression;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -190,5 +192,9 @@ public class OperationContext {
 
   public <T extends Annotation> List<T> findAllAnnotations(Class<T> annotation) {
     return requestContext.findAnnotations(annotation);
+  }
+
+  public Collection<Response> globalResponsesFor(HttpMethod httpMethod) {
+    return getDocumentationContext().globalResponsesFor(httpMethod);
   }
 }
