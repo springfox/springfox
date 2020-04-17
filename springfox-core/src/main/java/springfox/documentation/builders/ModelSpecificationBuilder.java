@@ -3,7 +3,6 @@ package springfox.documentation.builders;
 import springfox.documentation.schema.CollectionSpecification;
 import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.MapSpecification;
-import springfox.documentation.schema.ModelFacets;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.ScalarModelSpecification;
@@ -14,8 +13,8 @@ import java.util.Objects;
 
 public class ModelSpecificationBuilder {
   private final String sourceIdentifier;
+  private final ModelFacetsBuilder facetsBuilder = new ModelFacetsBuilder(this);
   private String name;
-  private ModelFacets facets;
   private ScalarModelSpecification scalar;
   private CompoundModelSpecification compound;
   private CollectionSpecification collection;
@@ -31,14 +30,20 @@ public class ModelSpecificationBuilder {
     return this;
   }
 
-  public ModelSpecificationBuilder facets(ModelFacets facets) {
-    this.facets = facets;
-    return this;
+  public ModelFacetsBuilder facetsBuilder() {
+    return facetsBuilder;
   }
 
   public ModelSpecificationBuilder scalarModel(ScalarType type) {
     if (type != null) {
       this.scalar = new ScalarModelSpecification(type);
+    }
+    return this;
+  }
+
+  public ModelSpecificationBuilder scalarModel(ScalarModelSpecification scalarModelSpecification) {
+    if (scalarModelSpecification != null) {
+      this.scalar = scalarModelSpecification;
     }
     return this;
   }
@@ -73,7 +78,7 @@ public class ModelSpecificationBuilder {
     return new ModelSpecification(
         sourceIdentifier,
         name,
-        facets,
+        facetsBuilder.build(),
         scalar,
         compound,
         collection,
@@ -81,11 +86,25 @@ public class ModelSpecificationBuilder {
         reference);
   }
 
+  public ModelSpecificationBuilder copyOf(ModelSpecification other) {
+
+    return new ModelSpecificationBuilder(other.getSourceIdentifier())
+        .name(other.getName())
+        .scalarModel(other.getScalar().orElse(null))
+        .referenceModel(other.getReference().orElse(null))
+        .compoundModel(other.getCompound().orElse(null))
+        .collectionModel(other.getCollection().orElse(null))
+        .mapModel(other.getMap().orElse(null))
+        .facetsBuilder()
+        .copyOf(other.getFacets())
+        .yield();
+  }
+
   private void ensureValidSpecification(
       Object... specs) {
     long specCount = Arrays.stream(specs)
-                           .filter(Objects::nonNull)
-                           .count();
+        .filter(Objects::nonNull)
+        .count();
     if (specCount == 0) {
       throw new IllegalArgumentException("At least one type of specification is required");
     }

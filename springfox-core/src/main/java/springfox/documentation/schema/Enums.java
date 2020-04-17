@@ -34,6 +34,7 @@ import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 
+//TODO: make this extensible
 public class Enums {
 
   private Enums() {

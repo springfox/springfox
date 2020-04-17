@@ -1,5 +1,6 @@
 package springfox.documentation.builders;
 
+import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelFacets;
 import springfox.documentation.schema.ModelKey;
@@ -10,14 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelFacetsBuilder {
+  private final ModelSpecificationBuilder parent;
   private ModelKey modelKey;
   private String title;
   private String description;
   private Boolean nullable;
   private Boolean deprecated;
   private DocumentationReference externalDocumentation;
+  private EnumerationFacet enumerationFacet;
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
+
+  public ModelFacetsBuilder(ModelSpecificationBuilder parent) {
+    this.parent = parent;
+  }
 
   public ModelFacetsBuilder withModelKey(ModelKey modelKey) {
     this.modelKey = modelKey;
@@ -59,15 +66,37 @@ public class ModelFacetsBuilder {
     return this;
   }
 
-  public ModelFacets builder() {
+  public ModelFacetsBuilder enumeration(EnumerationFacet enumerationFacet) {
+    this.enumerationFacet = enumerationFacet;
+    return this;
+  }
+
+  public ModelSpecificationBuilder yield() {
+    return parent;
+  }
+
+  public ModelFacets build() {
     return new ModelFacets(
         modelKey,
         title,
         description,
         nullable,
         deprecated,
+        enumerationFacet,
         externalDocumentation,
         examples,
         extensions);
+  }
+
+  public ModelFacetsBuilder copyOf(ModelFacets other) {
+    return this.withModelKey(other.getModelKey())
+        .withTitle(other.getTitle())
+        .withDescription(other.getDescription())
+        .withNullable(other.getNullable())
+        .withDeprecated(other.getDeprecated())
+        .enumeration(other.getEnumerationFacet())
+        .withExtensions(other.getExtensions())
+        .withExternalDocumentation(other.getExternalDocumentation())
+        .withExamples(other.getExamples());
   }
 }
