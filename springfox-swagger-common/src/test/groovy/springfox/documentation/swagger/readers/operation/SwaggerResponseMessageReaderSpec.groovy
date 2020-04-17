@@ -23,7 +23,13 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
-import springfox.documentation.schema.*
+import springfox.documentation.schema.DefaultTypeNameProvider
+import springfox.documentation.schema.Example
+import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.schema.ModelRef
+import springfox.documentation.schema.ModelReference
+import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.service.Header
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.EnumTypeDeterminer
@@ -42,20 +48,22 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         operationContext(documentationContext(), dummyHandlerMethod('methodWithApiResponses'))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     when:
     new SwaggerResponseMessageReader(
-        new JacksonEnumTypeDeterminer(),
+        enumTypeDeterminer,
         typeNameExtractor,
-        resolver)
-      .apply(operationContext)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -77,20 +85,22 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         operationContext(documentationContext(), dummyHandlerMethod('methodApiResponseClass'))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     when:
     new SwaggerResponseMessageReader(
-        new JacksonEnumTypeDeterminer(),
+        enumTypeDeterminer,
         typeNameExtractor,
-        resolver)
-      .apply(operationContext)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -113,19 +123,21 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         operationContext(documentationContext(), handlerMethodIn(ResponseHeaderTestController, methodName))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     when:
-    new SwaggerResponseMessageReader(new JacksonEnumTypeDeterminer(),
+    new SwaggerResponseMessageReader(enumTypeDeterminer,
         typeNameExtractor,
-        resolver)
-      .apply(operationContext)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
+        .apply(operationContext)
 
     and:
     def operation = operationContext.operationBuilder().build()
@@ -180,9 +192,10 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
   def "Supports all documentation types"() {
     given:
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
+    JacksonEnumTypeDeterminer enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
@@ -192,7 +205,8 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
     def sut = new SwaggerResponseMessageReader(
         new JacksonEnumTypeDeterminer(),
         typeNameExtractor,
-        resolver)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer), defaultWebPlugins())
 
     then:
     !sut.supports(DocumentationType.SPRING_WEB)
@@ -207,7 +221,7 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
         operationContext(documentationContext(), handlerMethodIn(ResponseExampleTestController, methodName))
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
 
     def resolver = new TypeResolver()
     def typeNameExtractor = new TypeNameExtractor(
@@ -219,7 +233,9 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec implemen
     new SwaggerResponseMessageReader(
         Mock(EnumTypeDeterminer),
         typeNameExtractor,
-        resolver)
+        resolver,
+        new ModelSpecificationFactory(typeNameExtractor, Mock(EnumTypeDeterminer)),
+        defaultWebPlugins())
         .apply(operationContext)
 
     and:
