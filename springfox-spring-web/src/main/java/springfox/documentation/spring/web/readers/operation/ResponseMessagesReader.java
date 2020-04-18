@@ -126,7 +126,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
                       mediaType,
                       modelSpecifications.create(modelContext, returnType),
                       new ArrayList<>(),
-                      new ArrayList<>())));
+                      encodings, new ArrayList<>())));
     }
     ResponseMessage built = new ResponseMessageBuilder()
         .code(httpStatusCode)

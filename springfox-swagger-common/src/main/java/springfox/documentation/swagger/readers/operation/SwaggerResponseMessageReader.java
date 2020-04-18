@@ -183,7 +183,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                           finalType.map(t -> modelSpecifications.create(modelContext, t))
                               .orElse(null),
                           new ArrayList<>(),
-                          new ArrayList<>())));
+                          encodings, new ArrayList<>())));
           responseContext.responseBuilder()
               .mediaTypes(mediaTypes)
               .examples(examples)
@@ -235,7 +235,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                       mediaType,
                       modelSpecifications.create(modelContext, resolvedType),
                       new ArrayList<>(),
-                      new ArrayList<>())));
+                      encodings, new ArrayList<>())));
 
       responseContext.responseBuilder()
           .mediaTypes(mediaTypes)
