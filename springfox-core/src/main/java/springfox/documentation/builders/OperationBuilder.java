@@ -58,28 +58,30 @@ public class OperationBuilder {
   private static final Collection<String> REQUEST_BODY_MEDIA_TYPES
       = of(APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE).collect(toSet());
   private final OperationNameGenerator nameGenerator;
+  private final Set<String> tags = new TreeSet<>();
+  private final List<SecurityReference> securityReferences = new ArrayList<>();
+  private final Set<Response> responses = new HashSet<>();
+  private final Set<RequestParameter> requestParameters = new TreeSet<>(defaultRequestParameterComparator());
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+
   private HttpMethod method = HttpMethod.GET;
   private String summary;
   private String notes;
   private String uniqueId;
   private String codeGenMethodNameStem;
+  private String deprecated;
+  private RequestBody body;
   private ExternalDocumentation externalDocumentation;
+
+  //TODO: to be deprecated
+  private boolean isHidden;
+  private ModelReference responseModel;
   private int position;
+  private final List<Parameter> parameters = new ArrayList<>();
+  private final Set<ResponseMessage> responseMessages = new HashSet<>();
   private final Set<String> produces = new TreeSet<>();
   private final Set<String> consumes = new TreeSet<>();
   private final Set<String> protocol = new TreeSet<>();
-  private final List<SecurityReference> securityReferences = new ArrayList<>();
-  private final List<Parameter> parameters = new ArrayList<>();
-  private final Set<ResponseMessage> responseMessages = new HashSet<>();
-  private final Set<String> tags = new TreeSet<>();
-  private String deprecated;
-  private boolean isHidden;
-  private ModelReference responseModel;
-  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
-  private final Set<Response> responses = new HashSet<>();
-  private final Set<RequestParameter> requestParameters =
-      new TreeSet<>(defaultRequestParameterComparator());
-  private RequestBody body;
 
   public OperationBuilder(OperationNameGenerator nameGenerator) {
     this.nameGenerator = nameGenerator;

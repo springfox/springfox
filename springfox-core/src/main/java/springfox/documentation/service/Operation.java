@@ -31,6 +31,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import static java.util.stream.Collectors.*;
 
@@ -38,23 +39,25 @@ public class Operation implements Ordered {
   private final HttpMethod method;
   private final String summary;
   private final String notes;
-  private final ModelReference responseModel;
   private final ExternalDocumentation externalDocumentation;
   private final String uniqueId;
-  private final int position;
   private final Set<String> tags;
-  private final Set<String> produces;
-  private final Set<String> consumes;
-  private final Set<String> protocol;
-  private final boolean isHidden;
   private final Map<String, List<AuthorizationScope>> securityReferences;
-  private final List<Parameter> parameters;
-  private final Set<ResponseMessage> responseMessages;
   private final Set<RequestParameter> requestParameters;
   private final RequestBody body;
   private final Set<Response> responses;
   private final String deprecated;
   private final List<VendorExtension> vendorExtensions;
+
+  //TODO: to be deprecated
+  private final int position;
+  private final List<Parameter> parameters;
+  private final Set<ResponseMessage> responseMessages;
+  private final ModelReference responseModel;
+  private final Set<String> produces;
+  private final Set<String> consumes;
+  private final Set<String> protocol;
+  private final boolean isHidden;
 
   @SuppressWarnings("ParameterNumber")
   public Operation(
@@ -212,4 +215,29 @@ public class Operation implements Ordered {
     return externalDocumentation;
   }
 
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Operation.class.getSimpleName() + "[", "]")
+        .add("method=" + method)
+        .add("summary='" + summary + "'")
+        .add("notes='" + notes + "'")
+        .add("externalDocumentation=" + externalDocumentation)
+        .add("uniqueId='" + uniqueId + "'")
+        .add("position=" + position)
+        .add("tags=" + tags)
+        .add("responseModel=" + responseModel)
+        .add("produces=" + produces)
+        .add("consumes=" + consumes)
+        .add("protocol=" + protocol)
+        .add("isHidden=" + isHidden)
+        .add("securityReferences=" + securityReferences)
+        .add("parameters=" + parameters)
+        .add("responseMessages=" + responseMessages)
+        .add("requestParameters=" + requestParameters)
+        .add("body=" + body)
+        .add("responses=" + responses)
+        .add("deprecated='" + deprecated + "'")
+        .add("vendorExtensions=" + vendorExtensions)
+        .toString();
+  }
 }
