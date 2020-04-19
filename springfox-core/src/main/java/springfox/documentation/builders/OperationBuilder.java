@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 import org.springframework.http.HttpMethod;
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
+import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.Operation;
@@ -62,6 +63,7 @@ public class OperationBuilder {
   private String notes;
   private String uniqueId;
   private String codeGenMethodNameStem;
+  private ExternalDocumentation externalDocumentation;
   private int position;
   private final Set<String> produces = new TreeSet<>();
   private final Set<String> consumes = new TreeSet<>();
@@ -265,6 +267,11 @@ public class OperationBuilder {
     return this;
   }
 
+  public OperationBuilder externalDocumentation(ExternalDocumentation externalDocumentation) {
+    this.externalDocumentation = externalDocumentation;
+    return this;
+  }
+
 
   /**
    * @param responseType = response type model reference
@@ -340,6 +347,7 @@ public class OperationBuilder {
         method,
         summary,
         notes,
+        externalDocumentation,
         responseModel,
         uniqueOperationId,
         position,

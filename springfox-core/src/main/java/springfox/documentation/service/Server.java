@@ -26,16 +26,18 @@ public class Server {
   private String description = null;
   private Map<String, ServerVariable> variables = null;
   private List<VendorExtension> extensions = null;
+  private final Map<String, ServerVariable> variables = new HashMap<>();
 
   public Server(
       String url,
       String description,
-      Map<String, ServerVariable> variables,
+      Collection<ServerVariable> variables,
       List<VendorExtension> extensions) {
     this.url = url;
     this.description = description;
     this.variables = variables;
     this.extensions = extensions;
+    variables.forEach(v -> this.variables.put(v.getName(), v));
   }
 
   public String getUrl() {
@@ -46,11 +48,11 @@ public class Server {
     return description;
   }
 
-  public Map<String, ServerVariable> getVariables() {
-    return variables;
+  public Collection<ServerVariable> getVariables() {
+    return variables.values();
   }
 
-  public List<VendorExtension> getExtensions() {
+  public Collection<VendorExtension> getExtensions() {
     return extensions;
   }
 }

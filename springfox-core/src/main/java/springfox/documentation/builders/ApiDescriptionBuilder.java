@@ -34,6 +34,7 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class ApiDescriptionBuilder {
   private String groupName;
   private String path;
+  private String summary;
   private String description;
   private List<Operation> operations;
   private Comparator<Operation> operationOrdering;
@@ -107,10 +108,16 @@ public class ApiDescriptionBuilder {
     return this;
   }
 
+  public ApiDescriptionBuilder summary(String summary) {
+    this.summary = summary;
+    return this;
+  }
+
   public ApiDescription build() {
     return new ApiDescription(
         groupName,
         pathDecorator.apply(path),
+        summary,
         description,
         operations,
         hidden);

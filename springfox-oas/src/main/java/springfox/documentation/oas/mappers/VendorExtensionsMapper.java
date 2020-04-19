@@ -24,8 +24,8 @@ import springfox.documentation.service.ObjectVendorExtension;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.service.VendorExtension;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -36,7 +36,7 @@ import static org.springframework.util.StringUtils.*;
 @Mapper(componentModel = "spring")
 public class VendorExtensionsMapper {
 
-  public Map<String, Object> mapExtensions(List<VendorExtension> from) {
+  public Map<String, Object> mapExtensions(Collection<VendorExtension> from) {
     Map<String, Object> extensions = new TreeMap<>();
     Iterable<ListVendorExtension> listExtensions = from.stream()
         .filter(ListVendorExtension.class::isInstance)

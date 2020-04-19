@@ -26,7 +26,7 @@ trait ApiDescriptionSupport {
   def apiDescriptions(List<String> paths) {
     def result = []
     paths.each {
-      result << new ApiDescription(null, it, "", [], false)
+      result << new ApiDescription(null, it, "", "", [], false)
     }
     result
   }

@@ -31,26 +31,28 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
+import io.swagger.v3.oas.models.servers.ServerVariables;
 import io.swagger.v3.oas.models.tags.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.springframework.http.HttpMethod;
-import springfox.documentation.service.ContentSpecification;
 import springfox.documentation.schema.ModelSpecification;
-import springfox.documentation.service.SimpleParameterSpecification;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
+import springfox.documentation.service.ContentSpecification;
 import springfox.documentation.service.Documentation;
 import springfox.documentation.service.MediaType;
 import springfox.documentation.service.RequestBody;
+import springfox.documentation.service.SimpleParameterSpecification;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -200,8 +202,19 @@ public abstract class ServiceModelToOasMapper {
             })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
-
+  @Mappings({
+      @Mapping(target = "extensions", source = "extensions")
+  })
   protected abstract Server mapServer(springfox.documentation.service.Server from);
+
+  protected ServerVariables serverVariableMap(
+      Collection<springfox.documentation.service.ServerVariable> serverVariables) {
+    ServerVariables variables = new ServerVariables();
+    variables.putAll(serverVariables.stream()
+        .collect(Collectors.toMap(
+            springfox.documentation.service.ServerVariable::getName, this::mapServerVariable)));
+    return variables;
+  }
 
   @Mappings({
                 @Mapping(target = "enum", source = "allowedValues"),

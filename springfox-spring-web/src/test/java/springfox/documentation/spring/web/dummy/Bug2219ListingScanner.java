@@ -37,11 +37,12 @@ public class Bug2219ListingScanner implements ApiListingScannerPlugin {
 
   @Override
   public List<ApiDescription> apply(DocumentationContext context) {
-    return new ArrayList<ApiDescription>(
+    return new ArrayList<>(
         Arrays.asList(
             new ApiDescription(
                 "different-group",
                 "/bugs/2219",
+                "This is a bug summary",
                 "This is a bug-fix for 2219",
                 Arrays.asList(
                     new OperationBuilder(

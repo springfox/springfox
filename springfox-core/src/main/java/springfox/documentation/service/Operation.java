@@ -22,6 +22,7 @@ package springfox.documentation.service;
 
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
+import springfox.documentation.common.ExternalDocumentation;
 import springfox.documentation.schema.ModelReference;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class Operation implements Ordered {
   private final String summary;
   private final String notes;
   private final ModelReference responseModel;
+  private final ExternalDocumentation externalDocumentation;
   private final String uniqueId;
   private final int position;
   private final Set<String> tags;
@@ -59,6 +61,7 @@ public class Operation implements Ordered {
       HttpMethod method,
       String summary,
       String notes,
+      ExternalDocumentation externalDocumentation,
       ModelReference responseModel,
       String uniqueId,
       int position,
@@ -79,6 +82,7 @@ public class Operation implements Ordered {
     this.method = method;
     this.summary = summary;
     this.notes = notes;
+    this.externalDocumentation = externalDocumentation;
     this.responseModel = responseModel;
     this.uniqueId = uniqueId;
     this.position = position;
@@ -203,4 +207,9 @@ public class Operation implements Ordered {
   public RequestBody getBody() {
     return body;
   }
+
+  public ExternalDocumentation getExternalDocumentation() {
+    return externalDocumentation;
+  }
+
 }

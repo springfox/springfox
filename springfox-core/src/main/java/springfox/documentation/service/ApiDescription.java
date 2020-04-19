@@ -20,13 +20,16 @@
 package springfox.documentation.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 import static java.util.Optional.*;
 
 public class ApiDescription {
   private final String groupName;
   private final String path;
+  private final String summary;
   private final String description;
   private final List<Operation> operations;
   private final Boolean hidden;
@@ -52,11 +55,13 @@ public class ApiDescription {
   public ApiDescription(
       String groupName,
       String path,
+      String summary,
       String description,
       List<Operation> operations,
       Boolean hidden) {
     this.groupName = groupName;
     this.path = path;
+    this.summary = summary;
     this.description = description;
     this.operations = operations;
     this.hidden = hidden;
@@ -80,5 +85,43 @@ public class ApiDescription {
 
   public Optional<String> getGroupName() {
     return ofNullable(groupName);
+  }
+
+  public String getSummary() {
+    return summary;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ApiDescription that = (ApiDescription) o;
+    return Objects.equals(groupName, that.groupName) &&
+        Objects.equals(path, that.path) &&
+        Objects.equals(summary, that.summary) &&
+        Objects.equals(description, that.description) &&
+        Objects.equals(operations, that.operations) &&
+        Objects.equals(hidden, that.hidden);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(groupName, path, summary, description, operations, hidden);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", ApiDescription.class.getSimpleName() + "[", "]")
+        .add("groupName='" + groupName + "'")
+        .add("path='" + path + "'")
+        .add("summary='" + summary + "'")
+        .add("description='" + description + "'")
+        .add("operations=" + operations)
+        .add("hidden=" + hidden)
+        .toString();
   }
 }

@@ -20,14 +20,18 @@ package springfox.documentation.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 public class ServerVariable {
   private List<String> allowedValues = new ArrayList<String>();
   private String defaultValue = null;
   private String description = null;
   private List<VendorExtension> extensions = null;
+  private final String name;
 
   public ServerVariable(
+      String name,
       List<String> allowedValues,
       String defaultValue,
       String description,
@@ -36,6 +40,7 @@ public class ServerVariable {
     this.defaultValue = defaultValue;
     this.description = description;
     this.extensions = extensions;
+    this.name = name;
   }
 
   public List<String> getAllowedValues() {
@@ -53,5 +58,10 @@ public class ServerVariable {
   public List<VendorExtension> getExtensions() {
     return extensions;
   }
+
+  public String getName() {
+    return name;
+  }
+
 }
 

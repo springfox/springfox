@@ -60,6 +60,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
             new ApiDescription(
                 "test",
                 "/bugs/1767",
+                "This is a bug summary",
                 "This is a bug",
                Collections.singletonList( //<2>
                   new OperationBuilder(operationNames)
@@ -87,6 +88,7 @@ public class Bug1767ListingScanner implements ApiListingScannerPlugin {
                            "different-group",
                            //<8>
                            "/different/2219",
+                           "This is a bug summary",
                            "This is a bug",
                            Collections.singletonList(
                                new OperationBuilder(
