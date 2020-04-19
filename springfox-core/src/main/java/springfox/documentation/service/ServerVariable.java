@@ -24,11 +24,11 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 public class ServerVariable {
-  private List<String> allowedValues = new ArrayList<String>();
-  private String defaultValue = null;
-  private String description = null;
-  private List<VendorExtension> extensions = null;
   private final String name;
+  private final List<String> allowedValues = new ArrayList<>();
+  private final String defaultValue;
+  private final String description;
+  private final List<VendorExtension> extensions = new ArrayList<>();
 
   public ServerVariable(
       String name,
@@ -36,11 +36,11 @@ public class ServerVariable {
       String defaultValue,
       String description,
       List<VendorExtension> extensions) {
-    this.allowedValues = allowedValues;
     this.defaultValue = defaultValue;
     this.description = description;
-    this.extensions = extensions;
     this.name = name;
+    this.allowedValues.addAll(allowedValues);
+    this.extensions.addAll(extensions);
   }
 
   public List<String> getAllowedValues() {
@@ -63,5 +63,36 @@ public class ServerVariable {
     return name;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ServerVariable that = (ServerVariable) o;
+    return Objects.equals(name, that.name) &&
+        Objects.equals(allowedValues, that.allowedValues) &&
+        Objects.equals(defaultValue, that.defaultValue) &&
+        Objects.equals(description, that.description) &&
+        Objects.equals(extensions, that.extensions);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, allowedValues, defaultValue, description, extensions);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", ServerVariable.class.getSimpleName() + "[", "]")
+        .add("name='" + name + "'")
+        .add("allowedValues=" + allowedValues)
+        .add("defaultValue='" + defaultValue + "'")
+        .add("description='" + description + "'")
+        .add("extensions=" + extensions)
+        .toString();
+  }
 }
 
