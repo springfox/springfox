@@ -99,8 +99,7 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   private Predicate<Parameter> onlyOneAllowableValue() {
     return input -> {
       AllowableValues allowableValues = input.getAllowableValues();
-      return allowableValues != null
-          && allowableValues instanceof AllowableListValues
+      return allowableValues instanceof AllowableListValues
           && ((AllowableListValues) allowableValues).getValues().size() == 1;
     };
   }

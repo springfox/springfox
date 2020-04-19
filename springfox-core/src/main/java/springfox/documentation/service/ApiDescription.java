@@ -34,24 +34,6 @@ public class ApiDescription {
   private final List<Operation> operations;
   private final Boolean hidden;
 
-  /**
-   * For backwards compatibility. Please use the builder instead.
-   * @see springfox.documentation.builders.ApiDescriptionBuilder
-   * @deprecated @since 2.8.1
-   * @param path path
-   * @param description description
-   * @param operations operations
-   * @param hidden true if hidden
-   */
-  @Deprecated
-  public ApiDescription(
-      String path,
-      String description,
-      List<Operation> operations,
-      Boolean hidden) {
-    this(null, path, description, operations, hidden);
-  }
-
   public ApiDescription(
       String groupName,
       String path,

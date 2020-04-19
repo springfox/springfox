@@ -42,12 +42,12 @@ public class OAuth extends SecurityScheme {
       String name,
       List<AuthorizationScope> scopes,
       List<GrantType> grantTypes) {
-    this(name, scopes, grantTypes, new ArrayList<VendorExtension>());
+    this(name, scopes, grantTypes, new ArrayList<>());
   }
 
   private LinkedHashMap<String, GrantType> initializeGrantTypes(List<GrantType> gTypes) {
     if (null != gTypes) {
-      LinkedHashMap<String, GrantType> map = new LinkedHashMap<String, GrantType>();
+      LinkedHashMap<String, GrantType> map = new LinkedHashMap<>();
       for (GrantType grantType : gTypes) {
         map.put(grantType.getType(), grantType);
       }
@@ -61,6 +61,6 @@ public class OAuth extends SecurityScheme {
   }
 
   public List<GrantType> getGrantTypes() {
-    return new ArrayList<GrantType>(grantTypes.values());
+    return new ArrayList<>(grantTypes.values());
   }
 }

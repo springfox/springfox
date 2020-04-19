@@ -9,9 +9,7 @@ public enum ParameterType {
   PATH("path"),
   COOKIE("cookie"),
   FORM("form"),
-  @Deprecated
   FORMDATA("formData"),
-  @Deprecated
   BODY("body");
 
   private String in;

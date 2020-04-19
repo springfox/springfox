@@ -1,6 +1,5 @@
 package springfox.documentation.builders;
 
-import org.slf4j.Logger;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelSpecification;
@@ -16,11 +15,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.slf4j.LoggerFactory.*;
 import static springfox.documentation.builders.ElementFacets.*;
 
 public class SimpleParameterSpecificationBuilder {
-  private static final Logger LOGGER = getLogger(SimpleParameterSpecificationBuilder.class);
   private final RequestParameterBuilder owner;
   private final List<Example> examples = new ArrayList<>();
   private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
