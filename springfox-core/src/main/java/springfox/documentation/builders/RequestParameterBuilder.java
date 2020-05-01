@@ -25,6 +25,7 @@ public class RequestParameterBuilder {
   private SimpleParameterSpecificationBuilder simpleParameterBuilder;
   private ContentSpecificationBuilder contentSpecificationBuilder;
   private int order;
+  private Validator<RequestParameterBuilder> validator = new NoopValidator<>();
 
   public RequestParameterBuilder name(String name) {
     this.name = name;
@@ -85,18 +86,15 @@ public class RequestParameterBuilder {
     return this;
   }
 
+  public RequestParameterBuilder validator(RequestParameterBuilderValidator validator) {
+    this.validator = validator;
+    return this;
+  }
+
   public RequestParameter build() {
-    if (simpleParameterBuilder != null && contentSpecificationBuilder != null) {
-      throw new IllegalStateException("Parameter can be either a simple parameter or content, but not both");
-    }
-    Either<SimpleParameterSpecification, ContentSpecification> parameterSpecification;
-    if (simpleParameterBuilder == null && contentSpecificationBuilder != null) {
-      parameterSpecification = new Either<>(null, contentSpecificationBuilder.create());
-    } else if (simpleParameterBuilder != null) {
-      parameterSpecification = new Either<>(simpleParameterBuilder.create(), null);
-    } else {
-      LOGGER.warn("Parameter has not been initialized to be either simple nor a content parameter");
-      parameterSpecification = null;
+    List<ValidationResult> results = validator.validate(this);
+    if (logProblems(results).size() > 0) {
+      return null;
     }
     return new RequestParameter(
         name,
