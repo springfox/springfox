@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 public class CollectionFormat {
+  public static final CollectionFormat NONE = null;
   public static final CollectionFormat CSV = new CollectionFormat("csv", "comma separated values foo,bar");
   public static final CollectionFormat SSV = new CollectionFormat("ssv", "space separated values foo bar");
   public static final CollectionFormat TSV = new CollectionFormat("tsv", "tab separated values foo\tbar");
