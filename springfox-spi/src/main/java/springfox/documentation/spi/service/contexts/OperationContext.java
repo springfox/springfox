@@ -90,7 +90,7 @@ public class OperationContext {
   /**
    * Use @see {@link OperationContext#getRequestParameters()} instead
    * @deprecated @since 3.0
-   * @return
+   * @return List<Parameter>
    */
   @Deprecated
   public List<Parameter> getGlobalOperationParameters() {
