@@ -38,7 +38,7 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
     ParameterExpansionContext context = new ParameterExpansionContext(
         "Test",
         "",
-        "",
+        "in",
         new ModelAttributeParameterMetadataAccessor(
             [named(Subject, fieldName).rawMember],
             resolver.resolve(Subject),
@@ -52,7 +52,7 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
     def parameter = context.parameterBuilder.build()
     def numericRange = context.requestParameterBuilder.build()
         ?.parameterSpecification
-        ?.getLeft()
+        ?.getQuery()
         ?.map {p -> p.facetOfType(NumericElementFacet) }
         ?.orElse(null)
         ?.get()

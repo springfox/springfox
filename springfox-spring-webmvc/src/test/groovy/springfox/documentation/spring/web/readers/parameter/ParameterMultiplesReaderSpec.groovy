@@ -54,8 +54,7 @@ class ParameterMultiplesReaderSpec
     ResolvedMethodParameter resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [apiParamAnnotation], resolvedType)
     ParameterContext parameterContext = new ParameterContext(
-        resolvedMethodParameter
-        ,
+        resolvedMethodParameter,
         documentationContext(),
         Mock(GenericTypeNamingStrategy),
         Mock(OperationContext))
@@ -67,7 +66,7 @@ class ParameterMultiplesReaderSpec
     parameterContext.parameterBuilder().build().isAllowMultiple() == expected
     (parameterContext.requestParameterBuilder().build()
         .parameterSpecification
-        .left
+        .query
         .orElse(null)
         ?.collectionFormat != null) == expected
 

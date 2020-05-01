@@ -1,8 +1,9 @@
 package springfox.documentation.service;
 
-import springfox.documentation.common.Either;
+import springfox.documentation.schema.Example;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,8 +17,10 @@ public class RequestParameter {
   private final Boolean required;
   private final Boolean deprecated;
   private final Boolean hidden;
-  private final Either<SimpleParameterSpecification, ContentSpecification> parameterSpecification;
+  private final ParameterSpecification parameterSpecification;
   private final Integer order;
+  private final Example scalarExample;
+  private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
 
   @SuppressWarnings("ParameterNumber")
@@ -28,7 +31,9 @@ public class RequestParameter {
       Boolean required,
       Boolean deprecated,
       Boolean hidden,
-      Either<SimpleParameterSpecification, ContentSpecification> parameterSpecification,
+      ParameterSpecification parameterSpecification,
+      Example scalarExample,
+      Collection<Example> examples,
       int order,
       List<VendorExtension> extensions) {
 
@@ -41,6 +46,8 @@ public class RequestParameter {
     this.parameterSpecification = parameterSpecification;
     this.order = order;
     this.extensions.addAll(extensions);
+    this.scalarExample = scalarExample;
+    this.examples.addAll(examples);
   }
 
   public String getName() {
@@ -63,7 +70,7 @@ public class RequestParameter {
     return deprecated;
   }
 
-  public Either<SimpleParameterSpecification, ContentSpecification> getParameterSpecification() {
+  public ParameterSpecification getParameterSpecification() {
     return parameterSpecification;
   }
 
@@ -79,6 +86,18 @@ public class RequestParameter {
     return in.getIn();
   }
 
+  public List<Example> getExamples() {
+    return examples;
+  }
+
+  public Example getScalarExample() {
+    return scalarExample;
+  }
+
+  public boolean isRequestBody() {
+    return false;
+  }
+  
   @Override
   public boolean equals(Object o) {
     if (this == o) {

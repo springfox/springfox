@@ -39,7 +39,7 @@ class MinMaxAnnotationPluginSpec extends Specification implements AnnotationsSup
     def property = context.parameterBuilder().build()
     def numericRange = context.requestParameterBuilder().build()
         ?.parameterSpecification
-        ?.getLeft()
+        ?.getQuery()
         ?.map { p -> p.facetOfType(NumericElementFacet) }
         ?.orElse(null)
         ?.get()

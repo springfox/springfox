@@ -71,7 +71,7 @@ class ApiParamParameterBuilderSpec
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     EnumerationFacet facet = parameterContext.requestParameterBuilder().build()
         .parameterSpecification
-        .left
+        .query
         .orElse(null)
         ?.facetOfType(EnumerationFacet)
         ?.orElse(null)
@@ -111,7 +111,7 @@ class ApiParamParameterBuilderSpec
     AllowableListValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableListValues
     EnumerationFacet facet = parameterContext.requestParameterBuilder().build()
         .parameterSpecification
-        .left
+        .query
         .orElse(null)
         ?.facetOfType(EnumerationFacet)
         ?.orElse(null)
@@ -148,7 +148,7 @@ class ApiParamParameterBuilderSpec
     AllowableRangeValues allowableValues = parameterContext.parameterBuilder().build().allowableValues as AllowableRangeValues
     NumericElementFacet facet = parameterContext.requestParameterBuilder().build()
         .parameterSpecification
-        .left
+        .query
         .orElse(null)
         ?.facetOfType(NumericElementFacet)
         ?.orElse(null)

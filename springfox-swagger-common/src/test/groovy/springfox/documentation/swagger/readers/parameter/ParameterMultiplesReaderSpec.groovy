@@ -64,7 +64,7 @@ class ParameterMultiplesReaderSpec
     parameterContext.parameterBuilder().build().isAllowMultiple() == expected
     (parameterContext.requestParameterBuilder().build()
         ?.parameterSpecification
-        ?.left
+        ?.query
         ?.orElse(null)
         ?.collectionFormat != null) == expected
     where:

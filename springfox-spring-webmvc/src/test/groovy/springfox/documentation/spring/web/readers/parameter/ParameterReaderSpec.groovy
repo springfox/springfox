@@ -58,7 +58,7 @@ class ParameterReaderSpec
     parameterContext.parameterBuilder().build()."$resultProperty" == expected
     parameterContext.requestParameterBuilder().build()
         .parameterSpecification
-        ?.left
+        ?.query
         ?.orElse(null)
         ?."$resultProperty" == expected
 

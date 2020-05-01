@@ -55,7 +55,7 @@ class SizeAnnotationPluginSpec extends Specification implements AnnotationsSuppo
     sut.apply(context)
     def property = context.parameterBuilder().build()
     def sizeParameter = context.requestParameterBuilder().build()
-        .parameterSpecification?.left?.orElse(null)
+        .parameterSpecification?.query?.orElse(null)
 
     then:
     def range = property.allowableValues as AllowableRangeValues
