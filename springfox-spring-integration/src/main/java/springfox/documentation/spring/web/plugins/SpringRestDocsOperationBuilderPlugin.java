@@ -142,7 +142,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
         .stream()
         .collect(toMap(
             Map.Entry::getKey,
-            o -> new Header(o.getKey(), "", new ModelRef("string"))));
+            o -> new Header(o.getKey(), "", new ModelRef("string"), null)));
   }
 
   private List<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
