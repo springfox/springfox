@@ -29,6 +29,7 @@ import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.schema.AlternateTypesSupport
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
@@ -36,7 +37,6 @@ import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
@@ -79,7 +79,7 @@ class ApiModelPropertyPropertyBuilderSpec
         new ModelPropertyBuilder(),
         properties.find { it.name == property },
         new TypeResolver(),
-        SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
+        SWAGGER_12, new PropertySpecificationBuilder(property))
 
     when:
     sut.apply(context)
@@ -109,7 +109,7 @@ class ApiModelPropertyPropertyBuilderSpec
     ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
     def properties = beanDescription.findProperties()
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(), new PropertySpecificationBuilder(property),
         properties.find { it.name == property }.getter.annotated,
         new TypeResolver(),
         SWAGGER_12)
@@ -142,7 +142,7 @@ class ApiModelPropertyPropertyBuilderSpec
     ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
     def properties = beanDescription.findProperties()
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(), new PropertySpecificationBuilder(property),
         properties.find { it.name == property }.getter.annotated,
         new TypeResolver(),
         SWAGGER_12)
@@ -181,13 +181,16 @@ class ApiModelPropertyPropertyBuilderSpec
         new DefaultGenericTypeNamingStrategy(),
         emptySet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
-    def context = new ModelPropertyContext(new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
-        properties.find { it.name == property }.getter.annotated, resolver,
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(property),
+        properties.find { it.name == property }.getter.annotated,
+        resolver,
         SWAGGER_12)
 
     when:
@@ -232,13 +235,16 @@ class ApiModelPropertyPropertyBuilderSpec
         new DefaultGenericTypeNamingStrategy(),
         emptySet())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+        OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
-    def context = new ModelPropertyContext(new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
-        properties.find { it.name == property }.getter.annotated, resolver,
+    def context = new ModelPropertyContext(
+        new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(property),
+        properties.find { it.name == property }.getter.annotated,
+        resolver,
         SWAGGER_12)
 
     when:

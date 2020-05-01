@@ -8,6 +8,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.BeanValidatorsTestModel
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
@@ -27,7 +28,8 @@ class BeanValidatorsSpec extends Specification {
   def "When AnnotatedElement is null"() {
     when:
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(""),
         (AnnotatedElement) null,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
@@ -43,7 +45,8 @@ class BeanValidatorsSpec extends Specification {
         new ModelPropertyBuilder(),
         Mock(BeanPropertyDefinition),
         new TypeResolver(),
-        DocumentationType.SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
+        DocumentationType.SWAGGER_12,
+        new PropertySpecificationBuilder(""))
     def annotation = Validators.extractAnnotation(context, NotNull)
 
     then:
@@ -55,7 +58,8 @@ class BeanValidatorsSpec extends Specification {
     given:
     def property = BeanValidatorsTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(propertyName),
         property,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
@@ -85,7 +89,8 @@ class BeanValidatorsSpec extends Specification {
         new ModelPropertyBuilder(),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
+        DocumentationType.SWAGGER_12,
+        new PropertySpecificationBuilder(propertyName))
 
     when:
     def annotation = Validators.extractAnnotation(context, NotNull)
@@ -109,7 +114,8 @@ class BeanValidatorsSpec extends Specification {
     given:
     def property = BeanValidatorsTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(propertyName),
         property,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
@@ -135,7 +141,8 @@ class BeanValidatorsSpec extends Specification {
         new ModelPropertyBuilder(),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
+        DocumentationType.SWAGGER_12,
+        new PropertySpecificationBuilder(propertyName))
     
     when:
     def annotation = Validators.extractAnnotation(context, Pattern)

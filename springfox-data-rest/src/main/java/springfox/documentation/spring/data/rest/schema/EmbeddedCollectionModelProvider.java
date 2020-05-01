@@ -112,9 +112,8 @@ class EmbeddedCollectionModelProvider implements SyntheticModelProviderPlugin {
     List<ResolvedType> typeParameters = resourceType.getTypeParameters();
     Class<?> type = typeParameters.get(0).getErasedType();
     return singletonList(
-        new PropertySpecificationBuilder()
-            .withName(relProvider.getCollectionResourceRelFor(type).value())
-            .withType(new ModelSpecificationBuilder(String.format(
+        new PropertySpecificationBuilder(relProvider.getCollectionResourceRelFor(type).value())
+            .type(new ModelSpecificationBuilder(String.format(
                 "%s_%s",
                 context.getParameterId(),
                 "List"))

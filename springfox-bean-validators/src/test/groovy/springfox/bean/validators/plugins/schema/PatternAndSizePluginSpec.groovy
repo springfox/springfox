@@ -25,6 +25,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.models.PatternAndSizeTestModel
 import springfox.documentation.builders.ModelPropertyBuilder
+import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
@@ -41,7 +42,8 @@ class PatternAndSizePluginSpec extends Specification{
     def sat = new SizeAnnotationPlugin()
     def element = PatternAndSizeTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new springfox.documentation.builders.PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(),
+        new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
@@ -70,7 +72,8 @@ class PatternAndSizePluginSpec extends Specification{
         new ModelPropertyBuilder(),
         beanProperty,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12, new springfox.documentation.builders.PropertySpecificationBuilder())
+        DocumentationType.SWAGGER_12,
+        new PropertySpecificationBuilder(propertyName))
     when:
     sat.apply(context)
     pat.apply(context)

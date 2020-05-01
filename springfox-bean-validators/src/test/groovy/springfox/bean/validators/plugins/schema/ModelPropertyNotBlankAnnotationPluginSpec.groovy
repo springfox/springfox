@@ -44,7 +44,7 @@ class ModelPropertyNotBlankAnnotationPluginSpec extends Specification {
     def element = NullabilityTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
-        new PropertySpecificationBuilder(),
+        new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)
@@ -74,7 +74,7 @@ class ModelPropertyNotBlankAnnotationPluginSpec extends Specification {
         beanProperty,
         new TypeResolver(),
         DocumentationType.SWAGGER_12,
-        new PropertySpecificationBuilder())
+        new PropertySpecificationBuilder(propertyName))
 
     when:
     sut.apply(context)

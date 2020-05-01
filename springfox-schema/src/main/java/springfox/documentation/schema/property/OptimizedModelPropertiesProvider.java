@@ -546,7 +546,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     return schemaPluginsManager.property(
         new ModelPropertyContext(
             propertyBuilder,
-            new PropertySpecificationBuilder(),
+            new PropertySpecificationBuilder(fieldModelProperty.getName()),
             childField.getRawMember(),
             typeResolver,
             modelContext.getDocumentationType()))
@@ -576,9 +576,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             modelContext.getAlternateTypeProvider(),
             jacksonProperty);
 
-    PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
-        .withName(fieldModelProperty.getName())
-        .withType(modelSpecifications.create(modelContext, fieldModelProperty.getType()))
+    PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder(fieldModelProperty.getName())
+        .type(modelSpecifications.create(modelContext, fieldModelProperty.getType()))
         .withPosition(fieldModelProperty.position())
         .withRequired(fieldModelProperty.isRequired())
         .withDescription(fieldModelProperty.propertyDescription())
@@ -639,7 +638,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             jacksonProperty,
             typeResolver,
             modelContext.getDocumentationType(),
-            new PropertySpecificationBuilder()))
+            new PropertySpecificationBuilder(beanModelProperty.getName())))
         .updateModelRef(modelRefFactory(
             modelContext,
             enumTypeDeterminer,
@@ -670,9 +669,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         "Adding property {} to model",
         propertyName);
 
-    PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
-        .withName(beanModelProperty.getName())
-        .withType(modelSpecifications.create(modelContext, beanModelProperty.getType()))
+    PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder(beanModelProperty.getName())
+        .type(modelSpecifications.create(modelContext, beanModelProperty.getType()))
         .withPosition(beanModelProperty.position())
         .withRequired(beanModelProperty.isRequired())
         .withIsHidden(false)
@@ -742,9 +740,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         "Adding property {} to model",
         propertyName);
 
-    PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder()
-        .withName(parameterModelProperty.getName())
-        .withType(modelSpecifications.create(modelContext, parameterModelProperty.getType()))
+    PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder(parameterModelProperty.getName())
+        .type(modelSpecifications.create(modelContext, parameterModelProperty.getType()))
         .withPosition(parameterModelProperty.position())
         .withRequired(parameterModelProperty.isRequired())
         .withIsHidden(false)

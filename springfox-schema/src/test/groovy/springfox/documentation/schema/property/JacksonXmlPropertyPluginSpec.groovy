@@ -45,7 +45,7 @@ class JacksonXmlPropertyPluginSpec extends Specification {
     def property = JacksonXmlModel.getDeclaredField("strings")
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
-        new PropertySpecificationBuilder(),
+        new PropertySpecificationBuilder("strings"),
         property,
         new TypeResolver(),
         DocumentationType.SWAGGER_2)
@@ -64,7 +64,7 @@ class JacksonXmlPropertyPluginSpec extends Specification {
     def property = JacksonXmlAttributeModel.getDeclaredField("string")
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
-        new PropertySpecificationBuilder(),
+        new PropertySpecificationBuilder("string"),
         property,
         new TypeResolver(),
         DocumentationType.SWAGGER_2)
@@ -83,7 +83,7 @@ class JacksonXmlPropertyPluginSpec extends Specification {
     def property = JacksonXmlWrapperModel.getDeclaredField("strings")
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
-        new PropertySpecificationBuilder(),
+        new PropertySpecificationBuilder("strings"),
         property,
         new TypeResolver(),
         DocumentationType.SWAGGER_2)

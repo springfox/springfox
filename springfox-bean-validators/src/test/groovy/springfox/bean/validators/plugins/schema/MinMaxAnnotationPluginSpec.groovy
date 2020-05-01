@@ -43,7 +43,7 @@ class MinMaxAnnotationPluginSpec extends Specification {
     def sut = new MinMaxAnnotationPlugin()
     def element = MinMaxTestModel.getDeclaredField(propertyName)
     def context = new ModelPropertyContext(
-        new ModelPropertyBuilder(), new PropertySpecificationBuilder(),
+        new ModelPropertyBuilder(), new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
         DocumentationType.SWAGGER_12)

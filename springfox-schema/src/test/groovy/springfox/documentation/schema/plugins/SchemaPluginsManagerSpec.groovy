@@ -21,7 +21,6 @@ package springfox.documentation.schema.plugins
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
-import spock.lang.Shared
 import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.builders.PropertySpecificationBuilder
@@ -60,15 +59,15 @@ class SchemaPluginsManagerSpec extends Specification implements TypesForTestingS
 
   def setup() {
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        OrderAwarePluginRegistry.create(singletonList(propertyPlugin))
+        OrderAwarePluginRegistry.of(singletonList(propertyPlugin))
     propertyPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        OrderAwarePluginRegistry.create(singletonList(modelPlugin))
+        OrderAwarePluginRegistry.of(singletonList(modelPlugin))
     modelPlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-        OrderAwarePluginRegistry.create(singletonList(namePlugin))
+        OrderAwarePluginRegistry.of(singletonList(namePlugin))
     namePlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderPlugin =
@@ -76,7 +75,7 @@ class SchemaPluginsManagerSpec extends Specification implements TypesForTestingS
     namePlugin.supports(SPRING_WEB) >> true
 
     PluginRegistry<SyntheticModelProviderPlugin, ModelContext> syntheticModelRegistry =
-        OrderAwarePluginRegistry.create(singletonList(resourcesModelPlugin))
+        OrderAwarePluginRegistry.of(singletonList(resourcesModelPlugin))
     resourcesModelPlugin.supports(_) >> false
 
     sut = new SchemaPluginsManager(propRegistry, modelRegistry, viewProviderPlugin, syntheticModelRegistry)
@@ -88,8 +87,12 @@ class SchemaPluginsManagerSpec extends Specification implements TypesForTestingS
 
   def "enriches model property when plugins are found"() {
     given:
-    def context = new ModelPropertyContext(Mock(ModelPropertyBuilder), new PropertySpecificationBuilder(), Mock(AnnotatedElement),
-        new TypeResolver(), SPRING_WEB)
+    def context = new ModelPropertyContext(
+        Mock(ModelPropertyBuilder),
+        new PropertySpecificationBuilder("any"),
+        Mock(AnnotatedElement),
+        new TypeResolver(),
+        SPRING_WEB)
     when:
     sut.property(context)
     then:
