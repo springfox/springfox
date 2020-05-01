@@ -29,6 +29,7 @@ import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.ContentParameterAggregator
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
 
@@ -45,7 +46,10 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec impleme
         new AccessorsProvider(resolver),
         enumTypeDeterminer)
     expander.pluginsManager = plugins
-    OperationParameterReader sut = new OperationParameterReader(expander, enumTypeDeterminer)
+    OperationParameterReader sut = new OperationParameterReader(
+        expander,
+        enumTypeDeterminer,
+        new ContentParameterAggregator())
     sut.pluginsManager = plugins
     def env = new DescriptionResolver(new MockEnvironment())
     OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader(env)

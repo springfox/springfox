@@ -39,6 +39,7 @@ import springfox.documentation.spring.web.dummy.models.Treeish
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
+import springfox.documentation.spring.web.readers.operation.ContentParameterAggregator
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 
 import javax.servlet.ServletContext
@@ -72,7 +73,7 @@ class OperationParameterReaderSpec
         new AccessorsProvider(typeResolver),
         enumTypeDeterminer)
     expander.pluginsManager = pluginsManager
-    sut = new OperationParameterReader(expander, enumTypeDeterminer)
+    sut = new OperationParameterReader(expander, enumTypeDeterminer, new ContentParameterAggregator())
     sut.pluginsManager = pluginsManager
   }
 
@@ -276,7 +277,10 @@ class OperationParameterReaderSpec
 
   def "OperationParameterReader supports all documentationTypes"() {
     given:
-    def sut = new OperationParameterReader(Mock(ModelAttributeParameterExpander), new JacksonEnumTypeDeterminer())
+    def sut = new OperationParameterReader(
+        Mock(ModelAttributeParameterExpander),
+        new JacksonEnumTypeDeterminer(),
+        new ContentParameterAggregator())
     sut.pluginsManager = defaultWebPlugins()
 
     expect:

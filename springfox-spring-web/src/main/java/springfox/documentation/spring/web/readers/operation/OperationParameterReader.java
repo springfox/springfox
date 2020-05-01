@@ -20,6 +20,7 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -47,6 +48,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
+import static org.slf4j.LoggerFactory.*;
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.Types.*;
@@ -54,8 +56,10 @@ import static springfox.documentation.schema.Types.*;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationParameterReader implements OperationBuilderPlugin {
+  private static final Logger LOGGER = getLogger(OperationParameterReader.class);
   private final ModelAttributeParameterExpander expander;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  private final ParameterAggregator aggregator;
 
   @Autowired
   private DocumentationPluginsManager pluginsManager;
@@ -63,9 +67,11 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   @Autowired
   public OperationParameterReader(
       ModelAttributeParameterExpander expander,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      ParameterAggregator aggregator) {
     this.expander = expander;
     this.enumTypeDeterminer = enumTypeDeterminer;
+    this.aggregator = aggregator;
   }
 
   @Override
@@ -79,12 +85,13 @@ public class OperationParameterReader implements OperationBuilderPlugin {
             .map(Optional::get)
             .collect(Collectors.toList()));
     context.operationBuilder().requestParameters(new HashSet<>(context.getRequestParameters()));
-    context.operationBuilder().requestParameters(
-        compatibilities.stream()
-            .map(Compatibility::getModern)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toSet()));
+    Collection<RequestParameter> requestParameters = compatibilities.stream()
+        .map(Compatibility::getModern)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(toSet());
+    context.operationBuilder()
+        .requestParameters(aggregator.aggregate(requestParameters));
   }
 
   @Override
@@ -93,11 +100,12 @@ public class OperationParameterReader implements OperationBuilderPlugin {
   }
 
   private List<Compatibility<Parameter, RequestParameter>> readParameters(final OperationContext context) {
-
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
     List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
+    LOGGER.info("Reading parameters for method {} at path {}", context.getName(), context.requestMappingPattern());
 
     for (ResolvedMethodParameter methodParameter : methodParameters) {
+      LOGGER.info("Processing parameter {}", methodParameter.defaultName().orElse("<unknown>"));
       ResolvedType alternate = context.alternateFor(methodParameter.getParameterType());
       if (!shouldIgnore(methodParameter, alternate, context.getIgnorableParameterTypes())) {
 

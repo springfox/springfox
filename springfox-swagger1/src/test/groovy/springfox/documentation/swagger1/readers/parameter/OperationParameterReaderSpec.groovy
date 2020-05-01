@@ -42,6 +42,7 @@ import springfox.documentation.spring.web.paths.DefaultPathProvider
 import springfox.documentation.spring.web.paths.Paths
 import springfox.documentation.spring.web.plugins.DocumentationContextSpec
 import springfox.documentation.spring.web.readers.operation.CachingOperationNameGenerator
+import springfox.documentation.spring.web.readers.operation.ContentParameterAggregator
 import springfox.documentation.spring.web.readers.operation.HandlerMethodResolver
 import springfox.documentation.spring.web.readers.operation.OperationParameterReader
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterExpander
@@ -87,7 +88,7 @@ class OperationParameterReaderSpec
 
     expander.pluginsManager = pluginsManager
 
-    sut = new OperationParameterReader(expander, enumTypeDeterminer)
+    sut = new OperationParameterReader(expander, enumTypeDeterminer, new ContentParameterAggregator())
     sut.pluginsManager = pluginsManager
   }
 
