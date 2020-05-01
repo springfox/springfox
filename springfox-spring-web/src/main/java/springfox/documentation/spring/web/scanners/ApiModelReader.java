@@ -155,6 +155,7 @@ public class ApiModelReader {
     return Collections.unmodifiableMap(mergedModelMap);
   }
 
+  @SuppressWarnings("NPathComplexity")
   private Set<ComparisonCondition> mergeModelBranch(
       UniqueTypeNameAdapter adapter,
       final MergingContext mergingContext) {

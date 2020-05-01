@@ -150,7 +150,7 @@
             <property name="max" value="10"/>
         </module>
         <module name="NPathComplexity">
-            <property name="max" value="85"/>
+            <property name="max" value="50"/>
         </module>
 
     </module>
