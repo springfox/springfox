@@ -1,30 +1,38 @@
 package springfox.documentation.builders;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import springfox.documentation.common.Either;
+import org.springframework.http.MediaType;
 import springfox.documentation.schema.ElementFacet;
-import springfox.documentation.service.ContentSpecification;
+import springfox.documentation.schema.Example;
+import springfox.documentation.service.ParameterSpecification;
+import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.service.RequestParameter;
-import springfox.documentation.service.SimpleParameterSpecification;
 import springfox.documentation.service.VendorExtension;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import static springfox.documentation.builders.NoopValidator.*;
+
+@SuppressWarnings("VisibilityModifier")
 public class RequestParameterBuilder {
-  private static final Logger LOGGER = LoggerFactory.getLogger(RequestParameterBuilder.class);
-  private String name;
-  private ParameterType in;
+  //Validator accessible
+  String name;
+  ParameterType in;
+  SimpleParameterSpecificationBuilder simpleParameterBuilder;
+  ContentSpecificationBuilder contentSpecificationBuilder;
+
   private String description;
   private Boolean required = false;
   private Boolean deprecated;
   private Boolean hidden = false;
+  private Example scalarExample;
+  private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
-  private SimpleParameterSpecificationBuilder simpleParameterBuilder;
-  private ContentSpecificationBuilder contentSpecificationBuilder;
+  private ParameterSpecificationProvider parameterSpecificationProvider = new RootParameterSpecificationProvider();
   private int order;
+  private final List<MediaType> accepts = new ArrayList<>();
   private Validator<RequestParameterBuilder> validator = new NoopValidator<>();
 
   public RequestParameterBuilder name(String name) {
@@ -34,11 +42,20 @@ public class RequestParameterBuilder {
 
   public RequestParameterBuilder in(ParameterType in) {
     this.in = in;
+    if (in == ParameterType.QUERY || in == ParameterType.COOKIE) {
+      this.simpleParameterBuilder()
+          .style(ParameterStyle.FORM)
+          .allowReserved(in == ParameterType.QUERY);
+    } else if (in == ParameterType.HEADER || in == ParameterType.PATH) {
+      this.simpleParameterBuilder()
+          .style(ParameterStyle.SIMPLE)
+          .allowReserved(false);
+    }
     return this;
   }
 
   public RequestParameterBuilder in(String in) {
-    this.in = ParameterType.from(in);
+    this.in(ParameterType.from(in));
     return this;
   }
 
@@ -86,31 +103,65 @@ public class RequestParameterBuilder {
     return this;
   }
 
+
+  public RequestParameterBuilder example(Example scalarExample) {
+    this.scalarExample = scalarExample;
+    return this;
+  }
+
+  public RequestParameterBuilder examples(Collection<Example> examples) {
+    this.examples.addAll(examples);
+    return this;
+  }
+
+  public RequestParameterBuilder parameterSpecificationProvider(ParameterSpecificationProvider specificationProvider) {
+    this.parameterSpecificationProvider = specificationProvider;
+    return this;
+  }
+
+  public RequestParameterBuilder accepts(Collection<? extends MediaType> accepts) {
+    this.accepts.addAll(accepts);
+    return this;
+  }
+
   public RequestParameterBuilder validator(RequestParameterBuilderValidator validator) {
     this.validator = validator;
     return this;
   }
+
 
   public RequestParameter build() {
     List<ValidationResult> results = validator.validate(this);
     if (logProblems(results).size() > 0) {
       return null;
     }
+    ParameterSpecification parameter = parameterSpecificationProvider.create(
+        new ParameterSpecificationContext(
+            name,
+            in,
+            accepts,
+            simpleParameterBuilder != null ? simpleParameterBuilder.build() : null,
+            contentSpecificationBuilder != null ? contentSpecificationBuilder.build() : null,
+            new SimpleParameterSpecificationBuilder(this),
+            new ContentSpecificationBuilder(this)));
+
     return new RequestParameter(
         name,
         in,
         description,
-        required,
+        in == ParameterType.PATH ? true : required,
         deprecated,
         hidden,
-        parameterSpecification,
+        parameter,
+        scalarExample,
+        examples,
         order,
         extensions);
   }
 
-  public RequestParameterBuilder from(RequestParameter source) {
+  public RequestParameterBuilder copyOf(RequestParameter source) {
     source.getParameterSpecification()
-        .getLeft()
+        .getQuery()
         .map(simple -> {
           for (ElementFacet each :
               simple.getFacets()) {
@@ -123,17 +174,15 @@ public class RequestParameterBuilder {
               .allowEmptyValue(simple.getAllowEmptyValue())
               .allowReserved(simple.getAllowReserved())
               .defaultValue(simple.getDefaultValue())
-              .examples(simple.getExamples())
               .explode(simple.getExplode())
-              .scalarExample(simple.getScalarExample())
               .model(simple.getModel())
               .style(simple.getStyle());
           return simple;
         });
     source.getParameterSpecification()
-        .getRight()
+        .getContent()
         .map(content -> this.contentSpecificationBuilder()
-            .mediaTypes(content.getMediaTypes()));
+            .copyOf(content));
     return this.in(source.getIn())
         .required(source.getRequired())
         .hidden(source.getHidden())
@@ -143,5 +192,4 @@ public class RequestParameterBuilder {
         .description(source.getDescription())
         .order(source.getOrder());
   }
-
 }

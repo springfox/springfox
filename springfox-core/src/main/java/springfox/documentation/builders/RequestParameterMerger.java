@@ -89,8 +89,8 @@ class RequestParameterMerger {
 
   private RequestParameter merged(RequestParameter destination, RequestParameter source) {
     return new RequestParameterBuilder()
-        .from(destination)
-        .from(source)
+        .copyOf(destination)
+        .copyOf(source)
         .build();
   }
 

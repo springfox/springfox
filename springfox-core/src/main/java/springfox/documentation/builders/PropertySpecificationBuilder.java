@@ -34,11 +34,17 @@ public class PropertySpecificationBuilder {
 
   private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
   private final List<VendorExtension<?>> vendorExtensions = new ArrayList<>();
+  private final CompoundModelSpecificationBuilder parent;
 
+  public PropertySpecificationBuilder(String name) {
+    this(name, null);
+  }
 
-  public PropertySpecificationBuilder withName(String name) {
+  public PropertySpecificationBuilder(
+      String name,
+      CompoundModelSpecificationBuilder parent) {
     this.name = name;
-    return this;
+    this.parent = parent;
   }
 
   public PropertySpecificationBuilder withDescription(String description) {
@@ -46,7 +52,7 @@ public class PropertySpecificationBuilder {
     return this;
   }
 
-  public PropertySpecificationBuilder withType(ModelSpecification type) {
+  public PropertySpecificationBuilder type(ModelSpecification type) {
     this.type = type;
     return this;
   }
@@ -108,7 +114,7 @@ public class PropertySpecificationBuilder {
     return this;
   }
 
-  public PropertySpecificationBuilder withXml(Xml xml) {
+  public PropertySpecificationBuilder xml(Xml xml) {
     this.xml = xml;
     return this;
   }
@@ -116,6 +122,10 @@ public class PropertySpecificationBuilder {
   public PropertySpecificationBuilder withVendorExtensions(List<VendorExtension<?>> vendorExtensions) {
     this.vendorExtensions.addAll(vendorExtensions);
     return this;
+  }
+
+  public CompoundModelSpecificationBuilder yield() {
+    return parent;
   }
 
   public PropertySpecification build() {

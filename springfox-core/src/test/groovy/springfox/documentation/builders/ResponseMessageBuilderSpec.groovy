@@ -106,7 +106,7 @@ class ResponseMessageBuilderSpec extends Specification {
 
   def headersWithDescription(String description, String... names) {
     def map = new HashMap<>()
-    names.collect({ map.put(it, new Header(it, description, new ModelRef("string"))) })
+    names.collect({ map.put(it, new Header(it, description, new ModelRef("string"), null)) })
     map
   }
 }

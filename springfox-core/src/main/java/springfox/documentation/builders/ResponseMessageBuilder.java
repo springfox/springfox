@@ -110,7 +110,7 @@ public class ResponseMessageBuilder {
         new Header(
             entry.getKey(),
             "",
-            entry.getValue()));
+            entry.getValue(), null));
   }
 
   /**

@@ -330,7 +330,7 @@ public class OperationBuilder {
    * @return this
    * @since 3.0.0
    */
-  public OperationBuilder requestParameters(Set<RequestParameter> parameters) {
+  public OperationBuilder requestParameters(Collection<RequestParameter> parameters) {
     List<RequestParameter> source = nullToEmptyList(parameters).stream()
         .filter(Objects::nonNull)
         .collect(Collectors.toList());

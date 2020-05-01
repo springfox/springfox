@@ -1,14 +1,11 @@
 package springfox.documentation.builders;
 
 import springfox.documentation.schema.ElementFacet;
-import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.service.CollectionFormat;
 import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.SimpleParameterSpecification;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +16,6 @@ import static springfox.documentation.builders.ElementFacets.*;
 
 public class SimpleParameterSpecificationBuilder {
   private final RequestParameterBuilder owner;
-  private final List<Example> examples = new ArrayList<>();
   private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
 
   private ParameterStyle style;
@@ -28,9 +24,7 @@ public class SimpleParameterSpecificationBuilder {
   private Boolean allowEmptyValue;
   private String defaultValue;
   private ModelSpecification model;
-  private Example scalarExample;
   private CollectionFormat collectionFormat;
-
 
   SimpleParameterSpecificationBuilder(RequestParameterBuilder owner) {
     this.owner = owner;
@@ -38,6 +32,7 @@ public class SimpleParameterSpecificationBuilder {
 
   public SimpleParameterSpecificationBuilder style(ParameterStyle style) {
     this.style = style;
+    this.explode(style == ParameterStyle.FORM);
     return this;
   }
 
@@ -56,11 +51,6 @@ public class SimpleParameterSpecificationBuilder {
     return this;
   }
 
-  public SimpleParameterSpecificationBuilder examples(Collection<Example> examples) {
-    this.examples.addAll(examples);
-    return this;
-  }
-
   public SimpleParameterSpecificationBuilder allowEmptyValue(Boolean allowEmptyValue) {
     this.allowEmptyValue = allowEmptyValue;
     return this;
@@ -76,18 +66,13 @@ public class SimpleParameterSpecificationBuilder {
     return this;
   }
 
-  public SimpleParameterSpecificationBuilder scalarExample(Example example) {
-    this.scalarExample = example;
-    return this;
-  }
-
   @SuppressWarnings("unchecked")
   public <T extends ElementFacetBuilder> T facetBuilder(Class<T> clazz) {
     this.facetBuilders.computeIfAbsent(clazz, builderFactory(this, clazz));
     return (T) this.facetBuilders.get(clazz);
   }
 
-  SimpleParameterSpecification create() {
+  SimpleParameterSpecification build() {
     List<ElementFacet> facets = facetBuilders.values().stream()
         .filter(Objects::nonNull)
         .map(ElementFacetBuilder::build)
@@ -101,12 +86,26 @@ public class SimpleParameterSpecificationBuilder {
         allowEmptyValue,
         defaultValue,
         model,
-        facets,
-        scalarExample,
-        examples);
+        facets
+    );
   }
 
-  public RequestParameterBuilder build() {
+  public RequestParameterBuilder yield() {
     return owner;
+  }
+
+  public SimpleParameterSpecificationBuilder copyOf(SimpleParameterSpecification simple) {
+    for (ElementFacet each :
+        simple.getFacets()) {
+      this.facetBuilder(each.facetBuilder())
+          .copyOf(each);
+    }
+    return this.collectionFormat(simple.getCollectionFormat())
+        .allowEmptyValue(simple.getAllowEmptyValue())
+        .allowReserved(simple.getAllowReserved())
+        .defaultValue(simple.getDefaultValue())
+        .explode(simple.getExplode())
+        .model(simple.getModel())
+        .style(simple.getStyle());
   }
 }

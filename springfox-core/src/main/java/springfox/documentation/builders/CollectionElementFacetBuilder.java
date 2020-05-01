@@ -2,15 +2,22 @@ package springfox.documentation.builders;
 
 import springfox.documentation.schema.CollectionElementFacet;
 import springfox.documentation.schema.ElementFacet;
+import springfox.documentation.service.CollectionFormat;
 
 public class CollectionElementFacetBuilder implements ElementFacetBuilder {
   private final Object parent;
   private Integer maxItems;
   private Integer minItems;
   private Boolean uniqueItems;
+  private CollectionFormat collectionFormat;
 
   public CollectionElementFacetBuilder(Object parent) {
     this.parent = parent;
+  }
+
+  public CollectionElementFacetBuilder collectionFormat(CollectionFormat collectionFormat) {
+    this.collectionFormat = collectionFormat;
+    return this;
   }
 
   public CollectionElementFacetBuilder maxItems(Integer maxItems) {
@@ -45,7 +52,7 @@ public class CollectionElementFacetBuilder implements ElementFacetBuilder {
       return this;
     }
     CollectionElementFacet other = (CollectionElementFacet) facet;
-    return this.maxItems(other.getMaxItems())
+    return maxItems(other.getMaxItems())
         .minItems(other.getMinItems())
         .uniqueItems(other.getUniqueItems());
   }

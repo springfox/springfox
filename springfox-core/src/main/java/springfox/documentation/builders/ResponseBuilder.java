@@ -2,7 +2,7 @@ package springfox.documentation.builders;
 
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.Header;
-import springfox.documentation.service.MediaType;
+import springfox.documentation.service.Representation;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.VendorExtension;
 
@@ -17,7 +17,7 @@ public class ResponseBuilder {
   private String description;
   private Boolean isDefault = false;
   private final List<Header> headers = new ArrayList<>();
-  private final Set<MediaType> mediaTypes = new HashSet<>();
+  private final Set<Representation> representations = new HashSet<>();
   private final List<VendorExtension> vendorExtensions = new ArrayList<>();
   private final List<Example> examples = new ArrayList<>();
 
@@ -41,8 +41,8 @@ public class ResponseBuilder {
     return this;
   }
 
-  public ResponseBuilder mediaTypes(Set<MediaType> mediaTypes) {
-    this.mediaTypes.addAll(mediaTypes);
+  public ResponseBuilder mediaTypes(Set<Representation> representations) {
+    this.representations.addAll(representations);
     return this;
   }
 
@@ -62,7 +62,7 @@ public class ResponseBuilder {
         description,
         isDefault,
         headers,
-        mediaTypes,
+        representations,
         examples,
         vendorExtensions);
   }
