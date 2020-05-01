@@ -33,7 +33,7 @@ import java.util.stream.Stream
 
 import static java.util.stream.Collectors.*
 
-class MediaTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
+class RepresentationReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   MediaTypeReader sut
 
   def setup() {

@@ -30,7 +30,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
-import springfox.documentation.service.MediaType;
+import springfox.documentation.service.Representation;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -41,7 +41,6 @@ import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ResponseContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,7 +100,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
 
-    Set<MediaType> mediaTypes = new HashSet<>();
+    Set<Representation> representations = new HashSet<>();
     if (!isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
@@ -121,13 +120,11 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
           knownNames).apply(returnType);
       context.consumes()
           .forEach(mediaType ->
-              mediaTypes.add(
-                  new MediaType(
+              representations.add(
+                  new Representation(
                       mediaType,
                       modelSpecifications.create(modelContext, returnType),
-                      new ArrayList<>(),
-                      new ArrayList<>(),
-                      new ArrayList<>())));
+                      new HashSet<>())));
     }
     ResponseMessage built = new ResponseMessageBuilder()
         .code(httpStatusCode)
@@ -141,7 +138,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
         context.getGenericsNamingStrategy(),
         context);
     responseContext.responseBuilder()
-        .mediaTypes(mediaTypes)
+        .mediaTypes(representations)
         .code(String.valueOf(httpStatusCode));
 
     context.operationBuilder()

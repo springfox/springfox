@@ -14,7 +14,7 @@ public class Response {
   private final String code;
   private final String description;
   private final boolean isDefault;
-  private final Set<MediaType> mediaTypes;
+  private final Set<Representation> representations;
   private final List<Header> headers;
   private final List<VendorExtension> vendorExtensions;
   private final List<Example> examples;
@@ -24,20 +24,20 @@ public class Response {
       String description,
       boolean isDefault,
       List<Header> headers,
-      Set<MediaType> mediaTypes,
+      Set<Representation> representations,
       List<Example> examples,
       List<VendorExtension> vendorExtensions) {
     this.code = code;
     this.description = description;
     this.isDefault = isDefault;
-    this.mediaTypes = mediaTypes;
+    this.representations = representations;
     this.headers = headers;
     this.vendorExtensions = vendorExtensions;
     this.examples = examples;
   }
 
-  public Set<MediaType> getMediaTypes() {
-    return mediaTypes;
+  public Set<Representation> getRepresentations() {
+    return representations;
   }
 
   public List<Header> getHeaders() {
@@ -87,7 +87,7 @@ public class Response {
         .add("code='" + code + "'")
         .add("description='" + description + "'")
         .add("isDefault=" + isDefault)
-        .add("mediaTypes=" + mediaTypes)
+        .add("mediaTypes=" + representations)
         .add("headers=" + headers)
         .add("vendorExtensions=" + vendorExtensions)
         .add("examples=" + examples)

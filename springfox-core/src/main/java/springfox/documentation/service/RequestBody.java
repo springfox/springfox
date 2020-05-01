@@ -8,17 +8,17 @@ import java.util.SortedSet;
  */
 public class RequestBody {
   private final String description;
-  private final SortedSet<MediaType> mediaTypes;
+  private final SortedSet<Representation> representations;
   private final Boolean required;
   private final List<VendorExtension> extensions;
 
   public RequestBody(
       String description,
-      SortedSet<MediaType> mediaTypes,
+      SortedSet<Representation> representations,
       Boolean required,
       List<VendorExtension> extensions) {
     this.description = description;
-    this.mediaTypes = mediaTypes;
+    this.representations = representations;
     this.required = required;
     this.extensions = extensions;
   }
@@ -27,8 +27,8 @@ public class RequestBody {
     return description;
   }
 
-  public SortedSet<MediaType> getMediaTypes() {
-    return mediaTypes;
+  public SortedSet<Representation> getRepresentations() {
+    return representations;
   }
 
   public Boolean getRequired() {

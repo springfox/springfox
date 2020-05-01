@@ -37,7 +37,7 @@ import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.Header;
-import springfox.documentation.service.MediaType;
+import springfox.documentation.service.Representation;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -173,20 +173,18 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context.getDocumentationContext(),
               context.getGenericsNamingStrategy(),
               context);
-          Set<MediaType> mediaTypes = new HashSet<>();
+          Set<Representation> representations = new HashSet<>();
           Optional<ResolvedType> finalType = type;
           context.consumes()
               .forEach(mediaType ->
-                  mediaTypes.add(
-                      new MediaType(
+                  representations.add(
+                      new Representation(
                           mediaType,
                           finalType.map(t -> modelSpecifications.create(modelContext, t))
                               .orElse(null),
-                          new ArrayList<>(),
-                          new ArrayList<>(),
-                          new ArrayList<>())));
+                          new HashSet<>())));
           responseContext.responseBuilder()
-              .mediaTypes(mediaTypes)
+              .mediaTypes(representations)
               .examples(examples)
               .description(apiResponse.message())
               .code(String.valueOf(apiResponse.code()));
@@ -228,19 +226,17 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           context.getDocumentationContext(),
           context.getGenericsNamingStrategy(),
           context);
-      Set<MediaType> mediaTypes = new HashSet<>();
+      Set<Representation> representations = new HashSet<>();
       context.consumes()
           .forEach(mediaType ->
-              mediaTypes.add(
-                  new MediaType(
+              representations.add(
+                  new Representation(
                       mediaType,
                       modelSpecifications.create(modelContext, resolvedType),
-                      new ArrayList<>(),
-                      new ArrayList<>(),
-                      new ArrayList<>())));
+                      new HashSet<>())));
 
       responseContext.responseBuilder()
-          .mediaTypes(mediaTypes)
+          .mediaTypes(representations)
           .description(message(context))
           .code(String.valueOf(httpStatusCode(context)));
       responses.add(documentationPlugins.response(responseContext));

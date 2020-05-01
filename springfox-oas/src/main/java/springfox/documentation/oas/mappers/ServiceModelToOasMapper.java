@@ -43,7 +43,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.ContentSpecification;
 import springfox.documentation.service.Documentation;
-import springfox.documentation.service.MediaType;
+import springfox.documentation.service.Representation;
 import springfox.documentation.service.RequestBody;
 import springfox.documentation.service.SimpleParameterSpecification;
 
@@ -152,7 +152,7 @@ public abstract class ServiceModelToOasMapper {
 
   abstract PathItem.HttpMethod mapHttpMethod(HttpMethod method);
 
-  static Content map(SortedSet<MediaType> value) {
+  static Content map(SortedSet<Representation> value) {
     //TODO: Implement this mapping
     return new Content();
   }
