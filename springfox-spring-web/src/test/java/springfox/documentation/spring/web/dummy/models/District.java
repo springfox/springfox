@@ -18,26 +18,48 @@
  */
 package springfox.documentation.spring.web.dummy.models;
 
-public class Holder<T> {
+import java.util.List;
 
-  private T content;
+public class District {
 
-  private Wrapper<T> wrapper;
+  private List<Street> streets;
 
-  public T getContent() {
-    return content;
+  private City city;
+
+  private Region region;
+
+  private Country country;
+
+  public List<Street> getStreets() {
+    return streets;
   }
 
-  public void setContent(T content) {
-    this.content = content;
+  public void setStreets(List<Street> streets) {
+    this.streets = streets;
   }
 
-  public Wrapper<T> getWrapper() {
-    return wrapper;
+  public City getCity() {
+    return city;
   }
 
-  public void setWrapper(Wrapper<T> wrapper) {
-    this.wrapper = wrapper;
+  public void setCity(City city) {
+    this.city = city;
+  }
+
+  public Region getRegion() {
+    return region;
+  }
+
+  public void setRegion(Region region) {
+    this.region = region;
+  }
+
+  public Country getCountry() {
+    return country;
+  }
+
+  public void setCountry(Country country) {
+    this.country = country;
   }
 
 }

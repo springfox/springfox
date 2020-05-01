@@ -368,4 +368,17 @@ class Swagger2TestConfig {
         .build()
 
   }
+
+  @Bean
+  public Docket cyclic(List<SecurityScheme> authorizationTypes) {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .groupName("cyclic")
+        .useDefaultResponseMessages(false)
+        .securitySchemes(authorizationTypes)
+        .produces(['application/xml', 'application/json'] as Set)
+        .select()
+        .paths(regex("/cyclic-structures/.*"))
+        .build()
+
+  }
 }

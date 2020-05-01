@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import springfox.documentation.spi.schema.UniqueTypeNameAdapter;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
 
   @Override
   public Map<String, String> getNames() {
-    return new HashMap<>(knownNames);
+    return Collections.unmodifiableMap(knownNames);
   }
 
   @Override
@@ -87,10 +88,10 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
     String tempName = typeName;
     while (knownNames.values().contains(tempName)) {
       ++nameIndex;
-      tempName = String.format(
-          "%s_%s",
-          typeName,
-          nameIndex);
+      tempName = new StringBuilder(typeName)
+          .append("_")
+          .append(nameIndex).
+          toString();
     }
     knownNames.put(
         modelId,

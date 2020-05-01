@@ -105,6 +105,11 @@
             "description": "Same Controller",
             "path": "/default/same-controller",
             "position": 0
+        },
+        {
+            "description": "Cyclic Structures Controller",
+            "path": "/default/cyclic-structures-controller",
+            "position": 0
         }
     ],
     "authorizations": {
