@@ -1,7 +1,6 @@
 package springfox.documentation.service;
 
 import springfox.documentation.schema.ElementFacet;
-import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelSpecification;
 
 import java.util.ArrayList;
@@ -14,13 +13,11 @@ public class SimpleParameterSpecification {
   private final ParameterStyle style;
   private final Boolean explode;
   private final Boolean allowReserved;
+  private final ModelSpecification model;
+  private final List<ElementFacet> facets = new ArrayList<>();
   private final Boolean allowEmptyValue;
   private final String defaultValue;
   private final CollectionFormat collectionFormat;
-  private final ModelSpecification model;
-  private final Example scalarExample;
-  private final List<Example> examples;
-  private final List<ElementFacet> facets = new ArrayList<>();
 
   @SuppressWarnings("ParameterNumber")
   public SimpleParameterSpecification(
@@ -31,9 +28,7 @@ public class SimpleParameterSpecification {
       Boolean allowEmptyValue,
       String defaultValue,
       ModelSpecification model,
-      List<ElementFacet> facets,
-      Example scalarExample,
-      List<Example> examples) {
+      List<ElementFacet> facets) {
     this.style = style;
     this.collectionFormat = collectionFormat;
     this.explode = explode;
@@ -42,8 +37,6 @@ public class SimpleParameterSpecification {
     this.defaultValue = defaultValue;
     this.model = model;
     this.facets.addAll(facets);
-    this.scalarExample = scalarExample;
-    this.examples = examples;
   }
 
   public ParameterStyle getStyle() {
@@ -62,9 +55,6 @@ public class SimpleParameterSpecification {
     return model;
   }
 
-  public List<Example> getExamples() {
-    return examples;
-  }
 
   public CollectionFormat getCollectionFormat() {
     return collectionFormat;
@@ -90,10 +80,6 @@ public class SimpleParameterSpecification {
     return defaultValue;
   }
 
-  public Example getScalarExample() {
-    return scalarExample;
-  }
-
   @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
   @Override
   public boolean equals(Object o) {
@@ -111,8 +97,6 @@ public class SimpleParameterSpecification {
         Objects.equals(defaultValue, that.defaultValue) &&
         collectionFormat == that.collectionFormat &&
         Objects.equals(model, that.model) &&
-        Objects.equals(scalarExample, that.scalarExample) &&
-        examples.equals(that.examples) &&
         facets.equals(that.facets);
   }
 
@@ -126,8 +110,6 @@ public class SimpleParameterSpecification {
         defaultValue,
         collectionFormat,
         model,
-        scalarExample,
-        examples,
         facets);
   }
 
@@ -141,8 +123,6 @@ public class SimpleParameterSpecification {
         .add("defaultValue='" + defaultValue + "'")
         .add("collectionFormat=" + collectionFormat)
         .add("model=" + model)
-        .add("scalarExample=" + scalarExample)
-        .add("examples=" + examples)
         .add("facets=" + facets)
         .toString();
   }

@@ -19,19 +19,25 @@
 package springfox.documentation.service;
 
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ModelSpecification;
 
 import java.util.Objects;
 
 public class Header {
   private final String name;
-  //TODO: Introduce compatibility here
   private final ModelReference modelReference;
+  private final ModelSpecification modelSpecification;
   private final String description;
 
-  public Header(String name, String description, ModelReference modelReference) {
+  public Header(
+      String name,
+      String description,
+      ModelReference modelReference,
+      ModelSpecification modelSpecification) {
     this.name = name;
     this.modelReference = modelReference;
     this.description = description;
+    this.modelSpecification = modelSpecification;
   }
 
   public String getName() {
@@ -46,6 +52,10 @@ public class Header {
     return description;
   }
 
+  public ModelSpecification getModelSpecification() {
+    return modelSpecification;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -57,12 +67,13 @@ public class Header {
     Header header = (Header) o;
     return Objects.equals(name, header.name) &&
         Objects.equals(modelReference, header.modelReference) &&
+        Objects.equals(modelSpecification, header.modelSpecification) &&
         Objects.equals(description, header.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, modelReference, description);
+    return Objects.hash(name, modelReference, modelSpecification, description);
   }
 
   @Override
@@ -71,6 +82,7 @@ public class Header {
         .append("{")
         .append("name=").append(name).append(", ")
         .append("modelReference=").append(modelReference).append(", ")
+        .append("modelSpecification=").append(modelSpecification).append(", ")
         .append("description=").append(description)
         .append("}").toString();
   }
