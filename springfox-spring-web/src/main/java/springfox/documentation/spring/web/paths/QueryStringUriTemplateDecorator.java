@@ -33,7 +33,6 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static java.util.Comparator.*;
 import static java.util.stream.Collectors.*;
 import static org.springframework.util.StringUtils.*;
 
@@ -79,21 +78,20 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
     return url.contains("?");
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
   private Set<String> queryParamNames(PathContext context) {
     return context.getParameters().stream()
-        .filter(queryStringParams().and(onlyOneAllowableValue().negate()))
-        .map(Parameter::getName)
-        .collect(toCollection(() -> new TreeSet(naturalOrder())));
+                  .filter(queryStringParams().and(onlyOneAllowableValue().negate()))
+                  .map(Parameter::getName)
+                  .collect(toCollection(TreeSet::new));
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
   private String prefilledQueryParams(PathContext context) {
-    return String.join("&", context.getParameters().stream()
-        .filter(onlyOneAllowableValue())
-        .map(queryStringWithValue())
-        .collect(toCollection(() -> new TreeSet(naturalOrder()))))
-        .trim();
+    return String.join(
+        "&",
+        context.getParameters().stream()
+               .filter(onlyOneAllowableValue())
+               .map(queryStringWithValue())
+               .collect(toCollection(TreeSet::new))).trim();
   }
 
   private Predicate<Parameter> onlyOneAllowableValue() {
@@ -112,7 +110,10 @@ class QueryStringUriTemplateDecorator implements PathDecorator {
   private Function<Parameter, String> queryStringWithValue() {
     return input -> {
       AllowableListValues allowableValues = (AllowableListValues) input.getAllowableValues();
-      return String.format("%s=%s", input.getName(), allowableValues.getValues().get(0).trim());
+      return String.format(
+          "%s=%s",
+          input.getName(),
+          allowableValues.getValues().get(0).trim());
     };
   }
 
