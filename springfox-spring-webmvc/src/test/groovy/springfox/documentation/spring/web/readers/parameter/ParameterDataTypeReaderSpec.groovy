@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 import spock.lang.Unroll
 import springfox.documentation.schema.*
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.service.AllowableListValues
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
@@ -45,11 +46,12 @@ import static java.util.Collections.emptySet
 
 class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements RequestMappingSupport {
   PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
-      OrderAwarePluginRegistry.create([new DefaultTypeNameProvider()])
+      OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
+  def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
   def typeNameExtractor = new TypeNameExtractor(
       new TypeResolver(),
       modelNameRegistry,
-      new JacksonEnumTypeDeterminer())
+      enumTypeDeterminer)
   def operationModelContextsBuilder = new OperationModelContextsBuilder(
       "group",
       DocumentationType.SWAGGER_12,
@@ -64,7 +66,10 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
       defaultSchemaPlugins(),
       typeNameExtractor,
       new TypeResolver(),
-      new JacksonEnumTypeDeterminer())
+      enumTypeDeterminer,
+      new ModelSpecificationFactory(
+          typeNameExtractor,
+          enumTypeDeterminer))
 
   def "Should support all documentation types"() {
     expect:
@@ -183,12 +188,15 @@ class ParameterDataTypeReaderSpec extends DocumentationContextSpec implements Re
     def typeNameExtractor = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     def sut = new ParameterDataTypeReader(
         defaultSchemaPlugins(),
         typeNameExtractor,
         new TypeResolver(),
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer,
+        new ModelSpecificationFactory(
+            typeNameExtractor,
+            enumTypeDeterminer))
     sut.apply(parameterContext)
     then:
     parameterContext.parameterBuilder().build().modelRef.type == "List"

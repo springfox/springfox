@@ -29,6 +29,8 @@ import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
 import java.util.Set;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
+
 public class ParameterContext {
   private final ParameterBuilder parameterBuilder;
   private final ResolvedMethodParameter resolvedMethodParameter;
@@ -44,7 +46,8 @@ public class ParameterContext {
       OperationContext operationContext) {
 
     this.parameterBuilder = new ParameterBuilder();
-    this.requestParameterBuilder = new RequestParameterBuilder();
+    this.requestParameterBuilder = new RequestParameterBuilder()
+        .accepts(nullToEmptyList(operationContext.consumes()));
     this.resolvedMethodParameter = resolvedMethodParameter;
     this.documentationContext = documentationContext;
     this.genericNamingStrategy = genericNamingStrategy;

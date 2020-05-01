@@ -47,7 +47,6 @@ import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
 
-
 @Component
 @Qualifier("default")
 public class DefaultModelSpecificationProvider implements ModelSpecificationProvider {
@@ -107,14 +106,20 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
       ModelContext modelContext,
       ResolvedType propertiesHost) {
     Map<String, PropertySpecification> propertiesIndex
-        = properties(modelContext, propertiesHost).stream()
-        .collect(Collectors.toMap(PropertySpecification::getName, identity()));
-    LOG.debug("Inferred {} properties. Properties found {}",
+        = properties(
+        modelContext,
+        propertiesHost).stream()
+                       .collect(Collectors.toMap(
+                           PropertySpecification::getName,
+                           identity()));
+    LOG.debug(
+        "Inferred {} properties. Properties found {}",
         propertiesIndex.size(),
         String.join(
             ", ",
             propertiesIndex.keySet()));
-    return of(modelBuilder(propertiesHost,
+    return of(modelBuilder(
+        propertiesHost,
         new TreeMap<>(propertiesIndex),
         modelContext));
   }
@@ -127,11 +132,12 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
         modelContext,
         propertiesHost));
     modelContext.getModelSpecificationBuilder()
-        .name(typeName)
-        .compoundModel(new CompoundModelSpecification(
-            properties.values(),
-            properties.size(),
-            properties.size()));
+                .name(typeName)
+                .compoundModelBuilder()
+                .properties(properties.values())
+                .maxProperties(properties.size())
+                .minProperties(properties.size())
+                .yield();
     return schemaPluginsManager.modelSpecification(modelContext);
   }
 
@@ -175,24 +181,28 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
 
       return of(
           mapContext.getModelSpecificationBuilder()
-              .mapModel(
-                  new MapSpecification(
-                      modelSpecifications.create(keyContext, keyType),
-                      modelSpecifications.create(valueContext, valueType)))
-              .facetsBuilder()
-              .copyOf(
-                  new ModelFacetsBuilder(null)
-                      .withModelKey(new ModelKey(
-                          simpleQualifiedTypeName(resolvedType),
-                          typeName,
-                          mapContext.isReturnType()))
-                      .withTitle(typeName)
-                      .withDescription("Key of type " + typeName)
-                      .withNullable(false)
-                      .withDeprecated(false)
-                      .build())
-              .yield()
-              .build());
+                    .mapModel(
+                        new MapSpecification(
+                            modelSpecifications.create(
+                                keyContext,
+                                keyType),
+                            modelSpecifications.create(
+                                valueContext,
+                                valueType)))
+                    .facetsBuilder()
+                    .copyOf(
+                        new ModelFacetsBuilder(null)
+                            .withModelKey(new ModelKey(
+                                simpleQualifiedTypeName(resolvedType),
+                                typeName,
+                                mapContext.isReturnType()))
+                            .withTitle(typeName)
+                            .withDescription("Key of type " + typeName)
+                            .withNullable(false)
+                            .withDeprecated(false)
+                            .build())
+                    .yield()
+                    .build());
     }
     return empty();
   }

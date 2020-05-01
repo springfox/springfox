@@ -25,17 +25,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.schema.ScalarTypes;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.plugins.SchemaPluginsManager;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
@@ -48,6 +53,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
@@ -62,17 +68,20 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
   private final TypeResolver resolver;
   private final EnumTypeDeterminer enumTypeDeterminer;
   private final SchemaPluginsManager pluginsManager;
+  private final ModelSpecificationFactory models;
 
   @Autowired
   public ParameterDataTypeReader(
       SchemaPluginsManager pluginsManager,
       TypeNameExtractor nameExtractor,
       TypeResolver resolver,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      ModelSpecificationFactory models) {
     this.nameExtractor = nameExtractor;
     this.resolver = resolver;
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.pluginsManager = pluginsManager;
+    this.models = models;
   }
 
   @Override
@@ -80,6 +89,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     return true;
   }
 
+  @SuppressWarnings({ "CyclomaticComplexity", "NPathComplexity" })
   @Override
   public void apply(ParameterContext context) {
     ResolvedMethodParameter methodParameter = context.resolvedMethodParameter();
@@ -87,6 +97,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     parameterType = context.alternateFor(parameterType);
     ModelReference modelRef = null;
     ModelSpecificationBuilder model = new ModelSpecificationBuilder("TODO");
+    boolean isRequestBody = false;
     if (methodParameter.hasParameterAnnotation(PathVariable.class) && treatAsAString(parameterType)) {
       parameterType = resolver.resolve(String.class);
       modelRef = new ModelRef("string");
@@ -119,6 +130,10 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
             parameterType);
       }
     }
+    if (methodParameter.hasParameterAnnotation(RequestPart.class) ||
+      methodParameter.hasParameterAnnotation(RequestBody.class)) {
+      isRequestBody = true;
+    }
     ViewProviderPlugin viewProvider = pluginsManager
         .viewProvider(context.getDocumentationContext().getDocumentationType());
 
@@ -145,9 +160,26 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                 modelContext,
                 enumTypeDeterminer,
                 nameExtractor).apply(parameterType)));
-    context.requestParameterBuilder()
-        .simpleParameterBuilder() //TODO: check this is correct
-        .build();
+    ModelSpecification parameterModel = models.create(
+        modelContext,
+        parameterType);
+    if (isRequestBody) {
+      Set<MediaType> consumes = new HashSet<>(context.getOperationContext().consumes());
+      if (consumes.isEmpty()) {
+        consumes.add(MediaType.ALL);
+      }
+      consumes
+             .forEach(mediaType ->
+                          context.requestParameterBuilder()
+                                 .contentSpecificationBuilder().representationBuilderFor(mediaType)
+                                 .modelSpecificationBuilder("TODO")
+                                 .copyOf(parameterModel));
+    } else {
+      context.requestParameterBuilder()
+             .simpleParameterBuilder()
+             .model(parameterModel)
+             .yield();
+    }
   }
 
   private boolean treatRequestParamAsString(ResolvedType parameterType) {

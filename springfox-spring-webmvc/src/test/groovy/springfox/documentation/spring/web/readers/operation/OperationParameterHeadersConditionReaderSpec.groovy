@@ -23,12 +23,14 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import springfox.documentation.builders.EnumerationFacetBuilder
 import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.SimpleParameterSpecificationBuilder
 import springfox.documentation.common.Either
 import springfox.documentation.schema.ScalarType
 import springfox.documentation.service.ContentSpecification
 import springfox.documentation.service.Parameter
+import springfox.documentation.service.ParameterSpecification
 import springfox.documentation.service.ParameterStyle
 import springfox.documentation.service.RequestParameter
 import springfox.documentation.service.SimpleParameterSpecification
@@ -61,6 +63,7 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.OAS_30)
 
     and:
     Parameter parameter = operation.parameters[0]
@@ -96,6 +99,8 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.OAS_30)
+
 
     and:
     RequestParameter requestParameter = operation.requestParameters[0]
@@ -110,19 +115,22 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     'parameterSpecification' | simpleParameter()
   }
 
-  private Either<SimpleParameterSpecification, ContentSpecification> simpleParameter() {
-    new Either<SimpleParameterSpecification, ContentSpecification>(
+  private ParameterSpecification simpleParameter() {
+    new ParameterSpecification(
         new SimpleParameterSpecificationBuilder(null)
-            .style(ParameterStyle.SIMPLE)
+            .style(null)
             .allowEmptyValue(false)
             .allowReserved(false)
             .defaultValue('testValue')
             .explode(false)
+            .facetBuilder(EnumerationFacetBuilder)
+              .allowedValues(['testValue'])
+              .yield(SimpleParameterSpecificationBuilder)
             .model(new ModelSpecificationBuilder("nv0_String")
                 .scalarModel(ScalarType.STRING)
                 .name("test")
                 .build())
-            .create(),
+            .build(),
         null)
   }
 

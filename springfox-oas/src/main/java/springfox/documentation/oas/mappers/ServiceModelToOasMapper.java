@@ -91,8 +91,8 @@ public abstract class ServiceModelToOasMapper {
   abstract Operation mapOperation(springfox.documentation.service.Operation from);
 
   @Mappings({
-      @Mapping(target = "schema", source = "parameterSpecification.left"),
-      @Mapping(target = "content", source = "parameterSpecification.right"),
+      @Mapping(target = "schema", source = "parameterSpecification.query"),
+      @Mapping(target = "content", source = "parameterSpecification.content"),
       @Mapping(target = "example", ignore = true),
       @Mapping(target = "$ref", ignore = true)
   })

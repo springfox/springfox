@@ -20,9 +20,11 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
+import springfox.documentation.builders.EnumerationFacetBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
+import springfox.documentation.builders.SimpleParameterSpecificationBuilder;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.AllowableListValues;
@@ -93,7 +95,6 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
       }
 
       String paramValue = expression.getValue();
-      //TODO: Convert to a facet
       AllowableListValues allowableValues = null;
       if (!isEmpty(paramValue)) {
         allowableValues = new AllowableListValues(singletonList(paramValue), "string");
@@ -108,13 +109,16 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
           .allowReserved(false)
           .allowEmptyValue(false)
           .defaultValue(paramValue)
+          .facetBuilder(EnumerationFacetBuilder.class)
+            .allowedValues(allowableValues)
+            .yield(SimpleParameterSpecificationBuilder.class)
           .model(new ModelSpecificationBuilder(String.format(
               "nv%s_String",
               index++))
               .name(expression.getName())
               .scalarModel(ScalarType.STRING)
               .build())
-          .build()
+          .yield()
           .in(parameterType)
           .order(DEFAULT_PRECEDENCE)
           .build();

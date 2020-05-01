@@ -48,8 +48,11 @@ class ParameterReaderSpec
     given:
     def resolvedMethodParameter =
         new ResolvedMethodParameter(0, "", [apiParamAnnotation, reqParamAnnot], Mock(ResolvedType))
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
-        documentationContext(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter,
+        documentationContext(),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext))
 
     when:
     parameterPlugin.apply(parameterContext)
@@ -80,11 +83,16 @@ class ParameterReaderSpec
     given:
     def bean = new ParamNameClazzSpecimen()
     def resolvedBeanType = new TypeResolver().resolve(ParamNameClazzSpecimen)
-    HandlerMethod method = new HandlerMethod(bean, ParamNameClazzSpecimen.methods.find { it.name.equals(methodName) })
+    HandlerMethod method = new HandlerMethod(
+        bean,
+        ParamNameClazzSpecimen.methods.find { it.name.equals(methodName) })
     def resolvedMethodParameter = new ResolvedMethodParameter("someName", method.getMethodParameters().first(),
         resolvedBeanType)
-    ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
-        documentationContext(), Mock(GenericTypeNamingStrategy), Mock(OperationContext))
+    ParameterContext parameterContext = new ParameterContext(
+        resolvedMethodParameter,
+        documentationContext(),
+        Mock(GenericTypeNamingStrategy),
+        Mock(OperationContext))
 
     when:
     parameterPlugin.apply(parameterContext)

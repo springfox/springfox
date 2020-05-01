@@ -132,7 +132,8 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
                   ? null
                   : annotation.defaultValue())
           .allowEmptyValue(annotation.allowEmptyValue())
-          .scalarExample(example)
+          .yield()
+          .example(example)
           .examples(allExamples(annotation.examples()));
     }
   }

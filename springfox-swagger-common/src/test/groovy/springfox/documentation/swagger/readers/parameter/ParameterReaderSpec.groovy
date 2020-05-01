@@ -24,6 +24,7 @@ import org.springframework.mock.env.MockEnvironment
 import spock.lang.Unroll
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
+import springfox.documentation.service.RequestParameter
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
@@ -46,7 +47,11 @@ class ParameterReaderSpec
     given:
     def nonNullAnnotations = [apiParamAnnotation, reqParamAnnot].findAll { it != null }
     def resolvedMethodParameter =
-        new ResolvedMethodParameter(0, "default", nonNullAnnotations, new TypeResolver().resolve(Object.class))
+        new ResolvedMethodParameter(
+            0,
+            "default",
+            nonNullAnnotations,
+            new TypeResolver().resolve(Object.class))
     def genericNamingStrategy = new DefaultGenericTypeNamingStrategy()
     ParameterContext parameterContext = new ParameterContext(resolvedMethodParameter,
         documentationContext(), genericNamingStrategy, Mock(OperationContext))
@@ -60,17 +65,21 @@ class ParameterReaderSpec
     if (nestedSimpleProperty) {
       parameterContext.requestParameterBuilder().build()
           .parameterSpecification
-          .left
+          .query
           ?.orElse(null)
           ?."$resultProperty" == expected
-    } else if (nestedSimpleProperty == false) {
-      parameterContext.requestParameterBuilder().build()."$resultProperty" == expected
+    } else if (!nestedSimpleProperty) {
+      def built = parameterContext.requestParameterBuilder().build()
+      if (built.hasProperty("$resultProperty")) {
+        built."$resultProperty" == expected
+      }
     }
 
     and:
     !sut.supports(DocumentationType.SPRING_WEB)
     sut.supports(DocumentationType.SWAGGER_12)
     sut.supports(DocumentationType.SWAGGER_2)
+    sut.supports(DocumentationType.OAS_30)
 
     where:
     resultProperty | nestedSimpleProperty | apiParamAnnotation                     | reqParamAnnot | expected
