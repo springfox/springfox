@@ -108,12 +108,6 @@ public class MergingContext {
     return this.currentBranch.get(rootId);
   }
 
-  public Set<Model> getModels() {
-    Set<Model> models = new HashSet<>();
-    this.typedModelMap.values().forEach(models::addAll);
-    return models;
-  }
-
   public boolean containsModel(String modelId) {
     return this.contextMap.containsKey(modelId);
   }
