@@ -88,21 +88,6 @@ public class MergingContext {
     this.seenModels = Collections.unmodifiableSet(seenModels);
   }
 
-  private MergingContext(
-      Map<String, Model> currentBranch,
-      Map<String, ModelContext> contextMap,
-      MergingContext mergingContext) {
-    this.rootId = "";
-    this.circlePath = new HashMap<>();
-    this.circleParameters = new HashMap<>();
-    this.globalComparisonConditions = new HashMap<>();
-    this.contextMap = Collections.unmodifiableMap(copyMap(contextMap));
-    this.currentBranch = Collections.unmodifiableMap(copyMap(currentBranch));
-    this.typedModelMap = mergingContext.typedModelMap;
-    this.modelIdToParameterId = mergingContext.modelIdToParameterId;
-    this.seenModels = new HashSet<>();
-  }
-
   public String getRootId() {
     return this.rootId;
   }
@@ -184,12 +169,6 @@ public class MergingContext {
     Set<String> localSeenModels = new HashSet<>(this.seenModels);
     localSeenModels.add(rootId);
     return new MergingContext(rootId, localSeenModels, this);
-  }
-
-  public MergingContext withNewBranch(
-      Map<String, Model> currentBranch,
-      Map<String, ModelContext> contextMap) {
-    return new MergingContext(currentBranch, contextMap, this);
   }
 
   private static <k, v> Map<k, v> copyMap(Map<k, v> originalMap) {

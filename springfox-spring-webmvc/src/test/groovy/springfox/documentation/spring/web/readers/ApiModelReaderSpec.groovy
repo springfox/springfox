@@ -26,8 +26,6 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.ResponseEntity
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.method.HandlerMethod
 import spock.lang.Ignore
 import springfox.documentation.schema.DefaultTypeNameProvider
@@ -47,7 +45,6 @@ import springfox.documentation.spring.web.dummy.DummyClass
 import springfox.documentation.spring.web.dummy.DummyModels
 import springfox.documentation.spring.web.dummy.controllers.BusinessService
 import springfox.documentation.spring.web.dummy.controllers.PetService
-import springfox.documentation.spring.web.dummy.models.Country
 import springfox.documentation.spring.web.dummy.models.Foo
 import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Holder
@@ -55,7 +52,6 @@ import springfox.documentation.spring.web.dummy.models.Wrapper
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.PetWithJsonView
 import springfox.documentation.spring.web.dummy.models.Pirate
-import springfox.documentation.spring.web.dummy.models.Street
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithConditions
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddleWithCircle
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddleWithModel

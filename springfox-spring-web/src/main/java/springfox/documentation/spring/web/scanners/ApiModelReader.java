@@ -56,7 +56,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static springfox.documentation.schema.ResolvedTypes.*;
 
@@ -135,9 +134,12 @@ public class ApiModelReader {
       if (modelBranch.isEmpty()) {
         continue;
       }
+
       final MergingContext mergingContext = createMergingContext(
           Collections.unmodifiableMap(uniqueModels),
-          Collections.unmodifiableMap(parameterModelMap)).withNewBranch(modelBranch, contextMap);
+          Collections.unmodifiableMap(parameterModelMap),
+          Collections.unmodifiableMap(modelBranch),
+          Collections.unmodifiableMap(contextMap));
 
       branchRoots.stream().filter(rootId -> modelBranch.containsKey(rootId)).forEach(
           rootId -> mergeModelBranch(adapter, mergingContext.toRootId(rootId)));
@@ -155,14 +157,11 @@ public class ApiModelReader {
     return Collections.unmodifiableMap(mergedModelMap);
   }
 
-  @SuppressWarnings("NPathComplexity")
   private Set<ComparisonCondition> mergeModelBranch(
       UniqueTypeNameAdapter adapter,
       final MergingContext mergingContext) {
 
     final Set<String> nodes = collectNodes(adapter, mergingContext);
-
-    Set<String> sameModels = new HashSet<>();
 
     final Set<ComparisonCondition> dependencies = new HashSet<>();
     final Set<String> currentDependencies = new HashSet<>();
@@ -179,12 +178,18 @@ public class ApiModelReader {
 
       if (!mergingContext.hasSeenBefore(modelId)) {
 
-        Set<ComparisonCondition> newDependencies = mergeNode(modelId,
+        MergingContext childMergingContext = createChildMergingContext(modelId,
             !currentDependencies.isEmpty(),
             parametersTo,
             dependencies,
             mergingContext,
             adapter);
+
+        Set<ComparisonCondition> newDependencies = childMergingContext
+            .getComparisonCondition(modelId)
+            .<Set<ComparisonCondition>>map(
+                reenteredCondition -> new HashSet<>(Arrays.asList(reenteredCondition)))
+            .orElseGet(() -> mergeModelBranch(adapter, childMergingContext));
 
         if (newDependencies.isEmpty()) {
           allowableToSearchTheSame = false;
@@ -228,57 +233,20 @@ public class ApiModelReader {
             parametersTo,
             mergingContext);
 
-        parametersTo = megedParameters.orElse(new HashSet<>());
+        parametersTo = megedParameters.orElseGet(() -> new HashSet<>());
         allowableToSearchTheSame = megedParameters.isPresent();
         comparisonConditions.put(modelId, Optional.empty());
       }
     }
 
-    if (!allowableToSearchTheSame) {
-      return mergeConditions(Optional.empty(), dependencies, adapter, mergingContext);
+    Set<String> sameModels = new HashSet<>();
+    if (allowableToSearchTheSame) {
+      sameModels
+          .addAll(findSameModels(comparisonConditions, parametersTo, adapter, mergingContext));
+      currentDependencies.remove(mergingContext.getRootId());
     }
 
-    sameModels.addAll(findSameModels(comparisonConditions, parametersTo, adapter, mergingContext));
-
-    if (sameModels.isEmpty()) {
-      return mergeConditions(Optional.empty(), dependencies, adapter, mergingContext);
-    }
-
-    currentDependencies.remove(mergingContext.getRootId());
-
-    return mergeConditions(
-        Optional.of(
-            new ComparisonCondition(mergingContext.getRootId(), sameModels, currentDependencies)),
-        filterDependencies(dependencies,
-            modelsToParameters(sameModels, mergingContext),
-            mergingContext),
-        adapter,
-        mergingContext);
-  }
-
-  private Set<ComparisonCondition> mergeNode(
-      String modelId,
-      boolean isCircle,
-      Set<String> parameters,
-      Set<ComparisonCondition> dependencies,
-      MergingContext mergingContext,
-      UniqueTypeNameAdapter adapter) {
-
-    MergingContext nodeMergingContext;
-    if (isCircle) {
-      nodeMergingContext = mergingContext.toRootId(modelId, dependencies, parameters);
-    } else {
-      nodeMergingContext = mergingContext.toRootId(modelId);
-    }
-
-    Optional<ComparisonCondition> reenteredCondition = nodeMergingContext
-        .getComparisonCondition(modelId);
-
-    if (reenteredCondition.isPresent()) {
-      return new HashSet<>(Arrays.asList(reenteredCondition.get()));
-    } else {
-      return mergeModelBranch(adapter, nodeMergingContext);
-    }
+    return mergeConditions(sameModels, currentDependencies, dependencies, adapter, mergingContext);
   }
 
   private ComparisonCondition currentCondition(
@@ -326,9 +294,9 @@ public class ApiModelReader {
         if (modelId.isPresent()) {
           String sModelId = modelId.get();
           ModelContext modelContext = Optional.ofNullable(parametersMatching.get(sModelId))
-              .map(op -> op.orElse(parameter))
+              .map(op -> op.orElseGet(() -> parameter))
               .map(p -> pseudoContext(p, mergingContext.getModelContext(sModelId)))
-              .orElse(mergingContext.getModelContext(sModelId));
+              .orElseGet(() -> mergingContext.getModelContext(sModelId));
           modelReference = modelRefFactory(modelContext,
               enumTypeDeterminer,
               typeNameExtractor,
@@ -346,9 +314,9 @@ public class ApiModelReader {
         if (modelId.isPresent()) {
           String sModelId = modelId.get();
           ModelContext modelContext = Optional.ofNullable(parametersMatching.get(sModelId))
-              .map(op -> op.orElse(parameter))
+              .map(op -> op.orElseGet(() -> parameter))
               .map(p -> pseudoContext(p, mergingContext.getModelContext(sModelId)))
-              .orElse(mergingContext.getModelContext(sModelId));
+              .orElseGet(() -> mergingContext.getModelContext(sModelId));
           newProperties.put(propertyName,
               new ModelPropertyBuilder(property).build()
                   .updateModelRef(modelRefFactory(modelContext,
@@ -373,13 +341,20 @@ public class ApiModelReader {
   }
 
   private Set<ComparisonCondition> mergeConditions(
-      Optional<ComparisonCondition> currentComparisonCondition,
+      Set<String> sameModels,
+      Set<String> currentDependencies,
       Set<ComparisonCondition> dependencies,
       UniqueTypeNameAdapter adapter,
       MergingContext mergingContext) {
 
-    if (currentComparisonCondition.isPresent()) {
-      ComparisonCondition currentCondition = currentComparisonCondition.get();
+    if (!sameModels.isEmpty()) {
+      ComparisonCondition currentCondition = new ComparisonCondition(mergingContext.getRootId(),
+          sameModels, currentDependencies);
+
+      dependencies = filterDependencies(dependencies,
+          modelsToParameters(sameModels, mergingContext),
+          mergingContext);
+
       dependencies.add(currentCondition);
 
       if (currentCondition.getConditions().isEmpty()) {
@@ -394,6 +369,7 @@ public class ApiModelReader {
           adapter.setEqualityFor(depComparisonCondition.getModelFor(),
               new ArrayList<>(depComparisonCondition.getModelsTo()).get(0));
         }
+        return new HashSet<>(Arrays.asList(currentCondition));
       } else {
         Set<ComparisonCondition> newDependencies = new HashSet<>();
         for (ComparisonCondition depComparisonCondition : dependencies) {
@@ -417,10 +393,7 @@ public class ApiModelReader {
       }
     }
 
-    return currentComparisonCondition
-        .<Set<ComparisonCondition>>map(comparisonCondition -> Stream.of(comparisonCondition)
-            .collect(Collectors.toCollection(HashSet::new)))
-        .orElseGet(HashSet::new);
+    return new HashSet<>();
   }
 
   private List<String> findBranchRoots(ModelContext rootContext) {
@@ -632,9 +605,25 @@ public class ApiModelReader {
     }
   }
 
+  private static MergingContext createChildMergingContext(
+      String modelId,
+      boolean isCircle,
+      Set<String> parameters,
+      Set<ComparisonCondition> dependencies,
+      MergingContext mergingContext,
+      UniqueTypeNameAdapter adapter) {
+    if (isCircle) {
+      return mergingContext.toRootId(modelId, dependencies, parameters);
+    } else {
+      return mergingContext.toRootId(modelId);
+    }
+  }
+
   private static MergingContext createMergingContext(
       Map<String, Model> uniqueModels,
-      Map<String, String> parameterModelMap) {
+      Map<String, String> parameterModelMap,
+      Map<String, Model> currentBranch,
+      Map<String, ModelContext> contextMap) {
     Map<String, Set<Model>> typedModelMap = new HashMap<>();
 
     Iterator<Model> it = uniqueModels.values().iterator();
@@ -651,7 +640,7 @@ public class ApiModelReader {
       typedModelMap.put(rawType, Collections.unmodifiableSet(models));
     }
 
-    return new MergingContext(typedModelMap, parameterModelMap, new HashMap<>(), new HashMap<>());
+    return new MergingContext(typedModelMap, parameterModelMap, currentBranch, contextMap);
   }
 
 }
