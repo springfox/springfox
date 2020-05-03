@@ -1,0 +1,390 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0",
+        "title": "Api Documentation",
+        "termsOfService": "urn:tos",
+        "contact": {
+            
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "localhost:__PORT__",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "cyclic-structures-controller",
+            "description": "Cyclic Structures Controller"
+        }
+    ],
+    "produces": [
+        "application/xml",
+        "application/json"
+    ],
+    "paths": {
+        "/cyclic-structures/create-city": {
+            "put": {
+                "tags": [
+                    "cyclic-structures-controller"
+                ],
+                "summary": "createCyclicCity",
+                "operationId": "createCyclicCityUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "city",
+                        "description": "city",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/City_1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/District"
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/cyclic-structures/create-country": {
+            "put": {
+                "tags": [
+                    "cyclic-structures-controller"
+                ],
+                "summary": "createCyclicCountry",
+                "operationId": "createCyclicCountryUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "country",
+                        "description": "country",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Country_1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Region"
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/cyclic-structures/create-street": {
+            "put": {
+                "tags": [
+                    "cyclic-structures-controller"
+                ],
+                "summary": "createCyclicStreet",
+                "operationId": "createCyclicStreetUsingPUT_1",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "street",
+                        "description": "street",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Street_1"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/House"
+                            }
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        }
+    },
+    "securityDefinitions": {
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
+        "petstore_auth": {
+            "type": "oauth2",
+            "authorizationUrl": "http://petstore.swagger.io/api/oauth/dialog",
+            "flow": "implicit",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
+    },
+    "definitions": {
+        "City": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "$ref": "#/definitions/Country"
+                },
+                "districts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/District"
+                    }
+                },
+                "region": {
+                    "$ref": "#/definitions/Region"
+                }
+            },
+            "title": "City"
+        },
+        "City_1": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "$ref": "#/definitions/Country_1"
+                },
+                "districts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/District_1"
+                    }
+                },
+                "region": {
+                    "$ref": "#/definitions/Region_1"
+                }
+            },
+            "title": "City_1"
+        },
+        "Country": {
+            "type": "object",
+            "properties": {
+                "populatuion": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "regions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Region"
+                    }
+                }
+            },
+            "title": "Country"
+        },
+        "Country_1": {
+            "type": "object",
+            "properties": {
+                "regions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Region_1"
+                    }
+                }
+            },
+            "title": "Country_1"
+        },
+        "District": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "$ref": "#/definitions/City"
+                },
+                "country": {
+                    "$ref": "#/definitions/Country"
+                },
+                "region": {
+                    "$ref": "#/definitions/Region"
+                },
+                "streets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Street"
+                    }
+                }
+            },
+            "title": "District"
+        },
+        "District_1": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "$ref": "#/definitions/City_1"
+                },
+                "country": {
+                    "$ref": "#/definitions/Country_1"
+                },
+                "region": {
+                    "$ref": "#/definitions/Region_1"
+                },
+                "streets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Street_1"
+                    }
+                }
+            },
+            "title": "District_1"
+        },
+        "House": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "$ref": "#/definitions/City"
+                },
+                "country": {
+                    "$ref": "#/definitions/Country"
+                },
+                "district": {
+                    "$ref": "#/definitions/District"
+                },
+                "number": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "region": {
+                    "$ref": "#/definitions/Region"
+                },
+                "street": {
+                    "$ref": "#/definitions/Street"
+                }
+            },
+            "title": "House"
+        },
+        "House_1": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "$ref": "#/definitions/City_1"
+                },
+                "country": {
+                    "$ref": "#/definitions/Country_1"
+                },
+                "district": {
+                    "$ref": "#/definitions/District_1"
+                },
+                "number": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "region": {
+                    "$ref": "#/definitions/Region_1"
+                },
+                "street": {
+                    "$ref": "#/definitions/Street_1"
+                }
+            },
+            "title": "House_1"
+        },
+        "Region": {
+            "type": "object",
+            "properties": {
+                "cities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/City"
+                    }
+                },
+                "country": {
+                    "$ref": "#/definitions/Country"
+                }
+            },
+            "title": "Region"
+        },
+        "Region_1": {
+            "type": "object",
+            "properties": {
+                "cities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/City_1"
+                    }
+                },
+                "country": {
+                    "$ref": "#/definitions/Country_1"
+                }
+            },
+            "title": "Region_1"
+        },
+        "Street": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "$ref": "#/definitions/City"
+                },
+                "country": {
+                    "$ref": "#/definitions/Country"
+                },
+                "district": {
+                    "$ref": "#/definitions/District"
+                },
+                "houses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/House"
+                    }
+                },
+                "region": {
+                    "$ref": "#/definitions/Region"
+                }
+            },
+            "title": "Street"
+        },
+        "Street_1": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "$ref": "#/definitions/City_1"
+                },
+                "country": {
+                    "$ref": "#/definitions/Country_1"
+                },
+                "district": {
+                    "$ref": "#/definitions/District_1"
+                },
+                "houses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/House_1"
+                    }
+                },
+                "region": {
+                    "$ref": "#/definitions/Region_1"
+                }
+            },
+            "title": "Street_1"
+        }
+    }
+}

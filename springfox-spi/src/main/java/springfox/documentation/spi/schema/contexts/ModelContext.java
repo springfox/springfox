@@ -76,10 +76,10 @@ public class ModelContext {
     this.view = view;
     this.validationGroups = new HashSet<>(validationGroups);
     this.modelBuilder =
-        new ModelBuilder(String.format(
-            "%s_%s",
-            parameterId,
-            type.getBriefDescription()));
+        new ModelBuilder(new StringBuilder(parameterId)
+            .append("_")
+            .append(type.getBriefDescription()).
+            toString());
   }
 
   @SuppressWarnings("ParameterNumber")
@@ -99,10 +99,10 @@ public class ModelContext {
     this.registeredTypes = parentContext.registeredTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
     this.modelBuilder =
-        new ModelBuilder(String.format(
-            "%s_%s",
-            parameterId,
-            input.getBriefDescription()));
+        new ModelBuilder(new StringBuilder(parameterId)
+            .append("_")
+            .append(type.getBriefDescription()).
+            toString());
   }
 
   /**
@@ -123,10 +123,10 @@ public class ModelContext {
    * @return type id behind this context
    */
   public String getTypeId() {
-    return String.format(
-        "%s_%s",
-        parameterId,
-        type.getBriefDescription());
+    return new StringBuilder(parameterId)
+        .append("_")
+        .append(type.getBriefDescription()).
+        toString();
   }
 
   /**
@@ -359,7 +359,7 @@ public class ModelContext {
         .append("{")
         .append("groupName=").append(this.getGroupName()).append(", ")
         .append("type=").append(this.getType()).append(", ")
-        .append("isReturnType=").append(this.isReturnType())
+        .append("isReturnType=").append(this.isReturnType()).append(", ")
         .append("view=").append(this.getView())
         .append("}").toString();
   }

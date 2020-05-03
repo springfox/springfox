@@ -18,26 +18,17 @@
  */
 package springfox.documentation.spring.web.dummy.models;
 
-public class Foo {
+public class RecursiveTypeWithNonEqualsConditionsInnerWithCircle {
 
-  private Integer id;
+  private RecursiveTypeWithNonEqualsConditionsOuterWithCircle recursiveTypeWithNonEqualsConditionsOuterWithCircle;
 
-  private String name;
-
-  public Integer getId() {
-    return id;
+  public RecursiveTypeWithNonEqualsConditionsOuterWithCircle getRecursiveTypeWithNonEqualsConditionsOuterWithCircle() {
+    return recursiveTypeWithNonEqualsConditionsOuterWithCircle;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
+  public void setRecursiveTypeWithNonEqualsConditionsOuterWithCircle(
+      RecursiveTypeWithNonEqualsConditionsOuterWithCircle recursiveTypeWithNonEqualsConditionsOuterWithCircle) {
+    this.recursiveTypeWithNonEqualsConditionsOuterWithCircle = recursiveTypeWithNonEqualsConditionsOuterWithCircle;
   }
 
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019 the original author or authors.
+ *  Copyright 2020 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,26 +18,32 @@
  */
 package springfox.documentation.spring.web.dummy.models;
 
-public class Foo {
+import java.util.List;
 
-  private Integer id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-  private String name;
+public class Country {
 
-  public Integer getId() {
-    return id;
+  @JsonProperty(access = Access.READ_ONLY)
+  private Long populatuion;
+
+  private List<Region> regions;
+
+  public Long getPopulatuion() {
+    return populatuion;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setPopulatuion(Long populatuion) {
+    this.populatuion = populatuion;
   }
 
-  public String getName() {
-    return name;
+  public List<Region> getRegions() {
+    return regions;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setRegions(List<Region> regions) {
+    this.regions = regions;
   }
 
 }

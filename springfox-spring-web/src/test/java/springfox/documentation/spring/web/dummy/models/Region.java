@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2019 the original author or authors.
+ *  Copyright 2020 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,26 +18,28 @@
  */
 package springfox.documentation.spring.web.dummy.models;
 
-public class Foo {
+import java.util.List;
 
-  private Integer id;
+public class Region {
 
-  private String name;
+  private List<City> cities;
 
-  public Integer getId() {
-    return id;
+  private Country country;
+
+  public List<City> getCities() {
+    return cities;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setCities(List<City> cities) {
+    this.cities = cities;
   }
 
-  public String getName() {
-    return name;
+  public Country getCountry() {
+    return country;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCountry(Country country) {
+    this.country = country;
   }
 
 }

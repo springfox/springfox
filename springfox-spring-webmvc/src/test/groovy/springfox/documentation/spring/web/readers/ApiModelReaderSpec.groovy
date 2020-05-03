@@ -38,6 +38,7 @@ import springfox.documentation.schema.mixins.SchemaPluginsSupport
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
+import springfox.documentation.spi.service.contexts.DocumentationContext
 import springfox.documentation.spi.service.contexts.RequestMappingContext
 import springfox.documentation.spring.web.WebMvcRequestHandler
 import springfox.documentation.spring.web.dummy.DummyClass
@@ -47,11 +48,15 @@ import springfox.documentation.spring.web.dummy.controllers.PetService
 import springfox.documentation.spring.web.dummy.models.Foo
 import springfox.documentation.spring.web.dummy.models.FoobarDto
 import springfox.documentation.spring.web.dummy.models.Holder
+import springfox.documentation.spring.web.dummy.models.Wrapper
 import springfox.documentation.spring.web.dummy.models.Monkey
 import springfox.documentation.spring.web.dummy.models.PetWithJsonView
 import springfox.documentation.spring.web.dummy.models.Pirate
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithConditions
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddleWithCircle
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsMiddleWithModel
 import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter
+import springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuterWithModel
 import springfox.documentation.spring.web.dummy.models.SameFancyPet
 import springfox.documentation.spring.web.dummy.models.same.Pet
 import springfox.documentation.spring.web.mixins.ModelProviderForServiceSupport
@@ -698,6 +703,273 @@ class ApiModelReaderSpec extends DocumentationContextSpec {
         .get('recursiveTypeWithNonEqualsConditionsOuter').getModelRef()
     modelRef_6.getModelId().get() == "0_1_springfox.documentation.spring.web.dummy.models.RecursiveTypeWithNonEqualsConditionsOuter"
     modelRef_6.getType() == 'RecursiveTypeWithNonEqualsConditionsOuter_1'
+
+  }
+
+  def "Test to verify that recursive type same with known types from other branch"() {
+    given:
+    HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithConditions',
+        RecursiveTypeWithConditions)
+    RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+
+    HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithNonEqualsConditions',
+        RecursiveTypeWithNonEqualsConditionsOuter)
+    RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+
+    when:
+    def modelsMap = new HashMap<>(sut.read(contextFirst))
+    modelsMap.putAll(sut.read(contextSecond.withKnownModels(modelsMap)))
+
+    then:
+    modelsMap.containsKey("0_0")
+    Map<String, Model> models_1 = modelsMap.get("0_0").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    modelsMap.containsKey("0_1")
+    Map<String, Model> models_2 = modelsMap.get("0_1").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    modelsMap.containsKey("1_0")
+    Map<String, Model> models_3 = modelsMap.get("1_0").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    modelsMap.containsKey("1_1")
+    Map<String, Model> models_4 = modelsMap.get("1_1").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    and:
+    Model recursiveTypeWithConditions_1 = models_1[RecursiveTypeWithConditions.simpleName]
+    Model monkey_1 = models_1[Monkey.simpleName]
+    Model pirate_1 = models_1[Pirate.simpleName]
+
+    and:
+    Model recursiveTypeWithConditions_2 = models_2[RecursiveTypeWithConditions.simpleName + '_1']
+    Model monkey_2 = models_2[Monkey.simpleName]
+    Model pirate_2 = models_2[Pirate.simpleName]
+
+    and:
+    models_1.size() == 3
+
+    and:
+    recursiveTypeWithConditions_1 != null
+    pirate_1 != null
+    monkey_1 != null
+
+    and:
+    models_2.size() == 3
+
+    and:
+    recursiveTypeWithConditions_2 != null
+    pirate_2 != null
+    monkey_2 != null
+
+    and:
+    Model recursiveTypeWithConditionsOuter_1 = models_3['RecursiveTypeWithNonEqualsConditionsOuter']
+    Model recursiveTypeWithConditionsMiddle_1 = models_3['RecursiveTypeWithNonEqualsConditionsMiddle']
+    Model recursiveTypeWithConditionsInner_1 = models_3['RecursiveTypeWithNonEqualsConditionsInner']
+
+    and:
+    Model recursiveTypeWithConditionsOuter_2 = models_4['RecursiveTypeWithNonEqualsConditionsOuter_1']
+    Model recursiveTypeWithConditionsMiddle_2 = models_4['RecursiveTypeWithNonEqualsConditionsMiddle_1']
+    Model recursiveTypeWithConditionsInner_2 = models_4['RecursiveTypeWithNonEqualsConditionsInner_1']
+
+    and:
+    models_1.size() == 3
+
+    and:
+    recursiveTypeWithConditionsOuter_1 != null
+    recursiveTypeWithConditionsMiddle_1 != null
+    recursiveTypeWithConditionsInner_1 != null
+
+    and:
+    models_2.size() == 3
+
+    and:
+    recursiveTypeWithConditionsOuter_2 != null
+    recursiveTypeWithConditionsMiddle_2 != null
+    recursiveTypeWithConditionsInner_2 != null
+
+  }
+
+  def "Test to verify that recursive type with dependent non equals circle produce two models"() {
+    given:
+    HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithCircle',
+       RecursiveTypeWithNonEqualsConditionsMiddleWithCircle)
+    RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+
+    HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithCircle')
+    RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+
+    when:
+    def modelsMap = new HashMap<>(sut.read(contextFirst))
+    modelsMap.putAll(sut.read(contextSecond.withKnownModels(modelsMap)))
+
+    then:
+
+    modelsMap.containsKey("0_0")
+    Map<String, Model> models_1 = modelsMap.get("0_0").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    modelsMap.containsKey("0_1")
+    Map<String, Model> models_2 = modelsMap.get("0_1").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    modelsMap.containsKey("1_0")
+    Map<String, Model> models_3 = modelsMap.get("1_0").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    and:
+    Model recursiveTypeWithNonEqualsConditionsMiddleWithModel =
+            models_1['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
+    Model recursiveTypeWithNonEqualsConditionsInnerWithModel =
+            models_1['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
+    Model recursiveTypeWithNonEqualsConditionsOuterWithModel =
+            models_1['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
+
+    Model recursiveTypeWithNonEqualsConditionsMiddleWithCircle =
+            models_2['RecursiveTypeWithNonEqualsConditionsMiddleWithCircle']
+    Model recursiveTypeWithNonEqualsConditionsInnerWithCircle =
+            models_2['RecursiveTypeWithNonEqualsConditionsInnerWithCircle']
+    Model recursiveTypeWithNonEqualsConditionsOuterWithCircle =
+            models_2['RecursiveTypeWithNonEqualsConditionsOuterWithCircle']
+    Model recursiveTypeWithNonEqualsConditionsMiddleWithModel_1 =
+            models_2['RecursiveTypeWithNonEqualsConditionsMiddleWithModel_1']
+    Model recursiveTypeWithNonEqualsConditionsInnerWithModel_1 =
+            models_2['RecursiveTypeWithNonEqualsConditionsInnerWithModel_1']
+    Model recursiveTypeWithNonEqualsConditionsOuterWithModel_1 =
+            models_2['RecursiveTypeWithNonEqualsConditionsOuterWithModel_1']
+    Model pet = models_2['Pet']
+
+    Model recursiveTypeWithNonEqualsConditionsMiddleWithCircle_1 =
+            models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithCircle_1']
+    Model recursiveTypeWithNonEqualsConditionsInnerWithCircle_1 =
+            models_3['RecursiveTypeWithNonEqualsConditionsInnerWithCircle_1']
+    Model recursiveTypeWithNonEqualsConditionsOuterWithCircle_1 =
+            models_3['RecursiveTypeWithNonEqualsConditionsOuterWithCircle_1']
+    Model recursiveTypeWithNonEqualsConditionsMiddleWithModel_2 =
+            models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
+    Model recursiveTypeWithNonEqualsConditionsInnerWithModel_2 =
+            models_3['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
+    Model recursiveTypeWithNonEqualsConditionsOuterWithModel_2 =
+            models_3['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
+
+    and:
+    models_1.size() == 3
+    models_2.size() == 7
+
+    models_3.size() == 6
+
+    and:
+    recursiveTypeWithNonEqualsConditionsMiddleWithModel != null
+    recursiveTypeWithNonEqualsConditionsInnerWithModel != null
+    recursiveTypeWithNonEqualsConditionsOuterWithModel != null
+
+    recursiveTypeWithNonEqualsConditionsMiddleWithCircle != null
+    recursiveTypeWithNonEqualsConditionsInnerWithCircle != null
+    recursiveTypeWithNonEqualsConditionsOuterWithCircle != null
+    recursiveTypeWithNonEqualsConditionsMiddleWithModel_1 != null
+    recursiveTypeWithNonEqualsConditionsInnerWithModel_1 != null
+    recursiveTypeWithNonEqualsConditionsOuterWithModel_1 != null
+    pet != null
+
+    recursiveTypeWithNonEqualsConditionsMiddleWithCircle_1 != null
+    recursiveTypeWithNonEqualsConditionsInnerWithCircle_1 != null
+    recursiveTypeWithNonEqualsConditionsOuterWithCircle_1 != null
+    recursiveTypeWithNonEqualsConditionsMiddleWithModel_2 != null
+    recursiveTypeWithNonEqualsConditionsInnerWithModel_2 != null
+    recursiveTypeWithNonEqualsConditionsOuterWithModel_2 != null
+
+    and:
+    recursiveTypeWithNonEqualsConditionsMiddleWithModel
+            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsMiddleWithModel_2)
+    recursiveTypeWithNonEqualsConditionsInnerWithModel
+            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsInnerWithModel_2)
+    recursiveTypeWithNonEqualsConditionsOuterWithModel
+            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsOuterWithModel)
+
+    and:
+    !recursiveTypeWithNonEqualsConditionsMiddleWithCircle
+            .equalsIgnoringName(recursiveTypeWithNonEqualsConditionsMiddleWithCircle_1)
+
+  }
+
+  def "Test to verify that recursive type with dependent registered model produce one model"() {
+    given:
+    HandlerMethod handlerMethodFirst = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithModel',
+        springfox.documentation.spring.web.dummy.models.Pet)
+    RequestMappingContext contextFirst = requestMappingContext(handlerMethodFirst, '/somePath', '0')
+
+    HandlerMethod handlerMethodSecond = dummyHandlerMethod('methodToTestBidirectionalRecursiveTypesWithModel',
+        Wrapper)
+    RequestMappingContext contextSecond = requestMappingContext(handlerMethodSecond, '/somePath', '1')
+
+    when:
+    def modelsMap = new HashMap<>(sut.read(contextFirst))
+    modelsMap.putAll(sut.read(contextSecond.withKnownModels(modelsMap)))
+
+    then:
+
+    modelsMap.containsKey("0_0")
+    Map<String, Model> models_1 = modelsMap.get("0_0").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    modelsMap.containsKey("0_1")
+    Map<String, Model> models_2 = modelsMap.get("0_1").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+        
+    modelsMap.containsKey("1_1")
+    Map<String, Model> models_3 = modelsMap.get("1_1").stream()
+        .collect(Collectors.toMap(toModelMap,
+            Function.identity()))
+
+    and:
+    Model wrapper = models_1['Wrapper«RecursiveTypeWithNonEqualsConditionsOuterWithModel»']
+    Model recursiveTypeWithNonEqualsConditionsMiddleWithModel =
+            models_1['RecursiveTypeWithNonEqualsConditionsMiddleWithModel']
+    Model recursiveTypeWithNonEqualsConditionsInnerWithModel =
+            models_1['RecursiveTypeWithNonEqualsConditionsInnerWithModel']
+    Model recursiveTypeWithNonEqualsConditionsOuterWithModel =
+            models_1['RecursiveTypeWithNonEqualsConditionsOuterWithModel']
+    Model pet = models_2['Pet']
+    
+    Model wrapper_1 = models_3['Wrapper«RecursiveTypeWithNonEqualsConditionsOuterWithModel»_1']
+    Model recursiveTypeWithNonEqualsConditionsMiddleWithModel_1 =
+            models_3['RecursiveTypeWithNonEqualsConditionsMiddleWithModel_1']
+    Model recursiveTypeWithNonEqualsConditionsInnerWithModel_1 =
+            models_3['RecursiveTypeWithNonEqualsConditionsInnerWithModel_1']
+    Model recursiveTypeWithNonEqualsConditionsOuterWithModel_1 =
+            models_3['RecursiveTypeWithNonEqualsConditionsOuterWithModel_1']
+    Model pet_1 = models_3['Pet']
+
+    and:
+    models_1.size() == 4
+    models_2.size() == 1
+
+    models_3.size() == 5
+
+    and:
+    wrapper != null
+    recursiveTypeWithNonEqualsConditionsMiddleWithModel != null
+    recursiveTypeWithNonEqualsConditionsInnerWithModel != null
+    recursiveTypeWithNonEqualsConditionsOuterWithModel != null
+    pet != null
+
+    wrapper_1 != null
+    recursiveTypeWithNonEqualsConditionsMiddleWithModel_1 != null
+    recursiveTypeWithNonEqualsConditionsInnerWithModel_1 != null
+    recursiveTypeWithNonEqualsConditionsOuterWithModel_1 != null
+    pet_1 != null
+
+    pet.equalsIgnoringName(pet_1)
 
   }
 

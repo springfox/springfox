@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -50,7 +50,7 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
     this.typeNameExtractor = typeNameExtractor;
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.parentContext = parentContext;
-    this.knownNames = new HashMap<>(knownNames);
+    this.knownNames = Collections.unmodifiableMap(knownNames);
   }
 
   @Override
