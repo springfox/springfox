@@ -36,6 +36,7 @@ import springfox.documentation.schema.ModelRef
 import springfox.documentation.schema.ModelReference
 import springfox.documentation.schema.SchemaSpecification
 import springfox.documentation.schema.SimpleType
+import springfox.documentation.schema.Xml
 import springfox.documentation.schema.mixins.TypesForTestingSupport
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
@@ -482,6 +483,65 @@ class ModelMapperSpec extends SchemaSpecification {
     then:
     mapped != null
     ['a', 'b', 'c', 'd', 'e'] == mapped['test'].properties.keySet().toList()
+  }
+
+  def "model for object with multiple parent is mapped properly"() {
+    given:
+    Model parent1 = new Model(
+            "parent1",
+            "parent1",
+            resolver.resolve(simpleType()),
+            "any",
+            emptyMap(),
+            "any",
+            "any",
+            "any",
+            [new ModelRef("child")],
+            "any",
+            new Xml());
+
+    Model parent2 = new Model(
+            "parent2",
+            "parent2",
+            resolver.resolve(simpleType()),
+            "any",
+            emptyMap(),
+            "any",
+            "any",
+            "any",
+            [new ModelRef("child")],
+            "any",
+            new Xml());
+
+
+    Model child = new Model(
+            "child",
+            "child",
+            resolver.resolve(simpleType()),
+            "any",
+            emptyMap(),
+            "any",
+            "any",
+            "any",
+            emptyList(),
+            "any",
+            new Xml());
+
+    def modelMap = new HashMap<>()
+
+    and:
+    modelMap.put("parent1", parent1)
+    modelMap.put("parent2", parent2)
+    modelMap.put("child", child)
+
+    when:
+    def mapped = Mappers.getMapper(ModelMapper).mapModels(modelMap)
+
+    then:
+    def allOf = mapped.get("child").allOf
+    allOf.size() == 3
+    allOf.get(0).genericRef.ref == "#/definitions/parent1"
+    allOf.get(1).genericRef.ref == "#/definitions/parent2"
   }
 
   ModelProperty createModelPropertyWithPosition(String name, int position) {

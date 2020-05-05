@@ -41,7 +41,9 @@ import springfox.documentation.service.ApiListing;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -69,7 +71,7 @@ public abstract class ModelMapper {
       String key = entry.getKey();
       Model value;
       if (determiner.hasParent(entry.getValue())) {
-        value = mapComposedModel(determiner.parent(entry.getValue()), entry.getValue());
+        value = mapComposedModel(determiner.parents(entry.getValue()), entry.getValue());
       } else {
         value = mapModel(entry.getValue());
       }
@@ -79,9 +81,9 @@ public abstract class ModelMapper {
     return map;
   }
 
-  private Model mapComposedModel(RefModel parent, springfox.documentation.schema.Model source) {
+  private Model mapComposedModel(Set<RefModel> parent, springfox.documentation.schema.Model source) {
     ComposedModel model = new ComposedModel()
-        .interfaces(singletonList(parent))
+        .interfaces(new ArrayList<>(parent))
         .child(mapModel(source));
 
     model.setDescription(source.getDescription());
