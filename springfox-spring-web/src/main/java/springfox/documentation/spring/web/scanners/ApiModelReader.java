@@ -291,7 +291,7 @@ public class ApiModelReader {
       for (ModelReference modelReference : rootModel.getSubTypes()) {
         Optional<String> modelId = getModelId(modelReference);
 
-        if (modelId.isPresent()) {
+        if (modelId.isPresent() && mergingContext.containsModel(modelId.get())) {
           String sModelId = modelId.get();
           ModelContext modelContext = Optional.ofNullable(parametersMatching.get(sModelId))
               .map(op -> op.orElseGet(() -> parameter))
@@ -311,7 +311,7 @@ public class ApiModelReader {
         ModelReference modelReference = property.getModelRef();
         Optional<String> modelId = getModelId(modelReference);
 
-        if (modelId.isPresent()) {
+        if (modelId.isPresent() && mergingContext.containsModel(modelId.get())) {
           String sModelId = modelId.get();
           ModelContext modelContext = Optional.ofNullable(parametersMatching.get(sModelId))
               .map(op -> op.orElseGet(() -> parameter))
