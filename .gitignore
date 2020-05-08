@@ -5,3 +5,8 @@ target
 .classpath
 .project
 .DS_Store
+.gradle
+buildSrc
+swagger-contract-tests-webflux/
+swagger-contract-tests/
+*.swp
