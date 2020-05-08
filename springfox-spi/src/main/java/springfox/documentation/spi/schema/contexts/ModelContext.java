@@ -76,15 +76,9 @@ public class ModelContext {
     this.returnType = returnType;
     this.view = view;
     this.validationGroups = new HashSet<>(validationGroups);
-    String sourceIdentifier = String.format(
-        "%s_%s",
-        parameterId,
-        type.getBriefDescription());
-    this.modelBuilder =
-        new ModelBuilder(getModelId());
-
+    this.modelBuilder = new ModelBuilder(getModelId());
     this.modelSpecificationBuilder =
-        new ModelSpecificationBuilder(sourceIdentifier);
+        new ModelSpecificationBuilder(getModelId());
   }
 
   @SuppressWarnings("ParameterNumber")
@@ -103,13 +97,8 @@ public class ModelContext {
     this.ignorableTypes = parentContext.ignorableTypes;
     this.registeredTypes = parentContext.registeredTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
-    String sourceIdentifier = String.format(
-        "%s_%s",
-        parameterId,
-        input.getBriefDescription());
-    this.modelBuilder =
-    new ModelBuilder(getModelId());
-    this.modelSpecificationBuilder = new ModelSpecificationBuilder(sourceIdentifier);
+    this.modelBuilder = new ModelBuilder(getModelId());
+    this.modelSpecificationBuilder = new ModelSpecificationBuilder(getModelId());
   }
 
   /**
