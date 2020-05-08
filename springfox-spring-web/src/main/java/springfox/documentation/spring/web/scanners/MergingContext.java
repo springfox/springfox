@@ -32,6 +32,7 @@ import java.util.Set;
 public class MergingContext {
 
   private final String rootId;
+  private final String parameterId;
   private final Map<String, Set<String>> circlePath;
   private final Map<String, Set<String>> circleParameters;
   private final Map<String, ComparisonCondition> globalComparisonConditions;
@@ -41,12 +42,13 @@ public class MergingContext {
   private final Map<String, Model> currentBranch;
   private final Set<String> seenModels;
 
-  public MergingContext(
+  public MergingContext(String parameterId,
       Map<String, Set<Model>> typedModelMap,
       Map<String, String> modelIdToParameterId,
       Map<String, Model> currentBranch,
       Map<String, ModelContext> contextMap) {
     this.rootId = "";
+    this.parameterId = parameterId;
     this.globalComparisonConditions = new HashMap<>();
     this.circlePath = new HashMap<>();
     this.circleParameters = new HashMap<>();
@@ -59,6 +61,7 @@ public class MergingContext {
 
   private MergingContext(String rootId, Set<String> seenModels, MergingContext mergingContext) {
     this.rootId = rootId;
+    this.parameterId = mergingContext.parameterId;
     this.circlePath = Collections.unmodifiableMap(copyMap(mergingContext.circlePath));
     this.circleParameters = Collections.unmodifiableMap(copyMap(mergingContext.circleParameters));
     this.globalComparisonConditions = Collections
@@ -70,14 +73,14 @@ public class MergingContext {
     this.seenModels = Collections.unmodifiableSet(seenModels);
   }
 
-  private MergingContext(
-      String rootId,
+  private MergingContext(String rootId,
       Set<String> seenModels,
       Map<String, Set<String>> circlePath,
       Map<String, Set<String>> circleParameters,
       Map<String, ComparisonCondition> globalComparisonConditions,
       MergingContext mergingContext) {
     this.rootId = rootId;
+    this.parameterId = mergingContext.parameterId;
     this.circlePath = Collections.unmodifiableMap(circlePath);
     this.circleParameters = Collections.unmodifiableMap(circleParameters);
     this.globalComparisonConditions = Collections.unmodifiableMap(globalComparisonConditions);
@@ -90,6 +93,10 @@ public class MergingContext {
 
   public String getRootId() {
     return this.rootId;
+  }
+
+  public String getParameterId() {
+    return this.parameterId;
   }
 
   public Optional<ComparisonCondition> getComparisonCondition(String modelFor) {
@@ -135,8 +142,7 @@ public class MergingContext {
     return this.seenModels.contains(modelId);
   }
 
-  public MergingContext toRootId(
-      String rootId,
+  public MergingContext toRootId(String rootId,
       Set<ComparisonCondition> comparisonConditions,
       Set<String> allowedParameters) {
     Set<String> localSeenModels = new HashSet<>(this.seenModels);

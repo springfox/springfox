@@ -183,6 +183,8 @@ public class ModelRef implements ModelReference {
         && Objects.equals(
         allowableValues,
         that.allowableValues)
-        && modelId.isPresent() == that.modelId.isPresent();
+        && Objects.equals(
+        modelId,
+        that.modelId);
   }
 }

@@ -40,18 +40,18 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
   }
 
   @Override
-  public Optional<String> getTypeName(String modelId) {
-    return Optional.ofNullable(knownNames.get(modelId));
+  public Optional<String> getTypeName(String typeId) {
+    return Optional.ofNullable(knownNames.get(typeId));
   }
 
   private boolean checkTypeRegistration(
       String typeName,
-      String modelId) {
-    if (knownNames.containsKey(modelId)) {
-      if (!knownNames.get(modelId).equals(typeName)) {
+      String typeId) {
+    if (knownNames.containsKey(typeId)) {
+      if (!knownNames.get(typeId).equals(typeName)) {
         LOG.info("Rewriting type {} with model id: {} is not allowed, because it is already registered",
                  typeName,
-                 modelId);
+                 typeId);
         throw new IllegalStateException("Model already registered with different name.");
       } else {
         return true;
@@ -64,24 +64,24 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
   @Override
   public void registerType(
       String typeName,
-      String modelId) {
+      String typeId) {
     if (checkTypeRegistration(
         typeName,
-        modelId)) {
+        typeId)) {
       return;
     }
     knownNames.put(
-        modelId,
+        typeId,
         typeName);
   }
 
   @Override
   public void registerUniqueType(
       String typeName,
-      String modelId) {
+      String typeId) {
     if (checkTypeRegistration(
         typeName,
-        modelId)) {
+        typeId)) {
       return;
     }
     Integer nameIndex = 0;
@@ -94,29 +94,29 @@ public class TypeNameIndexingAdapter implements UniqueTypeNameAdapter {
           toString();
     }
     knownNames.put(
-        modelId,
+        typeId,
         tempName);
   }
 
   @Override
   public void setEqualityFor(
-      String modelIdOf,
-      String modelIdTo) {
-    if (!knownNames.containsKey(modelIdTo)) {
+      String typeIdOf,
+      String typeIdTo) {
+    if (!knownNames.containsKey(typeIdTo)) {
       LOG.warn(
           "Model with model id: {} was not found, because it is not registered",
-          modelIdTo);
+          typeIdTo);
       throw new IllegalStateException("Model was not found");
     }
-    if (knownNames.containsKey(modelIdOf) && !knownNames.get(modelIdOf).equals(knownNames.get(modelIdTo))) {
+    if (knownNames.containsKey(typeIdOf) && !knownNames.get(typeIdOf).equals(knownNames.get(typeIdTo))) {
       LOG.warn(
           "Model with model id: {} already has equality to other model",
-          modelIdTo);
+          typeIdTo);
       throw new IllegalStateException("Model already has equality to other model");
     }
     knownNames.put(
-        modelIdOf,
-        knownNames.get(modelIdTo));
+        typeIdOf,
+        knownNames.get(typeIdTo));
   }
 
 }
