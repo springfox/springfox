@@ -57,44 +57,45 @@ public class JacksonJsonViewProvider implements ViewProviderPlugin {
 
   @Override
   public Optional<ResolvedType> viewFor(
-      ResolvedType type,
       ResolvedMethodParameter parameter) {
     return viewFor(
-        type,
-        parameter.findAnnotation(JsonView.class));
+        String.format("Parameter name: %s @ index: %s",
+                      parameter.defaultName().orElse("<none>"),
+                      parameter.getParameterIndex()),
+        parameter.findAnnotation(JsonView.class)
+                 .orElse(null));
   }
 
   @Override
   public Optional<ResolvedType> viewFor(
-      ResolvedType type,
       RequestMappingContext context) {
     return viewFor(
-        type,
-        context.findAnnotation(JsonView.class));
+        String.format("Request Mapping: %s", context.getRequestMappingPattern()),
+        context.findAnnotation(JsonView.class)
+               .orElse(null));
   }
 
   @Override
   public Optional<ResolvedType> viewFor(
-      ResolvedType type,
       OperationContext context) {
     return viewFor(
-        type,
-        context.findAnnotation(JsonView.class));
+        String.format("Operation: %s", context.getName()),
+        context.findAnnotation(JsonView.class)
+               .orElse(null));
   }
 
   private Optional<ResolvedType> viewFor(
-      ResolvedType type,
-      Optional<JsonView> annotation) {
+      String context,
+      JsonView annotation) {
     Optional<ResolvedType> view = Optional.empty();
-    if (annotation.isPresent()) {
-      Class<?>[] views = annotation.get().value();
+    if (annotation != null) {
+      Class<?>[] views = annotation.value();
       view = Optional.of(typeResolver.resolve(views[0]));
       LOG.debug(
           "Found view {} for type {}",
           resolvedTypeSignature(view.get())
               .orElse("<null>"),
-          resolvedTypeSignature(type)
-              .orElse("<null>"));
+          context);
     }
     return view;
   }

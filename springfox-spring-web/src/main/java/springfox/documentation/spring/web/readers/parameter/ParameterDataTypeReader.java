@@ -142,7 +142,6 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
         .addInputParam(
             parameterType,
             viewProvider.viewFor(
-                parameterType,
                 methodParameter),
             new HashSet<>());
 

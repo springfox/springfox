@@ -119,7 +119,6 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
     return viewProvider.viewFor(
-        regularModel,
         context);
   }
 
@@ -130,7 +129,6 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
     return viewProvider.viewFor(
-        modelType,
         parameter);
   }
 }

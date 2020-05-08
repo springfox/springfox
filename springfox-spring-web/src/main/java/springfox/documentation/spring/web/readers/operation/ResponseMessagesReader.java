@@ -104,7 +104,7 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
     if (!isVoid(returnType)) {
       ModelContext modelContext = context.operationModelsBuilder().addReturn(
           returnType,
-          viewProvider.viewFor(returnType, context));
+          viewProvider.viewFor(context));
 
       Map<String, String> knownNames = new HashMap<>();
       Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
