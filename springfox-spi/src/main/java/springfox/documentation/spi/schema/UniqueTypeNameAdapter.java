@@ -35,40 +35,40 @@ public interface UniqueTypeNameAdapter {
   /**
    * Returns type for the model
    * 
-   * @param modelId
-   *          - id of model
+   * @param typeId
+   *          - id of model type
    * @return Optional of a model names
    */
-  Optional<String> getTypeName(String modelId);
+  Optional<String> getTypeName(String typeId);
 
   /**
    * Add model name as is without adjusting
    * 
    * @param typeName
    *          - string representation of the models name
-   * @param modelId
-   *          - id of model
+   * @param typeId
+   *          - id of model type
    */
-  void registerType(String typeName, String modelId);
+  void registerType(String typeName, String typeId);
 
   /**
    * Register model name to keep it unique
    * 
    * @param typeName
    *          - string representation of the models name
-   * @param modelId
-   *          - id of model
+   * @param typeId
+   *          - id of model type
    */
-  void registerUniqueType(String typeName, String modelId);
+  void registerUniqueType(String typeName, String typeId);
 
   /**
    * Sets equality of two models to make sure, that models will be treated as one
    * 
    * @param modelIdOf
-   *          - id of the current model
+   *          - id of current model type
    * @param modelIdTo
-   *          - id of the existing model
+   *          - id of existing model type
    */
-  void setEqualityFor(String modelIdOf, String modelIdTo);
+  void setEqualityFor(String typeIdOf, String typeIdTo);
 
 }

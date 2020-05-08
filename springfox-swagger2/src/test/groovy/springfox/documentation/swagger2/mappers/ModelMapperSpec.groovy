@@ -141,9 +141,9 @@ class ModelMapperSpec extends SchemaSpecification {
 
 
     then:
-    mapped.containsKey("0_0_java.util.Map<java.lang.String,java.lang.String>")
+    mapped.containsKey("java.util.Map<java.lang.String,java.lang.String>")
     and:
-    def mappedModel = mapped.get("0_0_java.util.Map<java.lang.String,java.lang.String>")
+    def mappedModel = mapped.get("java.util.Map<java.lang.String,java.lang.String>")
     mappedModel.name == "MapOfstringAndstring"
     mappedModel.additionalProperties instanceof StringProperty
   }
@@ -168,9 +168,9 @@ class ModelMapperSpec extends SchemaSpecification {
             Function.identity())))
 
     then:
-    mapped.containsKey("0_0_org.springframework.ui.ModelMap")
+    mapped.containsKey("org.springframework.ui.ModelMap")
     and:
-    def mappedModel = mapped.get("0_0_org.springframework.ui.ModelMap")
+    def mappedModel = mapped.get("org.springframework.ui.ModelMap")
     mappedModel.name == "ModelMap"
     mappedModel.additionalProperties instanceof ObjectProperty
 
@@ -196,10 +196,10 @@ class ModelMapperSpec extends SchemaSpecification {
             Function.identity())))
 
     then:
-    mapped.containsKey("0_0_java.util.Map<java.lang.String,springfox.documentation.schema.SimpleType>")
-    mapped.containsKey("0_0_springfox.documentation.schema.SimpleType")
+    mapped.containsKey("java.util.Map<java.lang.String,springfox.documentation.schema.SimpleType>")
+    mapped.containsKey("springfox.documentation.schema.SimpleType")
     and:
-    def mappedModel = mapped.get("0_0_java.util.Map<java.lang.String,springfox.documentation.schema.SimpleType>")
+    def mappedModel = mapped.get("java.util.Map<java.lang.String,springfox.documentation.schema.SimpleType>")
     mappedModel.name == "MapOfstringAndSimpleType"
     mappedModel.additionalProperties instanceof RefProperty
 

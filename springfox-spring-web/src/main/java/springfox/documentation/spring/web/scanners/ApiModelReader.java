@@ -95,11 +95,9 @@ public class ApiModelReader {
     Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
 
     for (Map.Entry<String, Set<Model>> entry : context.getModelMap().entrySet()) {
-      entry.getValue()
-          .stream()
-          .peek(model -> adapter.registerType(model.getName(), model.getId()))
-          .filter(model -> !uniqueModels.containsKey(model.getName()))
-          .forEach(model -> {
+      entry.getValue().stream().filter(model -> !uniqueModels.containsKey(model.getName())).forEach(
+          model -> {
+            adapter.registerType(model.getName(), model.getId());
             uniqueModels.put(model.getName(), model);
             parameterModelMap.put(model.getId(), entry.getKey());
           });
@@ -112,13 +110,14 @@ public class ApiModelReader {
       Optional<Model> pModel = modelProvider.modelFor(rootContext);
       List<String> branchRoots = new ArrayList<>();
       if (pModel.isPresent()) {
-        LOG.debug("Generated parameter model id: {}, name: {}",
+        LOG.debug(
+            "Generated parameter model id: {}, name: {}",
             // TODO: resolve this, schema: {} models",
             pModel.get().getId(),
             pModel.get().getName());
         modelBranch.put(pModel.get().getId(), pModel.get());
         contextMap.put(pModel.get().getId(), rootContext);
-        branchRoots.add(rootContext.getTypeId());
+        branchRoots.add(rootContext.getModelId());
       } else {
         branchRoots = findBranchRoots(rootContext);
         LOG.debug("Did not find any parameter models for {}", rootContext.getType());
@@ -136,6 +135,7 @@ public class ApiModelReader {
       }
 
       final MergingContext mergingContext = createMergingContext(
+          rootContext.getParameterId(),
           Collections.unmodifiableMap(uniqueModels),
           Collections.unmodifiableMap(parameterModelMap),
           Collections.unmodifiableMap(modelBranch),
@@ -144,7 +144,11 @@ public class ApiModelReader {
       branchRoots.stream().filter(rootId -> modelBranch.containsKey(rootId)).forEach(
           rootId -> mergeModelBranch(adapter, mergingContext.toRootId(rootId)));
 
-      Set<Model> updatedModels = updateModels(modelBranch.values(), contextMap, adapter);
+      Set<Model> updatedModels = updateModels(
+          rootContext.getParameterId(),
+          modelBranch.values(),
+          contextMap,
+          adapter);
       mergedModelMap.put(rootContext.getParameterId(), updatedModels);
 
       updatedModels.stream().filter(model -> !uniqueModels.containsKey(model.getName())).forEach(
@@ -172,13 +176,14 @@ public class ApiModelReader {
     Set<String> parametersTo = new HashSet<>();
 
     for (final String modelId : nodes) {
-      if (adapter.getTypeName(modelId).isPresent()) {
+      if (adapter.getTypeName(toTypeId(mergingContext.getParameterId(), modelId)).isPresent()) {
         continue;
       }
 
       if (!mergingContext.hasSeenBefore(modelId)) {
 
-        MergingContext childMergingContext = createChildMergingContext(modelId,
+        MergingContext childMergingContext = createChildMergingContext(
+            modelId,
             !currentDependencies.isEmpty(),
             parametersTo,
             dependencies,
@@ -212,7 +217,8 @@ public class ApiModelReader {
         ComparisonCondition currentCondition = currentCondition(modelId, newDependencies);
 
         if (currentCondition.getConditions().isEmpty()) {
-          comparisonConditions.put(modelId,
+          comparisonConditions.put(
+              modelId,
               currentCondition.getModelsTo()
                   .stream()
                   .map(mergingContext::getModelParameter)
@@ -229,7 +235,8 @@ public class ApiModelReader {
           continue;
         }
 
-        Optional<Set<String>> megedParameters = mergeParameters(modelId,
+        Optional<Set<String>> megedParameters = mergeParameters(
+            modelId,
             parametersTo,
             mergingContext);
 
@@ -297,7 +304,8 @@ public class ApiModelReader {
               .map(op -> op.orElseGet(() -> parameter))
               .map(p -> pseudoContext(p, mergingContext.getModelContext(sModelId)))
               .orElseGet(() -> mergingContext.getModelContext(sModelId));
-          modelReference = modelRefFactory(modelContext,
+          modelReference = modelRefFactory(
+              modelContext,
               enumTypeDeterminer,
               typeNameExtractor,
               adapter.getNames()).apply(mergingContext.getModel(sModelId).getType());
@@ -317,9 +325,11 @@ public class ApiModelReader {
               .map(op -> op.orElseGet(() -> parameter))
               .map(p -> pseudoContext(p, mergingContext.getModelContext(sModelId)))
               .orElseGet(() -> mergingContext.getModelContext(sModelId));
-          newProperties.put(propertyName,
-              new ModelPropertyBuilder(property).build()
-                  .updateModelRef(modelRefFactory(modelContext,
+          newProperties.put(
+              propertyName,
+              new ModelPropertyBuilder(property).build().updateModelRef(
+                  modelRefFactory(
+                      modelContext,
                       enumTypeDeterminer,
                       typeNameExtractor,
                       adapter.getNames())));
@@ -329,8 +339,9 @@ public class ApiModelReader {
       Model modelToCompare = rootModelBuilder.properties(newProperties).subTypes(subTypes).build();
 
       modelsToCompare.stream()
-          .filter(m -> StringUtils.isEmpty(parameter)
-              || parameter.equals(mergingContext.getModelParameter(m.getId())))
+          .filter(
+              m -> StringUtils.isEmpty(parameter)
+                  || parameter.equals(mergingContext.getModelParameter(m.getId())))
           .filter(m -> m.equalsIgnoringName(modelToCompare))
           .map(m -> m.getId())
           .findFirst()
@@ -347,11 +358,13 @@ public class ApiModelReader {
       UniqueTypeNameAdapter adapter,
       MergingContext mergingContext) {
 
+    final String parameterId = mergingContext.getParameterId();
     if (!sameModels.isEmpty()) {
       ComparisonCondition currentCondition = new ComparisonCondition(mergingContext.getRootId(),
           sameModels, currentDependencies);
 
-      dependencies = filterDependencies(dependencies,
+      dependencies = filterDependencies(
+          dependencies,
           modelsToParameters(sameModels, mergingContext),
           mergingContext);
 
@@ -366,7 +379,8 @@ public class ApiModelReader {
               new ComparisonCondition(depComparisonCondition.getModelFor(),
                   depComparisonCondition.getModelsTo(), conditions),
               true);
-          adapter.setEqualityFor(depComparisonCondition.getModelFor(),
+          adapter.setEqualityFor(
+              toTypeId(parameterId, depComparisonCondition.getModelFor()),
               new ArrayList<>(depComparisonCondition.getModelsTo()).get(0));
         }
         return new HashSet<>(Arrays.asList(currentCondition));
@@ -379,17 +393,21 @@ public class ApiModelReader {
           conditions.remove(currentCondition.getModelFor());
           conditions.addAll(currentCondition.getConditions());
 
-          newDependencies.add(new ComparisonCondition(depComparisonCondition.getModelFor(),
-              depComparisonCondition.getModelsTo(), conditions));
+          newDependencies.add(
+              new ComparisonCondition(depComparisonCondition.getModelFor(),
+                  depComparisonCondition.getModelsTo(), conditions));
         }
         return newDependencies;
       }
     } else {
-      adapter.registerUniqueType(mergingContext.getRootModel().getName(),
-          mergingContext.getRootId());
+      adapter.registerUniqueType(
+          mergingContext.getRootModel().getName(),
+          toTypeId(parameterId, mergingContext.getRootId()));
       for (ComparisonCondition depComparisonCondition : dependencies) {
         String modelId = depComparisonCondition.getModelFor();
-        adapter.registerUniqueType(mergingContext.getModel(modelId).getName(), modelId);
+        adapter.registerUniqueType(
+            mergingContext.getModel(modelId).getName(),
+            toTypeId(parameterId, modelId));
       }
     }
 
@@ -407,7 +425,7 @@ public class ApiModelReader {
       for (ResolvedType parameter : resolvedType.getTypeParameters()) {
         roots.addAll(findBranchRoots(ModelContext.fromParent(rootContext, parameter)));
       }
-      roots.add(ModelContext.fromParent(rootContext, resolvedType).getTypeId());
+      roots.add(ModelContext.fromParent(rootContext, resolvedType).getModelId());
     }
     return roots;
   }
@@ -428,7 +446,7 @@ public class ApiModelReader {
     for (ResolvedType type : rootModel.getType().getTypeParameters()) {
       String modelId = ModelContext
           .fromParent(rootModelContext, rootModelContext.alternateFor(type))
-          .getTypeId();
+          .getModelId();
       if (mergingContext.containsModel(modelId)) {
         nodes.add(modelId);
       }
@@ -436,13 +454,13 @@ public class ApiModelReader {
 
     for (ModelProperty modelProperty : rootModel.getProperties().values()) {
       Optional<String> modelId = getModelId(modelProperty.getModelRef());
-
       if (modelId.isPresent() && mergingContext.containsModel(modelId.get())) {
         nodes.add(modelId.get());
       }
     }
 
-    nodes.removeIf(s -> adapter.getTypeName(s).isPresent());
+    nodes.removeIf(
+        node -> adapter.getTypeName(toTypeId(rootModelContext.getParameterId(), node)).isPresent());
 
     return nodes;
   }
@@ -513,10 +531,12 @@ public class ApiModelReader {
       Optional<String> modelId = getModelId(property.getModelRef());
 
       if (modelId.isPresent() && contextMap.containsKey(modelId.get())) {
-        property.updateModelRef(modelRefFactory(contextMap.get(modelId.get()),
-            enumTypeDeterminer,
-            typeNameExtractor,
-            adapter.getNames()));
+        property.updateModelRef(
+            modelRefFactory(
+                contextMap.get(modelId.get()),
+                enumTypeDeterminer,
+                typeNameExtractor,
+                adapter.getNames()));
       }
     }
     List<ModelReference> subTypes = new ArrayList<>();
@@ -532,19 +552,31 @@ public class ApiModelReader {
         subTypes.add(oldModelRef);
       }
     }
-    String name = typeNameExtractor.typeName(contextMap.get(model.getId()), adapter.getNames());
+    ModelContext modelContxt = contextMap.get(model.getId());
+    String name = typeNameExtractor.typeName(modelContxt, adapter.getNames());
 
-    return new ModelBuilder(model).name(name).subTypes(subTypes).build();
+    return new ModelBuilder(modelContxt.getTypeId()).name(name)
+        .qualifiedType(model.getQualifiedType())
+        .description(model.getDescription())
+        .baseModel(model.getBaseModel())
+        .discriminator(model.getDiscriminator())
+        .type(model.getType())
+        .example(model.getExample())
+        .xml(model.getXml())
+        .properties(model.getProperties())
+        .subTypes(subTypes)
+        .build();
   }
 
   private Set<Model> updateModels(
+      String parameterId,
       final Collection<Model> models,
       final Map<String, ModelContext> contextMap,
       final UniqueTypeNameAdapter adapter) {
     models.forEach(model -> {
-
-      if (!adapter.getTypeName(model.getId()).isPresent()) {
-        adapter.registerUniqueType(model.getName(), model.getId());
+      String typeId = toTypeId(parameterId, model.getId());
+      if (!adapter.getTypeName(typeId).isPresent()) {
+        adapter.registerUniqueType(model.getName(), typeId);
       }
     });
 
@@ -553,7 +585,8 @@ public class ApiModelReader {
   }
 
   private static ModelContext pseudoContext(String parameterId, ModelContext context) {
-    return ModelContext.inputParam(parameterId,
+    return ModelContext.inputParam(
+        parameterId,
         context.getGroupName(),
         context.getType(),
         Optional.empty(),
@@ -589,6 +622,10 @@ public class ApiModelReader {
     }
   }
 
+  private static String toTypeId(String parameterId, String modelId) {
+    return new StringBuilder(50).append(parameterId).append("_").append(modelId).toString();
+  }
+
   private static Set<String> modelsToParameters(Set<String> models, MergingContext mergingContext) {
     return models.stream().map(mergingContext::getModelParameter).collect(
         Collectors.toCollection(HashSet::new));
@@ -620,6 +657,7 @@ public class ApiModelReader {
   }
 
   private static MergingContext createMergingContext(
+      String parameterId,
       Map<String, Model> uniqueModels,
       Map<String, String> parameterModelMap,
       Map<String, Model> currentBranch,
@@ -640,7 +678,8 @@ public class ApiModelReader {
       typedModelMap.put(rawType, Collections.unmodifiableSet(models));
     }
 
-    return new MergingContext(typedModelMap, parameterModelMap, currentBranch, contextMap);
+    return new MergingContext(parameterId, typedModelMap, parameterModelMap, currentBranch,
+        contextMap);
   }
 
 }

@@ -119,6 +119,6 @@ class ModelReferenceProvider implements Function<ResolvedType, ModelReference> {
         || enumTypeDeterminer.isEnum(type.getErasedType())) {
       return null;
     }
-    return context.getTypeId();
+    return context.getModelId();
   }
 }

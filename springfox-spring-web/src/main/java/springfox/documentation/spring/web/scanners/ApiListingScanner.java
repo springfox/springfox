@@ -46,7 +46,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -127,7 +126,7 @@ public class ApiListingScanner {
 
     List<SecurityReference> securityReferences = new ArrayList<>();
 
-    Map<String, Set<Model>> globalModelMap = new TreeMap<>();
+    Map<String, Set<Model>> globalModelMap = new HashMap<>();
     for (final ResourceGroup resourceGroup : sortedByName(allResourceGroups)) {
 
       DocumentationContext documentationContext = context.getDocumentationContext();
@@ -150,7 +149,7 @@ public class ApiListingScanner {
           }
         });
         globalModelMap.putAll(currentModelMap);
-        apiDescriptions.addAll(apiDescriptionReader.read(each.withKnownModels(globalModelMap)));
+        apiDescriptions.addAll(apiDescriptionReader.read(each.withKnownModels(currentModelMap)));
       }
 
       List<ApiDescription> additional = additionalListings.stream()
