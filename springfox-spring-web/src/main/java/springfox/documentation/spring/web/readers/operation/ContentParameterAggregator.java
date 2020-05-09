@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
+import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.service.Encoding;
 import springfox.documentation.service.ParameterType;
@@ -31,7 +32,13 @@ public class ContentParameterAggregator implements ParameterAggregator {
                 .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
                   .modelSpecificationBuilder()
                   .compoundModelBuilder()
-                    .properties(properties(each, MediaType.APPLICATION_FORM_URLENCODED))
+                    .modelKey(new ModelKey(
+                        "io.springfox",
+                        each.getName() + "Aggregate",
+                        null,
+                        new ArrayList<>(),
+                        false))
+                    .properties(properties(each))
                     .yield()
                   .yield(RepresentationBuilder.class)
                   .encodingForProperty(each.getName())
@@ -56,7 +63,13 @@ public class ContentParameterAggregator implements ParameterAggregator {
               .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
                 .modelSpecificationBuilder()
                   .compoundModelBuilder()
-                    .properties(properties(each, MediaType.MULTIPART_FORM_DATA))
+                    .modelKey(new ModelKey(
+                      "io.springfox",
+                      each.getName() + "Aggregate",
+                      null,
+                      new ArrayList<>(),
+                      false))
+                    .properties(properties(each))
                     .yield()
                   .yield(RepresentationBuilder.class)
                 .encodingForProperty(each.getName())
@@ -77,9 +90,7 @@ public class ContentParameterAggregator implements ParameterAggregator {
     return requestParameters;
   }
 
-  private List<PropertySpecification> properties(
-      RequestParameter parameter,
-      MediaType mediaType) {
+  private List<PropertySpecification> properties(RequestParameter parameter) {
     return parameter.getParameterSpecification().getContent()
                     .map(c -> c.getRepresentations().stream()
                                .map(m -> new PropertySpecificationBuilder(

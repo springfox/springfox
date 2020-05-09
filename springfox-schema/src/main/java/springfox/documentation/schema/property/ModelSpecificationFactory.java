@@ -58,15 +58,17 @@ public class ModelSpecificationFactory {
         }
       } else {
         reference = new ReferenceModelSpecification(
-            new ModelKey(
-                safeGetPackageName(resolvedType),
-                typeNameExtractor.typeName(
-                    ModelContext.fromParent(
-                        modelContext,
-                        resolvedType)),
-                modelContext.getView().orElse(null),
-                modelContext.getValidationGroups(),
-                modelContext.isReturnType()));
+            new ModelKeyBuilder()
+                .qualifiedModelName(new QualifiedModelName(
+                    safeGetPackageName(resolvedType),
+                    typeNameExtractor.typeName(
+                        ModelContext.fromParent(
+                            modelContext,
+                            resolvedType))))
+                .viewDiscriminator(modelContext.getView().orElse(null))
+                .validationGroupDiscriminators(modelContext.getValidationGroups())
+                .isResponse(modelContext.isReturnType())
+                .build());
       }
     }
     return new ModelSpecificationBuilder()

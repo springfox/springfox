@@ -1,6 +1,7 @@
 package springfox.documentation.builders;
 
 import springfox.documentation.schema.CompoundModelSpecification;
+import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.PropertySpecification;
 
 import java.util.Collection;
@@ -11,9 +12,11 @@ import java.util.stream.Collectors;
 
 public class CompoundModelSpecificationBuilder {
   private final ModelSpecificationBuilder parent;
-  private Map<String, PropertySpecificationBuilder> properties = new HashMap<>();
+  private final Map<String, PropertySpecificationBuilder> properties = new HashMap<>();
   private Integer maxProperties;
   private Integer minProperties;
+  private ModelKey modelKey;
+
 
   public CompoundModelSpecificationBuilder(ModelSpecificationBuilder parent) {
     this.parent = parent;
@@ -25,6 +28,11 @@ public class CompoundModelSpecificationBuilder {
         n -> new PropertySpecificationBuilder(
             n,
             this));
+  }
+
+  public CompoundModelSpecificationBuilder modelKey(ModelKey modelKey) {
+    this.modelKey = modelKey;
+    return this;
   }
 
   public CompoundModelSpecificationBuilder maxProperties(Integer maxProperties) {
@@ -48,6 +56,7 @@ public class CompoundModelSpecificationBuilder {
                          .collect(Collectors.toList());
     if (properties.size() > 0) {
       return new CompoundModelSpecification(
+          modelKey,
           properties,
           maxProperties,
           minProperties);
@@ -59,7 +68,8 @@ public class CompoundModelSpecificationBuilder {
     if (other == null) {
       return this;
     }
-    return properties(other.getProperties())
+    return modelKey(other.getModelKey())
+        .properties(other.getProperties())
         .maxProperties(other.getMaxProperties())
         .minProperties(other.getMinProperties());
   }

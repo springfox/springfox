@@ -6,17 +6,24 @@ import java.util.List;
 import java.util.Objects;
 
 public class CompoundModelSpecification {
+  private final ModelKey modelKey;
   private final List<PropertySpecification> properties;
   private final Integer maxProperties;
   private final Integer minProperties;
 
   public CompoundModelSpecification(
+      ModelKey modelKey,
       Collection<PropertySpecification> properties,
       Integer maxProperties,
       Integer minProperties) {
+    this.modelKey = modelKey;
     this.properties = new ArrayList<>(properties);
     this.maxProperties = maxProperties;
     this.minProperties = minProperties;
+  }
+
+  public ModelKey getModelKey() {
+    return modelKey;
   }
 
   public List<PropertySpecification> getProperties() {
@@ -48,12 +55,14 @@ public class CompoundModelSpecification {
             that.maxProperties) &&
         Objects.equals(
             minProperties,
-            that.minProperties);
+            that.minProperties) &&
+        Objects.equals(modelKey, that.modelKey);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
+        modelKey,
         properties,
         maxProperties,
         minProperties);
@@ -62,7 +71,8 @@ public class CompoundModelSpecification {
   @Override
   public String toString() {
     return "CompoundModelSpecification{" +
-        "properties=" + properties +
+        "modelKey=" + modelKey +
+        ", properties=" + properties +
         ", maxProperties=" + maxProperties +
         ", minProperties=" + minProperties +
         '}';

@@ -135,6 +135,14 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
     modelContext.getModelSpecificationBuilder()
                 .name(typeName)
                 .compoundModelBuilder()
+                .modelKey(new ModelKeyBuilder()
+                              .qualifiedModelName(new QualifiedModelName(
+                                  safeGetPackageName(propertiesHost),
+                                  typeName))
+                              .viewDiscriminator(modelContext.getView().orElse(null))
+                              .validationGroupDiscriminators(modelContext.getValidationGroups())
+                              .isResponse(modelContext.isReturnType())
+                              .build())
                 .properties(properties.values())
                 .maxProperties(properties.size())
                 .minProperties(properties.size())
@@ -193,12 +201,14 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                     .facetsBuilder()
                     .copyOf(
                         new ModelFacetsBuilder(null)
-                            .withModelKey(new ModelKey(
-                                safeGetPackageName(resolvedType),
-                                typeName,
-                                mapContext.getView().orElse(null),
-                                mapContext.getValidationGroups(),
-                                mapContext.isReturnType()))
+                            .withModelKey(new ModelKeyBuilder()
+                                              .qualifiedModelName(new QualifiedModelName(
+                                                  safeGetPackageName(resolvedType),
+                                                  typeName))
+                                              .viewDiscriminator(mapContext.getView().orElse(null))
+                                              .validationGroupDiscriminators(mapContext.getValidationGroups())
+                                              .isResponse(mapContext.isReturnType())
+                                              .build())
                             .withTitle(typeName)
                             .withDescription("Key of type " + typeName)
                             .withNullable(false)

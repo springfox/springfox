@@ -6,6 +6,7 @@ import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.RepresentationBuilder
 import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.schema.ModelKey
+import springfox.documentation.schema.QualifiedModelName
 import springfox.documentation.schema.ReferenceModelSpecification
 import springfox.documentation.schema.ScalarType
 import springfox.documentation.schema.Xml
@@ -105,8 +106,9 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .referenceModel(
             new ReferenceModelSpecification(
                 new ModelKey(
-                    "io.springfox",
-                    "Address",
+                    new QualifiedModelName(
+                        "io.springfox",
+                        "Address"),
                     null,
                     new ArrayList<>(),
                     false)))
@@ -194,8 +196,9 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                 .propertyBuilder("address")
                   .type(new ModelSpecificationBuilder()
                     .referenceModel(new ReferenceModelSpecification(new ModelKey(
-                        "123",
-                        "abc",
+                        new QualifiedModelName(
+                            "123",
+                            "abc"),
                         null,
                         new ArrayList<>(),
                         true)))
