@@ -112,11 +112,21 @@ trait ModelTestingSupport {
 
   def responseModelKey(Class<?> type) {
     def alias = Types.typeNameFor(type)
-    new ModelKey(type.getPackage()?.name ?: "", alias ?: type.simpleName, true)
+    new ModelKey(
+        type.getPackage()?.name ?: "",
+        alias ?: type.simpleName,
+        null,
+        new ArrayList<>(),
+        true)
   }
 
   def requestModelKey(Class<?> type) {
     def alias = Types.typeNameFor(type)
-    new ModelKey(type.getPackage()?.name ?: "", alias ?: type.simpleName, false)
+    new ModelKey(
+        type.getPackage()?.name ?: "",
+        alias ?: type.simpleName,
+        null,
+        new ArrayList<>(),
+        false)
   }
 }

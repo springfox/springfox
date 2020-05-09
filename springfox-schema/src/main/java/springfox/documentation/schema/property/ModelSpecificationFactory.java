@@ -9,6 +9,7 @@ import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static springfox.documentation.schema.property.PackageNames.safeGetPackageName;
@@ -63,6 +64,8 @@ public class ModelSpecificationFactory {
                     ModelContext.fromParent(
                         modelContext,
                         resolvedType)),
+                modelContext.getView().orElse(null),
+                modelContext.getValidationGroups(),
                 modelContext.isReturnType()));
       }
     }

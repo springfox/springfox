@@ -46,6 +46,7 @@ import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
 import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.schema.property.PackageNames.*;
 
 @Component
 @Qualifier("default")
@@ -193,8 +194,10 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                     .copyOf(
                         new ModelFacetsBuilder(null)
                             .withModelKey(new ModelKey(
-                                simpleQualifiedTypeName(resolvedType),
+                                safeGetPackageName(resolvedType),
                                 typeName,
+                                mapContext.getView().orElse(null),
+                                mapContext.getValidationGroups(),
                                 mapContext.isReturnType()))
                             .withTitle(typeName)
                             .withDescription("Key of type " + typeName)

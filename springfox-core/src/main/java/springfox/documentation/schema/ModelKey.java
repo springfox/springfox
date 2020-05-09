@@ -1,19 +1,30 @@
 package springfox.documentation.schema;
 
+import com.fasterxml.classmate.ResolvedType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
 public class ModelKey {
   private final String namespace;
   private final String name;
+  private final ResolvedType viewDiscriminator;
+  private final ArrayList<ResolvedType> validationGroupDiscriminators = new ArrayList<>();
   private final boolean isResponse;
 
   public ModelKey(
       String namespace,
       String name,
+      ResolvedType viewDiscriminator,
+      Collection<ResolvedType> validationGroupDiscriminators,
       boolean isResponse) {
     this.namespace = namespace;
     this.name = name;
+    this.viewDiscriminator = viewDiscriminator;
+    this.validationGroupDiscriminators.addAll(validationGroupDiscriminators);
     this.isResponse = isResponse;
   }
 
@@ -39,9 +50,9 @@ public class ModelKey {
     }
     ModelKey modelKey = (ModelKey) o;
     return isResponse == modelKey.isResponse &&
-        Objects.equals(
-            namespace,
-            modelKey.namespace) &&
+        Objects.equals(namespace, modelKey.namespace) &&
+        Objects.equals(viewDiscriminator, modelKey.viewDiscriminator) &&
+        Objects.equals(validationGroupDiscriminators, modelKey.validationGroupDiscriminators) &&
         name.equals(modelKey.name);
   }
 
@@ -50,18 +61,19 @@ public class ModelKey {
     return Objects.hash(
         namespace,
         name,
+        viewDiscriminator,
+        validationGroupDiscriminators,
         isResponse);
   }
 
   @Override
   public String toString() {
-    return new StringJoiner(
-        ", ",
-        ModelKey.class.getSimpleName() + "[",
-        "]")
-        .add("namespace='" + namespace + "'")
-        .add("name='" + name + "'")
-        .add("isResponse=" + isResponse)
-        .toString();
+    return "ModelKey{" +
+        "namespace='" + namespace + '\'' +
+        ", name='" + name + '\'' +
+        ", viewDiscriminator=" + viewDiscriminator +
+        ", validationGroupDiscriminators=" + validationGroupDiscriminators +
+        ", isResponse=" + isResponse +
+        '}';
   }
 }

@@ -2,7 +2,6 @@ package springfox.documentation.spring.web.readers
 
 import org.springframework.http.MediaType
 import spock.lang.Specification
-import springfox.documentation.builders.CompoundModelSpecificationBuilder
 import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.RepresentationBuilder
 import springfox.documentation.builders.RequestParameterBuilder
@@ -108,6 +107,8 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                 new ModelKey(
                     "io.springfox",
                     "Address",
+                    null,
+                    new ArrayList<>(),
                     false)))
         .yield(RequestParameterBuilder)
         .yield()
@@ -192,7 +193,12 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                 .yield()
                 .propertyBuilder("address")
                   .type(new ModelSpecificationBuilder("")
-                    .referenceModel(new ReferenceModelSpecification(new ModelKey("123", "abc", true)))
+                    .referenceModel(new ReferenceModelSpecification(new ModelKey(
+                        "123",
+                        "abc",
+                        null,
+                        new ArrayList<>(),
+                        true)))
                   .build())
                 .yield()
                 .propertyBuilder("historyMetadata")

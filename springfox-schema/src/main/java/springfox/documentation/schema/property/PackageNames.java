@@ -2,12 +2,12 @@ package springfox.documentation.schema.property;
 
 import com.fasterxml.classmate.ResolvedType;
 
-class PackageNames {
+public class PackageNames {
   private PackageNames() {
     throw new UnsupportedOperationException();
   }
 
-  static String safeGetPackageName(ResolvedType type) {
+  public static String safeGetPackageName(ResolvedType type) {
     if (type != null
         && type.getErasedType() != null
         && type.getErasedType()
