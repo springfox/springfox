@@ -24,16 +24,20 @@ import springfox.documentation.schema.ModelReference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
+import static springfox.documentation.builders.BuilderDefaults.nullToEmptySet;
 
 class InheritanceDeterminer {
-  private final Map<String, RefModel> parentLookup = new HashMap<String, RefModel>();
+  private final Map<String, Set<RefModel>> parentLookup = new HashMap<String, Set<RefModel>>();
 
   InheritanceDeterminer(Map<String, Model> models) {
     for (Model each : models.values()) {
       for (ModelReference modelReference : nullToEmptyList(each.getSubTypes())) {
-        parentLookup.put(modelReference.getType(), toRefModel(each));
+        Set<RefModel> refModels = nullToEmptySet(parentLookup.get(modelReference.getType()));
+        refModels.add(toRefModel(each));
+        parentLookup.put(modelReference.getType(), refModels);
       }
     }
   }
@@ -42,7 +46,7 @@ class InheritanceDeterminer {
     return parentLookup.containsKey(model.getName());
   }
 
-  RefModel parent(Model model) {
+  Set<RefModel> parents(Model model) {
     return parentLookup.get(model.getName());
   }
 
