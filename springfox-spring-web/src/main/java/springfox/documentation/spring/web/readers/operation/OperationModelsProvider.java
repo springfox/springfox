@@ -79,11 +79,10 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
         "Adding return parameter of type {}",
         resolvedTypeSignature(modelType).orElse("<null>"));
 
-    context.operationModelsBuilder().addReturn(
-        modelType,
-        viewForReturn(
-            context,
-            modelType));
+    context.operationModelsBuilder()
+           .addReturn(
+               modelType,
+               viewForReturn(context));
   }
 
   private void collectParameters(RequestMappingContext context) {
@@ -103,7 +102,6 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
             modelType,
             viewForParameter(
                 context,
-                modelType,
                 parameterType),
             new HashSet<>());
       }
@@ -113,9 +111,7 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
         context.getName());
   }
 
-  private Optional<ResolvedType> viewForReturn(
-      RequestMappingContext context,
-      ResolvedType regularModel) {
+  private Optional<ResolvedType> viewForReturn(RequestMappingContext context) {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
     return viewProvider.viewFor(
@@ -124,7 +120,6 @@ public class OperationModelsProvider implements OperationModelsProviderPlugin {
 
   private Optional<ResolvedType> viewForParameter(
       RequestMappingContext context,
-      ResolvedType modelType,
       ResolvedMethodParameter parameter) {
     ViewProviderPlugin viewProvider =
         pluginsManager.viewProvider(context.getDocumentationContext().getDocumentationType());
