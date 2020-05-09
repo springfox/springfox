@@ -96,7 +96,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
     ResolvedType parameterType = methodParameter.getParameterType();
     parameterType = context.alternateFor(parameterType);
     ModelReference modelRef = null;
-    ModelSpecificationBuilder model = new ModelSpecificationBuilder("TODO");
+    ModelSpecificationBuilder model = new ModelSpecificationBuilder();
     boolean isRequestBody = false;
     if (methodParameter.hasParameterAnnotation(PathVariable.class) && treatAsAString(parameterType)) {
       parameterType = resolver.resolve(String.class);
@@ -104,13 +104,13 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       model.scalarModel(ScalarType.STRING);
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
       modelRef = new ModelRef("", new ModelRef("string"), true);
-      ModelSpecificationBuilder map = new ModelSpecificationBuilder("TODO");
+      ModelSpecificationBuilder map = new ModelSpecificationBuilder();
       model.mapModel(
           new MapSpecification(
-              new ModelSpecificationBuilder("TODO")
+              new ModelSpecificationBuilder()
                   .scalarModel(ScalarType.STRING)
                   .build(),
-              new ModelSpecificationBuilder("TODO")
+              new ModelSpecificationBuilder()
                   .scalarModel(ScalarType.STRING)
                   .build()));
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && treatRequestParamAsString(parameterType)) {
@@ -171,7 +171,7 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
              .forEach(mediaType ->
                           context.requestParameterBuilder()
                                  .contentSpecificationBuilder().representationBuilderFor(mediaType)
-                                 .modelSpecificationBuilder("TODO")
+                                 .modelSpecificationBuilder()
                                  .copyOf(parameterModel));
     } else {
       context.requestParameterBuilder()

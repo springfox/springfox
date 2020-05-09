@@ -11,12 +11,10 @@ public class ModelSpecification {
   private final MapSpecification map;
   private final ReferenceModelSpecification reference;
   private final ModelFacets facets;
-  private final String sourceIdentifier;
   private final String name;
 
   @SuppressWarnings("ParameterNumber")
   public ModelSpecification(
-      String sourceIdentifier,
       String name,
       ModelFacets facets,
       ScalarModelSpecification scalar,
@@ -24,7 +22,6 @@ public class ModelSpecification {
       CollectionSpecification collection,
       MapSpecification map,
       ReferenceModelSpecification reference) {
-    this.sourceIdentifier = sourceIdentifier;
     this.name = name;
     this.collection = collection;
     this.facets = facets;
@@ -34,10 +31,10 @@ public class ModelSpecification {
     this.reference = reference;
   }
 
-  public String getSourceIdentifier() {
-    return sourceIdentifier;
+  public Optional<ModelKey> key() {
+    return getCompound()
+        .map(CompoundModelSpecification::getModelKey);
   }
-
   public Optional<ScalarModelSpecification> getScalar() {
     return Optional.ofNullable(scalar);
   }
@@ -82,7 +79,6 @@ public class ModelSpecification {
         Objects.equals(map, that.map) &&
         Objects.equals(reference, that.reference) &&
         Objects.equals(facets, that.facets) &&
-        Objects.equals(sourceIdentifier, that.sourceIdentifier) &&
         name.equals(that.name);
   }
 
@@ -95,7 +91,6 @@ public class ModelSpecification {
         map,
         reference,
         facets,
-        sourceIdentifier,
         name);
   }
 
@@ -108,7 +103,6 @@ public class ModelSpecification {
         .add("map=" + map)
         .add("reference=" + reference)
         .add("facets=" + facets)
-        .add("sourceIdentifier='" + sourceIdentifier + "'")
         .add("name='" + name + "'")
         .toString();
   }

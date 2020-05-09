@@ -18,9 +18,9 @@ public class RepresentationBuilder {
     this.parent = parent;
   }
 
-  public ModelSpecificationBuilder modelSpecificationBuilder(String sourceIdentifier) {
+  public ModelSpecificationBuilder modelSpecificationBuilder() {
     if (modelBuilder == null) {
-      this.modelBuilder = new ModelSpecificationBuilder(sourceIdentifier, this);
+      this.modelBuilder = new ModelSpecificationBuilder(this);
     }
     return modelBuilder;
   }
@@ -71,7 +71,7 @@ public class RepresentationBuilder {
 
   public RepresentationBuilder copyOf(Representation other) {
     if (other != null) {
-      other.getEncodings().forEach(e -> this.modelSpecificationBuilder("aggregate")
+      other.getEncodings().forEach(e -> this.modelSpecificationBuilder()
           .copyOf(other.getModel())
           .yield(RepresentationBuilder.class)
           .encodingForProperty(e.getPropertyRef())

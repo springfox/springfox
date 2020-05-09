@@ -16,7 +16,6 @@ import static org.slf4j.LoggerFactory.*;
 public class ModelSpecificationBuilder {
   private static final Logger LOGGER = getLogger(ModelSpecificationBuilder.class);
   private final Object parent;
-  private final String sourceIdentifier;
   private final ModelFacetsBuilder facetsBuilder = new ModelFacetsBuilder(this);
   private String name;
   private ScalarModelSpecification scalar;
@@ -25,16 +24,13 @@ public class ModelSpecificationBuilder {
   private ReferenceModelSpecification reference;
   private CompoundModelSpecificationBuilder compoundModelBuilder;
 
-  public ModelSpecificationBuilder(String sourceIdentifier) {
+  public ModelSpecificationBuilder() {
     this(
-        sourceIdentifier,
         null);
   }
 
   public ModelSpecificationBuilder(
-      String sourceIdentifier,
       Object parent) {
-    this.sourceIdentifier = sourceIdentifier;
     this.parent = parent;
   }
 
@@ -91,7 +87,6 @@ public class ModelSpecificationBuilder {
         collection,
         map);
     return new ModelSpecification(
-        sourceIdentifier,
         name,
         facetsBuilder.build(),
         scalar,

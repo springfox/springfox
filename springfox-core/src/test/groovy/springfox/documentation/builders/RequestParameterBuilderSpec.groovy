@@ -4,7 +4,6 @@ import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.schema.ModelSpecification
-import springfox.documentation.service.CollectionFormat
 import springfox.documentation.service.ParameterStyle
 import springfox.documentation.service.ParameterType
 
@@ -81,7 +80,7 @@ class RequestParameterBuilderSpec extends Specification {
   }
 
   ModelSpecification spec(type) {
-    new ModelSpecificationBuilder("123")
+    new ModelSpecificationBuilder()
         .name("test")
         .scalarModel(type)
         .build()

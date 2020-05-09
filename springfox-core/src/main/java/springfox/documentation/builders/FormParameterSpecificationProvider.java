@@ -36,7 +36,7 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
       RepresentationBuilder representationBuilder = context.getContentSpecificationBuilder()
                                                            .requestBody(true)
                                                            .representationBuilderFor(mediaType)
-                                                           .modelSpecificationBuilder(context.getName())
+                                                           .modelSpecificationBuilder()
                                                            .copyOf(simpleParameter.getModel())
                                                            .yield(RepresentationBuilder.class);
       if (mediaType == MediaType.APPLICATION_FORM_URLENCODED) {
@@ -60,7 +60,7 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
       Collection<Encoding> encodings;
       ModelSpecification model;
       if (representation == null) {
-        model = new ModelSpecificationBuilder("pe_" + context.getName())
+        model = new ModelSpecificationBuilder()
             .name(context.getName())
             .scalarModel(ScalarType.STRING)
             .build();
@@ -72,7 +72,7 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
       contentSpecification = context.getContentSpecificationBuilder()
                                     .requestBody(true)
                                     .representationBuilderFor(mediaType)
-                                    .modelSpecificationBuilder(context.getName())
+                                    .modelSpecificationBuilder()
                                     .copyOf(model)
                                     .yield(RepresentationBuilder.class)
                                     .encodings(encodings)
@@ -82,8 +82,8 @@ public class FormParameterSpecificationProvider implements ParameterSpecificatio
       LOGGER.warn("Parameter should either be a simple or a content type");
       contentSpecification = context.getContentSpecificationBuilder()
                                     .representationBuilderFor(mediaType)
-                                    .modelSpecificationBuilder(context.getName())
-                                    .copyOf(new ModelSpecificationBuilder("pe_" + context.getName())
+                                    .modelSpecificationBuilder()
+                                    .copyOf(new ModelSpecificationBuilder()
                                                 .name(context.getName())
                                                 .scalarModel(ScalarType.STRING)
                                                 .build())

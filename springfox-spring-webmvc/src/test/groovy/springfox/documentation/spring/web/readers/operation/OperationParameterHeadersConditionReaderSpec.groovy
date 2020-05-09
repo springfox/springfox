@@ -26,14 +26,10 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import springfox.documentation.builders.EnumerationFacetBuilder
 import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.SimpleParameterSpecificationBuilder
-import springfox.documentation.common.Either
 import springfox.documentation.schema.ScalarType
-import springfox.documentation.service.ContentSpecification
 import springfox.documentation.service.Parameter
 import springfox.documentation.service.ParameterSpecification
-import springfox.documentation.service.ParameterStyle
 import springfox.documentation.service.RequestParameter
-import springfox.documentation.service.SimpleParameterSpecification
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.OperationContext
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -126,7 +122,7 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
             .facetBuilder(EnumerationFacetBuilder)
               .allowedValues(['testValue'])
               .yield(SimpleParameterSpecificationBuilder)
-            .model(new ModelSpecificationBuilder("nv0_String")
+            .model(new ModelSpecificationBuilder()
                 .scalarModel(ScalarType.STRING)
                 .name("test")
                 .build())

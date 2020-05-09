@@ -69,11 +69,7 @@ public class ModelSpecificationFactory {
                 modelContext.isReturnType()));
       }
     }
-    return new ModelSpecificationBuilder(
-        String.format(
-            "%s_%s",
-            modelContext.getParameterId(),
-            typeNameExtractor.typeName(modelContext)))
+    return new ModelSpecificationBuilder()
         .scalarModel(scalar.orElse(null))
         .referenceModel(reference)
         .collectionModel(collectionSpecification)

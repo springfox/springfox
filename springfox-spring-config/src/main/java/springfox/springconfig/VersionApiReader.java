@@ -57,9 +57,9 @@ public class VersionApiReader implements ParameterBuilderPlugin {
           .name("v")
           .simpleParameterBuilder()
           .style(ParameterStyle.SIMPLE)
-          .model(new ModelSpecificationBuilder("v") //TODO: what shuold this be
-              .scalarModel(ScalarType.STRING)
-              .build());
+                      .model(new ModelSpecificationBuilder()
+                                 .scalarModel(ScalarType.STRING)
+                                 .build());
     }
   }
 

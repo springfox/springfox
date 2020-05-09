@@ -87,7 +87,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("id")
         .simpleParameterBuilder()
         .model(
-            new ModelSpecificationBuilder("1")
+            new ModelSpecificationBuilder()
                 .scalarModel(ScalarType.UUID)
                 .build())
         .yield()
@@ -101,7 +101,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("address")
         .contentSpecificationBuilder()
         .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-        .modelSpecificationBuilder("abc")
+        .modelSpecificationBuilder()
         .referenceModel(
             new ReferenceModelSpecification(
                 new ModelKey(
@@ -123,11 +123,11 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("historyMetadata")
         .contentSpecificationBuilder()
         .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-        .modelSpecificationBuilder("1")
+        .modelSpecificationBuilder()
         .compoundModelBuilder()
         .propertyBuilder("id")
         .type(
-            new ModelSpecificationBuilder("2")
+            new ModelSpecificationBuilder()
                 .name("String")
                 .scalarModel(ScalarType.STRING)
                 .build())
@@ -135,7 +135,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .yield()
         .propertyBuilder("version")
         .type(
-            new ModelSpecificationBuilder("3")
+            new ModelSpecificationBuilder()
                 .name("String")
                 .scalarModel(ScalarType.BIGDECIMAL)
                 .build())
@@ -157,7 +157,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("profileImage")
         .contentSpecificationBuilder()
         .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-        .modelSpecificationBuilder("4")
+        .modelSpecificationBuilder()
         .scalarModel(ScalarType.BINARY)
         .yield(RepresentationBuilder)
         .encodingForProperty("profileImage")
@@ -167,7 +167,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                 " X-Rate-Limit-Limit",
                 "The number of allowed requests in the current period",
                 null,
-                new ModelSpecificationBuilder("5")
+                new ModelSpecificationBuilder()
                     .name("Integer")
                     .scalarModel(ScalarType.INTEGER)
                     .build())])
@@ -184,15 +184,15 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .name("body")
         .contentSpecificationBuilder()
           .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-            .modelSpecificationBuilder("4")
+            .modelSpecificationBuilder()
               .compoundModelBuilder()
                 .propertyBuilder("id")
-                .type(new ModelSpecificationBuilder("")
+                .type(new ModelSpecificationBuilder()
                     .scalarModel(ScalarType.STRING)
                     .build())
                 .yield()
                 .propertyBuilder("address")
-                  .type(new ModelSpecificationBuilder("")
+                  .type(new ModelSpecificationBuilder()
                     .referenceModel(new ReferenceModelSpecification(new ModelKey(
                         "123",
                         "abc",
@@ -213,7 +213,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
                   " X-Rate-Limit-Limit",
                   "The number of allowed requests in the current period",
                   null,
-                  new ModelSpecificationBuilder("5")
+                  new ModelSpecificationBuilder()
                     .name("Integer")
                     .scalarModel(ScalarType.INTEGER)
                     .build())])

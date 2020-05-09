@@ -30,7 +30,7 @@ public class MultipartFormDataParameterSpecificationProvider implements Paramete
             .copyOf(contentParameter)
             .requestBody(true)
             .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
-            .modelSpecificationBuilder(context.getName())
+            .modelSpecificationBuilder()
             .copyOf(simpleParameter.getModel())
             .yield(RepresentationBuilder.class)
             .encodings(Collections.singletonList(
@@ -45,10 +45,10 @@ public class MultipartFormDataParameterSpecificationProvider implements Paramete
               .copyOf(contentParameter)
               .requestBody(true)
               .representationBuilderFor(each.getMediaType())
-              .modelSpecificationBuilder(context.getName())
+              .modelSpecificationBuilder()
               .copyOf(
                   mediaType.map(Representation::getModel)
-                           .orElse(new ModelSpecificationBuilder("pe_" + context.getName())
+                           .orElse(new ModelSpecificationBuilder()
                                        .name(context.getName())
                                        .scalarModel(ScalarType.STRING)
                                        .build()))
@@ -62,8 +62,8 @@ public class MultipartFormDataParameterSpecificationProvider implements Paramete
         contentSpecificationBuilder
             .requestBody(true)
             .representationBuilderFor(MediaType.TEXT_PLAIN)
-            .modelSpecificationBuilder(context.getName())
-            .copyOf(new ModelSpecificationBuilder("pe_" + context.getName())
+            .modelSpecificationBuilder()
+            .copyOf(new ModelSpecificationBuilder()
                         .name(context.getName())
                         .scalarModel(ScalarType.STRING)
                         .build())

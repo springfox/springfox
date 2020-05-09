@@ -111,7 +111,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .order(DEFAULT_PRECEDENCE)
         .simpleParameterBuilder()
         .collectionFormat(isContainerType(resolved) ? CollectionFormat.CSV : null)
-        .model(new ModelSpecificationBuilder(name)
+        .model(new ModelSpecificationBuilder()
             .scalarModel(ScalarType.STRING)
             .build())
         .facetBuilder(EnumerationFacetBuilder.class)

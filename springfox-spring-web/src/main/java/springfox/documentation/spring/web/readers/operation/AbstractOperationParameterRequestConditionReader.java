@@ -112,9 +112,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
           .facetBuilder(EnumerationFacetBuilder.class)
             .allowedValues(allowableValues)
             .yield(SimpleParameterSpecificationBuilder.class)
-          .model(new ModelSpecificationBuilder(String.format(
-              "nv%s_String",
-              index++))
+          .model(new ModelSpecificationBuilder()
               .name(expression.getName())
               .scalarModel(ScalarType.STRING)
               .build())

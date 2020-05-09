@@ -73,8 +73,7 @@ public class ModelContext {
     this.view = view;
     this.validationGroups = new HashSet<>(validationGroups);
     this.modelBuilder = new ModelBuilder(getModelId());
-    this.modelSpecificationBuilder =
-        new ModelSpecificationBuilder(getModelId());
+    this.modelSpecificationBuilder = new ModelSpecificationBuilder();
   }
 
   @SuppressWarnings("ParameterNumber")
@@ -93,7 +92,7 @@ public class ModelContext {
     this.ignorableTypes = parentContext.ignorableTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
     this.modelBuilder = new ModelBuilder(getModelId());
-    this.modelSpecificationBuilder = new ModelSpecificationBuilder(getModelId());
+    this.modelSpecificationBuilder = new ModelSpecificationBuilder();
   }
 
   /**
