@@ -28,6 +28,7 @@ import springfox.documentation.schema.CachingModelDependencyProvider
 import springfox.documentation.schema.CachingModelProvider
 import springfox.documentation.schema.DefaultModelDependencyProvider
 import springfox.documentation.schema.DefaultModelProvider
+import springfox.documentation.schema.DefaultModelSpecificationProvider
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.ModelProvider
@@ -93,7 +94,17 @@ trait ModelProviderForServiceSupport implements ServicePluginsSupport {
           new CachingModelDependencyProvider(modelDependenciesProvider),
           pluginsManager,
           typeNameExtractor,
-          enumTypeDeterminer))
+          enumTypeDeterminer),
+        new DefaultModelSpecificationProvider(
+            typeResolver,
+            modelPropertiesProvider,
+            modelDependenciesProvider,
+            pluginsManager,
+            typeNameExtractor,
+            enumTypeDeterminer,
+            new ModelSpecificationFactory(
+                typeNameExtractor,
+                enumTypeDeterminer)))
   }
 
   ModelProvider modelProviderWithSnakeCaseNamingStrategy(

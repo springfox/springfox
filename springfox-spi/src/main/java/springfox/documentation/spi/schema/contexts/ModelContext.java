@@ -26,9 +26,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -50,7 +48,6 @@ public class ModelContext {
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
   private final Set<Class> ignorableTypes;
-  private final Map<ResolvedType, String> registeredTypes;
 
   @SuppressWarnings("ParameterNumber")
   private ModelContext(
@@ -70,7 +67,6 @@ public class ModelContext {
     this.alternateTypeProvider = alternateTypeProvider;
     this.genericNamingStrategy = genericNamingStrategy;
     this.ignorableTypes = ignorableTypes;
-    this.registeredTypes = new HashMap<>();
     this.parentContext = null;
     this.type = type;
     this.returnType = returnType;
@@ -95,7 +91,6 @@ public class ModelContext {
     this.documentationType = parentContext.getDocumentationType();
     this.alternateTypeProvider = parentContext.alternateTypeProvider;
     this.ignorableTypes = parentContext.ignorableTypes;
-    this.registeredTypes = parentContext.registeredTypes;
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
     this.modelBuilder = new ModelBuilder(getModelId());
     this.modelSpecificationBuilder = new ModelSpecificationBuilder(getModelId());

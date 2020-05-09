@@ -26,9 +26,6 @@ import springfox.documentation.schema.DefaultTypeNameProvider;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
-import java.util.function.Predicate;
-
-import static java.util.Optional.*;
 import static org.springframework.core.annotation.AnnotationUtils.*;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
@@ -37,7 +34,9 @@ import static springfox.documentation.builders.BuilderDefaults.*;
 public class ApiModelTypeNameProvider extends DefaultTypeNameProvider {
   @Override
   public String nameFor(Class<?> type) {
-    ApiModel annotation = findAnnotation(type, ApiModel.class);
+    ApiModel annotation = findAnnotation(
+        type,
+        ApiModel.class);
     String defaultTypeName = super.nameFor(type);
     if (annotation != null) {
       String value = nullToEmpty(annotation.value());
