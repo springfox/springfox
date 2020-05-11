@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -70,22 +69,15 @@ public class ParameterTypeReader implements ParameterBuilderPlugin {
       return "body";
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestPart.class)) {
       return "formData";
-    } else if (resolvedMethodParameter.hasParameterAnnotation(RequestParam.class)) {
-      return determineScalarParameterType(
-          parameterContext.getOperationContext().consumes(),
-          parameterContext.getOperationContext().httpMethod());
     } else if (resolvedMethodParameter.hasParameterAnnotation(RequestHeader.class)) {
       return "header";
     } else if (resolvedMethodParameter.hasParameterAnnotation(ModelAttribute.class)) {
       LOGGER.warn("@ModelAttribute annotated parameters should have already been expanded via "
           + "the ExpandedParameterBuilderPlugin");
     }
-    if (!resolvedMethodParameter.hasParameterAnnotations()) {
-      return determineScalarParameterType(
-          parameterContext.getOperationContext().consumes(),
-          parameterContext.getOperationContext().httpMethod());
-    }
-    return "body";
+    return determineScalarParameterType(
+        parameterContext.getOperationContext().consumes(),
+        parameterContext.getOperationContext().httpMethod());
   }
 
   private static boolean isListOfFiles(ResolvedType parameterType) {

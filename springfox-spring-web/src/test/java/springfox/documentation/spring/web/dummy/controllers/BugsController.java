@@ -501,6 +501,14 @@ public class BugsController {
     // Empty body is sufficient for testing
   }
 
+  @ApiOperation(value = "bug2855")
+  @RequestMapping(value = "/2855", method = POST, consumes = APPLICATION_FORM_URLENCODED_VALUE)
+  public void bug2855(
+          @NotNull String a,
+          String b) {
+    // Empty body is sufficient for testing
+  }
+
   @SuppressWarnings("VisibilityModifier")
   public class Bug2423 {
     public String from;

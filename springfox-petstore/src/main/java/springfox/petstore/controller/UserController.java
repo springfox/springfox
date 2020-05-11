@@ -62,7 +62,7 @@ public class UserController {
   @ResponseBody
   @ApiOperation(value = "Creates list of users with given input array")
   public ResponseEntity<User> createUsersWithArrayInput(@ApiParam(value = "List of user object", required = true)
-                                                            User[] users) {
+                                                        @RequestBody User[] users) {
     for (User user : users) {
       userRepository.add(user);
     }
@@ -73,7 +73,7 @@ public class UserController {
   @ResponseBody
   @ApiOperation(value = "Creates list of users with given input array")
   public ResponseEntity<String> createUsersWithListInput(
-      @ApiParam(value = "List of user object", required = true) List<User> users) {
+      @ApiParam(value = "List of user object", required = true) @RequestBody List<User> users) {
     for (User user : users) {
       userRepository.add(user);
     }
