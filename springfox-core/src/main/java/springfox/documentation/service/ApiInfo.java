@@ -30,7 +30,8 @@ public class ApiInfo {
       = new Contact(
       "",
       "",
-      "");
+      "",
+       new ArrayList<>());
   public static final ApiInfo DEFAULT
       = new ApiInfo(
       "Api Documentation",
@@ -78,7 +79,7 @@ public class ApiInfo {
         description,
         version,
         termsOfServiceUrl,
-        new Contact(contactName, "", ""),
+        new Contact(contactName, "", "", new ArrayList<>()),
         license,
         licenseUrl,
         new ArrayList<>());

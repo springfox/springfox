@@ -42,15 +42,15 @@ class ApiInfoBuilderSpec extends Specification {
       buildWithContactString.contact.url == ""
 
     where:
-      builderMethod       | value                      | property
-      'version'           | '1.0'                      | 'version'
-      'title'             | 'title'                    | 'title'
-      'termsOfServiceUrl' | 'urn:tos'                  | 'termsOfServiceUrl'
-      'description'       | 'test'                     | 'description'
-      'contact'           | new Contact("a", "b", "c") | 'contact'
-      'license'           | 'license'                  | 'license'
-      'licenseUrl'        | 'urn:license'              | 'licenseUrl'
-      'extensions'        | extensions()                  | 'vendorExtensions'
+      builderMethod       | value                                       | property
+      'version'           | '1.0'                                       | 'version'
+      'title'             | 'title'                                     | 'title'
+      'termsOfServiceUrl' | 'urn:tos'                                   | 'termsOfServiceUrl'
+      'description'       | 'test'                                      | 'description'
+      'contact'           | new Contact("a", "b", "c", new ArrayList()) | 'contact'
+      'license'           | 'license'                                   | 'license'
+      'licenseUrl'        | 'urn:license'                               | 'licenseUrl'
+      'extensions'        | extensions()                                | 'vendorExtensions'
   }
 
   List<VendorExtension> extensions() {

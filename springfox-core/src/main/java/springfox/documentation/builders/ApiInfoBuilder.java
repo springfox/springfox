@@ -94,7 +94,7 @@ public class ApiInfoBuilder {
    */
   @Deprecated
   public ApiInfoBuilder contact(String contact) {
-    this.contact = new Contact(contact, "", "");
+    this.contact = new Contact(contact, "", "", new ArrayList<>());
     return this;
   }
 

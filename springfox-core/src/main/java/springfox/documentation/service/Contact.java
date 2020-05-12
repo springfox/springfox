@@ -18,15 +18,19 @@
  */
 package springfox.documentation.service;
 
+import java.util.List;
+
 public class Contact {
   private final String name;
   private final String url;
   private final String email;
+  private final List<VendorExtension> vendorExtensions;
 
-  public Contact(String name, String url, String email) {
+  public Contact(String name, String url, String email, List<VendorExtension> vendorExtensions) {
     this.name = name;
     this.url = url;
     this.email = email;
+    this.vendorExtensions = vendorExtensions;
   }
 
   public String getName() {
@@ -39,5 +43,9 @@ public class Contact {
 
   public String getEmail() {
     return email;
+  }
+
+  public List<VendorExtension> getVendorExtensions() {
+    return vendorExtensions;
   }
 }

@@ -23,6 +23,11 @@ import io.swagger.models.Contact;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import springfox.documentation.schema.Model;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.service.ApiListingReference;
@@ -35,6 +40,7 @@ import springfox.documentation.swagger1.dto.Operation;
 import springfox.documentation.swagger1.dto.Parameter;
 import springfox.documentation.swagger1.dto.ResourceListing;
 import springfox.documentation.swagger1.dto.ResponseMessage;
+import springfox.documentation.swagger1.dto.VendorExtension;
 
 
 @Mapper(uses = {
@@ -52,6 +58,16 @@ public interface ServiceModelToSwaggerMapper {
   ApiInfo toSwaggerApiInfo(springfox.documentation.service.ApiInfo from);
 
   Contact map(springfox.documentation.service.Contact from);
+  VendorExtension map(springfox.documentation.service.VendorExtension vendorExtension);
+  List<VendorExtension> map(List<springfox.documentation.service.VendorExtension> vendorExtensions);
+
+  default Map<String, Object> toJavaMap(List<springfox.documentation.service.VendorExtension> vendorExtensions) {
+    Map<String, Object> m = new HashMap<String, Object>();
+    for (springfox.documentation.service.VendorExtension ext : vendorExtensions) {
+      m.put(ext.getName(), ext.getValue());
+    }
+    return m;
+  }
 
   @Mappings({
           @Mapping(

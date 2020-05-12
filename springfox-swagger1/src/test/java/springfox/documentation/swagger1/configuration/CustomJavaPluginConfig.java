@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.ArrayList;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -76,7 +79,8 @@ public class CustomJavaPluginConfig {
         .contact(new Contact(
             "My Apps API Contact Email",
             "",
-            ""))
+            "",
+             new ArrayList<>()))
         .license("My Apps API Licence Type")
         .licenseUrl("My Apps API License URL")
         .build();
