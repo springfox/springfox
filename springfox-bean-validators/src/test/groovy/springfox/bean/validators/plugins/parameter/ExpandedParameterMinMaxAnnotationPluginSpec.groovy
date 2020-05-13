@@ -14,6 +14,10 @@ import springfox.documentation.spring.web.readers.parameter.ModelAttributeParame
 
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
+import javax.validation.constraints.Negative
+import javax.validation.constraints.NegativeOrZero
+import javax.validation.constraints.Positive
+import javax.validation.constraints.PositiveOrZero
 
 class ExpandedParameterMinMaxAnnotationPluginSpec
     extends Specification
@@ -56,11 +60,19 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
     range?.exclusiveMin == exclusiveMin
 
     where:
-    fieldName      | expectedMin | exclusiveMin | expectedMax | exclusiveMax
-    "noAnnotation" | null        | null         | null        | null
-    "onlyMin"      | "10.0"      | false        | null        | null
-    "onlyMax"      | null        | null         | "20.0"      | false
-    "both"         | "10.0"      | false        | "20.0"      | false
+    fieldName           | expectedMin | exclusiveMin | expectedMax | exclusiveMax
+    "noAnnotation"      | null        | null         | null        | null
+    "onlyMin"           | "10.0"      | false        | null        | null
+    "onlyMax"           | null        | null         | "20.0"      | false
+    "both"              | "10.0"      | false        | "20.0"      | false
+    "positive"          | "1.0"       | false        | null        | null
+    "positiveOrZero"    | "0.0"       | false        | null        | null
+    "negative"          | null        | null         | "-1.0"      | false
+    "negativeOrZero"    | null        | null         | "0.0"       | false
+    "positiveMax"       | "1.0"       | false        | "20.0"      | false
+    "positiveOrZeroMax" | "0.0"       | false        | "20.0"      | false
+    "negativeMin"       | "-30.0"     | false        | "-1.0"      | false
+    "negativeOrZeroMin" | "-30.0"     | false        | "0.0"       | false
   }
 
   class Subject {
@@ -72,5 +84,25 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
     @Min(10L)
     @Max(20L)
     String both
+    @Positive
+    String positive
+    @PositiveOrZero
+    String positiveOrZero
+    @Negative
+    String negative
+    @NegativeOrZero
+    String negativeOrZero
+    @Positive
+    @Max(20L)
+    String positiveMax
+    @PositiveOrZero
+    @Max(20L)
+    String positiveOrZeroMax
+    @Negative
+    @Min(-30L)
+    String negativeMin
+    @NegativeOrZero
+    @Min(-30L)
+    String negativeOrZeroMin
   }
 }
