@@ -28,8 +28,8 @@ import io.swagger.models.Xml;
 import io.swagger.models.properties.AbstractNumericProperty;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
-import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
+import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelProperty;
@@ -52,7 +52,9 @@ import java.util.stream.Stream;
 import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
+import static springfox.documentation.schema.Collections.*;
 import static springfox.documentation.schema.Maps.*;
+import static springfox.documentation.schema.Types.*;
 import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
@@ -114,14 +116,22 @@ public abstract class ModelMapper {
     model.setType(ModelImpl.OBJECT);
     model.setTitle(source.getName());
     if (isMapType(source.getType())) {
-      Optional<Class> clazz = typeOfValue(source);
-      if (clazz.isPresent()) {
-        model.additionalProperties(property(clazz.get().getSimpleName()));
-      } else {
-        model.additionalProperties(new ObjectProperty());
-      }
+      ResolvedType valueType = mapValueType(source.getType());
+      model.additionalProperties(resolvedTypeToProperty(valueType));
     }
     return model;
+  }
+
+  private Property resolvedTypeToProperty(ResolvedType type) {
+    if (isContainerType(type)) {
+      return new ArrayProperty(resolvedTypeToProperty(collectionElementType(type)));
+    } else if (isMapType(type)) {
+      return new MapProperty(resolvedTypeToProperty(mapValueType(type)));
+    } else if (isBaseType(type)) {
+      return property(typeNameFor(type.getErasedType()));
+    } else {
+      return new RefProperty(type.getErasedType().getSimpleName());
+    }
   }
 
   private Map<String, Property> mapProperties(SortedMap<String, ModelProperty> properties) {
