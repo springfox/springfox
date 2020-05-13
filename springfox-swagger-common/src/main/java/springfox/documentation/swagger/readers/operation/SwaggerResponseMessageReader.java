@@ -40,6 +40,7 @@ import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 import java.util.ArrayList;
@@ -64,21 +65,23 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
   private final EnumTypeDeterminer enumTypeDeterminer;
   private final TypeNameExtractor typeNameExtractor;
   private final TypeResolver typeResolver;
+  private final DescriptionResolver descriptions;
 
   @Autowired
   public SwaggerResponseMessageReader(
       EnumTypeDeterminer enumTypeDeterminer,
       TypeNameExtractor typeNameExtractor,
-      TypeResolver typeResolver) {
+      TypeResolver typeResolver,
+      DescriptionResolver descriptions) {
     this.enumTypeDeterminer = enumTypeDeterminer;
     this.typeNameExtractor = typeNameExtractor;
     this.typeResolver = typeResolver;
+    this.descriptions = descriptions;
   }
 
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder().responseMessages(read(context));
-
   }
 
   @Override
@@ -143,7 +146,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               final String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
               examples.add(new Example(
                   mediaType,
-                  exampleProperty.value()));
+                  resolvedValue(exampleProperty.value())));
             }
           }
           Map<String, Header> headers = new HashMap<>(defaultHeaders);
@@ -202,5 +205,12 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
     return ofNullable(resolvedTypeFromResponse(
         typeResolver,
         null).apply(apiResponse));
+  }
+  
+  private String resolvedValue(String value) {
+    if (value.charAt(0) == '$' && value.charAt(1) == '{' && value.charAt(value.length() - 1) == '}') {
+      return descriptions.resolve(value);
+    }
+    return value;
   }
 }

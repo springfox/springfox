@@ -20,6 +20,7 @@
 package springfox.documentation.swagger.readers.operation
 
 import com.fasterxml.classmate.TypeResolver
+import org.springframework.mock.env.MockEnvironment
 import org.springframework.plugin.core.OrderAwarePluginRegistry
 import org.springframework.plugin.core.PluginRegistry
 import spock.lang.Unroll
@@ -29,6 +30,7 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.service.contexts.OperationContext
+import springfox.documentation.spring.web.DescriptionResolver
 import springfox.documentation.spring.web.dummy.ResponseExampleTestController
 import springfox.documentation.spring.web.dummy.ResponseHeaderTestController
 import springfox.documentation.spring.web.mixins.RequestMappingSupport
@@ -51,12 +53,14 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
+    def descriptions = new DescriptionResolver(new MockEnvironment())
 
     when:
     new SwaggerResponseMessageReader(
         new JacksonEnumTypeDeterminer(),
         typeNameExtractor,
-        resolver)
+        resolver,
+        descriptions)
       .apply(operationContext)
 
     and:
@@ -86,12 +90,14 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
+    def descriptions = new DescriptionResolver(new MockEnvironment())
 
     when:
     new SwaggerResponseMessageReader(
         new JacksonEnumTypeDeterminer(),
         typeNameExtractor,
-        resolver)
+        resolver,
+        descriptions)
       .apply(operationContext)
 
     and:
@@ -122,11 +128,13 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
+    def descriptions = new DescriptionResolver(new MockEnvironment())
 
     when:
     new SwaggerResponseMessageReader(new JacksonEnumTypeDeterminer(),
         typeNameExtractor,
-        resolver)
+        resolver,
+        descriptions)
       .apply(operationContext)
 
     and:
@@ -189,12 +197,14 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
+    def descriptions = new DescriptionResolver(new MockEnvironment())
 
     when:
     def sut = new SwaggerResponseMessageReader(
         new JacksonEnumTypeDeterminer(),
         typeNameExtractor,
-        resolver)
+        resolver,
+        descriptions)
 
     then:
     !sut.supports(DocumentationType.SPRING_WEB)
@@ -216,12 +226,14 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
         resolver,
         modelNameRegistry,
         new JacksonEnumTypeDeterminer())
+    def descriptions = new DescriptionResolver(new MockEnvironment().withProperty("resolvedValue", "this is an example."))
 
     when:
     new SwaggerResponseMessageReader(
         Mock(EnumTypeDeterminer),
         typeNameExtractor,
-        resolver)
+        resolver,
+        descriptions)
         .apply(operationContext)
 
     and:
@@ -232,11 +244,13 @@ class SwaggerResponseMessageReaderSpec extends DocumentationContextSpec {
     examplesMatch(responseMessages[0].examples, examples)
 
     where:
-    methodName                  | examples
-    "operationWithNoExamples"   | []
-    "operationWithOneExample"   | [new Example("mediaType", "value")]
-    "operationWithTwoExamples"  | [new Example("mediaType1", "value1"), new Example("mediaType2", "value2")]
-    "operationWithEmptyExample" | [new Example("mediaType1", "value1")]
+    methodName                      | examples
+    "operationWithNoExamples"       | []
+    "operationWithOneExample"       | [new Example("mediaType", "value")]
+    "operationWithTwoExamples"      | [new Example("mediaType1", "value1"), new Example("mediaType2", "value2")]
+    "operationWithEmptyExample"     | [new Example("mediaType1", "value1")]
+    "operationWithResolvedValue"    | [new Example("mediaType", "this is an example.")]
+    "operationWithInvalidProperties"| [new Example("mediaType", "\${resolvedValue"), new Example(null, "\$resolvedValue}")]
   }
 
   boolean examplesMatch(List<Example> examples, List<Example> expectedExamples) {
