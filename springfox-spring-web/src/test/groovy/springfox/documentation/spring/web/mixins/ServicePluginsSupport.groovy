@@ -27,6 +27,7 @@ import springfox.documentation.service.PathDecorator
 import springfox.documentation.spi.service.ApiListingScannerPlugin
 import springfox.documentation.spi.service.DefaultsProviderPlugin
 import springfox.documentation.spi.service.DocumentationPlugin
+import springfox.documentation.spi.service.ModelNamesRegistryFactoryPlugin
 import springfox.documentation.spi.service.OperationBuilderPlugin
 import springfox.documentation.spi.service.ParameterBuilderPlugin
 import springfox.documentation.spi.service.ResourceGroupingStrategy
@@ -69,6 +70,7 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
         new PathMappingDecorator(),
         new QueryStringUriTemplateDecorator()])
     plugins.responsePlugins = of([new DefaultResponseTypeReader()])
+    plugins.modelNameRegistryFactoryPlugins = of([])
     return plugins
   }
 
@@ -82,7 +84,8 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
                                             new PathSanitizer(),
                                             new PathMappingDecorator(),
                                             new QueryStringUriTemplateDecorator()],
-      List<ApiListingScannerPlugin> listingScanners = []) {
+      List<ApiListingScannerPlugin> listingScanners = [],
+      ModelNamesRegistryFactoryPlugin[] modelNamesGenerators) {
 
     def resolver = new TypeResolver()
     def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
@@ -97,6 +100,7 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
     plugins.defaultsProviders = of(defaultProviderPlugins)
     plugins.pathDecorators = of(pathDecorators)
     plugins.apiListingScanners = of(listingScanners)
+    plugins.modelNameRegistryFactoryPlugins = of(modelNamesGenerators)
     return plugins
   }
 

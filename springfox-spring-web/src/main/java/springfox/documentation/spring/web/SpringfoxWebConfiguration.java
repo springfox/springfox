@@ -57,7 +57,8 @@ import java.util.List;
     OperationModelsProviderPlugin.class,
     DefaultsProviderPlugin.class,
     PathDecorator.class,
-    ApiListingScannerPlugin.class
+    ApiListingScannerPlugin.class,
+    ModelNamesRegistryFactoryPlugin.class
 })
 public class SpringfoxWebConfiguration {
 

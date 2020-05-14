@@ -39,6 +39,7 @@ import springfox.documentation.spi.service.ApiListingScannerPlugin;
 import springfox.documentation.spi.service.DefaultsProviderPlugin;
 import springfox.documentation.spi.service.DocumentationPlugin;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
+import springfox.documentation.spi.service.ModelNamesRegistryFactoryPlugin;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -55,6 +56,7 @@ import springfox.documentation.spi.service.contexts.RequestMappingContext;
 import springfox.documentation.spi.service.contexts.ResponseContext;
 import springfox.documentation.spring.web.SpringGroupingStrategy;
 import springfox.documentation.spring.web.scanners.ApiListingScanningContext;
+import springfox.documentation.spring.web.scanners.DefaultModelNamesRegistryFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,6 +103,9 @@ public class DocumentationPluginsManager {
   @Autowired
   @Qualifier("responseBuilderPluginRegistry")
   private PluginRegistry<ResponseBuilderPlugin, DocumentationType> responsePlugins;
+  @Autowired
+  @Qualifier("modelNamesRegistryFactoryPluginRegistry")
+  private PluginRegistry<ModelNamesRegistryFactoryPlugin, DocumentationType> modelNameRegistryFactoryPlugins;
 
   public Iterable<DocumentationPlugin> documentationPlugins() throws IllegalStateException {
     List<DocumentationPlugin> plugins = documentationPlugins.getPlugins();
@@ -161,6 +166,12 @@ public class DocumentationPluginsManager {
 
   public ResourceGroupingStrategy resourceGroupingStrategy(DocumentationType documentationType) {
     return resourceGroupingStrategies.getPluginOrDefaultFor(documentationType, new SpringGroupingStrategy());
+  }
+
+  public ModelNamesRegistryFactoryPlugin modelNamesGeneratorFactory(DocumentationType documentationType) {
+    return modelNameRegistryFactoryPlugins.getPluginOrDefaultFor(
+        documentationType,
+        new DefaultModelNamesRegistryFactory());
   }
 
   private DocumentationPlugin defaultDocumentationPlugin() {
