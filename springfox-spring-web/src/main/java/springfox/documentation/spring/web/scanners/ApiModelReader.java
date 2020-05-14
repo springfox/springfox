@@ -428,7 +428,7 @@ public class ApiModelReader {
   private List<String> findBranchRoots(ModelContext rootContext) {
     List<String> roots = new ArrayList<>();
 
-    ResolvedType resolvedType = rootContext.alternateFor(rootContext.getType());
+    ResolvedType resolvedType = rootContext.alternateEvaluatedType();
     if (resolvedType.isArray()) {
       ResolvedType elementType = resolvedType.getArrayElementType();
       roots.addAll(findBranchRoots(ModelContext.fromParent(rootContext, elementType)));

@@ -10,13 +10,16 @@ public class CompoundModelSpecification {
   private final List<PropertySpecification> properties;
   private final Integer maxProperties;
   private final Integer minProperties;
+  private final ModelKey effectiveModelKey;
 
   public CompoundModelSpecification(
       ModelKey modelKey,
+      ModelKey effectiveModelKey,
       Collection<PropertySpecification> properties,
       Integer maxProperties,
       Integer minProperties) {
     this.modelKey = modelKey;
+    this.effectiveModelKey = effectiveModelKey;
     this.properties = new ArrayList<>(properties);
     this.maxProperties = maxProperties;
     this.minProperties = minProperties;
@@ -38,6 +41,10 @@ public class CompoundModelSpecification {
     return minProperties;
   }
 
+  public ModelKey getEffectiveModelKey() {
+    return effectiveModelKey;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -56,13 +63,15 @@ public class CompoundModelSpecification {
         Objects.equals(
             minProperties,
             that.minProperties) &&
-        Objects.equals(modelKey, that.modelKey);
+        Objects.equals(modelKey, that.modelKey)
+     && Objects.equals(getEffectiveModelKey(), that.getEffectiveModelKey());
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
         modelKey,
+        effectiveModelKey,
         properties,
         maxProperties,
         minProperties);
@@ -72,6 +81,7 @@ public class CompoundModelSpecification {
   public String toString() {
     return "CompoundModelSpecification{" +
         "modelKey=" + modelKey +
+        ", effecttiveModelKey=" + modelKey +
         ", properties=" + properties +
         ", maxProperties=" + maxProperties +
         ", minProperties=" + minProperties +

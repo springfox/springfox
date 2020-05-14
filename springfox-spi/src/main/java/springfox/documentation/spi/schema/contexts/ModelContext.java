@@ -22,6 +22,7 @@ import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import springfox.documentation.builders.ModelBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
+import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.AlternateTypeProvider;
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy;
@@ -45,6 +46,7 @@ public class ModelContext {
   private final Set<ResolvedType> seenTypes = new HashSet<>();
   private final ModelBuilder modelBuilder;
   private final ModelSpecificationBuilder modelSpecificationBuilder;
+  private final ModelKeyBuilder effectiveModelKeyBuilder = new ModelKeyBuilder();
   private final AlternateTypeProvider alternateTypeProvider;
   private final GenericTypeNamingStrategy genericNamingStrategy;
   private final Set<Class> ignorableTypes;
@@ -74,6 +76,8 @@ public class ModelContext {
     this.validationGroups = new HashSet<>(validationGroups);
     this.modelBuilder = new ModelBuilder(getModelId());
     this.modelSpecificationBuilder = new ModelSpecificationBuilder();
+    this.getEffectiveModelKeyBuilder()
+        .isResponse(isReturnType());
   }
 
   @SuppressWarnings("ParameterNumber")
@@ -93,6 +97,8 @@ public class ModelContext {
     this.genericNamingStrategy = parentContext.getGenericNamingStrategy();
     this.modelBuilder = new ModelBuilder(getModelId());
     this.modelSpecificationBuilder = new ModelSpecificationBuilder();
+    this.getEffectiveModelKeyBuilder()
+        .isResponse(isReturnType());
   }
 
   /**
@@ -168,6 +174,13 @@ public class ModelContext {
    */
   public ResolvedType alternateFor(ResolvedType resolved) {
     return alternateTypeProvider.alternateFor(resolved);
+  }
+
+  /**
+   * @return alternate type for given resolved type
+   */
+  public ResolvedType alternateEvaluatedType() {
+    return alternateTypeProvider.alternateFor(getType());
   }
 
   /**
@@ -309,6 +322,10 @@ public class ModelContext {
 
   public ModelSpecificationBuilder getModelSpecificationBuilder() {
     return modelSpecificationBuilder;
+  }
+
+  public ModelKeyBuilder getEffectiveModelKeyBuilder() {
+    return effectiveModelKeyBuilder;
   }
 
   public void seen(ResolvedType resolvedType) {

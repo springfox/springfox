@@ -97,7 +97,7 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
 
 
   private Set<ResolvedType> resolvedDependencies(ModelContext modelContext) {
-    ResolvedType resolvedType = modelContext.alternateFor(modelContext.resolvedType(typeResolver));
+    ResolvedType resolvedType = modelContext.alternateEvaluatedType();
     if (isBaseType(ModelContext.fromParent(modelContext, resolvedType))) {
       LOG.debug("Marking base type {} as seen", resolvedType.getSignature());
       modelContext.seen(resolvedType);

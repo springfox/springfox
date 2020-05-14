@@ -16,7 +16,7 @@ public class CompoundModelSpecificationBuilder {
   private Integer maxProperties;
   private Integer minProperties;
   private ModelKey modelKey;
-
+  private ModelKey effectiveModelKey;
 
   public CompoundModelSpecificationBuilder(ModelSpecificationBuilder parent) {
     this.parent = parent;
@@ -32,6 +32,7 @@ public class CompoundModelSpecificationBuilder {
 
   public CompoundModelSpecificationBuilder modelKey(ModelKey modelKey) {
     this.modelKey = modelKey;
+    this.effectiveModelKey = modelKey;
     return this;
   }
 
@@ -57,6 +58,7 @@ public class CompoundModelSpecificationBuilder {
     if (properties.size() > 0) {
       return new CompoundModelSpecification(
           modelKey,
+          effectiveModelKey,
           properties,
           maxProperties,
           minProperties);
@@ -69,6 +71,7 @@ public class CompoundModelSpecificationBuilder {
       return this;
     }
     return modelKey(other.getModelKey())
+        .effectiveModelKey(other.getEffectiveModelKey())
         .properties(other.getProperties())
         .maxProperties(other.getMaxProperties())
         .minProperties(other.getMinProperties());
@@ -98,4 +101,8 @@ public class CompoundModelSpecificationBuilder {
     return this;
   }
 
+  public CompoundModelSpecificationBuilder effectiveModelKey(ModelKey effectiveModelKey) {
+    this.effectiveModelKey = effectiveModelKey;
+    return this;
+  }
 }

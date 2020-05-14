@@ -76,7 +76,7 @@ public class DefaultModelProvider implements ModelProvider {
 
   @Override
   public Optional<Model> modelFor(ModelContext modelContext) {
-    ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
+    ResolvedType propertiesHost = modelContext.alternateEvaluatedType();
 
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)

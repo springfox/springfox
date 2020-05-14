@@ -35,6 +35,12 @@ public class ModelSpecification {
     return getCompound()
         .map(CompoundModelSpecification::getModelKey);
   }
+
+  public Optional<ModelKey> effectiveKey() {
+    return getCompound()
+        .map(CompoundModelSpecification::getEffectiveModelKey);
+  }
+
   public Optional<ScalarModelSpecification> getScalar() {
     return Optional.ofNullable(scalar);
   }
@@ -79,7 +85,7 @@ public class ModelSpecification {
         Objects.equals(map, that.map) &&
         Objects.equals(reference, that.reference) &&
         Objects.equals(facets, that.facets) &&
-        name.equals(that.name);
+        Objects.equals(name, that.name);
   }
 
   @Override

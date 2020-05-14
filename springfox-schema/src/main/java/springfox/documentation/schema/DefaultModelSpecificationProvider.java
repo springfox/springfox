@@ -143,6 +143,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
                               .validationGroupDiscriminators(modelContext.getValidationGroups())
                               .isResponse(modelContext.isReturnType())
                               .build())
+                .effectiveModelKey(modelContext.getEffectiveModelKeyBuilder().build())
                 .properties(properties.values())
                 .maxProperties(properties.size())
                 .minProperties(properties.size())
@@ -223,6 +224,11 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
   private List<PropertySpecification> properties(
       ModelContext context,
       ResolvedType propertiesHost) {
+    String typeName = typeNameExtractor.typeName(context);
+    context.getEffectiveModelKeyBuilder()
+           .qualifiedModelName(new QualifiedModelName(
+               safeGetPackageName(propertiesHost),
+               typeName));
     return propertiesProvider.propertySpecificationsFor(
         propertiesHost,
         context);
