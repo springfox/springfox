@@ -29,102 +29,70 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.oas.mappers.SchemaMapper
-import springfox.documentation.schema.Category
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.ModelSpecification
 import springfox.documentation.schema.ModelTestingSupport
-import springfox.documentation.schema.ScalarType
 import springfox.documentation.schema.mixins.ModelProviderSupport
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-class ComplexTypeSpec extends Specification implements ModelProviderSupport, ModelTestingSupport {
+class ComplexTypeSpec extends Specification implements ModelProviderSupport, ModelTestingSupport, ModelRegistrySupport {
   @Shared
   def resolver = new TypeResolver()
   @Shared
   def namingStrategy = new DefaultGenericTypeNamingStrategy()
 
-
   @Unroll
   def "Property #property on ComplexType is inferred correctly"() {
     given:
     def provider = defaultModelSpecificationProvider()
-    ModelSpecification asInput = provider.modelSpecificationsFor(
-        inputParam(
-            "0_0",
-            "group",
-            resolver.resolve(complexType()),
-            Optional.empty(),
-            new HashSet<>(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
+    def type = complexType()
+    def (asInput, asReturn, modelNamesRegistry) =
+    requestResponseAndNamesRegistry(provider, type)
 
-    ModelSpecification asReturn = provider.modelSpecificationsFor(
-        returnValue(
-            "0_0",
-            "group",
-            resolver.resolve(complexType()),
-            Optional.empty(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
     when:
-    def request = Mappers.getMapper(SchemaMapper).mapFrom(asInput)
-    def response = Mappers.getMapper(SchemaMapper).mapFrom(asReturn)
+    def request = Mappers.getMapper(SchemaMapper).mapFrom(
+        asInput,
+        modelNamesRegistry)
+    def response = Mappers.getMapper(SchemaMapper).mapFrom(
+        asReturn,
+        modelNamesRegistry)
 
     then:
     request.getType() == "object"
     request.getName() == "ComplexType"
     request.getProperties().containsKey(property)
-    request.properties[property] == type
+    request.properties[property] == requestType
 
     response.getType() == "object"
     response.getName() == "ComplexType"
     response.getProperties().containsKey(property)
-    response.properties[property] == type
+    response.properties[property] == responseType
 
     where:
-    property     | type
-    "name"       | new StringSchema()
-    "age"        | new IntegerSchema()
-    "category"   | new ObjectSchema().$ref("Category")
-    "customType" | new NumberSchema()
+    property            | requestType                            | responseType
+    "name"              | new StringSchema()                     | new StringSchema()
+    "age"               | new IntegerSchema()                    | new IntegerSchema()
+    "category"          | new ObjectSchema().$ref("Category") | new ObjectSchema().$ref("Category")
+    "customType"        | new NumberSchema()                     | new NumberSchema()
   }
 
   def "recursive type properties are inferred correctly"() {
     given:
     def complexType = resolver.resolve(recursiveType())
     def provider = defaultModelSpecificationProvider()
-    ModelSpecification asInput = provider.modelSpecificationsFor(
-        inputParam(
-            "0_0",
-            "group",
-            complexType,
-            Optional.empty(),
-            new HashSet<>(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-    ModelSpecification asReturn = provider.modelSpecificationsFor(
-        returnValue(
-            "0_0",
-            "group",
-            complexType,
-            Optional.empty(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
+    def (asInput, asReturn, modelNamesRegistry) =
+    requestResponseAndNamesRegistry(provider, complexType)
 
     when:
-    def request = Mappers.getMapper(SchemaMapper).mapFrom(asInput)
-    def response = Mappers.getMapper(SchemaMapper).mapFrom(asReturn)
+    def request = Mappers.getMapper(SchemaMapper).mapFrom(
+        asInput,
+        modelNamesRegistry)
+    def response = Mappers.getMapper(SchemaMapper).mapFrom(
+        asReturn,
+        modelNamesRegistry)
 
     then:
     request.getType() == "object"
@@ -147,50 +115,34 @@ class ComplexTypeSpec extends Specification implements ModelProviderSupport, Mod
     given:
     def complexType = resolver.resolve(inheritedComplexType())
     def provider = defaultModelSpecificationProvider()
-    ModelSpecification asInput = provider.modelSpecificationsFor(
-        inputParam(
-            "0_0",
-            "group",
-            complexType,
-            Optional.empty(),
-            new HashSet<>(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-
-    ModelSpecification asReturn = provider.modelSpecificationsFor(
-        returnValue(
-            "0_0",
-            "group",
-            complexType,
-            Optional.empty(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
+    def (asInput, asReturn, modelNamesRegistry) =
+    requestResponseAndNamesRegistry(provider, complexType)
 
     when:
-    def request = Mappers.getMapper(SchemaMapper).mapFrom(asInput)
-    def response = Mappers.getMapper(SchemaMapper).mapFrom(asReturn)
+    def request = Mappers.getMapper(SchemaMapper).mapFrom(
+        asInput,
+        modelNamesRegistry)
+    def response = Mappers.getMapper(SchemaMapper).mapFrom(
+        asReturn,
+        modelNamesRegistry)
 
     then:
     request.getType() == "object"
     request.getName() == "InheritedComplexType"
     request.getProperties().containsKey(property)
-    request.properties[property] == type
+    request.properties[property] == requestType
 
     response.getType() == "object"
     response.getName() == "InheritedComplexType"
     response.getProperties().containsKey(property)
-    response.properties[property] == type
+    response.properties[property] == responseType
 
     where:
-    property            | type
-    "name"              | new StringSchema()
-    "age"               | new IntegerSchema()
-    "category"          | new ObjectSchema().$ref("Category")
-    "customType"        | new NumberSchema()
-    "inheritedProperty" | new StringSchema()
+    property            | requestType                            | responseType
+    "name"              | new StringSchema()                     | new StringSchema()
+    "age"               | new IntegerSchema()                    | new IntegerSchema()
+    "category"          | new ObjectSchema().$ref("Category") | new ObjectSchema().$ref("Category")
+    "customType"        | new NumberSchema()                     | new NumberSchema()
+    "inheritedProperty" | new StringSchema()                     | new StringSchema()
   }
 }

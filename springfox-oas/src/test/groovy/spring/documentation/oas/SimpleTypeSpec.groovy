@@ -36,12 +36,13 @@ import springfox.documentation.schema.CodeGenGenericTypeNamingStrategy
 import springfox.documentation.schema.ModelSpecification
 import springfox.documentation.schema.ModelTestingSupport
 import springfox.documentation.schema.SchemaSpecification
+import springfox.documentation.service.ModelNamesRegistry
 
 import static java.util.Collections.*
 import static springfox.documentation.spi.DocumentationType.*
 import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
-class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport {
+class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport, ModelRegistrySupport {
   @Shared
   def resolver = new TypeResolver()
   @Shared
@@ -50,31 +51,17 @@ class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport 
   @Unroll
   def "simple type is rendered as [#type]"() {
     given:
-    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(
-        inputParam(
-            "0_0",
-            "group",
-            resolver.resolve(simpleType()),
-            Optional.empty(),
-            new HashSet<>(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(
-        returnValue(
-            "0_0",
-            "group",
-            resolver.resolve(simpleType()),
-            Optional.empty(),
-            SWAGGER_12,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
+    def simpleType = simpleType()
+    def (asInput, asReturn, modelNamesRegistry) =
+    requestResponseAndNamesRegistry(modelSpecificationProvider, simpleType)
 
     when:
-    def request = Mappers.getMapper(SchemaMapper).mapFrom(asInput)
-    def response = Mappers.getMapper(SchemaMapper).mapFrom(asReturn)
+    def request = Mappers.getMapper(SchemaMapper).mapFrom(
+        asInput,
+        modelNamesRegistry)
+    def response = Mappers.getMapper(SchemaMapper).mapFrom(
+        asReturn,
+        modelNamesRegistry)
 
     then:
     request.getType() == "object"
@@ -112,31 +99,16 @@ class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport 
 
   def "Types with properties aliased using JsonProperty annotation"() {
     given:
-    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(
-        inputParam(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithJsonPropertyAnnotation()),
-            Optional.empty(),
-            new HashSet<>(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
-    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(
-        returnValue(
-            "0_0",
-            "group",
-            resolver.resolve(typeWithJsonPropertyAnnotation()),
-            Optional.empty(),
-            documentationType,
-            alternateTypeProvider(),
-            namingStrategy,
-            emptySet())).get()
+    def (asInput, asReturn, modelNamesRegistry) =
+    requestResponseAndNamesRegistry(modelSpecificationProvider, typeWithJsonPropertyAnnotation())
 
     when:
-    def request = Mappers.getMapper(SchemaMapper).mapFrom(asInput)
-    def response = Mappers.getMapper(SchemaMapper).mapFrom(asReturn)
+    def request = Mappers.getMapper(SchemaMapper).mapFrom(
+        asInput,
+        modelNamesRegistry)
+    def response = Mappers.getMapper(SchemaMapper).mapFrom(
+        asReturn,
+        modelNamesRegistry)
 
     then:
     request.getType() == "object"
