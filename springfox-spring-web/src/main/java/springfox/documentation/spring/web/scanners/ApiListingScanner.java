@@ -28,6 +28,8 @@ import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.PathAdjuster;
 import springfox.documentation.service.ResourceGroup;
 import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.ModelNamesRegistry;
+import springfox.documentation.spi.service.contexts.ModelSpecificationRegistry;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.DocumentationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
@@ -63,16 +65,19 @@ import static springfox.documentation.spring.web.scanners.ResourceGroups.*;
 public class ApiListingScanner {
   private final ApiDescriptionReader apiDescriptionReader;
   private final ApiModelReader apiModelReader;
+  private final ApiModelSpecificationReader modelSpecificationReader;
   private final DocumentationPluginsManager pluginsManager;
 
   @Autowired
   public ApiListingScanner(
       ApiDescriptionReader apiDescriptionReader,
       ApiModelReader apiModelReader,
+      ApiModelSpecificationReader modelSpecificationReader,
       DocumentationPluginsManager pluginsManager) {
 
     this.apiDescriptionReader = apiDescriptionReader;
     this.apiModelReader = apiModelReader;
+    this.modelSpecificationReader = modelSpecificationReader;
     this.pluginsManager = pluginsManager;
   }
 
@@ -135,12 +140,14 @@ public class ApiListingScanner {
       String host = documentationContext.getHost();
       Set<String> protocols = new LinkedHashSet<>(documentationContext.getProtocols());
       Set<ApiDescription> apiDescriptions = new HashSet<>();
+      ModelSpecificationRegistryBuilder modelRegistryBuilder = new ModelSpecificationRegistryBuilder();
 
 
       final Map<String, Model> models = new LinkedHashMap<>();
       List<RequestMappingContext> requestMappings = nullToEmptyList(requestMappingsByResourceGroup.get(resourceGroup));
       for (RequestMappingContext each : sortedByMethods(requestMappings)) {
         Map<String, Set<Model>> currentModelMap = apiModelReader.read(each.withKnownModels(globalModelMap));
+        modelRegistryBuilder.addAll(modelSpecificationReader.read(each.withKnownModels(globalModelMap)));
         currentModelMap.values().forEach(list -> {
           for (Model model : list) {
             models.put(
@@ -171,6 +178,10 @@ public class ApiListingScanner {
 
 
       PathAdjuster adjuster = new PathMappingAdjuster(documentationContext);
+      ModelSpecificationRegistry modelRegistry = modelRegistryBuilder.build();
+      ModelNamesRegistry modelNamesRegistry =
+          pluginsManager.modelNamesGeneratorFactory(documentationContext.getDocumentationType())
+                                                              .modelNamesRegistry(modelRegistry);
       ApiListingBuilder apiListingBuilder = new ApiListingBuilder(context.apiDescriptionOrdering())
           .apiVersion(documentationContext.getApiInfo().getVersion())
           .basePath(adjuster.adjustedPath(ROOT))
@@ -182,6 +193,8 @@ public class ApiListingScanner {
           .securityReferences(securityReferences)
           .apis(sortedApis)
           .models(models)
+          .modelSpecifications(modelNamesRegistry.modelsByName())
+          .modelNamesRegistry(modelNamesRegistry)
           .position(position++)
           .availableTags(documentationContext.getTags());
 

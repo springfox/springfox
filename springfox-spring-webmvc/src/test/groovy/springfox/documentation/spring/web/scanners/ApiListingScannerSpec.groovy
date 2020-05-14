@@ -22,7 +22,8 @@ package springfox.documentation.spring.web.scanners
 import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import spock.lang.Unroll
-import springfox.documentation.schema.mixins.SchemaPluginsSupport
+import springfox.documentation.schema.ModelSpecification
+import springfox.documentation.schema.ModelSpecificationProvider
 import springfox.documentation.service.ApiListing
 import springfox.documentation.service.ResourceGroup
 import springfox.documentation.spi.service.ApiListingScannerPlugin
@@ -59,6 +60,7 @@ class ApiListingScannerSpec
   ApiListingScanningContext listingContext
   ApiListingScanner scanner
   def methodResolver = new HandlerMethodResolver(new TypeResolver())
+  ApiModelSpecificationReader specificationReader
 
   def setup() {
     SecurityContext securityContext = SecurityContext.builder()
@@ -74,7 +76,13 @@ class ApiListingScannerSpec
     apiDescriptionReader.read(_) >> []
     apiModelReader = Mock(ApiModelReader)
     apiModelReader.read(_) >> new HashMap<>()
-    scanner = new ApiListingScanner(apiDescriptionReader, apiModelReader, defaultWebPlugins())
+    specificationReader = Mock(ApiModelSpecificationReader)
+    specificationReader.read(_) >> new HashSet<ModelSpecification>()
+    scanner = new ApiListingScanner(
+        apiDescriptionReader,
+        apiModelReader,
+        specificationReader,
+        defaultWebPlugins())
   }
 
   def "Should create an api listing for a single resource grouping "() {
@@ -122,6 +130,7 @@ class ApiListingScannerSpec
     def sut = new ApiListingScanner(
         apiDescriptionReader,
         apiModelReader,
+        specificationReader,
         customWebPlugins(
             [],
             [],
@@ -150,6 +159,7 @@ class ApiListingScannerSpec
     def sut = new ApiListingScanner(
         apiDescriptionReader,
         apiModelReader,
+        specificationReader,
         customWebPlugins(
             [],
             [],
