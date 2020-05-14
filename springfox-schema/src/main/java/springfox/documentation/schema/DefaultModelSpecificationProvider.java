@@ -80,7 +80,7 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
 
   @Override
   public Optional<ModelSpecification> modelSpecificationsFor(ModelContext modelContext) {
-    ResolvedType propertiesHost = modelContext.alternateFor(modelContext.resolvedType(resolver));
+    ResolvedType propertiesHost = modelContext.alternateEvaluatedType();
 
     if (isContainerType(propertiesHost)
         || isMapType(propertiesHost)
