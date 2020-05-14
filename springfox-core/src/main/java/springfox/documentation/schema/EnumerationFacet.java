@@ -1,7 +1,7 @@
 package springfox.documentation.schema;
 
 import springfox.documentation.builders.ElementFacetBuilder;
-import springfox.documentation.builders.EnumerationFacetBuilder;
+import springfox.documentation.builders.EnumerationElementFacetBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +22,7 @@ public class EnumerationFacet implements ElementFacet {
 
   @Override
   public Class<? extends ElementFacetBuilder> facetBuilder() {
-    return EnumerationFacetBuilder.class;
+    return EnumerationElementFacetBuilder.class;
   }
 
   @Override

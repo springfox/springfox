@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationFacetBuilder;
+import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.schema.ModelProperty;
@@ -431,7 +431,8 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
     if (!isInActiveView(
         member,
         givenContext)) {
-      return properties;
+      givenContext.getEffectiveModelKeyBuilder()
+                  .viewDiscriminator(givenContext.getView().orElse(null));
     }
 
     if (member instanceof AnnotatedMethod) {
@@ -675,7 +676,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         .withRequired(beanModelProperty.isRequired())
         .withIsHidden(false)
         .withDescription(beanModelProperty.propertyDescription())
-        .facetBuilder(EnumerationFacetBuilder.class)
+        .facetBuilder(EnumerationElementFacetBuilder.class)
         .allowedValues(beanModelProperty.allowableValues())
         .yield(PropertySpecificationBuilder.class)
         .withExample(beanModelProperty.example());

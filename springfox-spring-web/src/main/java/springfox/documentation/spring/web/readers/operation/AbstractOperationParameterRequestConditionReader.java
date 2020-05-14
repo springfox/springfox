@@ -20,7 +20,7 @@
 package springfox.documentation.spring.web.readers.operation;
 
 import com.fasterxml.classmate.TypeResolver;
-import springfox.documentation.builders.EnumerationFacetBuilder;
+import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
@@ -109,7 +109,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
           .allowReserved(false)
           .allowEmptyValue(false)
           .defaultValue(paramValue)
-          .facetBuilder(EnumerationFacetBuilder.class)
+          .facetBuilder(EnumerationElementFacetBuilder.class)
             .allowedValues(allowableValues)
             .yield(SimpleParameterSpecificationBuilder.class)
           .model(new ModelSpecificationBuilder()

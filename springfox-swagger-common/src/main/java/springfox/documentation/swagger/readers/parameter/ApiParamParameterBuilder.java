@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationFacetBuilder;
+import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.Collections;
 import springfox.documentation.schema.Enums;
@@ -78,7 +78,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
     if (allowedValues instanceof AllowableListValues) {
       context.requestParameterBuilder()
           .simpleParameterBuilder()
-          .facetBuilder(EnumerationFacetBuilder.class)
+          .facetBuilder(EnumerationElementFacetBuilder.class)
           .allowedValues(allowedValues);
     } else if (allowedValues instanceof AllowableRangeValues) {
       context.requestParameterBuilder()

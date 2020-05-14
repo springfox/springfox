@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import springfox.documentation.builders.EnumerationFacetBuilder;
+import springfox.documentation.builders.EnumerationElementFacetBuilder;
 import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
 import springfox.documentation.schema.Enums;
@@ -114,7 +114,7 @@ public class ExpandedParameterBuilder implements ExpandedParameterBuilderPlugin 
         .model(new ModelSpecificationBuilder()
             .scalarModel(ScalarType.STRING)
             .build())
-        .facetBuilder(EnumerationFacetBuilder.class)
+        .facetBuilder(EnumerationElementFacetBuilder.class)
         .allowedValues(allowable)
         .yield(RequestParameterBuilder.class);
     //TODO: figure out model
