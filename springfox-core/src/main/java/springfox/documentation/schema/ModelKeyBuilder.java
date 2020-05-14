@@ -42,7 +42,7 @@ public class ModelKeyBuilder {
 
   public ModelKeyBuilder copyOf(ModelKey other) {
     return this.qualifiedModelName(other.getQualifiedModelName())
-        .viewDiscriminator(other.getViewDiscriminator())
+        .viewDiscriminator(other.getViewDiscriminator().orElse(null))
         .validationGroupDiscriminators(other.getValidationGroupDiscriminators())
         .isResponse(other.isResponse());
   }

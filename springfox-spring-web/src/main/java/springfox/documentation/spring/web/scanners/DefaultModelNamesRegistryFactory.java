@@ -83,13 +83,12 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
         requestResponseSuffixes.computeIfAbsent(
             modelKey,
             k -> k.isResponse() ? "Res" : "Req");
-      } else if (modelKey.getViewDiscriminator().isPresent()){
+      } else if (modelKey.getViewDiscriminator().isPresent()) {
         requestResponseSuffixes.putIfAbsent(
             modelKey,
             "View");
       }
     }
-
 
     @Override
     public Map<String, ModelSpecification> modelsByName() {
@@ -104,6 +103,5 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
     public Optional<String> nameByKey(ModelKey key) {
       return Optional.ofNullable(modelKeyToName.get(modelRegistry.effectiveModelKeyFor(key)));
     }
-
   }
 }
