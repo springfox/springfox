@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestParameterBuilder;
-import springfox.documentation.schema.ModelKey;
+import springfox.documentation.schema.ModelKeyBuilder;
+import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.PropertySpecification;
 import springfox.documentation.service.Encoding;
 import springfox.documentation.service.ParameterType;
@@ -32,12 +33,14 @@ public class ContentParameterAggregator implements ParameterAggregator {
                 .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
                   .modelSpecificationBuilder()
                   .compoundModelBuilder()
-                    .modelKey(new ModelKey(
-                        "io.springfox",
-                        each.getName() + "Aggregate",
-                        null,
-                        new ArrayList<>(),
-                        false))
+                    .modelKey(new ModelKeyBuilder()
+                                  .qualifiedModelName(
+                                      new QualifiedModelName("io.springfox",
+                                                             each.getName() + "Aggregate"))
+                                  .viewDiscriminator(null)
+                                  .validationGroupDiscriminators(new ArrayList<>())
+                                  .isResponse(false)
+                                  .build())
                     .properties(properties(each))
                     .yield()
                   .yield(RepresentationBuilder.class)
@@ -63,12 +66,13 @@ public class ContentParameterAggregator implements ParameterAggregator {
               .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
                 .modelSpecificationBuilder()
                   .compoundModelBuilder()
-                    .modelKey(new ModelKey(
-                      "io.springfox",
-                      each.getName() + "Aggregate",
-                      null,
-                      new ArrayList<>(),
-                      false))
+                    .modelKey(new ModelKeyBuilder()
+                                  .qualifiedModelName(
+                                      new QualifiedModelName("io.springfox",
+                                                             each.getName() + "Aggregate"))
+                                  .viewDiscriminator(null)
+                                  .validationGroupDiscriminators(new ArrayList<>())
+                                  .isResponse(false).build())
                     .properties(properties(each))
                     .yield()
                   .yield(RepresentationBuilder.class)

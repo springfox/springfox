@@ -2,38 +2,38 @@ package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.Set;
 
 public class ModelKey {
-  private final String namespace;
-  private final String name;
+  private final QualifiedModelName qualifiedModelName;
   private final ResolvedType viewDiscriminator;
-  private final ArrayList<ResolvedType> validationGroupDiscriminators = new ArrayList<>();
+  private final Set<ResolvedType> validationGroupDiscriminators = new HashSet<>();
   private final boolean isResponse;
 
   public ModelKey(
-      String namespace,
-      String name,
+      QualifiedModelName qualifiedModelName,
       ResolvedType viewDiscriminator,
       Collection<ResolvedType> validationGroupDiscriminators,
       boolean isResponse) {
-    this.namespace = namespace;
-    this.name = name;
+    this.qualifiedModelName = qualifiedModelName;
     this.viewDiscriminator = viewDiscriminator;
     this.validationGroupDiscriminators.addAll(validationGroupDiscriminators);
     this.isResponse = isResponse;
   }
 
-  public String getNamespace() {
-    return namespace;
+  public QualifiedModelName getQualifiedModelName() {
+    return qualifiedModelName;
   }
 
-  public String getName() {
-    return name;
+  public ResolvedType getViewDiscriminator() {
+    return viewDiscriminator;
+  }
+
+  public Set<ResolvedType> getValidationGroupDiscriminators() {
+    return validationGroupDiscriminators;
   }
 
   public boolean isResponse() {
@@ -50,17 +50,21 @@ public class ModelKey {
     }
     ModelKey modelKey = (ModelKey) o;
     return isResponse == modelKey.isResponse &&
-        Objects.equals(namespace, modelKey.namespace) &&
-        Objects.equals(viewDiscriminator, modelKey.viewDiscriminator) &&
-        Objects.equals(validationGroupDiscriminators, modelKey.validationGroupDiscriminators) &&
-        name.equals(modelKey.name);
+        Objects.equals(
+            qualifiedModelName,
+            modelKey.qualifiedModelName) &&
+        Objects.equals(
+            viewDiscriminator,
+            modelKey.viewDiscriminator) &&
+        Objects.equals(
+            validationGroupDiscriminators,
+            modelKey.validationGroupDiscriminators);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        namespace,
-        name,
+        qualifiedModelName,
         viewDiscriminator,
         validationGroupDiscriminators,
         isResponse);
@@ -69,11 +73,17 @@ public class ModelKey {
   @Override
   public String toString() {
     return "ModelKey{" +
-        "namespace='" + namespace + '\'' +
-        ", name='" + name + '\'' +
+        "qualifiedModelName=" + qualifiedModelName +
         ", viewDiscriminator=" + viewDiscriminator +
         ", validationGroupDiscriminators=" + validationGroupDiscriminators +
         ", isResponse=" + isResponse +
         '}';
+  }
+
+  public ModelKey flippedResponse() {
+    return new ModelKeyBuilder()
+        .copyOf(this)
+        .isResponse(!this.isResponse)
+        .build();
   }
 }
