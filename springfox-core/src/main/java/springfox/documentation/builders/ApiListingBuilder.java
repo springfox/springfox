@@ -21,8 +21,10 @@ package springfox.documentation.builders;
 
 
 import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
+import springfox.documentation.service.ModelNamesRegistry;
 import springfox.documentation.service.SecurityReference;
 import springfox.documentation.service.Tag;
 
@@ -60,6 +62,8 @@ public class ApiListingBuilder {
   private final Set<String> tagNames = new TreeSet<>();
   private final Map<String, Model> models = new TreeMap<>();
   private final Map<String, Tag> tagLookup = new TreeMap<>();
+  private final Map<String, ModelSpecification> modelSpecifications = new TreeMap<>();
+  private ModelNamesRegistry modelNamesRegistry;
 
   /**
    * Update the sorting order for api descriptions
@@ -225,6 +229,17 @@ public class ApiListingBuilder {
   }
 
   /**
+   * Adds to the models collection
+   *
+   * @param models - model entries by name
+   * @return this
+   */
+  public ApiListingBuilder modelSpecifications(Map<String, ModelSpecification> models) {
+    this.modelSpecifications.putAll(nullToEmptyMap(models));
+    return this;
+  }
+
+  /**
    * Updates the description
    *
    * @param description - description of the api listing
@@ -310,6 +325,8 @@ public class ApiListingBuilder {
         securityReferences,
         apis,
         models,
+        modelSpecifications,
+        modelNamesRegistry,
         description,
         position,
         tags);
