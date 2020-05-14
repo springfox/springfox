@@ -43,6 +43,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.ApiListing;
 import springfox.documentation.service.ContentSpecification;
 import springfox.documentation.service.Documentation;
+import springfox.documentation.service.ParameterStyle;
 import springfox.documentation.service.Representation;
 import springfox.documentation.service.RequestBody;
 import springfox.documentation.service.SimpleParameterSpecification;
@@ -57,46 +58,66 @@ import java.util.stream.Collectors;
 import static springfox.documentation.builders.BuilderDefaults.*;
 
 @Mapper(componentModel = "spring",
-    uses = {
-        VendorExtensionsMapper.class,
-        LicenseMapper.class,
-        ExamplesMapper.class,
-        SecurityMapper.class,
-        SchemaMapper.class
-    })
+        uses = {
+            VendorExtensionsMapper.class,
+            LicenseMapper.class,
+            ExamplesMapper.class,
+            SecurityMapper.class,
+            SchemaMapper.class
+        })
 public abstract class ServiceModelToOasMapper {
   @Mappings({
-      @Mapping(target = "openapi", constant = "3.0.0"),
-      @Mapping(target = "info", source = "resourceListing.info"),
-      @Mapping(target = "externalDocs", source = "documentationReference"),
-      @Mapping(target = "security", ignore = true),
-      @Mapping(target = "paths", source = "apiListings"),
-      @Mapping(target = "components", ignore = true),
-      @Mapping(target = "extensions", source = "vendorExtensions")
-  })
+                @Mapping(target = "openapi", constant = "3.0.0"),
+                @Mapping(target = "info", source = "resourceListing.info"),
+                @Mapping(target = "externalDocs", source = "documentationReference"),
+                @Mapping(target = "security", ignore = true),
+                @Mapping(target = "paths", source = "apiListings"),
+                @Mapping(target = "components", ignore = true),
+                @Mapping(target = "extensions", source = "vendorExtensions")
+            })
   public abstract OpenAPI mapDocumentation(Documentation from);
 
   @Mappings({
-      @Mapping(target = "operationId", source = "uniqueId"),
-      @Mapping(target = "security", source = "securityReferences"),
-      @Mapping(target = "responses", source = "responses"),
-      @Mapping(target = "extensions", source = "vendorExtensions"),
-      @Mapping(target = "parameters", source = "requestParameters"),
-      @Mapping(target = "requestBody", source = "body"),
-      @Mapping(target = "description", source = "notes"),
-      @Mapping(target = "callbacks", ignore = true),
-      @Mapping(target = "servers", ignore = true), //TODO
-      @Mapping(target = "externalDocs", ignore = true)
-  })
+                @Mapping(target = "operationId", source = "uniqueId"),
+                @Mapping(target = "security", source = "securityReferences"),
+                @Mapping(target = "responses", source = "responses"),
+                @Mapping(target = "extensions", source = "vendorExtensions"),
+                @Mapping(target = "parameters", source = "requestParameters"),
+                @Mapping(target = "requestBody", source = "body"),
+                @Mapping(target = "description", source = "notes"),
+                @Mapping(target = "callbacks", ignore = true),
+                @Mapping(target = "servers", ignore = true), //TODO
+                @Mapping(target = "externalDocs", ignore = true)
+            })
   abstract Operation mapOperation(springfox.documentation.service.Operation from);
 
   @Mappings({
-      @Mapping(target = "schema", source = "parameterSpecification.query"),
-      @Mapping(target = "content", source = "parameterSpecification.content"),
-      @Mapping(target = "example", ignore = true),
-      @Mapping(target = "$ref", ignore = true)
-  })
+                @Mapping(target = "schema", source = "parameterSpecification.query"),
+                @Mapping(target = "content", source = "parameterSpecification.content"),
+                @Mapping(target = "example", ignore = true),
+                @Mapping(target = "allowEmptyValue",
+                         expression =
+                             "java(from.getParameterSpecification().getQuery().map(q -> q.getAllowEmptyValue())"
+                                 + ".orElse(null))"),
+                @Mapping(target = "style",
+                         expression =
+                             "java(from.getParameterSpecification().getQuery().map(q -> mapStyle(q.getStyle())).orElse"
+                                 + "(null)"
+                                 + ")"),
+                @Mapping(target = "explode",
+                         expression = "java(from.getParameterSpecification().getQuery().map(q -> q.getExplode()).orElse"
+                             + "(null))"),
+                @Mapping(target = "allowReserved",
+                         expression =
+                             "java(from.getParameterSpecification().getQuery().map(q -> q.getAllowReserved()).orElse"
+                                 + "(null))"),
+                @Mapping(target = "$ref", ignore = true)
+            })
   abstract Parameter mapParameter(springfox.documentation.service.RequestParameter from);
+
+  Parameter.StyleEnum mapStyle(ParameterStyle from) {
+    return Parameter.StyleEnum.valueOf(from.name());
+  }
 
   static Schema fromSimpleParameter(Optional<SimpleParameterSpecification> value) {
     //TODO: Implement this mapping
@@ -126,11 +147,16 @@ public abstract class ServiceModelToOasMapper {
 
   Paths mapPaths(Map<String, List<ApiListing>> apiListings) {
     Paths paths = new Paths();
-    apiListings.values().stream()
+    apiListings.values()
+        .stream()
         .flatMap(Collection::stream)
         .forEachOrdered(each -> {
           for (ApiDescription api : each.getApis()) {
-            paths.addPathItem(api.getPath(), mapOperations(api, paths.get(api.getPath())));
+            paths.addPathItem(
+                api.getPath(),
+                mapOperations(
+                    api,
+                    paths.get(api.getPath())));
           }
         });
     return paths;
@@ -145,7 +171,9 @@ public abstract class ServiceModelToOasMapper {
     }
     for (springfox.documentation.service.Operation each : nullToEmptyList(api.getOperations())) {
       Operation operation = mapOperation(each);
-      path.operation(mapHttpMethod(each.getMethod()), operation);
+      path.operation(
+          mapHttpMethod(each.getMethod()),
+          operation);
     }
     return path;
   }
@@ -183,45 +211,46 @@ public abstract class ServiceModelToOasMapper {
 //  }
 
   @Mappings({
-      @Mapping(target = "license", source = "from",
-          qualifiedBy = {LicenseMapper.LicenseTranslator.class, LicenseMapper.License.class}),
-      @Mapping(target = "contact", source = "from.contact"),
-      @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
-      @Mapping(target = "extensions", source = "vendorExtensions")
-  })
+                @Mapping(target = "license", source = "from",
+                         qualifiedBy = { LicenseMapper.LicenseTranslator.class, LicenseMapper.License.class }),
+                @Mapping(target = "contact", source = "from.contact"),
+                @Mapping(target = "termsOfService", source = "termsOfServiceUrl"),
+                @Mapping(target = "extensions", source = "vendorExtensions")
+            })
   protected abstract Info mapApiInfo(ApiInfo from);
 
   @Mappings({
-      @Mapping(target = "extensions", ignore = true)
-  })
+                @Mapping(target = "extensions", ignore = true)
+            })
   protected abstract Contact map(springfox.documentation.service.Contact from);
 
   @Mappings({
-      @Mapping(target = "externalDocs", ignore = true),
-      @Mapping(target = "extensions", source = "vendorExtensions"),
-  })
+                @Mapping(target = "externalDocs", ignore = true),
+                @Mapping(target = "extensions", source = "vendorExtensions"),
+            })
   protected abstract Tag mapTag(springfox.documentation.service.Tag from);
 
   @Mappings({
-      @Mapping(target = "extensions", source = "extensions")
-  })
+                @Mapping(target = "extensions", source = "extensions")
+            })
   protected abstract Server mapServer(springfox.documentation.service.Server from);
 
   protected ServerVariables serverVariableMap(
       Collection<springfox.documentation.service.ServerVariable> serverVariables) {
     ServerVariables variables = new ServerVariables();
     variables.putAll(serverVariables.stream()
-        .collect(Collectors.toMap(
-            springfox.documentation.service.ServerVariable::getName, this::mapServerVariable)));
+                         .collect(Collectors.toMap(
+                             springfox.documentation.service.ServerVariable::getName,
+                             this::mapServerVariable)));
     return variables;
   }
 
   @Mappings({
-      @Mapping(target = "enum", source = "allowedValues"),
-      @Mapping(target = "default", source = "defaultValue"),
-      @Mapping(target = "_enum", ignore = true),
-      @Mapping(target = "_default", ignore = true)
-  })
+                @Mapping(target = "enum", source = "allowedValues"),
+                @Mapping(target = "default", source = "defaultValue"),
+                @Mapping(target = "_enum", ignore = true),
+                @Mapping(target = "_default", ignore = true)
+            })
   protected abstract ServerVariable mapServerVariable(springfox.documentation.service.ServerVariable from);
 
   protected abstract ExternalDocumentation mapExternalDocs(springfox.documentation.service.DocumentationReference from);

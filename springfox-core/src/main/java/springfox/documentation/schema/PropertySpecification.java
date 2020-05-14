@@ -84,9 +84,9 @@ public class PropertySpecification {
 
   public <T extends ElementFacet> Optional<T> facetOfType(Class<T> type) {
     return facets.stream()
-                 .filter(f -> f != null && type.isAssignableFrom(f.getClass()))
-                 .findFirst()
-                 .map(type::cast);
+        .filter(f -> f != null && type.isAssignableFrom(f.getClass()))
+        .findFirst()
+        .map(type::cast);
   }
 
   public Boolean getNullable() {
@@ -137,7 +137,7 @@ public class PropertySpecification {
     return vendorExtensions;
   }
 
-  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
+  @SuppressWarnings({ "CyclomaticComplexity", "NPathComplexity" })
   @Override
   public boolean equals(Object o) {
     if (this == o) {

@@ -49,9 +49,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -103,7 +101,10 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       modelRef = new ModelRef("string");
       model.scalarModel(ScalarType.STRING);
     } else if (methodParameter.hasParameterAnnotation(RequestParam.class) && isMapType(parameterType)) {
-      modelRef = new ModelRef("", new ModelRef("string"), true);
+      modelRef = new ModelRef(
+          "",
+          new ModelRef("string"),
+          true);
       ModelSpecificationBuilder map = new ModelSpecificationBuilder();
       model.mapModel(
           new MapSpecification(
@@ -131,11 +132,12 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
       }
     }
     if (methodParameter.hasParameterAnnotation(RequestPart.class) ||
-      methodParameter.hasParameterAnnotation(RequestBody.class)) {
+        methodParameter.hasParameterAnnotation(RequestBody.class)) {
       isRequestBody = true;
     }
     ViewProviderPlugin viewProvider = pluginsManager
-        .viewProvider(context.getDocumentationContext().getDocumentationType());
+        .viewProvider(context.getDocumentationContext()
+                          .getDocumentationType());
 
     ModelContext modelContext = context.getOperationContext()
         .operationModelsBuilder()
@@ -145,39 +147,34 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
                 methodParameter),
             new HashSet<>());
 
-    Map<String, String> knownNames = new HashMap<>();
-    Optional.ofNullable(context.getOperationContext().getKnownModels().get(modelContext.getParameterId()))
-        .orElse(new HashSet<>())
-        .forEach(m -> knownNames.put(
-            m.getId(),
-            m.getName()));
-
     context.parameterBuilder()
         .type(parameterType)
         .modelRef(Optional.ofNullable(modelRef)
-            .orElse(modelRefFactory(
-                modelContext,
-                enumTypeDeterminer,
-                nameExtractor).apply(parameterType)));
+                      .orElse(modelRefFactory(
+                          modelContext,
+                          enumTypeDeterminer,
+                          nameExtractor).apply(parameterType)));
     ModelSpecification parameterModel = models.create(
         modelContext,
         parameterType);
     if (isRequestBody) {
-      Set<MediaType> consumes = new HashSet<>(context.getOperationContext().consumes());
+      Set<MediaType> consumes = new HashSet<>(context.getOperationContext()
+                                                  .consumes());
       if (consumes.isEmpty()) {
         consumes.add(MediaType.ALL);
       }
       consumes
-             .forEach(mediaType ->
-                          context.requestParameterBuilder()
-                                 .contentSpecificationBuilder().representationBuilderFor(mediaType)
-                                 .modelSpecificationBuilder()
-                                 .copyOf(parameterModel));
+          .forEach(mediaType ->
+                       context.requestParameterBuilder()
+                           .contentSpecificationBuilder()
+                           .representationBuilderFor(mediaType)
+                           .modelSpecificationBuilder()
+                           .copyOf(parameterModel));
     } else {
       context.requestParameterBuilder()
-             .simpleParameterBuilder()
-             .model(parameterModel)
-             .yield();
+          .simpleParameterBuilder()
+          .model(parameterModel)
+          .yield();
     }
   }
 
@@ -188,6 +185,6 @@ public class ParameterDataTypeReader implements ParameterBuilderPlugin {
 
   private boolean treatAsAString(ResolvedType parameterType) {
     return !(isBaseType(typeNameFor(parameterType.getErasedType()))
-        || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
+                 || enumTypeDeterminer.isEnum(parameterType.getErasedType()));
   }
 }

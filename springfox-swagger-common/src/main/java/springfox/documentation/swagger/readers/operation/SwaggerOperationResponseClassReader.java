@@ -75,7 +75,7 @@ public class SwaggerOperationResponseClassReader implements OperationBuilderPlug
         returnType,
         Optional.empty());
 
-    final Map<String, String> knownNames = new HashMap<>();
+    Map<String, String> knownNames = new HashMap<>();
     Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
         .orElse(new HashSet<>())
         .forEach(model -> knownNames.put(model.getId(), model.getName()));

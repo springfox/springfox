@@ -136,7 +136,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
             type = type.map(Optional::of).orElse(operationResponse);
           }
           if (type.isPresent()) {
-            final Map<String, String> knownNames = new HashMap<>();
+            Map<String, String> knownNames = new HashMap<>();
             Optional.ofNullable(context.getKnownModels().get(modelContext.getParameterId()))
                 .orElse(new HashSet<>())
                 .forEach(model -> knownNames.put(

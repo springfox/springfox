@@ -14,7 +14,7 @@ public class ModelFacets {
   private final Boolean nullable;
   private final Boolean deprecated;
   private final EnumerationFacet enumerationFacet;
-  private final DocumentationReference externalDocumentation;
+  private final DocumentationReference externalDocumentation; //TODO: change to external documentation or otherwise
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
 

@@ -19,6 +19,7 @@
 package springfox.documentation.service;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DocumentationReference {
   private String description = null;
@@ -45,5 +46,42 @@ public class DocumentationReference {
 
   public List<VendorExtension> getExtensions() {
     return extensions;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    DocumentationReference that = (DocumentationReference) o;
+    return Objects.equals(
+        description,
+        that.description) &&
+        Objects.equals(
+            url,
+            that.url) &&
+        Objects.equals(
+            extensions,
+            that.extensions);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        description,
+        url,
+        extensions);
+  }
+
+  @Override
+  public String toString() {
+    return "DocumentationReference{" +
+        "description='" + description + '\'' +
+        ", url='" + url + '\'' +
+        ", extensions=" + extensions +
+        '}';
   }
 }

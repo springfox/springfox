@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
 
 import static springfox.documentation.builders.ElementFacets.*;
 
+//TODO: Change builders to not have with
 public class PropertySpecificationBuilder {
 
-  private String name;
+  private final String name;
   private String description;
   private ModelSpecification type;
   private Boolean nullable;
@@ -37,7 +38,9 @@ public class PropertySpecificationBuilder {
   private final CompoundModelSpecificationBuilder parent;
 
   public PropertySpecificationBuilder(String name) {
-    this(name, null);
+    this(
+        name,
+        null);
   }
 
   public PropertySpecificationBuilder(
@@ -59,7 +62,11 @@ public class PropertySpecificationBuilder {
 
   @SuppressWarnings("unchecked")
   public <T extends ElementFacetBuilder> T facetBuilder(Class<T> clazz) {
-    this.facetBuilders.computeIfAbsent(clazz, builderFactory(this, clazz));
+    this.facetBuilders.computeIfAbsent(
+        clazz,
+        builderFactory(
+            this,
+            clazz));
     return (T) this.facetBuilders.get(clazz);
   }
 
@@ -129,7 +136,8 @@ public class PropertySpecificationBuilder {
   }
 
   public PropertySpecification build() {
-    List<ElementFacet> facets = facetBuilders.values().stream()
+    List<ElementFacet> facets = facetBuilders.values()
+        .stream()
         .filter(Objects::nonNull)
         .map(ElementFacetBuilder::build)
         .collect(Collectors.toList());

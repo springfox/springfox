@@ -53,7 +53,12 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
   }
 
   public NumericElementFacet build() {
-    return new NumericElementFacet(multipleOf, minimum, exclusiveMinimum, maximum, exclusiveMaximum);
+    return new NumericElementFacet(
+        multipleOf,
+        minimum,
+        exclusiveMinimum,
+        maximum,
+        exclusiveMaximum);
   }
 
   @Override
@@ -63,10 +68,10 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
     }
     NumericElementFacet other = (NumericElementFacet) facet;
     return this.exclusiveMaximum(other.getExclusiveMaximum())
-        .exclusiveMinimum(other.getExclusiveMinimum())
-        .maximum(other.getMaximum())
-        .minimum(other.getMinimum())
-        .multipleOf(other.getMultipleOf());
+               .exclusiveMinimum(other.getExclusiveMinimum())
+               .maximum(other.getMaximum())
+               .minimum(other.getMinimum())
+               .multipleOf(other.getMultipleOf());
   }
 
   public NumericElementFacetBuilder from(AllowableRangeValues range) {
@@ -74,8 +79,8 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
       return this;
     }
     return this.exclusiveMaximum(range.getExclusiveMax())
-        .exclusiveMinimum(range.getExclusiveMin())
-        .maximum(range.getMax() != null ? new BigDecimal(range.getMax()) : null)
-        .minimum(range.getMin() != null ? new BigDecimal(range.getMin()) : null);
+               .exclusiveMinimum(range.getExclusiveMin())
+               .maximum(range.getMax() != null ? new BigDecimal(range.getMax()) : null)
+               .minimum(range.getMin() != null ? new BigDecimal(range.getMin()) : null);
   }
 }

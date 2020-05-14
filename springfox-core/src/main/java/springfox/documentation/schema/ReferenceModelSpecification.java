@@ -29,4 +29,11 @@ public class ReferenceModelSpecification {
   public int hashCode() {
     return Objects.hash(modelKey);
   }
+
+  @Override
+  public String toString() {
+    return "ReferenceModelSpecification{" +
+        "modelKey=" + modelKey +
+        '}';
+  }
 }

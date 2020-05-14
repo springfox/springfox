@@ -25,8 +25,7 @@ public class ModelSpecificationBuilder {
   private CompoundModelSpecificationBuilder compoundModelBuilder;
 
   public ModelSpecificationBuilder() {
-    this(
-        null);
+    this(null);
   }
 
   public ModelSpecificationBuilder(
@@ -118,11 +117,15 @@ public class ModelSpecificationBuilder {
                            .filter(Objects::nonNull)
                            .count();
     if (specCount == 0) {
-      LOGGER.error("Error building model {}", name);
+      LOGGER.error(
+          "Error building model {}",
+          name);
       throw new IllegalArgumentException("At least one type of specification is required");
     }
     if (specCount > 1) {
-      LOGGER.error("Error building model {}", name);
+      LOGGER.error(
+          "Error building model {}",
+          name);
       throw new IllegalArgumentException("Only one of the specifications should be non null");
     }
   }

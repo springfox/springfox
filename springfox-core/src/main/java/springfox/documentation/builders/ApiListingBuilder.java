@@ -77,7 +77,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder apiVersion(String apiVersion) {
-    this.apiVersion = defaultIfAbsent(apiVersion, this.apiVersion);
+    this.apiVersion = defaultIfAbsent(
+        apiVersion,
+        this.apiVersion);
     return this;
   }
 
@@ -88,7 +90,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder basePath(String basePath) {
-    this.basePath = defaultIfAbsent(basePath, this.basePath);
+    this.basePath = defaultIfAbsent(
+        basePath,
+        this.basePath);
     return this;
   }
 
@@ -99,7 +103,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder resourcePath(String resourcePath) {
-    this.resourcePath = defaultIfAbsent(resourcePath, this.resourcePath);
+    this.resourcePath = defaultIfAbsent(
+        resourcePath,
+        this.resourcePath);
     return this;
   }
 
@@ -137,8 +143,8 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder appendProduces(List<String> produces) {
     this.produces.addAll(nullToEmptyList(produces).stream()
-        .filter(Objects::nonNull)
-        .collect(toSet()));
+                                                  .filter(Objects::nonNull)
+                                                  .collect(toSet()));
     return this;
   }
 
@@ -150,8 +156,8 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder appendConsumes(List<String> consumes) {
     this.consumes.addAll(nullToEmptyList(consumes).stream()
-        .filter(Objects::nonNull)
-        .collect(toSet()));
+                                                  .filter(Objects::nonNull)
+                                                  .collect(toSet()));
     return this;
   }
 
@@ -163,7 +169,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder host(String host) {
-    this.host = defaultIfAbsent(host, this.host);
+    this.host = defaultIfAbsent(
+        host,
+        this.host);
     return this;
   }
 
@@ -223,7 +231,9 @@ public class ApiListingBuilder {
    * @return this
    */
   public ApiListingBuilder description(String description) {
-    this.description = defaultIfAbsent(description, this.description);
+    this.description = defaultIfAbsent(
+        description,
+        this.description);
     return this;
   }
 
@@ -246,8 +256,8 @@ public class ApiListingBuilder {
    */
   public ApiListingBuilder tagNames(Set<String> tagNames) {
     this.tagNames.addAll(nullToEmptySet(tagNames).stream()
-        .filter(Objects::nonNull)
-        .collect(toSet()));
+                                                 .filter(Objects::nonNull)
+                                                 .collect(toSet()));
     return this;
   }
 
@@ -265,19 +275,30 @@ public class ApiListingBuilder {
 
   /**
    * Globally configured tags
+   *
    * @param availableTags - tags available for services and operations
    * @return this
    */
   public ApiListingBuilder availableTags(Set<Tag> availableTags) {
-    this.tagLookup.putAll(nullToEmptySet(availableTags).stream().collect(toMap(Tag::getName, identity())));
+    this.tagLookup.putAll(nullToEmptySet(availableTags).stream()
+                                                       .collect(toMap(
+                                                           Tag::getName,
+                                                           identity())));
+    return this;
+  }
+
+  public ApiListingBuilder modelNamesRegistry(ModelNamesRegistry modelNamesRegistry) {
+    this.modelNamesRegistry = modelNamesRegistry;
     return this;
   }
 
   public ApiListing build() {
     this.tags.addAll(tagNames.stream()
-        .filter(emptyTags())
-        .map(toTag(descriptor(tagLookup, description)))
-        .collect(toSet()));
+                             .filter(emptyTags())
+                             .map(toTag(descriptor(
+                                 tagLookup,
+                                 description)))
+                             .collect(toSet()));
     return new ApiListing(
         apiVersion,
         basePath,

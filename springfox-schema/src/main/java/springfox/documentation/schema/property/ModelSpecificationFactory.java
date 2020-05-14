@@ -3,16 +3,25 @@ package springfox.documentation.schema.property;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.stereotype.Service;
 import springfox.documentation.builders.ModelSpecificationBuilder;
-import springfox.documentation.schema.*;
+import springfox.documentation.schema.CollectionSpecification;
+import springfox.documentation.schema.EnumerationFacet;
+import springfox.documentation.schema.Enums;
+import springfox.documentation.schema.MapSpecification;
+import springfox.documentation.schema.ModelKeyBuilder;
+import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.QualifiedModelName;
+import springfox.documentation.schema.ReferenceModelSpecification;
+import springfox.documentation.schema.ScalarType;
+import springfox.documentation.schema.ScalarTypes;
+import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.AllowableListValues;
 import springfox.documentation.service.AllowableValues;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
-import static springfox.documentation.schema.property.PackageNames.safeGetPackageName;
+import static springfox.documentation.schema.property.PackageNames.*;
 
 @Service
 public class ModelSpecificationFactory {
