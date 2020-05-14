@@ -5,6 +5,7 @@ import com.fasterxml.classmate.ResolvedType;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public class ModelKey {
@@ -28,8 +29,8 @@ public class ModelKey {
     return qualifiedModelName;
   }
 
-  public ResolvedType getViewDiscriminator() {
-    return viewDiscriminator;
+  public Optional<ResolvedType> getViewDiscriminator() {
+    return Optional.ofNullable(viewDiscriminator);
   }
 
   public Set<ResolvedType> getValidationGroupDiscriminators() {
