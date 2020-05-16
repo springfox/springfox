@@ -1,8 +1,11 @@
 package springfox.documentation.spring.web.scanners;
 
 import com.fasterxml.classmate.ResolvedType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelSpecification;
+import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.service.ModelNamesRegistry;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ModelNamesRegistryFactoryPlugin;
@@ -10,6 +13,7 @@ import springfox.documentation.spi.service.contexts.ModelSpecificationRegistry;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -37,20 +41,59 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
     DefaultModelNamesRegistry(ModelSpecificationRegistry modelRegistry) {
       this.modelRegistry = modelRegistry;
       modelRegistry.modelKeys()
-                   .forEach(this::processKeys);
+          .forEach(this::processKeys);
       modelKeyToName = modelRegistry.modelKeys()
-                                    .stream()
-                                    .collect(Collectors.toMap(
-                                        Function.identity(),
-                                        k -> String.format(
-                                            "%s%s%s",
-                                            modelStems.get(k),
-                                            validationSuffixes.getOrDefault(
-                                                k.getValidationGroupDiscriminators(),
-                                                ""),
-                                            requestResponseSuffixes.getOrDefault(
-                                                k,
-                                                ""))));
+          .stream()
+          .collect(Collectors.toMap(
+              Function.identity(),
+              k -> String.format(
+                  "%s%s%s",
+                  modelStems.get(k),
+                  validationSuffixes.getOrDefault(
+                      k.getValidationGroupDiscriminators(),
+                      ""),
+                  requestResponseSuffixes.getOrDefault(
+                      k,
+                      ""))));
+      adjustForNameCollisions();
+    }
+
+    private void adjustForNameCollisions() {
+      MultiValueMap<String, ModelKey> nameToKey = new LinkedMultiValueMap<>();
+      modelKeyToName.forEach((k, v) -> nameToKey.add(v, k));
+      nameToKey.entrySet()
+          .stream()
+          .filter(e -> e.getValue().size() > 1)
+          .forEach(e -> {
+            Map<QualifiedModelName, String> nameToSuffix = nameSuffixLookup(e);
+            e.getValue().forEach(modelKey ->
+                                     modelKeyToName.put(
+                                         modelKey,
+                                         String.format(
+                                             "%s%s",
+                                             modelKeyToName.get(modelKey),
+                                             nameToSuffix.getOrDefault(modelKey
+                                                                           .getQualifiedModelName(), ""))));
+          });
+    }
+
+    private Map<QualifiedModelName, String> nameSuffixLookup(Map.Entry<String, List<ModelKey>> e) {
+      Map<QualifiedModelName, String> modelSuffix = new HashMap<>();
+      Set<QualifiedModelName> distinctModels = e.getValue()
+          .stream()
+          .map(ModelKey::getQualifiedModelName)
+          .collect(Collectors.toSet());
+      if (distinctModels.size() > 1) {
+        int index = 0;
+        for (QualifiedModelName key : distinctModels) {
+          int modelIndex = index;
+          modelSuffix.putIfAbsent(
+              key,
+              String.valueOf(modelIndex));
+          index++;
+        }
+      }
+      return modelSuffix;
     }
 
     private void processKeys(ModelKey modelKey) {
@@ -93,10 +136,10 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
     @Override
     public Map<String, ModelSpecification> modelsByName() {
       return modelKeyToName.entrySet()
-                           .stream()
-                           .collect(Collectors.toMap(
-                               Map.Entry::getValue,
-                               e -> modelRegistry.modelSpecificationFor(e.getKey())));
+          .stream()
+          .collect(Collectors.toMap(
+              Map.Entry::getValue,
+              e -> modelRegistry.modelSpecificationFor(e.getKey())));
     }
 
     @Override

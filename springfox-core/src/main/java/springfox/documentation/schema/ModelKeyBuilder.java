@@ -9,7 +9,7 @@ import java.util.Set;
 public class ModelKeyBuilder {
   private QualifiedModelName qualifiedModelName;
   private ResolvedType viewDiscriminator;
-  private Set<ResolvedType> validationGroupDiscriminators = new HashSet<>();
+  private final Set<ResolvedType> validationGroupDiscriminators = new HashSet<>();
   private boolean isResponse;
 
   public ModelKeyBuilder qualifiedModelName(QualifiedModelName qualifiedModelName) {

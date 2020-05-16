@@ -30,13 +30,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.documentation.oas.mappers.SchemaMapper
 import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
-import springfox.documentation.schema.ModelSpecification
 import springfox.documentation.schema.ModelTestingSupport
 import springfox.documentation.schema.mixins.ModelProviderSupport
-
-import static java.util.Collections.*
-import static springfox.documentation.spi.DocumentationType.*
-import static springfox.documentation.spi.schema.contexts.ModelContext.*
 
 class ComplexTypeSpec extends Specification implements ModelProviderSupport, ModelTestingSupport, ModelRegistrySupport {
   @Shared
