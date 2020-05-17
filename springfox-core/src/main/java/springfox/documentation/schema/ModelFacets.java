@@ -110,4 +110,19 @@ public class ModelFacets {
         examples,
         extensions);
   }
+
+  @Override
+  public String toString() {
+    return "ModelFacets{" +
+        "modelKey=" + modelKey +
+        ", title='" + title + '\'' +
+        ", description='" + description + '\'' +
+        ", nullable=" + nullable +
+        ", deprecated=" + deprecated +
+        ", enumerationFacet=" + enumerationFacet +
+        ", externalDocumentation=" + externalDocumentation +
+        ", examples=" + examples +
+        ", extensions=" + extensions +
+        '}';
+  }
 }

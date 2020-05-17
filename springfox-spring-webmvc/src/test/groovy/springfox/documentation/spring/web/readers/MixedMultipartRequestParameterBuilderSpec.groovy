@@ -6,6 +6,7 @@ import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.RepresentationBuilder
 import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.schema.ModelKey
+import springfox.documentation.schema.ModelKeyBuilder
 import springfox.documentation.schema.QualifiedModelName
 import springfox.documentation.schema.ReferenceModelSpecification
 import springfox.documentation.schema.ScalarType
@@ -78,7 +79,6 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
     and:
     aggregated.first() == expectedModel()
 
-
   }
 
   private RequestParameter idParameter() {
@@ -127,6 +127,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
         .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
         .modelSpecificationBuilder()
         .compoundModelBuilder()
+        .modelKey(new ModelKeyBuilder().build())
         .propertyBuilder("id")
         .type(
             new ModelSpecificationBuilder()
@@ -188,6 +189,7 @@ class MixedMultipartRequestParameterBuilderSpec extends Specification {
           .representationBuilderFor(MediaType.MULTIPART_FORM_DATA)
             .modelSpecificationBuilder()
               .compoundModelBuilder()
+                .modelKey(new ModelKeyBuilder().build())
                 .propertyBuilder("id")
                 .type(new ModelSpecificationBuilder()
                     .scalarModel(ScalarType.STRING)

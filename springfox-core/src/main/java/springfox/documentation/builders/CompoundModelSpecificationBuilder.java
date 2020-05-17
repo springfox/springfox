@@ -55,7 +55,7 @@ public class CompoundModelSpecificationBuilder {
         = this.properties.values().stream()
                          .map(PropertySpecificationBuilder::build)
                          .collect(Collectors.toList());
-    if (properties.size() > 0) {
+    if (modelKey != null) {
       return new CompoundModelSpecification(
           modelKey,
           effectiveModelKey,

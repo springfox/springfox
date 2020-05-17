@@ -2,6 +2,7 @@ package springfox.documentation.builders;
 
 import org.slf4j.Logger;
 import springfox.documentation.schema.CollectionSpecification;
+import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.MapSpecification;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.ReferenceModelSpecification;
@@ -79,9 +80,11 @@ public class ModelSpecificationBuilder {
   }
 
   public ModelSpecification build() {
+    CompoundModelSpecification compoundModel =
+        compoundModelBuilder != null ? compoundModelBuilder.build() : null;
     ensureValidSpecification(
         scalar,
-        compoundModelBuilder != null ? compoundModelBuilder.build() : null,
+        compoundModel,
         reference,
         collection,
         map);
@@ -89,7 +92,7 @@ public class ModelSpecificationBuilder {
         name,
         facetsBuilder.build(),
         scalar,
-        compoundModelBuilder != null ? compoundModelBuilder.build() : null,
+        compoundModel,
         collection,
         map,
         reference);
