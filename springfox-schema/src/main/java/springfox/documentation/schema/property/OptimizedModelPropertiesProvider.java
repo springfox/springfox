@@ -433,6 +433,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
         givenContext)) {
       givenContext.getEffectiveModelKeyBuilder()
                   .viewDiscriminator(givenContext.getView().orElse(null));
+      return properties;
     }
 
     if (member instanceof AnnotatedMethod) {
