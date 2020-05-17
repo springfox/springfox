@@ -536,8 +536,8 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
         namingStrategy,
         emptySet())
 
-    List<ModelSpecification> asInputModels =
-        new ArrayList(modelSpecificationProvider.modelDependenciesSpecifications(modelContext).values())
+    Set<ModelSpecification> asInputModels =
+        modelSpecificationProvider.modelDependenciesSpecifications(modelContext)
 
     def returnContext = returnValue("0_0",
         "group",
@@ -548,8 +548,8 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
         namingStrategy,
         emptySet())
 
-    List<ModelSpecification> asReturnModels =
-        new ArrayList(modelSpecificationProvider.modelDependenciesSpecifications(returnContext).values())
+    Set<ModelSpecification> asReturnModels =
+        modelSpecificationProvider.modelDependenciesSpecifications(returnContext)
 
     expect:
     ModelSpecification asInput = asInputModels.find { it.name.equals("MapsContainer") }

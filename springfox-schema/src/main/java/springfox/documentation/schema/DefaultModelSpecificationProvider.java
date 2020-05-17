@@ -33,10 +33,11 @@ import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -152,24 +153,17 @@ public class DefaultModelSpecificationProvider implements ModelSpecificationProv
   }
 
   @Override
-  public Map<ResolvedType, ModelSpecification> modelDependenciesSpecifications(ModelContext modelContext) {
-    Map<ResolvedType, ModelSpecification> models = new HashMap<>();
+  public Set<ModelSpecification> modelDependenciesSpecifications(ModelContext modelContext) {
+    Set<ModelSpecification> models = new HashSet<>();
     for (ResolvedType resolvedType : dependencyProvider.dependentModels(modelContext)) {
       ModelContext parentContext = ModelContext.fromParent(
           modelContext,
           resolvedType);
       Optional<ModelSpecification> model = modelSpecificationsFor(parentContext);
       if (model.isPresent()) {
-        models.put(
-            resolvedType,
-            model.get());
+        models.add(model.get());
       } else {
-        model = mapModel(
-            parentContext,
-            resolvedType);
-        model.ifPresent(m -> models.put(
-            resolvedType,
-            m));
+        mapModel(parentContext, resolvedType).ifPresent(models::add);
       }
     }
     return models;

@@ -29,6 +29,7 @@ import springfox.documentation.spi.schema.contexts.ModelContext;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import static java.util.Optional.*;
@@ -92,7 +93,7 @@ public class CachingModelProvider implements ModelProvider, ModelSpecificationPr
   }
 
   @Override
-  public Map<ResolvedType, ModelSpecification> modelDependenciesSpecifications(ModelContext modelContext) {
+  public Set<ModelSpecification> modelDependenciesSpecifications(ModelContext modelContext) {
     return specificationDelegate.modelDependenciesSpecifications(modelContext);
   }
 }

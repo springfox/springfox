@@ -20,15 +20,15 @@
 package springfox.documentation.schema;
 
 
-import com.fasterxml.classmate.ResolvedType;
 import springfox.documentation.annotations.Cacheable;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface ModelSpecificationProvider {
   @Cacheable(value = "modelSpecifications")
   Optional<ModelSpecification> modelSpecificationsFor(ModelContext modelContext);
 
-  java.util.Map<ResolvedType, ModelSpecification> modelDependenciesSpecifications(ModelContext modelContext);
+  Set<ModelSpecification> modelDependenciesSpecifications(ModelContext modelContext);
 }

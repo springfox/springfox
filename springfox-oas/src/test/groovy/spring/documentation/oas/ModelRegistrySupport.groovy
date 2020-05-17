@@ -60,8 +60,8 @@ trait ModelRegistrySupport extends AlternateTypesSupport {
     def returnDependencies = provider.modelDependenciesSpecifications(returnParam)
 
     def models = [asInput, asReturn]
-    models.addAll(inputDependencies.values())
-    models.addAll(returnDependencies.values())
+    models.addAll(inputDependencies)
+    models.addAll(returnDependencies)
 
     [asInput, asReturn, modelNamesRegistry(models)]
   }
