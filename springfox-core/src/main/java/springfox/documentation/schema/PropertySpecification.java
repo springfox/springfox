@@ -114,7 +114,7 @@ public class PropertySpecification {
   }
 
   public Boolean getHidden() {
-    return isHidden;
+    return isHidden != null && isHidden;
   }
 
   public int getPosition() {
