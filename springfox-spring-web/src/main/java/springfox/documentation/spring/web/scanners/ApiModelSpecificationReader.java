@@ -32,7 +32,6 @@ public class ApiModelSpecificationReader {
     this.resolver = resolver;
   }
 
-  @SuppressWarnings("rawtypes")
   public Set<ModelSpecification> read(RequestMappingContext context) {
     Set<ModelSpecification> specifications = new HashSet<>();
     Set<ModelContext> modelContexts = pluginsManager.modelContexts(context);
@@ -42,6 +41,7 @@ public class ApiModelSpecificationReader {
           each);
       modelProvider.modelSpecificationsFor(each)
                    .ifPresent(specifications::add);
+      specifications.addAll(modelProvider.modelDependenciesSpecifications(each));
     }
     return specifications;
   }
