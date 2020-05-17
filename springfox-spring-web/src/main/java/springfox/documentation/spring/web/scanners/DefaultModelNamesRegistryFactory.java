@@ -139,7 +139,8 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
           .stream()
           .collect(Collectors.toMap(
               Map.Entry::getValue,
-              e -> modelRegistry.modelSpecificationFor(e.getKey())));
+              e -> modelRegistry.modelSpecificationFor(e.getKey()),
+              (ms1, ms2) -> ms1));
     }
 
     @Override
