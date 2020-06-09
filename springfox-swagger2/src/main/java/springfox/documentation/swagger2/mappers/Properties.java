@@ -21,7 +21,6 @@ package springfox.documentation.swagger2.mappers;
 
 import com.fasterxml.classmate.ResolvedType;
 import io.swagger.models.properties.ArrayProperty;
-import io.swagger.models.properties.BaseIntegerProperty;
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
 import io.swagger.models.properties.DateProperty;
@@ -68,23 +67,23 @@ class Properties {
       new AbstractMap.SimpleEntry<>("date", newInstanceOf(DateProperty.class)),
       new AbstractMap.SimpleEntry<>("date-time", newInstanceOf(DateTimeProperty.class)),
       new AbstractMap.SimpleEntry<>("bigdecimal", newInstanceOf(DecimalProperty.class)),
-      new AbstractMap.SimpleEntry<>("biginteger", newInstanceOf(BaseIntegerProperty.class)),
+      new AbstractMap.SimpleEntry<>("biginteger", newInstanceOf(LongProperty.class)),
       new AbstractMap.SimpleEntry<>("uuid", newInstanceOf(UUIDProperty.class)),
       new AbstractMap.SimpleEntry<>("object", newInstanceOf(ObjectProperty.class)),
       new AbstractMap.SimpleEntry<>("byte", bytePropertyFactory()),
       new AbstractMap.SimpleEntry<>("__file", filePropertyFactory()))
-      .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
+                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
   private Properties() {
     throw new UnsupportedOperationException();
   }
 
-  public static Property property(final String typeName) {
+  public static Property property(String typeName) {
     String safeTypeName = ofNullable(typeName).orElse("");
     return TYPE_FACTORY.getOrDefault(safeTypeName.toLowerCase(), voidOrRef(safeTypeName)).apply(safeTypeName);
   }
 
-  public static Property property(final ModelReference modelRef) {
+  public static Property property(ModelReference modelRef) {
     if (modelRef.isMap()) {
       return new MapProperty(property(modelRef.itemModel().get()));
     } else if (modelRef.isCollection()) {

@@ -31,7 +31,6 @@ import io.swagger.models.properties.FileProperty;
 import io.swagger.models.properties.Property;
 import org.mapstruct.Mapper;
 import org.springframework.util.StringUtils;
-
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
 
@@ -41,24 +40,22 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toSet;
-import static springfox.documentation.schema.Types.isBaseType;
-import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValues;
-import static springfox.documentation.swagger2.mappers.EnumMapper.maybeAddAllowableValuesToParameter;
-import static springfox.documentation.swagger2.mappers.Properties.itemTypeProperty;
-import static springfox.documentation.swagger2.mappers.Properties.property;
+import static java.util.stream.Collectors.*;
+import static springfox.documentation.schema.Types.*;
+import static springfox.documentation.swagger2.mappers.EnumMapper.*;
+import static springfox.documentation.swagger2.mappers.Properties.*;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public class ParameterMapper {
 
   // This list is directly copied from the OpenAPI 2.0 spec
   private static final Set<String> SUPPORTED_FORM_DATA_TYPES = Stream.of(
-          "string",
-          "number",
-          "integer",
-          "boolean",
-          "array",
-          "file").collect(toSet());
+      "string",
+      "number",
+      "integer",
+      "boolean",
+      "array",
+      "file").collect(toSet());
 
   private static final VendorExtensionsMapper VENDOR_EXTENSIONS_MAPPER = new VendorExtensionsMapper();
 
@@ -75,16 +72,16 @@ public class ParameterMapper {
   private Parameter formParameter(springfox.documentation.service.Parameter source) {
 
     FormParameter parameter = new FormParameter()
-            .name(source.getName())
-            .description(source.getDescription());
+        .name(source.getName())
+        .description(source.getDescription());
 
     // Form Parameters only work with certain primitive types specified in the spec
     ModelReference modelRef = source.getModelRef();
     parameter.setProperty(itemTypeProperty(modelRef));
 
     if (!SUPPORTED_FORM_DATA_TYPES.contains(parameter.getType())
-            || "array".equals(parameter.getType()) 
-            && !SUPPORTED_FORM_DATA_TYPES.contains(parameter.getItems().getType())) {
+        || "array".equals(parameter.getType())
+        && !SUPPORTED_FORM_DATA_TYPES.contains(parameter.getItems().getType())) {
       // Falling back to BodyParameter is non-compliant with the Swagger 2.0 spec,
       // but matches previous behavior.
       return bodyParameter(source);

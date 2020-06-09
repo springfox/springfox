@@ -36,12 +36,9 @@ import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.service.AllowableValues;
-import springfox.documentation.service.ApiListing;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
@@ -56,7 +53,7 @@ import static springfox.documentation.swagger2.mappers.EnumMapper.*;
 import static springfox.documentation.swagger2.mappers.Properties.*;
 
 @Mapper
-public abstract class ModelMapper {
+public class ModelMapper {
   public Map<String, Model> mapModels(Map<String, springfox.documentation.schema.Model> from) {
     if (from == null) {
       return null;
@@ -78,7 +75,9 @@ public abstract class ModelMapper {
     return map;
   }
 
-  private Model mapComposedModel(RefModel parent, springfox.documentation.schema.Model source) {
+  private Model mapComposedModel(
+      RefModel parent,
+      springfox.documentation.schema.Model source) {
     ComposedModel model = new ComposedModel()
         .interfaces(singletonList(parent))
         .child(mapModel(source));
@@ -252,11 +251,5 @@ public abstract class ModelMapper {
     return responseProperty;
   }
 
-  Map<String, Model> modelsFromApiListings(Map<String, List<ApiListing>> apiListings) {
-    Map<String, springfox.documentation.schema.Model> definitions = new TreeMap<>();
-    apiListings.values().stream()
-        .flatMap(Collection::stream)
-        .forEachOrdered(each -> definitions.putAll(each.getModels()));
-    return mapModels(definitions);
-  }
+
 }

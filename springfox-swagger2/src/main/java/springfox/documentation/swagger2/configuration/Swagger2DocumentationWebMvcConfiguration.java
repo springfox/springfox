@@ -38,7 +38,11 @@ import springfox.documentation.swagger2.web.Swagger2ControllerWebMvc;
 
 @Configuration
 @ConditionalOnClass(name = "springfox.documentation.spring.web.SpringfoxWebMvcConfiguration")
-@Import({ SpringfoxWebConfiguration.class, SpringfoxWebMvcConfiguration.class, SwaggerCommonConfiguration.class })
+@Import({
+            SpringfoxWebConfiguration.class,
+            SpringfoxWebMvcConfiguration.class,
+            SwaggerCommonConfiguration.class
+        })
 @ComponentScan(basePackages = {
     "springfox.documentation.swagger2.mappers"
 })

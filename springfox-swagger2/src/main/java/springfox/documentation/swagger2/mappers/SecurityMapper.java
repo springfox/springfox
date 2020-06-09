@@ -34,7 +34,7 @@ import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
 
-@Mapper
+@Mapper(componentModel = "spring")
 public class SecurityMapper {
   private Map<String, SecuritySchemeFactory> factories = unmodifiableMap(Stream.of(
       new AbstractMap.SimpleEntry<>("oauth2", new OAuth2AuthFactory()),
