@@ -27,6 +27,7 @@ import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.JacksonJsonViewProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.plugins.SchemaPluginsManager
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
@@ -61,15 +62,22 @@ trait SwaggerPluginsSupport {
     def descriptions = new DescriptionResolver(new MockEnvironment())
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         of(singletonList(new DefaultTypeNameProvider()))
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     def typeNameExtractor = new TypeNameExtractor(
         resolver,
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
     PluginRegistry<ModelPropertyBuilderPlugin, DocumentationType> propRegistry =
-        of(singletonList(new ApiModelPropertyPropertyBuilder(descriptions)))
+        of(singletonList(new ApiModelPropertyPropertyBuilder(
+            descriptions,
+            new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))))
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
-        of([new ApiModelBuilder(resolver, typeNameExtractor, new JacksonEnumTypeDeterminer())])
+        of([new ApiModelBuilder(
+            resolver,
+            typeNameExtractor,
+            enumTypeDeterminer,
+            new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer))])
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
         of([new JacksonJsonViewProvider(new TypeResolver())])
@@ -88,7 +96,10 @@ trait SwaggerPluginsSupport {
     def descriptions = new DescriptionResolver(new MockEnvironment())
     plugins.parameterExpanderPlugins =
         create([
-            new ExpandedParameterBuilder(resolver, new JacksonEnumTypeDeterminer()),
+            new ExpandedParameterBuilder(
+                resolver,
+                new JacksonEnumTypeDeterminer()
+            ),
             new SwaggerExpandedParameterBuilder(descriptions, new JacksonEnumTypeDeterminer())])
     plugins.parameterPlugins = of([new ParameterNameReader(),
                                        new ParameterNameReader()])

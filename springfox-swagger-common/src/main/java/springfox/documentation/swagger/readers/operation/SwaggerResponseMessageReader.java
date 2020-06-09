@@ -155,7 +155,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
           for (ExampleProperty exampleProperty : apiResponse.examples().value()) {
             if (!isEmpty(exampleProperty.value())) {
               final String mediaType = isEmpty(exampleProperty.mediaType()) ? null : exampleProperty.mediaType();
-              examples.add(new ExampleBuilder().withMediaType(mediaType).withValue(exampleProperty.value()).build());
+              examples.add(new ExampleBuilder().withMediaType(mediaType).value(exampleProperty.value()).build());
             }
           }
           Map<String, Header> headers = new HashMap<>(defaultHeaders);
@@ -175,7 +175,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
               context);
           Set<Representation> representations = new HashSet<>();
           Optional<ResolvedType> finalType = type;
-          context.consumes()
+          context.produces()
               .forEach(mediaType ->
                   representations.add(
                       new Representation(
@@ -184,9 +184,10 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                               .orElse(null),
                           new HashSet<>())));
           responseContext.responseBuilder()
-              .mediaTypes(representations)
+              .representations(representations)
               .examples(examples)
               .description(apiResponse.message())
+              .headers(headers.values())
               .code(String.valueOf(apiResponse.code()));
           responses.add(documentationPlugins.response(responseContext));
         }
@@ -236,7 +237,7 @@ public class SwaggerResponseMessageReader implements OperationBuilderPlugin {
                       new HashSet<>())));
 
       responseContext.responseBuilder()
-          .mediaTypes(representations)
+          .representations(representations)
           .description(message(context))
           .code(String.valueOf(httpStatusCode(context)));
       responses.add(documentationPlugins.response(responseContext));

@@ -37,6 +37,7 @@ import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.TypeWithAnnotatedGettersAndSetters
 import springfox.documentation.schema.mixins.ConfiguredObjectMapperSupport
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.TypeNameProviderPlugin
 import springfox.documentation.spi.schema.contexts.ModelContext
@@ -63,7 +64,7 @@ class ApiModelPropertyPropertyBuilderSpec
 
   def "Should all swagger documentation types"() {
     given:
-    def sut = new ApiModelPropertyPropertyBuilder()
+    def sut = new ApiModelPropertyPropertyBuilder(descriptions, Mock(ModelSpecificationFactory))
 
     expect:
     !sut.supports(SPRING_WEB)
@@ -73,15 +74,21 @@ class ApiModelPropertyPropertyBuilderSpec
 
   def "ApiModelProperty annotated models get enriched with additional info given a bean property"() {
     given:
-    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def modelContext= Mock(ModelContext)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(
+        descriptions,
+        new ModelSpecificationFactory(Mock(TypeNameExtractor), new JacksonEnumTypeDeterminer()))
     def properties = beanDescription.findProperties()
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(),
         properties.find { it.name == property },
         new TypeResolver(),
-        SWAGGER_12, new PropertySpecificationBuilder(property))
+        modelContext,
+        new PropertySpecificationBuilder(property))
 
     when:
+    modelContext.view >> Optional.empty()
+    modelContext.validationGroups >> []
     sut.apply(context)
 
     and:
@@ -106,15 +113,19 @@ class ApiModelPropertyPropertyBuilderSpec
 
   def "ApiModelProperty annotated models get enriched with additional info given an annotated element"() {
     given:
-    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    def modelContext = Mock(ModelContext)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(
+        descriptions,
+        Mock(ModelSpecificationFactory))
     def properties = beanDescription.findProperties()
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(), new PropertySpecificationBuilder(property),
         properties.find { it.name == property }.getter.annotated,
         new TypeResolver(),
-        SWAGGER_12)
+        modelContext)
 
     when:
+    modelContext.getDocumentationType() >> SPRING_WEB
     sut.apply(context)
 
     and:
@@ -139,13 +150,15 @@ class ApiModelPropertyPropertyBuilderSpec
 
   def "ApiModelProperties marked as hidden properties are respected"() {
     given:
-    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(
+        descriptions,
+        Mock(ModelSpecificationFactory))
     def properties = beanDescription.findProperties()
     def context = new ModelPropertyContext(
         new ModelPropertyBuilder(), new PropertySpecificationBuilder(property),
         properties.find { it.name == property }.getter.annotated,
         new TypeResolver(),
-        SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     sut.apply(context)
@@ -166,7 +179,9 @@ class ApiModelPropertyPropertyBuilderSpec
 
   def "Supports ApiModelProperty annotated models with dataType overrides"() {
     given:
-    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(
+        descriptions,
+        Mock(ModelSpecificationFactory))
     def properties = beanDescription.findProperties()
 
     def resolver = new TypeResolver()
@@ -191,7 +206,7 @@ class ApiModelPropertyPropertyBuilderSpec
         new PropertySpecificationBuilder(property),
         properties.find { it.name == property }.getter.annotated,
         resolver,
-        SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     sut.apply(context)
@@ -220,7 +235,9 @@ class ApiModelPropertyPropertyBuilderSpec
 
   def "Supports ApiModelProperty annotated models with dataType overrides but protects specific types"() {
     given:
-    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(descriptions)
+    ApiModelPropertyPropertyBuilder sut = new ApiModelPropertyPropertyBuilder(
+        descriptions,
+        Mock(ModelSpecificationFactory))
     def properties = beanDescription.findProperties()
 
     def resolver = new TypeResolver()
@@ -245,7 +262,7 @@ class ApiModelPropertyPropertyBuilderSpec
         new PropertySpecificationBuilder(property),
         properties.find { it.name == property }.getter.annotated,
         resolver,
-        SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     context.builder.type(resolver.resolve(dataType))

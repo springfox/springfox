@@ -92,7 +92,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
       Example example = null;
       if (annotation.example().length() > 0) {
         example = new ExampleBuilder()
-            .withValue(annotation.example())
+            .value(annotation.example())
             .build();
       }
       context.parameterBuilder()
@@ -124,7 +124,7 @@ public class ApiParamParameterBuilder implements ParameterBuilderPlugin {
               .orElse(null))
           .required(annotation.required())
           .hidden(annotation.hidden())
-          .order(SWAGGER_PLUGIN_ORDER)
+          .precedence(SWAGGER_PLUGIN_ORDER)
           .simpleParameterBuilder()
           .collectionFormat(CollectionFormat.convert(annotation.collectionFormat()).orElse(null))
           .defaultValue(

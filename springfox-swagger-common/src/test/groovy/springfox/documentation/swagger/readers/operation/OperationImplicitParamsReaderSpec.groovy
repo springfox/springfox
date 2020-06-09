@@ -53,7 +53,9 @@ class OperationImplicitParamsReaderSpec extends DocumentationContextSpec impleme
     sut.pluginsManager = plugins
     def env = new DescriptionResolver(new MockEnvironment())
     OperationImplicitParametersReader operationImplicitParametersReader = new OperationImplicitParametersReader(env)
-    OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader(env)
+    OperationImplicitParameterReader operationImplicitParameterReader = new OperationImplicitParameterReader(
+        env
+    )
 
     when:
     sut.apply(operationContext)

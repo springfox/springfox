@@ -43,7 +43,7 @@ public class Examples {
         examples.putIfAbsent(each.mediaType(), new LinkedList<>());
         examples.get(each.mediaType()).add(new ExampleBuilder()
             .withMediaType(each.mediaType())
-            .withValue(each.value())
+            .value(each.value())
             .build());
       }
     }
@@ -56,7 +56,7 @@ public class Examples {
       if (!isEmpty(each.value())) {
         examples.add(new ExampleBuilder()
             .withMediaType(each.mediaType())
-            .withValue(each.value())
+            .value(each.value())
             .build());
       }
     }

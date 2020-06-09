@@ -26,7 +26,9 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.ModelBuilderPlugin;
@@ -45,15 +47,18 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
   private final TypeResolver typeResolver;
   private final TypeNameExtractor typeNameExtractor;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  private final ModelSpecificationFactory modelSpecifications;
 
   @Autowired
   public ApiModelBuilder(
       TypeResolver typeResolver,
       TypeNameExtractor typeNameExtractor,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      ModelSpecificationFactory modelSpecifications) {
     this.typeResolver = typeResolver;
     this.typeNameExtractor = typeNameExtractor;
     this.enumTypeDeterminer = enumTypeDeterminer;
+    this.modelSpecifications = modelSpecifications;
   }
 
   @Override
@@ -61,14 +66,24 @@ public class ApiModelBuilder implements ModelBuilderPlugin {
     ApiModel annotation = AnnotationUtils.findAnnotation(forClass(context), ApiModel.class);
     if (annotation != null) {
       List<ModelReference> modelRefs = new ArrayList<ModelReference>();
+      List<ReferenceModelSpecification> subclassKeys = new ArrayList<>();
       for (Class<?> each : annotation.subTypes()) {
         modelRefs.add(modelRefFactory(context, enumTypeDeterminer, typeNameExtractor)
-            .apply(typeResolver.resolve(each)));
+                          .apply(typeResolver.resolve(each)));
+        subclassKeys.add(modelSpecifications.create(
+            context,
+            typeResolver.resolve(each)).getReference()
+                             .orElse(null));
       }
       context.getBuilder()
           .description(annotation.description())
           .discriminator(annotation.discriminator())
           .subTypes(modelRefs);
+      context.getModelSpecificationBuilder()
+          .facetsBuilder()
+          .description(annotation.description())
+          .yield().compoundModelBuilder().discriminator(annotation.discriminator())
+          .subclassReferences(subclassKeys);
     }
   }
 
