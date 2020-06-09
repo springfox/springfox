@@ -54,6 +54,12 @@ public class JacksonXmlPropertyPlugin implements ModelPropertyBuilderPlugin {
                 .namespace(defaultToNull(propertyAnnotation.get().namespace()))
                 .name(propertyName(propertyAnnotation))
                 .wrapped(false));
+        context.getSpecificationBuilder()
+            .xml(new Xml()
+                     .attribute(true)
+                     .namespace(defaultToNull(propertyAnnotation.get().namespace()))
+                     .name(propertyName(propertyAnnotation))
+                     .wrapped(false));
       } else {
         Optional<JacksonXmlElementWrapper> wrapper = findAnnotation(context, JacksonXmlElementWrapper.class);
         context.getBuilder()
@@ -62,6 +68,12 @@ public class JacksonXmlPropertyPlugin implements ModelPropertyBuilderPlugin {
                 .namespace(defaultToNull(propertyAnnotation.get().namespace()))
                 .name(wrapperName(wrapper, propertyAnnotation))
                 .wrapped(wrapper.isPresent()));
+        context.getSpecificationBuilder()
+            .xml(new Xml()
+                     .attribute(false)
+                     .namespace(defaultToNull(propertyAnnotation.get().namespace()))
+                     .name(wrapperName(wrapper, propertyAnnotation))
+                     .wrapped(wrapper.isPresent()));
       }
     }
   }

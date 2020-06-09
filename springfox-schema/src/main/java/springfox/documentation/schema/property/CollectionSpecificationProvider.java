@@ -26,6 +26,9 @@ public class CollectionSpecificationProvider {
     }
     ResolvedType itemType = Collections.collectionElementType(type);
     CollectionType collectionType = Collections.collectionType(type);
+    if (itemType.getErasedType() == Byte.class || itemType.getErasedType() == Byte.TYPE) {
+      return Optional.empty();
+    }
     ModelSpecification itemModel = models.create(modelContext, itemType);
     return Optional.of(new CollectionSpecification(itemModel, collectionType));
   }

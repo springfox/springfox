@@ -24,7 +24,7 @@ trait ModelTestingSupport {
     assert modelProperty != null
     assert modelProperty.type.scalar.isPresent()
     assert scalar.equals(modelProperty.type.scalar.get().type)
-    assert !modelProperty.facetOfType(CollectionElementFacet).isPresent()
+    assert !modelProperty.elementFacet(CollectionElementFacet).isPresent()
     true
   }
 
@@ -36,7 +36,7 @@ trait ModelTestingSupport {
     assert modelProperty != null
     assert modelProperty.type.reference.isPresent()
     assert modelKey.equals(modelProperty.type.reference.get().key)
-    assert !modelProperty.facetOfType(CollectionElementFacet).isPresent()
+    assert !modelProperty.elementFacet(CollectionElementFacet).isPresent()
     true
   }
 
@@ -68,7 +68,7 @@ trait ModelTestingSupport {
       itemType,
       isRequest = false) {
     def collectionProperty = specification.properties.find { it.name.equals(propertyName) }
-    assert !collectionProperty.facetOfType(CollectionElementFacet).isPresent()
+    assert !collectionProperty.elementFacet(CollectionElementFacet).isPresent()
     if (itemType instanceof ScalarType) {
       assertScalarCollectionPropertySpecification(
           collectionProperty.type.collection.orElse(null),

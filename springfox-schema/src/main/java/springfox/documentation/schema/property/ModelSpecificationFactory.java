@@ -58,8 +58,7 @@ public class ModelSpecificationFactory {
         && collectionSpecification == null
         && mapSpecification == null) {
       if (resolvedType != null
-          && enumTypeDeterminer.isEnum(resolvedType
-          .getErasedType())) {
+          && enumTypeDeterminer.isEnum(resolvedType.getErasedType())) {
         scalar = Optional.of(ScalarType.STRING);
         AllowableValues allowableValues = Enums.allowableValues(resolvedType.getErasedType());
         if (allowableValues instanceof AllowableListValues) {

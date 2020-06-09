@@ -47,10 +47,16 @@ public class XmlModelPlugin implements ModelBuilderPlugin {
     XmlType annotation = AnnotationUtils.findAnnotation(forClass(context), XmlType.class);
     if (annotation != null) {
       context.getBuilder().xml(buildXml(annotation));
+      context.getModelSpecificationBuilder()
+          .facetsBuilder()
+          .xml(buildXml(annotation));
     }
     XmlRootElement root = AnnotationUtils.findAnnotation(forClass(context), XmlRootElement.class);
     if (root != null) {
       context.getBuilder().xml(buildXml(root));
+      context.getModelSpecificationBuilder()
+          .facetsBuilder()
+          .xml(buildXml(root));
     }
   }
 

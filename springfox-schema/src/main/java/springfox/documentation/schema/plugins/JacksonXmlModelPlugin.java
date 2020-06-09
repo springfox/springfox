@@ -45,6 +45,7 @@ public class JacksonXmlModelPlugin implements ModelBuilderPlugin {
     JacksonXmlRootElement root = AnnotationUtils.findAnnotation(forClass(context), JacksonXmlRootElement.class);
     if (root != null) {
       context.getBuilder().xml(buildXml(root));
+      context.getModelSpecificationBuilder().facetsBuilder().xml(buildXml(root));
     }
   }
 

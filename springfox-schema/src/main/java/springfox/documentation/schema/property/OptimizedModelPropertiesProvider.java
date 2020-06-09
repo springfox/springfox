@@ -551,7 +551,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             new PropertySpecificationBuilder(fieldModelProperty.getName()),
             childField.getRawMember(),
             typeResolver,
-            modelContext.getDocumentationType()))
+            modelContext))
         .updateModelRef(modelRefFactory(
             modelContext,
             enumTypeDeterminer,
@@ -580,17 +580,17 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder(fieldModelProperty.getName())
         .type(modelSpecifications.create(modelContext, fieldModelProperty.getType()))
-        .withPosition(fieldModelProperty.position())
-        .withRequired(fieldModelProperty.isRequired())
-        .withDescription(fieldModelProperty.propertyDescription())
-        .withExample(fieldModelProperty.example());
+        .position(fieldModelProperty.position())
+        .required(fieldModelProperty.isRequired())
+        .description(fieldModelProperty.propertyDescription())
+        .example(fieldModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(
             new ModelPropertyBuilder(),
             propertyBuilder,
             childField.getRawMember(),
             typeResolver,
-            modelContext.getDocumentationType()));
+            modelContext));
   }
 
   private ModelProperty beanModelProperty(
@@ -639,7 +639,7 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
             propertyBuilder,
             jacksonProperty,
             typeResolver,
-            modelContext.getDocumentationType(),
+            modelContext,
             new PropertySpecificationBuilder(beanModelProperty.getName())))
         .updateModelRef(modelRefFactory(
             modelContext,
@@ -673,20 +673,20 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder(beanModelProperty.getName())
         .type(modelSpecifications.create(modelContext, beanModelProperty.getType()))
-        .withPosition(beanModelProperty.position())
-        .withRequired(beanModelProperty.isRequired())
-        .withIsHidden(false)
-        .withDescription(beanModelProperty.propertyDescription())
+        .position(beanModelProperty.position())
+        .required(beanModelProperty.isRequired())
+        .isHidden(false)
+        .description(beanModelProperty.propertyDescription())
         .facetBuilder(EnumerationElementFacetBuilder.class)
         .allowedValues(beanModelProperty.allowableValues())
         .yield(PropertySpecificationBuilder.class)
-        .withExample(beanModelProperty.example());
+        .example(beanModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(
             new ModelPropertyBuilder(),
             jacksonProperty,
             typeResolver,
-            modelContext.getDocumentationType(),
+            modelContext,
             propertyBuilder));
   }
 
@@ -744,17 +744,17 @@ public class OptimizedModelPropertiesProvider implements ModelPropertiesProvider
 
     PropertySpecificationBuilder propertyBuilder = new PropertySpecificationBuilder(parameterModelProperty.getName())
         .type(modelSpecifications.create(modelContext, parameterModelProperty.getType()))
-        .withPosition(parameterModelProperty.position())
-        .withRequired(parameterModelProperty.isRequired())
-        .withIsHidden(false)
-        .withDescription(parameterModelProperty.propertyDescription())
-        .withExample(parameterModelProperty.example());
+        .position(parameterModelProperty.position())
+        .required(parameterModelProperty.isRequired())
+        .isHidden(false)
+        .description(parameterModelProperty.propertyDescription())
+        .example(parameterModelProperty.example());
     return schemaPluginsManager.propertySpecification(
         new ModelPropertyContext(
             new ModelPropertyBuilder(),
             jacksonProperty,
             typeResolver,
-            modelContext.getDocumentationType(),
+            modelContext,
             propertyBuilder));
   }
 

@@ -76,13 +76,28 @@ public class XmlPropertyPlugin implements ModelPropertyBuilderPlugin {
               .namespace(defaultToNull(elementAnnotation.get().namespace()))
               .name(wrapperName(wrapper, elementAnnotation))
               .wrapped(wrapper.isPresent()));
+
+      context.getSpecificationBuilder()
+          .xml(new Xml()
+                   .attribute(false)
+                   .namespace(defaultToNull(elementAnnotation.get().namespace()))
+                   .name(wrapperName(wrapper, elementAnnotation))
+                   .wrapped(wrapper.isPresent()));
+
     } else if (attributeAnnotation.isPresent()) {
       context.getBuilder()
           .xml(new Xml()
-              .attribute(true)
-              .namespace(defaultToNull(attributeAnnotation.get().namespace()))
-              .name(attributeName(attributeAnnotation))
-              .wrapped(false));
+                   .attribute(true)
+                   .namespace(defaultToNull(attributeAnnotation.get().namespace()))
+                   .name(attributeName(attributeAnnotation))
+                   .wrapped(false));
+
+      context.getSpecificationBuilder()
+          .xml(new Xml()
+                   .attribute(true)
+                   .namespace(defaultToNull(attributeAnnotation.get().namespace()))
+                   .name(attributeName(attributeAnnotation))
+                   .wrapped(false));
     }
   }
 

@@ -82,8 +82,8 @@ class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport 
     "anObjectDouble"  | ScalarType.DOUBLE
     "uuid"            | ScalarType.UUID
     "currency"        | ScalarType.CURRENCY
-    "aDate"           | ScalarType.DATE
-    "aSqlDate"        | ScalarType.DATE_TIME
+    "aDate"           | ScalarType.DATE_TIME
+    "aSqlDate"        | ScalarType.DATE
   }
 
 

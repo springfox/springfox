@@ -118,8 +118,8 @@ class EnumTypeSpec extends Specification implements ModelProviderSupport {
     modelProperty.name == "exampleEnum"
     modelProperty.type.scalar.isPresent()
     modelProperty.type.scalar.get().type == ScalarType.STRING
-    modelProperty.facetOfType(EnumerationFacet).isPresent()
-    modelProperty.facetOfType(EnumerationFacet).get().allowedValues == enumerationValues
+    modelProperty.elementFacet(EnumerationFacet).isPresent()
+    modelProperty.elementFacet(EnumerationFacet).get().allowedValues == enumerationValues
 
     asReturn.getName() == "ExampleWithEnums"
     asReturn.compound.isPresent()
@@ -127,7 +127,7 @@ class EnumTypeSpec extends Specification implements ModelProviderSupport {
     retModelProperty.name == "exampleEnum"
     retModelProperty.type.scalar.isPresent()
     retModelProperty.type.scalar.get().type == ScalarType.STRING
-    retModelProperty.facetOfType(EnumerationFacet).isPresent()
-    retModelProperty.facetOfType(EnumerationFacet).get().allowedValues == enumerationValues
+    retModelProperty.elementFacet(EnumerationFacet).isPresent()
+    retModelProperty.elementFacet(EnumerationFacet).get().allowedValues == enumerationValues
   }
 }

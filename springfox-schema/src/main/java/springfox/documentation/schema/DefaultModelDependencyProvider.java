@@ -182,16 +182,12 @@ public class DefaultModelDependencyProvider implements ModelDependencyProvider {
   }
 
   private Predicate<? super ModelProperty> baseProperty(final ModelContext modelContext) {
-    return new Predicate<ModelProperty>() {
-      @Override
-      public boolean test(ModelProperty input) {
-        return isBaseType(ModelContext.fromParent(modelContext, input.getType()));
-      }
-    };
+    return input -> isBaseType(ModelContext.fromParent(modelContext, input.getType()));
   }
 
   private List<ResolvedType> maybeFromRegularType(ModelContext modelContext, ModelProperty property) {
-    if (isContainerType(property.getType()) || isMapType(property.getType())) {
+    if (isContainerType(property.getType())
+        || isMapType(property.getType())) {
       return new ArrayList<>();
     }
     LOG.debug("Recursively resolving dependencies for type {}", resolvedTypeSignature(property.getType()).orElse(

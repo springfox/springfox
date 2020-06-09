@@ -12,6 +12,7 @@ import springfox.documentation.schema.DefaultGenericTypeNamingStrategy
 import springfox.documentation.schema.DefaultTypeNameProvider
 import springfox.documentation.schema.JacksonEnumTypeDeterminer
 import springfox.documentation.schema.TypeNameExtractor
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.spi.schema.EnumTypeDeterminer
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.AlternateTypeProvider
@@ -31,7 +32,8 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
         new PropertyDiscriminatorBasedInheritancePlugin(
             resolver,
             Mock(EnumTypeDeterminer),
-            Mock(TypeNameExtractor))
+            Mock(TypeNameExtractor),
+            Mock(ModelSpecificationFactory))
 
     expect:
     sut.supports(DocumentationType.SPRING_WEB)
@@ -46,7 +48,8 @@ class PropertyDiscriminatorBasedInheritancePluginSpec extends Specification {
         new PropertyDiscriminatorBasedInheritancePlugin(
             resolver,
             enumTypeDeterminer(),
-            typeNameExtractor())
+            typeNameExtractor(),
+            new ModelSpecificationFactory(typeNameExtractor(), enumTypeDeterminer()))
     def context = modelContext(type)
 
     when:

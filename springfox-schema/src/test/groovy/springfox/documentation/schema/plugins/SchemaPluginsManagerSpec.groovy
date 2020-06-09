@@ -87,14 +87,18 @@ class SchemaPluginsManagerSpec extends Specification implements TypesForTestingS
 
   def "enriches model property when plugins are found"() {
     given:
+    def modelContext = Mock(ModelContext)
     def context = new ModelPropertyContext(
         Mock(ModelPropertyBuilder),
         new PropertySpecificationBuilder("any"),
         Mock(AnnotatedElement),
         new TypeResolver(),
-        SPRING_WEB)
+        modelContext)
+
     when:
+    modelContext.getDocumentationType() >> SPRING_WEB
     sut.property(context)
+
     then:
     1 * propertyPlugin.apply(context)
   }

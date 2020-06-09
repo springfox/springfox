@@ -116,7 +116,7 @@ class BeanWithFactoryMethodSpec extends SchemaSpecification {
       property.required == isRequired
       property.type.scalar.isPresent()
       property.type.scalar.get().getType() == type
-      !property.facetOfType(EnumerationFacet).isPresent()
+      !property.elementFacet(EnumerationFacet).isPresent()
       true
     }
 

@@ -26,6 +26,7 @@ import spock.lang.Specification
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 class JacksonXmlPropertyPluginSpec extends Specification {
@@ -48,7 +49,7 @@ class JacksonXmlPropertyPluginSpec extends Specification {
         new PropertySpecificationBuilder("strings"),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_2)
+        Mock(ModelContext))
     plugin.apply(context)
 
     then:
@@ -67,7 +68,7 @@ class JacksonXmlPropertyPluginSpec extends Specification {
         new PropertySpecificationBuilder("string"),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_2)
+        Mock(ModelContext))
     plugin.apply(context)
 
     then:
@@ -86,7 +87,7 @@ class JacksonXmlPropertyPluginSpec extends Specification {
         new PropertySpecificationBuilder("strings"),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_2)
+        Mock(ModelContext))
     plugin.apply(context)
 
     then:

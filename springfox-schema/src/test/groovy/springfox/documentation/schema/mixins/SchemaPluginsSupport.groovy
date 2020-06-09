@@ -27,6 +27,7 @@ import springfox.documentation.schema.JacksonJsonViewProvider
 import springfox.documentation.schema.TypeNameExtractor
 import springfox.documentation.schema.plugins.PropertyDiscriminatorBasedInheritancePlugin
 import springfox.documentation.schema.plugins.SchemaPluginsManager
+import springfox.documentation.schema.property.ModelSpecificationFactory
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.ModelBuilderPlugin
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin
@@ -43,15 +44,20 @@ trait SchemaPluginsSupport {
 
     PluginRegistry<TypeNameProviderPlugin, DocumentationType> modelNameRegistry =
         OrderAwarePluginRegistry.of([new DefaultTypeNameProvider()])
+    def enumTypeDeterminer = new JacksonEnumTypeDeterminer()
     TypeNameExtractor typeNameExtractor = new TypeNameExtractor(
         new TypeResolver(),
         modelNameRegistry,
-        new JacksonEnumTypeDeterminer())
+        enumTypeDeterminer)
 
     PluginRegistry<ModelBuilderPlugin, DocumentationType> modelRegistry =
         OrderAwarePluginRegistry.of(
             [new PropertyDiscriminatorBasedInheritancePlugin(
-                new TypeResolver(), new JacksonEnumTypeDeterminer(), typeNameExtractor)])
+                new TypeResolver(),
+                enumTypeDeterminer,
+                typeNameExtractor,
+                new ModelSpecificationFactory(typeNameExtractor,
+                    enumTypeDeterminer))])
 
     PluginRegistry<ViewProviderPlugin, DocumentationType> viewProviderRegistry =
         OrderAwarePluginRegistry.of([new JacksonJsonViewProvider(new TypeResolver())])

@@ -19,4 +19,14 @@ public class PackageNames {
       return "";
     }
   }
+
+  public static String safeGetPackageName(Class<?> type) {
+    if (type != null
+        && type.getPackage() != null) {
+      return type.getPackage()
+          .getName();
+    } else {
+      return "";
+    }
+  }
 }

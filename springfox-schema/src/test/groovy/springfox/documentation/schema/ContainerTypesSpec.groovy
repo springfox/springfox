@@ -289,8 +289,38 @@ class ContainerTypesSpec extends SchemaSpecification implements ModelTestingSupp
     "aliasOfIntegers" | ScalarType.INTEGER
     "strings"         | ScalarType.STRING
     "objects"         | Object
-    "bytes"           | ScalarType.BYTE
     "substituted"     | Substituted
+  }
+
+  def "Bytes are not treated as a collection"() {
+    given:
+    def sut = resolver.resolve(typeWithArrays())
+    ModelSpecification asInput = modelSpecificationProvider.modelSpecificationsFor(inputParam("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        new HashSet<>(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+    ModelSpecification asReturn = modelSpecificationProvider.modelSpecificationsFor(returnValue("0_0",
+        "group",
+        sut,
+        Optional.empty(),
+        SWAGGER_12,
+        alternateTypeProvider(),
+        namingStrategy,
+        emptySet())).get()
+
+    expect:
+    asInput.getName() == "ArraysContainer"
+    asInput.getCompound().isPresent()
+    assertScalarPropertySpecification(asInput.compound.get(), "bytes", ScalarType.BYTE)
+
+    asReturn.getName() == "ArraysContainer"
+    asReturn.getCompound().isPresent()
+    assertScalarPropertySpecification(asReturn.compound.get(), "bytes", ScalarType.BYTE)
   }
 
   @Unroll
