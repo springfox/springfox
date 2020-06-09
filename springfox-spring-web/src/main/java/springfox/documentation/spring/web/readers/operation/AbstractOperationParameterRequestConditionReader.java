@@ -107,7 +107,6 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
           .style(ParameterStyle.SIMPLE)
           .explode(false)
           .allowReserved(false)
-          .allowEmptyValue(false)
           .defaultValue(paramValue)
           .facetBuilder(EnumerationElementFacetBuilder.class)
             .allowedValues(allowableValues)
@@ -118,7 +117,7 @@ public abstract class AbstractOperationParameterRequestConditionReader implement
               .build())
           .yield()
           .in(parameterType)
-          .order(DEFAULT_PRECEDENCE)
+          .precedence(DEFAULT_PRECEDENCE)
           .build();
       parameters.add(parameter);
     }

@@ -23,6 +23,7 @@ import com.fasterxml.classmate.TypeResolver
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import spock.lang.Unroll
 import springfox.documentation.builders.EnumerationElementFacetBuilder
 import springfox.documentation.builders.ModelSpecificationBuilder
 import springfox.documentation.builders.SimpleParameterSpecificationBuilder
@@ -75,7 +76,8 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     'paramType'     | "header"
   }
 
-  def "Should read a parameter given a parameter request condition"() {
+  @Unroll
+  def "Should read a parameter given a parameter request condition for #property"() {
     given:
     HandlerMethod handlerMethod = dummyHandlerMethod('methodWithParameterRequestCondition')
     HeadersRequestCondition headersCondition = new HeadersRequestCondition("test=testValue")
@@ -115,7 +117,6 @@ class OperationParameterHeadersConditionReaderSpec extends DocumentationContextS
     new ParameterSpecification(
         new SimpleParameterSpecificationBuilder(null)
             .style(null)
-            .allowEmptyValue(false)
             .allowReserved(false)
             .defaultValue('testValue')
             .explode(false)

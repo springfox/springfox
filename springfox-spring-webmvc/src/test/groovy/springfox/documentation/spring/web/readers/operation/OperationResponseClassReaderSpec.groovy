@@ -63,10 +63,6 @@ class OperationResponseClassReaderSpec extends DocumentationContextSpec implemen
         assert expectedClass == String.format("%s[%s]", operation.responseModel.type, operation.responseModel.itemType)
       } else {
         assert expectedClass == operation.responseModel.type
-        if ("Map".equals(operation.responseModel.type)) {
-          assert operation.responseModel.isMap()
-          assert !isNullOrEmpty(operation.responseModel.itemType)
-        }
         if (allowableValues == null) {
           assert operation.responseModel.getAllowableValues() == null
         } else {
