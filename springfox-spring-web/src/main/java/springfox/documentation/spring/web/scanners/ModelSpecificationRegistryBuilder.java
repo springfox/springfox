@@ -54,7 +54,7 @@ public class ModelSpecificationRegistryBuilder {
     for (Map.Entry<QualifiedModelName, List<ModelSpecification>> eachEntry : modelByQName.entrySet()) {
       List<ModelSpecification> models = eachEntry.getValue();
       if (models.size() > 1) {
-        LOGGER.info(
+        LOGGER.trace(
             "Starting comparison of model with name {}. Models to compare {}", eachEntry.getKey(), models.size());
         for (int i = 0; i < (models.size() - 1); i++) {
           for (int j = 1; j < models.size(); j++) {
@@ -66,21 +66,21 @@ public class ModelSpecificationRegistryBuilder {
                           .map(CompoundModelSpecification::getModelKey).get()),
                 true);
             if (sameModel(models.get(i), models.get(j), referenceKeyToEffectiveKey, seen)) {
-              LOGGER.info(
+              LOGGER.trace(
                   "Models were equivalent {} and {}",
                   models.get(i).key().get(),
                   models.get(j).key().get());
               referenceKeyToEffectiveKey.add(models.get(i).key().get(), models.get(j).key().get());
               referenceKeyToEffectiveKey.add(models.get(j).key().get(), models.get(i).key().get());
             } else {
-              LOGGER.info(
+              LOGGER.trace(
                   "Models were different {} and {}",
                   models.get(i).key().orElse(null),
                   models.get(j).key().orElse(null));
             }
           }
         }
-        LOGGER.info("Done comparison of models with name {}", eachEntry.getKey());
+        LOGGER.trace("Done comparison of models with name {}", eachEntry.getKey());
       }
     }
     return new DefaultModelSpecificationRegistry(
@@ -133,7 +133,7 @@ public class ModelSpecificationRegistryBuilder {
     if (first == null || second == null) {
       return false;
     }
-    LOGGER.info(
+    LOGGER.trace(
         "Comparing collections {} and {}",
         first,
         first);
@@ -152,7 +152,7 @@ public class ModelSpecificationRegistryBuilder {
     if (first == null || second == null) {
       return false;
     }
-    LOGGER.info("Comparing Map  {} and {}", first, second);
+    LOGGER.trace("Comparing Map  {} and {}", first, second);
     return sameModel(first.getKey(), second.getKey(), referenceKeyToEffectiveKey, seen)
         && sameModel(first.getValue(), second.getValue(), referenceKeyToEffectiveKey, seen);
   }
@@ -168,7 +168,7 @@ public class ModelSpecificationRegistryBuilder {
     if (first == null || second == null) {
       return false;
     }
-    LOGGER.info("Comparing compound specs {} and {}", first, second);
+    LOGGER.trace("Comparing compound specs {} and {}", first, second);
     seen.put(Arrays.asList(first.getModelKey(), second.getModelKey()), true);
     boolean sameProperties = sameProperties(
         first.getProperties(),
@@ -205,10 +205,10 @@ public class ModelSpecificationRegistryBuilder {
       PropertySpecification firstProperty = firstMap.get(name);
       PropertySpecification secondProperty = secondMap.get(name);
       if (!sameProperty(firstProperty, secondProperty, referenceKeyToEffectiveKey, seen)) {
-        LOGGER.info("Properties {} did not match", firstProperty.getName());
+        LOGGER.trace("Properties {} did not match", firstProperty.getName());
         return false;
       } else {
-        LOGGER.info("Properties  {} matched", firstProperty.getName());
+        LOGGER.trace("Properties  {} matched", firstProperty.getName());
       }
     }
     return true;
@@ -220,7 +220,7 @@ public class ModelSpecificationRegistryBuilder {
       PropertySpecification second,
       MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
       HashMap<List<ModelKey>, Boolean> seen) {
-    LOGGER.info("Comparing property {}", first.getName());
+    LOGGER.trace("Comparing property {}", first.getName());
     return first.getPosition() == second.getPosition() &&
         Objects.equals(first.getName(), second.getName()) &&
         Objects.equals(first.getDescription(), second.getDescription()) &&
@@ -254,7 +254,7 @@ public class ModelSpecificationRegistryBuilder {
     if (seen.containsKey(Arrays.asList(first, second))) {
       return seen.get(Arrays.asList(first, second));
     }
-    LOGGER.info("Comparing references {} and {}", first, second);
+    LOGGER.trace("Comparing references {} and {}", first, second);
     seen.put(Arrays.asList(first, second), true);
     boolean isSame = sameModel(modelByKey.get(first), modelByKey.get(second), referenceKeyToEffectiveKey, seen);
     seen.put(Arrays.asList(first, second), isSame);

@@ -1953,6 +1953,9 @@
                 "rel": {
                     "$ref": "#/definitions/LinkRelation"
                 },
+                "template": {
+                    "$ref": "#/definitions/UriTemplate"
+                },
                 "templated": {
                     "type": "boolean"
                 },
@@ -2024,6 +2027,47 @@
                 }
             },
             "title": "Tag"
+        },
+        "TemplateVariable": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "COMPOSITE_PARAM",
+                        "FRAGMENT",
+                        "PATH_VARIABLE",
+                        "REQUEST_PARAM",
+                        "REQUEST_PARAM_CONTINUED",
+                        "SEGMENT"
+                    ]
+                }
+            },
+            "title": "TemplateVariable"
+        },
+        "UriTemplate": {
+            "type": "object",
+            "properties": {
+                "variableNames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "variables": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/TemplateVariable"
+                    }
+                }
+            },
+            "title": "UriTemplate"
         }
     }
 }

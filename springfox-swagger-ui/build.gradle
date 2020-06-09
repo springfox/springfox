@@ -16,7 +16,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
  * limitations under the License.
  */
 plugins {
-  id "de.undercouch.download" version "4.0.2"
+  id "de.undercouch.download" version "4.0.4"
   id "com.github.node-gradle.node" version "2.2.3"
 }
 

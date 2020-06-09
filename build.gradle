@@ -1,11 +1,11 @@
 plugins {
-  id 'com.github.ben-manes.versions' version '0.27.0'
-  id 'se.patrikerdes.use-latest-versions' version '0.2.13'
-  id "com.jfrog.bintray" version "1.8.4"
-  id "com.jfrog.artifactory" version "4.13.0"
-  id "com.github.kt3k.coveralls" version "2.9.0"
+  id 'com.github.ben-manes.versions' version '0.28.0'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.14'
+  id "com.jfrog.bintray" version "1.8.5"
+  id "com.jfrog.artifactory" version "4.15.2"
+  id "com.github.kt3k.coveralls" version "2.10.1"
   id "org.asciidoctor.jvm.convert" version "2.4.0"
-  id "org.ajoberstar.grgit" version "4.0.1"
+  id "org.ajoberstar.grgit" version "4.0.2"
   id "org.ajoberstar.git-publish" version "3.0.0-rc.1"
 }
 
