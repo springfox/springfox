@@ -57,7 +57,10 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = of(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
     plugins.documentationPlugins = of([])
-    plugins.parameterExpanderPlugins = of([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
+    plugins.parameterExpanderPlugins = of([new ExpandedParameterBuilder(
+        resolver,
+        enumTypeDeterminer
+    )])
     plugins.parameterPlugins = of([new ParameterNameReader()])
     plugins.operationBuilderPlugins = of([])
     plugins.resourceGroupingStrategies = of([])
@@ -92,7 +95,10 @@ trait ServicePluginsSupport implements SchemaPluginsSupport {
     def plugins = new DocumentationPluginsManager()
     plugins.apiListingPlugins = of(Stream.of(new MediaTypeReader(), new ApiListingReader()).collect(toList()))
     plugins.documentationPlugins = of(documentationPlugins)
-    plugins.parameterExpanderPlugins = of([new ExpandedParameterBuilder(resolver, enumTypeDeterminer)])
+    plugins.parameterExpanderPlugins = of([new ExpandedParameterBuilder(
+        resolver,
+        enumTypeDeterminer
+    )])
     plugins.parameterPlugins = of(paramPlugins)
     plugins.operationBuilderPlugins = of(operationPlugins)
     plugins.resourceGroupingStrategies = of(groupingStrategyPlugins)

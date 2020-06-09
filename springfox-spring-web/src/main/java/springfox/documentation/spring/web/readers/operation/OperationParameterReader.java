@@ -99,7 +99,7 @@ public class OperationParameterReader implements OperationBuilderPlugin {
     return true;
   }
 
-  private List<Compatibility<Parameter, RequestParameter>> readParameters(final OperationContext context) {
+  private List<Compatibility<Parameter, RequestParameter>> readParameters(OperationContext context) {
     List<ResolvedMethodParameter> methodParameters = context.getParameters();
     List<Compatibility<Parameter, RequestParameter>> parameters = new ArrayList<>();
     LOGGER.info("Reading parameters for method {} at path {}", context.getName(), context.requestMappingPattern());

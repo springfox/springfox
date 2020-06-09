@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import springfox.documentation.builders.ResponseMessageBuilder;
@@ -118,7 +119,11 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
           enumTypeDeterminer,
           typeNameExtractor,
           knownNames).apply(returnType);
-      context.consumes()
+      Set<MediaType> produces = new HashSet<>(context.produces());
+      if (produces.isEmpty()) {
+        produces.add(MediaType.ALL);
+      }
+      produces
           .forEach(mediaType ->
               representations.add(
                   new Representation(
@@ -138,7 +143,8 @@ public class ResponseMessagesReader implements OperationBuilderPlugin {
         context.getGenericsNamingStrategy(),
         context);
     responseContext.responseBuilder()
-        .mediaTypes(representations)
+        .representations(representations)
+        .description(message)
         .code(String.valueOf(httpStatusCode));
 
     context.operationBuilder()

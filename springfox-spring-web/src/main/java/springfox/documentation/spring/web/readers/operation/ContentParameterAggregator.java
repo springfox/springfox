@@ -20,6 +20,9 @@ import java.util.stream.Collectors;
 @Component
 public class ContentParameterAggregator implements ParameterAggregator {
   public Collection<RequestParameter> aggregate(Collection<RequestParameter> parameters) {
+    if (parameters.size() == 0) {
+      return new ArrayList<>();
+    }
     RequestParameterBuilder builder = new RequestParameterBuilder();
 
     // @formatter:off
@@ -55,8 +58,8 @@ public class ContentParameterAggregator implements ParameterAggregator {
         .filter(p -> p.getIn() == ParameterType.FORMDATA
             && p.getParameterSpecification().getContent()
             .map(c -> c.getRepresentations().stream()
-                .anyMatch(m -> m.getMediaType() == MediaType.MULTIPART_FORM_DATA
-                    || m.getMediaType() == MediaType.MULTIPART_MIXED))
+                .anyMatch(m -> m.getMediaType().equals(MediaType.MULTIPART_FORM_DATA)
+                    || m.getMediaType().equals(MediaType.MULTIPART_MIXED)))
             .orElse(false))
         .forEach(each -> builder
             .name("body")
@@ -90,7 +93,9 @@ public class ContentParameterAggregator implements ParameterAggregator {
                   .filter(p -> p.getIn() != ParameterType.FORMDATA
                       && p.getIn() != ParameterType.FORM)
                   .collect(Collectors.toCollection(ArrayList::new));
-    requestParameters.add(content);
+    if (content.getIn() != null) {
+      requestParameters.add(content);
+    }
     return requestParameters;
   }
 
@@ -101,6 +106,8 @@ public class ContentParameterAggregator implements ParameterAggregator {
                                    parameter.getName(),
                                    null)
                                    .type(m.getModel())
+                                   .required(parameter.getRequired())
+                                   .description(parameter.getDescription())
                                    .build())
                                .collect(Collectors.toList()))
                     .orElse(new ArrayList<>());

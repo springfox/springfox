@@ -15,7 +15,10 @@ import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 class ExpandedParameterBuilderSpec extends Specification {
   def "List of enums are expanded correctly"() {
     given:
-    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(new TypeResolver(), new JacksonEnumTypeDeterminer())
+    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(
+        new TypeResolver(),
+        new JacksonEnumTypeDeterminer()
+    )
 
     and:
     ParameterExpansionContext context = new ParameterExpansionContext(
@@ -48,7 +51,10 @@ class ExpandedParameterBuilderSpec extends Specification {
   @Unroll
   def "List of scalar type for #field is expanded correctly"() {
     given:
-    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(new TypeResolver(), new JacksonEnumTypeDeterminer())
+    ExpandedParameterBuilder sut = new ExpandedParameterBuilder(
+        new TypeResolver(),
+        new JacksonEnumTypeDeterminer()
+    )
 
     and:
     ParameterExpansionContext context = new ParameterExpansionContext(

@@ -3,6 +3,7 @@ package springfox.documentation.spring.web.scanners;
 import com.fasterxml.classmate.ResolvedType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.QualifiedModelName;
@@ -66,14 +67,14 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
           .filter(e -> e.getValue().size() > 1)
           .forEach(e -> {
             Map<QualifiedModelName, String> nameToSuffix = nameSuffixLookup(e);
-            e.getValue().forEach(modelKey ->
-                                     modelKeyToName.put(
-                                         modelKey,
-                                         String.format(
-                                             "%s%s",
-                                             modelKeyToName.get(modelKey),
-                                             nameToSuffix.getOrDefault(modelKey
-                                                                           .getQualifiedModelName(), ""))));
+            e.getValue()
+                .forEach(modelKey ->
+                             modelKeyToName.put(
+                                 modelKey,
+                                 String.format(
+                                     "%s%s",
+                                     modelKeyToName.get(modelKey),
+                                     nameToSuffix.getOrDefault(modelKey.getQualifiedModelName(), ""))));
           });
     }
 
@@ -119,7 +120,7 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
         int modelIndex = index;
         validationSuffixes.computeIfAbsent(
             key.getValidationGroupDiscriminators(),
-            k -> "_" + modelIndex);
+            k -> modelIndex == 0 ? "" : "_" + modelIndex);
         index++;
       }
       if (hasRequestResponsePair) {
@@ -135,17 +136,21 @@ public class DefaultModelNamesRegistryFactory implements ModelNamesRegistryFacto
 
     @Override
     public Map<String, ModelSpecification> modelsByName() {
-      return modelKeyToName.entrySet()
-          .stream()
-          .collect(Collectors.toMap(
-              Map.Entry::getValue,
-              e -> modelRegistry.modelSpecificationFor(e.getKey()),
-              (ms1, ms2) -> ms1));
+      Map<String, ModelSpecification> map = new HashMap<>();
+      modelKeyToName.forEach((key, value) -> map.putIfAbsent(
+          value,
+          new ModelSpecificationBuilder()
+              .copyOf(modelRegistry.modelSpecificationFor(key))
+              .facetsBuilder()
+              .withTitle(value)
+              .yield()
+              .build()));
+      return map;
     }
 
     @Override
     public Optional<String> nameByKey(ModelKey key) {
-      return Optional.ofNullable(modelKeyToName.get(modelRegistry.effectiveModelKeyFor(key)));
+      return Optional.ofNullable(modelKeyToName.get(key));
     }
   }
 }
