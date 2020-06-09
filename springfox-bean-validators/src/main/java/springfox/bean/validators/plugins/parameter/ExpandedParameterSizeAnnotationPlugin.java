@@ -23,12 +23,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.builders.SimpleParameterSpecificationBuilder;
+import springfox.documentation.builders.StringElementFacetBuilder;
+import springfox.documentation.schema.NumericElementFacetBuilder;
 import springfox.documentation.service.AllowableRangeValues;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.ExpandedParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext;
 
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static springfox.bean.validators.plugins.RangeAnnotations.*;
@@ -56,6 +60,26 @@ public class ExpandedParameterSizeAnnotationPlugin implements ExpandedParameterB
 
       values = new AllowableRangeValues(values.getMin(), values.getMax());
       context.getParameterBuilder().allowableValues(values);
+      context.getRequestParameterBuilder()
+          .simpleParameterBuilder()
+          .facetBuilder(NumericElementFacetBuilder.class)
+          .minimum(safeBigDecimal(values.getMin()))
+          .maximum(safeBigDecimal(values.getMax()))
+          .yield(SimpleParameterSpecificationBuilder.class)
+          .facetBuilder(StringElementFacetBuilder.class)
+          .minLength(safeBigDecimal(values.getMin()).intValue())
+          .maxLength(safeBigDecimal(values.getMax()).intValue());
+    }
+  }
+
+  static BigDecimal safeBigDecimal(String doubleString) {
+    if (doubleString == null) {
+      return null;
+    }
+    try {
+      return new BigDecimal(doubleString);
+    } catch (NumberFormatException e) {
+      return null;
     }
   }
 }

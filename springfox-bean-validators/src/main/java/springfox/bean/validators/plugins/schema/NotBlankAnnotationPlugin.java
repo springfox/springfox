@@ -53,6 +53,7 @@ public class NotBlankAnnotationPlugin implements ModelPropertyBuilderPlugin {
     Optional<NotBlank> notBlank = extractAnnotation(context);
     if (notBlank.isPresent()) {
       context.getBuilder().required(true);
+      context.getSpecificationBuilder().required(true);
     }
   }
 

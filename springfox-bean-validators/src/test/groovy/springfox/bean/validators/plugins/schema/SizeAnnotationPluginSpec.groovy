@@ -26,6 +26,7 @@ import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 class SizeAnnotationPluginSpec extends Specification {
@@ -45,7 +46,7 @@ class SizeAnnotationPluginSpec extends Specification {
           new ModelPropertyBuilder(), new PropertySpecificationBuilder(propertyName),
           element,
           new TypeResolver(),
-          DocumentationType.SWAGGER_12)
+          Mock(ModelContext))
     when:
       sut.apply(context)
       def property = context.builder.build()

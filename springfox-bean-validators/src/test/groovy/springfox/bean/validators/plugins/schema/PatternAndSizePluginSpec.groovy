@@ -28,6 +28,7 @@ import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 /**
  * @author : ashutosh 
@@ -46,7 +47,7 @@ class PatternAndSizePluginSpec extends Specification{
         new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
     when:
     sat.apply(context)
     pat.apply(context)
@@ -72,7 +73,7 @@ class PatternAndSizePluginSpec extends Specification{
         new ModelPropertyBuilder(),
         beanProperty,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12,
+        Mock(ModelContext),
         new PropertySpecificationBuilder(propertyName))
     when:
     sat.apply(context)

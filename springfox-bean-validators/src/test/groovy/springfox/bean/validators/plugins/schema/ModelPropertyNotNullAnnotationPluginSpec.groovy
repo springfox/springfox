@@ -27,6 +27,7 @@ import springfox.bean.validators.plugins.models.NullabilityTestModel
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
@@ -47,7 +48,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
         new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     sut.apply(context)
@@ -73,7 +74,7 @@ class ModelPropertyNotNullAnnotationPluginSpec extends Specification {
         new ModelPropertyBuilder(),
         beanProperty,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12,
+        Mock(ModelContext),
         new PropertySpecificationBuilder(propertyName))
 
     when:

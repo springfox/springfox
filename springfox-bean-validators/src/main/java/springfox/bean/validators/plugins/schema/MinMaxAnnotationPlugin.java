@@ -65,9 +65,11 @@ public class MinMaxAnnotationPlugin implements ModelPropertyBuilderPlugin {
                 .orElse(null));
     LOGGER.debug(String.format("Adding numeric element facet : %s",
         values.getModern().map(NumericElementFacet::toString).orElse("<none>")));
-    context.getSpecificationBuilder()
-        .facetBuilder(NumericElementFacetBuilder.class)
-        .copyOf(values.getModern().orElse(null));
+    values.getModern()
+        .ifPresent(facet -> context.getSpecificationBuilder()
+            .facetBuilder(NumericElementFacetBuilder.class)
+            .copyOf(facet));
+
   }
 
   private Optional<Min> extractMin(ModelPropertyContext context) {

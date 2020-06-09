@@ -57,8 +57,16 @@ public class SizeAnnotationPlugin implements ParameterBuilderPlugin {
       context.parameterBuilder().allowableValues(values);
       context.requestParameterBuilder().simpleParameterBuilder()
         .facetBuilder(StringElementFacetBuilder.class)
-        .minLength(Integer.valueOf(values.getMin()))
-        .maxLength(Integer.valueOf(values.getMax()));
+        .minLength(tryGetInteger(values.getMin()).orElse(null))
+        .maxLength(tryGetInteger(values.getMax()).orElse(null));
+    }
+  }
+
+  private Optional<Integer> tryGetInteger(String min) {
+    try {
+      return Optional.of(Integer.valueOf(min));
+    } catch (NumberFormatException e) {
+      return Optional.empty();
     }
   }
 }

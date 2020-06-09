@@ -27,6 +27,7 @@ import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.service.AllowableRangeValues
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 class MinMaxAnnotationPluginSpec extends Specification {
@@ -46,13 +47,13 @@ class MinMaxAnnotationPluginSpec extends Specification {
         new ModelPropertyBuilder(), new PropertySpecificationBuilder(propertyName),
         element,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     sut.apply(context)
     def property = context.builder.build()
     def numericRange = context.getSpecificationBuilder().build()
-        ?.facetOfType(NumericElementFacet)
+        ?.elementFacet(NumericElementFacet)
         ?.orElse(null)
 
     then:

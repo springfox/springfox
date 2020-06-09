@@ -10,6 +10,7 @@ import springfox.bean.validators.plugins.models.BeanValidatorsTestModel
 import springfox.documentation.builders.ModelPropertyBuilder
 import springfox.documentation.builders.PropertySpecificationBuilder
 import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spi.schema.contexts.ModelContext
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext
 
 import javax.validation.constraints.NotNull
@@ -32,7 +33,7 @@ class BeanValidatorsSpec extends Specification {
         new PropertySpecificationBuilder(""),
         (AnnotatedElement) null,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
     def annotation = Validators.extractAnnotation(context, NotNull)
 
     then:
@@ -45,7 +46,7 @@ class BeanValidatorsSpec extends Specification {
         new ModelPropertyBuilder(),
         Mock(BeanPropertyDefinition),
         new TypeResolver(),
-        DocumentationType.SWAGGER_12,
+        Mock(ModelContext),
         new PropertySpecificationBuilder(""))
     def annotation = Validators.extractAnnotation(context, NotNull)
 
@@ -62,7 +63,7 @@ class BeanValidatorsSpec extends Specification {
         new PropertySpecificationBuilder(propertyName),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     def annotation = Validators.extractAnnotation(context, NotNull)
@@ -89,7 +90,7 @@ class BeanValidatorsSpec extends Specification {
         new ModelPropertyBuilder(),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12,
+        Mock(ModelContext),
         new PropertySpecificationBuilder(propertyName))
 
     when:
@@ -118,7 +119,7 @@ class BeanValidatorsSpec extends Specification {
         new PropertySpecificationBuilder(propertyName),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12)
+        Mock(ModelContext))
 
     when:
     def annotation = Validators.extractAnnotation(context, Pattern)
@@ -141,7 +142,7 @@ class BeanValidatorsSpec extends Specification {
         new ModelPropertyBuilder(),
         property,
         new TypeResolver(),
-        DocumentationType.SWAGGER_12,
+        Mock(ModelContext),
         new PropertySpecificationBuilder(propertyName))
     
     when:

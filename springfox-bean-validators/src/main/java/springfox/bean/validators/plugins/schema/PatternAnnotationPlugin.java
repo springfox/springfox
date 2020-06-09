@@ -22,6 +22,7 @@ package springfox.bean.validators.plugins.schema;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.bean.validators.plugins.Validators;
+import springfox.documentation.builders.StringElementFacetBuilder;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
@@ -37,7 +38,12 @@ public class PatternAnnotationPlugin implements ModelPropertyBuilderPlugin {
   @Override
   public void apply(ModelPropertyContext context) {
     Optional<Pattern> pattern = extractAnnotation(context, Pattern.class);
-    context.getBuilder().pattern(createPatternValueFromAnnotation(pattern));
+    String patternValueFromAnnotation = createPatternValueFromAnnotation(pattern);
+    context.getBuilder().pattern(patternValueFromAnnotation);
+    if (patternValueFromAnnotation != null) {
+      context.getSpecificationBuilder().facetBuilder(StringElementFacetBuilder.class)
+          .pattern(patternValueFromAnnotation);
+    }
   }
 
   @Override
