@@ -23,7 +23,8 @@ public class ContentSpecificationBuilder {
     this.representations.putAll(representations.stream()
         .collect(Collectors.toMap(
             Representation::getMediaType,
-            r -> representationBuilderFor(r.getMediaType()).copyOf(r))));
+            r -> representationBuilderFor(r.getMediaType())
+                .copyOf(r))));
     return this;
   }
 

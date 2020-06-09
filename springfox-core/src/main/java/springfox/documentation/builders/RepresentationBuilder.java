@@ -14,7 +14,7 @@ public class RepresentationBuilder {
   private ModelSpecificationBuilder modelBuilder;
   private final Map<String, EncodingBuilder> encodings = new HashMap<>();
 
-  public RepresentationBuilder(ContentSpecificationBuilder parent) {
+  public RepresentationBuilder(ContentSpecificationBuilder parent) { //TODO: Fix this to not take parent
     this.parent = parent;
   }
 
@@ -71,13 +71,11 @@ public class RepresentationBuilder {
 
   public RepresentationBuilder copyOf(Representation other) {
     if (other != null) {
-      other.getEncodings().forEach(e -> this.modelSpecificationBuilder()
-          .copyOf(other.getModel())
-          .yield(RepresentationBuilder.class)
-          .encodingForProperty(e.getPropertyRef())
-          .copyOf(e)
-          .yield());
-
+      other.getEncodings().forEach(e -> this.encodingForProperty(e.getPropertyRef())
+          .copyOf(e));
+      this.mediaType(other.getMediaType())
+          .modelSpecificationBuilder()
+          .copyOf(other.getModel());
     }
     return this;
   }

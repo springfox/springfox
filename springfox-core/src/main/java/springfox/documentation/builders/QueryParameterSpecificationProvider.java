@@ -29,39 +29,48 @@ class QueryParameterSpecificationProvider implements ParameterSpecificationProvi
     SimpleParameterSpecification simpleParameter = context.getSimpleParameter();
     SimpleParameterSpecification validSimpleParameter = null;
     ContentSpecification validContentEncoding = null;
-    ModelSpecification model = simpleParameter.getModel();
-    if (model != null) {
-      if (model.getScalar().isPresent()) {
-        validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
-                                      .copyOf(simpleParameter)
-                                      .explode(null)
-                                      .style(ParameterStyle.FORM)
-                                      .build();
-      } else if (model.getCollection().isPresent()) {
-        ParameterStyle style = VALID_COLLECTION_STYLES.contains(simpleParameter.getStyle())
+    if (simpleParameter != null) {
+      ModelSpecification model = simpleParameter.getModel();
+      if (model != null) {
+        if (model.getScalar().isPresent()) {
+          validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
+              .copyOf(simpleParameter)
+              .explode(null)
+              .style(ParameterStyle.FORM)
+              .build();
+        } else if (model.getCollection().isPresent()) {
+          ParameterStyle style =
+              VALID_COLLECTION_STYLES.contains(simpleParameter.getStyle())
+              ? simpleParameter.getStyle()
+              : simpleParameter.nullSafeIsExplode()
+                ? ParameterStyle.FORM
+                : ParameterStyle.PIPEDELIMITED;
+
+          validSimpleParameter =
+              context.getSimpleParameterSpecificationBuilder()
+                  .copyOf(simpleParameter)
+                  .explode(simpleParameter.getExplode())
+                  .style(style)
+                  .collectionFormat(
+                      simpleParameter.nullSafeIsExplode()
+                      ? CollectionFormat.MULTI
+                      : CollectionFormat.CSV)
+                  .build();
+        }
+      }
+      if (validSimpleParameter == null) {
+        ParameterStyle style = VALID_OBJECT_STYLES.contains(simpleParameter.getStyle())
                                ? simpleParameter.getStyle()
-                               : simpleParameter.getExplode() ? ParameterStyle.FORM : ParameterStyle.PIPEDELIMITED;
+                               : simpleParameter.nullSafeIsExplode() ? ParameterStyle.FORM : ParameterStyle.DEEPOBJECT;
         validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
-                                      .copyOf(simpleParameter)
-                                      .explode(simpleParameter.getExplode())
-                                      .style(style)
-                                      .collectionFormat(simpleParameter.getExplode()
-                                                        ? CollectionFormat.MULTI
-                                                        : CollectionFormat.CSV)
-                                      .build();
+            .copyOf(simpleParameter)
+            .explode(style == ParameterStyle.DEEPOBJECT ? true : simpleParameter.getExplode())
+            .style(style)
+            .collectionFormat(null)
+            .build();
       }
     }
-    if (validSimpleParameter == null) {
-      ParameterStyle style = VALID_OBJECT_STYLES.contains(simpleParameter.getStyle())
-                             ? simpleParameter.getStyle()
-                             : simpleParameter.getExplode() ? ParameterStyle.FORM : ParameterStyle.DEEPOBJECT;
-      validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
-                                    .copyOf(simpleParameter)
-                                    .explode(style == ParameterStyle.DEEPOBJECT ? true : simpleParameter.getExplode())
-                                    .style(style)
-                                    .collectionFormat(null)
-                                    .build();
-    }
+
     if (context.getContentParameter() != null) {
       validContentEncoding = context.getContentSpecificationBuilder()
                                     .copyOf(context.getContentParameter())

@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static org.springframework.util.StringUtils.*;
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.builders.ElementFacets.*;
 
 //TODO: Change builders to not have with
@@ -34,7 +36,7 @@ public class PropertySpecificationBuilder {
   private Xml xml;
 
   private final Map<Class<?>, ElementFacetBuilder> facetBuilders = new HashMap<>();
-  private final List<VendorExtension<?>> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
   private final CompoundModelSpecificationBuilder parent;
 
   public PropertySpecificationBuilder(String name) {
@@ -50,13 +52,13 @@ public class PropertySpecificationBuilder {
     this.parent = parent;
   }
 
-  public PropertySpecificationBuilder withDescription(String description) {
-    this.description = description;
+  public PropertySpecificationBuilder description(String description) {
+    this.description = defaultIfAbsent(emptyToNull(description), this.description);
     return this;
   }
 
   public PropertySpecificationBuilder type(ModelSpecification type) {
-    this.type = type;
+    this.type = defaultIfAbsent(type, this.type);
     return this;
   }
 
@@ -71,52 +73,52 @@ public class PropertySpecificationBuilder {
   }
 
 
-  public PropertySpecificationBuilder withNullable(Boolean nullable) {
+  public PropertySpecificationBuilder nullable(Boolean nullable) {
     this.nullable = nullable;
     return this;
   }
 
-  public PropertySpecificationBuilder withRequired(Boolean required) {
+  public PropertySpecificationBuilder required(Boolean required) {
     this.required = required;
     return this;
   }
 
-  public PropertySpecificationBuilder withReadOnly(Boolean readOnly) {
+  public PropertySpecificationBuilder readOnly(Boolean readOnly) {
     this.readOnly = readOnly;
     return this;
   }
 
-  public PropertySpecificationBuilder withWriteOnly(Boolean writeOnly) {
+  public PropertySpecificationBuilder writeOnly(Boolean writeOnly) {
     this.writeOnly = writeOnly;
     return this;
   }
 
-  public PropertySpecificationBuilder withDeprecated(Boolean deprecated) {
+  public PropertySpecificationBuilder deprecated(Boolean deprecated) {
     this.deprecated = deprecated;
     return this;
   }
 
-  public PropertySpecificationBuilder withAllowEmptyValue(Boolean allowEmptyValue) {
+  public PropertySpecificationBuilder allowEmptyValue(Boolean allowEmptyValue) {
     this.allowEmptyValue = allowEmptyValue;
     return this;
   }
 
-  public PropertySpecificationBuilder withIsHidden(Boolean isHidden) {
+  public PropertySpecificationBuilder isHidden(Boolean isHidden) {
     this.isHidden = isHidden;
     return this;
   }
 
-  public PropertySpecificationBuilder withPosition(int position) {
+  public PropertySpecificationBuilder position(int position) {
     this.position = position;
     return this;
   }
 
-  public PropertySpecificationBuilder withExample(Object example) {
+  public PropertySpecificationBuilder example(Object example) {
     this.example = example;
     return this;
   }
 
-  public PropertySpecificationBuilder withDefaultValue(Object defaultValue) {
+  public PropertySpecificationBuilder defaultValue(Object defaultValue) {
     this.defaultValue = defaultValue;
     return this;
   }
@@ -126,7 +128,7 @@ public class PropertySpecificationBuilder {
     return this;
   }
 
-  public PropertySpecificationBuilder withVendorExtensions(List<VendorExtension<?>> vendorExtensions) {
+  public PropertySpecificationBuilder vendorExtensions(List<VendorExtension> vendorExtensions) {
     this.vendorExtensions.addAll(vendorExtensions);
     return this;
   }
@@ -140,7 +142,11 @@ public class PropertySpecificationBuilder {
         .stream()
         .filter(Objects::nonNull)
         .map(ElementFacetBuilder::build)
+        .filter(Objects::nonNull)
         .collect(Collectors.toList());
+    if (xml != null && isEmpty(xml.getName())) {
+      xml.setName(name);
+    }
 
     return new PropertySpecification(
         name,

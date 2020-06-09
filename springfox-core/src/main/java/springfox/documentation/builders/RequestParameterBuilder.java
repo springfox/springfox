@@ -1,7 +1,6 @@
 package springfox.documentation.builders;
 
 import org.springframework.http.MediaType;
-import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.schema.Example;
 import springfox.documentation.service.ParameterSpecification;
 import springfox.documentation.service.ParameterStyle;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
 import static springfox.documentation.builders.NoopValidator.*;
 
 @SuppressWarnings("VisibilityModifier")
@@ -31,22 +31,22 @@ public class RequestParameterBuilder {
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
   private ParameterSpecificationProvider parameterSpecificationProvider = new RootParameterSpecificationProvider();
-  private int order;
+  private int precedence;
   private final List<MediaType> accepts = new ArrayList<>();
   private Validator<RequestParameterBuilder> validator = new NoopValidator<>();
 
   public RequestParameterBuilder name(String name) {
-    this.name = name;
+    this.name = defaultIfAbsent(name, this.name);
     return this;
   }
 
   public RequestParameterBuilder in(ParameterType in) {
-    this.in = in;
-    if (in == ParameterType.QUERY || in == ParameterType.COOKIE) {
+    this.in = defaultIfAbsent(in, this.in);
+    if (this.in == ParameterType.QUERY || this.in == ParameterType.COOKIE) {
       this.simpleParameterBuilder()
           .style(ParameterStyle.FORM)
           .allowReserved(in == ParameterType.QUERY);
-    } else if (in == ParameterType.HEADER || in == ParameterType.PATH) {
+    } else if (this.in == ParameterType.HEADER || this.in == ParameterType.PATH) {
       this.simpleParameterBuilder()
           .style(ParameterStyle.SIMPLE)
           .allowReserved(false);
@@ -55,22 +55,24 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder in(String in) {
-    this.in(ParameterType.from(in));
+    if (in != null && !in.isEmpty()) {
+      this.in = ParameterType.from(in);
+    }
     return this;
   }
 
   public RequestParameterBuilder description(String description) {
-    this.description = description;
+    this.description = defaultIfAbsent(description, this.description);
     return this;
   }
 
   public RequestParameterBuilder required(Boolean required) {
-    this.required = required;
+    this.required = defaultIfAbsent(required, this.required);
     return this;
   }
 
   public RequestParameterBuilder deprecated(Boolean deprecated) {
-    this.deprecated = deprecated;
+    this.deprecated = defaultIfAbsent(deprecated, this.deprecated);
     return this;
   }
 
@@ -94,18 +96,18 @@ public class RequestParameterBuilder {
   }
 
   public RequestParameterBuilder hidden(boolean hidden) {
-    this.hidden = hidden;
+    this.hidden = defaultIfAbsent(hidden, this.hidden);
     return this;
   }
 
-  public RequestParameterBuilder order(int order) {
-    this.order = order;
+  public RequestParameterBuilder precedence(int precedence) {
+    this.precedence = precedence;
     return this;
   }
 
 
   public RequestParameterBuilder example(Example scalarExample) {
-    this.scalarExample = scalarExample;
+    this.scalarExample = defaultIfAbsent(scalarExample, this.scalarExample);
     return this;
   }
 
@@ -155,7 +157,7 @@ public class RequestParameterBuilder {
         parameter,
         scalarExample,
         examples,
-        order,
+        precedence,
         extensions);
   }
 
@@ -163,20 +165,8 @@ public class RequestParameterBuilder {
     source.getParameterSpecification()
         .getQuery()
         .map(simple -> {
-          for (ElementFacet each :
-              simple.getFacets()) {
-            this.simpleParameterBuilder()
-                .facetBuilder(each.facetBuilder())
-                .copyOf(each);
-          }
           this.simpleParameterBuilder()
-              .collectionFormat(simple.getCollectionFormat())
-              .allowEmptyValue(simple.getAllowEmptyValue())
-              .allowReserved(simple.getAllowReserved())
-              .defaultValue(simple.getDefaultValue())
-              .explode(simple.getExplode())
-              .model(simple.getModel())
-              .style(simple.getStyle());
+              .copyOf(simple);
           return simple;
         });
     source.getParameterSpecification()
@@ -190,6 +180,9 @@ public class RequestParameterBuilder {
         .extensions(source.getExtensions())
         .name(source.getName())
         .description(source.getDescription())
-        .order(source.getOrder());
+        .precedence(source.getPrecedence())
+        .example(source.getScalarExample())
+        .examples(source.getExamples());
   }
+
 }

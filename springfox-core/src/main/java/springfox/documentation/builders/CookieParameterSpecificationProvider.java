@@ -23,7 +23,7 @@ public class CookieParameterSpecificationProvider implements ParameterSpecificat
           .copyOf(simpleParameter)
           .explode(simpleParameter.getExplode())
           .style(ParameterStyle.FORM)
-          .collectionFormat(simpleParameter.getExplode() != null && simpleParameter.getExplode()
+          .collectionFormat(simpleParameter.nullSafeIsExplode()
               ? CollectionFormat.MULTI
               : CollectionFormat.CSV)
           .build();

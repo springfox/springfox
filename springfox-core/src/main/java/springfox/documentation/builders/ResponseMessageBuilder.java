@@ -21,6 +21,7 @@ package springfox.documentation.builders;
 
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelReference;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.VendorExtension;
@@ -110,7 +111,10 @@ public class ResponseMessageBuilder {
         new Header(
             entry.getKey(),
             "",
-            entry.getValue(), null));
+            entry.getValue(),
+            new ModelSpecificationBuilder()
+                .scalarModel(ScalarType.STRING)
+                .build()));
   }
 
   /**

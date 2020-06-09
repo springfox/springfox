@@ -12,7 +12,7 @@ public class ExampleBuilder {
   private String description;
   private String externalValue;
 
-  public ExampleBuilder withValue(Object value) {
+  public ExampleBuilder value(Object value) {
     this.value = value;
     return this;
   }

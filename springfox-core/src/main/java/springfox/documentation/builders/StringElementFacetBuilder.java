@@ -36,6 +36,9 @@ public class StringElementFacetBuilder implements ElementFacetBuilder {
 
   @Override
   public ElementFacet build() {
+    if (maxLength == null && minLength == null && pattern == null) {
+      return null;
+    }
     return new StringElementFacet(maxLength, minLength, pattern);
   }
 

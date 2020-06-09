@@ -11,38 +11,40 @@ public class HeaderParameterSpecificationProvider implements ParameterSpecificat
   @Override
   public ParameterSpecification create(ParameterSpecificationContext context) {
     SimpleParameterSpecification simpleParameter = context.getSimpleParameter();
-    SimpleParameterSpecification validSimpleParameter;
+    SimpleParameterSpecification validSimpleParameter = null;
     ContentSpecification validContentEncoding = null;
-    ModelSpecification model = simpleParameter.getModel();
-    if (model != null) {
-      if (model.getScalar().isPresent()) {
-        validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
-                                      .copyOf(simpleParameter)
-                                      .explode(null)
-                                      .style(null)
-                                      .build();
-      } else if (model.getCollection().isPresent()) {
-        validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
-                                      .copyOf(simpleParameter)
-                                      .explode(simpleParameter.getExplode())
-                                      .style(ParameterStyle.SIMPLE)
-                                      .collectionFormat(CollectionFormat.CSV)
-                                      .build();
+    if (simpleParameter != null) {
+      ModelSpecification model = simpleParameter.getModel();
+      if (model != null) {
+        if (model.getScalar().isPresent()) {
+          validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
+              .copyOf(simpleParameter)
+              .explode(null)
+              .style(null)
+              .build();
+        } else if (model.getCollection().isPresent()) {
+          validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
+              .copyOf(simpleParameter)
+              .explode(simpleParameter.getExplode())
+              .style(ParameterStyle.SIMPLE)
+              .collectionFormat(CollectionFormat.CSV)
+              .build();
+        } else {
+          validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
+              .copyOf(simpleParameter)
+              .explode(null)
+              .style(ParameterStyle.SIMPLE)
+              .collectionFormat(null)
+              .build();
+        }
       } else {
         validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
-                                      .copyOf(simpleParameter)
-                                      .explode(null)
-                                      .style(ParameterStyle.SIMPLE)
-                                      .collectionFormat(null)
-                                      .build();
+            .copyOf(simpleParameter)
+            .explode(null)
+            .style(ParameterStyle.SIMPLE)
+            .collectionFormat(null)
+            .build();
       }
-    } else {
-      validSimpleParameter = context.getSimpleParameterSpecificationBuilder()
-                                    .copyOf(simpleParameter)
-                                    .explode(null)
-                                    .style(ParameterStyle.SIMPLE)
-                                    .collectionFormat(null)
-                                    .build();
     }
 
     if (context.getContentParameter() != null) {

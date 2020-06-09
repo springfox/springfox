@@ -8,7 +8,10 @@ import springfox.documentation.service.ParameterSpecification;
 import springfox.documentation.service.Representation;
 import springfox.documentation.service.SimpleParameterSpecification;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.slf4j.LoggerFactory.*;
 
@@ -21,7 +24,17 @@ public class BodyParameterSpecificationProvider implements ParameterSpecificatio
     SimpleParameterSpecification simpleParameter = context.getSimpleParameter();
     ContentSpecification contentParameter = context.getContentParameter();
 
-    context.getAccepts().stream()
+    Collection<MediaType> accepts = new HashSet<>(context.getAccepts());
+    if (contentParameter != null) {
+      accepts.addAll(contentParameter.getRepresentations().stream()
+                         .map(Representation::getMediaType)
+                         .collect(Collectors.toSet()));
+    }
+    if (accepts.isEmpty()) {
+      accepts.add(MediaType.ALL);
+    }
+
+    accepts.stream()
         .filter(mediaType -> !mediaType.equalsTypeAndSubtype(MediaType.APPLICATION_FORM_URLENCODED))
         .forEach(
             each -> {

@@ -37,6 +37,9 @@ public class EnumerationElementFacetBuilder implements ElementFacetBuilder {
 
   @Override
   public EnumerationFacet build() {
+    if (allowedValues.isEmpty()) {
+      return null;
+    }
     return new EnumerationFacet(allowedValues);
   }
 

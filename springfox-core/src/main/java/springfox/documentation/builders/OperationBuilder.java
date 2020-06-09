@@ -19,6 +19,8 @@
 package springfox.documentation.builders;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import springfox.documentation.OperationNameGenerator;
 import springfox.documentation.annotations.Incubating;
 import springfox.documentation.common.ExternalDocumentation;
@@ -39,11 +41,10 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.*;
@@ -60,8 +61,8 @@ public class OperationBuilder {
   private final OperationNameGenerator nameGenerator;
   private final Set<String> tags = new TreeSet<>();
   private final List<SecurityReference> securityReferences = new ArrayList<>();
-  private final Set<Response> responses = new HashSet<>();
-  private final Set<RequestParameter> requestParameters = new TreeSet<>(defaultRequestParameterComparator());
+  private final MultiValueMap<String, Response> responses = new LinkedMultiValueMap<>();
+  private final Set<RequestParameter> requestParameters = new HashSet<>();
   private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   private HttpMethod method = HttpMethod.GET;
@@ -207,10 +208,10 @@ public class OperationBuilder {
    *
    * @param parameters - input parameter definitions
    * @return this
-   * @deprecated - Use @see {@link OperationBuilder#requestParameters(Set)}
+   * @deprecated - Use @see {@link OperationBuilder#requestParameters(Collection)}
    */
   @Deprecated
-  public OperationBuilder parameters(final List<Parameter> parameters) {
+  public OperationBuilder parameters(List<Parameter> parameters) {
     List<Parameter> source = nullToEmptyList(parameters);
     List<Parameter> destination = new ArrayList<>(this.parameters);
     ParameterMerger merger = new ParameterMerger(destination, source);
@@ -225,7 +226,7 @@ public class OperationBuilder {
    * @return this
    * @deprecated @since 3.0.0
    * Updates the response messages
-   * Use @see {@link OperationBuilder#responses(Set)}
+   * Use @see {@link OperationBuilder#responses(Collection)}
    */
   @Deprecated
   public OperationBuilder responseMessages(Set<ResponseMessage> responseMessages) {
@@ -242,8 +243,8 @@ public class OperationBuilder {
    * @return this
    * @since 3.0.0
    */
-  public OperationBuilder responses(Set<Response> responses) {
-    this.responses.addAll(responses);
+  public OperationBuilder responses(Collection<Response> responses) {
+    responses.forEach(r -> this.responses.add(r.getCode(), r));
     return this;
   }
 
@@ -280,7 +281,7 @@ public class OperationBuilder {
    * @return this
    * @deprecated @since 3.0.0
    * Updates the reference to the response model
-   * Use @see {@link OperationBuilder#responses(Set)}
+   * Use @see {@link OperationBuilder#responses(Collection)}
    */
   @Deprecated
   public OperationBuilder responseModel(ModelReference responseType) {
@@ -331,19 +332,26 @@ public class OperationBuilder {
    * @since 3.0.0
    */
   public OperationBuilder requestParameters(Collection<RequestParameter> parameters) {
-    List<RequestParameter> source = nullToEmptyList(parameters).stream()
-        .filter(Objects::nonNull)
-        .collect(Collectors.toList());
-    List<RequestParameter> destination = new ArrayList<>(this.requestParameters);
-    RequestParameterMerger merger = new RequestParameterMerger(destination, source);
+    RequestParameterMerger merger = new RequestParameterMerger(
+        this.requestParameters,
+        nullToEmptyList(parameters));
     this.requestParameters.clear();
-    this.requestParameters.addAll(merger.merged());
+    this.requestParameters.addAll(merger.merge());
     return this;
   }
 
 
   public Operation build() {
     String uniqueOperationId = nameGenerator.startingWith(uniqueOperationIdStem());
+
+    Set<Response> responses = new HashSet<>();
+    for (String code : this.responses.keySet()) {
+      if (this.responses.get(code).size() > 0) {
+        responses.add(mergeResponses(this.responses.get(code)));
+      }
+    }
+    SortedSet<RequestParameter> requestParameters = new TreeSet<>(defaultRequestParameterComparator());
+    requestParameters.addAll(this.requestParameters);
 
     return new Operation(
         method,
@@ -366,6 +374,20 @@ public class OperationBuilder {
         requestParameters,
         body,
         responses);
+  }
+
+  private Response mergeResponses(List<Response> responses) {
+    if (responses.size() == 1) {
+      return responses.stream().findFirst().get();
+    }
+    Response response = null;
+    for (Response each : responses) {
+      response = new ResponseBuilder()
+          .copyOf(response)
+          .copyOf(each)
+          .build();
+    }
+    return response;
   }
 
   private Set<String> adjustConsumableMediaTypes() {

@@ -4,6 +4,8 @@ import springfox.documentation.schema.CollectionElementFacet;
 import springfox.documentation.schema.ElementFacet;
 import springfox.documentation.service.CollectionFormat;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
+
 public class CollectionElementFacetBuilder implements ElementFacetBuilder {
   private final Object parent;
   private Integer maxItems;
@@ -16,22 +18,22 @@ public class CollectionElementFacetBuilder implements ElementFacetBuilder {
   }
 
   public CollectionElementFacetBuilder collectionFormat(CollectionFormat collectionFormat) {
-    this.collectionFormat = collectionFormat;
+    this.collectionFormat = defaultIfAbsent(collectionFormat, this.collectionFormat);
     return this;
   }
 
   public CollectionElementFacetBuilder maxItems(Integer maxItems) {
-    this.maxItems = maxItems;
+    this.maxItems = defaultIfAbsent(maxItems, this.maxItems);
     return this;
   }
 
   public CollectionElementFacetBuilder minItems(Integer minItems) {
-    this.minItems = minItems;
+    this.minItems = defaultIfAbsent(minItems, this.minItems);
     return this;
   }
 
   public CollectionElementFacetBuilder uniqueItems(Boolean uniqueItems) {
-    this.uniqueItems = uniqueItems;
+    this.uniqueItems = defaultIfAbsent(uniqueItems, this.uniqueItems);
     return this;
   }
 
@@ -43,6 +45,9 @@ public class CollectionElementFacetBuilder implements ElementFacetBuilder {
 
   @Override
   public ElementFacet build() {
+    if (maxItems == null && minItems == null && uniqueItems == null) {
+      return null;
+    }
     return new CollectionElementFacet(maxItems, minItems, uniqueItems);
   }
 

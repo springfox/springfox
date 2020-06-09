@@ -7,7 +7,6 @@ public class RequestParameterBuilderValidator implements Validator<RequestParame
   @Override
   public List<ValidationResult> validate(RequestParameterBuilder builder) {
     List<ValidationResult> results = new ArrayList<>();
-    boolean valid = true;
     if (builder.name == null) {
       results.add(
           new ValidationResult(
@@ -19,7 +18,7 @@ public class RequestParameterBuilderValidator implements Validator<RequestParame
       results.add(new ValidationResult(
           "RequestParameter",
           "in",
-          String.format("Parameter %s in is required", builder.name)));
+          String.format("Parameter %s is required", builder.name)));
     }
     if (builder.simpleParameterBuilder != null && builder.contentSpecificationBuilder != null) {
       results.add(new ValidationResult(

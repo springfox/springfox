@@ -100,14 +100,26 @@ public class ModelSpecificationBuilder {
 
   public ModelSpecificationBuilder copyOf(ModelSpecification other) {
     if (other != null) {
+      ScalarModelSpecification scalar = other.getScalar().orElse(null);
+      ReferenceModelSpecification reference = other.getReference().orElse(null);
+      CompoundModelSpecification compound = other.getCompound().orElse(null);
+      CollectionSpecification collection = other.getCollection().orElse(null);
+      MapSpecification map = other.getMap().orElse(null);
+
+      this.scalar = null;
+      this.map = null;
+      this.collection = null;
+      this.reference = null;
+      this.compoundModelBuilder = new CompoundModelSpecificationBuilder(this);
+
       this.name(other.getName())
-          .scalarModel(other.getScalar().orElse(null))
-          .referenceModel(other.getReference().orElse(null))
+          .scalarModel(scalar)
+          .referenceModel(reference)
           .compoundModelBuilder()
-          .copyOf(other.getCompound().orElse(null))
+          .copyOf(compound)
           .yield()
-          .collectionModel(other.getCollection().orElse(null))
-          .mapModel(other.getMap().orElse(null))
+          .collectionModel(collection)
+          .mapModel(map)
           .facetsBuilder()
           .copyOf(other.getFacets());
     }
@@ -117,8 +129,8 @@ public class ModelSpecificationBuilder {
   private void ensureValidSpecification(
       Object... specs) {
     long specCount = Arrays.stream(specs)
-                           .filter(Objects::nonNull)
-                           .count();
+        .filter(Objects::nonNull)
+        .count();
     if (specCount == 0) {
       LOGGER.error(
           "Error building model {}",

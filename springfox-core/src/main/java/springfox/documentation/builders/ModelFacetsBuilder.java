@@ -4,6 +4,7 @@ import springfox.documentation.schema.EnumerationFacet;
 import springfox.documentation.schema.Example;
 import springfox.documentation.schema.ModelFacets;
 import springfox.documentation.schema.ModelKey;
+import springfox.documentation.schema.Xml;
 import springfox.documentation.service.DocumentationReference;
 import springfox.documentation.service.VendorExtension;
 
@@ -21,6 +22,7 @@ public class ModelFacetsBuilder {
   private EnumerationFacet enumerationFacet;
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
+  private Xml xml;
 
   public ModelFacetsBuilder(ModelSpecificationBuilder parent) {
     this.parent = parent;
@@ -36,7 +38,7 @@ public class ModelFacetsBuilder {
     return this;
   }
 
-  public ModelFacetsBuilder withDescription(String description) {
+  public ModelFacetsBuilder description(String description) {
     this.description = description;
     return this;
   }
@@ -71,6 +73,11 @@ public class ModelFacetsBuilder {
     return this;
   }
 
+  public ModelFacetsBuilder xml(Xml xml) {
+    this.xml = xml;
+    return this;
+  }
+
   public ModelSpecificationBuilder yield() {
     return parent;
   }
@@ -82,7 +89,8 @@ public class ModelFacetsBuilder {
         description,
         nullable,
         deprecated,
-        enumerationFacet,
+        enumerationFacet, //TODO: make this a set of facets
+        xml,
         externalDocumentation,
         examples,
         extensions);
@@ -91,12 +99,13 @@ public class ModelFacetsBuilder {
   public ModelFacetsBuilder copyOf(ModelFacets other) {
     return this.withModelKey(other.getModelKey())
         .withTitle(other.getTitle())
-        .withDescription(other.getDescription())
+        .description(other.getDescription())
         .withNullable(other.getNullable())
         .withDeprecated(other.getDeprecated())
         .enumeration(other.getEnumerationFacet())
         .withExtensions(other.getExtensions())
         .withExternalDocumentation(other.getExternalDocumentation())
-        .withExamples(other.getExamples());
+        .withExamples(other.getExamples())
+        .xml(other.getXml());
   }
 }

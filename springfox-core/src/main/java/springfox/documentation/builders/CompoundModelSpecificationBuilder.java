@@ -3,7 +3,9 @@ package springfox.documentation.builders;
 import springfox.documentation.schema.CompoundModelSpecification;
 import springfox.documentation.schema.ModelKey;
 import springfox.documentation.schema.PropertySpecification;
+import springfox.documentation.schema.ReferenceModelSpecification;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +15,11 @@ import java.util.stream.Collectors;
 public class CompoundModelSpecificationBuilder {
   private final ModelSpecificationBuilder parent;
   private final Map<String, PropertySpecificationBuilder> properties = new HashMap<>();
+  private final List<ReferenceModelSpecification> subclassReferences = new ArrayList<>();
   private Integer maxProperties;
   private Integer minProperties;
   private ModelKey modelKey;
-  private ModelKey effectiveModelKey;
+  private String discriminator;
 
   public CompoundModelSpecificationBuilder(ModelSpecificationBuilder parent) {
     this.parent = parent;
@@ -25,14 +28,11 @@ public class CompoundModelSpecificationBuilder {
   public PropertySpecificationBuilder propertyBuilder(String name) {
     return properties.computeIfAbsent(
         name,
-        n -> new PropertySpecificationBuilder(
-            n,
-            this));
+        n -> new PropertySpecificationBuilder(n, this));
   }
 
   public CompoundModelSpecificationBuilder modelKey(ModelKey modelKey) {
     this.modelKey = modelKey;
-    this.effectiveModelKey = modelKey;
     return this;
   }
 
@@ -53,15 +53,16 @@ public class CompoundModelSpecificationBuilder {
   public CompoundModelSpecification build() {
     List<PropertySpecification> properties
         = this.properties.values().stream()
-                         .map(PropertySpecificationBuilder::build)
-                         .collect(Collectors.toList());
+        .map(PropertySpecificationBuilder::build)
+        .collect(Collectors.toList());
     if (modelKey != null) {
       return new CompoundModelSpecification(
           modelKey,
-          effectiveModelKey,
           properties,
           maxProperties,
-          minProperties);
+          minProperties,
+          discriminator,
+          subclassReferences);
     }
     return null;
   }
@@ -71,38 +72,46 @@ public class CompoundModelSpecificationBuilder {
       return this;
     }
     return modelKey(other.getModelKey())
-        .effectiveModelKey(other.getEffectiveModelKey())
         .properties(other.getProperties())
         .maxProperties(other.getMaxProperties())
-        .minProperties(other.getMinProperties());
+        .minProperties(other.getMinProperties())
+        .discriminator(other.getDiscriminator())
+        .subclassReferences(other.getSubclassReferences());
   }
 
   public CompoundModelSpecificationBuilder properties(Collection<PropertySpecification> properties) {
     properties.forEach(each -> {
       PropertySpecificationBuilder propertyBuilder
           = this.propertyBuilder(each.getName())
-                .type(each.getType())
-                .withAllowEmptyValue(each.getAllowEmptyValue())
-                .withDefaultValue(each.getDefaultValue())
-                .withDeprecated(each.getDeprecated())
-                .withDescription(each.getDescription())
-                .withExample(each.getExample())
-                .withIsHidden(each.getHidden())
-                .withNullable(each.getNullable())
-                .withPosition(each.getPosition())
-                .withReadOnly(each.getReadOnly())
-                .withRequired(each.getRequired())
-                .withVendorExtensions(each.getVendorExtensions())
-                .withWriteOnly(each.getWriteOnly());
+          .type(each.getType())
+          .allowEmptyValue(each.getAllowEmptyValue())
+          .defaultValue(each.getDefaultValue())
+          .deprecated(each.getDeprecated())
+          .description(each.getDescription())
+          .example(each.getExample())
+          .isHidden(each.getHidden())
+          .nullable(each.getNullable())
+          .position(each.getPosition())
+          .readOnly(each.getReadOnly())
+          .required(each.getRequired())
+          .vendorExtensions(each.getVendorExtensions())
+          .xml(each.getXml())
+          .writeOnly(each.getWriteOnly());
       each.getFacets()
           .forEach(f -> propertyBuilder.facetBuilder(f.facetBuilder())
-                                       .copyOf(f));
+              .copyOf(f));
     });
     return this;
   }
 
-  public CompoundModelSpecificationBuilder effectiveModelKey(ModelKey effectiveModelKey) {
-    this.effectiveModelKey = effectiveModelKey;
+  public CompoundModelSpecificationBuilder discriminator(String discriminator) {
+    this.discriminator = discriminator;
+    return this;
+  }
+
+  public CompoundModelSpecificationBuilder subclassReferences(
+      Collection<ReferenceModelSpecification> subclassReferences) {
+    this.subclassReferences.addAll(subclassReferences);
     return this;
   }
 }

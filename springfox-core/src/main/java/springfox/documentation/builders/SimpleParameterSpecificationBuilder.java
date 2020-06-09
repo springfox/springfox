@@ -76,6 +76,7 @@ public class SimpleParameterSpecificationBuilder {
     List<ElementFacet> facets = facetBuilders.values().stream()
         .filter(Objects::nonNull)
         .map(ElementFacetBuilder::build)
+        .filter(Objects::nonNull)
         .collect(Collectors.toList());
 
     return new SimpleParameterSpecification(

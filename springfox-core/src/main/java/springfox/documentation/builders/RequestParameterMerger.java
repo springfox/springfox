@@ -22,42 +22,55 @@ package springfox.documentation.builders;
 import springfox.documentation.service.RequestParameter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
 
 //TODO: write a test for this
 class RequestParameterMerger {
 
-  private final List<RequestParameter> destination;
-  private final List<RequestParameter> source;
+  private final Map<String, RequestParameter> destination;
+  private final Map<String, RequestParameter> source;
 
-  RequestParameterMerger(List<RequestParameter> destination, List<RequestParameter> source) {
-    this.destination = new ArrayList<>(destination);
-    this.source = new ArrayList<>(source);
+  RequestParameterMerger(
+      Collection<RequestParameter> destination,
+      Collection<RequestParameter> source) {
+
+    this.destination = destination.stream()
+        .collect(toMap(RequestParameter::getName, Function.identity()));
+    this.source = source.stream()
+        .collect(toMap(
+            RequestParameter::getName,
+            Function.identity(),
+            this::mergeWithPrecedence));
   }
 
-  public List<RequestParameter> merged() {
-    Set<String> existingParameterNames = destination.stream().map(RequestParameter::getName).collect(toSet());
-    Set<String> newParameterNames = source.stream().map(RequestParameter::getName).collect(toSet());
+  public List<RequestParameter> merge() {
     List<RequestParameter> merged = new ArrayList<>();
 
-    Set<String> asIsParams = existingParameterNames.stream()
-        .filter(entry -> !newParameterNames.contains(entry)).collect(toSet());
-    Set<String> missingParamNames = newParameterNames.stream()
-        .filter(entry -> !existingParameterNames.contains(entry)).collect(toSet());
-    Set<String> paramsToMerge = newParameterNames.stream()
-        .filter(existingParameterNames::contains).collect(toSet());
+    Set<String> asIsParams = destination.keySet().stream()
+        .filter(entry -> !source.containsKey(entry))
+        .collect(toSet());
+    Set<String> missingParamNames = source.keySet().stream()
+        .filter(entry -> !destination.containsKey(entry))
+        .collect(toSet());
+    Set<String> paramsToMerge = source.keySet().stream()
+        .filter(destination::containsKey)
+        .collect(toSet());
 
-    merged.addAll(asIsParameters(asIsParams, destination));
-    merged.addAll(newParameters(missingParamNames, source));
-    merged.addAll(mergedParameters(paramsToMerge, destination, source));
+    merged.addAll(parametersNotRequiringMerging(asIsParams, destination.values()));
+    merged.addAll(parametersNotRequiringMerging(missingParamNames, source.values()));
+    merged.addAll(mergedParameters(paramsToMerge));
     return merged;
   }
 
-  private List<RequestParameter> asIsParameters(Set<String> asIsParams, List<RequestParameter> source) {
+  private List<RequestParameter> parametersNotRequiringMerging(
+      Set<String> asIsParams,
+      Collection<RequestParameter> source) {
     List<RequestParameter> parameters = new ArrayList<>();
     for (RequestParameter each : source) {
       if (asIsParams.contains(each.getName())) {
@@ -68,39 +81,33 @@ class RequestParameterMerger {
   }
 
   private List<RequestParameter> mergedParameters(
-      Set<String> paramsToMerge,
-      List<RequestParameter> existingParameters,
-      List<RequestParameter> newParams) {
+      Set<String> paramsToMerge) {
     List<RequestParameter> parameters = new ArrayList<>();
-    for (RequestParameter newParam : newParams) {
-      Optional<RequestParameter> original = existingParameters.stream()
-          .filter(input -> newParam.getName().equals(input.getName()))
-          .findFirst();
-      if (paramsToMerge.contains(newParam.getName()) && original.isPresent()) {
-        if (newParam.getOrder() > original.get().getOrder()) {
-          parameters.add(merged(newParam, original.get()));
-        } else {
-          parameters.add(merged(original.get(), newParam));
-        }
-      }
+
+    for (String each : paramsToMerge) {
+      RequestParameter original = destination.get(each);
+      RequestParameter newParam = source.get(each);
+      parameters.add(mergeWithPrecedence(newParam, original));
     }
     return parameters;
   }
 
-  private RequestParameter merged(RequestParameter destination, RequestParameter source) {
+  private RequestParameter merge(
+      RequestParameter destination,
+      RequestParameter source) {
     return new RequestParameterBuilder()
         .copyOf(destination)
         .copyOf(source)
         .build();
   }
 
-  private List<RequestParameter> newParameters(Set<String> missingParamNames, List<RequestParameter> newParams) {
-    List<RequestParameter> parameters = new ArrayList<>();
-    for (RequestParameter each : newParams) {
-      if (missingParamNames.contains(each.getName())) {
-        parameters.add(each);
-      }
+  private RequestParameter mergeWithPrecedence(
+      RequestParameter first,
+      RequestParameter second) {
+    if (first.getPrecedence() > second.getPrecedence()) {
+      return merge(first, second);
+    } else {
+      return merge(second, first);
     }
-    return parameters;
   }
 }
