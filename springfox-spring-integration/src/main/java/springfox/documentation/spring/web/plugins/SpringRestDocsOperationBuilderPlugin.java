@@ -27,10 +27,12 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpResponse;
+import springfox.documentation.builders.ExampleBuilder;
+import springfox.documentation.builders.ModelSpecificationBuilder;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.Example;
-import springfox.documentation.builders.ExampleBuilder;
 import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.Header;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
@@ -94,7 +96,7 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
                   RawHttpResponse::getStatusCode,
                   mappingResponseToResponseMessageBuilder(),
                   mergingExamples()
-              ),
+                   ),
               responseMessagesMap -> responseMessagesMap.values()
                   .stream()
                   .map(ResponseMessageBuilder::build)
@@ -142,13 +144,19 @@ public class SpringRestDocsOperationBuilderPlugin implements OperationBuilderPlu
         .stream()
         .collect(toMap(
             Map.Entry::getKey,
-            o -> new Header(o.getKey(), "", new ModelRef("string"), null)));
+            o -> new Header(
+                o.getKey(),
+                "",
+                new ModelRef("string"),
+                new ModelSpecificationBuilder()
+                    .scalarModel(ScalarType.STRING)
+                    .build())));
   }
 
   private List<Example> toExamples(RawHttpResponse<Void> parsedResponse) {
     return singletonList(new ExampleBuilder()
         .withMediaType(getContentType(parsedResponse))
-        .withValue(getBody(parsedResponse))
+        .value(getBody(parsedResponse))
         .build());
   }
 
