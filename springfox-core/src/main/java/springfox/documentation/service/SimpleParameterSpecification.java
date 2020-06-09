@@ -47,6 +47,10 @@ public class SimpleParameterSpecification {
     return explode;
   }
 
+  public Boolean nullSafeIsExplode() {
+    return explode == null ? false : explode;
+  }
+
   public Boolean getAllowReserved() {
     return allowReserved;
   }

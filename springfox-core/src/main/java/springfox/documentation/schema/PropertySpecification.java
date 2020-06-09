@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static springfox.documentation.builders.BuilderDefaults.*;
 
-public class PropertySpecification {
+public class PropertySpecification implements ElementFacetSource {
   private final String name;
   private final String description;
   private final ModelSpecification type;
@@ -28,7 +28,7 @@ public class PropertySpecification {
   private final Object defaultValue;
 
   private final Xml xml;
-  private final List<VendorExtension<?>> vendorExtensions = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
 
   @SuppressWarnings("ParameterNumber")
   public PropertySpecification(
@@ -47,7 +47,7 @@ public class PropertySpecification {
       Object example,
       Object defaultValue,
       Xml xml,
-      List<VendorExtension<?>> vendorExtensions) {
+      List<VendorExtension> vendorExtensions) {
     this.name = name;
     this.description = description;
     this.type = type;
@@ -82,11 +82,12 @@ public class PropertySpecification {
     return facets;
   }
 
-  public <T extends ElementFacet> Optional<T> facetOfType(Class<T> type) {
+  @Override
+  public <T extends ElementFacet> Optional<T> elementFacet(Class<T> clazz) {
     return facets.stream()
-        .filter(f -> f != null && type.isAssignableFrom(f.getClass()))
+        .filter(f -> f != null && clazz.isAssignableFrom(f.getClass()))
         .findFirst()
-        .map(type::cast);
+        .map(clazz::cast);
   }
 
   public Boolean getNullable() {
@@ -95,6 +96,10 @@ public class PropertySpecification {
 
   public Boolean getRequired() {
     return required;
+  }
+
+  public Boolean nullSafeIsRequired() {
+    return required != null && required;
   }
 
   public Boolean getReadOnly() {
@@ -133,7 +138,7 @@ public class PropertySpecification {
     return xml;
   }
 
-  public List<VendorExtension<?>> getVendorExtensions() {
+  public List<VendorExtension> getVendorExtensions() {
     return vendorExtensions;
   }
 
@@ -148,51 +153,21 @@ public class PropertySpecification {
     }
     PropertySpecification that = (PropertySpecification) o;
     return position == that.position &&
-        Objects.equals(
-            name,
-            that.name) &&
-        Objects.equals(
-            description,
-            that.description) &&
-        Objects.equals(
-            type,
-            that.type) &&
-        Objects.equals(
-            facets,
-            that.facets) &&
-        Objects.equals(
-            nullable,
-            that.nullable) &&
-        Objects.equals(
-            required,
-            that.required) &&
-        Objects.equals(
-            readOnly,
-            that.readOnly) &&
-        Objects.equals(
-            writeOnly,
-            that.writeOnly) &&
-        Objects.equals(
-            deprecated,
-            that.deprecated) &&
-        Objects.equals(
-            allowEmptyValue,
-            that.allowEmptyValue) &&
-        Objects.equals(
-            isHidden,
-            that.isHidden) &&
-        Objects.equals(
-            example,
-            that.example) &&
-        Objects.equals(
-            defaultValue,
-            that.defaultValue) &&
-        Objects.equals(
-            xml,
-            that.xml) &&
-        Objects.equals(
-            vendorExtensions,
-            that.vendorExtensions);
+        Objects.equals(name, that.name) &&
+        Objects.equals(description, that.description) &&
+        Objects.equals(type, that.type) &&
+        Objects.equals(facets, that.facets) &&
+        Objects.equals(nullable, that.nullable) &&
+        Objects.equals(required, that.required) &&
+        Objects.equals(readOnly, that.readOnly) &&
+        Objects.equals(writeOnly, that.writeOnly) &&
+        Objects.equals(deprecated, that.deprecated) &&
+        Objects.equals(allowEmptyValue, that.allowEmptyValue) &&
+        Objects.equals(isHidden, that.isHidden) &&
+        Objects.equals(example, that.example) &&
+        Objects.equals(defaultValue, that.defaultValue) &&
+        Objects.equals(xml, that.xml) &&
+        Objects.equals(vendorExtensions, that.vendorExtensions);
   }
 
   @Override

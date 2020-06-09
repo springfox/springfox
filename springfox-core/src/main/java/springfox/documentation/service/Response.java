@@ -2,10 +2,12 @@ package springfox.documentation.service;
 
 import springfox.documentation.schema.Example;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.StringJoiner;
 
 /**
  * @since 3.0.0
@@ -14,26 +16,26 @@ public class Response {
   private final String code;
   private final String description;
   private final boolean isDefault;
-  private final Set<Representation> representations;
-  private final List<Header> headers;
-  private final List<VendorExtension> vendorExtensions;
-  private final List<Example> examples;
+  private final Set<Representation> representations = new HashSet<>();
+  private final List<Header> headers = new ArrayList<>();
+  private final List<VendorExtension> vendorExtensions = new ArrayList<>();
+  private final List<Example> examples = new ArrayList<>();
 
   public Response(
       String code,
       String description,
       boolean isDefault,
-      List<Header> headers,
-      Set<Representation> representations,
-      List<Example> examples,
-      List<VendorExtension> vendorExtensions) {
+      Collection<Header> headers,
+      Collection<Representation> representations,
+      Collection<Example> examples,
+      Collection<VendorExtension> vendorExtensions) {
     this.code = code;
     this.description = description;
     this.isDefault = isDefault;
-    this.representations = representations;
-    this.headers = headers;
-    this.vendorExtensions = vendorExtensions;
-    this.examples = examples;
+    this.representations.addAll(representations);
+    this.headers.addAll(headers);
+    this.vendorExtensions.addAll(vendorExtensions);
+    this.examples.addAll(examples);
   }
 
   public Set<Representation> getRepresentations() {
@@ -83,14 +85,14 @@ public class Response {
 
   @Override
   public String toString() {
-    return new StringJoiner(", ", Response.class.getSimpleName() + "[", "]")
-        .add("code='" + code + "'")
-        .add("description='" + description + "'")
-        .add("isDefault=" + isDefault)
-        .add("mediaTypes=" + representations)
-        .add("headers=" + headers)
-        .add("vendorExtensions=" + vendorExtensions)
-        .add("examples=" + examples)
-        .toString();
+    return "Response{" +
+        "code='" + code + '\'' +
+        ", description='" + description + '\'' +
+        ", isDefault=" + isDefault +
+        ", representations=" + representations +
+        ", headers=" + headers +
+        ", vendorExtensions=" + vendorExtensions +
+        ", examples=" + examples +
+        '}';
   }
 }

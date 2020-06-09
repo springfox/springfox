@@ -53,6 +53,13 @@ public class NumericElementFacetBuilder implements ElementFacetBuilder {
   }
 
   public NumericElementFacet build() {
+    if (multipleOf == null
+    && maximum == null
+    && exclusiveMaximum == null
+    && minimum == null
+    && exclusiveMinimum == null) {
+      return null;
+    }
     return new NumericElementFacet(
         multipleOf,
         minimum,

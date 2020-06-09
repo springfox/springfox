@@ -51,15 +51,9 @@ public class ModelKey {
     }
     ModelKey modelKey = (ModelKey) o;
     return isResponse == modelKey.isResponse &&
-        Objects.equals(
-            qualifiedModelName,
-            modelKey.qualifiedModelName) &&
-        Objects.equals(
-            viewDiscriminator,
-            modelKey.viewDiscriminator) &&
-        Objects.equals(
-            validationGroupDiscriminators,
-            modelKey.validationGroupDiscriminators);
+        Objects.equals(qualifiedModelName, modelKey.qualifiedModelName) &&
+        Objects.equals(viewDiscriminator, modelKey.viewDiscriminator) &&
+        Objects.equals(validationGroupDiscriminators, modelKey.validationGroupDiscriminators);
   }
 
   @Override

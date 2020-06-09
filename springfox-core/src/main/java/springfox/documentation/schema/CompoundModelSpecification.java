@@ -10,26 +10,29 @@ public class CompoundModelSpecification {
   private final List<PropertySpecification> properties;
   private final Integer maxProperties;
   private final Integer minProperties;
-  private final ModelKey effectiveModelKey;
+  private final String discriminator;
+  private final List<ReferenceModelSpecification> subclassReferences;
 
   public CompoundModelSpecification(
       ModelKey modelKey,
-      ModelKey effectiveModelKey,
       Collection<PropertySpecification> properties,
       Integer maxProperties,
-      Integer minProperties) {
+      Integer minProperties,
+      String discriminator,
+      List<ReferenceModelSpecification> subclassReferences) {
     this.modelKey = modelKey;
-    this.effectiveModelKey = effectiveModelKey;
     this.properties = new ArrayList<>(properties);
     this.maxProperties = maxProperties;
     this.minProperties = minProperties;
+    this.discriminator = discriminator;
+    this.subclassReferences = subclassReferences;
   }
 
   public ModelKey getModelKey() {
     return modelKey;
   }
 
-  public List<PropertySpecification> getProperties() {
+  public Collection<PropertySpecification> getProperties() {
     return properties;
   }
 
@@ -41,8 +44,12 @@ public class CompoundModelSpecification {
     return minProperties;
   }
 
-  public ModelKey getEffectiveModelKey() {
-    return effectiveModelKey;
+  public Collection<ReferenceModelSpecification> getSubclassReferences() {
+    return subclassReferences;
+  }
+
+  public String getDiscriminator() {
+    return discriminator;
   }
 
   @Override
@@ -54,37 +61,34 @@ public class CompoundModelSpecification {
       return false;
     }
     CompoundModelSpecification that = (CompoundModelSpecification) o;
-    return Objects.equals(
-        properties,
-        that.properties) &&
-        Objects.equals(
-            maxProperties,
-            that.maxProperties) &&
-        Objects.equals(
-            minProperties,
-            that.minProperties) &&
-        Objects.equals(modelKey, that.modelKey)
-     && Objects.equals(getEffectiveModelKey(), that.getEffectiveModelKey());
+    return Objects.equals(modelKey, that.modelKey) &&
+        Objects.equals(properties, that.properties) &&
+        Objects.equals(maxProperties, that.maxProperties) &&
+        Objects.equals(minProperties, that.minProperties) &&
+        Objects.equals(discriminator, that.discriminator) &&
+        Objects.equals(subclassReferences, that.subclassReferences);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
         modelKey,
-        effectiveModelKey,
         properties,
         maxProperties,
-        minProperties);
+        minProperties,
+        discriminator,
+        subclassReferences);
   }
 
   @Override
   public String toString() {
     return "CompoundModelSpecification{" +
         "modelKey=" + modelKey +
-        ", effecttiveModelKey=" + modelKey +
         ", properties=" + properties +
         ", maxProperties=" + maxProperties +
         ", minProperties=" + minProperties +
+        ", discriminator='" + discriminator + '\'' +
+        ", subclassReferences=" + subclassReferences +
         '}';
   }
 }

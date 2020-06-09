@@ -26,6 +26,7 @@ public class ContentSpecification {
         .collect(Collectors.toMap(Representation::getMediaType, m -> m)));
   }
 
+  //TODO: Use collection here
   public SortedSet<Representation> getRepresentations() {
     TreeSet<Representation> representations = new TreeSet<>(Comparator.comparing(Representation::getMediaType));
     representations.addAll(this.representations.values());

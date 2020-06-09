@@ -36,11 +36,6 @@ public class ModelSpecification {
         .map(CompoundModelSpecification::getModelKey);
   }
 
-  public Optional<ModelKey> effectiveKey() {
-    return getCompound()
-        .map(CompoundModelSpecification::getEffectiveModelKey);
-  }
-
   public Optional<ScalarModelSpecification> getScalar() {
     return Optional.ofNullable(scalar);
   }

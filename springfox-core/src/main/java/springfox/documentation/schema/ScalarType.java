@@ -52,19 +52,13 @@ public class ScalarType {
       return false;
     }
     ScalarType that = (ScalarType) o;
-    return Objects.equals(
-        type,
-        that.type) &&
-        Objects.equals(
-            format,
-            that.format);
+    return Objects.equals(type, that.type) &&
+        Objects.equals(format, that.format);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-        type,
-        format);
+    return Objects.hash(type, format);
   }
 
   @Override

@@ -76,7 +76,7 @@ class RequestParameterBuilderSpec extends Specification {
         .description("This is a test")
         .extensions([])
         .hidden(false)
-        .order(1)
+        .precedence(1)
   }
 
   ModelSpecification spec(type) {

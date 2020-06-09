@@ -21,6 +21,7 @@ public class ReferenceModelSpecification {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
+
     ReferenceModelSpecification that = (ReferenceModelSpecification) o;
     return Objects.equals(modelKey, that.modelKey);
   }

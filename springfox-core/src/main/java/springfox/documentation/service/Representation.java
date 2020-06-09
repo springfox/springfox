@@ -51,6 +51,6 @@ public class Representation {
 
   @Override
   public int hashCode() {
-    return Objects.hash(mediaType, model);
+    return Objects.hash(mediaType, model, encodings);
   }
 }

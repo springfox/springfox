@@ -18,7 +18,7 @@ public class RequestParameter {
   private final Boolean deprecated;
   private final Boolean hidden;
   private final ParameterSpecification parameterSpecification;
-  private final Integer order;
+  private final Integer precedence; //This is an internal property
   private final Example scalarExample;
   private final List<Example> examples = new ArrayList<>();
   private final List<VendorExtension> extensions = new ArrayList<>();
@@ -34,7 +34,7 @@ public class RequestParameter {
       ParameterSpecification parameterSpecification,
       Example scalarExample,
       Collection<Example> examples,
-      int order,
+      int precedence,
       List<VendorExtension> extensions) {
 
     this.name = name;
@@ -44,7 +44,7 @@ public class RequestParameter {
     this.deprecated = deprecated;
     this.hidden = hidden;
     this.parameterSpecification = parameterSpecification;
-    this.order = order;
+    this.precedence = precedence;
     this.extensions.addAll(extensions);
     this.scalarExample = scalarExample;
     this.examples.addAll(examples);
@@ -78,8 +78,8 @@ public class RequestParameter {
     return extensions;
   }
 
-  public Integer getOrder() {
-    return order;
+  public Integer getPrecedence() {
+    return precedence;
   }
 
   String getParamType() {

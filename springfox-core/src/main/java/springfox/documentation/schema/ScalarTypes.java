@@ -1,6 +1,7 @@
 package springfox.documentation.schema;
 
 import com.fasterxml.classmate.ResolvedType;
+import com.fasterxml.classmate.types.ResolvedArrayType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Type;
@@ -28,8 +29,8 @@ public class ScalarTypes {
       new AbstractMap.SimpleEntry<>(Boolean.TYPE, ScalarType.BOOLEAN),
       new AbstractMap.SimpleEntry<>(Character.TYPE, ScalarType.STRING),
 
-      new AbstractMap.SimpleEntry<>(Date.class, ScalarType.DATE),
-      new AbstractMap.SimpleEntry<>(java.sql.Date.class, ScalarType.DATE_TIME),
+      new AbstractMap.SimpleEntry<>(Date.class, ScalarType.DATE_TIME),
+      new AbstractMap.SimpleEntry<>(java.sql.Date.class, ScalarType.DATE),
       new AbstractMap.SimpleEntry<>(String.class, ScalarType.STRING),
       new AbstractMap.SimpleEntry<>(Long.class, ScalarType.LONG),
       new AbstractMap.SimpleEntry<>(Short.class, ScalarType.INTEGER),
@@ -61,6 +62,12 @@ public class ScalarTypes {
   }
 
   private static Optional<ScalarType> builtInScalarTypeForResolvedType(ResolvedType forType) {
+    if (forType instanceof ResolvedArrayType) {
+      if (forType.getArrayElementType().getErasedType() == Byte.class
+      || forType.getArrayElementType().getErasedType() == byte.class) {
+        return Optional.of(ScalarType.BYTE);
+      }
+    }
     return Optional.ofNullable(SCALAR_TYPE_LOOKUP.getOrDefault(
         forType.getErasedType(),
         null));
