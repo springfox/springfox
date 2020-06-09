@@ -34,21 +34,22 @@ public class ModelPropertyContext {
   private final TypeResolver resolver;
   private final BeanPropertyDefinition beanPropertyDefinition;
   private final AnnotatedElement annotatedElement;
-  private final DocumentationType documentationType;
+
+  private final ModelContext owner;
 
   public ModelPropertyContext(
       ModelPropertyBuilder builder,
       PropertySpecificationBuilder specificationBuilder,
       AnnotatedElement annotatedElement,
       TypeResolver resolver,
-      DocumentationType documentationType) {
+      ModelContext owner) {
     this(
         builder,
         specificationBuilder,
         resolver,
         null,
         annotatedElement,
-        documentationType);
+        owner);
 
   }
 
@@ -56,7 +57,7 @@ public class ModelPropertyContext {
       ModelPropertyBuilder builder,
       BeanPropertyDefinition beanPropertyDefinition,
       TypeResolver resolver,
-      DocumentationType documentationType,
+      ModelContext owner,
       PropertySpecificationBuilder specificationBuilder) {
     this(
         builder,
@@ -64,7 +65,7 @@ public class ModelPropertyContext {
         resolver,
         beanPropertyDefinition,
         null,
-        documentationType);
+        owner);
   }
 
   private ModelPropertyContext(
@@ -73,19 +74,22 @@ public class ModelPropertyContext {
       TypeResolver resolver,
       BeanPropertyDefinition beanPropertyDefinition,
       AnnotatedElement annotatedElement,
-      DocumentationType documentationType) {
+      ModelContext owner) {
     this.builder = builder;
     this.specificationBuilder = specificationBuilder;
     this.resolver = resolver;
     this.beanPropertyDefinition = beanPropertyDefinition;
     this.annotatedElement = annotatedElement;
-    this.documentationType = documentationType;
+    this.owner = owner;
   }
 
   /**
    * Model property build. Use this to override model property attributes
    * @return the builder
+   * @deprecated Use {@link ModelPropertyContext#getSpecificationBuilder()} instead
+   * @since 3.0
    */
+  @Deprecated
   public ModelPropertyBuilder getBuilder() {
     return builder;
   }
@@ -103,7 +107,7 @@ public class ModelPropertyContext {
    * @return documentation type
    */
   public DocumentationType getDocumentationType() {
-    return documentationType;
+    return owner.getDocumentationType();
   }
 
 
@@ -126,5 +130,13 @@ public class ModelPropertyContext {
    */
   public TypeResolver getResolver() {
     return resolver;
+  }
+
+  /**
+   * Owning model context
+   * @return context that owns the property
+   */
+  public ModelContext getOwner() {
+    return owner;
   }
 }

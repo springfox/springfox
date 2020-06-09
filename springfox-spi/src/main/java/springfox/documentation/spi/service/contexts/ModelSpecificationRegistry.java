@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.Set;
 
 public interface ModelSpecificationRegistry {
-  ModelKey effectiveModelKeyFor(ModelKey key);
-
   ModelSpecification modelSpecificationFor(ModelKey key);
 
   boolean hasRequestResponsePairs(ModelKey test);

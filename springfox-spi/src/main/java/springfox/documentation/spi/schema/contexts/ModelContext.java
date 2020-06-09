@@ -387,4 +387,18 @@ public class ModelContext {
   public boolean canIgnore(ResolvedType type) {
     return ignorableTypes.contains(type.getErasedType());
   }
+
+  public ModelContext copy() {
+    return new ModelContext(
+        this.parameterId,
+        this.groupName,
+        this.type,
+        this.returnType,
+        this.view,
+        this.validationGroups,
+        this.documentationType,
+        this.alternateTypeProvider,
+        this.genericNamingStrategy,
+        this.ignorableTypes);
+  }
 }
