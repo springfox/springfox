@@ -23,12 +23,16 @@ import com.fasterxml.classmate.TypeResolver;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import springfox.documentation.builders.ModelPropertyBuilder;
+import springfox.documentation.builders.PropertySpecificationBuilder;
 import springfox.documentation.schema.Model;
+import springfox.documentation.schema.ModelKeyBuilder;
 import springfox.documentation.schema.ModelProperty;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.schema.PropertySpecification;
+import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.schema.Xml;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 import springfox.documentation.spi.schema.SyntheticModelProviderPlugin;
@@ -43,20 +47,24 @@ import java.util.stream.Stream;
 import static java.util.function.Function.*;
 import static java.util.stream.Collectors.*;
 import static springfox.documentation.schema.ResolvedTypes.*;
+import static springfox.documentation.schema.property.PackageNames.*;
 
 class ResourcesModelProvider implements SyntheticModelProviderPlugin {
 
   private final TypeResolver resolver;
   private final TypeNameExtractor typeNameExtractor;
   private final EnumTypeDeterminer enumTypeDeterminer;
+  private final ModelSpecificationFactory modelSpecifications;
 
   ResourcesModelProvider(
       TypeResolver resolver,
       TypeNameExtractor typeNameExtractor,
-      EnumTypeDeterminer enumTypeDeterminer) {
+      EnumTypeDeterminer enumTypeDeterminer,
+      ModelSpecificationFactory modelSpecifications) {
     this.resolver = resolver;
     this.typeNameExtractor = typeNameExtractor;
     this.enumTypeDeterminer = enumTypeDeterminer;
+    this.modelSpecifications = modelSpecifications;
   }
 
   @Override
@@ -78,8 +86,7 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
         .xml(new Xml()
                  .name("entities")
                  .wrapped(false)
-                 .attribute(false)
-            )
+                 .attribute(false))
         .build();
   }
 
@@ -127,12 +134,63 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
 
   @Override
   public ModelSpecification createModelSpecification(ModelContext context) {
-    return null;
+    ResolvedType resourceType = resourceType(context.getType());
+    List<ResolvedType> typeParameters = resourceType.getTypeParameters();
+    Class<?> type = typeParameters.get(0).getErasedType();
+    String name = typeNameExtractor.typeName(context);
+    return context.getModelSpecificationBuilder()
+        .name(name)
+        .facetsBuilder()
+        .description(String.format(
+            "Resources of %s",
+            type.getSimpleName()))
+        .xml(new Xml()
+                 .name("entities")
+                 .wrapped(false)
+                 .attribute(false))
+        .yield()
+        .compoundModelBuilder()
+        .properties(propertySpecifications(context))
+        .modelKey(new ModelKeyBuilder()
+                      .isResponse(context.isReturnType())
+                      .qualifiedModelName(
+                          new QualifiedModelName(
+                              "org.springframework.hateoas",
+                              name))
+                      .build())
+        .yield()
+        .build();
   }
 
   @Override
   public List<PropertySpecification> propertySpecifications(ModelContext context) {
-    return null;
+    ResolvedType resourceType = resourceType(context.getType());
+    List<ResolvedType> typeParameters = resourceType.getTypeParameters();
+    Class<?> type = typeParameters.get(0).getErasedType();
+    ResolvedType embedded = resolver.resolve(
+        EmbeddedCollection.class,
+        type);
+    ResolvedType mapOfLinks = resolver.resolve(
+        Map.class,
+        String.class,
+        Link.class);
+    ModelSpecification embeddedProperty = modelSpecifications.create(context, embedded);
+    ModelSpecification mapOfLinksProperty = modelSpecifications.create(context, mapOfLinks);
+    return Stream.of(
+        new PropertySpecificationBuilder("_embedded")
+            .type(embeddedProperty)
+            .position(0)
+            .required(true)
+            .isHidden(false)
+            .build(),
+        new PropertySpecificationBuilder("_links")
+            .type(mapOfLinksProperty)
+            .position(1)
+            .required(true)
+            .isHidden(false)
+            .description("Link collection")
+            .build())
+        .collect(toList());
   }
 
   @Override
@@ -152,7 +210,9 @@ class ResourcesModelProvider implements SyntheticModelProviderPlugin {
   @Override
   public boolean supports(ModelContext delimiter) {
     return CollectionModel.class.equals(resourceType(delimiter.getType()).getErasedType())
-        && delimiter.getDocumentationType() == DocumentationType.SWAGGER_2;
+        && (delimiter.getDocumentationType() == DocumentationType.SWAGGER_2
+        || delimiter.getDocumentationType() == DocumentationType.OAS_30
+        || delimiter.getDocumentationType() == DocumentationType.SPRING_WEB);
   }
 
   private ResolvedType resourceType(Type type) {

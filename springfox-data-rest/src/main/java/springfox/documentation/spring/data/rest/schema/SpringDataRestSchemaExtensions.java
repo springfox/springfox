@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.server.LinkRelationProvider;
 import springfox.documentation.schema.TypeNameExtractor;
+import springfox.documentation.schema.property.ModelSpecificationFactory;
 import springfox.documentation.spi.schema.EnumTypeDeterminer;
 
 @Configuration
@@ -34,7 +35,8 @@ public class SpringDataRestSchemaExtensions {
       TypeResolver resolver,
       TypeNameExtractor typeNameExtractor,
       EnumTypeDeterminer enumTypeDeterminer) {
-    return new ResourcesModelProvider(resolver, typeNameExtractor, enumTypeDeterminer);
+    return new ResourcesModelProvider(resolver, typeNameExtractor, enumTypeDeterminer,
+                                      new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer));
   }
 
   @Bean
@@ -44,6 +46,7 @@ public class SpringDataRestSchemaExtensions {
           LinkRelationProvider relProvider,
       TypeNameExtractor typeNameExtractor,
       EnumTypeDeterminer enumTypeDeterminer) {
-    return new EmbeddedCollectionModelProvider(resolver, relProvider, typeNameExtractor, enumTypeDeterminer);
+    return new EmbeddedCollectionModelProvider(resolver, relProvider, typeNameExtractor, enumTypeDeterminer,
+                                               new ModelSpecificationFactory(typeNameExtractor, enumTypeDeterminer));
   }
 }
