@@ -38,6 +38,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "array",
+                            "uniqueItems": true,
                             "items": {
                                 "type": "string",
                                 "enum": [
@@ -114,6 +115,7 @@
             "properties": {
                 "types": {
                     "type": "array",
+                    "uniqueItems": true,
                     "items": {
                         "type": "string",
                         "enum": [

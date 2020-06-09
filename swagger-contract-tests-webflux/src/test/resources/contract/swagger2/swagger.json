@@ -59,7 +59,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetReq"
                         }
                     }
                 ],
@@ -104,7 +104,7 @@
                         "description": "Pet object that needs to be added to the store",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetReq"
                         }
                     }
                 ],
@@ -170,7 +170,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet"
+                                "$ref": "#/definitions/PetRes"
                             }
                         }
                     },
@@ -217,7 +217,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Pet"
+                                "$ref": "#/definitions/PetRes"
                             }
                         }
                     },
@@ -256,14 +256,15 @@
                         "required": true,
                         "type": "string",
                         "maxLength": 5,
-                        "minLength": 1
+                        "minLength": 1,
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Pet"
+                            "$ref": "#/definitions/PetRes"
                         }
                     },
                     "400": {
@@ -326,18 +327,6 @@
                 ],
                 "parameters": [
                     {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Order Status",
-                        "required": false,
-                        "type": "string",
-                        "enum": [
-                            "placed",
-                            "approved",
-                            "delivered"
-                        ]
-                    },
-                    {
                         "name": "complete",
                         "in": "query",
                         "required": false,
@@ -377,13 +366,25 @@
                         "required": false,
                         "type": "string",
                         "format": "date-time"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Order Status",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "approved",
+                            "delivered",
+                            "placed"
+                        ]
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Order"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -413,7 +414,8 @@
                         "required": true,
                         "type": "string",
                         "maxLength": 5,
-                        "minLength": 1
+                        "minLength": 1,
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -449,7 +451,8 @@
                         "description": "ID of the order that needs to be deleted",
                         "required": true,
                         "type": "string",
-                        "minLength": 1
+                        "minLength": 1,
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -490,7 +493,7 @@
                         "description": "Created user object",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserReq"
                         }
                     }
                 ],
@@ -498,7 +501,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserRes"
                         }
                     }
                 },
@@ -527,7 +530,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/UserReq"
                             }
                         }
                     }
@@ -536,7 +539,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserRes"
                         }
                     }
                 },
@@ -565,7 +568,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/UserReq"
                             }
                         }
                     }
@@ -660,14 +663,15 @@
                         "in": "path",
                         "description": "The name that needs to be fetched. Use user1 for testing. ",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserRes"
                         }
                     },
                     "400": {
@@ -693,26 +697,6 @@
                     "application/json"
                 ],
                 "parameters": [
-                    {
-                        "name": "userStatus",
-                        "in": "query",
-                        "description": "User Status",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32",
-                        "enum": [
-                            "1-registered",
-                            "2-active",
-                            "3-closed"
-                        ]
-                    },
-                    {
-                        "name": "username",
-                        "in": "path",
-                        "description": "name that need to be deleted",
-                        "required": true,
-                        "type": "string"
-                    },
                     {
                         "name": "email",
                         "in": "query",
@@ -758,9 +742,24 @@
                     },
                     {
                         "name": "username",
+                        "in": "path",
+                        "description": "name that need to be deleted",
+                        "required": true,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    },
+                    {
+                        "name": "userStatus",
                         "in": "query",
+                        "description": "User Status",
                         "required": false,
-                        "type": "string"
+                        "type": "integer",
+                        "format": "int32",
+                        "enum": [
+                            "1-registered",
+                            "2-active",
+                            "3-closed"
+                        ]
                     }
                 ],
                 "responses": {
@@ -795,7 +794,8 @@
                         "in": "path",
                         "description": "The name that needs to be deleted",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -833,20 +833,7 @@
         }
     },
     "definitions": {
-        "Category": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "Category"
-        },
-        "Category_1": {
+        "CategoryReq": {
             "type": "object",
             "required": [
                 "id"
@@ -860,7 +847,20 @@
                     "type": "string"
                 }
             },
-            "title": "Category_1"
+            "title": "CategoryReq"
+        },
+        "CategoryRes": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "CategoryRes"
         },
         "Order": {
             "type": "object",
@@ -892,19 +892,56 @@
                     "type": "string",
                     "description": "Order Status",
                     "enum": [
-                        "placed",
                         "approved",
-                        "delivered"
+                        "delivered",
+                        "placed"
                     ]
                 }
             },
             "title": "Order"
         },
-        "Pet": {
+        "PetReq": {
             "type": "object",
             "properties": {
                 "category": {
-                    "$ref": "#/definitions/Category"
+                    "$ref": "#/definitions/CategoryReq"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photoUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "description": "pet status in the store",
+                    "enum": [
+                        "available",
+                        "pending",
+                        "sold"
+                    ]
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Tag"
+                    }
+                }
+            },
+            "title": "PetReq"
+        },
+        "PetRes": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/CategoryRes"
                 },
                 "id": {
                     "type": "integer",
@@ -939,44 +976,7 @@
                     }
                 }
             },
-            "title": "Pet"
-        },
-        "Pet_1": {
-            "type": "object",
-            "properties": {
-                "category": {
-                    "$ref": "#/definitions/Category_1"
-                },
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "photoUrls": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "status": {
-                    "type": "string",
-                    "description": "pet status in the store",
-                    "enum": [
-                        "available",
-                        "pending",
-                        "sold"
-                    ]
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Tag"
-                    }
-                }
-            },
-            "title": "Pet_1"
+            "title": "PetRes"
         },
         "Tag": {
             "type": "object",
@@ -991,7 +991,40 @@
             },
             "title": "Tag"
         },
-        "User": {
+        "UserReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "userStatus": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "User Status"
+                },
+                "username": {
+                    "type": "string"
+                }
+            },
+            "title": "UserReq"
+        },
+        "UserRes": {
             "type": "object",
             "properties": {
                 "email": {
@@ -1025,40 +1058,7 @@
                     "type": "string"
                 }
             },
-            "title": "User"
-        },
-        "User_1": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "userStatus": {
-                    "type": "integer",
-                    "format": "int32",
-                    "description": "User Status"
-                },
-                "username": {
-                    "type": "string"
-                }
-            },
-            "title": "User_1"
+            "title": "UserRes"
         }
     }
 }

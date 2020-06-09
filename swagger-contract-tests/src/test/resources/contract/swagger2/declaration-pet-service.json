@@ -119,7 +119,8 @@
                         "exclusiveMaximum": true,
                         "minimum": 0,
                         "exclusiveMinimum": true,
-                        "format": "int32"
+                        "format": "int32",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -152,7 +153,8 @@
                         "exclusiveMaximum": true,
                         "minimum": 0,
                         "exclusiveMinimum": true,
-                        "format": "int32"
+                        "format": "int32",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -184,7 +186,8 @@
                         "maximum": 12,
                         "exclusiveMaximum": true,
                         "exclusiveMinimum": false,
-                        "format": "int64"
+                        "format": "int64",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -214,6 +217,7 @@
                         "required": true,
                         "type": "string",
                         "default": "available",
+                        "allowEmptyValue": false,
                         "enum": [
                             "available",
                             "pending",
@@ -604,7 +608,8 @@
                         "required": true,
                         "type": "string",
                         "maxLength": 5,
-                        "minLength": 1
+                        "minLength": 1,
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -630,18 +635,26 @@
                 ],
                 "parameters": [
                     {
+                        "in": "formData",
+                        "name": "body",
+                        "required": false,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "pic": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "pic"
+                                }
+                            }
+                        }
+                    },
+                    {
                         "name": "petId",
                         "in": "path",
                         "description": "petId",
                         "required": true,
                         "type": "string"
-                    },
-                    {
-                        "name": "pic",
-                        "in": "formData",
-                        "description": "pic",
-                        "required": false,
-                        "type": "file"
                     }
                 ],
                 "responses": {

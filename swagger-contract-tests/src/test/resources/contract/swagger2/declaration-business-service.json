@@ -43,7 +43,8 @@
                         "in": "path",
                         "description": "ID of business",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -81,7 +82,7 @@
                                 "SERVICE"
                             ]
                         },
-                        "collectionFormat": "multi",
+                        "collectionFormat": "csv",
                         "enum": [
                             "PRODUCT",
                             "SERVICE"
@@ -143,7 +144,8 @@
                         "in": "path",
                         "description": "ID of business",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {

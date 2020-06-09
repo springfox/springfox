@@ -43,7 +43,7 @@
                         "description": "toCreate",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/EntityModel«Pet»"
+                            "$ref": "#/definitions/EntityModel«Pet»Req"
                         }
                     }
                 ],
@@ -105,7 +105,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/EntityModel«Pet»"
+                            "$ref": "#/definitions/EntityModel«Pet»Res"
                         }
                     },
                     "405": {
@@ -133,26 +133,7 @@
         }
     },
     "definitions": {
-        "EntityModel«Pet»": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "links": {
-                    "$ref": "#/definitions/Links"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "EntityModel«Pet»"
-        },
-        "EntityModel«Pet»_1": {
+        "EntityModel«Pet»Req": {
             "type": "object",
             "properties": {
                 "age": {
@@ -172,13 +153,32 @@
                     "type": "string"
                 }
             },
-            "title": "EntityModel«Pet»_1"
+            "title": "EntityModel«Pet»Req"
+        },
+        "EntityModel«Pet»Res": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "links": {
+                    "$ref": "#/definitions/Links"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "EntityModel«Pet»Res"
         },
         "HttpEntity«EntityModel«Pet»»": {
             "type": "object",
             "properties": {
                 "body": {
-                    "$ref": "#/definitions/EntityModel«Pet»"
+                    "$ref": "#/definitions/EntityModel«Pet»Res"
                 }
             },
             "title": "HttpEntity«EntityModel«Pet»»"

@@ -59,13 +59,14 @@
                 ],
                 "parameters": [
                     {
+                        "name": "custom-header",
                         "in": "header",
                         "required": false,
                         "type": "array",
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     }
                 ],
                 "responses": {
@@ -563,11 +564,32 @@
                         "type": "boolean"
                     },
                     {
+                        "name": "companyName",
+                        "in": "query",
+                        "description": "companyName",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "email",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "like",
+                        "in": "query",
+                        "description": "like",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
                         "name": "pageNumber",
                         "in": "query",
                         "required": true,
                         "type": "integer",
-                        "minimum": 1.0,
+                        "minimum": 1,
                         "exclusiveMinimum": false,
                         "format": "int32"
                     },
@@ -576,7 +598,7 @@
                         "in": "query",
                         "required": true,
                         "type": "integer",
-                        "maximum": 50.0,
+                        "maximum": 50,
                         "exclusiveMaximum": false,
                         "format": "int32"
                     },
@@ -601,27 +623,6 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
-                    },
-                    {
-                        "name": "companyName",
-                        "in": "query",
-                        "description": "companyName",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "email",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "like",
-                        "in": "query",
-                        "description": "like",
-                        "required": false,
-                        "type": "boolean"
                     }
                 ],
                 "responses": {
@@ -676,10 +677,7 @@
                         }
                     },
                     "204": {
-                        "description": "no ids found",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "no ids found"
                     }
                 },
                 "deprecated": false
@@ -811,7 +809,7 @@
                                 "TWO"
                             ]
                         },
-                        "collectionFormat": "multi",
+                        "collectionFormat": "csv",
                         "enum": [
                             "ONE",
                             "TWO"
@@ -1027,8 +1025,8 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "zh",
-                                "en"
+                                "en",
+                                "zh"
                             ]
                         }
                     }
@@ -1061,8 +1059,8 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "zh",
-                                "en"
+                                "en",
+                                "zh"
                             ]
                         }
                     }
@@ -1128,40 +1126,40 @@
                 ],
                 "parameters": [
                     {
-                        "name": "file",
                         "in": "formData",
-                        "description": "file",
+                        "name": "body",
                         "required": false,
-                        "type": "file"
-                    },
-                    {
-                        "in": "formData",
-                        "name": "paramMap",
-                        "description": "paramMap",
-                        "required": true,
                         "schema": {
                             "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
+                            "required": [
+                                "paramMap",
+                                "sfData",
+                                "sfId"
+                            ],
+                            "properties": {
+                                "file": {
+                                    "type": "string",
+                                    "format": "binary",
+                                    "description": "file"
+                                },
+                                "paramMap": {
+                                    "type": "object",
+                                    "description": "paramMap",
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    }
+                                },
+                                "sfData": {
+                                    "description": "sfData",
+                                    "$ref": "#/definitions/Example"
+                                },
+                                "sfId": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "description": "sfId"
+                                }
                             }
                         }
-                    },
-                    {
-                        "in": "formData",
-                        "name": "sfData",
-                        "description": "sfData",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Example"
-                        }
-                    },
-                    {
-                        "name": "sfId",
-                        "in": "formData",
-                        "description": "sfId",
-                        "required": true,
-                        "type": "integer",
-                        "format": "int32"
                     }
                 ],
                 "responses": {
@@ -1188,76 +1186,68 @@
                 ],
                 "parameters": [
                     {
-                        "name": "allCapsSet",
                         "in": "formData",
-                        "description": "description of allCapsSet",
+                        "name": "body",
                         "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
-                    },
-                    {
-                        "name": "annotatedEnumType",
-                        "in": "formData",
-                        "description": "description of annotatedEnumType",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "bar",
-                        "in": "formData",
-                        "description": "description of bar",
-                        "required": false,
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    {
-                        "name": "foo",
-                        "in": "formData",
-                        "description": "description of foo",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "localDateTime",
-                        "in": "formData",
-                        "description": "local date time desc dd-MM-yyyy hh:mm:ss",
-                        "required": true,
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    {
-                        "name": "readOnlyString",
-                        "in": "formData",
-                        "description": "A read only string",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "enumType",
-                        "in": "formData",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "nestedType.name",
-                        "in": "formData",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "parentBeanProperty",
-                        "in": "formData",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "propertyWithNoSetterMethod",
-                        "in": "formData",
-                        "required": false,
-                        "type": "string"
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "foo",
+                                "localDateTime"
+                            ],
+                            "properties": {
+                                "allCapsSet": {
+                                    "type": "array",
+                                    "description": "description of allCapsSet",
+                                    "uniqueItems": true,
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "annotatedEnumType": {
+                                    "type": "string",
+                                    "description": "description of annotatedEnumType",
+                                    "enum": [
+                                        "ONE",
+                                        "TWO"
+                                    ]
+                                },
+                                "bar": {
+                                    "type": "integer",
+                                    "format": "int32",
+                                    "description": "description of bar"
+                                },
+                                "enumType": {
+                                    "type": "string",
+                                    "enum": [
+                                        "ONE",
+                                        "TWO"
+                                    ]
+                                },
+                                "foo": {
+                                    "type": "string",
+                                    "description": "description of foo"
+                                },
+                                "localDateTime": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "description": "local date time desc dd-MM-yyyy hh:mm:ss"
+                                },
+                                "nestedType.name": {
+                                    "type": "string"
+                                },
+                                "parentBeanProperty": {
+                                    "type": "string"
+                                },
+                                "propertyWithNoSetterMethod": {
+                                    "type": "string"
+                                },
+                                "readOnlyString": {
+                                    "type": "string",
+                                    "description": "A read only string"
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -1355,7 +1345,8 @@
                         "description": "This is the description",
                         "required": true,
                         "type": "string",
-                        "default": "1f1f1f"
+                        "default": "1f1f1f",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -1753,12 +1744,7 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "example": {
-                                "value": "exampleMessage",
-                                "mediaType": {
-                                    "present": false
-                                }
-                            }
+                            "example": "exampleMessage"
                         }
                     }
                 ],
@@ -1779,6 +1765,17 @@
                 "summary": "addBook",
                 "operationId": "addBookUsingGET",
                 "parameters": [
+                    {
+                        "name": "authorIds",
+                        "in": "query",
+                        "description": "authorIds",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv"
+                    },
                     {
                         "name": "authors[0].books[0].id",
                         "in": "query",
@@ -1817,17 +1814,6 @@
                         "in": "query",
                         "required": false,
                         "type": "string"
-                    },
-                    {
-                        "name": "authorIds",
-                        "in": "query",
-                        "description": "authorIds",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi"
                     }
                 ],
                 "responses": {
@@ -1914,7 +1900,7 @@
                         "name": "bar",
                         "in": "path",
                         "description": "bar",
-                        "required": false,
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -2014,12 +2000,11 @@
                 "parameters": [
                     {
                         "name": "bar",
+                        "in": "path",
                         "description": "example",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
                     },
                     {
                         "name": "year",
@@ -2054,15 +2039,17 @@
                         "name": "environmentKey",
                         "in": "path",
                         "description": "Key of the environment",
-                        "required": false,
-                        "type": "string"
+                        "required": true,
+                        "type": "string",
+                        "allowEmptyValue": false
                     },
                     {
                         "name": "propertyKey",
                         "in": "path",
                         "description": "Key of the property",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "allowEmptyValue": false
                     }
                 ],
                 "responses": {
@@ -2094,13 +2081,6 @@
         }
     },
     "definitions": {
-        "ApplicationLang": {
-            "type": "object",
-            "title": "ApplicationLang",
-            "additionalProperties": {
-                "$ref": "#/definitions/Language"
-            }
-        },
         "Bug1376": {
             "type": "object",
             "properties": {
@@ -2324,6 +2304,7 @@
             "properties": {
                 "allCapsSet": {
                     "type": "array",
+                    "uniqueItems": true,
                     "items": {
                         "type": "string"
                     }
@@ -2390,8 +2371,8 @@
                 "lang": {
                     "type": "string",
                     "enum": [
-                        "zh",
-                        "en"
+                        "en",
+                        "zh"
                     ]
                 }
             },
@@ -2403,26 +2384,12 @@
                 "lang": {
                     "type": "string",
                     "enum": [
-                        "zh",
-                        "en"
+                        "en",
+                        "zh"
                     ]
                 }
             },
             "title": "LangNotFilteredWrapper"
-        },
-        "Language": {
-            "type": "object",
-            "title": "Language",
-            "additionalProperties": {
-                "$ref": "#/definitions/LanguageText"
-            }
-        },
-        "LanguageResponse": {
-            "type": "object",
-            "title": "LanguageResponse",
-            "additionalProperties": {
-                "$ref": "#/definitions/ApplicationLang"
-            }
         },
         "LanguageText": {
             "type": "object",

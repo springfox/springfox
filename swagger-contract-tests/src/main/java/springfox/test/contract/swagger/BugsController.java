@@ -88,7 +88,10 @@ public class BugsController {
   }
 
   @ApiImplicitParams(
-      @ApiImplicitParam(dataType = "string", allowMultiple = true, paramType = "header")
+      @ApiImplicitParam(name = "custom-header",
+                        dataTypeClass = String.class,
+                        allowMultiple = true,
+                        paramType = "header")
   )
   @RequestMapping(value = "1209", method = POST)
   public ResponseEntity<String> bug1209() {
@@ -374,10 +377,10 @@ public class BugsController {
                          @ApiImplicitParam(name = "date",
                                            value = "日期：2017-09-01",
                                            required = true,
-                                           dataType = "String",
+                                           dataTypeClass = String.class,
                                            paramType =
                                                "path"),
-                         @ApiImplicitParam(name = "name", value = "名称", required = false, dataType = "string")
+                         @ApiImplicitParam(name = "name", value = "名称", required = false, dataTypeClass = String.class)
                      })
   @GetMapping("/2029")
   public String bug2020(
@@ -387,7 +390,7 @@ public class BugsController {
   }
 
   @GetMapping(path = "/{bar}/2148")
-  @ApiImplicitParam(name = "bar", dataType = "long", value = "example")
+  @ApiImplicitParam(name = "bar", dataTypeClass = Long.class, paramType = "path", value = "example")
   ResponseEntity<Example> bug2148(
       @ApiIgnore @PathVariable("bar") Example example,
       @RequestParam("year") Optional<Integer> year) {

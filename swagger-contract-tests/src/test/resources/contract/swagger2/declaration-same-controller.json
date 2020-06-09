@@ -43,7 +43,7 @@
                         "description": "toCreate",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/ModelWithSameNameClasses"
+                            "$ref": "#/definitions/ModelWithSameNameClassesReq"
                         }
                     }
                 ],
@@ -75,7 +75,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ModelWithSameNameClasses"
+                            "$ref": "#/definitions/ModelWithSameNameClassesRes"
                         }
                     },
                     "405": {
@@ -134,7 +134,7 @@
             },
             "title": "FancyPet"
         },
-        "ModelWithSameNameClasses": {
+        "ModelWithSameNameClassesReq": {
             "type": "object",
             "properties": {
                 "crazyFancyPets": {
@@ -164,7 +164,7 @@
                 "fancyPetsMap": {
                     "type": "object",
                     "additionalProperties": {
-                        "$ref": "#/definitions/SameFancyPet"
+                        "$ref": "#/definitions/SameFancyPetReq"
                     }
                 },
                 "madFancyPets": {
@@ -174,13 +174,13 @@
                         "items": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/SameFancyPet"
+                                "$ref": "#/definitions/SameFancyPetReq"
                             }
                         }
                     }
                 },
                 "moreFancyPet": {
-                    "$ref": "#/definitions/SameFancyPet"
+                    "$ref": "#/definitions/SameFancyPetReq"
                 },
                 "weirdFancyPets": {
                     "type": "array",
@@ -191,16 +191,16 @@
                             "items": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/definitions/SameFancyPet"
+                                    "$ref": "#/definitions/SameFancyPetReq"
                                 }
                             }
                         }
                     }
                 }
             },
-            "title": "ModelWithSameNameClasses"
+            "title": "ModelWithSameNameClassesReq"
         },
-        "ModelWithSameNameClasses_1": {
+        "ModelWithSameNameClassesRes": {
             "type": "object",
             "properties": {
                 "crazyFancyPets": {
@@ -230,7 +230,7 @@
                 "fancyPetsMap": {
                     "type": "object",
                     "additionalProperties": {
-                        "$ref": "#/definitions/SameFancyPet_1"
+                        "$ref": "#/definitions/SameFancyPetRes"
                     }
                 },
                 "madFancyPets": {
@@ -240,13 +240,13 @@
                         "items": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/SameFancyPet_1"
+                                "$ref": "#/definitions/SameFancyPetRes"
                             }
                         }
                     }
                 },
                 "moreFancyPet": {
-                    "$ref": "#/definitions/SameFancyPet_1"
+                    "$ref": "#/definitions/SameFancyPetRes"
                 },
                 "weirdFancyPets": {
                     "type": "array",
@@ -257,30 +257,16 @@
                             "items": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/definitions/SameFancyPet_1"
+                                    "$ref": "#/definitions/SameFancyPetRes"
                                 }
                             }
                         }
                     }
                 }
             },
-            "title": "ModelWithSameNameClasses_1"
+            "title": "ModelWithSameNameClassesRes"
         },
-        "SameCategory": {
-            "type": "object",
-            "properties": {
-                "_type": {
-                    "type": "string",
-                    "description": "Type field",
-                    "readOnly": true
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "title": "SameCategory"
-        },
-        "SameCategory_1": {
+        "SameCategoryReq": {
             "type": "object",
             "required": [
                 "id"
@@ -295,31 +281,23 @@
                     "type": "string"
                 }
             },
-            "title": "SameCategory_1"
+            "title": "SameCategoryReq"
         },
-        "SameFancyPet": {
+        "SameCategoryRes": {
             "type": "object",
             "properties": {
-                "age": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "color": {
-                    "type": "string"
-                },
-                "extendedCategory": {
-                    "$ref": "#/definitions/SameCategory"
-                },
-                "id": {
-                    "type": "string"
+                "_type": {
+                    "type": "string",
+                    "description": "Type field",
+                    "readOnly": true
                 },
                 "name": {
                     "type": "string"
                 }
             },
-            "title": "SameFancyPet"
+            "title": "SameCategoryRes"
         },
-        "SameFancyPet_1": {
+        "SameFancyPetReq": {
             "type": "object",
             "properties": {
                 "age": {
@@ -330,7 +308,7 @@
                     "type": "string"
                 },
                 "extendedCategory": {
-                    "$ref": "#/definitions/SameCategory_1"
+                    "$ref": "#/definitions/SameCategoryReq"
                 },
                 "id": {
                     "type": "string"
@@ -343,7 +321,29 @@
                     "format": "double"
                 }
             },
-            "title": "SameFancyPet_1"
+            "title": "SameFancyPetReq"
+        },
+        "SameFancyPetRes": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "extendedCategory": {
+                    "$ref": "#/definitions/SameCategoryRes"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "title": "SameFancyPetRes"
         }
     }
 }

@@ -288,15 +288,25 @@
                 ],
                 "parameters": [
                     {
-                        "name": "files",
                         "in": "formData",
-                        "description": "files",
-                        "required": true,
-                        "type": "array",
-                        "items": {
-                            "type": "file"
-                        },
-                        "collectionFormat": "multi"
+                        "name": "body",
+                        "required": false,
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "files"
+                            ],
+                            "properties": {
+                                "files": {
+                                    "type": "array",
+                                    "description": "files",
+                                    "items": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
@@ -484,7 +494,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     },
                     {
                         "name": "annotatedEnumType",
@@ -507,14 +517,24 @@
                         "x-example": 10
                     },
                     {
+                        "name": "enumType",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "ONE",
+                            "TWO"
+                        ]
+                    },
+                    {
                         "name": "foo",
                         "in": "query",
                         "description": "description of foo",
                         "required": true,
                         "type": "string",
                         "enum": [
-                            "man",
-                            "chu"
+                            "chu",
+                            "man"
                         ]
                     },
                     {
@@ -524,23 +544,6 @@
                         "required": true,
                         "type": "string",
                         "format": "date-time"
-                    },
-                    {
-                        "name": "readOnlyString",
-                        "in": "query",
-                        "description": "A read only string",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "enumType",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "enum": [
-                            "ONE",
-                            "TWO"
-                        ]
                     },
                     {
                         "name": "nestedType.name",
@@ -557,6 +560,13 @@
                     {
                         "name": "propertyWithNoSetterMethod",
                         "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "readOnlyString",
+                        "in": "query",
+                        "description": "A read only string",
                         "required": false,
                         "type": "string"
                     }
@@ -585,7 +595,8 @@
                         "in": "query",
                         "description": "input",
                         "required": false,
-                        "type": "number"
+                        "type": "number",
+                        "format": "bigdecimal"
                     }
                 ],
                 "responses": {
@@ -726,9 +737,9 @@
                         "required": false,
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/Example"
+                            "$ref": "#/definitions/Error-ModelName{namespace='springfox.test.contract.swagger.models', name='Example'}"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     }
                 ],
                 "responses": {
@@ -790,7 +801,7 @@
                             "type": "integer",
                             "format": "int32"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     }
                 ],
                 "responses": {
@@ -814,7 +825,10 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/MapOfstringAndstring"
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
                             }
                         }
                     }
@@ -880,14 +894,14 @@
                         "items": {
                             "type": "string",
                             "enum": [
-                                "CASH",
-                                "BANK"
+                                "BANK",
+                                "CASH"
                             ]
                         },
-                        "collectionFormat": "multi",
+                        "collectionFormat": "csv",
                         "enum": [
-                            "CASH",
-                            "BANK"
+                            "BANK",
+                            "CASH"
                         ]
                     },
                     {
@@ -899,7 +913,7 @@
                             "type": "integer",
                             "format": "int32"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     },
                     {
                         "name": "complexProp.name",
@@ -922,7 +936,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "collectionFormat": "multi"
+                        "collectionFormat": "csv"
                     },
                     {
                         "name": "stringProp",
@@ -1052,7 +1066,7 @@
                                 "TWO"
                             ]
                         },
-                        "collectionFormat": "multi",
+                        "collectionFormat": "csv",
                         "enum": [
                             "ONE",
                             "TWO"
@@ -1084,6 +1098,7 @@
                         "type": "string",
                         "maxLength": 5,
                         "minLength": 1,
+                        "allowEmptyValue": false,
                         "x-example": "3"
                     }
                 ],
@@ -1183,6 +1198,7 @@
             "properties": {
                 "allCapsSet": {
                     "type": "array",
+                    "uniqueItems": true,
                     "items": {
                         "type": "string"
                     }
@@ -1255,20 +1271,6 @@
                 }
             },
             "title": "FancyPet"
-        },
-        "MapOfstringAndExample": {
-            "type": "object",
-            "title": "MapOfstringAndExample",
-            "additionalProperties": {
-                "$ref": "#/definitions/Example"
-            }
-        },
-        "MapOfstringAndstring": {
-            "type": "object",
-            "title": "MapOfstringAndstring",
-            "additionalProperties": {
-                "type": "string"
-            }
         },
         "ModelWithArrayOfArrays": {
             "type": "object",

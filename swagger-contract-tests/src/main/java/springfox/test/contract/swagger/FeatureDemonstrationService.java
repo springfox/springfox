@@ -271,7 +271,7 @@ public class FeatureDemonstrationService {
 
   @GetMapping(value = "/inheritance")
   public List<Vehicle> findVehicles(@RequestParam("type") String type) {
-    return new ArrayList<Vehicle>();
+    return new ArrayList<>();
   }
 
   // tag::question-27[]
@@ -281,7 +281,7 @@ public class FeatureDemonstrationService {
   @ApiImplicitParams({
                          @ApiImplicitParam(
                              name = "contents",
-                             dataType = "CustomTypeFor2031",
+                             dataTypeClass = CustomTypeFor2031.class,
                              examples = @io.swagger.annotations.Example(
                                  value = {
                                      @ExampleProperty(value = "{'property': 'test'}", mediaType = "application/json")
