@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import springfox.documentation.schema.ModelSpecification;
 import springfox.documentation.service.ModelNamesRegistry;
 
+import static springfox.documentation.builders.BuilderDefaults.*;
+
 @Mapper(componentModel = "spring")
 public class SchemaMapper {
   public Schema<?> mapFrom(
@@ -36,6 +38,7 @@ public class SchemaMapper {
 
     if (schema == null) {
       schema = modelSpecification.getReference()
+          .filter(r -> emptyToNull(r.getKey().getQualifiedModelName().getName()) != null)
           .map(cm -> new ReferenceModelSpecificationToSchemaConverter(modelNamesRegistry).convert(cm))
           .orElse(null);
     }

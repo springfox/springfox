@@ -15,10 +15,10 @@ public class MapSpecificationToSchemaConverter implements Converter<MapSpecifica
   }
 
   @Override
-    public Schema<?> convert(MapSpecification source) {
-        Schema<?> schema = Mappers.getMapper(SchemaMapper.class).mapFrom(source.getValue(),
-                                                                         modelNamesRegistry);
-        return new MapSchema()
-                .additionalProperties(schema);
-    }
+  public Schema<?> convert(MapSpecification source) {
+    Schema<?> schema = Mappers.getMapper(SchemaMapper.class)
+        .mapFrom(source.getValue(), modelNamesRegistry);
+    return new MapSchema()
+        .additionalProperties(schema);
+  }
 }

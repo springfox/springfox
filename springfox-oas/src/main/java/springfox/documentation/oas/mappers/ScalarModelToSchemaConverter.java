@@ -15,7 +15,7 @@ public class ScalarModelToSchemaConverter implements Converter<ScalarModelSpecif
                 put(ScalarType.STRING, any -> new StringSchema());
                 put(ScalarType.BYTE, any -> new ByteArraySchema());
                 put(ScalarType.INTEGER, any -> new IntegerSchema());
-                put(ScalarType.LONG, any -> new IntegerSchema());
+                put(ScalarType.LONG, any -> new IntegerSchema().format("int64"));
                 put(ScalarType.BIGINTEGER, any -> new NumberSchema());
                 put(ScalarType.BIGDECIMAL, any -> new NumberSchema());
                 put(ScalarType.DOUBLE, any -> new NumberSchema());

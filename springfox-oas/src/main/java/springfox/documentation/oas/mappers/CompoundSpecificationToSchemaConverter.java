@@ -18,20 +18,19 @@ public class CompoundSpecificationToSchemaConverter implements Converter<Compoun
   }
 
   @Override
-    public Schema<?> convert(CompoundModelSpecification source) {
-        ObjectSchema schema = new ObjectSchema();
-        schema.properties(source.getProperties()
-                .stream()
-                .map(p -> {
-                  Schema<?> property = Mappers.getMapper(SchemaMapper.class).mapFrom(p.getType(),
-                                                                                     modelNamesRegistry);
-                  if (property != null) {
-                    return property.name(p.getName());
-                  }
-                  return null;
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(Schema::getName, s -> s)));
-        return schema;
-    }
+  public Schema<?> convert(CompoundModelSpecification source) {
+    ObjectSchema schema = new ObjectSchema();
+    schema.properties(source.getProperties().stream()
+                          .map(p -> {
+                            Schema<?> property = Mappers.getMapper(SchemaMapper.class)
+                                .mapFrom(p.getType(), modelNamesRegistry);
+                            if (property != null) {
+                              return property.name(p.getName());
+                            }
+                            return null;
+                          })
+                          .filter(Objects::nonNull)
+                          .collect(Collectors.toMap(Schema::getName, s -> s)));
+    return schema;
+  }
 }

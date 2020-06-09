@@ -81,19 +81,19 @@ class SimpleTypeSpec extends SchemaSpecification implements ModelTestingSupport,
     "aBoolean"        | new BooleanSchema()
     "aShort"          | new IntegerSchema()
     "anInt"           | new IntegerSchema()
-    "aLong"           | new IntegerSchema()
+    "aLong"           | new IntegerSchema().format("int64")
     "aFloat"          | new NumberSchema()
     "aDouble"         | new NumberSchema()
     "anObjectByte"    | new ByteArraySchema()
     "anObjectBoolean" | new BooleanSchema()
     "anObjectShort"   | new IntegerSchema()
     "anObjectInt"     | new IntegerSchema()
-    "anObjectLong"    | new IntegerSchema()
+    "anObjectLong"    | new IntegerSchema().format("int64")
     "anObjectFloat"   | new NumberSchema()
     "anObjectDouble"  | new NumberSchema()
     "uuid"            | new UUIDSchema()
-    "aDate"           | new DateSchema()
-    "aSqlDate"        | new DateTimeSchema()
+    "aDate"           | new DateTimeSchema()
+    "aSqlDate"        | new DateSchema()
   }
 
 
