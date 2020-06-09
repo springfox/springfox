@@ -13,9 +13,9 @@ import springfox.documentation.schema.QualifiedModelName;
 import springfox.documentation.schema.ReferenceModelSpecification;
 import springfox.documentation.spi.service.contexts.ModelSpecificationRegistry;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -49,34 +49,38 @@ public class ModelSpecificationRegistryBuilder {
 
   public ModelSpecificationRegistry build() {
     MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey = new LinkedMultiValueMap<>();
-    Set<ModelKey> seen = new HashSet<>();
+    HashMap<List<ModelKey>, Boolean> seen = new HashMap<>();
 
     for (Map.Entry<QualifiedModelName, List<ModelSpecification>> eachEntry : modelByQName.entrySet()) {
       List<ModelSpecification> models = eachEntry.getValue();
       if (models.size() > 1) {
+        LOGGER.info(
+            "Starting comparison of model with name {}. Models to compare {}", eachEntry.getKey(), models.size());
         for (int i = 0; i < (models.size() - 1); i++) {
           for (int j = 1; j < models.size(); j++) {
-            models.get(i).getCompound()
-                .map(CompoundModelSpecification::getModelKey)
-                .ifPresent(seen::add);
-            models.get(j).getCompound()
-                .map(CompoundModelSpecification::getModelKey)
-                .ifPresent(seen::add);
+            seen.putIfAbsent(
+                Arrays.asList(
+                    models.get(i).getCompound()
+                          .map(CompoundModelSpecification::getModelKey).get(),
+                    models.get(j).getCompound()
+                          .map(CompoundModelSpecification::getModelKey).get()),
+                true);
             if (sameModel(models.get(i), models.get(j), referenceKeyToEffectiveKey, seen)) {
-              LOGGER.trace(
+              LOGGER.info(
                   "Models were equivalent {} and {}",
-                  models.get(i).key().orElse(null),
-                  models.get(j).key().orElse(null));
+                  models.get(i).key().get(),
+                  models.get(j).key().get());
               referenceKeyToEffectiveKey.add(models.get(i).key().get(), models.get(j).key().get());
               referenceKeyToEffectiveKey.add(models.get(j).key().get(), models.get(i).key().get());
             } else {
-              LOGGER.trace(
+              LOGGER.info(
                   "Models were different {} and {}",
                   models.get(i).key().orElse(null),
                   models.get(j).key().orElse(null));
             }
           }
         }
+        LOGGER.info("Done comparison of models with name {}", eachEntry.getKey());
       }
     }
     return new DefaultModelSpecificationRegistry(
@@ -88,21 +92,13 @@ public class ModelSpecificationRegistryBuilder {
       ModelSpecification first,
       ModelSpecification second,
       MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
-      Set<ModelKey> seen) {
+      HashMap<List<ModelKey>, Boolean> seen) {
     if (Objects.equals(first, second)) {
       return true;
     }
     if (first == null || second == null) {
       return false;
     }
-    LOGGER.trace(
-        "Comparing models {} and {}",
-        first.key()
-            .map(ModelKey::toString)
-            .orElse("scalar property"),
-        second.key()
-            .map(ModelKey::toString)
-            .orElse("scalar property"));
     return Objects.equals(first.getScalar(), second.getScalar()) &&
         sameCompoundModel(
             first.getCompound().orElse(null),
@@ -110,11 +106,13 @@ public class ModelSpecificationRegistryBuilder {
             referenceKeyToEffectiveKey,
             seen)
         && sameCollectionModel(
-        first,
-        second,
-        referenceKeyToEffectiveKey,
-        seen)
-        && sameMapModel(first, second, referenceKeyToEffectiveKey, seen)
+        first.getCollection().orElse(null),
+        second.getCollection().orElse(null),
+        referenceKeyToEffectiveKey, seen)
+        && sameMapModel(
+        first.getMap().orElse(null),
+        second.getMap().orElse(null),
+        referenceKeyToEffectiveKey, seen)
         && Objects.equals(first.getFacets(), second.getFacets())
         && Objects.equals(first.getName(), second.getName())
         && equivalentReference(
@@ -125,76 +123,60 @@ public class ModelSpecificationRegistryBuilder {
   }
 
   private boolean sameCollectionModel(
-      ModelSpecification first,
-      ModelSpecification second,
+      CollectionSpecification first,
+      CollectionSpecification second,
       MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
-      Set<ModelKey> seen) {
-    ModelSpecification firstCollection = first.getCollection()
-        .map(CollectionSpecification::getModel)
-        .orElse(null);
-    ModelSpecification secondCollection = second.getCollection()
-        .map(CollectionSpecification::getModel)
-        .orElse(null);
-    if (firstCollection == secondCollection) {
-      return true;
-    }
-    if (firstCollection == null || secondCollection == null) {
-      return false;
-    }
-    LOGGER.trace(
-        "Comparing collections {} and {}",
-        firstCollection.key().orElse(null),
-        secondCollection.key().orElse(null));
-
-    return sameModel(firstCollection, secondCollection, referenceKeyToEffectiveKey, seen);
-  }
-
-  private boolean sameMapModel(
-      ModelSpecification first,
-      ModelSpecification second,
-      MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
-      Set<ModelKey> seen) {
+      HashMap<List<ModelKey>, Boolean> seen) {
     if (first == second) {
       return true;
     }
     if (first == null || second == null) {
       return false;
     }
-    LOGGER.trace(
-        "Comparing Map with values {} and {}",
-        first.getMap()
-            .map(MapSpecification::getValue)
-            .flatMap(ModelSpecification::key)
-            .orElse(null),
-        second.getMap()
-            .map(MapSpecification::getValue)
-            .flatMap(ModelSpecification::key)
-            .orElse(null));
-    return sameModel(
-        first.getMap().map(MapSpecification::getKey).orElse(null),
-        second.getMap().map(MapSpecification::getKey).orElse(null),
-        referenceKeyToEffectiveKey,
-        seen)
-        && sameModel(
-        first.getMap().map(MapSpecification::getKey).orElse(null),
-        second.getMap().map(MapSpecification::getKey).orElse(null),
-        referenceKeyToEffectiveKey,
-        seen);
+    LOGGER.info(
+        "Comparing collections {} and {}",
+        first,
+        first);
+
+    return sameModel(first.getModel(), second.getModel(), referenceKeyToEffectiveKey, seen);
+  }
+
+  private boolean sameMapModel(
+      MapSpecification first,
+      MapSpecification second,
+      MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
+      HashMap<List<ModelKey>, Boolean> seen) {
+    if (first == second) {
+      return true;
+    }
+    if (first == null || second == null) {
+      return false;
+    }
+    LOGGER.info("Comparing Map  {} and {}", first, second);
+    return sameModel(first.getKey(), second.getKey(), referenceKeyToEffectiveKey, seen)
+        && sameModel(first.getValue(), second.getValue(), referenceKeyToEffectiveKey, seen);
   }
 
   private boolean sameCompoundModel(
       CompoundModelSpecification first,
       CompoundModelSpecification second,
       MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
-      Set<ModelKey> seen) {
+      HashMap<List<ModelKey>, Boolean> seen) {
     if (first == second) {
       return true;
     }
     if (first == null || second == null) {
       return false;
     }
-    LOGGER.trace("Comparing compound specs {} and {}", first, second);
-    return sameProperties(first.getProperties(), second.getProperties(), referenceKeyToEffectiveKey, seen) &&
+    LOGGER.info("Comparing compound specs {} and {}", first, second);
+    seen.put(Arrays.asList(first.getModelKey(), second.getModelKey()), true);
+    boolean sameProperties = sameProperties(
+        first.getProperties(),
+        second.getProperties(),
+        referenceKeyToEffectiveKey,
+        seen);
+    seen.put(Arrays.asList(first.getModelKey(), second.getModelKey()), sameProperties);
+    return sameProperties &&
         Objects.equals(first.getMaxProperties(), second.getMaxProperties()) &&
         Objects.equals(first.getMinProperties(), second.getMinProperties()) &&
         Objects.equals(first.getDiscriminator(), second.getDiscriminator());
@@ -204,45 +186,32 @@ public class ModelSpecificationRegistryBuilder {
       Collection<PropertySpecification> first,
       Collection<PropertySpecification> second,
       MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
-      Set<ModelKey> seen) {
+      HashMap<List<ModelKey>, Boolean> seen) {
     if (first.size() != second.size()) {
       return false;
     }
     Map<String, PropertySpecification> firstMap = first.stream()
-        .collect(Collectors.toMap(
-            PropertySpecification::getName,
-            Function.identity()));
+                                                       .collect(Collectors.toMap(
+                                                           PropertySpecification::getName,
+                                                           Function.identity()));
     Map<String, PropertySpecification> secondMap = second.stream()
-        .collect(Collectors.toMap(
-            PropertySpecification::getName,
-            Function.identity()));
+                                                         .collect(Collectors.toMap(
+                                                             PropertySpecification::getName,
+                                                             Function.identity()));
     if (!firstMap.keySet().equals(secondMap.keySet())) {
       return false;
     }
     for (String name : firstMap.keySet()) {
       PropertySpecification firstProperty = firstMap.get(name);
       PropertySpecification secondProperty = secondMap.get(name);
-      if (seenProperty(firstProperty, seen) && seenProperty(secondProperty, seen)) {
-        continue;
-      }
-      if (!sameProperty(firstProperty, secondMap.get(name), referenceKeyToEffectiveKey, seen)) {
-        LOGGER.trace("Properties did not match {} and {}", firstProperty.getName(), secondProperty.getName());
+      if (!sameProperty(firstProperty, secondProperty, referenceKeyToEffectiveKey, seen)) {
+        LOGGER.info("Properties {} did not match", firstProperty.getName());
         return false;
       } else {
-        LOGGER.trace("Properties matched {} and {}", firstProperty.getName(), secondProperty.getName());
+        LOGGER.info("Properties  {} matched", firstProperty.getName());
       }
     }
     return true;
-  }
-
-  private boolean seenProperty(
-      PropertySpecification firstProperty,
-      Set<ModelKey> seen) {
-    return firstProperty.getType().getReference().isPresent() &&
-        firstProperty.getType().getReference()
-            .map(ReferenceModelSpecification::getKey)
-            .map(seen::contains)
-            .orElse(false);
   }
 
   @SuppressWarnings("CyclomaticComplexity")
@@ -250,14 +219,8 @@ public class ModelSpecificationRegistryBuilder {
       PropertySpecification first,
       PropertySpecification second,
       MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
-      Set<ModelKey> seen) {
-    first.getType().getCompound()
-        .map(CompoundModelSpecification::getModelKey)
-        .ifPresent(seen::add);
-    second.getType().getCompound()
-        .map(CompoundModelSpecification::getModelKey)
-        .ifPresent(seen::add);
-    LOGGER.trace("Comparing property {}", first.getName());
+      HashMap<List<ModelKey>, Boolean> seen) {
+    LOGGER.info("Comparing property {}", first.getName());
     return first.getPosition() == second.getPosition() &&
         Objects.equals(first.getName(), second.getName()) &&
         Objects.equals(first.getDescription(), second.getDescription()) &&
@@ -276,32 +239,25 @@ public class ModelSpecificationRegistryBuilder {
         Objects.equals(first.getVendorExtensions(), second.getVendorExtensions());
   }
 
-  @SuppressWarnings({"CyclomaticComplexity", "NPathComplexity"})
+  @SuppressWarnings({ "CyclomaticComplexity", "NPathComplexity" })
   private boolean equivalentReference(
       ModelKey first,
       ModelKey second,
       MultiValueMap<ModelKey, ModelKey> referenceKeyToEffectiveKey,
-      Set<ModelKey> seen) {
+      HashMap<List<ModelKey>, Boolean> seen) {
     if (first == second) {
       return true;
     }
     if (first == null || second == null) {
       return false;
     }
-    if (seen.contains(first)
-        || seen.contains(second)) {
-      return true;
+    if (seen.containsKey(Arrays.asList(first, second))) {
+      return seen.get(Arrays.asList(first, second));
     }
-    LOGGER.trace("Comparing references {} and {}", first, second);
-    if ((referenceKeyToEffectiveKey.containsKey(first)
-             && referenceKeyToEffectiveKey.get(first).contains(second) ||
-             (referenceKeyToEffectiveKey.containsKey(second)
-                  && referenceKeyToEffectiveKey.get(second).contains(first)))) {
-      return true;
-    }
-    seen.add(first);
-    seen.add(second);
+    LOGGER.info("Comparing references {} and {}", first, second);
+    seen.put(Arrays.asList(first, second), true);
     boolean isSame = sameModel(modelByKey.get(first), modelByKey.get(second), referenceKeyToEffectiveKey, seen);
+    seen.put(Arrays.asList(first, second), isSame);
     if (isSame) {
       referenceKeyToEffectiveKey.addIfAbsent(first, second);
       referenceKeyToEffectiveKey.addIfAbsent(second, first);
@@ -344,21 +300,21 @@ public class ModelSpecificationRegistryBuilder {
     @Override
     public Collection<ModelKey> modelsDifferingOnlyInValidationGroups(ModelKey test) {
       return modelsLookupByKey.keySet().stream()
-          .filter(mk -> mk.getQualifiedModelName().equals(test.getQualifiedModelName())
-              && Objects.equals(mk.getViewDiscriminator(), test.getViewDiscriminator())
-              && mk.isResponse() == test.isResponse()
-              && !areEquivalent(mk, test))
-          .collect(Collectors.toSet());
+                              .filter(mk -> mk.getQualifiedModelName().equals(test.getQualifiedModelName())
+                                  && Objects.equals(mk.getViewDiscriminator(), test.getViewDiscriminator())
+                                  && mk.isResponse() == test.isResponse()
+                                  && !areEquivalent(mk, test))
+                              .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<ModelKey> modelsWithSameNameAndDifferentNamespace(ModelKey test) {
       return modelsLookupByKey.keySet().stream()
-          .filter(mk -> mk.getQualifiedModelName().getName()
-              .equals(test.getQualifiedModelName().getName())
-              && !mk.getQualifiedModelName().getNamespace()
-              .equals(test.getQualifiedModelName().getNamespace()))
-          .collect(Collectors.toSet());
+                              .filter(mk -> mk.getQualifiedModelName().getName()
+                                              .equals(test.getQualifiedModelName().getName())
+                                  && !mk.getQualifiedModelName().getNamespace()
+                                        .equals(test.getQualifiedModelName().getNamespace()))
+                              .collect(Collectors.toSet());
     }
 
     @Override
