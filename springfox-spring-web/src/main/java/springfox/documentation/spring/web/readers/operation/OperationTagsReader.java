@@ -19,7 +19,6 @@
 
 package springfox.documentation.spring.web.readers.operation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -27,20 +26,15 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.OperationBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 
+import java.util.Collections;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class OperationTagsReader implements OperationBuilderPlugin {
-  private final DefaultTagsProvider tagsProvider;
-
-  @Autowired
-  public OperationTagsReader(DefaultTagsProvider tagsProvider) {
-    this.tagsProvider = tagsProvider;
-  }
-
   @Override
   public void apply(OperationContext context) {
     context.operationBuilder()
-        .tags(tagsProvider.tags(context));
+           .tags(Collections.singleton(context.getGroupName()));
   }
 
   @Override
