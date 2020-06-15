@@ -21,23 +21,18 @@ package springfox.test.contract.oas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
+import springfox.documentation.oas.annotations.EnableOasWebMvc;
 import springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration;
-import springfox.petstore.PetStoreConfiguration;
 
 @SpringBootApplication
 @SuppressWarnings("HideUtilityClassConstructor")
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
-@ComponentScan(basePackages = {
-    "springfox.test.contract.oas",
-    "springfox.petstore.controller"
-})
+@EnableOasWebMvc
 @Import(value = {
     SpringDataRestConfiguration.class,
-    PetStoreConfiguration.class,
     SecuritySupport.class,
     OpenApiTestConfig.class,
     BeanValidatorPluginsConfiguration.class })

@@ -44,7 +44,6 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.*
 import static org.springframework.boot.test.context.SpringBootTest.*
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = OasApplication)
-@Ignore
 class FunctionContractSpec extends Specification implements FileAccess {
 
   @Shared
@@ -93,20 +92,6 @@ class FunctionContractSpec extends Specification implements FileAccess {
     where:
     contractFile    | groupName
     'petstore.json' | 'petstore'
-//    'petstoreTemplated.json'                                       | 'petstoreTemplated'
-//    'declaration-business-service.json'                           | 'businessService'
-//    'declaration-concrete-controller.json'                        | 'concrete'
-//    'declaration-controller-with-no-request-mapping-service.json' | 'noRequestMapping'
-//    'declaration-fancy-pet-service.json'                          | 'fancyPetstore'
-//    'declaration-inherited-service-impl.json'                     | 'inheritedService'
-//    'declaration-pet-grooming-service.json'                       | 'petGroomingService'
-//    'declaration-pet-service.json'                                | 'petService'
-//    'declaration-groovy-service.json'                             | 'groovyService'
-//    'declaration-enum-service.json'                               | 'enumService'
-//    'declaration-spring-data-rest.json'                           | 'spring-data-rest'
-//    'declaration-consumes-produces-not-on-document-context.json'  | 'consumesProducesNotOnDocumentContext'
-//    'declaration-consumes-produces-on-document-context.json'      | 'consumesProducesOnDocumentContext'
-//    'declaration-same-controller.json'                            | 'same'
   }
 
   def "should list swagger resources for open api 3.0"() {
@@ -127,48 +112,13 @@ class FunctionContractSpec extends Specification implements FileAccess {
     result.find {
       it.name == 'petstore' &&
           it.url == '/v3/api-docs?group=petstore' &&
-          it.swaggerVersion == '2.0'
+          it.swaggerVersion == '3.0.1'
     }
     result.find {
-      it.name == 'businessService' &&
-          it.url == '/v3/api-docs?group=businessService' &&
-          it.swaggerVersion == '2.0'
+      it.name == 'default' &&
+          it.url == '/v3/api-docs' &&
+          it.swaggerVersion == '3.0.1'
     }
-    result.find {
-      it.name == 'concrete' &&
-          it.url == '/v3/api-docs?group=concrete' &&
-          it.swaggerVersion == '2.0'
-    }
-  }
-
-  @Ignore
-  def 'should honor swagger resource listing'() {
-    given:
-    RequestEntity<Void> request = RequestEntity.get(new URI("http://localhost:$port/api-docs"))
-        .accept(MediaType.APPLICATION_JSON)
-        .build()
-    String contract = fileContents('/contract/swagger/resource-listing.json')
-
-    when:
-    def response = http.
-        exchange(
-            request,
-            String)
-
-    then:
-    response.statusCode == HttpStatus.OK
-
-    def bodyWithLFOnly = response.
-        body.
-        replaceAll(
-            "\\\\r\\\\n",
-            "\\\\n") //Make sure if we're running on windows the line endings which are double-escaped match up with
-    // the resource file above.
-    JSONAssert.
-        assertEquals(
-            contract,
-            bodyWithLFOnly,
-            NON_EXTENSIBLE)
   }
 
   @TestConfiguration

@@ -48,7 +48,6 @@ dependencies {
 
   compile project(':springfox-oas')
   compile project(':springfox-data-rest')
-  compile project(':springfox-petstore')
   compile project(':springfox-bean-validators')
 
   compile(project(path: ':springfox-swagger-ui')) {
