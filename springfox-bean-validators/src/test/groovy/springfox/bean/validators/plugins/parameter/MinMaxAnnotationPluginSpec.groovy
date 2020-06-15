@@ -6,6 +6,7 @@ import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
 import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -36,13 +37,16 @@ class MinMaxAnnotationPluginSpec extends Specification implements AnnotationsSup
 
     when:
     sut.apply(context)
-    def property = context.parameterBuilder().build()
-    def numericRange = context.requestParameterBuilder().build()
-        ?.parameterSpecification
+    def property = context.parameterBuilder()
+        .build()
+    def numericRange = context.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
+        .parameterSpecification
         ?.getQuery()
-        ?.map { p -> p.facetOfType(NumericElementFacet) }
+        ?.flatMap { p -> p.facetOfType(NumericElementFacet) }
         ?.orElse(null)
-        ?.get()
 
     then:
     def range = property.allowableValues as AllowableRangeValues

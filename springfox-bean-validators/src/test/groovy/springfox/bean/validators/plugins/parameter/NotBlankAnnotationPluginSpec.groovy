@@ -22,6 +22,7 @@ import com.fasterxml.classmate.ResolvedType
 import spock.lang.Specification
 import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -52,7 +53,10 @@ class NotBlankAnnotationPluginSpec extends Specification implements AnnotationsS
     when:
     sut.apply(context)
     def property = context.parameterBuilder().build()
-    def parameter = context.requestParameterBuilder().build()
+    def parameter = context.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
 
     then:
     property.required == required

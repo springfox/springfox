@@ -24,6 +24,7 @@ import spock.lang.Unroll
 import springfox.bean.validators.plugins.AnnotationsSupport
 import springfox.documentation.schema.StringElementFacet
 import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.service.ParameterType
 import springfox.documentation.service.ResolvedMethodParameter
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.schema.GenericTypeNamingStrategy
@@ -54,7 +55,10 @@ class SizeAnnotationPluginSpec extends Specification implements AnnotationsSuppo
     when:
     sut.apply(context)
     def property = context.parameterBuilder().build()
-    def sizeParameter = context.requestParameterBuilder().build()
+    def sizeParameter = context.requestParameterBuilder()
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
         .parameterSpecification?.query?.orElse(null)
 
     then:

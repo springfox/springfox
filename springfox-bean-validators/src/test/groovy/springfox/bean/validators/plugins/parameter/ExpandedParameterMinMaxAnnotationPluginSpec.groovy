@@ -10,6 +10,7 @@ import springfox.documentation.builders.ParameterBuilder
 import springfox.documentation.builders.RequestParameterBuilder
 import springfox.documentation.schema.NumericElementFacet
 import springfox.documentation.service.AllowableRangeValues
+import springfox.documentation.service.ParameterType
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spi.service.contexts.ParameterExpansionContext
 import springfox.documentation.spring.web.readers.parameter.ModelAttributeParameterMetadataAccessor
@@ -50,12 +51,14 @@ class ExpandedParameterMinMaxAnnotationPluginSpec
     when:
     sut.apply(context)
     def parameter = context.parameterBuilder.build()
-    def numericRange = context.requestParameterBuilder.build()
-        ?.parameterSpecification
+    def numericRange = context.requestParameterBuilder
+        .name("test")
+        .in(ParameterType.QUERY)
+        .build()
+        .parameterSpecification
         ?.getQuery()
-        ?.map {p -> p.facetOfType(NumericElementFacet) }
+        ?.flatMap {p -> p.facetOfType(NumericElementFacet) }
         ?.orElse(null)
-        ?.get()
 
 
     then:
